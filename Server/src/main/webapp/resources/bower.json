@@ -1,0 +1,31 @@
+{
+  "name": "GetKnowledge",
+  "version": "1.0.0",
+  "authors": [
+    "DenisMD <markovdenis2012@gmail.com>"
+  ],
+  "description": "Проект по созданию уроков",
+  "main": "getKnoweledge.js",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "tutorials",
+    "getKnowledge",
+    "platform"
+  ],
+  "license": "MIT",
+  "homepage": "www.getknowledge.com",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.6",
+    "angular-ui-router": "~0.2.15",
+    "bootstrap": "~3.3.5"
+  }
+}
