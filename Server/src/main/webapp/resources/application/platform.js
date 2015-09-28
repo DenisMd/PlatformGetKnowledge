@@ -48,12 +48,31 @@ angular.module("BackEndService", ['ui.router'])
             });
         };
 
+        this.read = function($scope, name, className, id) {
+            $http.get(platformDataUrl+"read?className="+className+"&id="+id).success(function(data){
+                $scope[name] = data;
+            });
+        };
+
+        this.count = function($scope, name, className) {
+            $http.get(platformDataUrl+"count?className="+className).success(function(data){
+                $scope[name] = data;
+            });
+        };
+
         this.list = function ($scope,name,className) {
             $http.get(platformDataUrl+"list?className="+className).success(function(data){
                 $scope[name] = data;
             });
         };
 
+        this.listPartial = function ($scope,name,className,first,max) {
+            $http.get(platformDataUrl+"listPartial?className="+className+"&first="+first+"&max="+max).success(function(data){
+                $scope[name] = data;
+            });
+        };
+
+        //Методы на изменения
         this.action = function ($scope,name,className,actionName,data){
             $http({
                 method: 'POST',
@@ -65,7 +84,37 @@ angular.module("BackEndService", ['ui.router'])
             }).success(function (data){
                 $scope[name] = data;
             });
-        }
+        };
+
+        this.create = function ($scope,name,className,data){
+            $http({
+                method: 'POST',
+                url: platformDataUrl+'create',
+                data: $.param({className: className,
+                    object : JSON.stringify(data)}),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).success(function (data){
+                $scope[name] = data;
+            });
+        };
+
+        this.update = function ($scope,name,className,data){
+            $http({
+                method: 'POST',
+                url: platformDataUrl+'update',
+                data: $.param({className: className,
+                    object : JSON.stringify(data)}),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).success(function (data){
+                $scope[name] = data;
+            });
+        };
+
+        this.remove = function ($scope,name,className,id) {
+            $http.get(platformDataUrl+"remove?className="+className+"&id="+id).success(function(data){
+                $scope[name] = data;
+            });
+        };
     }
 )
     .config(function ($stateProvider, $urlRouterProvider,$urlMatcherFactoryProvider) {

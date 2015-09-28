@@ -11,7 +11,6 @@
         <div ui-view></div>
     </div>
 
-
     {{list}}
 
     <script src="/resources/bower_components/jquery/dist/jquery.min.js"></script>
