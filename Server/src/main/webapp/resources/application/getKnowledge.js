@@ -20,6 +20,6 @@ model.controller("mainController", function ($scope, $http, applicationService) 
       alert(error);
     });
   };
-  applicationService.listPartial($scope, "list" ,"com.getknowledge.modules.userInfo.UserInfo",0,0);
+  applicationService.read($scope, "list" ,"com.getknowledge.modules.userInfo.UserInfo",1);
 
 });

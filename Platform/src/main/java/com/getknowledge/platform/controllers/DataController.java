@@ -3,6 +3,7 @@ package com.getknowledge.platform.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
@@ -37,7 +38,10 @@ public class DataController {
     private UserRepository userRepository;
 
     Logger logger = LoggerFactory.getLogger(DataController.class);
-    ObjectMapper objectMapper = new ObjectMapper();
+    static ObjectMapper objectMapper = new ObjectMapper();
+    static {
+        objectMapper.registerModule(new Hibernate4Module());
+    }
 
 //    Методы на чтение ----------------------------------------------------------------------------
 
@@ -103,6 +107,7 @@ public class DataController {
     }
 
     @RequestMapping(value = "/listPartial", method = RequestMethod.GET)
+    @Transactional
     public @ResponseBody String listPartial(@RequestParam("className") String className,
                        @RequestParam("first") Integer first, @RequestParam("max") Integer max, Principal principal) throws PlatformException {
         try {

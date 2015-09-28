@@ -30,11 +30,9 @@ public class User extends AbstractEntity {
     private boolean enabled=true;
 
     @ManyToOne
-    @JsonIgnore
     private Role role;
 
     @OneToMany
-    @JsonIgnore
     private List<Permission> permissions = new ArrayList<>();
 
     public Role getRole() {
