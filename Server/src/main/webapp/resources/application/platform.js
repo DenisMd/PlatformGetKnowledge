@@ -48,6 +48,23 @@ angular.module("BackEndService", ['ui.router'])
             });
         };
 
+        this.login = function (user, pass) {
+            $http({
+                method: 'POST',
+                url: "/j_spring_security_check",
+                data:  $.param({
+                    username: user,
+                    password: pass
+                }),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).success(function (data) {
+                alert(data.message);
+
+            }).error(function (error) {
+                alert(error);
+            });
+        };
+
         this.read = function($scope, name, className, id) {
             $http.get(platformDataUrl+"read?className="+className+"&id="+id).success(function(data){
                 $scope[name] = data;
