@@ -4,7 +4,7 @@ angular.module("BackEndService", ['ui.router'])
         "use strict";
 
         var resourceUrl = "/resources/application/";
-        var platformDataUrl = "/platform/data/";
+        var platformDataUrl = "/data/";
 
         this.pageInfo = function ($scope) {
             $http.get(resourceUrl + 'page-info/pageInfo.json').success(function(data) {

@@ -22,7 +22,7 @@
     <script src="/resources/application/getKnowledge.js"></script>
 
     <c:forEach items="${scripts}" var="src">
-        <c:out value="${src}"></c:out><br/>
+        <script src="<c:out value="${src}"></c:out>"></script>
     </c:forEach>
 
 </body>
