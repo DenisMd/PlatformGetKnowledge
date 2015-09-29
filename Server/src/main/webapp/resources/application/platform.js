@@ -1,9 +1,10 @@
 ;
 angular.module("BackEndService", ['ui.router'])
-    .service("applicationService", function ($http) {
+    .constant("resourceUrl", "/resources/application/")
+    .constant("resourceTemplate","/resources/template/")
+    .service("applicationService", function ($http,resourceUrl) {
         "use strict";
 
-        var resourceUrl = "/resources/application/";
         var platformDataUrl = "/data/";
 
         this.pageInfo = function ($scope) {
@@ -89,7 +90,7 @@ angular.module("BackEndService", ['ui.router'])
             });
         };
 
-        //Методы на изменения
+
         this.action = function ($scope,name,className,actionName,data){
             $http({
                 method: 'POST',
@@ -134,7 +135,8 @@ angular.module("BackEndService", ['ui.router'])
         };
     }
 )
-    .config(function ($stateProvider, $urlRouterProvider,$urlMatcherFactoryProvider) {
+
+    .config(function ($stateProvider, $urlRouterProvider,$urlMatcherFactoryProvider,resourceTemplate) {
 
         function valToString(val) {
             return val !== null ? val.toString() : val;
@@ -163,7 +165,7 @@ angular.module("BackEndService", ['ui.router'])
             url : "/:language",
             views : {
                 '' : {
-                    templateUrl : '/resources/template/indexTemplate.html'
+                    templateUrl : resourceTemplate + 'indexTemplate.html'
                 }
             }
         }).state('modules',{
@@ -175,4 +177,17 @@ angular.module("BackEndService", ['ui.router'])
                 }
             }
         });
+    })
+
+    .directive('moduleTemplate', function(resourceTemplate) {
+        return {
+            restrict: 'E',
+            scope: {
+                name: '@name',
+                data: '=data'
+            },
+            templateUrl: function(elem,attrs){
+                return resourceTemplate + attrs.name + ".html";
+            }
+        };
     });
