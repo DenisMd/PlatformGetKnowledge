@@ -1,6 +1,8 @@
 package com.getknowledge.platform.modules.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
@@ -85,5 +87,22 @@ public class User extends AbstractEntity {
 
     public List<Permission> getPermissions() {
         return permissions;
+    }
+
+    public boolean isHasPermission (Permission permission) {
+
+        boolean result = false;
+        result = permissions == null ? false : permissions.contains(permission);
+        if (result) return result;
+
+        if (role != null) {
+            result = role.getPermissions() == null ? false : role.getPermissions().contains(permission);
+        }
+
+        return result;
+    }
+
+    public boolean isHasRole (Role role) {
+        return this.role.equals(role);
     }
 }

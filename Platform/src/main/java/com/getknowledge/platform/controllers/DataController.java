@@ -1,5 +1,6 @@
 package com.getknowledge.platform.controllers;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,6 +8,8 @@ import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
+import com.getknowledge.platform.base.repositories.AbstractRepository;
+import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.exceptions.*;
 import com.getknowledge.platform.modules.permission.Permission;
@@ -41,9 +44,12 @@ public class DataController {
     static ObjectMapper objectMapper = new ObjectMapper();
     static {
         objectMapper.registerModule(new Hibernate4Module());
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
 //    Методы на чтение ----------------------------------------------------------------------------
+
+
 
     @RequestMapping(value = "/read", method = RequestMethod.GET)
     public @ResponseBody String read(@RequestParam(value = "id" ,required = true) Long id,
@@ -51,7 +57,12 @@ public class DataController {
         try {
             if (id == null || className == null || className.isEmpty()) return null;
             Class classEntity = Class.forName(className);
-            AbstractEntity entity = moduleLocator.findRepository(classEntity).read(id, classEntity);
+            AbstractRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
+            if (repository instanceof ProtectedRepository) {
+                ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
+                protectedRepository.setCurrentUser(getCurrentUser(principal));
+            }
+            AbstractEntity entity = repository.read(id, classEntity);
             if (entity == null) {
                 return null;
             }
@@ -85,7 +96,12 @@ public class DataController {
         try {
             if (className == null || className.isEmpty()) return null;
             Class classEntity = Class.forName(className);
-            List<AbstractEntity> list = moduleLocator.findRepository(classEntity).list(classEntity);
+            AbstractRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
+            if (repository instanceof ProtectedRepository) {
+                ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
+                protectedRepository.setCurrentUser(getCurrentUser(principal));
+            }
+            List<AbstractEntity> list = repository.list(classEntity);
 
             if (list == null) {
                 return "";
@@ -113,7 +129,12 @@ public class DataController {
         try {
             if (className == null || className.isEmpty() || first < 0 || max < 0) return null;
             Class classEntity = Class.forName(className);
-            List<AbstractEntity> list = moduleLocator.findRepository(classEntity).listPartial(classEntity, first, max);
+            AbstractRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
+            if (repository instanceof ProtectedRepository) {
+                ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
+                protectedRepository.setCurrentUser(getCurrentUser(principal));
+            }
+            List<AbstractEntity> list = repository.listPartial(classEntity, first, max);
 
             if (list == null) {
                 return "";
@@ -248,6 +269,10 @@ public class DataController {
 
     // Проверка прав доступа -----------------------------------------------------------
 
+    private User getCurrentUser(Principal p) {
+        return p == null ? null : userRepository.getSingleEntityByFieldAndValue(User.class , "login",p.getName());
+    }
+
     private boolean isAccessRead(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {
         AuthorizationList al = abstractEntity.getAuthorizationList();
         if (al != null && al.getPermissionsForRead().isEmpty()) {
@@ -258,7 +283,7 @@ public class DataController {
             return false;
         }
 
-        User user = userRepository.getSingleEntityByFieldAndValue(User.class , "login",principal.getName());
+        User user = getCurrentUser(principal);
         if (user == null) throw new NotAuthorized("User not found");;
 
         if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
@@ -279,7 +304,7 @@ public class DataController {
             return false;
         }
 
-        User user = userRepository.getSingleEntityByFieldAndValue(User.class , "login",principal.getName());
+        User user = getCurrentUser(principal);
         if (user == null) throw new NotAuthorized("User not found");;
 
         if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {

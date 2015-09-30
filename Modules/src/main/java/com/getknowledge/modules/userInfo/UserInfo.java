@@ -1,5 +1,7 @@
 package com.getknowledge.modules.userInfo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.getknowledge.platform.annotations.Access;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
@@ -22,6 +24,7 @@ public class UserInfo  extends AbstractEntity{
     private String lastName;
 
     @OneToOne
+    @Access(roles = {"ROLE_ADMIN"})
     private User user;
 
     public String getFirstName() {

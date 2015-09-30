@@ -16,6 +16,14 @@ public class Permission extends AbstractEntity{
     @Column(name =  "permission_name" , unique = true)
     private String permissionName;
 
+    public Permission() {
+        permissionName = "";
+    }
+
+    public Permission(String permissionName) {
+        this.permissionName = permissionName;
+    }
+
     public String getPermissionName() {
         return permissionName;
     }

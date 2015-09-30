@@ -1,7 +1,10 @@
 package com.getknowledge.platform.base.repositories;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.getknowledge.platform.base.entities.AbstractEntity;
-import org.hibernate.Session;
+import com.getknowledge.platform.controllers.DataController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -11,11 +14,14 @@ import java.util.List;
 
 public abstract class AbstractRepository<T extends AbstractEntity> {
 
+    protected Logger logger = LoggerFactory.getLogger(AbstractRepository.class);
+
     @PersistenceContext
     public EntityManager entityManager;
 
     @Transactional
     public void create(T object) {
+        ObjectMapper objectMapper = new ObjectMapper();
         if(object == null) {
             throw new NullPointerException();
         }
@@ -41,7 +47,7 @@ public abstract class AbstractRepository<T extends AbstractEntity> {
             throw new NullPointerException();
         }
 
-        entityManager.remove(entityManager.find(classEntity , id));
+        entityManager.remove(entityManager.find(classEntity, id));
         entityManager.flush();
     }
 
@@ -57,7 +63,8 @@ public abstract class AbstractRepository<T extends AbstractEntity> {
         if( classEntity == null) {
             throw new NullPointerException();
         }
-        return entityManager.createQuery("Select t from " + classEntity.getSimpleName() + " t").getResultList();
+        List<T> list = entityManager.createQuery("Select t from " + classEntity.getSimpleName() + " t").getResultList();
+        return list;
     }
 
     public List<T> listPartial(Class<T> classEntity , int first, int max) {
@@ -67,7 +74,8 @@ public abstract class AbstractRepository<T extends AbstractEntity> {
         Query query = entityManager.createQuery("Select t from " + classEntity.getSimpleName() + " t");
         query.setFirstResult(first);
         query.setMaxResults(max);
-        return query.getResultList();
+        List<T> list = query.getResultList();
+        return list;
     }
 
     public Long count(Class<T> classEntity) {
