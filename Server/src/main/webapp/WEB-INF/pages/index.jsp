@@ -3,6 +3,7 @@
 <html ng-app="mainApp" ng-controller="mainController">
 <head>
     <title>Index</title>
+    <link rel="stylesheet" href="/resources/bower_components/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="/resources/css/index.css">
 </head>
 <body>

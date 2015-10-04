@@ -2,8 +2,9 @@
 angular.module("BackEndService", ['ui.router'])
     .constant("resourceUrl", "/resources/application/")
     .constant("resourceTemplate","/resources/template/")
-    .service("applicationService", function ($http,resourceUrl) {
+    .service("applicationService", function ($http,resourceUrl,errorService) {
         "use strict";
+
 
         var platformDataUrl = "/data/";
 
@@ -32,7 +33,9 @@ angular.module("BackEndService", ['ui.router'])
                                     }
                                 }
                             }
-                        );
+                        ).error(function(error, status, headers, config){
+                                errorService.showError(error,status);
+                        });
                         $http.get(resourceUrl+"module/"+moduleUrl+"/page-info/"+language+".json").success(
                             function(data) {
                                 var key;
@@ -43,8 +46,12 @@ angular.module("BackEndService", ['ui.router'])
                                     $scope.application.text[key] = data.text[key];
                                 }
                             }
-                        );
+                        ).error(function(error, status, headers, config){
+                                errorService.showError(error,status);
+                        });
                     }
+                }).error(function(error, status, headers, config){
+                    errorService.showError(error,status);
                 });
             });
         };
@@ -60,33 +67,40 @@ angular.module("BackEndService", ['ui.router'])
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (data) {
                 alert(data.message);
-
-            }).error(function (error) {
-                alert(error);
             });
         };
 
         this.read = function($scope, name, className, id) {
-            $http.get(platformDataUrl+"read?className="+className+"&id="+id).success(function(data){
-                $scope[name] = data;
-            });
+            $http.get(platformDataUrl+"read?className="+className+"&id="+id)
+                .success(function(data){
+                    $scope[name] = data;
+                }).error(function(error, status, headers, config){
+                    errorService.showError(error,status);
+                });
+
         };
 
         this.count = function($scope, name, className) {
             $http.get(platformDataUrl+"count?className="+className).success(function(data){
                 $scope[name] = data;
+            }).error(function(error, status, headers, config){
+                errorService.showError(error,status);
             });
         };
 
         this.list = function ($scope,name,className) {
             $http.get(platformDataUrl+"list?className="+className).success(function(data){
                 $scope[name] = data;
+            }).error(function(error, status, headers, config){
+                errorService.showError(error,status);
             });
         };
 
         this.listPartial = function ($scope,name,className,first,max) {
             $http.get(platformDataUrl+"listPartial?className="+className+"&first="+first+"&max="+max).success(function(data){
                 $scope[name] = data;
+            }).error(function(error, status, headers, config){
+                errorService.showError(error,status);
             });
         };
 
@@ -101,6 +115,8 @@ angular.module("BackEndService", ['ui.router'])
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (data){
                 $scope[name] = data;
+            }).error(function(error, status, headers, config){
+                errorService.showError(error,status);
             });
         };
 
@@ -113,6 +129,8 @@ angular.module("BackEndService", ['ui.router'])
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (data){
                 $scope[name] = data;
+            }).error(function(error, status, headers, config){
+                errorService.showError(error,status);
             });
         };
 
@@ -125,6 +143,8 @@ angular.module("BackEndService", ['ui.router'])
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (data){
                 $scope[name] = data;
+            }).error(function(error, status, headers, config){
+                errorService.showError(error,status);
             });
         };
 
@@ -133,8 +153,39 @@ angular.module("BackEndService", ['ui.router'])
                 $scope[name] = data;
             });
         };
-    }
-)
+    })
+
+    .service("errorService", function (resourceUrl) {
+        "use strict";
+
+        function showModalError(){
+            var modal = angular.element('#errorMessage');
+            modal.modal('show');
+        }
+
+        function hideModalError(){
+            angular.element('#errorMessage').modal('hide');
+        }
+
+        var error = null;
+
+        this.showError = function(errorMessage,status){
+            error = errorMessage;
+            error.status = status;
+            console.log(error);
+            showModalError();
+        };
+
+        this.removeError = function(){
+            error = null;
+            hideModalError();
+        };
+
+        this.getError = function(){
+            return error;
+        }
+
+    })
 
     .config(function ($stateProvider, $urlRouterProvider,$urlMatcherFactoryProvider,resourceTemplate) {
 
@@ -179,6 +230,45 @@ angular.module("BackEndService", ['ui.router'])
         });
     })
 
+    .run(function(){
+        angular.element("body").append("<error-template></error-template>");
+    })
+
+    .directive("errorTemplate",function(){
+        return{
+                restrict: "E",
+                scope : {},
+                controller: function(errorService,$scope){
+                    $scope.$watch(
+                        function(){ return errorService.getError()},
+                        function(newValue,oldValue){
+                            if (newValue !== oldValue){
+                                $scope.error = newValue;
+                            }
+                    });
+
+                    $scope.modalClass = {
+                        modal : 'color:black',
+                        image : 'height:100px'
+                    }
+                },
+                template:
+                            '<div class="modal fade" id="errorMessage" ng-style="{{modalClass.modal}}">\n' +
+                            ' <div class="modal-dialog">\n' +
+                            '   <div class="modal-content">\n' +
+                            '     <div class="modal-header">\n' +
+                            '       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\n' +
+                            '       <h4 class="modal-title">{{error.status?"Error "+error.status:""}}</h4>\n' +
+                            '     </div>\n' +
+                            '      <div class="modal-body">\n' +
+                            '       <p>{{error.message}}</p>\n' +
+                            '      </div>\n' +
+                            '    </div>\n' +
+                            '  </div>\n' +
+                            '</div>'
+        }
+    })
+
     .directive('moduleTemplate', function(resourceTemplate) {
         return {
             restrict: 'E',
@@ -191,3 +281,8 @@ angular.module("BackEndService", ['ui.router'])
             }
         };
     });
+
+
+
+
+
