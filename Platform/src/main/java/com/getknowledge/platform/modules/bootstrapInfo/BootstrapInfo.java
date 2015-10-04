@@ -26,6 +26,16 @@ public class BootstrapInfo extends AbstractEntity {
     @Column(name = "error_message" , length = 2000)
     private String errorMessage;
 
+    private boolean repeat = false;
+
+    public boolean isRepeat() {
+        return repeat;
+    }
+
+    public void setRepeat(boolean repeat) {
+        this.repeat = repeat;
+    }
+
     public BootstrapState getBootstrapState() {
         return bootstrapState;
     }

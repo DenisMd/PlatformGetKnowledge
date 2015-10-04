@@ -66,7 +66,7 @@ public class BootstrapController {
                 BootstrapInfo bootstrapInfo = null;
                 try {
                     bootstrapInfo = repository.getSingleEntityByFieldAndValue(BootstrapInfo.class, "name", bootstrapService.getBootstrapInfo().getName());
-                    if(bootstrapInfo != null && bootstrapInfo.getBootstrapState() == BootstrapState.Completed) {
+                    if(bootstrapInfo != null && bootstrapInfo.getBootstrapState() == BootstrapState.Completed && !bootstrapInfo.isRepeat()) {
                         continue;
                     } else {
                         bootstrapService.bootstrap(data);

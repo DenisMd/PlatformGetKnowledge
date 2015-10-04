@@ -24,6 +24,7 @@ public class PermissionService implements BootstrapService{
         BootstrapInfo bootstrapInfo = new BootstrapInfo();
         bootstrapInfo.setName("PermissionService");
         bootstrapInfo.setBootstrapState(BootstrapState.NotComplete);
-        return null;
+        bootstrapInfo.setRepeat(true);
+        return bootstrapInfo;
     }
 }
