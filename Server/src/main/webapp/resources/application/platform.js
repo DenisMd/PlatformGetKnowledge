@@ -172,7 +172,6 @@ angular.module("BackEndService", ['ui.router'])
         this.showError = function(errorMessage,status){
             error = errorMessage;
             error.status = status;
-            console.log(error);
             showModalError();
         };
 
@@ -231,10 +230,10 @@ angular.module("BackEndService", ['ui.router'])
     })
 
     .run(function(){
-        angular.element("body").append("<error-template></error-template>");
+        angular.element("body").append("<error-modal-template></error-modal-template>");
     })
 
-    .directive("errorTemplate",function(){
+    .directive("errorModalTemplate",function(resourceTemplate){
         return{
                 restrict: "E",
                 scope : {},
@@ -246,26 +245,8 @@ angular.module("BackEndService", ['ui.router'])
                                 $scope.error = newValue;
                             }
                     });
-
-                    $scope.modalClass = {
-                        modal : 'color:black',
-                        image : 'height:100px'
-                    }
                 },
-                template:
-                            '<div class="modal fade" id="errorMessage" ng-style="{{modalClass.modal}}">\n' +
-                            ' <div class="modal-dialog">\n' +
-                            '   <div class="modal-content">\n' +
-                            '     <div class="modal-header">\n' +
-                            '       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\n' +
-                            '       <h4 class="modal-title">{{error.status?"Error "+error.status:""}}</h4>\n' +
-                            '     </div>\n' +
-                            '      <div class="modal-body">\n' +
-                            '       <p>{{error.message}}</p>\n' +
-                            '      </div>\n' +
-                            '    </div>\n' +
-                            '  </div>\n' +
-                            '</div>'
+                templateUrl: resourceTemplate+"/error/modalForError.html"
         }
     })
 
