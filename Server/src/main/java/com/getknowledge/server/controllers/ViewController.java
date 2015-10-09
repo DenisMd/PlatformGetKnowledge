@@ -1,5 +1,7 @@
 package com.getknowledge.server.controllers;
 
+import com.getknowledge.modules.userInfo.UserInfo;
+import com.getknowledge.modules.userInfo.UserInfoService;
 import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.role.names.RoleName;
 import com.getknowledge.platform.modules.user.User;
@@ -29,6 +31,9 @@ public class ViewController {
     private UserRepository userRepository;
 
     @Autowired
+    private UserInfoService userInfoService;
+
+    @Autowired
     ServletContext servletContext;
 
     private Map<String,String> marshalling = new HashMap<>();
@@ -55,10 +60,6 @@ public class ViewController {
             }
         }
         return true;
-    }
-
-    private User getCurrentUser(Principal p) {
-        return p == null ? null : userRepository.getSingleEntityByFieldAndValue(User.class , "login",p.getName());
     }
 
     private String getNameJsp(String realPath,String fileName) {
@@ -111,7 +112,8 @@ public class ViewController {
 
     private ModelAndView filter(String  restOfTheUrl , Principal p) {
         String [] split = restOfTheUrl.split("/");
-        if (!isCorrectRole(getCurrentUser(p), split)) {
+        UserInfo userInfo = userInfoService.getCurrentUser(p);
+        if (!isCorrectRole(userInfo.getUser(), split)) {
             return new ModelAndView("accessDenied");
         }
         return new ModelAndView(getPath(split));
