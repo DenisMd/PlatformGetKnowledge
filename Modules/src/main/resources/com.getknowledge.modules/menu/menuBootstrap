@@ -1,12 +1,35 @@
-Main menu
+
+# Общее меню
+General
     programming : /section/programming
-        books : /books
-            bestBook : /bestBook
         courses : /courses
-        program : /program
+        books : /books
+        programs : /programs
     math : /section/math
-        books : /mathBook
-        courses : /mathCourses
-Admin menu
-    adminPanel : /admin/panel
-        bootstrap : /bootstrap
+        courses : /courses
+        books : /books
+        programs : /programs
+    physic : /section/physic
+        courses : /courses
+        books : /books
+        programs : /programs
+    news : /news
+    contactUs : /contact
+
+# Меню для администратора
+Admin : ROLE_ADMIN
+    programming : /section/programming
+        courses : /courses
+        books : /books
+        programs : /programs
+    math : /section/math
+        courses : /courses
+        books : /books
+        programs : /programs
+    physic : /section/physic
+        courses : /courses
+        books : /books
+        programs : /programs
+    news : /news
+    contactUs : /contact
+    adminPanel : /admin

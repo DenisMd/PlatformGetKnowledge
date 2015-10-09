@@ -12,7 +12,7 @@
         <div ui-view></div>
     </div>
 
-    {{list}}
+    Main menu : {{menu}}
 
     <script src="/resources/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="/resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>

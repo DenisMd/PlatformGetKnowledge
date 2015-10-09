@@ -7,12 +7,15 @@ import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.BootstrapService;
 import com.getknowledge.platform.exceptions.ParseException;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
+import com.getknowledge.platform.modules.role.Role;
+import com.getknowledge.platform.modules.role.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletContext;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,6 +27,9 @@ public class MenuService extends AbstractService implements BootstrapService {
 
     @Autowired
     MenuItemsRepository menuItemsRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
 
     @Autowired
     ServletContext servletContext;
@@ -56,9 +62,12 @@ public class MenuService extends AbstractService implements BootstrapService {
         List<MenuItem> parents = new ArrayList<>();
         while ((line = reader.readLine()) != null) {
 
+            if (line.startsWith("#") || line.trim().isEmpty()) continue;
+
             if (!line.startsWith(" ")) {
 
                 if (!parents.isEmpty()) {
+                    Collections.reverse(parents);
                     for (MenuItem menuItem : parents) {
                         menuItem.setSubItems(stackMenuItems.get(level));
                         level--;
@@ -76,7 +85,17 @@ public class MenuService extends AbstractService implements BootstrapService {
                 stackMenuItems.add(new ArrayList<>());
 
                 menu = new Menu();
-                menu.setTitle(line);
+                String split[] = line.split(":");
+                if (split.length == 2) {
+                    String name  = split[0].trim();
+                    String roleName = split[1].trim();
+                    Role role = roleRepository.getSingleEntityByFieldAndValue(Role.class, "roleName" , roleName);
+                    menu.setName(name);
+                    if (role != null)
+                        menu.setRole(role);
+                } else {
+                    menu.setName(line);
+                }
                 menuRepository.create(menu);
 
                 continue;
@@ -112,8 +131,8 @@ public class MenuService extends AbstractService implements BootstrapService {
         }
 
         if (menu != null) {
-
             if (!parents.isEmpty()) {
+                Collections.reverse(parents);
                 for (MenuItem menuItem : parents) {
                     menuItem.setSubItems(stackMenuItems.get(level));
                     level--;
@@ -138,8 +157,14 @@ public class MenuService extends AbstractService implements BootstrapService {
     public BootstrapInfo getBootstrapInfo() {
         BootstrapInfo bootstrapInfo = new BootstrapInfo();
         bootstrapInfo.setName("Menu service");
-        bootstrapInfo.setOrder(0);
+        bootstrapInfo.setOrder(1);
         bootstrapInfo.setRepeat(false);
         return bootstrapInfo;
+    }
+
+
+    @Action(name = "getMenuByName" , mandatoryFields = {"name"})
+    public Menu getMenuByName(HashMap<String, Object> data) {
+        return menuRepository.getSingleEntityByFieldAndValue(Menu.class , "name" , data.get("name"));
     }
 }
