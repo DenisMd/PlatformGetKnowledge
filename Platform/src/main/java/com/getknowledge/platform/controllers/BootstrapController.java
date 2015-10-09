@@ -40,6 +40,10 @@ public class BootstrapController {
 
     @RequestMapping(value = "/do" , method = RequestMethod.POST)
     public String bootstrap(@RequestParam("data") String jsonData) throws PlatformException{
+
+        //after bootstrap, that init services
+        listServices();
+
         TypeReference<HashMap<String, Object>> typeRef
                 = new TypeReference<HashMap<String, Object>>() {
         };
