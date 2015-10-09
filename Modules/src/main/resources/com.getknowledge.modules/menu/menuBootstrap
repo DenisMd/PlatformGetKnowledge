@@ -1,0 +1,12 @@
+Main menu
+    programming : /section/programming
+        books : /books
+            bestBook : /bestBook
+        courses : /courses
+        program : /program
+    math : /section/math
+        books : /mathBook
+        courses : /mathCourses
+Admin menu
+    adminPanel : /admin/panel
+        bootstrap : /bootstrap
