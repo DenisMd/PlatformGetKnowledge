@@ -47,7 +47,7 @@ public class DataController {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
-//    Методы на чтение ----------------------------------------------------------------------------
+//    пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ ----------------------------------------------------------------------------
 
 
 
@@ -155,7 +155,7 @@ public class DataController {
         }
     }
 
-//    Методы на изменения -----------------------------------------------------------------------------------
+//    пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ -----------------------------------------------------------------------------------
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @Transactional public @ResponseBody String create(@RequestParam("object") String jsonObject, @RequestParam("className") String className, Principal principal) throws PlatformException {
@@ -267,7 +267,7 @@ public class DataController {
         }
     }
 
-    // Проверка прав доступа -----------------------------------------------------------
+    // Authorization -----------------------------------------------------------
 
     private User getCurrentUser(Principal p) {
         return p == null ? null : userRepository.getSingleEntityByFieldAndValue(User.class , "login",p.getName());

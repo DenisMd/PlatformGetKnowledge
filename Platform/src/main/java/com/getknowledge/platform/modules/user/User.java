@@ -35,6 +35,7 @@ public class User extends AbstractEntity {
     private Role role;
 
     @OneToMany
+    @JoinTable(name = "permissions_of_user")
     private List<Permission> permissions = new ArrayList<>();
 
     public Role getRole() {

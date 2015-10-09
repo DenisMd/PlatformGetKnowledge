@@ -51,6 +51,7 @@ public abstract class AbstractRepository<T extends AbstractEntity> {
         entityManager.flush();
     }
 
+    @Transactional
     public T read(Long id , Class<T> classEntity) {
         if(id == null || classEntity == null) {
             throw new NullPointerException();
@@ -59,6 +60,7 @@ public abstract class AbstractRepository<T extends AbstractEntity> {
         return result;
     }
 
+    @Transactional
     public List<T> list(Class<T> classEntity) {
         if( classEntity == null) {
             throw new NullPointerException();
@@ -67,6 +69,7 @@ public abstract class AbstractRepository<T extends AbstractEntity> {
         return list;
     }
 
+    @Transactional
     public List<T> listPartial(Class<T> classEntity , int first, int max) {
         if( classEntity == null) {
             throw new NullPointerException();
@@ -86,6 +89,7 @@ public abstract class AbstractRepository<T extends AbstractEntity> {
         return rowCnt;
     }
 
+    @Transactional
     public List<T> getEntitiesByFieldAndValue(Class<T> classEntity ,String field, Object value) {
         if( classEntity == null) {
             throw new NullPointerException();
@@ -94,6 +98,8 @@ public abstract class AbstractRepository<T extends AbstractEntity> {
                 .setParameter("value" , value).getResultList();
         return list;
     }
+
+    @Transactional
     public T getSingleEntityByFieldAndValue(Class<T> classEntity ,String field, Object value) {
         if( classEntity == null) {
             throw new NullPointerException();

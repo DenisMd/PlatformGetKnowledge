@@ -18,6 +18,7 @@ public class Role extends AbstractEntity {
     private String roleName;
 
     @OneToMany
+    @JoinTable(name = "permissions_of_roles")
     private List<Permission> permissions = new ArrayList<>();
 
     public String getRoleName() {
