@@ -13,6 +13,7 @@ import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -77,10 +78,9 @@ public class UserInfoService extends AbstractService implements BootstrapService
         String login = (String) data.get("principalName");
         if (login == null) {return  null;}
 
-        List<UserInfo> userInfo = entityManager.createQuery("select ui from UserInfo where user.login = :login")
-                .setParameter("login" , login).getResultList();
+        UserInfo result = userInfoRepository.getSingleEntityByFieldAndValue(UserInfo.class, "user.login", login);
 
-        return userInfo.isEmpty() ? null : userInfo.get(0);
+        return result;
     }
 
     @Action(name = "register" , mandatoryFields = {"login" , "password" , "firstName" , "lastName"})
@@ -107,6 +107,11 @@ public class UserInfoService extends AbstractService implements BootstrapService
         return RegisterResult.Complete;
     }
 
+    public UserInfo getCurrentUser(Principal p) {
+        if (p == null) return null;
+        UserInfo result = userInfoRepository.getSingleEntityByFieldAndValue(UserInfo.class, "user.login", p.getName());
+        return result;
+    }
 
     @Override
     public BootstrapInfo getBootstrapInfo() {
