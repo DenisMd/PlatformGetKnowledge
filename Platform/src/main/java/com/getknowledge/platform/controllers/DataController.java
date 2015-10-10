@@ -47,7 +47,7 @@ public class DataController {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
-//    ������ �� ������ ----------------------------------------------------------------------------
+//    Methods for read ----------------------------------------------------------------------------
 
 
 
@@ -155,7 +155,7 @@ public class DataController {
         }
     }
 
-//    ������ �� ��������� -----------------------------------------------------------------------------------
+//    methods for change -----------------------------------------------------------------------------------
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @Transactional public @ResponseBody String create(@RequestParam("object") String jsonObject, @RequestParam("className") String className, Principal principal) throws PlatformException {
