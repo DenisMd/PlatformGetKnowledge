@@ -1,8 +1,8 @@
 ;
-angular.module("BackEndService", ['ui.router'])
+angular.module("BackEndService", ['ui.router','ngSanitize'])
     .constant("resourceUrl", "/resources/application/")
     .constant("resourceTemplate","/resources/template/")
-    .service("applicationService", function ($http,resourceUrl,errorService) {
+    .service("applicationService", function ($http,$sce,resourceUrl,errorService) {
         "use strict";
 
 
@@ -20,8 +20,14 @@ angular.module("BackEndService", ['ui.router'])
                     moduleUrl = moduleUrlSplit.join("/");
                 }
 
-                $http.get(resourceUrl+"page-info/"+language+".json").success(function(data){
-                    $scope.application.text = data.text;
+                $http.get(resourceUrl+"page-info/"+language+".json")
+                    .success(function(data){
+                    $scope.application.text = {};
+
+                    for (var stingData in data.text){
+                        $scope.application.text[stingData] = $sce.trustAsHtml(data.text[stingData]);
+                    }
+
                     $scope.application.language = data.language;
                     if(moduleUrl) {
                         $http.get(resourceUrl+"module/"+moduleUrl+"/page-info/pageInfo.json").success(
@@ -50,9 +56,12 @@ angular.module("BackEndService", ['ui.router'])
                                 errorService.showError(error,status);
                         });
                     }
-                }).error(function(error, status, headers, config){
+                })
+                    .error(function(error, status, headers, config){
                     errorService.showError(error,status);
                 });
+            }).error(function(error, status, headers, config){
+                errorService.showError(error,status);
             });
         };
 
