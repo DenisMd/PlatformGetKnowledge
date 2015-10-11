@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.base.entities.AbstractEntity;
@@ -71,13 +72,15 @@ public class DataController {
                 throw new NotAuthorized("access denied");
             }
 
-            return objectMapper.writeValueAsString(entity);
+            ObjectNode objectNode = objectMapper.valueToTree(entity);
+            objectNode.put("editable" , isAccessEdit(principal,entity));
+            return objectNode.toString();
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found");
-        } catch (JsonProcessingException e) {
+        }/* catch (JsonProcessingException e) {
             logger.warn("can't parse entity " + className + " id " + id , e);
             throw new ParseException("can't parse entity " + className + " id " + id);
-        }
+        }*/
     }
 
     @RequestMapping(value = "/count", method = RequestMethod.GET)
@@ -106,18 +109,26 @@ public class DataController {
             if (list == null) {
                 return "";
             }
-
+            String jsonResult = "[";
             for (AbstractEntity abstractEntity : list) {
                 if (!isAccessRead(principal, abstractEntity) ) {
                     throw new NotAuthorized("access denied");
                 }
+                ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
+                objectNode.put("editable" , isAccessEdit(principal,abstractEntity));
+                jsonResult += objectNode.toString();
+                jsonResult += ",";
             }
+            if (jsonResult.length() > 1)
+                jsonResult = jsonResult.substring(0,jsonResult.length()-1);
 
-            return objectMapper.writeValueAsString(list);
-        } catch (JsonProcessingException e) {
+            jsonResult += "]";
+
+            return jsonResult;
+        }/* catch (JsonProcessingException e) {
             logger.warn("can't parse entities " + className, e);
             throw new ParseException("can't parse entities " + className);
-        } catch (ClassNotFoundException e) {
+        }*/ catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found");
         }
     }
@@ -139,17 +150,26 @@ public class DataController {
                 return "";
             }
 
+            String jsonResult = "[";
             for (AbstractEntity abstractEntity : list) {
                 if (!isAccessRead(principal, abstractEntity) ) {
                     throw new NotAuthorized("access denied");
                 }
+                ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
+                objectNode.put("editable" , isAccessEdit(principal,abstractEntity));
+                jsonResult += objectNode.toString();
+                jsonResult += ",";
             }
+            if (jsonResult.length() > 1)
+                jsonResult = jsonResult.substring(0,jsonResult.length()-1);
 
-            return objectMapper.writeValueAsString(list);
-        } catch (JsonProcessingException e) {
+            jsonResult += "]";
+
+            return jsonResult;
+        }/* catch (JsonProcessingException e) {
             logger.warn("can't parse entities " + className, e);
             throw new ParseException("can't parse entities " + className);
-        } catch (ClassNotFoundException e) {
+        }*/ catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found");
         }
     }
