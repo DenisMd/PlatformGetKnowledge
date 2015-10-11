@@ -43,13 +43,13 @@ public class DataController {
     Logger logger = LoggerFactory.getLogger(DataController.class);
     static ObjectMapper objectMapper = new ObjectMapper();
     static {
-        objectMapper.registerModule(new Hibernate4Module());
+        Hibernate4Module hbm = new Hibernate4Module();
+        hbm.enable(Hibernate4Module.Feature.FORCE_LAZY_LOADING);
+        objectMapper.registerModule(hbm);
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
 //    Methods for read ----------------------------------------------------------------------------
-
-
 
     @RequestMapping(value = "/read", method = RequestMethod.GET)
     public @ResponseBody String read(@RequestParam(value = "id" ,required = true) Long id,
