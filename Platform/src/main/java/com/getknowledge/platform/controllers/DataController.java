@@ -123,7 +123,6 @@ public class DataController {
     }
 
     @RequestMapping(value = "/listPartial", method = RequestMethod.GET)
-    @Transactional
     public @ResponseBody String listPartial(@RequestParam("className") String className,
                        @RequestParam("first") Integer first, @RequestParam("max") Integer max, Principal principal) throws PlatformException {
         try {
@@ -158,7 +157,7 @@ public class DataController {
 //    methods for change -----------------------------------------------------------------------------------
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    @Transactional public @ResponseBody String create(@RequestParam("object") String jsonObject, @RequestParam("className") String className, Principal principal) throws PlatformException {
+    public @ResponseBody String create(@RequestParam("object") String jsonObject, @RequestParam("className") String className, Principal principal) throws PlatformException {
         try {
             if (jsonObject == null || className == null) return null;
             Class classEntity = Class.forName(className);
@@ -177,7 +176,6 @@ public class DataController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    @Transactional
     public @ResponseBody String update(@RequestParam("object") String jsonObject, @RequestParam("className") String className, Principal principal) throws PlatformException {
         try {
             if (jsonObject == null || className == null) return null;
@@ -197,7 +195,7 @@ public class DataController {
     }
 
     @RequestMapping(value = "/remove", method = RequestMethod.GET)
-    @Transactional public @ResponseBody String remove(@RequestParam("id") Long id, @RequestParam("className") String className, Principal principal) throws PlatformException {
+    public @ResponseBody String remove(@RequestParam("id") Long id, @RequestParam("className") String className, Principal principal) throws PlatformException {
         try {
             if (id == null || className == null) return null;
             Class classEntity = Class.forName(className);
@@ -215,7 +213,7 @@ public class DataController {
     }
 
     @RequestMapping(value = "/action", method = RequestMethod.POST)
-    @Transactional public @ResponseBody
+    public @ResponseBody
     String action(@RequestParam("className") String className, @RequestParam("actionName") String actionName, @RequestParam("data") String jsonData , Principal principal) throws PlatformException {
         try {
             Class classEntity = Class.forName(className);

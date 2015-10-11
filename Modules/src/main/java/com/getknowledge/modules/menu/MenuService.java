@@ -2,6 +2,9 @@ package com.getknowledge.modules.menu;
 
 import com.getknowledge.modules.menu.item.MenuItem;
 import com.getknowledge.modules.menu.item.MenuItemsRepository;
+import com.getknowledge.modules.userInfo.UserInfo;
+import com.getknowledge.modules.userInfo.UserInfoRepository;
+import com.getknowledge.modules.userInfo.UserInfoService;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.BootstrapService;
@@ -9,6 +12,10 @@ import com.getknowledge.platform.exceptions.ParseException;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
 import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.role.RoleRepository;
+import com.getknowledge.platform.modules.role.names.RoleName;
+import com.getknowledge.platform.modules.user.User;
+import com.getknowledge.platform.modules.user.UserRepository;
+import com.getknowledge.platform.modules.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +37,9 @@ public class MenuService extends AbstractService implements BootstrapService {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
     ServletContext servletContext;
@@ -167,4 +177,23 @@ public class MenuService extends AbstractService implements BootstrapService {
     public Menu getMenuByName(HashMap<String, Object> data) {
         return menuRepository.getSingleEntityByFieldAndValue(Menu.class , "name" , data.get("name"));
     }
+
+    @Action(name = "getMenu")
+    public Menu getMenu(HashMap<String, Object> data) {
+        if (data.get("principalName") == null) {
+            Menu menu = menuRepository.getSingleEntityByFieldAndValue(Menu.class , "name" , MenuNames.General.name());
+            return menu;
+        }
+        String userName = (String) data.get("principalName");
+        User user = userRepository.getSingleEntityByFieldAndValue(User.class, "login", userName);
+        if (user != null) {
+            if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+                Menu menu = menuRepository.getSingleEntityByFieldAndValue(Menu.class , "name" , MenuNames.Admin.name());
+                return menu;
+            }
+        }
+        Menu menu = menuRepository.getSingleEntityByFieldAndValue(Menu.class , "name" , MenuNames.General.name());
+        return menu;
+    }
+
 }
