@@ -13,7 +13,7 @@ public class AuthorizationList {
     private List<User> userList = new ArrayList<>();
     private List<Permission> permissionsForRead = new ArrayList<>();
     private List<Permission> permissionsForEdit = new ArrayList<>();
-    public boolean allowCreateEveryOne = true;
+    public boolean allowCreateEveryOne = false;
 
     public List<User> getUserList() {
         return userList;
