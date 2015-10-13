@@ -79,10 +79,12 @@ angular.module("BackEndService", ['ui.router','ngSanitize'])
             });
         };
 
-        this.read = function($scope, name, className, id) {
+
+        this.read = function($scope, name, className, id, callback) {
             $http.get(platformDataUrl+"read?className="+className+"&id="+id)
                 .success(function(data){
                     $scope[name] = data;
+                    callback(data);
                 }).error(function(error, status, headers, config){
                     errorService.showError(error,status);
                 });
@@ -97,24 +99,39 @@ angular.module("BackEndService", ['ui.router','ngSanitize'])
             });
         };
 
-        this.list = function ($scope,name,className) {
+        this.list = function ($scope,name,className,callback) {
+            var isCallbackFunction = isFunction(callback);
+
             $http.get(platformDataUrl+"list?className="+className).success(function(data){
                 $scope[name] = data;
+                if (isCallbackFunction){
+                    data.forEach(function(item){
+                        callback(item);
+                    });
+                }
             }).error(function(error, status, headers, config){
                 errorService.showError(error,status);
             });
         };
 
-        this.listPartial = function ($scope,name,className,first,max) {
+        this.listPartial = function ($scope,name,className,first,max,callback) {
+            var isCallbackFunction = isFunction(callback);
+
             $http.get(platformDataUrl+"listPartial?className="+className+"&first="+first+"&max="+max).success(function(data){
                 $scope[name] = data;
+                if (isCallbackFunction){
+                    data.forEach(function(item){
+                        callback(item);
+                    });
+                }
             }).error(function(error, status, headers, config){
                 errorService.showError(error,status);
             });
         };
 
 
-        this.action = function ($scope,name,className,actionName,data){
+        this.action = function ($scope,name,className,actionName,data,callback){
+            var isCallbackFunction = isFunction(callback);
             $http({
                 method: 'POST',
                 url: platformDataUrl+'action',
@@ -124,6 +141,16 @@ angular.module("BackEndService", ['ui.router','ngSanitize'])
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (data){
                 $scope[name] = data;
+                if (isCallbackFunction){
+                    if (angular.isArray(data)){
+                        data.forEach(function(item){
+                            callback(item);
+                        });
+                    } else {
+                        callback(data);
+                    }
+
+                }
             }).error(function(error, status, headers, config){
                 errorService.showError(error,status);
             });
@@ -162,6 +189,13 @@ angular.module("BackEndService", ['ui.router','ngSanitize'])
                 $scope[name] = data;
             });
         };
+
+        function isFunction(func){
+            if (func && angular.isFunction(func)){
+                return true;
+            }
+            return false;
+        }
     })
 
     .service("errorService", function (resourceUrl) {
