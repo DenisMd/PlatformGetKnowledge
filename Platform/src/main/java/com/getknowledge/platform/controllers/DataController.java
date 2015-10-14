@@ -74,6 +74,7 @@ public class DataController {
 
             ObjectNode objectNode = objectMapper.valueToTree(entity);
             objectNode.put("editable" , isAccessEdit(principal,entity));
+            objectNode.put("creatable" , isAccessCreate(principal, entity));
             return objectNode.toString();
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found");
@@ -116,6 +117,7 @@ public class DataController {
                 }
                 ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
                 objectNode.put("editable" , isAccessEdit(principal,abstractEntity));
+                objectNode.put("creatable" , isAccessCreate(principal,abstractEntity));
                 jsonResult += objectNode.toString();
                 jsonResult += ",";
             }
@@ -157,6 +159,7 @@ public class DataController {
                 }
                 ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
                 objectNode.put("editable" , isAccessEdit(principal,abstractEntity));
+                objectNode.put("creatable" , isAccessCreate(principal,abstractEntity));
                 jsonResult += objectNode.toString();
                 jsonResult += ",";
             }
@@ -182,7 +185,7 @@ public class DataController {
             if (jsonObject == null || className == null) return null;
             Class classEntity = Class.forName(className);
             AbstractEntity abstractEntity = (AbstractEntity) objectMapper.readValue(jsonObject, classEntity);
-            if (!isAccessEdit(principal, abstractEntity) ) {
+            if (!isAccessCreate(principal, abstractEntity) ) {
                 throw new NotAuthorized("access denied");
             }
             moduleLocator.findRepository(classEntity).create(abstractEntity);
@@ -314,9 +317,29 @@ public class DataController {
         return checkRight(user, al.getPermissionsForRead()) || checkUserList(user , al.getUserList());
     }
 
-    private boolean isAccessEdit(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {
+    private boolean isAccessCreate(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {
         AuthorizationList al = abstractEntity.getAuthorizationList();
         if (al != null && al.allowCreateEveryOne) return true;
+
+        if (principal == null) {
+            return false;
+        }
+
+        User user = getCurrentUser(principal);
+        if (user == null) throw new NotAuthorized("User not found");;
+
+        if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+            return true;
+        }
+
+        if (al == null) {return false;}
+
+        return checkRight(user, al.getPermissionsForEdit()) || checkUserList(user , al.getUserList());
+    }
+
+    private boolean isAccessEdit(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {
+        AuthorizationList al = abstractEntity.getAuthorizationList();
+        if (al != null) return true;
 
         if (principal == null) {
             return false;
