@@ -112,15 +112,21 @@ public class MenuService extends AbstractService implements BootstrapService {
             }
 
             String[] split = line.split(":");
-            if (split.length != 2) throw new ParseException("Can't parse menu from file. Error in line : " + line);
+            if (split.length < 2) throw new ParseException("Can't parse menu from file. Error in line : " + line);
             String title = split[0].trim();
             String url = split[1].trim();
+            String imageUrl = null;
+            if (split.length >= 3) imageUrl = split[2].trim();
+            String color = null;
+            if (split.length >= 4) color = split[3].trim();
 
             int stringLevel = countLevel(line);
 
             MenuItem menuItem = new MenuItem();
             menuItem.setUrl(url);
             menuItem.setTitle(title);
+            menuItem.setColor(color);
+            menuItem.setIconUrl(imageUrl);
             menuItemsRepository.create(menuItem);
 
             if (level != stringLevel-1){

@@ -1,15 +1,19 @@
 
 # Общее меню
 General
-    programming : /section/programming
+    programming : /section/programming : /resources/image/menu/icons/programming.png : d35136
         courses : /courses
         books : /books
         programs : /programs
-    math : /section/math
+    math : /section/math : /resources/image/menu/icons/math.png : 27b599
         courses : /courses
         books : /books
         programs : /programs
-    physic : /section/physic
+    physic : /section/physic : /resources/image/menu/icons/physic.png : 088ecc
+        courses : /courses
+        books : /books
+        programs : /programs
+    design : /section/design : /resources/image/menu/icons/design.png : c52a5e
         courses : /courses
         books : /books
         programs : /programs
@@ -18,18 +22,22 @@ General
 
 # Меню для администратора
 Admin : ROLE_ADMIN
-    programming : /section/programming
+    programming : /section/programming : /resources/image/menu/icons/programming.png : d35136
         courses : /courses
         books : /books
         programs : /programs
-    math : /section/math
+    math : /section/math : /resources/image/menu/icons/math.png : 27b599
         courses : /courses
         books : /books
         programs : /programs
-    physic : /section/physic
+    physic : /section/physic : /resources/image/menu/icons/physic.png : 088ecc
+        courses : /courses
+        books : /books
+        programs : /programs
+    design : /section/design : /resources/image/menu/icons/design.png : c52a5e
         courses : /courses
         books : /books
         programs : /programs
     news : /news
     contactUs : /contact
-    adminPanel : /admin
+    adminPanel : /adminPanel : /resources/image/menu/icons/admin.png

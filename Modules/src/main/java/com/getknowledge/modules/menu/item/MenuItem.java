@@ -22,6 +22,28 @@ public class MenuItem extends AbstractEntity {
     @JoinTable(name = "subItems_of_item")
     private List<MenuItem> subItems = new ArrayList<>();
 
+    @Column(name = "icon_url", length = 500)
+    private String iconUrl;
+
+    @Column(name = "color" , length = 20)
+    private String color;
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+
     public List<MenuItem> getSubItems() {
         return subItems;
     }
