@@ -7,10 +7,7 @@ import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.modules.user.User;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "user_info")
@@ -23,9 +20,33 @@ public class UserInfo  extends AbstractEntity{
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(length = 40)
+    private String specialty;
+
+    @Basic(fetch=FetchType.LAZY)
+    @Lob @Column(name="image")
+    private byte[] profileImage;
+
     @OneToOne
     @Access(roles = {"ROLE_ADMIN"})
     private User user;
+
+
+    public byte[] getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(byte[] profileImage) {
+        this.profileImage = profileImage;
+    }
+
+    public String getSpecialty() {
+        return specialty;
+    }
+
+    public void setSpecialty(String specialty) {
+        this.specialty = specialty;
+    }
 
     public String getFirstName() {
         return firstName;

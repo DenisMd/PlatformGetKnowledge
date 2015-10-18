@@ -1,8 +1,8 @@
 package com.getknowledge.modules.menu.item;
 
-import com.getknowledge.platform.base.repositories.AbstractRepository;
+import com.getknowledge.platform.base.repositories.BaseRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository("MenuItemsRepository")
-public class MenuItemsRepository extends AbstractRepository<MenuItem> {
+public class MenuItemsRepository extends BaseRepository<MenuItem> {
 }
