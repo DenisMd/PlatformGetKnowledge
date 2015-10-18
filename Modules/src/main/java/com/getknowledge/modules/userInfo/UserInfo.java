@@ -75,7 +75,7 @@ public class UserInfo  extends AbstractEntity{
     @Override
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
-        authorizationList.getUserList().add(this.getUser());
+        authorizationList.allowCreateEveryOne = false;
         return authorizationList;
     }
 }

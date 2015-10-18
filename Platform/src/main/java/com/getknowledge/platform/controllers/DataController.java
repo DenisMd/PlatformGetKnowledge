@@ -224,7 +224,7 @@ public class DataController {
             Class classEntity = Class.forName(className);
 
             AbstractEntity abstractEntity = moduleLocator.findRepository(classEntity).read(id, classEntity);
-            if (!isAccessEdit(principal, abstractEntity) ) {
+            if (!isAccessRemove(principal, abstractEntity) ) {
                 throw new NotAuthorized("access denied");
             }
             moduleLocator.findRepository(classEntity).remove(id, classEntity);
@@ -389,7 +389,7 @@ public class DataController {
 
         if (al == null) {return false;}
 
-        return checkRight(user, al.getPermissionsForEdit()) || checkUserList(user , al.getUserList());
+        return checkRight(user, al.getPermissionsForCreate()) || checkUserList(user , al.getUserList());
     }
 
     private boolean isAccessEdit(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {
@@ -410,6 +410,26 @@ public class DataController {
         if (al == null) {return false;}
 
         return checkRight(user, al.getPermissionsForEdit()) || checkUserList(user , al.getUserList());
+    }
+
+    private boolean isAccessRemove(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {
+        AuthorizationList al = abstractEntity.getAuthorizationList();
+        if (al != null) return true;
+
+        if (principal == null) {
+            return false;
+        }
+
+        User user = getCurrentUser(principal);
+        if (user == null) throw new NotAuthorized("User not found");;
+
+        if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+            return true;
+        }
+
+        if (al == null) {return false;}
+
+        return checkRight(user, al.getPermissionsForRemove()) || checkUserList(user , al.getUserList());
     }
 
     private boolean checkRight(User user , List<Permission> permissions) throws NotAuthorized {
