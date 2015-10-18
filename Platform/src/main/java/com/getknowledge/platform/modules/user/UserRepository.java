@@ -1,13 +1,13 @@
 package com.getknowledge.platform.modules.user;
 
-import com.getknowledge.platform.base.repositories.AbstractRepository;
+import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.modules.role.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository("UserRepository")
-public class UserRepository extends AbstractRepository<User> {
+public class UserRepository extends BaseRepository<User> {
 
     @Autowired
     RoleRepository roleRepository;

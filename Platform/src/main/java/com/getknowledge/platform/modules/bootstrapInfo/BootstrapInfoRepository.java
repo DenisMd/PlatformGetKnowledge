@@ -1,12 +1,12 @@
 package com.getknowledge.platform.modules.bootstrapInfo;
 
-import com.getknowledge.platform.base.repositories.AbstractRepository;
+import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.modules.bootstrapInfo.states.BootstrapState;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository("BootstrapInfoRepository")
-public class BootstrapInfoRepository extends AbstractRepository<BootstrapInfo> {
+public class BootstrapInfoRepository extends BaseRepository<BootstrapInfo> {
 
     @Transactional
     public BootstrapInfo createIfNotExist(BootstrapInfo object) {

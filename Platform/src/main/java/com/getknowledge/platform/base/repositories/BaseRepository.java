@@ -2,7 +2,6 @@ package com.getknowledge.platform.base.repositories;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.getknowledge.platform.base.entities.AbstractEntity;
-import com.getknowledge.platform.controllers.DataController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,9 +11,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 
-public abstract class AbstractRepository<T extends AbstractEntity> {
+public abstract class BaseRepository<T extends AbstractEntity> {
 
-    protected Logger logger = LoggerFactory.getLogger(AbstractRepository.class);
+    protected Logger logger = LoggerFactory.getLogger(BaseRepository.class);
 
     @PersistenceContext
     public EntityManager entityManager;

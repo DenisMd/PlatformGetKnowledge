@@ -1,18 +1,15 @@
 package com.getknowledge.platform.utils;
 
 import com.getknowledge.platform.annotations.ModuleInfo;
-import com.getknowledge.platform.base.repositories.AbstractRepository;
+import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.BootstrapService;
 import com.getknowledge.platform.exceptions.ModuleNotFound;
-import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
-import javax.sql.rowset.serial.SerialRef;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -21,14 +18,14 @@ public class  ModuleLocator {
     @Autowired
     private ApplicationContext ac;
 
-    public AbstractRepository findRepository(Class classEntity) throws ModuleNotFound {
+    public BaseRepository findRepository(Class classEntity) throws ModuleNotFound {
         if (classEntity == null) return null;
         ModuleInfo moduleInfo = (ModuleInfo) classEntity.getAnnotation(ModuleInfo.class);
         if(moduleInfo == null) {
             throw new ModuleNotFound("module info not found for entity : " + classEntity.getName());
         }
-        AbstractRepository abstractRepository = (AbstractRepository) ac.getBean(moduleInfo.repositoryName());
-        return abstractRepository;
+        BaseRepository baseRepository = (BaseRepository) ac.getBean(moduleInfo.repositoryName());
+        return baseRepository;
     }
 
     public AbstractService findService(Class classEntity) throws ModuleNotFound {

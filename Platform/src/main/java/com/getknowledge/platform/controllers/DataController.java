@@ -1,15 +1,15 @@
 package com.getknowledge.platform.controllers;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.getknowledge.platform.annotations.Action;
+import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
-import com.getknowledge.platform.base.repositories.AbstractRepository;
+import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.exceptions.*;
@@ -22,8 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -58,7 +58,7 @@ public class DataController {
         try {
             if (id == null || className == null || className.isEmpty()) return null;
             Class classEntity = Class.forName(className);
-            AbstractRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
+            BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
             if (repository instanceof ProtectedRepository) {
                 ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
                 protectedRepository.setCurrentUser(getCurrentUser(principal));
@@ -100,7 +100,7 @@ public class DataController {
         try {
             if (className == null || className.isEmpty()) return null;
             Class classEntity = Class.forName(className);
-            AbstractRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
+            BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
             if (repository instanceof ProtectedRepository) {
                 ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
                 protectedRepository.setCurrentUser(getCurrentUser(principal));
@@ -141,7 +141,7 @@ public class DataController {
         try {
             if (className == null || className.isEmpty() || first < 0 || max < 0) return null;
             Class classEntity = Class.forName(className);
-            AbstractRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
+            BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
             if (repository instanceof ProtectedRepository) {
                 ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
                 protectedRepository.setCurrentUser(getCurrentUser(principal));
@@ -287,6 +287,61 @@ public class DataController {
             throw new InvokeException("IllegalAccessException");
         }
     }
+
+    @RequestMapping(value = "/actionWithFile", method = RequestMethod.POST)
+    public @ResponseBody String actionWithFile(@RequestParam("className") String className, @RequestParam("actionName") String actionName,
+                                               @RequestParam("data") String jsonData, @RequestParam("file") MultipartFile file,
+                                               Principal principal) throws PlatformException {
+        try {
+            Class classEntity = Class.forName(className);
+            AbstractService abstractService = moduleLocator.findService(classEntity);
+
+            for (Method method : abstractService.getClass().getMethods()) {
+                ActionWithFile action = AnnotationUtils.findAnnotation(method, ActionWithFile.class);
+                if(action == null) {
+                    continue;
+                }
+
+                if (action.name().equals(actionName)) {
+                    TypeReference<HashMap<String, Object>> typeRef
+                            = new TypeReference<HashMap<String, Object>>() {
+                    };
+
+                    HashMap<String, Object> data = objectMapper.readValue(jsonData, typeRef);
+
+                    if (!action.mandatoryFields()[0].isEmpty()) {
+                        for (String mandatoryField : action.mandatoryFields()) {
+                            if (!data.containsKey(mandatoryField)) {
+                                throw new MandatoryFieldNotContainException("mandatory field not contain " + mandatoryField);
+                            }
+                        }
+                    }
+
+                    if(principal != null) {
+                        data.put("principalName", principal.getName());
+                    } else {
+                        data.put("principalName" , null);
+                    }
+                    Object result = method.invoke(abstractService, data, file);
+                    return objectMapper.writeValueAsString(result);
+                }
+            }
+
+            return null;
+        } catch (ClassNotFoundException e) {
+            throw new ClassNameNotFound("classname : " + className + " not found");
+        } catch (IOException e) {
+            logger.warn("parse result exception ", e);
+            throw new ParseException("parse result exception");
+        } catch (InvocationTargetException e) {
+            logger.warn("InvocationTargetException ", e);
+            throw new InvokeException("InvocationTargetException");
+        } catch (IllegalAccessException e) {
+            logger.warn("IllegalAccessException ", e);
+            throw new InvokeException("IllegalAccessException");
+        }
+    }
+
 
     // Authorization -----------------------------------------------------------
 
