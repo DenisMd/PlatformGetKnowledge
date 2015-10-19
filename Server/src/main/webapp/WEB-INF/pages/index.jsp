@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="/resources/css/index.css">
 </head>
 <body>
-
+    <module-template name="menus/mainMenu" data="{{menu}}"></module-template>
     <div class="wrapper">
         <div ui-view></div>
+        <p>text:<span ng-bind-html="application.text.language"></span></p><br/>
+        Main menu : {{menu}}
     </div>
-    <p>text:<span ng-bind-html="application.text.language"></span></p><br/>
-    Main menu : {{menu}}
 
     <script src="/resources/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="/resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>

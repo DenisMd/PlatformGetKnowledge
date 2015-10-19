@@ -1,3 +1,151 @@
-body {
-    color: red;
+html, body{
+    height: 100%;
+}
+
+/*--------------------------------------*/
+/*Menu*/
+
+.nav-menu {
+    width: 230px;
+    position: fixed;
+    background-color: #11171c;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    color: #ffffff;
+}
+
+.site-title {
+    font: bold 24px / 12px 'Courier New';
+    text-align: center;
+    margin-top: 18px;
+}
+
+/*User information*/
+
+.user-info-card {
+    width: 100%;
+    margin-top: 20px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.user-image {
+    width: 100px;
+    height: 100px;
+    background: white;
+    border-radius: 50%;
+    position: relative;
+}
+
+.user-name {
+    font: 400 18px Corbel;
+    margin-top: 2px;
+}
+
+.info-about-user{
+    font: 400 16px / 12px Corbel;
+}
+
+/*Link*/
+.link-card{
+    text-align: center;
+    display: inline-block;
+    width:100%;
+}
+
+.link{
+    text-align: center;
+    background-image: url("../image/social.png");
+    background-repeat:no-repeat;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border:0;
+    padding: 0;
+}
+
+.link:focus,.link:hover{
+    border:0;
+    outline: 0;
+}
+
+.link-with-vk{
+    background-position: 1px -3px;
+}
+
+.link-with-facebook{
+    background-position: -55px -3px;
+}
+
+.link-with-twitter{
+    background-position: -109px -1px;
+}
+
+.link-with-github{
+    background-position: -164px -2px;
+}
+
+.line{
+    margin: 10px 0;
+    width: 100%;
+    height: 1px;
+    background: #eee;
+    box-shadow: 0px 0px 2px 1px #e2e2e2;
+}
+
+/*menu items*/
+.first-menu-items{
+    list-style: none;
+    font: 400 20px Corbel;
+    padding-left: 0;
+}
+
+.first-menu-item{
+    vertical-align: middle;
+    line-height: 30px;
+}
+
+.first-menu-item>a{
+    display: block;
+    text-decoration: none;
+    padding-left: 20px;
+}
+
+.first-menu-item a>img{
+    vertical-align: middle;
+    margin-right: 15px;
+    height: 25px;
+    width: 25px;
+}
+
+.first-menu-item a:hover>img{
+    transform: scale(1.1,1.1);
+}
+
+.second-menu-items{
+    font: 400 18px Corbel;
+    list-style: none;
+    padding: 5px 0;
+    margin: 0;
+}
+
+.second-menu-item{
+    vertical-align: middle;
+    line-height: 20px;
+}
+
+.second-menu-item>a{
+    display: block;
+    text-decoration: none;
+    padding-left: 60px;
+    color: #3f474e;
+}
+.second-menu-item a:hover{
+    color:#ffffff;
+}
+/*--------------------------------------*/
+/*wrapper*/
+.wrapper{
+    padding-left: 230px;
 }

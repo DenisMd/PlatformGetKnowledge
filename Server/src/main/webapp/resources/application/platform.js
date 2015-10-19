@@ -2,6 +2,12 @@
 angular.module("BackEndService", ['ui.router','ngSanitize'])
     .constant("resourceUrl", "/resources/application/")
     .constant("resourceTemplate","/resources/template/")
+    .service("pageService",function(){
+        this.getLanguage = function(){
+            var url = window.location.hash.split("/");
+            return url[1];
+        }
+    })
     .service("applicationService", function ($http,$sce,resourceUrl,errorService) {
         "use strict";
 
@@ -296,15 +302,27 @@ angular.module("BackEndService", ['ui.router','ngSanitize'])
     .directive('moduleTemplate', function(resourceTemplate) {
         return {
             restrict: 'E',
-            scope: {
-                name: '@name',
-                data: '=data'
-            },
+            scope: true,
             templateUrl: function(elem,attrs){
                 return resourceTemplate + attrs.name + ".html";
+            },
+            //controller : function($scope,$attrs){
+            //    function init(){
+            //        $scope.data = $scope[$attrs.data];
+            //    }
+            //},
+            link: function(scope, element, attrs){
+                console.log(attrs.data);
+                console.log(scope[attrs.data]);
+                console.log(scope.$parent[attrs.data]);
+                console.log(scope.$parent);
             }
         };
     });
+
+
+
+
 
 
 

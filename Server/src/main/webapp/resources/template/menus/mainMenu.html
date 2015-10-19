@@ -1,0 +1,30 @@
+<nav class="nav-menu">
+    <div class="site-title">getKnowledge();</div>
+
+    <div class="user-info-card">
+        <img src="images/photo.png" class="user-image" />
+        <p class="user-name">Mabel</p>
+        <p class="info-about-user">Programmer engener</p>
+    </div>
+
+    <div class="link-card">
+        <button class="link link-with-vk"></button>
+        <button class="link link-with-facebook"></button>
+        <button class="link link-with-twitter"></button>
+        <button class="link link-with-github"></button>
+    </div>
+    <div class="line"></div>
+    <div>{{data}}
+        <ul class="first-menu-items">
+            <li class="first-menu-item" ng-repeat="menuItem in data[0].items">
+                <a ng-style="{color: menuItem.color}" ng->
+                    <img ng-src="{{menuItem.iconUrl}}"/>
+                    {{menuItem.title}}
+                </a>
+                <ul class="second-menu-items" ng-show="menuItem.subItems.length">
+                    <li class="second-menu-item"><a>Groups courses</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
