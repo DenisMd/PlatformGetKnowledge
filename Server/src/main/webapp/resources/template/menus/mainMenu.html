@@ -14,15 +14,18 @@
         <button class="link link-with-github"></button>
     </div>
     <div class="line"></div>
-    <div>{{data}}
+    <div>
+        <!--ng-scrollbars ng-scrollbars-config="menuScrollConfig"-->
         <ul class="first-menu-items">
-            <li class="first-menu-item" ng-repeat="menuItem in data[0].items">
-                <a ng-style="{color: menuItem.color}" ng->
+            <li class="first-menu-item" ng-repeat="menuItem in getData()[0].items">
+                <a ng-style="{color: menuItem.color}" ng-href="{{'#/'+application.language+menuItem.url}}">
                     <img ng-src="{{menuItem.iconUrl}}"/>
-                    {{menuItem.title}}
+                    {{translate(menuItem.title)}}
                 </a>
                 <ul class="second-menu-items" ng-show="menuItem.subItems.length">
-                    <li class="second-menu-item"><a>Groups courses</a></li>
+                    <li class="second-menu-item"  ng-repeat="submenuItem in menuItem.subItems">
+                        <a ng-href="{{'#/'+application.language+menuItem.url+submenuItem.url}}">{{translate(submenuItem.title)}}</a>
+                    </li>
                 </ul>
             </li>
         </ul>
