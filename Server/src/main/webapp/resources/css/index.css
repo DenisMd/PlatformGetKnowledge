@@ -56,13 +56,18 @@ html, body{
 
 .link{
     text-align: center;
-    background-image: url("../image/social.png");
+    background-image: url("../image/menu/social.png");
     background-repeat:no-repeat;
     width: 45px;
     height: 45px;
     border-radius: 50%;
     border:0;
     padding: 0;
+    background-size: cover;
+    background-color: inherit;
+}
+.link:hover{
+    background-image: url("../image/menu/social-hover.png");
 }
 
 .link:focus,.link:hover{
@@ -71,19 +76,20 @@ html, body{
 }
 
 .link-with-vk{
-    background-position: 1px -3px;
+    background-position: 2px -2px;
 }
 
 .link-with-facebook{
-    background-position: -55px -3px;
+    background-position: -53px -2px;
 }
 
 .link-with-twitter{
-    background-position: -109px -1px;
+    background-position: -106px -2px;
 }
 
+
 .link-with-github{
-    background-position: -164px -2px;
+    background-position: -158px -2px;
 }
 
 .line{

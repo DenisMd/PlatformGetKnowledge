@@ -2,7 +2,7 @@
     <div class="site-title">getKnowledge();</div>
 
     <div class="user-info-card">
-        <img src="images/photo.png" class="user-image" />
+        <img src="/resources/image/menu/photo.png" class="user-image" />
         <p class="user-name">Mabel</p>
         <p class="info-about-user">Programmer engener</p>
     </div>
@@ -17,7 +17,7 @@
     <div>
         <!--ng-scrollbars ng-scrollbars-config="menuScrollConfig"-->
         <ul class="first-menu-items">
-            <li class="first-menu-item" ng-repeat="menuItem in getData()[0].items">
+            <li class="first-menu-item" ng-repeat="menuItem in getData().items">
                 <a ng-style="{color: menuItem.color}" ng-href="{{'#/'+application.language+menuItem.url}}">
                     <img ng-src="{{menuItem.iconUrl}}"/>
                     {{translate(menuItem.title)}}
