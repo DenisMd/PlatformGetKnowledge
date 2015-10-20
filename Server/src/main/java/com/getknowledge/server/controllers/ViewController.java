@@ -87,6 +87,7 @@ public class ViewController {
 
         for (int i=1; i < split.length; i++) {
             File dir = new File(servletContext.getRealPath(prefix + pathForView + "/" + split[i]));
+            if (!dir.exists()) return "404";
             if (dir.isDirectory()) {
                 pathForView += "/"+split[i];
                 if (split.length == i+1) {
@@ -116,7 +117,13 @@ public class ViewController {
         if (!isCorrectRole(userInfo.getUser(), split)) {
             return new ModelAndView("accessDenied");
         }
-        return new ModelAndView(getPath(split));
+        String path = getPath(split);
+        File dir = new File(servletContext.getRealPath(prefix + path + ".jsp"));
+        if (dir.exists()) {
+            return new ModelAndView(path);
+        } else {
+            return new ModelAndView("404");
+        }
     }
 
     @RequestMapping(value = "/**")
