@@ -1,5 +1,5 @@
 
-# Общее меню
+# General menu
 General
     programming : /section/programming : /resources/image/menu/icons/programming.png : d35136
         courses : /courses
@@ -17,10 +17,10 @@ General
         courses : /courses
         books : /books
         programs : /programs
-    news : /news
-    contactUs : /contact
+    news : /news : /resources/image/menu/icons/news.png : e5d525
+    contactUs : /resources/image/menu/icons/contact.png : 459619
 
-# Меню для администратора
+# Admin menu
 Admin : ROLE_ADMIN
     programming : /section/programming : /resources/image/menu/icons/programming.png : d35136
         courses : /courses
@@ -38,6 +38,5 @@ Admin : ROLE_ADMIN
         courses : /courses
         books : /books
         programs : /programs
-    news : /news
-    contactUs : /contact
-    adminPanel : /adminPanel : /resources/image/menu/icons/admin.png
+    news : /news : /resources/image/menu/icons/news.png : e5d525
+    contactUs : /resources/image/menu/icons/contact.png : 459619
