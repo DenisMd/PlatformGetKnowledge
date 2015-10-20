@@ -255,6 +255,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars'])
             var url = $stateParams.path.split("/");
             return url [url.length - 1] + "Ctrl";
         }
+
         $urlRouterProvider.when('' , '/ru');
         $urlRouterProvider.when('/' , '/ru');
         $urlRouterProvider.when('/#' , '/ru');
