@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -111,7 +112,7 @@ public class ViewController {
         return  pathForView;
     }
 
-    private ModelAndView filter(String  restOfTheUrl , Principal p) {
+    private ModelAndView filter(String  restOfTheUrl , Principal p, HttpServletResponse response) {
         String [] split = restOfTheUrl.split("/");
         UserInfo userInfo = userInfoService.getCurrentUser(p);
         User user = userInfo == null ? null : userInfo.getUser();
@@ -121,19 +122,23 @@ public class ViewController {
         String path = getPath(split);
         File dir = new File(servletContext.getRealPath(prefix + path + ".jsp"));
         if (dir.exists()) {
+            if (path.equals("404")){
+                response.setHeader("Error","404");
+            }
             return new ModelAndView(path);
         } else {
+            response.setHeader("Error","404");
             return new ModelAndView("404");
         }
     }
 
     @RequestMapping(value = "/**")
-    public ModelAndView viewer(HttpServletRequest request,Principal principal) {
+    public ModelAndView viewer(HttpServletRequest request,Principal principal,HttpServletResponse response) {
         String restOfTheUrl = (String) request.getAttribute(
                 HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
 
         restOfTheUrl = restOfTheUrl.substring(1);
-        return filter(restOfTheUrl,principal);
+        return filter(restOfTheUrl,principal,response);
     }
 
 }
