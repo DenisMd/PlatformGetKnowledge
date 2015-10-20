@@ -1,5 +1,5 @@
 ;
-angular.module("BackEndService", ['ui.router','ngSanitize'])
+angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars'])
     .constant("resourceUrl", "/resources/application/")
     .constant("resourceTemplate","/resources/template/")
     .service("pageService",function(){
@@ -306,16 +306,14 @@ angular.module("BackEndService", ['ui.router','ngSanitize'])
             templateUrl: function(elem,attrs){
                 return resourceTemplate + attrs.name + ".html";
             },
-            //controller : function($scope,$attrs){
-            //    function init(){
-            //        $scope.data = $scope[$attrs.data];
-            //    }
-            //},
-            link: function(scope, element, attrs){
-                console.log(attrs.data);
-                console.log(scope[attrs.data]);
-                console.log(scope.$parent[attrs.data]);
-                console.log(scope.$parent);
+            controller : function($scope,$attrs){
+                $scope.data = null;
+                $scope.getData = function (){
+                    if (!$scope.data){
+                        $scope.data = $scope[$attrs.data];
+                    }
+                    return  $scope.data;
+                }
             }
         };
     });
