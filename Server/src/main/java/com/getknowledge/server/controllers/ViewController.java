@@ -114,7 +114,8 @@ public class ViewController {
     private ModelAndView filter(String  restOfTheUrl , Principal p) {
         String [] split = restOfTheUrl.split("/");
         UserInfo userInfo = userInfoService.getCurrentUser(p);
-        if (!isCorrectRole(userInfo.getUser(), split)) {
+        User user = userInfo == null ? null : userInfo.getUser();
+        if (!isCorrectRole(user, split)) {
             return new ModelAndView("accessDenied");
         }
         String path = getPath(split);
