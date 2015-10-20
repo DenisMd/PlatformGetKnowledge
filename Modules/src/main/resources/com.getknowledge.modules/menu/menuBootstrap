@@ -18,7 +18,7 @@ General
         books : /books
         programs : /programs
     news : /news : /resources/image/menu/icons/news.png : e5d525
-    contactUs : /resources/image/menu/icons/contact.png : 459619
+    contactUs : /contacts : /resources/image/menu/icons/contacts.png : 459619
 
 # Admin menu
 Admin : ROLE_ADMIN
@@ -39,4 +39,4 @@ Admin : ROLE_ADMIN
         books : /books
         programs : /programs
     news : /news : /resources/image/menu/icons/news.png : e5d525
-    contactUs : /resources/image/menu/icons/contact.png : 459619
+    contactUs : /contacts : /resources/image/menu/icons/contacts.png : 459619
