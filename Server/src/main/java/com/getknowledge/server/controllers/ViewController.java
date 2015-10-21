@@ -2,6 +2,9 @@ package com.getknowledge.server.controllers;
 
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoService;
+import com.getknowledge.platform.exceptions.ModuleNotFound;
+import com.getknowledge.platform.exceptions.NotAuthorized;
+import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.role.names.RoleName;
 import com.getknowledge.platform.modules.user.User;
@@ -16,6 +19,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -112,28 +116,27 @@ public class ViewController {
         return  pathForView;
     }
 
-    private ModelAndView filter(String  restOfTheUrl , Principal p, HttpServletResponse response) {
+    private ModelAndView filter(String  restOfTheUrl , Principal p, HttpServletResponse response) throws PlatformException {
         String [] split = restOfTheUrl.split("/");
         UserInfo userInfo = userInfoService.getCurrentUser(p);
         User user = userInfo == null ? null : userInfo.getUser();
         if (!isCorrectRole(user, split)) {
-            return new ModelAndView("accessDenied");
+            throw new NotAuthorized("Access denied");
         }
         String path = getPath(split);
         File dir = new File(servletContext.getRealPath(prefix + path + ".jsp"));
         if (dir.exists()) {
             if (path.equals("404")){
-                response.setHeader("Error","404");
+                throw new ModuleNotFound("Not found!");
             }
             return new ModelAndView(path);
         } else {
-            response.setHeader("Error","404");
-            return new ModelAndView("404");
+            throw new ModuleNotFound("Not found!");
         }
     }
 
     @RequestMapping(value = "/**")
-    public ModelAndView viewer(HttpServletRequest request,Principal principal,HttpServletResponse response) {
+    public ModelAndView viewer(HttpServletRequest request,Principal principal,HttpServletResponse response) throws PlatformException {
         String restOfTheUrl = (String) request.getAttribute(
                 HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
 
