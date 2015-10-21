@@ -1,5 +1,15 @@
-<nav class="nav-menu">
-    <div class="site-title">getKnowledge();</div>
+<header class="header-info">
+    <div class="header-item header-left">
+        <button class="menu-toggle" ng-click="toggelMenu = !toggelMenu"><span class="hamburger">&#9776;</span></button>
+        <div class="site-title">getKnowledge();</div>
+    </div>
+    <div class="header-item header-right">
+        <div class="header-item language-panel"><a ng-class="application.language=='ru'?'selected':''" ng-click="changeLanguage('ru')">Ru</a>/<a ng-class="application.language=='en'?'selected':''" ng-click="changeLanguage('en')">En</a></div>
+    </div>
+    <div class="header-item header-center"></div>
+</header>
+
+<nav class="nav-menu animate-show" ng-show="toggelMenu">
 
     <div class="user-info-card">
         <img src="/resources/image/menu/photo.png" class="user-image" />

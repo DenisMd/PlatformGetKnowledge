@@ -1,5 +1,5 @@
-var model = angular.module("mainApp", ["BackEndService"]);
-model.controller("mainController", function ($scope, $http, applicationService) {
+var model = angular.module("mainApp", ["BackEndService","ngAnimate"]);
+model.controller("mainController", function ($scope, $http, $state, applicationService) {
     $scope.menuScrollConfig = {
         autoHideScrollbar: false,
         theme: 'light-3',
@@ -7,6 +7,27 @@ model.controller("mainController", function ($scope, $http, applicationService) 
             updateOnContentResize: true
         }
     };
+
+    //смена языка
+    $scope.changeLanguage = function (language) {
+        if (!$scope.application.language || $scope.application.language===language) {
+            return;
+        }
+        var str = window.location.hash.split("/").splice(2).join("/");
+        if (str) {
+            $state.go("modules", {
+                language: language,
+                path: str
+            });
+        } else {
+            $state.go("home", {
+                language: language
+            });
+        }
+        applicationService.pageInfo($scope);
+    };
+
+    $scope.toggelMenu = true;
 
   $scope.translate = function (key) {
       if (!$scope.application || !$scope.application.text || !(key in $scope.application.text)) {

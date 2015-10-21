@@ -20,6 +20,7 @@
     <script src="/resources/bower_components/angular/angular.min.js"></script>
     <script src="/resources/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="/resources/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="/resources/bower_components/angular-animate/angular-animate.min.js"></script>
     <script src="/resources/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="/resources/bower_components/ng-scrollbars/dist/scrollbars.min.js"></script>
     <script src="/resources/application/platform.js"></script>
