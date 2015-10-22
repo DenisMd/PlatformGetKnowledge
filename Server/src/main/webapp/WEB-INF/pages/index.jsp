@@ -22,11 +22,8 @@
     </header>
 
     <module-template name="menus/mainMenu" data="menu"></module-template>
-
     <div class="wrapper wrapper-left" id="wrapper">
-        <div class="container">
             <div ui-view></div>
-        </div>
     </div>
 
     <script src="/resources/bower_components/jquery/dist/jquery.min.js"></script>
