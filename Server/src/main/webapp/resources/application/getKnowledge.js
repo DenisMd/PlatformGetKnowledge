@@ -1,10 +1,11 @@
 var model = angular.module("mainApp", ["BackEndService","ngAnimate"]);
 model.controller("mainController", function ($scope, $http, $state, applicationService) {
     $scope.menuScrollConfig = {
-        autoHideScrollbar: false,
         theme: 'light-3',
+        snapOffset : 100,
         advanced:{
-            updateOnContentResize: true
+            updateOnContentResize: true,
+            updateOnSelectorChange: "ul li"
         }
     };
 
