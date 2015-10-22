@@ -28,15 +28,20 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
     };
 
     $scope.toggelMenu = true;
+    $scope.toggelClick = function(){
+        $scope.toggelMenu = !$scope.toggelMenu;
+        var wrapper = angular.element("#wrapper");
+        wrapper.toggleClass("wrapper-left");
+    };
 
-  $scope.translate = function (key) {
+    $scope.translate = function (key) {
       if (!$scope.application || !$scope.application.text || !(key in $scope.application.text)) {
           return key;
       }
 
       return $scope.application.text[key];
 
-  };
+    };
 
   applicationService.pageInfo($scope);
 

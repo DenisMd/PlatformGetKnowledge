@@ -236,11 +236,15 @@ html, body{
 
 .animate-show.ng-hide {
     opacity: 0;
-    width:0;
+    left:-250px;
 }
 /*--------------------------------------*/
 /*wrapper*/
 .wrapper{
-    padding-left: 230px;
     padding-top:60px;
+    transition: all linear 0.5s;
+    padding-left: 0px;
+}
+.wrapper-left{
+    padding-left: 250px;
 }

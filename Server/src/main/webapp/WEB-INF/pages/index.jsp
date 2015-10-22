@@ -8,8 +8,22 @@
     <link rel="stylesheet" href="/resources/css/index.css" type="text/css">
 </head>
 <body>
+    <header class="header-info">
+        <div class="header-item header-left">
+            <button class="menu-toggle" ng-click="toggelClick()"><span class="hamburger">&#9776;</span></button>
+            <div class="site-title">getKnowledge();</div>
+        </div>
+        <div class="header-item header-right">
+            <div class="header-item language-panel"><a ng-class="application.language=='ru'?'selected':''"
+                                                       ng-click="changeLanguage('ru')">Ru</a>/<a
+                    ng-class="application.language=='en'?'selected':''" ng-click="changeLanguage('en')">En</a></div>
+        </div>
+        <div class="header-item header-center"></div>
+    </header>
+
     <module-template name="menus/mainMenu" data="menu"></module-template>
-    <div class="wrapper">
+
+    <div class="wrapper wrapper-left" id="wrapper">
         <div class="container">
             <div ui-view></div>
         </div>
