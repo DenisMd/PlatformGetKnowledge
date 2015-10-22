@@ -1,6 +1,15 @@
 {
   "language" : "en",
   "text" : {
-    "language" : "Language"
+    "language" : "Language",
+    "programming" : "Programing",
+    "courses" : "Group of courses",
+    "books" : "Books",
+    "programs" : "Programs",
+    "math" : "Math",
+    "physic" : "Physic",
+    "design" : "Design",
+    "news" : "News",
+    "contactUs" : "Contact us"
   }
 }

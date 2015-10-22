@@ -22,6 +22,8 @@ General
 
 # Admin menu
 Admin : ROLE_ADMIN
+    admin : /admin : /resources/image/menu/icons/admin.png : f41c1c
+        panel : /panel
     programming : /section/programming : /resources/image/menu/icons/programming.png : d35136
         courses : /courses
         books : /books
@@ -37,6 +39,6 @@ Admin : ROLE_ADMIN
     design : /section/design : /resources/image/menu/icons/design.png : c52a5e
         courses : /courses
         books : /books
-        programs : /programs
+        programs : /program
     news : /news : /resources/image/menu/icons/news.png : e5d525
     contactUs : /contacts : /resources/image/menu/icons/contacts.png : 459619

@@ -1,6 +1,15 @@
 {
   "language" : "ru",
   "text" : {
-    "language" : "Язык"
+    "language" : "Язык",
+    "programming" : "Программирование",
+    "courses" : "Группы курсов",
+    "books" : "Книги",
+    "programs" : "Программы",
+    "math" : "Математика",
+    "physic" : "Физика",
+    "design" : "Дезайн",
+    "news" : "Новости",
+    "contactUs" : "Обратная связь"
   }
 }

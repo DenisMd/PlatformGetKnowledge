@@ -89,7 +89,7 @@ html, body{
 /*Menu*/
 
 .nav-menu {
-    width: 230px;
+    width: 250px;
     position: fixed;
     background-color: #11171c;
     height: 100%;
@@ -193,7 +193,7 @@ html, body{
 .first-menu-item>a{
     display: block;
     text-decoration: none;
-    padding-left: 20px;
+    padding-left: 10px;
 }
 
 .first-menu-item a>img{
