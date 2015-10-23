@@ -2,6 +2,7 @@
   "language" : "en",
   "text" : {
     "language" : "Language",
+    "login" : "Login",
     "programming" : "Programing",
     "courses" : "Group of courses",
     "books" : "Books",

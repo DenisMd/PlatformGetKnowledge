@@ -135,6 +135,11 @@ html, body{
     background: white;
     border-radius: 50%;
     position: relative;
+    cursor: pointer;
+}
+
+.login-image{
+    background: none;
 }
 
 

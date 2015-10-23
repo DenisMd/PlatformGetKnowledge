@@ -2,6 +2,7 @@
   "language" : "ru",
   "text" : {
     "language" : "Язык",
+    "login" : "Вход",
     "programming" : "Программирование",
     "courses" : "Группы курсов",
     "books" : "Книги",
