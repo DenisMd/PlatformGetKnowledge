@@ -29,6 +29,7 @@
     "bootstrap": "~3.3.5",
     "angular-sanitize": "1.4.7",
     "ng-scrollbars": "~0.0.5",
-    "angular-animate": "1.4.7"
+    "angular-animate": "1.4.7",
+    "angular-bootstrap": "0.14.2"
   }
 }

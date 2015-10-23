@@ -1,4 +1,4 @@
-var model = angular.module("mainApp", ["BackEndService","ngAnimate"]);
+var model = angular.module("mainApp", ["BackEndService","ngAnimate","ui.bootstrap"]);
 model.controller("mainController", function ($scope, $http, $state, applicationService) {
     $scope.menuScrollConfig = {
         theme: 'light-3',
@@ -50,4 +50,31 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
   applicationService.action($scope, "user" , "com.getknowledge.modules.userInfo.UserInfo" , "getAuthorizedUser" , {});
 
 
-});
+})
+
+    model.controller("carouselCtrl",function($scope){
+        $scope.interval = 5000;
+        $scope.noWrapSlides = false;
+        $scope.slides =  [
+            {
+                section: "Programming",
+                image: "/resources/image/index/slider/programming.jpg",
+                text: "Программирование - научись формулировать свои желания компьютеру."
+            },
+            {
+                section: "Math",
+                image: "/resources/image/index/slider/math.jpg",
+                text: "Математика - одна истина прекрасна."
+            },
+            {
+                section: "Physic",
+                image: "/resources/image/index/slider/physic.jpg",
+                text: "Если тебя квантовая физика не испугала, значит, ты ничего в ней не понял."
+            },
+            {
+                section: "Design",
+                image: '/resources/image/index/slider/design.jpg',
+                text: "Простота — необходимое условие прекрасного."
+            }
+        ];
+    });
