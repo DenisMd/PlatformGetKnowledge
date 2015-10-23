@@ -1,12 +1,17 @@
 
 <nav class="nav-menu animate-show" ng-show="toggelMenu" ng-scrollbars ng-scrollbars-config="menuScrollConfig">
     <div class="main-menu-info">
-        <div class="user-info-card">
-            <img src="/resources/image/menu/photo.png" class="user-image" />
-            <p class="user-name">Mabel</p>
+        <div class="user-info-card" ng-show="user">
+            <img src="/resources/image/menu/photo.png" class="main-image" />
+            <p class="main-label">Mabel</p>
             <p class="info-about-user">Programmer engener</p>
         </div>
-
+        <div class="user-info-card" ng-hide="user">
+            <a>
+                <img ng-src="{{isMouseenter? '/resources/image/menu/login2.png': '/resources/image/menu/login.png'}}" ng-mouseenter="isMouseenter = true" ng-mouseleave="isMouseenter = false" class="main-image login-image" />
+            </a>
+            <p class="main-label">Login</p>
+        </div>
         <div class="link-card">
             <button class="link link-with-vk"></button>
             <button class="link link-with-facebook"></button>

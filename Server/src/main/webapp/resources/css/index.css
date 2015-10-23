@@ -109,7 +109,7 @@ html, body{
     color: #ffffff;
     border-top:1px solid #000;
     opacity: 1;
-    /*overflow: hidden;*/
+    z-index: 500;
 }
 
 /*Top information*/
@@ -126,9 +126,10 @@ html, body{
     margin-top: 20px;
     text-align: center;
     color: #ffffff;
+    height: 150px;
 }
 
-.user-image {
+.main-image {
     width: 100px;
     height: 100px;
     background: white;
@@ -136,8 +137,9 @@ html, body{
     position: relative;
 }
 
-.user-name {
-    font: 400 18px Corbel;
+
+.main-label {
+    font: 400 22px Corbel;
     margin-top: 2px;
 }
 
@@ -150,7 +152,7 @@ html, body{
     text-align: center;
     display: inline-block;
     width:100%;
-    margin-bottom: 15px;
+    margin: 15px 0;
 }
 
 .link{
