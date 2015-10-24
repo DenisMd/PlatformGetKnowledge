@@ -264,6 +264,9 @@ html, body{
     padding-top:60px;
     transition: all linear 0.5s;
     padding-left: 0px;
+    padding-right: 20px;
+    margin-right: auto;
+    margin-left: auto;
 }
 .wrapper-left{
     padding-left: 270px;
@@ -271,9 +274,14 @@ html, body{
 
 /*carousel*/
 .carousel-caption {
-    top: 38%;
+    width: 100%;
+    background: rgba(52, 52, 52, 0.85);
+    left:0;
+    right: 0;
+    bottom: 0;
 }
 
-.slider-text-container{
-    background: rgba(18, 0, 12, 0.52);
+
+.carousel-slide{
+    max-height: 400px;
 }

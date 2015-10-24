@@ -25,11 +25,12 @@
   ],
   "dependencies": {
     "angular": "~1.4.6",
+    "angular-animate": "1.4.7",
+    "angular-bootstrap": "0.14.2",
+    "angular-sanitize": "1.4.7",
     "angular-ui-router": "~0.2.15",
     "bootstrap": "~3.3.5",
-    "angular-sanitize": "1.4.7",
     "ng-scrollbars": "~0.0.5",
-    "angular-animate": "1.4.7",
-    "angular-bootstrap": "0.14.2"
+    "video.js": "~5.0.2"
   }
 }

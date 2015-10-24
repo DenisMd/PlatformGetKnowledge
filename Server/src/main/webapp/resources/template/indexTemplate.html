@@ -1,14 +1,13 @@
-<div class="container">
-    <div ng-controller="carouselCtrl">
+
+    <div ng-controller="carouselCtrl" class="hidden-xs">
         <uib-carousel interval="interval" >
             <uib-slide ng-repeat="slide in slides" active="slide.active" class="carousel-slide">
                 <img ng-src="{{slide.image}}">
                 <div class="carousel-caption">
-                    <div class="slider-text-container">
-                        <h2>{{slide.text}}</h2>
-                    </div>
+                    <h2>{{slide.text}}</h2>
                 </div>
             </uib-slide>
         </uib-carousel>
     </div>
-</div>
+
+
