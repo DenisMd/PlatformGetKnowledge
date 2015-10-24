@@ -22,8 +22,59 @@ General
 
 # Admin menu
 Admin : ROLE_ADMIN
-    admin : /admin : /resources/image/menu/icons/admin.png : f41c1c
-        panel : /panel
+    panel : /panel/admin : /resources/image/menu/icons/panel.png : f41c1c
+        bootstrap : /bootstrap
+        users : /users
+        menu : /menu
+    programming : /section/programming : /resources/image/menu/icons/programming.png : d35136
+        courses : /courses
+        books : /books
+        programs : /programs
+    math : /section/math : /resources/image/menu/icons/math.png : 27b599
+        courses : /courses
+        books : /books
+        programs : /programs
+    physic : /section/physic : /resources/image/menu/icons/physic.png : 088ecc
+        courses : /courses
+        books : /books
+        programs : /programs
+    design : /section/design : /resources/image/menu/icons/design.png : c52a5e
+        courses : /courses
+        books : /books
+        programs : /program
+    news : /news : /resources/image/menu/icons/news.png : e5d525
+    contactUs : /contacts : /resources/image/menu/icons/contacts.png : 459619
+
+# Author menu
+Author : ROLE_AUTHOR
+    panel : /panel/author : /resources/image/menu/icons/panel.png : f41c1c
+        courses : /courses
+        statistic : /statistic
+        reviews : /reviews
+    programming : /section/programming : /resources/image/menu/icons/programming.png : d35136
+        courses : /courses
+        books : /books
+        programs : /programs
+    math : /section/math : /resources/image/menu/icons/math.png : 27b599
+        courses : /courses
+        books : /books
+        programs : /programs
+    physic : /section/physic : /resources/image/menu/icons/physic.png : 088ecc
+        courses : /courses
+        books : /books
+        programs : /programs
+    design : /section/design : /resources/image/menu/icons/design.png : c52a5e
+        courses : /courses
+        books : /books
+        programs : /program
+    news : /news : /resources/image/menu/icons/news.png : e5d525
+    contactUs : /contacts : /resources/image/menu/icons/contacts.png : 459619
+
+# HelpDesk menu
+HelpDesk : ROLE_HELPDESK
+    panel : /panel/helpdesk : /resources/image/menu/icons/panel.png : f41c1c
+        mailbox : /mailbox
+        logs : /logs
     programming : /section/programming : /resources/image/menu/icons/programming.png : d35136
         courses : /courses
         books : /books

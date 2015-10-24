@@ -49,7 +49,7 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
     applicationService.action($scope, "menu", "com.getknowledge.modules.menu.Menu", "getMenu", {});
     applicationService.action($scope, "user", "com.getknowledge.modules.userInfo.UserInfo", "getAuthorizedUser", {});
 
-    applicationService.list($scope,"UserS" , "com.getknowledge.platform.modules.user.User");
+    applicationService.list($scope,"test" , "com.getknowledge.modules.userInfo.UserInfo");
 });
 
 model.controller("carouselCtrl", function ($scope) {

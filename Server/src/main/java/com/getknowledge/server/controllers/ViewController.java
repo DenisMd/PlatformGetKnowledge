@@ -48,7 +48,9 @@ public class ViewController {
 
     private void fillMarshalling() {
         if (marshalling.isEmpty()) {
-            marshalling.put("admin/" , RoleName.ROLE_ADMIN.name());
+            marshalling.put("panel/admin/" , RoleName.ROLE_ADMIN.name());
+            marshalling.put("panel/helpdesk/" , RoleName.ROLE_HELPDESK.name());
+            marshalling.put("panel/author/" , RoleName.ROLE_AUTHOR.name());
         }
     }
 
