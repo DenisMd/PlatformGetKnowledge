@@ -17,6 +17,6 @@ public class PlatformExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleInvalidRequest(PlatformException e, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        return handleExceptionInternal(e, e.getErrorResource(), headers, HttpStatus.UNPROCESSABLE_ENTITY, request);
+        return handleExceptionInternal(e, e.getErrorResource(), headers, e.getErrorResource().getStatus(), request);
     }
 }

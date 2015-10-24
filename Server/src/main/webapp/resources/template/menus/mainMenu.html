@@ -1,4 +1,3 @@
-
 <nav class="nav-menu animate-show" ng-show="toggelMenu" ng-scrollbars ng-scrollbars-config="menuScrollConfig">
     <div class="main-menu-info">
         <div class="user-info-card" ng-show="user">
@@ -7,7 +6,7 @@
             <p class="info-about-user">Programmer engener</p>
         </div>
         <div class="user-info-card" ng-hide="user">
-            <a>
+            <a href="/login">
                 <img ng-src="{{isMouseenter? '/resources/image/menu/login2.png': '/resources/image/menu/login.png'}}" ng-mouseenter="isMouseenter = true" ng-mouseleave="isMouseenter = false" class="main-image login-image" />
             </a>
             <p class="main-label">{{translate('login')}}</p>

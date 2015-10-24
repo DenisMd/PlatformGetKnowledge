@@ -16,7 +16,7 @@ public class PermissionService implements BootstrapService{
 
     @Override
     public void bootstrap(HashMap<String, Object> map) {
-        permissionRepository.ifNotExistCreate(new Permission("readUserInfo"));
+        permissionRepository.ifNotExistCreate(new Permission("ReadUserInfo"));
     }
 
     @Override

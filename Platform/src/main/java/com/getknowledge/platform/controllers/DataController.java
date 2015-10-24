@@ -113,6 +113,7 @@ public class DataController {
             String jsonResult = "[";
             for (AbstractEntity abstractEntity : list) {
                 if (!isAccessRead(principal, abstractEntity) ) {
+                    // TODO: question may continue?
                     throw new NotAuthorized("access denied");
                 }
                 ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
@@ -155,6 +156,7 @@ public class DataController {
             String jsonResult = "[";
             for (AbstractEntity abstractEntity : list) {
                 if (!isAccessRead(principal, abstractEntity) ) {
+                    // TODO: question may continue?
                     throw new NotAuthorized("access denied");
                 }
                 ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
@@ -237,7 +239,8 @@ public class DataController {
 
     @RequestMapping(value = "/action", method = RequestMethod.POST)
     public @ResponseBody
-    String action(@RequestParam("className") String className, @RequestParam("actionName") String actionName, @RequestParam("data") String jsonData , Principal principal) throws PlatformException {
+    String action(@RequestParam("className") String className, @RequestParam("actionName") String actionName, @RequestParam("data") String jsonData
+            ,Principal principal) throws PlatformException {
         try {
             Class classEntity = Class.forName(className);
             AbstractService abstractService = moduleLocator.findService(classEntity);
@@ -381,7 +384,7 @@ public class DataController {
         }
 
         User user = getCurrentUser(principal);
-        if (user == null) throw new NotAuthorized("User not found");;
+        if (user == null) return false;
 
         if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
             return true;
@@ -394,14 +397,13 @@ public class DataController {
 
     private boolean isAccessEdit(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {
         AuthorizationList al = abstractEntity.getAuthorizationList();
-        if (al != null) return true;
 
         if (principal == null) {
             return false;
         }
 
         User user = getCurrentUser(principal);
-        if (user == null) throw new NotAuthorized("User not found");;
+        if (user == null) return false;
 
         if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
             return true;
@@ -414,14 +416,13 @@ public class DataController {
 
     private boolean isAccessRemove(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {
         AuthorizationList al = abstractEntity.getAuthorizationList();
-        if (al != null) return true;
 
         if (principal == null) {
             return false;
         }
 
         User user = getCurrentUser(principal);
-        if (user == null) throw new NotAuthorized("User not found");;
+        if (user == null) return false;
 
         if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
             return true;

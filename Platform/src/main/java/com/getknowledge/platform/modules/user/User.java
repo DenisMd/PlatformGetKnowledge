@@ -67,6 +67,7 @@ public class User extends AbstractEntity {
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
         authorizationList.allowCreateEveryOne = false;
+        authorizationList.getPermissionsForRead().add(new Permission("ReadUserInfo"));
         return authorizationList;
     }
 

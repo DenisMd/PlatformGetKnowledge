@@ -32,7 +32,6 @@ public class Permission extends AbstractEntity{
         this.permissionName = permissionName;
     }
 
-//    Изменять права могут только администраторы
     @Override
     public AuthorizationList getAuthorizationList() {
         return null;
