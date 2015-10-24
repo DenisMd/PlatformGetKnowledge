@@ -1,5 +1,5 @@
 
-    <div ng-controller="carouselCtrl" class="hidden-xs">
+    <div ng-controller="carouselCtrl" class="hidden-xs carousel-container">
         <uib-carousel interval="interval" >
             <uib-slide ng-repeat="slide in slides" active="slide.active" class="carousel-slide">
                 <img ng-src="{{slide.image}}">
@@ -10,4 +10,11 @@
         </uib-carousel>
     </div>
 
-
+    <video id="video" class="video-js" controls preload="auto" width="640" height="264"
+           poster="/resources/image/index/slider/programming.jpg" data-setup="{}">
+        <source src="/resources/video/SampleVideo_1080x720_2mb.mp4" type='video/mp4'>
+        <p class="vjs-no-js">
+            To view this video please enable JavaScript, and consider upgrading to a web browser that
+            <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+        </p>
+    </video>

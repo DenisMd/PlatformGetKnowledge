@@ -5,6 +5,7 @@
     <title>Index</title>
     <link rel="stylesheet" href="/resources/bower_components/bootstrap/dist/css/bootstrap.css" type="text/css">
     <link rel="stylesheet" href="/resources/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css" type="text/css"/>
+    <link rel="stylesheet" href="/resources/bower_components/video.js/dist/video-js.css" type="text/css"/>
     <link rel="stylesheet" href="/resources/css/index.css" type="text/css">
 </head>
 <body>
@@ -36,6 +37,7 @@
     <script src="/resources/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="/resources/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="/resources/bower_components/ng-scrollbars/dist/scrollbars.min.js"></script>
+    <script src="/resources/bower_components/video.js/dist/video.min.js"></script>
     <script src="/resources/application/platform.js"></script>
     <script src="/resources/application/getKnowledge.js"></script>
 

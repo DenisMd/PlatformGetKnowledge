@@ -273,6 +273,10 @@ html, body{
 }
 
 /*carousel*/
+.carousel-container{
+    margin-bottom: 20px;
+}
+
 .carousel-caption {
     width: 100%;
     background: rgba(52, 52, 52, 0.85);
