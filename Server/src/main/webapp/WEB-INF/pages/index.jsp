@@ -12,7 +12,7 @@
     <header class="header-info">
         <div class="header-item header-left">
             <button class="menu-toggle" ng-click="toggelClick()"><span class="hamburger">&#9776;</span></button>
-            <div class="site-title">getKnowledge();</div>
+            <div class="site-title"><a ng-href="{{createUrl('')}}">getKnowledge();</a></div>
         </div>
         <div class="header-item header-right">
             <div class="header-item language-panel"><a ng-class="application.language=='ru'?'selected':''"

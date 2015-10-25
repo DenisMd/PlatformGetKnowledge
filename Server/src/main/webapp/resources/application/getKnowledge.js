@@ -44,12 +44,19 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
 
     };
 
-    applicationService.pageInfo($scope);
+    $scope.createUrl = function (url) {
+        if (!$scope.application) return;
+        return '#/' + $scope.application.language + url;
+    };
 
+    applicationService.pageInfo($scope);
     applicationService.action($scope, "menu", "com.getknowledge.modules.menu.Menu", "getMenu", {});
     applicationService.action($scope, "user", "com.getknowledge.modules.userInfo.UserInfo", "getAuthorizedUser", {});
 
-    applicationService.list($scope,"test" , "com.getknowledge.modules.userInfo.UserInfo");
+    $scope.login = function(login , password) {
+        applicationService.login(login,password);
+    }
+
 });
 
 model.controller("carouselCtrl", function ($scope) {

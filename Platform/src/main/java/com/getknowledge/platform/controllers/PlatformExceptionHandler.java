@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class PlatformExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({PlatformException.class})
-    protected ResponseEntity<Object> handleInvalidRequest(PlatformException e, WebRequest request) {
+    public ResponseEntity<Object> handleInvalidRequest(PlatformException e, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return handleExceptionInternal(e, e.getErrorResource(), headers, e.getErrorResource().getStatus(), request);

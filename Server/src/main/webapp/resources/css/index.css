@@ -74,6 +74,15 @@ html, body{
     display: inline-block;
 }
 
+.site-title>a {
+    color:#fff;
+    text-decoration: none;
+}
+
+.site-title>a:hover {
+    text-decoration: none;
+}
+
 /*Right header*/
 .language-panel{
     text-align: center;

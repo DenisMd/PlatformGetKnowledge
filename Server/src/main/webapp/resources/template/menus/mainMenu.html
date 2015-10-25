@@ -6,7 +6,7 @@
             <p class="info-about-user">Programmer engener</p>
         </div>
         <div class="user-info-card" ng-hide="user">
-            <a href="/login">
+            <a ng-href="{{createUrl('/login')}}">
                 <img ng-src="{{isMouseenter? '/resources/image/menu/login2.png': '/resources/image/menu/login.png'}}" ng-mouseenter="isMouseenter = true" ng-mouseleave="isMouseenter = false" class="main-image login-image" />
             </a>
             <p class="main-label">{{translate('login')}}</p>
@@ -21,13 +21,13 @@
     <div>
         <ul class="first-menu-items">
             <li class="first-menu-item" ng-repeat="menuItem in getData().items">
-                <a ng-style="{color: menuItem.color}" ng-href="{{'#/'+application.language+menuItem.url}}">
+                <a ng-style="{color: menuItem.color}" ng-href="{{createUrl(menuItem.url)}}">
                     <img ng-src="{{menuItem.iconUrl}}"/>
                     {{translate(menuItem.title)}}
                 </a>
                 <ul class="second-menu-items" ng-show="menuItem.subItems.length">
                     <li class="second-menu-item"  ng-repeat="submenuItem in menuItem.subItems">
-                        <a ng-href="{{'#/'+application.language+menuItem.url+submenuItem.url}}">{{translate(submenuItem.title)}}</a>
+                        <a ng-href="{{createUrl(menuItem.url+submenuItem.url)}}">{{translate(submenuItem.title)}}</a>
                     </li>
                 </ul>
             </li>

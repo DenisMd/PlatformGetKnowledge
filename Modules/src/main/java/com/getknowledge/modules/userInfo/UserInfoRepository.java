@@ -5,7 +5,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository("UserInfoRepository")
 public class UserInfoRepository extends ProtectedRepository<UserInfo> {
-
-
-
 }
