@@ -52,11 +52,6 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
     applicationService.pageInfo($scope);
     applicationService.action($scope, "menu", "com.getknowledge.modules.menu.Menu", "getMenu", {});
     applicationService.action($scope, "user", "com.getknowledge.modules.userInfo.UserInfo", "getAuthorizedUser", {});
-
-    $scope.login = function(login , password) {
-        applicationService.login(login,password);
-    }
-
 });
 
 model.controller("carouselCtrl", function ($scope) {
