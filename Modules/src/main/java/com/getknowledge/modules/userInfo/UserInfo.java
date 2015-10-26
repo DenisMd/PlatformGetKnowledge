@@ -27,10 +27,9 @@ public class UserInfo  extends AbstractEntity{
     @Lob @Column(name="image")
     private byte[] profileImage;
 
-    @OneToOne
     @Access(roles = {"ROLE_ADMIN"})
+    @OneToOne
     private User user;
-
 
     public byte[] getProfileImage() {
         return profileImage;

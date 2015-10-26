@@ -78,10 +78,9 @@ public class UserInfoService extends AbstractService implements BootstrapService
         String login = (String) data.get("principalName");
         if (login == null) {return  null;}
 
-        List<UserInfo> userList = entityManager.createQuery("select ui from UserInfo ui inner JOIN ui.user u where u.login = :value")
-                .setParameter("value", login).getResultList();
-
-        return userList.isEmpty() ? null : userList.get(0);
+        User user = userRepository.getSingleEntityByFieldAndValue(User.class, "login", login);
+        userInfoRepository.setCurrentUser(user);
+        return userInfoRepository.getSingleEntityByFieldAndValue(UserInfo.class,"user.login",login);
     }
 
     @Action(name = "register" , mandatoryFields = {"login" , "password" , "firstName" , "lastName"})
