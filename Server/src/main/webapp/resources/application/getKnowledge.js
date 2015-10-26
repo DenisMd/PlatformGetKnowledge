@@ -55,7 +55,7 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
 
     $scope.login = function(login , password) {
         applicationService.login(login,password);
-    }
+    };
 
 });
 
@@ -84,4 +84,49 @@ model.controller("carouselCtrl", function ($scope) {
             text: "Простота — необходимое условие прекрасного."
         }
     ];
+});
+
+model.controller("cardCtrl", function ($scope) {
+    $scope.cards = [];
+    update();
+
+    $scope.range = function() {
+        update();
+        return new Array($scope.count);
+    };
+
+    var cardsArray = [];
+    $scope.maxLength = 3;
+    $scope.prepareCard = function(index) {
+        if (!cardsArray[index]) {
+            cardsArray[index] = [];
+        }
+        var realIndex = index * $scope.maxLength;
+        if ($scope.cards.length > realIndex){
+                updateArray(index,$scope.cards.slice(realIndex, $scope.maxLength+realIndex));
+        } else {
+            updateArray(index,$scope.cards.slice(realIndex));
+        }
+        return cardsArray[index];
+    };
+
+    function updateArray(index,newArray){
+        if (!angular.equals(cardsArray[index], newArray)){
+            cardsArray[index] = newArray;
+        }
+    }
+
+    function update(){
+        if ($scope.menu) {
+            angular.copy($scope.menu.items, $scope.cards);
+            if ($scope.cards) {
+                var len = $scope.cards.length;
+                $scope.count = Math.ceil(len / 3);
+            } else {
+                $scope.count = 0;
+            }
+        }
+
+
+    }
 });

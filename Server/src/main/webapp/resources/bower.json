@@ -31,6 +31,7 @@
     "angular-ui-router": "~0.2.15",
     "bootstrap": "~3.3.5",
     "ng-scrollbars": "~0.0.5",
-    "video.js": "~5.0.2"
+    "video.js": "~5.0.2",
+    "videojs-hotkeys": "~0.2.10"
   }
 }

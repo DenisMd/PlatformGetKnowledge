@@ -10,11 +10,56 @@
     </uib-carousel>
 </div>
 
-<video id="video" class="video-js" controls preload="auto" width="640" height="264"
-       poster="/resources/image/index/slider/programming.jpg" data-setup="{}">
-    <source src="/resources/video/SampleVideo_1080x720_2mb.mp4" type='video/mp4'>
-    <p class="vjs-no-js">
-        To view this video please enable JavaScript, and consider upgrading to a web browser that
-        <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-    </p>
-</video>
+<div class="site-information">
+    <div class="col-lg-2 col-md-3 col-sm-4 right-text">
+        <a><img src="/resources/image/index/slider/programming.jpg" class="img-thumbnail"></a>
+    </div>
+   <div class="col-lg-10 col-md-9  col-sm-8 left-text">
+       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit, erat a auctor semper, ex libero rhoncus arcu, eget tristique libero dui sed ipsum. Pellentesque semper lacus a dapibus finibus. Donec vulputate, lacus sed suscipit vestibulum, odio metus tempor quam, in molestie nibh ex at urna. Cras dignissim est id lacus tincidunt pellentesque. Nullam egestas lorem id eros iaculis, non ullamcorper nunc fermentum. Morbi viverra et ligula quis dapibus. Sed eu sapien nisi. Sed eleifend ipsum ut velit sollicitudin sollicitudin. Nam vulputate eleifend mauris, rutrum dapibus sem luctus quis. In sed convallis nibh. Aliquam blandit elit sed nibh finibus hendrerit.
+   </div>
+</div>
+<div class="site-information">
+    <div class="col-lg-2 col-md-3 col-sm-4 right-text">
+        <a><img src="/resources/image/index/slider/programming.jpg" class="img-thumbnail"></a>
+    </div>
+    <div class="col-lg-10 col-md-9  col-sm-8 left-text">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit, erat a auctor semper, ex libero rhoncus arcu, eget tristique libero dui sed ipsum. Pellentesque semper lacus a dapibus finibus. Donec vulputate, lacus sed suscipit vestibulum, odio metus tempor quam, in molestie nibh ex at urna. Cras dignissim est id lacus tincidunt pellentesque. Nullam egestas lorem id eros iaculis, non ullamcorper nunc fermentum. Morbi viverra et ligula quis dapibus. Sed eu sapien nisi. Sed eleifend ipsum ut velit sollicitudin sollicitudin. Nam vulputate eleifend mauris, rutrum dapibus sem luctus quis. In sed convallis nibh. Aliquam blandit elit sed nibh finibus hendrerit.
+    </div>
+</div>
+
+<div class="site-info-card" ng-controller="cardCtrl">
+    <h2 class="text-center">Our courses</h2>
+    <div>
+        <div class="row-height" ng-repeat="index in range() track by $index">
+            <div class="col-sm-height col-info" ng-repeat="menuItem in prepareCard($index)">
+                <div class="thumbnail">
+                    <div class="caption text-center">
+                        <h3>{{translate(menuItem.title)}}</h3>
+                        <p><a href="#" class="btn btn-primary btn-sm" role="button">Button</a></p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit, erat a auctor semper, ex libero rhoncus arcu, eget tristique libero dui sed ipsum. Pellentesque semper lacus a dapibus finibus. Donec vulputate, lacus sed suscipit vestibulum, odio metus tempor quam, in molestie nibh ex at urna.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<video id="main-video" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="metadata" width="640" height="264"-->
+       <!--poster="/resources/image/index/slider/programming.jpg" data-setup="{}">-->
+    <!--<source src="/resources/video/SampleVideo_1080x720_2mb.mp4" type='video/mp4'>-->
+    <!--<p class="vjs-no-js">-->
+        <!--To view this video please enable JavaScript, and consider upgrading to a web browser that-->
+        <!--<a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>-->
+    <!--</p>-->
+<!--</video>-->
+<!--<script>-->
+    <!--videojs('main-video').ready(function() {-->
+        <!--this.hotkeys({-->
+            <!--volumeStep: 0.1,-->
+            <!--fullscreenKey: function(event, player) {-->
+                <!--// override fullscreen to trigger when pressing the F key or Ctrl+Enter-->
+                <!--return ((event.which === 70) || (event.ctrlKey && event.which === 13));-->
+            <!--}-->
+        <!--});-->
+    <!--});-->
+<!--</script>-->
