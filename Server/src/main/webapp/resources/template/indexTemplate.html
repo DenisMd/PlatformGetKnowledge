@@ -32,11 +32,12 @@
     <div>
         <div class="row-height" ng-repeat="index in range() track by $index">
             <div class="col-sm-height col-info" ng-repeat="menuItem in prepareCard($index)">
-                <div class="thumbnail">
-                    <div class="caption text-center">
+                <div class="thumbnail thumbnail-card">
+                    <div class="caption text-center card">
+                        <p class="card-image text-center"><img ng-src="{{menuItem.iconUrl}}" ></p>
                         <h3>{{translate(menuItem.title)}}</h3>
-                        <p><a href="#" class="btn btn-primary btn-sm" role="button">Button</a></p>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit, erat a auctor semper, ex libero rhoncus arcu, eget tristique libero dui sed ipsum. Pellentesque semper lacus a dapibus finibus. Donec vulputate, lacus sed suscipit vestibulum, odio metus tempor quam, in molestie nibh ex at urna.</p>
+                        <p><a href="#" class="btn btn-primary" role="button">Button</a></p>
                     </div>
                 </div>
             </div>
