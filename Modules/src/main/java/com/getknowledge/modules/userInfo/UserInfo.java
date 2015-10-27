@@ -8,6 +8,7 @@ import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.modules.user.User;
 
 import javax.persistence.*;
+import java.util.Calendar;
 
 @Entity
 @Table(name = "user_info")
@@ -22,6 +23,9 @@ public class UserInfo  extends AbstractEntity{
 
     @Column(length = 40)
     private String specialty;
+
+    @Column(name = "birth_day")
+    private Calendar birthDay;
 
     @Basic(fetch=FetchType.LAZY)
     @Lob @Column(name="image")
@@ -69,6 +73,14 @@ public class UserInfo  extends AbstractEntity{
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Calendar getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(Calendar birthDay) {
+        this.birthDay = birthDay;
     }
 
     @Override

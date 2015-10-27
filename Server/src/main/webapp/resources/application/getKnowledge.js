@@ -121,7 +121,5 @@ model.controller("cardCtrl", function ($scope) {
                 $scope.count = 0;
             }
         }
-
-
     }
 });

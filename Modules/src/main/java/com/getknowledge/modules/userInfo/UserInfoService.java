@@ -2,6 +2,7 @@ package com.getknowledge.modules.userInfo;
 
 import com.getknowledge.modules.userInfo.results.RegisterResult;
 import com.getknowledge.platform.annotations.Action;
+import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.BootstrapService;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
@@ -12,10 +13,12 @@ import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service("UserInfoService")
 public class UserInfoService extends AbstractService implements BootstrapService {
@@ -97,7 +100,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
         user.setLogin(login);
         user.setPwdTransient(password);
         user.setEnabled(true);
-        user.setRole(roleRepository.getSingleEntityByFieldAndValue(Role.class, "roleName", RoleName.ROLE_USER));
+        user.setRole(roleRepository.getSingleEntityByFieldAndValue(Role.class, "roleName", RoleName.ROLE_USER.name()));
         userRepository.create(user);
         UserInfo userInfo = new UserInfo();
         userInfo.setUser(user);
@@ -106,6 +109,17 @@ public class UserInfoService extends AbstractService implements BootstrapService
         userInfoRepository.create(userInfo);
         return RegisterResult.Complete;
     }
+
+    @ActionWithFile(name = "extraInfo" , mandatoryFields = {"image" , "specialty" , "birth_day"})
+    public RegisterResult registerExtraInfo (HashMap<String,Object> data,MultipartFile file) {
+
+        for (Map.Entry<String , Object> entry : data.entrySet()) {
+            System.err.println("key " + entry.getKey() + " : value : " + entry.getValue());
+        }
+
+        return RegisterResult.Complete;
+    }
+
 
     public UserInfo getCurrentUser(Principal p) {
         if (p == null) return null;
