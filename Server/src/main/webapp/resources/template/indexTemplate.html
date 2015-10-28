@@ -30,20 +30,18 @@
 <div class="site-info-card" ng-controller="cardCtrl">
     <h2 class="text-center">Our courses</h2>
 
-    <div class="col-info" ng-repeat="menuItem in update()">
-        <div class="thumbnail thumbnail-card">
+    <div class="col-info" ng-repeat="course in update()">
+        <div class="thumbnail thumbnail-card" ng-style="style">
             <div class="caption text-center card">
-                <p class="card-image text-center"><img ng-src="{{menuItem.iconUrl}}"></p>
+                <p class="card-image text-center"><img ng-src="{{course.iconUrl}}"></p>
 
-                <h3>{{translate(menuItem.title)}}</h3>
+                <h3 class="car-title">{{translate(course.title)}}</h3>
 
-                <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit, erat a
-                    auctor semper, ex libero rhoncus arcu, eget tristique libero dui sed ipsum. Pellentesque semper
-                    lacus a dapibus finibus. Donec vulputate, lacus sed suscipit vestibulum, odio metus tempor quam, in
-                    molestie nibh ex at urna.</p>
+                <p class="text-justify">{{getText($index)}}</p>
 
-                <p><a href="#" class="btn btn-primary" role="button">Button</a></p>
+
             </div>
+            <div class="text-center card-footer"><a href="#" class="btn btn-primary" role="button">Button</a></div>
         </div>
     </div>
 </div>

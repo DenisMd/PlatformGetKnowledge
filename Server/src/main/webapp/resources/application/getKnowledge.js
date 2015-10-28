@@ -83,9 +83,18 @@ model.controller("carouselCtrl", function ($scope) {
 
 model.controller("cardCtrl", function ($scope,$window) {
     $scope.cards = [];
+    $scope.style = {};
     update();
 
     $scope.update = update;
+
+    $scope.getText = function(index){
+        var text = "";
+        for (var i = 0 ; i <= index; i++)
+            text += "Lorem ipsum dolor sit amet,";
+
+        return text;
+    };
 
     function update(){
         if ($scope.menu) {
@@ -104,11 +113,26 @@ model.controller("cardCtrl", function ($scope,$window) {
     angular.element($window).bind('resize', function() {
         var wrapper = angular.element("#wrapper");
         var cardsArray = $(".thumbnail-card").get();
+        var objectsHeight = [];
         if (cardsArray.length){
             cardsArray.forEach(function(item,index){
-
+                var object = $(item);
+                objectsHeight.push(object.innerHeight());
             });
         }
+        var height =  0;
+        if (objectsHeight.every(function(element) {
+            return element === objectsHeight[0];
+        })){
+            height =  objectsHeight[0];
+        } else{
+            height =  Math.max.apply(null, objectsHeight);
+            height += 35; //fotter
+        }
+
+        $scope.style = {
+            "min-height" : height
+        };
         $scope.$apply();
     });
 });
