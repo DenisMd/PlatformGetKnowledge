@@ -82,7 +82,6 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
     @Action(name = "getAuthorizedUser")
     public UserInfo getAuthorizedUser(HashMap<String,Object> data){
-        emailService.send("v_al_d@mail.ru" , "markovdenis2013@gmail.com", "test" , "Hello");
         String login = (String) data.get("principalName");
         if (login == null) {return  null;}
 
