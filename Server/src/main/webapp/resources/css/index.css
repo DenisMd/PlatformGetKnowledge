@@ -415,6 +415,7 @@ html, body{
     padding-right: 20px;
     margin-right: auto;
     margin-left: auto;
+    padding-left: 20px;
 }
 .wrapper-left{
     padding-left: 270px;
@@ -436,6 +437,10 @@ html, body{
 
 .carousel-slide{
     max-height: 400px;
+}
+
+.carousel-slide img{
+    width:100%;
 }
 
 .site-information,.site-info-card{
@@ -462,11 +467,15 @@ html, body{
     clear:both;
 }
 
-.col-info{
-    padding: 0 20px;
-}
+
 
 /*cards*/
+.col-info{
+    padding: 0 20px;
+    width: 300px;
+    float: left;
+}
+
 .thumbnail-card{
     margin-top: 25px;
 }

@@ -81,45 +81,34 @@ model.controller("carouselCtrl", function ($scope) {
     ];
 });
 
-model.controller("cardCtrl", function ($scope) {
+model.controller("cardCtrl", function ($scope,$window) {
     $scope.cards = [];
     update();
 
-    $scope.range = function() {
-        update();
-        return new Array($scope.count);
-    };
-
-    var cardsArray = [];
-    $scope.maxLength = 3;
-    $scope.prepareCard = function(index) {
-        if (!cardsArray[index]) {
-            cardsArray[index] = [];
-        }
-        var realIndex = index * $scope.maxLength;
-        if ($scope.cards.length > realIndex){
-                updateArray(index,$scope.cards.slice(realIndex, $scope.maxLength+realIndex));
-        } else {
-            updateArray(index,$scope.cards.slice(realIndex));
-        }
-        return cardsArray[index];
-    };
-
-    function updateArray(index,newArray){
-        if (!angular.equals(cardsArray[index], newArray)){
-            cardsArray[index] = newArray;
-        }
-    }
+    $scope.update = update;
 
     function update(){
         if ($scope.menu) {
-            angular.copy($scope.menu.items, $scope.cards);
-            if ($scope.cards) {
-                var len = $scope.cards.length;
-                $scope.count = Math.ceil(len / 3);
-            } else {
-                $scope.count = 0;
-            }
+            updateArray($scope.menu.items, $scope.cards);
         }
+        return $scope.cards;
     }
+
+    function updateArray(newArray,oldArray){
+        if (!angular.equals(oldArray, newArray)){
+            angular.copy(newArray, oldArray);
+        }
+        return oldArray;
+    }
+
+    angular.element($window).bind('resize', function() {
+        var wrapper = angular.element("#wrapper");
+        var cardsArray = $(".thumbnail-card").get();
+        if (cardsArray.length){
+            cardsArray.forEach(function(item,index){
+
+            });
+        }
+        $scope.$apply();
+    });
 });
