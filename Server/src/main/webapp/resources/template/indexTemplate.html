@@ -29,17 +29,6 @@
 
 <div class="site-info-card" ng-controller="cardCtrl">
     <h2 class="text-center">Our courses</h2>
-    <div>
-        <div class="row-height" ng-repeat="index in range() track by $index">
-            <div class="col-sm-height col-info" ng-repeat="menuItem in prepareCard($index)">
-                <div class="thumbnail thumbnail-card">
-                    <div class="caption text-center card">
-                        <p class="card-image text-center"><img ng-src="{{menuItem.iconUrl}}" ></p>
-                        <h3>{{translate(menuItem.title)}}</h3>
-                        <p>{{translate(menuItem.title+'_card')}}</p>
-                        <p><a href="#" class="btn btn-primary" role="button">{{translate('go_to_course')}}</a></p>
-                    </div>
-                </div>
 
     <div class="col-info" ng-repeat="menuItem in update()">
         <div class="thumbnail thumbnail-card">
@@ -48,12 +37,9 @@
 
                 <h3>{{translate(menuItem.title)}}</h3>
 
-                <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit, erat a
-                    auctor semper, ex libero rhoncus arcu, eget tristique libero dui sed ipsum. Pellentesque semper
-                    lacus a dapibus finibus. Donec vulputate, lacus sed suscipit vestibulum, odio metus tempor quam, in
-                    molestie nibh ex at urna.</p>
+                <p class="text-justify">{{translate(menuItem.title+'_card')}}</p>
 
-                <p><a href="#" class="btn btn-primary" role="button">Button</a></p>
+                <p><a href="#" class="btn btn-primary" role="button">{{translate('go_to_course')}}</a></p>
             </div>
         </div>
     </div>
