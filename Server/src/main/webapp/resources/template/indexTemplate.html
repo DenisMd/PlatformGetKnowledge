@@ -1,7 +1,7 @@
 <div ng-controller="carouselCtrl" class="hidden-xs carousel-container">
     <uib-carousel interval="interval">
         <uib-slide ng-repeat="slide in slides" active="slide.active" class="carousel-slide">
-            <img ng-src="{{slide.image}}" class="">
+            <img ng-src="{{slide.image}}">
 
             <div class="carousel-caption">
                 <h2>{{slide.text}}</h2>
@@ -15,7 +15,7 @@
         <a><img src="/resources/image/index/slider/programming.jpg" class="img-thumbnail"></a>
     </div>
    <div class="col-lg-10 col-md-9  col-sm-8 left-text">
-       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit, erat a auctor semper, ex libero rhoncus arcu, eget tristique libero dui sed ipsum. Pellentesque semper lacus a dapibus finibus. Donec vulputate, lacus sed suscipit vestibulum, odio metus tempor quam, in molestie nibh ex at urna. Cras dignissim est id lacus tincidunt pellentesque. Nullam egestas lorem id eros iaculis, non ullamcorper nunc fermentum. Morbi viverra et ligula quis dapibus. Sed eu sapien nisi. Sed eleifend ipsum ut velit sollicitudin sollicitudin. Nam vulputate eleifend mauris, rutrum dapibus sem luctus quis. In sed convallis nibh. Aliquam blandit elit sed nibh finibus hendrerit.
+        {{translate('video1')}}
    </div>
 </div>
 <div class="site-information">
@@ -23,7 +23,7 @@
         <a><img src="/resources/image/index/slider/programming.jpg" class="img-thumbnail"></a>
     </div>
     <div class="col-lg-10 col-md-9  col-sm-8 left-text">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit, erat a auctor semper, ex libero rhoncus arcu, eget tristique libero dui sed ipsum. Pellentesque semper lacus a dapibus finibus. Donec vulputate, lacus sed suscipit vestibulum, odio metus tempor quam, in molestie nibh ex at urna. Cras dignissim est id lacus tincidunt pellentesque. Nullam egestas lorem id eros iaculis, non ullamcorper nunc fermentum. Morbi viverra et ligula quis dapibus. Sed eu sapien nisi. Sed eleifend ipsum ut velit sollicitudin sollicitudin. Nam vulputate eleifend mauris, rutrum dapibus sem luctus quis. In sed convallis nibh. Aliquam blandit elit sed nibh finibus hendrerit.
+        {{translate('video2')}}
     </div>
 </div>
 
@@ -37,11 +37,11 @@
 
                 <h3 class="car-title">{{translate(course.title)}}</h3>
 
-                <p class="text-justify">{{getText($index)}}</p>
+                <p class="text-justify">{{translate(menuItem.title+'_card')}}</p>
 
 
             </div>
-            <div class="text-center card-footer"><a href="#" class="btn btn-primary" role="button">Button</a></div>
+            <div class="text-center card-footer"><a href="#" class="btn btn-primary" role="button">{{translate('go_to_course')}}</a></div>
         </div>
     </div>
 </div>
