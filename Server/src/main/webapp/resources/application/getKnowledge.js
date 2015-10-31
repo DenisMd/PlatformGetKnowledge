@@ -84,24 +84,13 @@ model.controller("carouselCtrl", function ($scope) {
 model.controller("cardCtrl", function ($scope,$window) {
     $scope.cards = [];
     $scope.style = {};
-    update();
-
-    $scope.update = update;
-
-    $scope.getText = function(index){
-        var text = "";
-        for (var i = 0 ; i <= index; i++)
-            text += "Lorem ipsum dolor sit amet,";
-
-        return text;
-    };
-
-    function update(){
+    $scope.getCards = function(){
         if ($scope.menu) {
             updateArray($scope.menu.items, $scope.cards);
         }
         return $scope.cards;
-    }
+    };
+
 
     function updateArray(newArray,oldArray){
         if (!angular.equals(oldArray, newArray)){
@@ -109,30 +98,80 @@ model.controller("cardCtrl", function ($scope,$window) {
         }
         return oldArray;
     }
+    $scope.style = {};
+    //$scope.update = function (){
+    //    var wrapper = angular.element("#wrapper");
+    //    var cardsArray = $(".thumbnail-card").get();
+    //    var objectsHeight = [];
+    //    if (cardsArray.length){
+    //        cardsArray.forEach(function(item,index){
+    //            var object = $(item);
+    //            objectsHeight.push(object.innerHeight());
+    //        });
+    //    }
+    //    var height =  0;
+    //    if (objectsHeight.every(function(element) {
+    //            return element === objectsHeight[0];
+    //        })){
+    //        height =  objectsHeight[0];
+    //    } else{
+    //        height =  Math.max.apply(null, objectsHeight);
+    //        height += 35; //fotter
+    //    }
+    //
+    //    var style = {
+    //        "min-height" : height
+    //    };
+    //    if (!angular.equals($scope.style,style)){
+    //        $scope.style = style;
+    //    }
+    //};
 
-    angular.element($window).bind('resize', function() {
-        var wrapper = angular.element("#wrapper");
-        var cardsArray = $(".thumbnail-card").get();
-        var objectsHeight = [];
-        if (cardsArray.length){
-            cardsArray.forEach(function(item,index){
-                var object = $(item);
-                objectsHeight.push(object.innerHeight());
-            });
-        }
-        var height =  0;
-        if (objectsHeight.every(function(element) {
-            return element === objectsHeight[0];
-        })){
-            height =  objectsHeight[0];
-        } else{
-            height =  Math.max.apply(null, objectsHeight);
-            height += 35; //fotter
-        }
-
-        $scope.style = {
-            "min-height" : height
-        };
-        $scope.$apply();
-    });
+    //angular.element($window).bind('resize', function() {
+    //    $scope.update();
+    //    $scope.$apply();
+    //});
 });
+
+model.controller("videoCtrl",function($scope){
+    $scope.open = function(){
+        $('#videoModal').modal('show');
+        //player.play();
+    };
+
+    $scope.close = function(){
+        $('#videoModal').modal('hide');
+        //player.play();
+    };
+
+    var player = videojs('main-video', $scope.videoSetup, function() {
+
+        // How about an event listener?
+        this.on('ended', function() {
+            console.log('awww...over so soon?');
+        });
+    });
+
+    player.src({ type: "video/mp4", src: "/resources/video/SampleVideo_1080x720_2mb.mp4" });
+
+    $scope.videoSetup = {
+        'controls' : true,
+        'preload' : 'metadata',
+        'autoplay' : false,
+        'width': 640,
+        height:320
+    };
+});
+
+//model.directive('test', function() {
+//    return {
+//        restrict: 'A',
+//        link: function(scope, element, attrs) {
+//                if (scope.$last) {
+//                    scope.$eval('update()');
+//                }
+//            }
+//
+//    }
+//});
+

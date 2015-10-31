@@ -10,17 +10,17 @@
     </uib-carousel>
 </div>
 
-<div class="site-information">
+<div class="site-information" ng-controller="videoCtrl">
     <div class="col-lg-2 col-md-3 col-sm-4 right-text">
-        <a><img src="/resources/image/index/slider/programming.jpg" class="img-thumbnail"></a>
+        <a ng-click="open()"><img src="/resources/image/index/slider/programming.jpg" class="img-thumbnail"></a>
     </div>
    <div class="col-lg-10 col-md-9  col-sm-8 left-text">
         {{translate('video1')}}
    </div>
 </div>
-<div class="site-information">
+<div class="site-information" ng-controller="videoCtrl">
     <div class="col-lg-2 col-md-3 col-sm-4 right-text">
-        <a><img src="/resources/image/index/slider/programming.jpg" class="img-thumbnail"></a>
+        <a ng-click="open()"><img src="/resources/image/index/slider/programming.jpg" class="img-thumbnail"></a>
     </div>
     <div class="col-lg-10 col-md-9  col-sm-8 left-text">
         {{translate('video2')}}
@@ -30,14 +30,14 @@
 <div class="site-info-card" ng-controller="cardCtrl">
     <h2 class="text-center">Our courses</h2>
 
-    <div class="col-info" ng-repeat="course in update()">
+    <div class="col-info" ng-repeat="course in getCards()">
         <div class="thumbnail thumbnail-card" ng-style="style">
             <div class="caption text-center card">
                 <p class="card-image text-center"><img ng-src="{{course.iconUrl}}"></p>
 
                 <h3 class="car-title">{{translate(course.title)}}</h3>
 
-                <p class="text-justify">{{translate(menuItem.title+'_card')}}</p>
+                <span class="text-justify">{{translate(course.title+"_card")}}</span>
 
 
             </div>
@@ -46,14 +46,21 @@
     </div>
 </div>
 
-<!--<video id="main-video" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="metadata" width="640" height="264"-->
-       <!--poster="/resources/image/index/slider/programming.jpg" data-setup="{}">-->
-    <!--<source src="/resources/video/SampleVideo_1080x720_2mb.mp4" type='video/mp4'>-->
-    <!--<p class="vjs-no-js">-->
-        <!--To view this video please enable JavaScript, and consider upgrading to a web browser that-->
-        <!--<a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>-->
-    <!--</p>-->
-<!--</video>-->
+<!-- Modal -->
+<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" ng-controller="videoCtrl">
+            <div class="modal-body">
+                <video id="main-video" class="video-js vjs-default-skin vjs-big-play-centered">
+                       <!--poster="/resources/image/index/slider/programming.jpg" data-setup="{{videoSetup}}">-->
+                </video>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <!--<script>-->
     <!--videojs('main-video').ready(function() {-->
         <!--this.hotkeys({-->

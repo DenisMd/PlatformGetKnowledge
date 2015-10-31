@@ -473,12 +473,18 @@ html, body{
 .col-info{
     padding: 0 20px;
     width: 300px;
+
     float: left;
 }
-
+.col-info:after{
+    content: "";
+    display: table;
+    clear: both;
+}
 .thumbnail-card{
     margin-top: 25px;
     position: relative;
+    height: 345px;
 }
 
 .card{

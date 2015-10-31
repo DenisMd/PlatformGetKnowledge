@@ -38,7 +38,7 @@
     <script src="/resources/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="/resources/bower_components/ng-scrollbars/dist/scrollbars.min.js"></script>
     <script src="/resources/bower_components/video.js/dist/video.min.js"></script>
-    <script src="/resources/bower_components/videojs-hotkeys/videojs.hotkeys.min.js"></script>
+    <%--<script src="/resources/bower_components/videojs-hotkeys/videojs.hotkeys.min.js"></script>--%>
     <script src="/resources/application/platform.js"></script>
     <script src="/resources/application/getKnowledge.js"></script>
 
