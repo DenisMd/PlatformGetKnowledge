@@ -10,20 +10,36 @@
     </uib-carousel>
 </div>
 
-<div class="site-information" ng-controller="videoCtrl">
-    <div class="col-lg-2 col-md-3 col-sm-4 right-text">
-        <a ng-click="open()"><img src="/resources/image/index/slider/programming.jpg" class="img-thumbnail"></a>
+<div class="video-content">
+    <div class="site-information" ng-controller="videoCtrl">
+        <div class="col-lg-4 col-md-3 col-sm-4 right-text">
+            <div class="video-image">
+                <img src="/resources/image/index/video/videoCover1.png"
+                                          class="img-thumbnail">
+                <div class="video-play">
+                    <a ng-click="open()"><img src="/resources/image/index/video/play.png"></a>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-8 col-md-9  col-sm-8 left-text video-text">
+            <div class="video-text-title">
+                Почему getKnowlege() ?
+            </div>
+            {{translate('video1')}}
+        </div>
     </div>
-   <div class="col-lg-10 col-md-9  col-sm-8 left-text">
-        {{translate('video1')}}
-   </div>
-</div>
-<div class="site-information" ng-controller="videoCtrl">
-    <div class="col-lg-2 col-md-3 col-sm-4 right-text">
-        <a ng-click="open()"><img src="/resources/image/index/slider/programming.jpg" class="img-thumbnail"></a>
-    </div>
-    <div class="col-lg-10 col-md-9  col-sm-8 left-text">
-        {{translate('video2')}}
+    <div class="site-information" ng-controller="videoCtrl">
+        <div class="col-lg-4 col-md-3 col-sm-4 right-text">
+            <a ng-click="open()"><img src="/resources/image/index/video/videoCover1.png"
+                                      class="img-thumbnail"></a>
+        </div>
+        <div class="col-lg-8 col-md-9  col-sm-8 left-text video-text">
+            <div class="video-text-title">
+                Что значит быть программистом сегодня?
+            </div>
+            {{translate('video2')}}
+        </div>
     </div>
 </div>
 
@@ -41,10 +57,12 @@
 
 
             </div>
-            <div class="text-center card-footer"><a href="#" class="btn btn-primary" role="button">{{translate('go_to_course')}}</a></div>
+            <div class="text-center card-footer"><a href="#" class="btn btn-primary" role="button">{{translate('go_to_course')}}</a>
+            </div>
         </div>
     </div>
 </div>
+
 
 <!-- Modal -->
 <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -52,7 +70,7 @@
         <div class="modal-content" ng-controller="videoCtrl">
             <div class="modal-body">
                 <video id="main-video" class="video-js vjs-default-skin vjs-big-play-centered">
-                       <!--poster="/resources/image/index/slider/programming.jpg" data-setup="{{videoSetup}}">-->
+                    <!--poster="/resources/image/index/slider/programming.jpg" data-setup="{{videoSetup}}">-->
                 </video>
             </div>
         </div>
@@ -60,15 +78,14 @@
 </div>
 
 
-
 <!--<script>-->
-    <!--videojs('main-video').ready(function() {-->
-        <!--this.hotkeys({-->
-            <!--volumeStep: 0.1,-->
-            <!--fullscreenKey: function(event, player) {-->
-                <!--// override fullscreen to trigger when pressing the F key or Ctrl+Enter-->
-                <!--return ((event.which === 70) || (event.ctrlKey && event.which === 13));-->
-            <!--}-->
-        <!--});-->
-    <!--});-->
+<!--videojs('main-video').ready(function() {-->
+<!--this.hotkeys({-->
+<!--volumeStep: 0.1,-->
+<!--fullscreenKey: function(event, player) {-->
+<!--// override fullscreen to trigger when pressing the F key or Ctrl+Enter-->
+<!--return ((event.which === 70) || (event.ctrlKey && event.which === 13));-->
+<!--}-->
+<!--});-->
+<!--});-->
 <!--</script>-->

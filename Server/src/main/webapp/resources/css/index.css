@@ -467,6 +467,39 @@ html, body{
     clear:both;
 }
 
+/*Index page video*/
+.video-content {
+    border-top: 2px solid #d8dfe5;
+    border-bottom: 2px solid #d8dfe5;
+    margin: 0 -20px;
+    padding-left: 10px;
+    padding-top: 10px;
+    background-color: #F6F8F8;
+}
+
+.video-text {
+    font-size: 22px;
+}
+
+.video-text-title {
+    color : #899b9f;
+    font-weight: 300;
+    font-size: 150%;
+}
+
+.video-image {
+    position: relative;
+}
+
+.video-play {
+    cursor: pointer;
+    position: absolute;
+    left:0;
+    top: 0;
+    margin-left:auto;
+    margin-right:auto;
+}
+
 
 
 /*cards*/
