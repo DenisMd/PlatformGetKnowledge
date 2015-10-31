@@ -15,6 +15,8 @@ import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.exceptions.*;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.role.names.RoleName;
+import com.getknowledge.platform.modules.trace.TraceService;
+import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import com.getknowledge.platform.utils.ModuleLocator;
@@ -41,7 +43,9 @@ public class DataController {
     @Autowired
     private UserRepository userRepository;
 
-    Logger logger = LoggerFactory.getLogger(DataController.class);
+    @Autowired
+    private TraceService trace;
+
     static ObjectMapper objectMapper = new ObjectMapper();
     static {
         Hibernate4Module hbm = new Hibernate4Module();
@@ -77,11 +81,8 @@ public class DataController {
             objectNode.put("creatable" , isAccessCreate(principal, entity));
             return objectNode.toString();
         } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found");
-        }/* catch (JsonProcessingException e) {
-            logger.warn("can't parse entity " + className + " id " + id , e);
-            throw new ParseException("can't parse entity " + className + " id " + id);
-        }*/
+            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+        }
     }
 
     @RequestMapping(value = "/count", method = RequestMethod.GET)
@@ -91,7 +92,7 @@ public class DataController {
             Class classEntity = Class.forName(className);
             return moduleLocator.findRepository(classEntity).count(classEntity).toString();
         } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found");
+            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
         }
     }
 
@@ -128,11 +129,8 @@ public class DataController {
             jsonResult += "]";
 
             return jsonResult;
-        }/* catch (JsonProcessingException e) {
-            logger.warn("can't parse entities " + className, e);
-            throw new ParseException("can't parse entities " + className);
-        }*/ catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found");
+        } catch (ClassNotFoundException e) {
+            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
         }
     }
 
@@ -171,11 +169,8 @@ public class DataController {
             jsonResult += "]";
 
             return jsonResult;
-        }/* catch (JsonProcessingException e) {
-            logger.warn("can't parse entities " + className, e);
-            throw new ParseException("can't parse entities " + className);
-        }*/ catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found");
+        } catch (ClassNotFoundException e) {
+            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
         }
     }
 
@@ -193,9 +188,9 @@ public class DataController {
             moduleLocator.findRepository(classEntity).create(abstractEntity);
             return "object created";
         } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found");
+            throw new ClassNameNotFound("classname : " + className + " not found" , trace , TraceLevel.Warning);
         } catch (IOException e) {
-            logger.warn("can't parse entities " + className, e);
+            trace.logException("can't parse entities " + className, e, TraceLevel.Warning);
             throw new ParseException("can't parse entities " + className);
         }
     }
@@ -212,10 +207,10 @@ public class DataController {
             moduleLocator.findRepository(classEntity).update(abstractEntity);
             return "object updated";
         } catch (IOException e) {
-            logger.warn("can't parse entities " + className, e);
+            trace.logException("can't parse entities " + className, e, TraceLevel.Warning);
             throw new ParseException("can't parse entities " + className);
         } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found");
+            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
         }
     }
 
@@ -233,7 +228,7 @@ public class DataController {
 
             return "object removed";
         } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found");
+            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
         }
     }
 
@@ -278,15 +273,15 @@ public class DataController {
 
             return null;
         } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found");
+            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
         } catch (IOException e) {
-            logger.warn("parse result exception ", e);
+            trace.logException("parse result exception ", e, TraceLevel.Warning);
             throw new ParseException("parse result exception");
         } catch (InvocationTargetException e) {
-            logger.warn("InvocationTargetException ", e);
+            trace.logException("InvocationTargetException", e, TraceLevel.Warning);
             throw new InvokeException("InvocationTargetException");
         } catch (IllegalAccessException e) {
-            logger.warn("IllegalAccessException ", e);
+            trace.logException("IllegalAccessException", e, TraceLevel.Warning);
             throw new InvokeException("IllegalAccessException");
         }
     }
@@ -332,15 +327,15 @@ public class DataController {
 
             return null;
         } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found");
+            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
         } catch (IOException e) {
-            logger.warn("parse result exception ", e);
+            trace.logException("parse result exception ", e, TraceLevel.Warning);
             throw new ParseException("parse result exception");
         } catch (InvocationTargetException e) {
-            logger.warn("InvocationTargetException ", e);
+            trace.logException("InvocationTargetException", e, TraceLevel.Warning);
             throw new InvokeException("InvocationTargetException");
         } catch (IllegalAccessException e) {
-            logger.warn("IllegalAccessException ", e);
+            trace.logException("IllegalAccessException ", e, TraceLevel.Warning);
             throw new InvokeException("IllegalAccessException");
         }
     }

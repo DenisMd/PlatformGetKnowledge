@@ -1,6 +1,8 @@
 package com.getknowledge.modules.userInfo;
 
 import com.getknowledge.modules.email.EmailService;
+import com.getknowledge.modules.userInfo.registerInfo.RegisterInfo;
+import com.getknowledge.modules.userInfo.registerInfo.RegisterInfoRepository;
 import com.getknowledge.modules.userInfo.results.RegisterResult;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
@@ -17,9 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service("UserInfoService")
 public class UserInfoService extends AbstractService implements BootstrapService {
@@ -35,6 +35,9 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private RegisterInfoRepository registerInfoRepository;
 
     @Override
     public void bootstrap(HashMap<String, Object> map) {
@@ -103,7 +106,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
         User user = new User();
         user.setLogin(login);
         user.setPwdTransient(password);
-        user.setEnabled(true);
+        user.setEnabled(false);
         user.setRole(roleRepository.getSingleEntityByFieldAndValue(Role.class, "roleName", RoleName.ROLE_USER.name()));
         userRepository.create(user);
         UserInfo userInfo = new UserInfo();
@@ -111,7 +114,18 @@ public class UserInfoService extends AbstractService implements BootstrapService
         userInfo.setFirstName(firstName);
         userInfo.setLastName(lastName);
         userInfoRepository.create(userInfo);
-        return RegisterResult.Complete;
+
+        RegisterInfo registerInfo = new RegisterInfo();
+        registerInfo.setUserInfo(userInfo);
+        registerInfo.setCalendar(Calendar.getInstance());
+        registerInfo.setUuid(UUID.randomUUID().toString());
+        registerInfoRepository.create(registerInfo);
+
+        emailService.send("markovdenis2013@gmail.com", login, "Регистрация на getKnowledge();", registerInfo.getUuid());
+
+        RegisterResult registerResult = RegisterResult.Complete;
+        registerResult.setUserInfoId(userInfo.getId());
+        return registerResult;
     }
 
     @ActionWithFile(name = "extraInfo" , mandatoryFields = {"image" , "specialty" , "birth_day"})
