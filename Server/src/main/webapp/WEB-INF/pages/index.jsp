@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/resources/css/index.css" type="text/css">
 </head>
 <body>
+
     <header class="header-info">
         <div class="header-item header-left">
             <button class="menu-toggle" ng-click="toggelClick()"><span class="hamburger">&#9776;</span></button>
@@ -23,6 +24,7 @@
     </header>
 
     <module-template name="menus/mainMenu" data="menu"></module-template>
+
     <div class="wrapper wrapper-left" id="wrapper">
             <div ui-view></div>
     </div>
