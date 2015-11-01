@@ -135,7 +135,7 @@ model.controller("cardCtrl", function ($scope,$window) {
 
 model.controller("videoCtrl",function($scope){
     init();
-    $scope.url = {type: "video/mp4", src: "/data/readVideo"};
+    $scope.url = {type: "video/mp4", src: "/data/readVideo?className=com.getknowledge.modules.video.Video&id=1"};
 
     $scope.open = function() {
         if (!player ||player.currentSrc() != $scope.url.src) {

@@ -25,6 +25,30 @@ public class Video extends AbstractEntity{
     @Column(name = "allow_every_one")
     private boolean allowEveryOne = false;
 
+    public boolean isAllowEveryOne() {
+        return allowEveryOne;
+    }
+
+    public void setAllowEveryOne(boolean allowEveryOne) {
+        this.allowEveryOne = allowEveryOne;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getVideoName() {
+        return videoName;
+    }
+
+    public void setVideoName(String videoName) {
+        this.videoName = videoName;
+    }
+
     @Override
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
@@ -32,6 +56,6 @@ public class Video extends AbstractEntity{
         if (!allowEveryOne) {
             authorizationList.getPermissionsForRead().add(new Permission("VideoRead"));
         }
-        return null;
+        return authorizationList;
     }
 }
