@@ -148,22 +148,17 @@ model.controller("videoCtrl",function($scope){
                 player = this;
 
             });
-            player.src({type: "video/mp4", src: "/resources/video/SampleVideo_1080x720_2mb.mp4"});
+            player.src({type: "video/mp4", src: "http://video-js.zencoder.com/oceans-clip.mp4"});
         }
         $('#videoModal').modal('show');
-        //player.play();
     };
 
     $scope.close = function(){
         $('#videoModal').modal('hide');
-        //player.play();
+
     };
 
     var player;
-
-
-
-
 });
 
 //model.directive('test', function() {
