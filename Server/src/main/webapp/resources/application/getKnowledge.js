@@ -134,31 +134,46 @@ model.controller("cardCtrl", function ($scope,$window) {
 });
 
 model.controller("videoCtrl",function($scope){
-    $scope.videoSetup = {
-        "controls": true,
-        "preload" : "auto",
-        "autoplay" : false,
-        "width": 720,
-        "height":480
-    };
+    init();
+    $scope.url = {type: "video/mp4", src: "http://video-js.zencoder.com/oceans-clip.mp4"};
+
     $scope.open = function() {
-        if (!player) {
-            player = videojs('main-video', $scope.videoSetup, function () {
-
-                player = this;
-
-            });
-            player.src({type: "video/mp4", src: "http://video-js.zencoder.com/oceans-clip.mp4"});
+        if (!player ||player.currentSrc() != $scope.url.src) {
+            player.src($scope.url);
+            player.play();
+        } else {
+            player.play();
         }
         $('#videoModal').modal('show');
+
     };
 
     $scope.close = function(){
-        $('#videoModal').modal('hide');
-
+        if (player) {
+            player.pause();
+        }
     };
 
+    $('#videoModal').on("hidden.bs.modal",function(){
+        $scope.close();
+    });
+
     var player;
+
+    function init(){
+        if (!player){
+            var options = {
+                "controls": true,
+                "preload" : "auto",
+                "autoplay" : false,
+                "width": 720,
+                "height":480
+            };
+            player = videojs('main-video', options, function () {
+                player = this;
+            });
+        }
+    }
 });
 
 //model.directive('test', function() {
