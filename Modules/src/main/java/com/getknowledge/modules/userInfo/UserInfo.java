@@ -31,9 +31,20 @@ public class UserInfo  extends AbstractEntity{
     @Lob @Column(name="image")
     private byte[] profileImage;
 
+    @Column(length = 5)
+    private String language;
+
     @Access(roles = {"ROLE_ADMIN"})
     @OneToOne
     private User user;
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 
     public byte[] getProfileImage() {
         return profileImage;

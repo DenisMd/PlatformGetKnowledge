@@ -79,6 +79,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
             userInfo.setUser(user);
             userInfo.setFirstName(firstName);
             userInfo.setLastName(lastName);
+            userInfo.setLanguage("ru");
             userInfoRepository.create(userInfo);
         }
     }
