@@ -504,8 +504,13 @@ html, body{
     transform: translate(-50%, -50%);
     text-align: center;
 }
-
-
+.video-play span{
+    font-size: 70px;
+    color: #000000;
+}
+.video-play span:hover{
+    color: #17789D;
+}
 
 /*cards*/
 .col-info{
