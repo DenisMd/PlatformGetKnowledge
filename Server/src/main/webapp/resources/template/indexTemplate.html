@@ -12,17 +12,15 @@
 
 <div class="video-content">
     <div class="site-information" ng-controller="videoCtrl">
-        <div class="col-lg-4 col-md-3 col-sm-4 right-text">
+        <div class="col-md-3 col-sm-4 right-text">
             <div class="video-image">
                 <img src="/resources/image/index/video/videoCover1.png"
-                                          class="img-thumbnail">
-                <div class="video-play">
-                    <a ng-click="open()"><img src="/resources/image/index/video/play.png"></a>
-                </div>
+                                          class="img-thumbnail video-poster">
+                <a ng-click="open()" class="video-play"><img src="/resources/image/index/video/play.png" class="img-responsive"></a>
             </div>
 
         </div>
-        <div class="col-lg-8 col-md-9  col-sm-8 left-text video-text">
+        <div class="col-md-9  col-sm-8 left-text video-text">
             <div class="video-text-title">
                 Почему getKnowlege() ?
             </div>
@@ -30,11 +28,11 @@
         </div>
     </div>
     <div class="site-information" ng-controller="videoCtrl">
-        <div class="col-lg-4 col-md-3 col-sm-4 right-text">
-            <a ng-click="open()"><img src="/resources/image/index/video/videoCover1.png"
-                                      class="img-thumbnail"></a>
+        <div class="col-md-3 col-sm-4 right-text">
+            <img src="/resources/image/index/video/videoCover1.png" class="img-thumbnail video-poster"></a>
+            <a ng-click="open()" class="video-play"><img src="/resources/image/index/video/play.png" class="img-responsive"></a>
         </div>
-        <div class="col-lg-8 col-md-9  col-sm-8 left-text video-text">
+        <div class="col-md-9  col-sm-8 left-text video-text">
             <div class="video-text-title">
                 Что значит быть программистом сегодня?
             </div>
@@ -68,11 +66,11 @@
 <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content" ng-controller="videoCtrl">
-            <div class="modal-body">
+            <!--<div class="modal-body">-->
                 <video id="main-video" class="video-js vjs-default-skin vjs-big-play-centered">
                     <!--poster="/resources/image/index/slider/programming.jpg" data-setup="{{videoSetup}}">-->
                 </video>
-            </div>
+            <!--</div>-->
         </div>
     </div>
 </div>

@@ -489,15 +489,20 @@ html, body{
 
 .video-image {
     position: relative;
+    left: 0; top: 0;
 }
-
+.video-poster{
+    position: relative; top: 0; left: 0;
+}
 .video-play {
     cursor: pointer;
     position: absolute;
-    left:0;
-    top: 0;
-    margin-left:auto;
-    margin-right:auto;
+    left:50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
 }
 
 
@@ -506,7 +511,6 @@ html, body{
 .col-info{
     padding: 0 20px;
     width: 300px;
-
     float: left;
 }
 .col-info:after{
@@ -517,11 +521,15 @@ html, body{
 .thumbnail-card{
     margin-top: 25px;
     position: relative;
-    height: 345px;
-}
 
+}
+.thumbnail-card:after{
+    content: "";
+    display: table;
+    clear: both;
+}
 .card{
-    position: relative;
+    position: relative;height: 345px;
 }
 
 .card-image{
