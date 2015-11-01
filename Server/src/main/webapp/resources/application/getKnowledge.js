@@ -148,7 +148,7 @@ model.controller("videoCtrl",function($scope){
                 player = this;
 
             });
-            player.src({type: "video/mp4", src: "http://video-js.zencoder.com/oceans-clip.mp4"});
+            player.src({type: "video/mp4", src: "/data/readVideoFile"});
         }
         $('#videoModal').modal('show');
     };

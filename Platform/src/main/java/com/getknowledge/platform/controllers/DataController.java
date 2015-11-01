@@ -20,16 +20,19 @@ import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import com.getknowledge.platform.utils.ModuleLocator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.getknowledge.platform.utils.MultipartFileSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +40,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/data")
 public class DataController {
+
+    @Autowired
+    ServletContext servletContext;
+
     @Autowired
     private ModuleLocator moduleLocator;
 
@@ -82,6 +89,20 @@ public class DataController {
             return objectNode.toString();
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+        }
+    }
+
+    @RequestMapping(value = "/readVideoFile", method = RequestMethod.GET)
+    public void readVideoFile(HttpServletRequest request, HttpServletResponse response) throws PlatformException {
+
+        try {
+            String videoUrl = servletContext.getRealPath("/WEB-INF/video/video.mp4");
+            MultipartFileSender.fromPath(Paths.get(videoUrl))
+                    .with(request)
+                    .with(response)
+                    .serveResource();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
