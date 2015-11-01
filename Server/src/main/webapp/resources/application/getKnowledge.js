@@ -135,7 +135,7 @@ model.controller("cardCtrl", function ($scope,$window) {
 
 model.controller("videoCtrl",function($scope){
     init();
-    $scope.url = {type: "video/mp4", src: "http://video-js.zencoder.com/oceans-clip.mp4"};
+    $scope.url = {type: "video/mp4", src: "/data/readVideo"};
 
     $scope.open = function() {
         if (!player ||player.currentSrc() != $scope.url.src) {

@@ -92,7 +92,7 @@ public class DataController {
         }
     }
 
-    @RequestMapping(value = "/readVideoFile", method = RequestMethod.GET)
+    @RequestMapping(value = "/readVideo", method = RequestMethod.GET)
     public void readVideoFile(HttpServletRequest request, HttpServletResponse response) throws PlatformException {
 
         try {
