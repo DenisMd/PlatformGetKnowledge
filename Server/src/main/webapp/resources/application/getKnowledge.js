@@ -134,7 +134,22 @@ model.controller("cardCtrl", function ($scope,$window) {
 });
 
 model.controller("videoCtrl",function($scope){
-    $scope.open = function(){
+    $scope.videoSetup = {
+        "controls": true,
+        "preload" : "auto",
+        "autoplay" : false,
+        "width": 720,
+        "height":480
+    };
+    $scope.open = function() {
+        if (!player) {
+            player = videojs('main-video', $scope.videoSetup, function () {
+
+                player = this;
+
+            });
+            player.src({type: "video/mp4", src: "/resources/video/SampleVideo_1080x720_2mb.mp4"});
+        }
         $('#videoModal').modal('show');
         //player.play();
     };
@@ -144,23 +159,11 @@ model.controller("videoCtrl",function($scope){
         //player.play();
     };
 
-    var player = videojs('main-video', $scope.videoSetup, function() {
+    var player;
 
-        // How about an event listener?
-        this.on('ended', function() {
-            console.log('awww...over so soon?');
-        });
-    });
 
-    player.src({ type: "video/mp4", src: "/resources/video/SampleVideo_1080x720_2mb.mp4" });
 
-    $scope.videoSetup = {
-        'controls' : true,
-        'preload' : 'metadata',
-        'autoplay' : false,
-        'width': 640,
-        height:320
-    };
+
 });
 
 //model.directive('test', function() {
