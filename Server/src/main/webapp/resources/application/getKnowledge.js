@@ -10,6 +10,10 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
         }
     };
 
+    $scope.getVideoUrl = function (id) {
+        return "/data/readVideo?className=com.getknowledge.modules.video.Video&id="+id;
+    };
+
     //смена языка
     $scope.changeLanguage = function (language) {
         if (!$scope.application.language || $scope.application.language === language) {
@@ -136,10 +140,6 @@ model.controller("cardCtrl", function ($scope,$window) {
 
 model.controller("videoCtrl",function($scope){
     init();
-
-    $scope.getVideoUrl = function (id) {
-        return "/data/readVideo?className=com.getknowledge.modules.video.Video&id="+id;
-    };
 
     var videoUrl = $scope.getVideoUrl(1);
     $scope.url = {type: "video/mp4", src: videoUrl};
