@@ -513,6 +513,11 @@ html, body{
 }
 
 /*cards*/
+
+.thumbnail-height-300 {
+    height: 300px;
+}
+
 .col-info{
     padding: 0 20px;
     min-width: 300px;
@@ -524,6 +529,7 @@ html, body{
 
 .card{
     position: relative;
+    height: 300px;
 }
 
 .card-image{

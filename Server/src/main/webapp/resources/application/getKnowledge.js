@@ -55,6 +55,10 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
         return '#/' + $scope.application.language + url;
     };
 
+    $scope.range = function(n) {
+        return new Array(Math.ceil(n));
+    };
+
     $scope.carouselData = {
         interval : 5000,
         slides : [
@@ -82,51 +86,24 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
     };
 
     applicationService.pageInfo($scope);
-    applicationService.action($scope, "menu", "com.getknowledge.modules.menu.Menu", "getMenu", {});
+    applicationService.action($scope, "menu", "com.getknowledge.modules.menu.Menu", "getMenu", {}, function(menu){
+        $scope.cardsData = {
+            cardsInRow : 4,
+            cards : menu.items
+        };
+    });
     applicationService.action($scope, "user", "com.getknowledge.modules.userInfo.UserInfo", "getAuthorizedUser", {});
-});
 
-model.controller("cardCtrl", function ($scope,$window) {
-    $scope.cards = [];
-    update();
-
-    $scope.range = function() {
-        update();
-        return new Array($scope.count);
-    };
-
-    var cardsArray = [];
-    $scope.maxLength = 3;
-    $scope.prepareCard = function(index) {
-        if (!cardsArray[index]) {
-            cardsArray[index] = [];
+    $scope.getRow = function (index, length, array) {
+        console.log(index);
+        var result = [];
+        for (var i = index*length; i < length*(index+1); i++) {
+            if (array.length <= i) return result;
+            result.push(array[i]);
         }
-        var realIndex = index * $scope.maxLength;
-        if ($scope.cards.length > realIndex){
-                updateArray(index,$scope.cards.slice(realIndex, $scope.maxLength+realIndex));
-        } else {
-            updateArray(index,$scope.cards.slice(realIndex));
-        }
-        return cardsArray[index];
-    };
-
-    function updateArray(index,newArray){
-        if (!angular.equals(cardsArray[index], newArray)){
-            cardsArray[index] = newArray;
-        }
+        return result;
     }
 
-    function update(){
-        if ($scope.menu) {
-            angular.copy($scope.menu.items, $scope.cards);
-            if ($scope.cards) {
-                var len = $scope.cards.length;
-                $scope.count = $scope.maxLength? Math.ceil(len / $scope.maxLength) : 0;
-            } else {
-                $scope.count = 0;
-            }
-        }
-    }
 });
 
 model.controller("videoCtrl",function($scope){
@@ -175,15 +152,3 @@ model.controller("videoCtrl",function($scope){
         }
     }
 });
-
-//model.directive('test', function() {
-//    return {
-//        restrict: 'A',
-//        link: function(scope, element, attrs) {
-//                if (scope.$last) {
-//                    scope.$eval('update()');
-//                }
-//            }
-//
-//    }
-//});
