@@ -51,10 +51,6 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
         return '#/' + $scope.application.language + url;
     };
 
-    $scope.getVideoUrl = function (id) {
-        return ""
-    };
-
     $scope.carouselData = {
         interval : 5000,
         slides : [
@@ -140,7 +136,15 @@ model.controller("cardCtrl", function ($scope,$window) {
 
 model.controller("videoCtrl",function($scope){
     init();
-    $scope.url = {type: "video/mp4", src: "/data/readVideo?className=com.getknowledge.modules.video.Video&id=1"};
+
+    $scope.getVideoUrl = function (id) {
+        return "/data/readVideo?className=com.getknowledge.modules.video.Video&id="+id;
+    };
+
+    var videoUrl = $scope.getVideoUrl(1);
+    $scope.url = {type: "video/mp4", src: videoUrl};
+
+
 
     $scope.open = function() {
         if (!player ||player.currentSrc() != $scope.url.src) {
