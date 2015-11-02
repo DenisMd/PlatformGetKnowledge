@@ -83,54 +83,45 @@ model.controller("carouselCtrl", function ($scope) {
 
 model.controller("cardCtrl", function ($scope,$window) {
     $scope.cards = [];
-    $scope.style = {};
-    $scope.getCards = function(){
-        if ($scope.menu) {
-            updateArray($scope.menu.items, $scope.cards);
-        }
-        return $scope.cards;
+    update();
+
+    $scope.range = function() {
+        update();
+        return new Array($scope.count);
     };
 
-
-    function updateArray(newArray,oldArray){
-        if (!angular.equals(oldArray, newArray)){
-            angular.copy(newArray, oldArray);
+    var cardsArray = [];
+    $scope.maxLength = 3;
+    $scope.prepareCard = function(index) {
+        if (!cardsArray[index]) {
+            cardsArray[index] = [];
         }
-        return oldArray;
-    }
-    $scope.style = {};
-    //$scope.update = function (){
-    //    var wrapper = angular.element("#wrapper");
-    //    var cardsArray = $(".thumbnail-card").get();
-    //    var objectsHeight = [];
-    //    if (cardsArray.length){
-    //        cardsArray.forEach(function(item,index){
-    //            var object = $(item);
-    //            objectsHeight.push(object.innerHeight());
-    //        });
-    //    }
-    //    var height =  0;
-    //    if (objectsHeight.every(function(element) {
-    //            return element === objectsHeight[0];
-    //        })){
-    //        height =  objectsHeight[0];
-    //    } else{
-    //        height =  Math.max.apply(null, objectsHeight);
-    //        height += 35; //fotter
-    //    }
-    //
-    //    var style = {
-    //        "min-height" : height
-    //    };
-    //    if (!angular.equals($scope.style,style)){
-    //        $scope.style = style;
-    //    }
-    //};
+        var realIndex = index * $scope.maxLength;
+        if ($scope.cards.length > realIndex){
+                updateArray(index,$scope.cards.slice(realIndex, $scope.maxLength+realIndex));
+        } else {
+            updateArray(index,$scope.cards.slice(realIndex));
+        }
+        return cardsArray[index];
+    };
 
-    //angular.element($window).bind('resize', function() {
-    //    $scope.update();
-    //    $scope.$apply();
-    //});
+    function updateArray(index,newArray){
+        if (!angular.equals(cardsArray[index], newArray)){
+            cardsArray[index] = newArray;
+        }
+    }
+
+    function update(){
+        if ($scope.menu) {
+            angular.copy($scope.menu.items, $scope.cards);
+            if ($scope.cards) {
+                var len = $scope.cards.length;
+                $scope.count = $scope.maxLength? Math.ceil(len / $scope.maxLength) : 0;
+            } else {
+                $scope.count = 0;
+            }
+        }
+    }
 });
 
 model.controller("videoCtrl",function($scope){
@@ -164,7 +155,7 @@ model.controller("videoCtrl",function($scope){
         if (!player){
             var options = {
                 "controls": true,
-                "preload" : "auto",
+                "preload" : "matadata",
                 "autoplay" : false,
                 "width": 720,
                 "height":480
@@ -187,4 +178,3 @@ model.controller("videoCtrl",function($scope){
 //
 //    }
 //});
-

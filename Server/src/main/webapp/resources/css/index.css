@@ -515,26 +515,15 @@ html, body{
 /*cards*/
 .col-info{
     padding: 0 20px;
-    width: 300px;
-    float: left;
+    min-width: 300px;
 }
-.col-info:after{
-    content: "";
-    display: table;
-    clear: both;
-}
+
 .thumbnail-card{
     margin-top: 25px;
-    position: relative;
+}
 
-}
-.thumbnail-card:after{
-    content: "";
-    display: table;
-    clear: both;
-}
 .card{
-    position: relative;height: 345px;
+    position: relative;
 }
 
 .card-image{
@@ -553,9 +542,10 @@ html, body{
     height: 35px;
 }
 
-.car-title{
+.card-title{
     color: #3AA0EC;
 }
+
 
 .card-footer{
     position: absolute;
