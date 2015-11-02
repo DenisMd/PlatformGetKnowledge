@@ -94,7 +94,6 @@ public class ViewController {
 
         for (int i=1; i < split.length; i++) {
             File dir = new File(servletContext.getRealPath(prefix + pathForView + "/" + split[i]));
-            if (!dir.exists()) return "404";
             if (dir.isDirectory()) {
                 pathForView += "/"+split[i];
                 if (split.length == i+1) {
@@ -110,6 +109,9 @@ public class ViewController {
                 } else {
                     if (i+1 != split.length && getNameJsp(servletContext.getRealPath(prefix + pathForView) , split[i-1]).endsWith("!")) {
                         continue;
+                    }
+                    if (!getNameJsp(servletContext.getRealPath(prefix + pathForView) , split[split.length-2]).endsWith("!")) {
+                        return "404";
                     }
                     return pathForView + "/"+getNameJsp(servletContext.getRealPath(prefix + pathForView) , split[split.length-2]);
                 }

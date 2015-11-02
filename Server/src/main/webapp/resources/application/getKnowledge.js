@@ -1,5 +1,6 @@
 var model = angular.module("mainApp", ["BackEndService", "ngAnimate", "ui.bootstrap"]);
 model.controller("mainController", function ($scope, $http, $state, applicationService) {
+
     $scope.menuScrollConfig = {
         theme: 'light-3',
         snapOffset: 100,
@@ -7,6 +8,10 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
             updateOnContentResize: true,
             updateOnSelectorChange: "ul li"
         }
+    };
+
+    $scope.getVideoUrl = function (id) {
+        return "/data/readVideo?className=com.getknowledge.modules.video.Video&id="+id;
     };
 
     //смена языка
@@ -29,6 +34,7 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
     };
 
     $scope.toggelMenu = true;
+
     $scope.toggelClick = function () {
         $scope.toggelMenu = !$scope.toggelMenu;
         var wrapper = angular.element("#wrapper");
@@ -49,36 +55,35 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
         return '#/' + $scope.application.language + url;
     };
 
+    $scope.carouselData = {
+        interval : 5000,
+        slides : [
+            {
+                section: "Programming",
+                image: "/resources/image/index/slider/programming.jpg",
+                text: "carousel_programming"
+            },
+            {
+                section: "Math",
+                image: "/resources/image/index/slider/math.jpg",
+                text: "carousel_math"
+            },
+            {
+                section: "Physic",
+                image: "/resources/image/index/slider/physic.jpg",
+                text: "carousel_physic"
+            },
+            {
+                section: "Design",
+                image: '/resources/image/index/slider/design.jpg',
+                text: "carousel_design"
+            }
+        ]
+    };
+
     applicationService.pageInfo($scope);
     applicationService.action($scope, "menu", "com.getknowledge.modules.menu.Menu", "getMenu", {});
     applicationService.action($scope, "user", "com.getknowledge.modules.userInfo.UserInfo", "getAuthorizedUser", {});
-});
-
-model.controller("carouselCtrl", function ($scope) {
-    $scope.interval = 5000;
-    $scope.noWrapSlides = false;
-    $scope.slides = [
-        {
-            section: "Programming",
-            image: "/resources/image/index/slider/programming.jpg",
-            text: "Программирование - способ научиться формулировать свои желания компьютеру."
-        },
-        {
-            section: "Math",
-            image: "/resources/image/index/slider/math.jpg",
-            text: "Математика - одна истина прекрасна."
-        },
-        {
-            section: "Physic",
-            image: "/resources/image/index/slider/physic.jpg",
-            text: "Если тебя квантовая физика не испугала, значит, ты ничего в ней не понял."
-        },
-        {
-            section: "Design",
-            image: '/resources/image/index/slider/design.jpg',
-            text: "Простота — необходимое условие прекрасного."
-        }
-    ];
 });
 
 model.controller("cardCtrl", function ($scope,$window) {
@@ -126,7 +131,11 @@ model.controller("cardCtrl", function ($scope,$window) {
 
 model.controller("videoCtrl",function($scope){
     init();
-    $scope.url = {type: "video/mp4", src: "/data/readVideo"};
+
+    var videoUrl = $scope.getVideoUrl(1);
+    $scope.url = {type: "video/mp4", src: videoUrl};
+
+
 
     $scope.open = function() {
         if (!player ||player.currentSrc() != $scope.url.src) {

@@ -251,8 +251,15 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars'])
             return "module/" + $stateParams.path;
         }
 
+        var modules = ["user"];
+
         function getCtrl ($stateParams){
             var url = $stateParams.path.split("/");
+            for (var i=0; i < modules.length; i++) {
+                if (modules[i] == url [url.length - 2]) {
+                    return url [url.length - 2];
+                }
+            }
             return url [url.length - 1] + "Ctrl";
         }
 

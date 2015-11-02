@@ -1,0 +1,11 @@
+<div class="hidden-xs carousel-container">
+    <uib-carousel interval="getData().interval">
+        <uib-slide ng-repeat="slide in getData().slides" active="slide.active" class="carousel-slide">
+            <img ng-src="{{slide.image}}">
+
+            <div class="carousel-caption">
+                <h2>{{translate(slide.text)}}</h2>
+            </div>
+        </uib-slide>
+    </uib-carousel>
+</div>

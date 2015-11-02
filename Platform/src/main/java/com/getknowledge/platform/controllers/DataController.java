@@ -10,6 +10,7 @@ import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.base.repositories.FileLinkRepository;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.exceptions.*;
@@ -93,16 +94,39 @@ public class DataController {
     }
 
     @RequestMapping(value = "/readVideo", method = RequestMethod.GET)
-    public void readVideoFile(HttpServletRequest request, HttpServletResponse response) throws PlatformException {
-
+    public void readVideoFile(@RequestParam(value = "id" ,required = true) Long id,
+                              @RequestParam(value ="className" , required = true) String className, Principal principal, HttpServletRequest request, HttpServletResponse response) throws PlatformException {
         try {
-            String videoUrl = servletContext.getRealPath("/WEB-INF/video/video.mp4");
-            MultipartFileSender.fromPath(Paths.get(videoUrl))
-                    .with(request)
-                    .with(response)
-                    .serveResource();
+            if (id == null || className == null || className.isEmpty()) return;
+            Class classEntity = Class.forName(className);
+            BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
+            if (repository instanceof ProtectedRepository) {
+                ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
+                protectedRepository.setCurrentUser(getCurrentUser(principal));
+            }
+            AbstractEntity entity = repository.read(id, classEntity);
+            if (entity == null) {
+                return;
+            }
+
+            if (!isAccessRead(principal, entity)) {
+                throw new NotAuthorized("access denied");
+            }
+            if (repository instanceof FileLinkRepository) {
+                FileLinkRepository<?> fileLinkRepository = (FileLinkRepository<?>) repository;
+
+                String videoUrl = servletContext.getRealPath(fileLinkRepository.getFileLink(id));
+                MultipartFileSender.fromPath(Paths.get(videoUrl))
+                        .with(request)
+                        .with(response)
+                        .serveResource();
+            }
+
+
+        } catch (ClassNotFoundException e) {
+            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
         } catch (Exception e) {
-            e.printStackTrace();
+            trace.logException("Read video exception: ", e, TraceLevel.Warning);
         }
     }
 
