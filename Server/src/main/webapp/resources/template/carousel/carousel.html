@@ -1,5 +1,5 @@
 <div class="hidden-xs carousel-container">
-    <uib-carousel interval="getData().interval">
+    <uib-carousel interval="getData().interval" no-wrap="false">
         <uib-slide ng-repeat="slide in getData().slides" active="slide.active" class="carousel-slide">
             <img ng-src="{{slide.image}}">
 

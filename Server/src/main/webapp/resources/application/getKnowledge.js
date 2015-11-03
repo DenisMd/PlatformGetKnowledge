@@ -56,6 +56,7 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
     };
 
     $scope.range = function(n) {
+        if (!n) return 1;
         return new Array(Math.ceil(n));
     };
 
