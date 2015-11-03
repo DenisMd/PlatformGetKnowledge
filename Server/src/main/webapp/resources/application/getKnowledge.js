@@ -89,7 +89,7 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
     applicationService.pageInfo($scope);
     applicationService.action($scope, "menu", "com.getknowledge.modules.menu.Menu", "getMenu", {}, function(menu){
         $scope.cardsData = {
-            cardsInRow : 4,
+            cardsInRow : 3,
             cards : menu.items
         };
     });
