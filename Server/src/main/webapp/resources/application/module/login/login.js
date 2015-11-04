@@ -6,9 +6,9 @@ model.controller("loginCtrl", function ($scope, $state,$http,applicationService)
                 applicationService.action($scope.$parent, "user", "com.getknowledge.modules.userInfo.UserInfo", "getAuthorizedUser", {}, function(user){
                     var language = user.language;
                     if (!language){
-                        language = application.language;
+                        language = $scope.application.language;
                     }
-                    $state.go($state.$current, {"language": user.language, path:"user/"+user.id});
+                    $state.go($state.$current, {"language": language, path:"user/"+user.id});
                 });
             } else {
                 $scope.error = true;
