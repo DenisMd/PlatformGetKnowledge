@@ -29,7 +29,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -139,7 +138,6 @@ public class DataController {
     }
 
     @RequestMapping(value = "/image", method = RequestMethod.GET)
-    @Transactional
     public ResponseEntity<byte[]> getImage(@RequestParam(value = "id" ,required = true) Long id,
                               @RequestParam(value ="className" , required = true) String className, Principal principal, HttpServletRequest request, HttpServletResponse response) throws PlatformException {
         try {

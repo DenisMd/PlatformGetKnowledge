@@ -19,7 +19,6 @@ import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import sun.misc.IOUtils;
 
@@ -90,6 +89,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
             userInfo.setFirstName(firstName);
             userInfo.setLastName(lastName);
             userInfo.setLanguage("ru");
+            userInfo.setSpecialty("main admin");
             InputStream is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/image/photo.png");
             try {
                 userInfo.setProfileImage(org.apache.commons.io.IOUtils.toByteArray(is));
@@ -107,7 +107,8 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
         User user = userRepository.getSingleEntityByFieldAndValue(User.class, "login", login);
         userInfoRepository.setCurrentUser(user);
-        return userInfoRepository.getSingleEntityByFieldAndValue(UserInfo.class,"user.login",login);
+        UserInfo userInfo = userInfoRepository.getSingleEntityByFieldAndValue(UserInfo.class,"user.login",login);
+        return userInfo;
     }
 
     @Action(name = "register" , mandatoryFields = {"login" , "password" , "firstName" , "lastName"})

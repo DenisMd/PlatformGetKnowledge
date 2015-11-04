@@ -1,4 +1,5 @@
 ;
+var modules = ["user"];
 angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars'])
     .constant("resourceUrl", "/resources/application/")
     .constant("resourceTemplate","/resources/template/")
@@ -253,8 +254,6 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars'])
         function getURL ($stateParams){
             return "module/" + $stateParams.path;
         }
-
-        var modules = ["user"];
 
         function getCtrl ($stateParams){
             var url = $stateParams.path.split("/");
