@@ -1,6 +1,8 @@
 var model = angular.module("mainApp", ["BackEndService", "ngAnimate", "ui.bootstrap"]);
 model.controller("mainController", function ($scope, $http, $state, applicationService) {
-
+    var userInfoClassName = "com.getknowledge.modules.userInfo.UserInfo";
+    var menuClassName = "com.getknowledge.modules.menu.Menu";
+    var videoClassName = "com.getknowledge.modules.video.Video";
     $scope.menuScrollConfig = {
         theme: 'light-3',
         snapOffset: 100,
@@ -11,7 +13,7 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
     };
 
     $scope.getVideoUrl = function (id) {
-        return "/data/readVideo?className=com.getknowledge.modules.video.Video&id="+id;
+        return "/data/readVideo?className="+videoClassName+"&id="+id;
     };
 
     //смена языка
@@ -87,23 +89,26 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
     };
 
     applicationService.pageInfo($scope);
-    applicationService.action($scope, "menu", "com.getknowledge.modules.menu.Menu", "getMenu", {}, function(menu){
+    applicationService.action($scope, "menu", menuClassName, "getMenu", {}, function(menu){
         $scope.cardsData = {
             cardsInRow : 3,
             cards : menu.items
         };
     });
-    applicationService.action($scope, "user", "com.getknowledge.modules.userInfo.UserInfo", "getAuthorizedUser", {});
+    applicationService.action($scope, "user", userInfoClassName, "getAuthorizedUser", {});
 
     $scope.getRow = function (index, length, array) {
-        console.log(index);
         var result = [];
         for (var i = index*length; i < length*(index+1); i++) {
             if (array.length <= i) return result;
             result.push(array[i]);
         }
         return result;
-    }
+    };
+
+    $scope.userImg = function(id){
+        return applicationService.imageHref(userInfoClassName,id);
+    };
 
 });
 

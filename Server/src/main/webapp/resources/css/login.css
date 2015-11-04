@@ -1,3 +1,29 @@
+
 .login-form {
-    color: red;
+    text-align: justify;
+    margin: 0 auto;
+    width:350px;
+}
+
+.login-title{
+    font: 40px 'Exo', sans-serif;
+    text-align: center;
+}
+
+.login-btns{
+    text-align: center;
+}
+
+.login-btn{
+    cursor: pointer;
+    display: inline-block;
+    padding: 0 2.5em;
+    background-color: #21abc7;
+    border: 1px solid #21abc7;
+    color: #fff;
+    border-radius: 100px;
+    font-family: "Open Sans",Helvetica,Arial,sans-serif;
+    font-weight: 600;
+    min-width: 18.75em;
+    height: 40px;
 }

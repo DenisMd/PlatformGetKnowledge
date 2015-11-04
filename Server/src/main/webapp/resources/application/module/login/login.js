@@ -1,11 +1,11 @@
 model.controller("loginCtrl", function ($scope, $state,$http,applicationService) {
-    applicationService.pageInfo($scope);
-    $scope.login = function(login , password) {
-        applicationService.login($scope,"loginResult",login,password,function(data){
-            console.log(data);
-            if (data.message == 'success') {
-                console.log("action");
-                $state.go($state.current, {}, {reload: true});
+    $scope.info = {};
+    $scope.login = function() {
+        applicationService.login($scope,"loginResult",$scope.info.login,$scope.info.password,function(data){
+            if (data.message === 'success') {
+                applicationService.action($scope.$parent, "user", "com.getknowledge.modules.userInfo.UserInfo", "getAuthorizedUser", {});
+            } else {
+                $scope.errorMsg = data;
             }
         });
     }

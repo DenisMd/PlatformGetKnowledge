@@ -194,6 +194,11 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars'])
             });
         };
 
+        this.imageHref = function(className,id){
+            if (!className || !id) return "";
+            return "/data/image?className="+className+"&id="+id;
+        };
+
         function isFunction(func){
             if (func && angular.isFunction(func)){
                 return true;
