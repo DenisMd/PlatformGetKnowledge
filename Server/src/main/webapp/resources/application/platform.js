@@ -22,10 +22,17 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars'])
                 var language = urlSplit[1];
                 var moduleUrlSplit = urlSplit.splice(2);
                 var moduleUrl = "";
-                if(moduleUrlSplit.length) {
-                    moduleUrl = moduleUrlSplit.join("/");
+                for (var i=0; i < moduleUrlSplit.length; i++) {
+                    var isContains = false;
+                    for (var j=0; j < modules.length; j++) {
+                        if (modules[j] == moduleUrlSplit[i-1]) {
+                            isContains = true;
+                            break;
+                        }
+                    }
+                    if (isContains) continue;
+                    moduleUrl += "/" + moduleUrlSplit[i];
                 }
-
                 $http.get(resourceUrl+"page-info/"+language+".json")
                     .success(function(data){
                     $scope.application.text = {};
@@ -259,7 +266,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars'])
             var url = $stateParams.path.split("/");
             for (var i=0; i < modules.length; i++) {
                 if (modules[i] == url [url.length - 2]) {
-                    return url [url.length - 2];
+                    return url [url.length - 2] + "Ctrl";
                 }
             }
             return url [url.length - 1] + "Ctrl";
