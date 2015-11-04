@@ -2,6 +2,7 @@ package com.getknowledge.platform.base.repositories;
 
 import com.getknowledge.platform.annotations.Access;
 import com.getknowledge.platform.base.entities.AbstractEntity;
+import com.getknowledge.platform.base.entities.IUser;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.user.User;
@@ -25,6 +26,18 @@ public abstract class ProtectedRepository <T extends AbstractEntity> extends Pre
             field.setAccessible(true);
             mainFor : for (Access access : field.getAnnotationsByType(Access.class)) {
                 if (currentUser != null) {
+
+                    if (access.myself()) {
+                        if (entity instanceof IUser) {
+                            User user = ((IUser)entity).getUser();
+                            if (user != null) {
+                                if (user.getLogin().equals(currentUser.getLogin())) {
+                                    break mainFor;
+                                }
+                            }
+                        }
+                    }
+
                     for (String permission : access.permissions()) {
                         Permission p = new Permission();
                         p.setPermissionName(permission);

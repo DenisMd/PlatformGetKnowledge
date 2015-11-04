@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Access {
+    boolean myself() default false;
     String[] roles() default "";
     String[] permissions() default "";
 }

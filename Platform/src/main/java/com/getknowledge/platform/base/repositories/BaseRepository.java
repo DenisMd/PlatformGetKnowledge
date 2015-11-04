@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 
+@Transactional
 public abstract class BaseRepository<T extends AbstractEntity> {
 
     protected Logger logger = LoggerFactory.getLogger(BaseRepository.class);
@@ -50,6 +51,7 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         entityManager.flush();
     }
 
+    @Transactional
     public T read(Long id , Class<T> classEntity) {
         if(id == null || classEntity == null) {
             throw new NullPointerException();
@@ -58,6 +60,7 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         return result;
     }
 
+    @Transactional
     public List<T> list(Class<T> classEntity) {
         if( classEntity == null) {
             throw new NullPointerException();
@@ -66,6 +69,7 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         return list;
     }
 
+    @Transactional
     public List<T> listPartial(Class<T> classEntity , int first, int max) {
         if( classEntity == null) {
             throw new NullPointerException();

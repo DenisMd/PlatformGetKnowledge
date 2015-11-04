@@ -8,21 +8,28 @@ import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.BootstrapService;
+import com.getknowledge.platform.base.services.ImageService;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
 import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.role.names.RoleName;
 import com.getknowledge.platform.modules.role.RoleRepository;
+import com.getknowledge.platform.modules.trace.TraceService;
+import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import sun.misc.IOUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.Principal;
 import java.util.*;
 
 @Service("UserInfoService")
-public class UserInfoService extends AbstractService implements BootstrapService {
+public class UserInfoService extends AbstractService implements BootstrapService,ImageService {
 
     @Autowired
     private UserRepository userRepository;
@@ -38,6 +45,9 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
     @Autowired
     private RegisterInfoRepository registerInfoRepository;
+
+    @Autowired
+    private TraceService trace;
 
     @Override
     public void bootstrap(HashMap<String, Object> map) {
@@ -80,6 +90,12 @@ public class UserInfoService extends AbstractService implements BootstrapService
             userInfo.setFirstName(firstName);
             userInfo.setLastName(lastName);
             userInfo.setLanguage("ru");
+            InputStream is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/image/photo.png");
+            try {
+                userInfo.setProfileImage(org.apache.commons.io.IOUtils.toByteArray(is));
+            } catch (IOException e) {
+                trace.logException("Error load file: " + e.getMessage(), e, TraceLevel.Warning);
+            }
             userInfoRepository.create(userInfo);
         }
     }
@@ -152,5 +168,12 @@ public class UserInfoService extends AbstractService implements BootstrapService
         bootstrapInfo.setName("User Service");
         bootstrapInfo.setOrder(1);
         return bootstrapInfo;
+    }
+
+    @Override
+    public byte[] getImageById(long id) {
+        UserInfo userInfo = userInfoRepository.read(id , UserInfo.class);
+        byte [] bytes = userInfo.getProfileImage();
+        return bytes;
     }
 }

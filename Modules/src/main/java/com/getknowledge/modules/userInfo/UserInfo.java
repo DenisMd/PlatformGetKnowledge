@@ -5,6 +5,7 @@ import com.getknowledge.platform.annotations.Access;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
+import com.getknowledge.platform.base.entities.IUser;
 import com.getknowledge.platform.modules.user.User;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import java.util.Calendar;
 @Entity
 @Table(name = "user_info")
 @ModuleInfo(repositoryName = "UserInfoRepository" , serviceName = "UserInfoService")
-public class UserInfo  extends AbstractEntity{
+public class UserInfo  extends AbstractEntity implements IUser {
 
     @Column(name = "first_name")
     private String firstName;
@@ -32,6 +33,7 @@ public class UserInfo  extends AbstractEntity{
     private byte[] profileImage;
 
     @Column(length = 5)
+    @Access(myself = true)
     private String language;
 
     @Access(roles = {"ROLE_ADMIN"})
@@ -78,6 +80,7 @@ public class UserInfo  extends AbstractEntity{
         this.lastName = lastName;
     }
 
+    @Override
     public User getUser() {
         return user;
     }

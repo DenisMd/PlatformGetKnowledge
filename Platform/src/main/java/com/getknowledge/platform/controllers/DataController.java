@@ -10,9 +10,10 @@ import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.repositories.BaseRepository;
-import com.getknowledge.platform.base.repositories.FileLinkRepository;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.base.services.AbstractService;
+import com.getknowledge.platform.base.services.FileLinkService;
+import com.getknowledge.platform.base.services.ImageService;
 import com.getknowledge.platform.exceptions.*;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.role.names.RoleName;
@@ -24,6 +25,11 @@ import com.getknowledge.platform.utils.ModuleLocator;
 import com.getknowledge.platform.utils.MultipartFileSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -112,10 +118,12 @@ public class DataController {
             if (!isAccessRead(principal, entity)) {
                 throw new NotAuthorized("access denied");
             }
-            if (repository instanceof FileLinkRepository) {
-                FileLinkRepository<?> fileLinkRepository = (FileLinkRepository<?>) repository;
 
-                String videoUrl = servletContext.getRealPath(fileLinkRepository.getFileLink(id));
+            AbstractService abstractService = moduleLocator.findService(classEntity);
+            if (abstractService instanceof FileLinkService) {
+                FileLinkService fileLinkService = (FileLinkService) abstractService;
+
+                String videoUrl = servletContext.getRealPath(fileLinkService.getFileLink(id));
                 MultipartFileSender.fromPath(Paths.get(videoUrl))
                         .with(request)
                         .with(response)
@@ -128,6 +136,43 @@ public class DataController {
         } catch (Exception e) {
             trace.logException("Read video exception: ", e, TraceLevel.Warning);
         }
+    }
+
+    @RequestMapping(value = "/image", method = RequestMethod.GET)
+    @Transactional
+    public ResponseEntity<byte[]> getImage(@RequestParam(value = "id" ,required = true) Long id,
+                              @RequestParam(value ="className" , required = true) String className, Principal principal, HttpServletRequest request, HttpServletResponse response) throws PlatformException {
+        try {
+            if (id == null || className == null || className.isEmpty()) return null;
+            Class classEntity = Class.forName(className);
+            BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
+            if (repository instanceof ProtectedRepository) {
+                ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
+                protectedRepository.setCurrentUser(getCurrentUser(principal));
+            }
+            AbstractEntity entity = repository.read(id, classEntity);
+            if (entity == null) {
+                return null;
+            }
+
+            if (!isAccessRead(principal, entity)) {
+                throw new NotAuthorized("access denied");
+            }
+            AbstractService abstractService = moduleLocator.findService(classEntity);
+            if (abstractService instanceof ImageService) {
+                ImageService imageService = ((ImageService)abstractService);
+                final HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.IMAGE_JPEG);
+                return new ResponseEntity<byte[]>(imageService.getImageById(id),headers, HttpStatus.OK);
+            }
+
+
+        } catch (ClassNotFoundException e) {
+            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+        } catch (Exception e) {
+            trace.logException("Read video exception: ", e, TraceLevel.Warning);
+        }
+        return null;
     }
 
     @RequestMapping(value = "/count", method = RequestMethod.GET)

@@ -2,6 +2,7 @@ package com.getknowledge.modules.video;
 
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.BootstrapService;
+import com.getknowledge.platform.base.services.FileLinkService;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 
 @Service("VideoService")
-public class VideoService extends AbstractService implements BootstrapService {
+public class VideoService extends AbstractService implements BootstrapService , FileLinkService{
 
     @Autowired
     private VideoRepository videoRepository;
@@ -36,5 +37,11 @@ public class VideoService extends AbstractService implements BootstrapService {
         bootstrapInfo.setName("VideoBootstrap");
         bootstrapInfo.setOrder(1);
         return bootstrapInfo;
+    }
+
+    @Override
+    public String getFileLink(long id) {
+        Video video = videoRepository.read(id , Video.class);
+        return video == null ? null : "/WEB-INF/video/" +video.getLink();
     }
 }
