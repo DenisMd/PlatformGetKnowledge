@@ -28,8 +28,8 @@
             Don't have an account? <a ng-href="{{createUrl('/register')}}">Sign up</a>
         </div>
 
-        <div ng-messages="myForm.myName.$error || errorMsg" style="color:maroon" role="alert">
-            <div ng-message="errorMsg">Err</div>
+        <div ng-show="error" style="color:maroon" role="alert">
+            <div ng-show="error">Error</div>
         </div>
     </form>
 </div>

@@ -27,3 +27,7 @@
     min-width: 18.75em;
     height: 40px;
 }
+
+.login-btn:focus, .login-btn:active, .login-btn:active:focus{
+    outline: 0;
+}
