@@ -1,5 +1,6 @@
 package com.getknowledge.modules.userInfo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.getknowledge.platform.annotations.Access;
 import com.getknowledge.platform.annotations.ModuleInfo;
@@ -30,6 +31,7 @@ public class UserInfo  extends AbstractEntity implements IUser {
 
     @Basic(fetch=FetchType.LAZY)
     @Lob @Column(name="image")
+    @JsonIgnore
     private byte[] profileImage;
 
     @Column(length = 5)
