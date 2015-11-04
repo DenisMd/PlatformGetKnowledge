@@ -1,4 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<link rel="stylesheet" href="/resources/css/login.css">
+
+
+
+<div class="login-form">
+    Get knowledge : {{loginResult}}
+</div>
 
 email : <input type="text" ng-model="test.email"><br/>
 password : <input type="password" ng-model="test.password"><br/>

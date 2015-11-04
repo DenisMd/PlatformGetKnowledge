@@ -11,7 +11,6 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars'])
     .service("applicationService", function ($http,$sce,resourceUrl,errorService) {
         "use strict";
 
-
         var platformDataUrl = "/data/";
 
         this.pageInfo = function ($scope) {
@@ -71,7 +70,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars'])
             });
         };
 
-        this.login = function (user, pass) {
+        this.login = function ($scope,name, user, pass,callback) {
             $http({
                 method: 'POST',
                 url: "/j_spring_security_check",
@@ -81,10 +80,10 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars'])
                 }),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (data) {
-                alert(data.message);
+                $scope[name] = data;
+                callback(data);
             });
         };
-
 
         this.read = function($scope, name, className, id, callback) {
             $http.get(platformDataUrl+"read?className="+className+"&id="+id)
@@ -134,7 +133,6 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars'])
                 errorService.showError(error,status);
             });
         };
-
 
         this.action = function ($scope,name,className,actionName,data,callback){
             var isCallbackFunction = isFunction(callback);
@@ -325,12 +323,3 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars'])
             }
         };
     });
-
-
-
-
-
-
-
-
-
