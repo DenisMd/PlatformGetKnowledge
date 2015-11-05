@@ -86,7 +86,7 @@ public class DataController {
             }
 
             if (!isAccessRead(principal, entity)) {
-                throw new NotAuthorized("access denied");
+                throw new NotAuthorized("access denied for read entity: " + className, trace , TraceLevel.Warning);
             }
 
             ObjectNode objectNode = objectMapper.valueToTree(entity);
@@ -115,7 +115,7 @@ public class DataController {
             }
 
             if (!isAccessRead(principal, entity)) {
-                throw new NotAuthorized("access denied");
+                throw new NotAuthorized("access denied for read video" , trace, TraceLevel.Warning);
             }
 
             AbstractService abstractService = moduleLocator.findService(classEntity);
@@ -133,7 +133,7 @@ public class DataController {
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
         } catch (Exception e) {
-            trace.logException("Read video exception: ", e, TraceLevel.Warning);
+            trace.logException("read video exception: " + e.getMessage(), e, TraceLevel.Warning);
         }
     }
 
@@ -154,7 +154,7 @@ public class DataController {
             }
 
             if (!isAccessRead(principal, entity)) {
-                throw new NotAuthorized("access denied");
+                throw new NotAuthorized("access denied for read image" , trace, TraceLevel.Warning);
             }
             AbstractService abstractService = moduleLocator.findService(classEntity);
             if (abstractService instanceof ImageService) {
@@ -168,7 +168,7 @@ public class DataController {
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
         } catch (Exception e) {
-            trace.logException("Read video exception: ", e, TraceLevel.Warning);
+            trace.logException("read image exception: " + e.getMessage(), e, TraceLevel.Warning);
         }
         return null;
     }
@@ -203,7 +203,7 @@ public class DataController {
             for (AbstractEntity abstractEntity : list) {
                 if (!isAccessRead(principal, abstractEntity) ) {
                     // TODO: question may continue?
-                    throw new NotAuthorized("access denied");
+                    throw new NotAuthorized("access denied for read entity from list" , trace, TraceLevel.Warning);
                 }
                 ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
                 objectNode.put("editable" , isAccessEdit(principal,abstractEntity));
@@ -243,7 +243,7 @@ public class DataController {
             for (AbstractEntity abstractEntity : list) {
                 if (!isAccessRead(principal, abstractEntity) ) {
                     // TODO: question may continue?
-                    throw new NotAuthorized("access denied");
+                    throw new NotAuthorized("access denied for read entity from list partial" , trace, TraceLevel.Warning);
                 }
                 ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
                 objectNode.put("editable" , isAccessEdit(principal,abstractEntity));
@@ -271,15 +271,14 @@ public class DataController {
             Class classEntity = Class.forName(className);
             AbstractEntity abstractEntity = (AbstractEntity) objectMapper.readValue(jsonObject, classEntity);
             if (!isAccessCreate(principal, abstractEntity) ) {
-                throw new NotAuthorized("access denied");
+                throw new NotAuthorized("access denied for create entity" , trace, TraceLevel.Warning);
             }
             moduleLocator.findRepository(classEntity).create(abstractEntity);
             return "object created";
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found" , trace , TraceLevel.Warning);
         } catch (IOException e) {
-            trace.logException("can't parse entities " + className, e, TraceLevel.Warning);
-            throw new ParseException("can't parse entities " + className);
+            throw new ParseException("can't parse entities for create " + className , trace, TraceLevel.Warning, e);
         }
     }
 
@@ -290,13 +289,12 @@ public class DataController {
             Class classEntity = Class.forName(className);
             AbstractEntity abstractEntity = (AbstractEntity) objectMapper.readValue(jsonObject, classEntity);
             if (isAccessEdit(principal, abstractEntity) ) {
-                throw new NotAuthorized("access denied");
+                throw new NotAuthorized("access denied for update entity" , trace, TraceLevel.Warning);
             }
             moduleLocator.findRepository(classEntity).update(abstractEntity);
             return "object updated";
         } catch (IOException e) {
-            trace.logException("can't parse entities " + className, e, TraceLevel.Warning);
-            throw new ParseException("can't parse entities " + className);
+            throw new ParseException("can't parse entities for update " + className,trace,TraceLevel.Warning,e);
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
         }
@@ -310,7 +308,7 @@ public class DataController {
 
             AbstractEntity abstractEntity = moduleLocator.findRepository(classEntity).read(id, classEntity);
             if (!isAccessRemove(principal, abstractEntity) ) {
-                throw new NotAuthorized("access denied");
+                throw new NotAuthorized("access denied for remove entity" , trace, TraceLevel.Warning);
             }
             moduleLocator.findRepository(classEntity).remove(id, classEntity);
 
@@ -363,8 +361,7 @@ public class DataController {
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
         } catch (IOException e) {
-            trace.logException("parse result exception ", e, TraceLevel.Warning);
-            throw new ParseException("parse result exception");
+            throw new ParseException("can't parse result for action " + className,trace,TraceLevel.Warning,e);
         } catch (InvocationTargetException e) {
             trace.logException("InvocationTargetException", e, TraceLevel.Warning);
             throw new InvokeException("InvocationTargetException");
@@ -420,11 +417,9 @@ public class DataController {
             trace.logException("parse result exception ", e, TraceLevel.Warning);
             throw new ParseException("parse result exception");
         } catch (InvocationTargetException e) {
-            trace.logException("InvocationTargetException", e, TraceLevel.Warning);
-            throw new InvokeException("InvocationTargetException");
+            throw new InvokeException("InvocationTargetException", trace , TraceLevel.Warning , e);
         } catch (IllegalAccessException e) {
-            trace.logException("IllegalAccessException ", e, TraceLevel.Warning);
-            throw new InvokeException("IllegalAccessException");
+            throw new InvokeException("IllegalAccessException", trace , TraceLevel.Warning , e);
         }
     }
 

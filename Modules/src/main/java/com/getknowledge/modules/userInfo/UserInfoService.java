@@ -54,8 +54,8 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
             String login = "admin";
             String password = "admin";
-            String lastName = "Denis";
-            String firstName = "Markov";
+            String lastName = "Markov";
+            String firstName = "Denis";
 
             if (map.containsKey("login")) {
                 login = (String) map.get("login");

@@ -21,7 +21,13 @@ public class PlatformException extends Exception {
 
     public PlatformException(String message , TraceService traceService , TraceLevel traceLevel) {
         super(message);
-        traceService.logException(message ,this, traceLevel);
+        traceService.logException(message, this, traceLevel);
+        errorResource.setMessage(message);
+    }
+
+    public PlatformException(String message , TraceService traceService , TraceLevel traceLevel , Exception e) {
+        super(message);
+        traceService.logException(message ,e, traceLevel);
         errorResource.setMessage(message);
     }
 }
