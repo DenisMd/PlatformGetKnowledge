@@ -30,7 +30,5 @@
         <div class="form-group text-center">
             {{translate("dontHaveAccount")}} <a ng-href="{{createUrl('/register')}}">{{translate("SignUp")}}</a>
         </div>
-
-
     </form>
 </div>
