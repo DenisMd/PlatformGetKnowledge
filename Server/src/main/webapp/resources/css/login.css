@@ -31,3 +31,7 @@
 .login-btn:focus, .login-btn:active, .login-btn:active:focus{
     outline: 0;
 }
+
+.err-hidden{
+    visibility: hidden;
+}

@@ -3,7 +3,7 @@
         <div class="user-info-card" ng-show="user">
             <img ng-src="{{userImg(user.id)}}" class="main-image" />
             <p class="main-label">{{user.firstName}} {{user.lastName}}</p>
-            <a class="logout">({{translate('logout')}})</a>
+            <a class="logout" ng-click="logout()">({{translate('logout')}})</a>
             <p class="info-about-user">{{user.specialty}}</p>
         </div>
 

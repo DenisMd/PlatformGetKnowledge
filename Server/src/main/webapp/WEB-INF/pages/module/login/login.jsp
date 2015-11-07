@@ -2,6 +2,9 @@
 <link rel="stylesheet" href="/resources/css/login.css">
 
 <div>
+    <div ng-class="error?'':'err-hidden'" class="alert alert-danger text-center" role="alert">
+        Error
+    </div>
     <form class="login-form">
     <div class="form-group login-title">
         Sign in
@@ -26,10 +29,6 @@
         </div>
         <div class="form-group text-center">
             Don't have an account? <a ng-href="{{createUrl('/register')}}">Sign up</a>
-        </div>
-
-        <div ng-show="error" style="color:maroon" role="alert">
-            <div ng-show="error">Error</div>
         </div>
     </form>
 </div>

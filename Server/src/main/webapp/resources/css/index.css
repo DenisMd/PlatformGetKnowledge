@@ -294,6 +294,11 @@ html, body{
     font-size: 14px;
     display: inline-block;
     margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.logout:hover{
+    color: inherit;
 }
 
 .main-label {
