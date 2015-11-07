@@ -7,28 +7,30 @@
     </div>
     <form class="login-form">
     <div class="form-group login-title">
-        Sign in
+        {{translate("signIn")}}
     </div>
 
         <div class="form-group">
-            <label for="inputEmail" class="control-label">Email</label>
+            <label for="inputEmail" class="control-label">{{translate("email")}}</label>
             <input type="text" class="form-control" id="inputEmail" placeholder="Email" ng-model="info.login">
         </div>
 
         <div class="form-group">
-            <label for="inputPassword" class="control-label">Password</label>
+            <label for="inputPassword" class="control-label">{{translate("password")}}</label>
             <input type="password" class="form-control" id="inputPassword" placeholder="Password" ng-model="info.password">
         </div>
 
         <div class="form-group">
-            <label class="control-label"><a><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> Forgot your password?</a></label>
+            <label class="control-label"><a><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> {{translate("forgotPassword")}}</a></label>
         </div>
 
         <div class="form-group login-btns">
-            <button class="btn login-btn" ng-click="login()">Войти</button>
+            <button class="btn login-btn" ng-click="login()">{{translate("login")}}</button>
         </div>
         <div class="form-group text-center">
-            Don't have an account? <a ng-href="{{createUrl('/register')}}">Sign up</a>
+            {{translate("dontHaveAccount")}} <a ng-href="{{createUrl('/register')}}">{{translate("SignUp")}}</a>
         </div>
+
+
     </form>
 </div>

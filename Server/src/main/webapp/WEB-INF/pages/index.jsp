@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/resources/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css" type="text/css"/>
     <link rel="stylesheet" href="/resources/bower_components/video.js/dist/video-js.min.css" type="text/css"/>
     <link rel="stylesheet" href="/resources/css/index.css" type="text/css">
+    <meta charset="utf-8">
 </head>
 <body>
 
