@@ -3,6 +3,7 @@
   "text" : {
     "language" : "Language",
     "login" : "Login",
+    "logout" : "Logout",
     "panel" : "Working panel",
     "programming" : "Programing",
     "courses" : "Group of courses",
