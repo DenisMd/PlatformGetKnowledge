@@ -14,6 +14,10 @@ public abstract class AbstractEntity {
     @Column(name = "class_name",length = 500)
     private String className;
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

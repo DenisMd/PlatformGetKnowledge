@@ -9,6 +9,16 @@ import org.springframework.stereotype.Repository;
 public class SectionRepository extends PrepareRepository<Section> {
 
     @Override
+    public Section clone(Section entity) {
+        Section section = new Section();
+        section.setCover(entity.getCover());
+        section.setDescription(entity.getDescription());
+        section.setMenuItem(entity.getMenuItem());
+        section.setTitle(entity.getTitle());
+        return section;
+    }
+
+    @Override
     public Section prepare(Section entity) {
         if (entity == null || entity.getMenuItem() == null) return entity;
 

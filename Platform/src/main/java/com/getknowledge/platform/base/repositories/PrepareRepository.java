@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class PrepareRepository<T extends AbstractEntity> extends BaseRepository<T> implements PrepareEntity<T> {
+public abstract class PrepareRepository<T extends AbstractEntity> extends BaseRepository<T> implements PrepareEntity<T>, CloneableEntity<T> {
     @Override
     public T read(Long id, Class<T> classEntity) {
         return prepare(super.read(id, classEntity));
@@ -24,6 +24,7 @@ public abstract class PrepareRepository<T extends AbstractEntity> extends BaseRe
 
     @Override
     public List<T> getEntitiesByFieldAndValue(Class<T> classEntity ,String field, Object value) {
-        return super.getEntitiesByFieldAndValue(classEntity , field,value).stream().map(this::prepare).collect(Collectors.toList());
+        List<T> list = super.getEntitiesByFieldAndValue(classEntity, field, value);
+        return list.stream().map(this::prepare).collect(Collectors.toList());
     }
 }

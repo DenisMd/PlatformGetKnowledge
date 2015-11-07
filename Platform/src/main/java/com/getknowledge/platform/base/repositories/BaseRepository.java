@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 
+
 @Transactional
 public abstract class BaseRepository<T extends AbstractEntity> {
 
@@ -19,7 +20,6 @@ public abstract class BaseRepository<T extends AbstractEntity> {
     @PersistenceContext
     public EntityManager entityManager;
 
-    @Transactional
     public void create(T object) {
         ObjectMapper objectMapper = new ObjectMapper();
         if(object == null) {
@@ -31,7 +31,6 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         entityManager.flush();
     }
 
-    @Transactional
     public void update(T object) {
         if(object == null) {
             throw new NullPointerException();
@@ -41,7 +40,6 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         entityManager.flush();
     }
 
-    @Transactional
     public void remove(Long id , Class<T> classEntity) {
         if(id == null || classEntity == null) {
             throw new NullPointerException();
@@ -51,7 +49,6 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         entityManager.flush();
     }
 
-    @Transactional
     public T read(Long id , Class<T> classEntity) {
         if(id == null || classEntity == null) {
             throw new NullPointerException();
@@ -60,7 +57,6 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         return result;
     }
 
-    @Transactional
     public List<T> list(Class<T> classEntity) {
         if( classEntity == null) {
             throw new NullPointerException();
@@ -69,7 +65,6 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         return list;
     }
 
-    @Transactional
     public List<T> listPartial(Class<T> classEntity , int first, int max) {
         if( classEntity == null) {
             throw new NullPointerException();
