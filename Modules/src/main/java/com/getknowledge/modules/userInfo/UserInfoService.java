@@ -19,6 +19,7 @@ import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import sun.misc.IOUtils;
 
@@ -108,6 +109,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
         User user = userRepository.getSingleEntityByFieldAndValue(User.class, "login", login);
         userInfoRepository.setCurrentUser(user);
         UserInfo userInfo = userInfoRepository.getSingleEntityByFieldAndValue(UserInfo.class,"user.login",login);
+        userInfo.setFirstName("Wiiii");
         return userInfo;
     }
 
@@ -172,6 +174,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
     }
 
     @Override
+    @Transactional
     public byte[] getImageById(long id) {
         UserInfo userInfo = userInfoRepository.read(id , UserInfo.class);
         byte [] bytes = userInfo.getProfileImage();

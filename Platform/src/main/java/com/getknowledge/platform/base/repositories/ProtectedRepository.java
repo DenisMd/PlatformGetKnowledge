@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Transactional(readOnly = true)
 public abstract class ProtectedRepository <T extends AbstractEntity> extends PrepareRepository<T> {
     protected User currentUser = null;
 
@@ -21,6 +22,8 @@ public abstract class ProtectedRepository <T extends AbstractEntity> extends Pre
 
     @Override
     public T prepare(T entity) {
+        //Чтобы не изсенить объект в транзакции
+        entity = clone(entity);
         if (entity == null) {return null;}
         for (Field field : entity.getClass().getDeclaredFields()) {
             field.setAccessible(true);
