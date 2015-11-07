@@ -274,7 +274,6 @@ html, body{
     margin-top: 20px;
     text-align: center;
     color: #ffffff;
-    height: 200px;
 }
 
 .main-image {
@@ -290,10 +289,17 @@ html, body{
     background: none;
 }
 
+.logout{
+    color: inherit;
+    font-size: 14px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
 
 .main-label {
     font: 400 22px Corbel;
     margin-top: 2px;
+    margin-bottom: 0;
 }
 
 .info-about-user{

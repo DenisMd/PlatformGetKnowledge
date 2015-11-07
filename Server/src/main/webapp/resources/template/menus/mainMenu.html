@@ -3,8 +3,10 @@
         <div class="user-info-card" ng-show="user">
             <img ng-src="{{userImg(user.id)}}" class="main-image" />
             <p class="main-label">{{user.firstName}} {{user.lastName}}</p>
+            <a class="logout">({{translate('logout')}})</a>
             <p class="info-about-user">{{user.specialty}}</p>
         </div>
+
         <div class="user-info-card" ng-hide="user">
             <a ng-href="{{createUrl('/login')}}">
                 <img ng-src="{{isMouseenter? '/resources/image/menu/login2.png': '/resources/image/menu/login.png'}}" ng-mouseenter="isMouseenter = true" ng-mouseleave="isMouseenter = false" class="main-image login-image" />

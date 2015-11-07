@@ -19,7 +19,7 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
     //смена языка
     $scope.changeLanguage = function (language) {
         if (!$scope.application.language || $scope.application.language === language) {
-            return;
+            return false;
         }
         var str = window.location.hash.split("/").splice(2).join("/");
         if (str) {
@@ -33,6 +33,7 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
             });
         }
         applicationService.pageInfo($scope);
+        return true;
     };
 
     $scope.toggelMenu = true;
