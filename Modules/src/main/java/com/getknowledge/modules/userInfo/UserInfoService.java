@@ -52,7 +52,6 @@ public class UserInfoService extends AbstractService implements BootstrapService
     @Override
     public void bootstrap(HashMap<String, Object> map) {
         if(userRepository.count(User.class) == 0) {
-
             String login = "admin";
             String password = "admin";
             String lastName = "Markov";
@@ -174,7 +173,6 @@ public class UserInfoService extends AbstractService implements BootstrapService
     }
 
     @Override
-    @Transactional
     public byte[] getImageById(long id) {
         UserInfo userInfo = userInfoRepository.read(id , UserInfo.class);
         byte [] bytes = userInfo.getProfileImage();

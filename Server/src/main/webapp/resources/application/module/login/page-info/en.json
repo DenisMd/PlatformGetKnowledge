@@ -5,7 +5,6 @@
     "password" : "Password",
     "forgotPassword" : "Forgot your password?",
     "dontHaveAccount" : "Don't have an account?",
-    "login" : "Login",
     "SignUp" : "Sign up",
     "loginError" : "Incorrect password or login"
   }
