@@ -16,6 +16,13 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
         return "/data/readVideo?className="+videoClassName+"&id="+id;
     };
 
+    $scope.logout = function(){
+        if (!$scope.user) return;
+        $http.get("/j_spring_security_logout").success(function(){
+            applicationService.action($scope, "user", userInfoClassName, "getAuthorizedUser", {});
+        });
+    };
+
     //смена языка
     $scope.changeLanguage = function (language) {
         if (!$scope.application.language || $scope.application.language === language) {

@@ -2,6 +2,9 @@
 <link rel="stylesheet" href="/resources/css/login.css">
 
 <div>
+    <div ng-class="error?'':'err-hidden'" class="alert alert-danger text-center" role="alert">
+        Error
+    </div>
     <form class="login-form">
     <div class="form-group login-title">
         {{translate("signIn")}}
@@ -28,8 +31,6 @@
             {{translate("dontHaveAccount")}} <a ng-href="{{createUrl('/register')}}">{{translate("SignUp")}}</a>
         </div>
 
-        <div ng-show="error" style="color:maroon" role="alert">
-            <div ng-show="error">{{translate("Incorrect password or login")}}</div>
-        </div>
+
     </form>
 </div>
