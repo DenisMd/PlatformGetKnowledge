@@ -52,7 +52,6 @@ public class UserInfoService extends AbstractService implements BootstrapService
     @Override
     public void bootstrap(HashMap<String, Object> map) {
         if(userRepository.count(User.class) == 0) {
-
             String login = "admin";
             String password = "admin";
             String lastName = "Markov";
@@ -91,6 +90,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
             userInfo.setLastName(lastName);
             userInfo.setLanguage("ru");
             userInfo.setSpecialty("main admin");
+            userInfo.setMan(true);
             InputStream is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/image/photo.png");
             try {
                 userInfo.setProfileImage(org.apache.commons.io.IOUtils.toByteArray(is));
@@ -109,17 +109,21 @@ public class UserInfoService extends AbstractService implements BootstrapService
         User user = userRepository.getSingleEntityByFieldAndValue(User.class, "login", login);
         userInfoRepository.setCurrentUser(user);
         UserInfo userInfo = userInfoRepository.getSingleEntityByFieldAndValue(UserInfo.class,"user.login",login);
-        userInfo.setFirstName("Wiiii");
         return userInfo;
     }
 
-    @Action(name = "register" , mandatoryFields = {"login" , "password" , "firstName" , "lastName"})
+    @Action(name = "register" , mandatoryFields = {"email" , "password" , "firstName" , "lastName"})
     public RegisterResult register(HashMap<String,Object> data) {
-        String login = (String) data.get("login");
+        String login = (String) data.get("email");
         String password = (String) data.get("password");
+        if (password.length() < 6) {
+            trace.log("Password less than 6 character for user " + login, TraceLevel.Event);
+            return RegisterResult.PasswordLessThan6;
+        }
         String firstName = (String) data.get("firstName");
         String lastName = (String) data.get("lastName");
         if (userRepository.getSingleEntityByFieldAndValue(User.class , "login", login) != null) {
+            trace.log("User with email already register " + login, TraceLevel.Event);
             return RegisterResult.UserAlreadyCreated;
         }
 
@@ -141,10 +145,11 @@ public class UserInfoService extends AbstractService implements BootstrapService
         registerInfo.setUuid(UUID.randomUUID().toString());
         registerInfoRepository.create(registerInfo);
 
-        emailService.send("markovdenis2013@gmail.com", login, "Ðåãèñòðàöèÿ íà getKnowledge();", registerInfo.getUuid());
+        emailService.send(login,"markovdenis2013@gmail.com", "Ð ÐµÐ³Ð¸ÑÑ‚Ñ€Ð°Ñ†Ð¸Ñ Ð½Ð° getKnowledge();", registerInfo.getUuid()+"~"+userInfo.getId());
 
         RegisterResult registerResult = RegisterResult.Complete;
         registerResult.setUserInfoId(userInfo.getId());
+        trace.log("Registration complete for user " + login, TraceLevel.Event);
         return registerResult;
     }
 
@@ -174,7 +179,6 @@ public class UserInfoService extends AbstractService implements BootstrapService
     }
 
     @Override
-    @Transactional
     public byte[] getImageById(long id) {
         UserInfo userInfo = userInfoRepository.read(id , UserInfo.class);
         byte [] bytes = userInfo.getProfileImage();

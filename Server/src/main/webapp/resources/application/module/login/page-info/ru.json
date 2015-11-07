@@ -5,7 +5,6 @@
     "password" : "Пароль",
     "forgotPassword" : "Забыли свой пароль?",
     "dontHaveAccount" : "Нету аккаунта?",
-    "login" : "Войти",
     "SignUp" : "Зарегистрироваться",
     "loginError" : "Неправильный логин или пароль"
   }

@@ -3,7 +3,7 @@
 
 <div>
     <div ng-class="error?'':'err-hidden'" class="alert alert-danger text-center" role="alert">
-        Error
+        {{translate("loginError")}}
     </div>
     <form class="login-form">
     <div class="form-group login-title">
