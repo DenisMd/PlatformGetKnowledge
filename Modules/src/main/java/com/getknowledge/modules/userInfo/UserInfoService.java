@@ -90,6 +90,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
             userInfo.setLastName(lastName);
             userInfo.setLanguage("ru");
             userInfo.setSpecialty("main admin");
+            userInfo.setMan(true);
             InputStream is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/image/photo.png");
             try {
                 userInfo.setProfileImage(org.apache.commons.io.IOUtils.toByteArray(is));

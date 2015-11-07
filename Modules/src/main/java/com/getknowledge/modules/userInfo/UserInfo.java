@@ -42,6 +42,16 @@ public class UserInfo  extends AbstractEntity implements IUser {
     @OneToOne
     private User user;
 
+    private boolean man;
+
+    public boolean isMan() {
+        return man;
+    }
+
+    public void setMan(boolean man) {
+        this.man = man;
+    }
+
     public String getLanguage() {
         return language;
     }

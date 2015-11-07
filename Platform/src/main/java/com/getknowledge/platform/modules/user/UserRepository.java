@@ -18,7 +18,6 @@ public class UserRepository extends BaseRepository<User> {
         if (object == null) {
             throw new NullPointerException();
         }
-        object.setEnabled(true);
         object.setHashPwd(object.getPwdTransient());
         super.create(object);
     }
