@@ -27,6 +27,8 @@ public class TaskService extends AbstractService {
 
     public static Semaphore semaphore;
 
+    public static Thread thread;
+
     static {
         semaphore = new Semaphore(1);
     }
@@ -41,7 +43,7 @@ public class TaskService extends AbstractService {
     private ModuleLocator moduleLocator;
 
     public void startup() {
-        new Thread(new Runnable() {
+        thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
@@ -87,22 +89,26 @@ public class TaskService extends AbstractService {
 
                         if (!calendars.isEmpty()) {
                             if (calendars.get(0) != null) {
-                                System.err.println("delta : "  + (calendars.get(0).getTimeInMillis() - Calendar.getInstance().getTimeInMillis()));
+                                long delta = calendars.get(0).getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+                                Thread.sleep(delta);
                             } else {
-
+                                synchronized (this) {
+                                    wait();
+                                }
                             }
                         }
 
-                        Thread.sleep(5000);
+
 
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        continue;
                     } catch (Exception e) {
                         traceService.logException("Exception for task service", e, TraceLevel.Warning);
                     }
                 }
             }
-        }).start();
+        });
+        thread.start();
     }
 
 }

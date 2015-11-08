@@ -6,4 +6,10 @@ import sun.reflect.generics.repository.AbstractRepository;
 
 @Repository("TaskRepository")
 public class TaskRepository extends BaseRepository<Task> {
+
+    @Override
+    public void create(Task object) {
+        super.create(object);
+        TaskService.thread.interrupt();
+    }
 }
