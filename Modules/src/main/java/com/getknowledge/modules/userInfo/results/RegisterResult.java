@@ -1,7 +1,7 @@
 package com.getknowledge.modules.userInfo.results;
 
 public enum RegisterResult {
-    PasswordLessThan6,UserAlreadyCreated , Complete , RegistrationTimeout;
+    PasswordLessThan6,UserAlreadyCreated , Complete , RegistrationTimeout,AlreadyActivate;
 
     private Long userInfoId = null;
 
