@@ -33,6 +33,16 @@
         <label for="inputLastName" class="control-label">{{translate("LastName")}}</label>
         <input type="text" class="form-control input-lg" required id="inputLastName" placeholder="Last name" ng-model="info.lastName">
     </div>
+    <div class="form-group">
+            <label for="male" class="radio-inline">
+                <input type="radio" ng-model="info.sex" name="gender" id="male" ng-value="true">
+                {{translate("male")}}
+            </label>
+            <label for="female" class="radio-inline">
+                <input type="radio" ng-model="info.sex" name="gender" id="female" ng-value="false">
+                {{translate("female")}}
+            </label>
+    </div>
 
     <div class="form-group login-btns">
         <button class="btn login-btn" ng-click="signUp()" ng-disabled="registerForm.$invalid">Register</button>

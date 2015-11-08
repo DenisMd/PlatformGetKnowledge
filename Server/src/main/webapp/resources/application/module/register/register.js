@@ -1,7 +1,9 @@
 model.controller("registerCtrl", function ($scope, $http,applicationService) {
     applicationService.pageInfo($scope);
 
-    $scope.info = {};
+    $scope.info = {
+        "sex" : true
+    };
     $scope.password = "";
     $scope.signUp = function() {
         if (registerForm.$invalid) return;
