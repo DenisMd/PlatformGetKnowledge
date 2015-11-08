@@ -5,8 +5,8 @@
     <div ng-class="error?'':'err-hidden'" class="alert alert-danger text-center" role="alert">
         {{translate("loginError")}}
     </div>
-    <form class="login-form">
-    <div class="form-group login-title">
+    <form class="center-form">
+    <div class="form-group form-title">
         {{translate("signIn")}}
     </div>
 

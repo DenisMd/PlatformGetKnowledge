@@ -1,6 +1,5 @@
-model.controller("registerCtrl", function ($scope, $http,applicationService,validationService) {
+model.controller("registerCtrl", function ($scope, $http,applicationService) {
     applicationService.pageInfo($scope);
-    $scope.compareTo = validationService.compareTo;
 
     $scope.info = {};
     $scope.password = "";
@@ -15,32 +14,30 @@ model.controller("registerCtrl", function ($scope, $http,applicationService,vali
     }
 });
 
-model.service("validationService", function(){
-    this.compareTo = function (value,anotherInput){
-        console.log(anotherInput);
-        return angular.equals(anotherInput,value);
-    }
-});
 
 model.directive("useValidation", function () {
     return {
         restrict: 'A',
         require:'ngModel',
         scope:{
-            validationFunction:"&useValidation",
-            options: "@options"
+            type:"@useValidation",
+            options: "=options"
         },
-        link:function (scope, elm, attrs, ngModelCtrl) {
-            console.log(scope.options);
-            ngModelCtrl.$parsers.unshift(function (viewValue) {
-                ngModelCtrl.$setValidity('data', scope.validationFunction(viewValue,scope.options));
-                return viewValue;
-            });
+        link:function (scope, elm, attrs,ngModel) {
+           if (!scope.type) return;
+            switch (scope.type){
 
-            ngModelCtrl.$formatters.unshift(function (modelValue) {
-                ngModelCtrl.$setValidity('data', scope.validationFunction(modelValue,scope.options));
-                return modelValue;
-            });
+                case "compareTo":
+                    ngModel.$validators.compareTo = function(value){
+                        return scope.options.value === value;
+                    };
+                    scope.$watch("options", function() {
+                        ngModel.$validate();
+                    });
+                    break;
+
+                default : return;
+            }
         }
     };
 });

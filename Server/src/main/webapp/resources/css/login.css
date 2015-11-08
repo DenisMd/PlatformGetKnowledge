@@ -1,11 +1,22 @@
+/*validation*/
+.ng-invalid.ng-touched {
+    border-color: red;
+    outline-color: red;
+}
 
-.login-form {
+.ng-valid.ng-touched {
+    border-color: green;
+    outline-color: green;
+}
+
+/*forms*/
+.center-form {
     text-align: justify;
     margin: 0 auto;
     width:350px;
 }
 
-.login-title{
+.form-title {
     font: 40px 'Exo', sans-serif;
     text-align: center;
 }
