@@ -34,14 +34,12 @@
         <input type="text" class="form-control input-lg" required id="inputLastName" placeholder="Last name" ng-model="info.lastName">
     </div>
     <div class="form-group">
-            <label for="male" class="radio-inline">
-                <input type="radio" ng-model="info.sex" name="gender" id="male" ng-value="true">
-                {{translate("male")}}
-            </label>
-            <label for="female" class="radio-inline">
-                <input type="radio" ng-model="info.sex" name="gender" id="female" ng-value="false">
-                {{translate("female")}}
-            </label>
+        <div class="register-switch">
+            <input type="radio" ng-model="info.sex" name="sex" ng-value="true" id="male" class="register-switch-input" checked>
+            <label for="male" class="register-switch-label">{{translate("male")}}</label>
+            <input type="radio" name="sex"  ng-value="false" id="female" class="register-switch-input">
+            <label for="female" class="register-switch-label">{{translate("female")}}</label>
+        </div>
     </div>
 
     <div class="form-group login-btns">
