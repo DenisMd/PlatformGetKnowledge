@@ -38,6 +38,16 @@ public class  ModuleLocator {
         return abstractRepository;
     }
 
+    public AbstractService findService(String serviceName) throws ModuleNotFound {
+        AbstractService abstractRepository = (AbstractService) ac.getBean(serviceName);
+        return abstractRepository;
+    }
+
+    public BaseRepository findRepository(String repositoryName) throws ModuleNotFound {
+        BaseRepository baseRepository = (BaseRepository) ac.getBean(repositoryName);
+        return baseRepository;
+    }
+
     public List<BootstrapService> findAllBootstrapServices(){
         List<BootstrapService> bootstraps = new ArrayList<>(50);
         for ( Map.Entry< String, Object > b : ac.getBeansWithAnnotation( Service.class ).entrySet () ) {

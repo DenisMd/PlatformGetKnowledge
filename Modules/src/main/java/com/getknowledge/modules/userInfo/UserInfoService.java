@@ -1,5 +1,6 @@
 package com.getknowledge.modules.userInfo;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.getknowledge.modules.email.EmailService;
 import com.getknowledge.modules.userInfo.registerInfo.RegisterInfo;
 import com.getknowledge.modules.userInfo.registerInfo.RegisterInfoRepository;
@@ -13,6 +14,9 @@ import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
 import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.role.names.RoleName;
 import com.getknowledge.platform.modules.role.RoleRepository;
+import com.getknowledge.platform.modules.task.Task;
+import com.getknowledge.platform.modules.task.TaskRepository;
+import com.getknowledge.platform.modules.task.enumerations.TaskStatus;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
@@ -48,6 +52,9 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
     @Autowired
     private TraceService trace;
+
+    @Autowired
+    private TaskRepository taskRepository;
 
     @Override
     public void bootstrap(HashMap<String, Object> map) {
@@ -139,6 +146,20 @@ public class UserInfoService extends AbstractService implements BootstrapService
         userInfo.setFirstName(firstName);
         userInfo.setLastName(lastName);
         userInfo.setMan(sex);
+
+        InputStream is = null;
+        if (sex) {
+            is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/image/male.png");
+        } else {
+            is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/image/female.png");
+        }
+
+        try {
+            userInfo.setProfileImage(org.apache.commons.io.IOUtils.toByteArray(is));
+        } catch (IOException e) {
+            trace.logException("Error load file: " + e.getMessage(), e, TraceLevel.Warning);
+        }
+
         userInfoRepository.create(userInfo);
 
         RegisterInfo registerInfo = new RegisterInfo();
@@ -149,7 +170,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
         try {
             emailService.sendTemplate(login,"markovdenis2013@gmail.com", "Регистрация на getKnowledge();",
-                    "register",new String[] {registerInfo.getUuid()+"~"+userInfo.getId()});
+                    "register",new String[] {registerInfo.getUuid()});
         } catch (Exception e) {
             trace.logException("Error send register email to " + login , e , TraceLevel.Error);
         }
@@ -157,6 +178,24 @@ public class UserInfoService extends AbstractService implements BootstrapService
         RegisterResult registerResult = RegisterResult.Complete;
         registerResult.setUserInfoId(userInfo.getId());
         trace.log("Registration complete for user " + login, TraceLevel.Event);
+
+        try {
+            Task task = new Task();
+            task.setServiceName("RegisterInfoService");
+            task.setTaskName("cancelRegistration");
+            task.setJsonData(objectMapper.writeValueAsString(registerInfo));
+            task.setTaskStatus(TaskStatus.NotStarted);
+            //next day
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DATE , 1);
+            task.setStartDate(calendar);
+            taskRepository.create(task);
+        } catch (JsonProcessingException e) {
+            trace.logException("Can't parse register info to josn" , e , TraceLevel.Warning);
+        }
+
+
+
         return registerResult;
     }
 

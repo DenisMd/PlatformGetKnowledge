@@ -1,5 +1,5 @@
 ;
-var modules = ["user"];
+var modules = ["user" , "accept"];
 angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars'])
     .constant("resourceUrl", "/resources/application/")
     .constant("resourceTemplate","/resources/template/")
@@ -13,6 +13,21 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars'])
         "use strict";
 
         var platformDataUrl = "/data/";
+
+        this.getPathVariable = function (key) {
+            if (!key) return "";
+
+            var currentUrl = window.location.hash;
+            var urlSplit = currentUrl.split("/");
+
+            for (var i=0; i < urlSplit.length; i++) {
+                if (urlSplit[i] == key) {
+                    return i == (urlSplit.length-1) ? "" : urlSplit[i+1];
+                }
+            }
+
+            return "";
+        };
 
         this.pageInfo = function ($scope) {
             $http.get(resourceUrl + 'page-info/pageInfo.json').success(function(data) {
