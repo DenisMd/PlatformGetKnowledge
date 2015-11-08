@@ -40,7 +40,7 @@
         <div class="register-switch">
             <input type="radio" ng-model="info.sex" name="sex" ng-value="true" id="male" class="register-switch-input" checked>
             <label for="male" class="register-switch-label">{{translate("male")}}</label>
-            <input type="radio" name="sex"  ng-value="false" id="female" class="register-switch-input">
+            <input type="radio" ng-model="info.sex" name="sex"  ng-value="false" id="female" class="register-switch-input">
             <label for="female" class="register-switch-label">{{translate("female")}}</label>
         </div>
     </div>

@@ -42,13 +42,14 @@ public class UserInfo  extends AbstractEntity implements IUser {
     @OneToOne
     private User user;
 
-    private boolean man;
+    @Column(name = "man")
+    private Boolean man;
 
-    public boolean isMan() {
+    public Boolean isMan() {
         return man;
     }
 
-    public void setMan(boolean man) {
+    public void setMan(Boolean man) {
         this.man = man;
     }
 
