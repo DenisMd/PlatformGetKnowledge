@@ -25,12 +25,12 @@
     </div>
 
     <div class="form-group">
-        <label for="inputFirstName" class="control-label">{{translate("FirstName")}}</label>
+        <label for="inputFirstName" class="control-label">{{translate("firstName")}}</label>
         <input type="text" class="form-control input-lg" required id="inputFirstName" placeholder="First name" ng-model="info.firstName">
     </div>
 
     <div class="form-group">
-        <label for="inputLastName" class="control-label">{{translate("LastName")}}</label>
+        <label for="inputLastName" class="control-label">{{translate("lastName")}}</label>
         <input type="text" class="form-control input-lg" required id="inputLastName" placeholder="Last name" ng-model="info.lastName">
     </div>
     <div class="form-group">
@@ -43,8 +43,6 @@
     </div>
 
     <div class="form-group login-btns">
-        <button class="btn login-btn" ng-click="signUp()" ng-disabled="registerForm.$invalid">Register</button>
+        <button class="btn login-btn" ng-click="signUp()" ng-disabled="registerForm.$invalid">{{translate("register")}}</button>
     </div>
 </form>
-
-{{registe}}

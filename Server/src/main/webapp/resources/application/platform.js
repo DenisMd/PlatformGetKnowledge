@@ -229,15 +229,18 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars'])
 
         var error = null;
 
+        this.showErrorCallback = showModalError();
+        this.hideErrorCallback = hideModalError();
+
         this.showError = function(errorMessage,status){
             error = errorMessage;
             error.status = status;
-            showModalError();
+            this.showErrorCallback();
         };
 
         this.removeError = function(){
             error = null;
-            hideModalError();
+            this.hideErrorCallback();
         };
 
         this.getError = function(){

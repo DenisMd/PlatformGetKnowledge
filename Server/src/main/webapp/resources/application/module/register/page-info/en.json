@@ -1,5 +1,13 @@
 {
   "text" : {
-
+    "signUp": "Registration",
+    "email" : "Email",
+    "password" : "Password",
+    "repeatPassword": "Confirm your password",
+    "firstName" : "First name",
+    "lastName" : "Last name",
+    "male": "male",
+    "female":"female",
+    "register": "Register"
   }
 }
