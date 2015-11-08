@@ -313,7 +313,11 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars'])
         });
     })
 
-    .run(function(){
+    .run(function($rootScope,applicationService){
+        $rootScope.$on('$stateChangeSuccess',
+            function(event, toState, toParams, fromState, fromParams){
+                applicationService.pageInfo($rootScope);
+            });
         angular.element("body").append("<error-modal-template></error-modal-template>");
     })
 

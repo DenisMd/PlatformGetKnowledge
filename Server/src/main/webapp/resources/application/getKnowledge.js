@@ -1,5 +1,5 @@
 var model = angular.module("mainApp", ["BackEndService", "ngAnimate", "ui.bootstrap"]);
-model.controller("mainController", function ($scope, $http, $state, applicationService) {
+model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService) {
     var userInfoClassName = "com.getknowledge.modules.userInfo.UserInfo";
     var menuClassName = "com.getknowledge.modules.menu.Menu";
     var videoClassName = "com.getknowledge.modules.video.Video";
@@ -39,7 +39,7 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
                 language: language
             });
         }
-        applicationService.pageInfo($scope);
+        applicationService.pageInfo($rootScope);
         return true;
     };
 
@@ -96,7 +96,6 @@ model.controller("mainController", function ($scope, $http, $state, applicationS
         ]
     };
 
-    applicationService.pageInfo($scope);
     applicationService.action($scope, "menu", menuClassName, "getMenu", {}, function(menu){
         $scope.cardsData = {
             cardsInRow : 3,

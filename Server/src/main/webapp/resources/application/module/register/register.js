@@ -1,6 +1,4 @@
 model.controller("registerCtrl", function ($scope, $http,applicationService) {
-    applicationService.pageInfo($scope);
-
     $scope.info = {
         "sex" : true
     };

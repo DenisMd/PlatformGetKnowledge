@@ -5,6 +5,9 @@
     <div ng-class="error?'':'err-hidden'" class="alert alert-danger text-center" role="alert">
         Error
     </div>
+    <div ng-show="registerInfo" class="alert  alert-info text-center" role="alert">
+        {{registerInfo}}
+    </div>
     <div class="form-group form-title">
         {{translate("signUp")}}
     </div>
@@ -16,7 +19,7 @@
 
     <div class="form-group">
         <label for="inputPassword" class="control-label">{{translate("password")}}</label>
-        <input type="password" class="form-control input-lg" required name="inputPassword" id="inputPassword" placeholder="Password" ng-model="info.password">
+        <input type="password" class="form-control input-lg" ng-minlength="6" required name="inputPassword" id="inputPassword" placeholder="Password" ng-model="info.password">
     </div>
 
     <div class="form-group">
