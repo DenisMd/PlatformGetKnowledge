@@ -26,12 +26,12 @@
 
     <div class="form-group">
         <label for="inputFirstName" class="control-label">{{translate("FirstName")}}</label>
-        <input type="password" class="form-control input-lg" required id="inputFirstName" placeholder="First name" ng-model="info.firstName">
+        <input type="text" class="form-control input-lg" required id="inputFirstName" placeholder="First name" ng-model="info.firstName">
     </div>
 
     <div class="form-group">
         <label for="inputLastName" class="control-label">{{translate("LastName")}}</label>
-        <input type="password" class="form-control input-lg" required id="inputLastName" placeholder="Last name" ng-model="info.lastName">
+        <input type="text" class="form-control input-lg" required id="inputLastName" placeholder="Last name" ng-model="info.lastName">
     </div>
 
     <div class="form-group login-btns">

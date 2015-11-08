@@ -3,14 +3,9 @@ model.controller("registerCtrl", function ($scope, $http,applicationService) {
 
     $scope.info = {};
     $scope.password = "";
-    $scope.register = function(login , password , firstName , lastName) {
-        applicationService.action($scope,"registerInfo" , "com.getknowledge.modules.userInfo.UserInfo" , "register",
-            {
-                "login" : login,
-                "password" : password,
-                "firstName" : firstName,
-                "lastName" : lastName
-            });
+    $scope.signUp = function() {
+        if (registerForm.$invalid) return;
+        applicationService.action($scope,"registerInfo" , "com.getknowledge.modules.userInfo.UserInfo" , "register", $scope.info);
     }
 });
 
