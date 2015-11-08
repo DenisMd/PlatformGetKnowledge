@@ -112,7 +112,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
         return userInfo;
     }
 
-    @Action(name = "register" , mandatoryFields = {"email" , "password" , "firstName" , "lastName"})
+    @Action(name = "register" , mandatoryFields = {"email" , "password" , "firstName" , "lastName" , "sex"})
     public RegisterResult register(HashMap<String,Object> data) {
         String login = (String) data.get("email");
         String password = (String) data.get("password");
@@ -122,6 +122,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
         }
         String firstName = (String) data.get("firstName");
         String lastName = (String) data.get("lastName");
+        Boolean sex = (Boolean) data.get("sex");
         if (userRepository.getSingleEntityByFieldAndValue(User.class , "login", login) != null) {
             trace.log("User with email already register " + login, TraceLevel.Event);
             return RegisterResult.UserAlreadyCreated;
@@ -137,6 +138,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
         userInfo.setUser(user);
         userInfo.setFirstName(firstName);
         userInfo.setLastName(lastName);
+        userInfo.setMan(sex);
         userInfoRepository.create(userInfo);
 
         RegisterInfo registerInfo = new RegisterInfo();
@@ -145,7 +147,12 @@ public class UserInfoService extends AbstractService implements BootstrapService
         registerInfo.setUuid(UUID.randomUUID().toString());
         registerInfoRepository.create(registerInfo);
 
-        emailService.send(login,"markovdenis2013@gmail.com", "Регистрация на getKnowledge();", registerInfo.getUuid()+"~"+userInfo.getId());
+        try {
+            emailService.sendTemplate(login,"markovdenis2013@gmail.com", "Регистрация на getKnowledge();",
+                    "register",new String[] {registerInfo.getUuid()+"~"+userInfo.getId()});
+        } catch (Exception e) {
+            trace.logException("Error send register email to " + login , e , TraceLevel.Error);
+        }
 
         RegisterResult registerResult = RegisterResult.Complete;
         registerResult.setUserInfoId(userInfo.getId());
@@ -162,7 +169,6 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
         return RegisterResult.Complete;
     }
-
 
     public UserInfo getCurrentUser(Principal p) {
         if (p == null) return null;
