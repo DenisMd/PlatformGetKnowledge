@@ -79,7 +79,7 @@ public class DataController {
 
 //    Methods for read ----------------------------------------------------------------------------
 
-    private void prepare (AbstractEntity entity , BaseRepository<AbstractEntity> repository,Principal principal, List<String> classNames) {
+    private AbstractEntity prepare (AbstractEntity entity , BaseRepository<AbstractEntity> repository,Principal principal, List<String> classNames) {
         if (repository instanceof PrepareEntity) {
 
             if (repository instanceof ProtectedRepository) {
@@ -102,7 +102,7 @@ public class DataController {
 
                             AbstractEntity abstractEntity = (AbstractEntity) result;
                             BaseRepository<AbstractEntity> repository2 = moduleLocator.findRepository(abstractEntity.getClass());
-                            prepare(abstractEntity,repository2,principal,classNames);
+                            pd.getWriteMethod().invoke(entity, prepare(abstractEntity,repository2,principal,classNames));
                         }
                     }
                 }
@@ -110,8 +110,9 @@ public class DataController {
                 trace.logException("prepare exception", e, TraceLevel.Error);
             }
 
-            entity = ((PrepareEntity) repository).prepare(entity);
+            return ((PrepareEntity) repository).prepare(entity);
         }
+        return entity;
     }
 
     @RequestMapping(value = "/read", method = RequestMethod.GET)
@@ -131,7 +132,7 @@ public class DataController {
                 throw new NotAuthorized("access denied for read entity: " + className, trace , TraceLevel.Warning);
             }
 
-            prepare(entity,repository,principal,new ArrayList<>());
+            entity = prepare(entity,repository,principal,new ArrayList<>());
 
             ObjectNode objectNode = objectMapper.valueToTree(entity);
             objectNode.put("editable" , isAccessEdit(principal,entity));
