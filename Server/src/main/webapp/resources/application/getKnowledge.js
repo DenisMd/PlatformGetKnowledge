@@ -1,8 +1,6 @@
 var model = angular.module("mainApp", ["BackEndService", "ngAnimate", "ui.bootstrap"]);
 model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService) {
-    var userInfoClassName = "com.getknowledge.modules.userInfo.UserInfo";
-    var menuClassName = "com.getknowledge.modules.menu.Menu";
-    var videoClassName = "com.getknowledge.modules.video.Video";
+
     $scope.menuScrollConfig = {
         theme: 'light-3',
         snapOffset: 100,
@@ -13,13 +11,13 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
     };
 
     $scope.getVideoUrl = function (id) {
-        return "/data/readVideo?className="+videoClassName+"&id="+id;
+        return "/data/readVideo?className="+className.video+"&id="+id;
     };
 
     $scope.logout = function(){
         if (!$scope.user) return;
         $http.get("/j_spring_security_logout").success(function(){
-            applicationService.action($scope, "user", userInfoClassName, "getAuthorizedUser", {});
+            applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {});
         });
     };
 
@@ -96,13 +94,13 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         ]
     };
 
-    applicationService.action($scope, "menu", menuClassName, "getMenu", {}, function(menu){
+    applicationService.action($scope, "menu", className.menu, "getMenu", {}, function(menu){
         $scope.cardsData = {
             cardsInRow : 3,
             cards : menu.items
         };
     });
-    applicationService.action($scope, "user", userInfoClassName, "getAuthorizedUser", {});
+    applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {});
 
     $scope.getRow = function (index, length, array) {
         var result = [];
@@ -114,7 +112,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
     };
 
     $scope.userImg = function(id){
-        return applicationService.imageHref(userInfoClassName,id);
+        return applicationService.imageHref(className.userInfo,id);
     };
 
 });

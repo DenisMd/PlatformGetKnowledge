@@ -1,5 +1,10 @@
 ;
 var modules = ["user" , "accept"];
+var className = {
+    "userInfo" : "com.getknowledge.modules.userInfo.UserInfo",
+    "menu" : "com.getknowledge.modules.menu.Menu",
+    "video" : "com.getknowledge.modules.video.Video",
+}
 angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars'])
     .constant("resourceUrl", "/resources/application/")
     .constant("resourceTemplate","/resources/template/")

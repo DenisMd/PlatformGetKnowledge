@@ -1,3 +1,7 @@
 model.controller("userCtrl", function ($scope, $state,$http,applicationService) {
-    $scope.test = "TEST!";
+
+    var userId = applicationService.getPathVariable("user");
+    if (userId) {
+        $scope.read($scope, "user_info" , className.userInfo, userId);
+    }
 });

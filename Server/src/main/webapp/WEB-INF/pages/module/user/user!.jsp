@@ -1,3 +1,3 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 User page
-{{test}}
+{{user_info}}

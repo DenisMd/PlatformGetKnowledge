@@ -5,7 +5,7 @@ model.controller("registerCtrl", function ($scope, $http,applicationService) {
     $scope.password = "";
     $scope.signUp = function() {
         if (registerForm.$invalid) return;
-        applicationService.action($scope,"registerInfo" , "com.getknowledge.modules.userInfo.UserInfo" , "register", $scope.info);
+        applicationService.action($scope,"registerInfo" , className.userInfo , "register", $scope.info);
     }
 });
 
