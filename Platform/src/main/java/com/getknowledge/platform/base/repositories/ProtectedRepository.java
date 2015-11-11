@@ -22,9 +22,8 @@ public abstract class ProtectedRepository <T extends AbstractEntity> extends Pre
 
     @Override
     public T prepare(T entity) {
-        //Чтобы не изсенить объект в транзакции
-        entity = clone(entity);
         if (entity == null) {return null;}
+        entity = clone(entity);
         for (Field field : entity.getClass().getDeclaredFields()) {
             field.setAccessible(true);
             mainFor : for (Access access : field.getAnnotationsByType(Access.class)) {

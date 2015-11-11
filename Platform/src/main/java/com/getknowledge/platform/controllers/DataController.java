@@ -1,5 +1,6 @@
 package com.getknowledge.platform.controllers;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,6 +11,8 @@ import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.base.repositories.PrepareEntity;
+import com.getknowledge.platform.base.repositories.PrepareRepository;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.FileLinkService;
@@ -35,13 +38,20 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Paths;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/data")
@@ -69,6 +79,41 @@ public class DataController {
 
 //    Methods for read ----------------------------------------------------------------------------
 
+    private void prepare (AbstractEntity entity , BaseRepository<AbstractEntity> repository,Principal principal, List<String> classNames) {
+        if (repository instanceof PrepareEntity) {
+
+            if (repository instanceof ProtectedRepository) {
+                ProtectedRepository<AbstractEntity> protectedRepository = (ProtectedRepository<AbstractEntity>) repository;
+                protectedRepository.setCurrentUser(getCurrentUser(principal));
+            }
+
+            try {
+                properties : for (PropertyDescriptor pd : Introspector.getBeanInfo(entity.getClass()).getPropertyDescriptors()) {
+                    if (pd.getReadMethod() != null && !"class".equals(pd.getName())) {
+                        Object result = pd.getReadMethod().invoke(entity, null);
+                        if (result == null) continue;
+                        if (result instanceof AbstractEntity) {
+
+                            for (Annotation annotation : pd.getReadMethod().getAnnotations()) {
+                                if (annotation instanceof JsonIgnore) {
+                                    continue properties;
+                                }
+                            }
+
+                            AbstractEntity abstractEntity = (AbstractEntity) result;
+                            BaseRepository<AbstractEntity> repository2 = moduleLocator.findRepository(abstractEntity.getClass());
+                            prepare(abstractEntity,repository2,principal,classNames);
+                        }
+                    }
+                }
+            } catch (IntrospectionException | InvocationTargetException | IllegalAccessException | ModuleNotFound   e) {
+                trace.logException("prepare exception", e, TraceLevel.Error);
+            }
+
+            entity = ((PrepareEntity) repository).prepare(entity);
+        }
+    }
+
     @RequestMapping(value = "/read", method = RequestMethod.GET)
     public @ResponseBody String read(@RequestParam(value = "id" ,required = true) Long id,
                                      @RequestParam(value ="className" , required = true) String className, Principal principal) throws PlatformException {
@@ -76,11 +121,8 @@ public class DataController {
             if (id == null || className == null || className.isEmpty()) return null;
             Class classEntity = Class.forName(className);
             BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
-            if (repository instanceof ProtectedRepository) {
-                ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
-                protectedRepository.setCurrentUser(getCurrentUser(principal));
-            }
-            AbstractEntity entity = repository.read(id, classEntity);
+            AbstractEntity entity  = repository.read(id, classEntity);;
+
             if (entity == null) {
                 return null;
             }
@@ -88,6 +130,8 @@ public class DataController {
             if (!isAccessRead(principal, entity)) {
                 throw new NotAuthorized("access denied for read entity: " + className, trace , TraceLevel.Warning);
             }
+
+            prepare(entity,repository,principal,new ArrayList<>());
 
             ObjectNode objectNode = objectMapper.valueToTree(entity);
             objectNode.put("editable" , isAccessEdit(principal,entity));
@@ -205,6 +249,7 @@ public class DataController {
                     // TODO: question may continue?
                     throw new NotAuthorized("access denied for read entity from list" , trace, TraceLevel.Warning);
                 }
+                prepare(abstractEntity,repository,principal,new ArrayList<>());
                 ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
                 objectNode.put("editable" , isAccessEdit(principal,abstractEntity));
                 objectNode.put("creatable" , isAccessCreate(principal,abstractEntity));
@@ -245,6 +290,7 @@ public class DataController {
                     // TODO: question may continue?
                     throw new NotAuthorized("access denied for read entity from list partial" , trace, TraceLevel.Warning);
                 }
+                prepare(abstractEntity,repository,principal,new ArrayList<>());
                 ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
                 objectNode.put("editable" , isAccessEdit(principal,abstractEntity));
                 objectNode.put("creatable" , isAccessCreate(principal,abstractEntity));
@@ -353,6 +399,9 @@ public class DataController {
                         data.put("principalName" , null);
                     }
                     Object result = method.invoke(abstractService, data);
+                    if (result instanceof AbstractEntity) {
+                        prepare((AbstractEntity)result,moduleLocator.findRepository(classEntity),principal,new ArrayList<>());
+                    }
                     return objectMapper.writeValueAsString(result);
                 }
             }

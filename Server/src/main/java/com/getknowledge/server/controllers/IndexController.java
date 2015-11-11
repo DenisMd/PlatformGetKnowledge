@@ -26,24 +26,31 @@ public class IndexController {
 
 
     @RequestMapping
-    public String index (Model model){
-        model.addAttribute("scripts" , getScripts());
+    public String index(Model model) {
+        model.addAttribute("scripts", getScripts());
         return "index";
     }
+
+
+    @RequestMapping("favicon.ico")
+    String favicon() {
+        return "forward:/resources/image/favicon.ico";
+    }
+
 
     public List<String> getScripts() {
         List<String> scripts = new LinkedList<>();
         String path = servletContext.getRealPath("/resources/application/module");
         List<File> files = (List<File>) FileUtils.listFiles(new File(path), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
 
-        for(File file : files) {
+        for (File file : files) {
             String filePath = file.getPath();
             if (!filePath.endsWith(".js")) {
                 continue;
             }
 
             int position = filePath.indexOf("resources");
-            scripts.add("/" + filePath.substring(position).replace("\\","/"));
+            scripts.add("/" + filePath.substring(position).replace("\\", "/"));
         }
 
         return scripts;
