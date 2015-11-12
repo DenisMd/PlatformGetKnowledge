@@ -1,6 +1,5 @@
 var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap"]);
 model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService) {
-
     $scope.menuScrollConfig = {
         theme: 'light-3',
         snapOffset: 100,
