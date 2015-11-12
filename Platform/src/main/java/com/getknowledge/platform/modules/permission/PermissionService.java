@@ -3,6 +3,7 @@ package com.getknowledge.platform.modules.permission;
 import com.getknowledge.platform.base.services.BootstrapService;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
 import com.getknowledge.platform.modules.bootstrapInfo.states.BootstrapState;
+import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +17,8 @@ public class PermissionService implements BootstrapService{
 
     @Override
     public void bootstrap(HashMap<String, Object> map) {
-        permissionRepository.ifNotExistCreate(new Permission("ReadUserInfo"));
-        permissionRepository.ifNotExistCreate(new Permission("VideoRead"));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.ReadUserInfo.name()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.VideoRead.name()));
     }
 
     @Override

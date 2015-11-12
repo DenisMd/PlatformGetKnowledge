@@ -2,6 +2,7 @@ package com.getknowledge.modules.userInfo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.getknowledge.modules.dictonaries.language.Language;
 import com.getknowledge.platform.annotations.Access;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
@@ -34,9 +35,10 @@ public class UserInfo  extends AbstractEntity implements IUser {
     @JsonIgnore
     private byte[] profileImage;
 
-    @Column(length = 5)
     @Access(myself = true)
-    private String language;
+    @ManyToOne
+    @JoinTable(name = "users_language")
+    private Language language;
 
     @Access(roles = {"ROLE_ADMIN"})
     @OneToOne
@@ -53,11 +55,11 @@ public class UserInfo  extends AbstractEntity implements IUser {
         this.man = man;
     }
 
-    public String getLanguage() {
+    public Language getLanguage() {
         return language;
     }
 
-    public void setLanguage(String language) {
+    public void setLanguage(Language language) {
         this.language = language;
     }
 
@@ -114,6 +116,7 @@ public class UserInfo  extends AbstractEntity implements IUser {
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
         authorizationList.allowCreateEveryOne = false;
+        authorizationList.allowReadEveryOne = true;
         return authorizationList;
     }
 }

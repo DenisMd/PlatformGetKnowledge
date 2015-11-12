@@ -1,4 +1,4 @@
-package com.getknowledge.modules.socialLinks;
+package com.getknowledge.modules.dictonaries.language;
 
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
@@ -9,22 +9,12 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "social_link")
-@ModuleInfo(repositoryName = "SocialLinkRepository")
-public class SocialLink extends AbstractEntity {
+@Table(name = "language")
+@ModuleInfo(repositoryName = "LanguageRepository" , serviceName = "LanguageService")
+public class Language extends AbstractEntity {
 
+    @Column(length = 5)
     private String name;
-
-    @Column(length = 500)
-    private String link;
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
-    }
 
     public String getName() {
         return name;
@@ -37,7 +27,6 @@ public class SocialLink extends AbstractEntity {
     @Override
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
-        authorizationList.allowCreateEveryOne = false;
         authorizationList.allowReadEveryOne = true;
         return authorizationList;
     }

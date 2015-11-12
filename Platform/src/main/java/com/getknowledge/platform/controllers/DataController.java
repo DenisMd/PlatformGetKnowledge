@@ -482,7 +482,7 @@ public class DataController {
 
     private boolean isAccessRead(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {
         AuthorizationList al = abstractEntity.getAuthorizationList();
-        if (al != null && al.getPermissionsForRead().isEmpty()) {
+        if (al != null && al.allowReadEveryOne) {
             return true;
         }
 

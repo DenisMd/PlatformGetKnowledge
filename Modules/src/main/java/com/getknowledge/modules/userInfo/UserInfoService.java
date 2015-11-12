@@ -1,6 +1,9 @@
 package com.getknowledge.modules.userInfo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.getknowledge.modules.dictonaries.language.Language;
+import com.getknowledge.modules.dictonaries.language.LanguageRepository;
+import com.getknowledge.modules.dictonaries.language.names.Languages;
 import com.getknowledge.modules.email.EmailService;
 import com.getknowledge.modules.userInfo.registerInfo.RegisterInfo;
 import com.getknowledge.modules.userInfo.registerInfo.RegisterInfoRepository;
@@ -56,6 +59,9 @@ public class UserInfoService extends AbstractService implements BootstrapService
     @Autowired
     private TaskRepository taskRepository;
 
+    @Autowired
+    private LanguageRepository languageRepository;
+
     @Override
     public void bootstrap(HashMap<String, Object> map) {
         if(userRepository.count(User.class) == 0) {
@@ -95,7 +101,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
             userInfo.setUser(user);
             userInfo.setFirstName(firstName);
             userInfo.setLastName(lastName);
-            userInfo.setLanguage("ru");
+            userInfo.setLanguage(languageRepository.getSingleEntityByFieldAndValue(Language.class,"name", Languages.Ru.name()));
             userInfo.setSpecialty("main admin");
             userInfo.setMan(true);
             InputStream is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/image/photo.png");
@@ -119,13 +125,19 @@ public class UserInfoService extends AbstractService implements BootstrapService
         return userInfo;
     }
 
-    @Action(name = "register" , mandatoryFields = {"email" , "password" , "firstName" , "lastName" , "sex"})
+    @Action(name = "register" , mandatoryFields = {"email" , "password" , "firstName" , "lastName" , "sex" , "language"})
     public RegisterResult register(HashMap<String,Object> data) {
         String login = (String) data.get("email");
         String password = (String) data.get("password");
         if (password.length() < 6) {
             trace.log("Password less than 6 character for user " + login, TraceLevel.Event);
             return RegisterResult.PasswordLessThan6;
+        }
+
+        Language language = languageRepository.getSingleEntityByFieldAndValue(Language.class,"name" , data.get("language"));
+        if (language==null) {
+            trace.log("Language not supported " + data.get("language"), TraceLevel.Event);
+            return RegisterResult.LanguageNotSupported;
         }
         String firstName = (String) data.get("firstName");
         String lastName = (String) data.get("lastName");
@@ -143,6 +155,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
         userRepository.create(user);
         UserInfo userInfo = new UserInfo();
         userInfo.setUser(user);
+        userInfo.setLanguage(language);
         userInfo.setFirstName(firstName);
         userInfo.setLastName(lastName);
         userInfo.setMan(sex);

@@ -5,6 +5,7 @@ model.controller("registerCtrl", function ($scope, $http,applicationService) {
     $scope.password = "";
     $scope.signUp = function() {
         if (registerForm.$invalid) return;
+        $scope.info.language = 'En';
         applicationService.action($scope,"registerInfo" , className.userInfo , "register", $scope.info);
     }
 });

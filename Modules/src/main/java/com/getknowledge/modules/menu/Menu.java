@@ -54,6 +54,7 @@ public class Menu extends AbstractEntity{
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
         authorizationList.allowCreateEveryOne = false;
+        authorizationList.allowReadEveryOne = true;
         return authorizationList;
     }
 }

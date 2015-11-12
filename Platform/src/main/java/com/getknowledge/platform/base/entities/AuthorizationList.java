@@ -16,6 +16,7 @@ public class AuthorizationList {
     private List<Permission> permissionsForCreate = new ArrayList<>();
     private List<Permission> permissionsForRemove = new ArrayList<>();
     public boolean allowCreateEveryOne = false;
+    public boolean allowReadEveryOne = false;
 
     public List<User> getUserList() {
         return userList;

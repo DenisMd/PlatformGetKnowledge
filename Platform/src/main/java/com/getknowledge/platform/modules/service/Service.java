@@ -19,7 +19,6 @@ public class Service extends AbstractEntity {
 
     @Override
     public AuthorizationList getAuthorizationList() {
-        AuthorizationList authorizationList = new AuthorizationList();
-        return authorizationList;
+        return null;
     }
 }

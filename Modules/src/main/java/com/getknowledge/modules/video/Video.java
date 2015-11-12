@@ -4,6 +4,7 @@ import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.modules.permission.Permission;
+import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import com.getknowledge.platform.modules.user.User;
 
 import javax.persistence.Column;
@@ -54,7 +55,7 @@ public class Video extends AbstractEntity{
         AuthorizationList authorizationList = new AuthorizationList();
         authorizationList.allowCreateEveryOne = false;
         if (!allowEveryOne) {
-            authorizationList.getPermissionsForRead().add(new Permission("VideoRead"));
+            authorizationList.getPermissionsForRead().add(new Permission(PermissionNames.VideoRead.name()));
         }
         return authorizationList;
     }

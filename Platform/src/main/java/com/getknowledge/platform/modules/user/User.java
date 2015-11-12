@@ -7,6 +7,7 @@ import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.modules.permission.Permission;
+import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import com.getknowledge.platform.modules.role.Role;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -67,7 +68,8 @@ public class User extends AbstractEntity {
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
         authorizationList.allowCreateEveryOne = false;
-        authorizationList.getPermissionsForRead().add(new Permission("ReadUserInfo"));
+        authorizationList.allowReadEveryOne = false;
+        authorizationList.getPermissionsForRead().add(new Permission(PermissionNames.ReadUserInfo.name()));
         return authorizationList;
     }
 
