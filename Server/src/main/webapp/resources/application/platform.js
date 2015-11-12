@@ -4,7 +4,8 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         return {
             "userInfo" : "com.getknowledge.modules.userInfo.UserInfo",
             "menu" : "com.getknowledge.modules.menu.Menu",
-            "video" : "com.getknowledge.modules.video.Video"
+            "video" : "com.getknowledge.modules.video.Video",
+            "language" : "com.getknowledge.modules.dictonaries.language.Language"
         };
     })
     .factory('modules',function(){

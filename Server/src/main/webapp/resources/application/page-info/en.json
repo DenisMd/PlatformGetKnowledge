@@ -1,6 +1,8 @@
 {
   "language" : "en",
   "text" : {
+    "ru" : "Russian",
+    "en" : "English",
     "language" : "Language",
     "login" : "Login",
     "logout" : "Logout",
