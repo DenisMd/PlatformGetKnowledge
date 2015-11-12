@@ -1,4 +1,4 @@
-var model = angular.module("mainApp", ["BackEndService", "ngAnimate", "ui.bootstrap"]);
+var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap"]);
 model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService) {
     var userInfoClassName = "com.getknowledge.modules.userInfo.UserInfo";
     var menuClassName = "com.getknowledge.modules.menu.Menu";

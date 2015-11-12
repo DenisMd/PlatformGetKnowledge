@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/resources/bower_components/bootstrap/dist/css/bootstrap.css" type="text/css">
     <link rel="stylesheet" href="/resources/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css" type="text/css"/>
     <link rel="stylesheet" href="/resources/bower_components/video.js/dist/video-js.min.css" type="text/css"/>
+    <link rel="stylesheet" href="/resources/bower_components/angular-loading-bar/build/loading-bar.css" type="text/css"/>
     <link rel="stylesheet" href="/resources/css/index.css" type="text/css">
     <meta charset="utf-8">
 </head>
@@ -36,6 +37,7 @@
     <script src="/resources/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="/resources/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
     <script src="/resources/bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="/resources/bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
     <script src="/resources/bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
     <script src="/resources/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="/resources/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>

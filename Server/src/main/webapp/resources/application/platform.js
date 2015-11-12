@@ -1,6 +1,6 @@
 ;
 var modules = ["user" , "accept"];
-angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars'])
+angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angular-loading-bar','ngAnimate'])
     .constant("resourceUrl", "/resources/application/")
     .constant("resourceTemplate","/resources/template/")
     .service("pageService",function(){
