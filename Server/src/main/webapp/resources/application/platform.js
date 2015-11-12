@@ -1,30 +1,22 @@
 ;
-var modules = ["user" , "accept"];
-var className = {
-    "userInfo" : "com.getknowledge.modules.userInfo.UserInfo",
-    "menu" : "com.getknowledge.modules.menu.Menu",
-    "video" : "com.getknowledge.modules.video.Video",
-};
-
 angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angular-loading-bar','ngAnimate'])
+    .factory('className', function() {
+        return {
+            "userInfo" : "com.getknowledge.modules.userInfo.UserInfo",
+            "menu" : "com.getknowledge.modules.menu.Menu",
+            "video" : "com.getknowledge.modules.video.Video"
+        };
+    })
+    .factory('modules',function(){
+        return ["user" , "accept"];
+    })
     .constant("resourceUrl", "/resources/application/")
     .constant("resourceTemplate","/resources/template/")
     .service("pageService",function(){
-        this.getLanguage = function(){
-            var url = window.location.hash.split("/");
-            return url[1];
-        }
-    })
-    .service("applicationService", function ($http,$sce,resourceUrl,errorService) {
-        "use strict";
-
-        var platformDataUrl = "/data/";
-
-        this.getPathVariable = function (key) {
+        this.getPathVariable = function (key,path) {
             if (!key) return "";
 
-            var currentUrl = window.location.hash;
-            var urlSplit = currentUrl.split("/");
+            var urlSplit = path.split("/");
 
             for (var i=0; i < urlSplit.length; i++) {
                 if (urlSplit[i] == key) {
@@ -34,6 +26,11 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
 
             return "";
         };
+    })
+    .service("applicationService", function ($http,$sce,modules,resourceUrl,errorService) {
+        "use strict";
+
+        var platformDataUrl = "/data/";
 
         this.pageInfo = function ($scope) {
             $http.get(resourceUrl + 'page-info/pageInfo.json').success(function(data) {
@@ -100,6 +97,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         };
 
         this.login = function ($scope,name, user, pass,callback) {
+            var isCallbackFunction = isFunction(callback);
             $http({
                 method: 'POST',
                 url: "/j_spring_security_check",
@@ -110,15 +108,20 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (data) {
                 $scope[name] = data;
-                callback(data);
+                if (isCallbackFunction) {
+                    callback(data);
+                }
             });
         };
 
         this.read = function($scope, name, className, id, callback) {
+            var isCallbackFunction = isFunction(callback);
             $http.get(platformDataUrl+"read?className="+className+"&id="+id)
                 .success(function(data){
                     $scope[name] = data;
-                    callback(data);
+                    if (isCallbackFunction) {
+                        callback(data);
+                    }
                 }).error(function(error, status, headers, config){
                     errorService.showError(error,status);
                 });
@@ -286,7 +289,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             return "module/" + $stateParams.path;
         }
 
-        function getCtrl ($stateParams){
+        function getCtrl ($stateParams,modules){
             var url = $stateParams.path.split("/");
             for (var i=0; i < modules.length; i++) {
                 if (modules[i] == url [url.length - 2]) {
