@@ -1,4 +1,4 @@
-model.controller("loginCtrl", function ($scope, $state,$http,applicationService) {
+model.controller("loginCtrl", function ($scope, $state,$http,applicationService,className) {
     $scope.info = {};
     $scope.login = function() {
         applicationService.login($scope,"loginResult",$scope.info.login,$scope.info.password,function(data){

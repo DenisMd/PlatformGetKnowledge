@@ -1,4 +1,4 @@
-model.controller("registerCtrl", function ($scope, $http,applicationService) {
+model.controller("registerCtrl", function ($scope, $http,applicationService,className) {
     $scope.info = {
         "sex" : true
     };
