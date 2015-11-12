@@ -22,9 +22,8 @@ public abstract class ProtectedRepository <T extends AbstractEntity> extends Pre
 
     @Override
     public T prepare(T entity) {
-        //Чтобы не изсенить объект в транзакции
-        entity = clone(entity);
         if (entity == null) {return null;}
+        entity = clone(entity);
         for (Field field : entity.getClass().getDeclaredFields()) {
             field.setAccessible(true);
             mainFor : for (Access access : field.getAnnotationsByType(Access.class)) {
@@ -42,6 +41,7 @@ public abstract class ProtectedRepository <T extends AbstractEntity> extends Pre
                     }
 
                     for (String permission : access.permissions()) {
+                        if (permission.isEmpty()) continue;
                         Permission p = new Permission();
                         p.setPermissionName(permission);
                         if (currentUser.isHasPermission(p)) {
@@ -50,6 +50,7 @@ public abstract class ProtectedRepository <T extends AbstractEntity> extends Pre
                     }
 
                     for (String role : access.roles()) {
+                        if (role.isEmpty()) continue ;
                         Role r = new Role();
                         r.setRoleName(role);
                         if (currentUser.isHasRole(r)) {
