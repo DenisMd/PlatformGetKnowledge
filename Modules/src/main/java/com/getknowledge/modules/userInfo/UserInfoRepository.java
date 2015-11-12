@@ -1,5 +1,7 @@
 package com.getknowledge.modules.userInfo;
 
+import com.getknowledge.modules.dictonaries.language.Language;
+import com.getknowledge.modules.dictonaries.language.LanguageRepository;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
@@ -11,6 +13,9 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private LanguageRepository languageRepository;
 
     @Override
     public UserInfo clone(UserInfo entity) {
@@ -30,7 +35,9 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
     public void remove(Long id, Class<UserInfo> classEntity) {
         UserInfo userInfo = entityManager.find(classEntity , id);
         long userId = userInfo.getUser().getId();
+        long languageId = userInfo.getLanguage().getId();
         super.remove(id, classEntity);
+        languageRepository.remove(languageId,Language.class);
         userRepository.remove(userId , User.class);
     }
 }
