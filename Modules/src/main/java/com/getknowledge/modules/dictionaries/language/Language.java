@@ -1,4 +1,4 @@
-package com.getknowledge.modules.dictonaries.language;
+package com.getknowledge.modules.dictionaries.language;
 
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;

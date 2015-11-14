@@ -1,8 +1,7 @@
 package com.getknowledge.modules.userInfo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.getknowledge.modules.dictonaries.language.Language;
+import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.platform.annotations.Access;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;

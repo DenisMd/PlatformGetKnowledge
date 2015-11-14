@@ -1,7 +1,7 @@
 package com.getknowledge.modules.userInfo;
 
-import com.getknowledge.modules.dictonaries.language.Language;
-import com.getknowledge.modules.dictonaries.language.LanguageRepository;
+import com.getknowledge.modules.dictionaries.language.Language;
+import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;

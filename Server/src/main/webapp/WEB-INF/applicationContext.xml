@@ -45,6 +45,8 @@
                 <prop key="hibernate.format_sql">false</prop>
                 <prop key="hibernate.use_sql_comments">false</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.search.default.directory_provider">filesystem</prop>
+                <prop key="hibernate.search.default.indexBase">/var/netgloo_blog/lucene/indexes/</prop>
             </props>
         </property>
         <property name="persistenceProvider">

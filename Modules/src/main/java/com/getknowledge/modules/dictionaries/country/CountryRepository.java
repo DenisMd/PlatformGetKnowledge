@@ -1,4 +1,4 @@
-package com.getknowledge.modules.dictonaries.country;
+package com.getknowledge.modules.dictionaries.country;
 
 import com.getknowledge.platform.base.repositories.BaseRepository;
 import org.springframework.stereotype.Repository;

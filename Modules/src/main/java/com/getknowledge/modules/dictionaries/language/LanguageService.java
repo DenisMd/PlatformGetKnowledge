@@ -1,6 +1,6 @@
-package com.getknowledge.modules.dictonaries.language;
+package com.getknowledge.modules.dictionaries.language;
 
-import com.getknowledge.modules.dictonaries.language.names.Languages;
+import com.getknowledge.modules.dictionaries.language.names.Languages;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.BootstrapService;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;

@@ -1,9 +1,9 @@
 package com.getknowledge.modules.userInfo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.getknowledge.modules.dictonaries.language.Language;
-import com.getknowledge.modules.dictonaries.language.LanguageRepository;
-import com.getknowledge.modules.dictonaries.language.names.Languages;
+import com.getknowledge.modules.dictionaries.language.Language;
+import com.getknowledge.modules.dictionaries.language.LanguageRepository;
+import com.getknowledge.modules.dictionaries.language.names.Languages;
 import com.getknowledge.modules.email.EmailService;
 import com.getknowledge.modules.userInfo.registerInfo.RegisterInfo;
 import com.getknowledge.modules.userInfo.registerInfo.RegisterInfoRepository;
@@ -26,9 +26,7 @@ import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import sun.misc.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,12 +1,13 @@
-package com.getknowledge.modules.dictonaries.country;
+package com.getknowledge.modules.dictionaries.country;
 
-import com.getknowledge.modules.dictonaries.language.Language;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
+import org.hibernate.search.annotations.Field;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -14,35 +15,29 @@ import javax.persistence.Table;
 @ModuleInfo(repositoryName = "CountryRepository" , serviceName = "CountryService")
 public class Country extends AbstractEntity {
 
-    private String name;
 
-    private String code;
+    @Column(name = "country_name")
+    private String countryName;
 
-    @ManyToOne
-    private Language language;
+    @JsonIgnore
+    @Column(name = "xml_id")
+    @Field
+    private Long xmlId;
 
-    public String getCode() {
-        return code;
+    public String getCountryName() {
+        return countryName;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
     }
 
-    public Language getLanguage() {
-        return language;
+    public Long getXmlId() {
+        return xmlId;
     }
 
-    public void setLanguage(Language language) {
-        this.language = language;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setXmlId(Long xmlId) {
+        this.xmlId = xmlId;
     }
 
     @Override
