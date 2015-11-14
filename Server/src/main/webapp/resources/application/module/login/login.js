@@ -7,6 +7,8 @@ model.controller("loginCtrl", function ($scope, $state,$http,applicationService,
                     var language = user.language;
                     if (!language){
                         language = $scope.application.language;
+                    } else {
+                        language = language.name.toLowerCase();
                     }
                     $state.go($state.$current, {"language": language, path:"user/"+user.id});
                 });

@@ -1,7 +1,6 @@
-model.controller("acceptCtrl", function ($scope, $state,$http,applicationService,cfpLoadingBar) {
-    var classNameRegisterInfo = "com.getknowledge.modules.userInfo.registerInfo.RegisterInfo";
-    var uuid = applicationService.getPathVariable("accept");
-    applicationService.action($scope , "result" , classNameRegisterInfo , "completeRegistration" , {
+model.controller("acceptCtrl", function ($scope, $state,$http,className,applicationService,pageService,cfpLoadingBar) {
+    var uuid = pageService.getPathVariable("accept");
+    applicationService.action($scope , "result" , className.registerInfo , "completeRegistration" , {
         "uuid" : uuid
     },function(){
         cfpLoadingBar.start();

@@ -5,7 +5,8 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "userInfo" : "com.getknowledge.modules.userInfo.UserInfo",
             "menu" : "com.getknowledge.modules.menu.Menu",
             "video" : "com.getknowledge.modules.video.Video",
-            "language" : "com.getknowledge.modules.dictonaries.language.Language"
+            "language" : "com.getknowledge.modules.dictionaries.language.Language",
+            "registerInfo" : "com.getknowledge.modules.userInfo.registerInfo.RegisterInfo"
         };
     })
     .factory('modules',function(){
@@ -362,6 +363,33 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                         $scope.data = $scope[$attrs.data];
                     }
                     return  $scope.data;
+                }
+            }
+        };
+    })
+
+    .directive("useValidation", function () {
+        return {
+            restrict: 'A',
+            require:'ngModel',
+            scope:{
+                type:"@useValidation",
+                options: "=options"
+            },
+            link:function (scope, elm, attrs,ngModel) {
+                if (!scope.type) return;
+                switch (scope.type){
+
+                    case "compareTo":
+                        ngModel.$validators.compareTo = function(value){
+                            return scope.options.value === value;
+                        };
+                        scope.$watch("options", function() {
+                            ngModel.$validate();
+                        });
+                        break;
+
+                    default : return;
                 }
             }
         };
