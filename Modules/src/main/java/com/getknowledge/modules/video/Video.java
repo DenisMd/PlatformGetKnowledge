@@ -56,6 +56,8 @@ public class Video extends AbstractEntity{
         authorizationList.allowCreateEveryOne = false;
         if (!allowEveryOne) {
             authorizationList.getPermissionsForRead().add(new Permission(PermissionNames.VideoRead.name()));
+        } else {
+            authorizationList.allowReadEveryOne = true;
         }
         return authorizationList;
     }
