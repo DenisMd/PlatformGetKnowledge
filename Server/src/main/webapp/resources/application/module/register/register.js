@@ -11,6 +11,11 @@ model.controller("registerCtrl", function ($scope, $http,applicationService,clas
     $scope.signUp = function() {
         if (registerForm.$invalid) return;
         $scope.info.language = 'En';
-        applicationService.action($scope,"registerInfo" , className.userInfo , "register", $scope.info);
+        applicationService.action($scope,"registerInfo" , className.userInfo , "register", $scope.info, function(registerInfo) {
+            $scope.error = false;
+            if (registerInfo != 'Complete') {
+                $scope.error = true;
+            }
+        });
     }
 });

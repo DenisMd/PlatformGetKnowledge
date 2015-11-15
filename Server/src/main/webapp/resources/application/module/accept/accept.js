@@ -1,5 +1,5 @@
 model.controller("acceptCtrl", function ($scope, $state,$http,className,applicationService,pageService,cfpLoadingBar) {
-    var uuid = pageService.getPathVariable("accept");
+    var uuid = pageService.getPathVariable("accept",$state.params.path);
     applicationService.action($scope , "result" , className.registerInfo , "completeRegistration" , {
         "uuid" : uuid
     },function(){

@@ -12,12 +12,12 @@
 
         <div class="form-group">
             <label for="inputEmail" class="control-label">{{translate("email")}}</label>
-            <input type="text" class="form-control" id="inputEmail" placeholder="Email" ng-model="info.login">
+            <input type="text" class="form-control" id="inputEmail" placeholder="{{translate('email')}}" ng-model="info.login">
         </div>
 
         <div class="form-group">
             <label for="inputPassword" class="control-label">{{translate("password")}}</label>
-            <input type="password" class="form-control" id="inputPassword" placeholder="Password" ng-model="info.password">
+            <input type="password" class="form-control" id="inputPassword" placeholder="{{translate('password')}}" ng-model="info.password">
         </div>
 
         <div class="form-group">

@@ -6,8 +6,12 @@
     "repeatPassword": "Confirm your password",
     "firstName" : "First name",
     "lastName" : "Last name",
-    "male": "male",
-    "female":"female",
-    "register": "Register"
+    "male": "Male",
+    "female":"Female",
+    "register": "Register",
+    "UserAlreadyCreated" : "User with email already created",
+    "PasswordLessThan6" : "Password less then 6 characters",
+    "Complete" : "For continue registration check email. If mail not received, support about it in help desk.",
+    "LanguageNotSupported" : "Selected language not supported."
   }
 }
