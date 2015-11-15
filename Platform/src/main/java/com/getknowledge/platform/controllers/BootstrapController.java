@@ -69,7 +69,7 @@ public class BootstrapController {
             for (BootstrapService bootstrapService : bootstrapServices) {
                 BootstrapInfo bootstrapInfo = null;
                 try {
-                    bootstrapInfo = repository.getSingleEntityByFieldAndValue(BootstrapInfo.class, "name", bootstrapService.getBootstrapInfo().getName());
+                    bootstrapInfo = repository.getSingleEntityByFieldAndValue("name", bootstrapService.getBootstrapInfo().getName());
                     if(bootstrapInfo != null && bootstrapInfo.getBootstrapState() == BootstrapState.Completed && !bootstrapInfo.isRepeat()) {
                         continue;
                     } else {

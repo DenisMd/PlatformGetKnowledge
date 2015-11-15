@@ -17,7 +17,7 @@ public class VideoService extends AbstractService implements BootstrapService , 
 
     @Override
     public void bootstrap(HashMap<String, Object> map) throws Exception {
-        if (videoRepository.count(Video.class) == 0) {
+        if (videoRepository.count() == 0) {
             Video video = new Video();
             video.setAllowEveryOne(true);
             video.setVideoName("IndexVideo1");
@@ -41,7 +41,7 @@ public class VideoService extends AbstractService implements BootstrapService , 
 
     @Override
     public String getFileLink(long id) {
-        Video video = videoRepository.read(id , Video.class);
+        Video video = videoRepository.read(id);
         return video == null ? null : "/WEB-INF/video/" +video.getLink();
     }
 }

@@ -15,6 +15,8 @@ import java.util.List;
 @Transactional
 public abstract class BaseRepository<T extends AbstractEntity> {
 
+    protected abstract Class<T> getClassEntity();
+
     protected Logger logger = LoggerFactory.getLogger(BaseRepository.class);
 
     @PersistenceContext
@@ -40,64 +42,49 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         entityManager.flush();
     }
 
-    public void remove(Long id , Class<T> classEntity) {
-        if(id == null || classEntity == null) {
+    public void remove(Long id) {
+        if(id == null) {
             throw new NullPointerException();
         }
 
-        entityManager.remove(entityManager.find(classEntity, id));
+        entityManager.remove(entityManager.find(getClassEntity(), id));
         entityManager.flush();
     }
 
-    public T read(Long id , Class<T> classEntity) {
-        if(id == null || classEntity == null) {
+    public T read(Long id) {
+        if(id == null) {
             throw new NullPointerException();
         }
-        T result = entityManager.find(classEntity , id);
+        T result = entityManager.find(getClassEntity() , id);
         return result;
     }
 
-    public List<T> list(Class<T> classEntity) {
-        if( classEntity == null) {
-            throw new NullPointerException();
-        }
-        List<T> list = entityManager.createQuery("Select t from " + classEntity.getSimpleName() + " t").getResultList();
+    public List<T> list() {
+        List<T> list = entityManager.createQuery("Select t from " + getClassEntity().getSimpleName() + " t").getResultList();
         return list;
     }
 
-    public List<T> listPartial(Class<T> classEntity , int first, int max) {
-        if( classEntity == null) {
-            throw new NullPointerException();
-        }
-        Query query = entityManager.createQuery("Select t from " + classEntity.getSimpleName() + " t");
+    public List<T> listPartial(int first, int max) {
+        Query query = entityManager.createQuery("Select t from " + getClassEntity().getSimpleName() + " t");
         query.setFirstResult(first);
         query.setMaxResults(max);
         List<T> list = query.getResultList();
         return list;
     }
 
-    public Long count(Class<T> classEntity) {
-        if( classEntity == null) {
-            throw new NullPointerException();
-        }
-        long rowCnt= (Long) entityManager.createQuery("SELECT count(a) FROM " + classEntity.getSimpleName() + " a").getSingleResult();
+    public Long count() {
+        long rowCnt= (Long) entityManager.createQuery("SELECT count(a) FROM " + getClassEntity().getSimpleName() + " a").getSingleResult();
         return rowCnt;
     }
 
-    public List<T> getEntitiesByFieldAndValue(Class<T> classEntity ,String field, Object value) {
-        if( classEntity == null) {
-            throw new NullPointerException();
-        }
-        List<T> list = entityManager.createQuery("select ent from " + classEntity.getSimpleName() + " ent where ent."+field+"=:value")
+    public List<T> getEntitiesByFieldAndValue(String field, Object value) {
+        List<T> list = entityManager.createQuery("select ent from " + getClassEntity().getSimpleName() + " ent where ent."+field+"=:value")
                 .setParameter("value" , value).getResultList();
         return list;
     }
 
-    public T getSingleEntityByFieldAndValue(Class<T> classEntity ,String field, Object value) {
-        if( classEntity == null) {
-            throw new NullPointerException();
-        }
-        List<T> list = getEntitiesByFieldAndValue(classEntity,field,value);
+    public T getSingleEntityByFieldAndValue(String field, Object value) {
+        List<T> list = getEntitiesByFieldAndValue(field,value);
         return list.isEmpty() ? null : list.get(0);
     }
 }

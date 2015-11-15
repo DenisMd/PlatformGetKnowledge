@@ -5,4 +5,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository(value = "RoleRepository")
 public class RoleRepository extends BaseRepository<Role> {
+    @Override
+    protected Class<Role> getClassEntity() {
+        return Role.class;
+    }
 }

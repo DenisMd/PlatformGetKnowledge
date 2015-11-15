@@ -9,6 +9,7 @@ import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import com.getknowledge.platform.modules.role.Role;
+import org.hibernate.search.annotations.Field;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ import java.util.List;
 public class User extends AbstractEntity {
 
     @Column(unique = true)
+    @Field
     private String login;
 
     @Column(name = "hash_pwd" , length = 500)

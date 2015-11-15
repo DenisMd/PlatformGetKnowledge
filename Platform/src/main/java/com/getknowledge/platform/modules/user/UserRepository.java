@@ -9,6 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository("UserRepository")
 public class UserRepository extends BaseRepository<User> {
 
+    @Override
+    protected Class<User> getClassEntity() {
+        return User.class;
+    }
+
     @Autowired
     RoleRepository roleRepository;
 

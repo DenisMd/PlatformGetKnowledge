@@ -9,6 +9,11 @@ import org.springframework.stereotype.Repository;
 public class SectionRepository extends PrepareRepository<Section> {
 
     @Override
+    protected Class<Section> getClassEntity() {
+        return Section.class;
+    }
+
+    @Override
     public Section clone(Section entity) {
         Section section = new Section();
         section.setCover(entity.getCover());

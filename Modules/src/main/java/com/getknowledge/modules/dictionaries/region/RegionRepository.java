@@ -5,4 +5,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository("RegionRepository")
 public class RegionRepository extends BaseRepository<Region> {
+    @Override
+    protected Class<Region> getClassEntity() {
+        return Region.class;
+    }
 }

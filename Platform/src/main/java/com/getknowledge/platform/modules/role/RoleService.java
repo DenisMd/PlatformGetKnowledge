@@ -17,7 +17,7 @@ public class RoleService extends AbstractService implements BootstrapService {
 
     @Override
     public void bootstrap(HashMap<String, Object> map) {
-        if(roleRepository.count(Role.class) == 0) {
+        if(roleRepository.count() == 0) {
             Role roleAdmin = new Role();
             roleAdmin.setRoleName(RoleName.ROLE_ADMIN.name());
             roleRepository.create(roleAdmin);

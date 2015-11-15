@@ -5,4 +5,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository("CountryRepository")
 public class CountryRepository extends BaseRepository<Country> {
+    @Override
+    protected Class<Country> getClassEntity() {
+        return Country.class;
+    }
 }

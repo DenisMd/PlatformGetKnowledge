@@ -62,7 +62,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
     @Override
     public void bootstrap(HashMap<String, Object> map) {
-        if(userRepository.count(User.class) == 0) {
+        if(userRepository.count() == 0) {
             String login = "admin";
             String password = "admin";
             String lastName = "Markov";
@@ -82,7 +82,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
                 firstName = (String) map.get("firstName");
             }
 
-            Role role = roleRepository.getSingleEntityByFieldAndValue(Role.class, "roleName" , RoleName.ROLE_ADMIN.name());
+            Role role = roleRepository.getSingleEntityByFieldAndValue("roleName" , RoleName.ROLE_ADMIN.name());
             if (role == null) {
                 return;
             }
@@ -99,7 +99,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
             userInfo.setUser(user);
             userInfo.setFirstName(firstName);
             userInfo.setLastName(lastName);
-            userInfo.setLanguage(languageRepository.getSingleEntityByFieldAndValue(Language.class,"name", Languages.Ru.name()));
+            userInfo.setLanguage(languageRepository.getSingleEntityByFieldAndValue("name", Languages.Ru.name()));
             userInfo.setSpecialty("main admin");
             userInfo.setMan(true);
             InputStream is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/image/photo.png");
@@ -117,9 +117,9 @@ public class UserInfoService extends AbstractService implements BootstrapService
         String login = (String) data.get("principalName");
         if (login == null) {return  null;}
 
-        User user = userRepository.getSingleEntityByFieldAndValue(User.class, "login", login);
+        User user = userRepository.getSingleEntityByFieldAndValue("login", login);
         userInfoRepository.setCurrentUser(user);
-        UserInfo userInfo = userInfoRepository.getSingleEntityByFieldAndValue(UserInfo.class,"user.login",login);
+        UserInfo userInfo = userInfoRepository.getSingleEntityByFieldAndValue("user.login",login);
         return userInfo;
     }
 
@@ -132,7 +132,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
             return RegisterResult.PasswordLessThan6;
         }
 
-        Language language = languageRepository.getSingleEntityByFieldAndValue(Language.class,"name" , data.get("language"));
+        Language language = languageRepository.getSingleEntityByFieldAndValue("name" , data.get("language"));
         if (language==null) {
             trace.log("Language not supported " + data.get("language"), TraceLevel.Event);
             return RegisterResult.LanguageNotSupported;
@@ -140,7 +140,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
         String firstName = (String) data.get("firstName");
         String lastName = (String) data.get("lastName");
         Boolean sex = (Boolean) data.get("sex");
-        if (userRepository.getSingleEntityByFieldAndValue(User.class , "login", login) != null) {
+        if (userRepository.getSingleEntityByFieldAndValue("login", login) != null) {
             trace.log("User with email already register " + login, TraceLevel.Event);
             return RegisterResult.UserAlreadyCreated;
         }
@@ -149,7 +149,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
         user.setLogin(login);
         user.setPwdTransient(password);
         user.setEnabled(false);
-        user.setRole(roleRepository.getSingleEntityByFieldAndValue(Role.class, "roleName", RoleName.ROLE_USER.name()));
+        user.setRole(roleRepository.getSingleEntityByFieldAndValue("roleName", RoleName.ROLE_USER.name()));
         userRepository.create(user);
         UserInfo userInfo = new UserInfo();
         userInfo.setUser(user);
@@ -222,7 +222,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
     public UserInfo getCurrentUser(Principal p) {
         if (p == null) return null;
-        UserInfo result = userInfoRepository.getSingleEntityByFieldAndValue(UserInfo.class, "user.login", p.getName());
+        UserInfo result = userInfoRepository.getSingleEntityByFieldAndValue("user.login", p.getName());
         return result;
     }
 
@@ -236,7 +236,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
     @Override
     public byte[] getImageById(long id) {
-        UserInfo userInfo = userInfoRepository.read(id , UserInfo.class);
+        UserInfo userInfo = userInfoRepository.read(id);
         byte [] bytes = userInfo.getProfileImage();
         return bytes;
     }

@@ -14,6 +14,12 @@ import java.util.Map;
 @Repository("ServiceRepository")
 public class ServiceRepository extends TransientRepository<Service> {
 
+
+    @Override
+    protected Class<Service> getClassEntity() {
+        return Service.class;
+    }
+
     @Autowired
     InitApplication application;
 

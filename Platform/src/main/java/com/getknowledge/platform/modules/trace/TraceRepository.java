@@ -6,5 +6,8 @@ import sun.reflect.generics.repository.AbstractRepository;
 
 @Repository("TraceRepository")
 public class TraceRepository extends BaseRepository<Trace> {
-
+    @Override
+    protected Class<Trace> getClassEntity() {
+        return Trace.class;
+    }
 }

@@ -6,5 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository("MenuRepository")
 public class MenuRepository extends BaseRepository<Menu> {
-
+    @Override
+    protected Class<Menu> getClassEntity() {
+        return Menu.class;
+    }
 }

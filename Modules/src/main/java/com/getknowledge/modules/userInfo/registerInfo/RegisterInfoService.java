@@ -29,7 +29,7 @@ public class RegisterInfoService extends AbstractService {
     @Action(name = "completeRegistration", mandatoryFields = {"uuid"})
     public RegisterResult completeRegistration(HashMap<String , Object> data) {
         String uuid = (String) data.get("uuid");
-        RegisterInfo registerInfo = registerInfoRepository.getSingleEntityByFieldAndValue(RegisterInfo.class, "uuid", uuid);
+        RegisterInfo registerInfo = registerInfoRepository.getSingleEntityByFieldAndValue("uuid", uuid);
         if (registerInfo == null) return null;
         User user = registerInfo.getUserInfo().getUser();
         if (!user.isEnabled()) {
@@ -45,10 +45,10 @@ public class RegisterInfoService extends AbstractService {
 
     @Task(name = "cancelRegistration")
     public void cancelRegistration(HashMap<String , Object> data) {
-        RegisterInfo registerInfo = registerInfoRepository.getSingleEntityByFieldAndValue(RegisterInfo.class, "uuid", data.get("uuid").toString());
+        RegisterInfo registerInfo = registerInfoRepository.getSingleEntityByFieldAndValue("uuid", data.get("uuid").toString());
         if (!registerInfo.getUserInfo().getUser().isEnabled()) {
             trace.log("Cancel registration for user " + registerInfo.getUserInfo().getUser().getLogin() , TraceLevel.Event);
-            registerInfoRepository.remove(registerInfo.getId() , RegisterInfo.class);
+            registerInfoRepository.remove(registerInfo.getId());
         }
     }
 

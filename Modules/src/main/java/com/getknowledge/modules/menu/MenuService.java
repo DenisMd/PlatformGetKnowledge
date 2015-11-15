@@ -99,7 +99,7 @@ public class MenuService extends AbstractService implements BootstrapService {
                 if (split.length == 2) {
                     String name  = split[0].trim();
                     String roleName = split[1].trim();
-                    Role role = roleRepository.getSingleEntityByFieldAndValue(Role.class, "roleName" , roleName);
+                    Role role = roleRepository.getSingleEntityByFieldAndValue("roleName" , roleName);
                     menu.setName(name);
                     if (role != null)
                         menu.setRole(role);
@@ -164,7 +164,7 @@ public class MenuService extends AbstractService implements BootstrapService {
 
     @Override
     public void bootstrap(HashMap<String, Object> map) throws Exception {
-        if (menuRepository.count(Menu.class) == 0) {
+        if (menuRepository.count() == 0) {
             parseMenu("com.getknowledge.modules/menu/menuBootstrap");
         }
     }
@@ -181,35 +181,35 @@ public class MenuService extends AbstractService implements BootstrapService {
 
     @Action(name = "getMenuByName" , mandatoryFields = {"name"})
     public Menu getMenuByName(HashMap<String, Object> data) {
-        return menuRepository.getSingleEntityByFieldAndValue(Menu.class , "name" , data.get("name"));
+        return menuRepository.getSingleEntityByFieldAndValue("name" , data.get("name"));
     }
 
     @Action(name = "getMenu")
     public Menu getMenu(HashMap<String, Object> data) {
         if (data.get("principalName") == null) {
-            Menu menu = menuRepository.getSingleEntityByFieldAndValue(Menu.class , "name" , MenuNames.General.name());
+            Menu menu = menuRepository.getSingleEntityByFieldAndValue("name" , MenuNames.General.name());
             return menu;
         }
         String userName = (String) data.get("principalName");
-        User user = userRepository.getSingleEntityByFieldAndValue(User.class, "login", userName);
+        User user = userRepository.getSingleEntityByFieldAndValue("login", userName);
         if (user != null) {
             if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
-                Menu menu = menuRepository.getSingleEntityByFieldAndValue(Menu.class , "name" , MenuNames.Admin.name());
+                Menu menu = menuRepository.getSingleEntityByFieldAndValue("name" , MenuNames.Admin.name());
                 return menu;
             }
 
             if (user.getRole().getRoleName().equals(RoleName.ROLE_AUTHOR.name())) {
-                Menu menu = menuRepository.getSingleEntityByFieldAndValue(Menu.class , "name" , MenuNames.Author.name());
+                Menu menu = menuRepository.getSingleEntityByFieldAndValue("name" , MenuNames.Author.name());
                 return menu;
             }
 
             if (user.getRole().getRoleName().equals(RoleName.ROLE_HELPDESK.name())) {
-                Menu menu = menuRepository.getSingleEntityByFieldAndValue(Menu.class , "name" , MenuNames.HelpDesk.name());
+                Menu menu = menuRepository.getSingleEntityByFieldAndValue("name" , MenuNames.HelpDesk.name());
                 return menu;
             }
 
         }
-        Menu menu = menuRepository.getSingleEntityByFieldAndValue(Menu.class , "name" , MenuNames.General.name());
+        Menu menu = menuRepository.getSingleEntityByFieldAndValue("name" , MenuNames.General.name());
         return menu;
     }
 

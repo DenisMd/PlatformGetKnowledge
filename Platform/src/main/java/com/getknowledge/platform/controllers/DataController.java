@@ -90,7 +90,7 @@ public class DataController {
             try {
                 properties : for (PropertyDescriptor pd : Introspector.getBeanInfo(entity.getClass()).getPropertyDescriptors()) {
                     if (pd.getReadMethod() != null && !"class".equals(pd.getName())) {
-                        Object result = pd.getReadMethod().invoke(entity, null);
+                        Object result = pd.getReadMethod().invoke(entity);
                         if (result == null) continue;
                         if (result instanceof AbstractEntity) {
 
@@ -122,7 +122,7 @@ public class DataController {
             if (id == null || className == null || className.isEmpty()) return null;
             Class classEntity = Class.forName(className);
             BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
-            AbstractEntity entity  = repository.read(id, classEntity);;
+            AbstractEntity entity  = repository.read(id);
 
             if (entity == null) {
                 return null;
@@ -154,7 +154,7 @@ public class DataController {
                 ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
                 protectedRepository.setCurrentUser(getCurrentUser(principal));
             }
-            AbstractEntity entity = repository.read(id, classEntity);
+            AbstractEntity entity = repository.read(id);
             if (entity == null) {
                 return;
             }
@@ -193,7 +193,7 @@ public class DataController {
                 ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
                 protectedRepository.setCurrentUser(getCurrentUser(principal));
             }
-            AbstractEntity entity = repository.read(id, classEntity);
+            AbstractEntity entity = repository.read(id);
             if (entity == null) {
                 return null;
             }
@@ -223,7 +223,7 @@ public class DataController {
         try {
             if (className == null || className.isEmpty()) return null;
             Class classEntity = Class.forName(className);
-            return moduleLocator.findRepository(classEntity).count(classEntity).toString();
+            return moduleLocator.findRepository(classEntity).count().toString();
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
         }
@@ -239,7 +239,7 @@ public class DataController {
                 ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
                 protectedRepository.setCurrentUser(getCurrentUser(principal));
             }
-            List<AbstractEntity> list = repository.list(classEntity);
+            List<AbstractEntity> list = repository.list();
 
             if (list == null) {
                 return "";
@@ -279,7 +279,7 @@ public class DataController {
                 ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
                 protectedRepository.setCurrentUser(getCurrentUser(principal));
             }
-            List<AbstractEntity> list = repository.listPartial(classEntity, first, max);
+            List<AbstractEntity> list = repository.listPartial(first, max);
 
             if (list == null) {
                 return "";
@@ -353,11 +353,11 @@ public class DataController {
             if (id == null || className == null) return null;
             Class classEntity = Class.forName(className);
 
-            AbstractEntity abstractEntity = moduleLocator.findRepository(classEntity).read(id, classEntity);
+            AbstractEntity abstractEntity = moduleLocator.findRepository(classEntity).read(id);
             if (!isAccessRemove(principal, abstractEntity) ) {
                 throw new NotAuthorized("access denied for remove entity" , trace, TraceLevel.Warning);
             }
-            moduleLocator.findRepository(classEntity).remove(id, classEntity);
+            moduleLocator.findRepository(classEntity).remove(id);
 
             return "object removed";
         } catch (ClassNotFoundException e) {
@@ -477,7 +477,7 @@ public class DataController {
     // Authorization -----------------------------------------------------------
 
     private User getCurrentUser(Principal p) {
-        return p == null ? null : userRepository.getSingleEntityByFieldAndValue(User.class , "login",p.getName());
+        return p == null ? null : userRepository.getSingleEntityByFieldAndValue("login",p.getName());
     }
 
     private boolean isAccessRead(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {

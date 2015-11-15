@@ -11,6 +11,11 @@ import org.springframework.stereotype.Repository;
 @Repository("UserInfoRepository")
 public class UserInfoRepository extends ProtectedRepository<UserInfo> {
 
+    @Override
+    protected Class<UserInfo> getClassEntity() {
+        return UserInfo.class;
+    }
+
     @Autowired
     private UserRepository userRepository;
 
@@ -32,12 +37,12 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
     }
 
     @Override
-    public void remove(Long id, Class<UserInfo> classEntity) {
-        UserInfo userInfo = entityManager.find(classEntity , id);
+    public void remove(Long id) {
+        UserInfo userInfo = entityManager.find(getClassEntity() , id);
         long userId = userInfo.getUser().getId();
         long languageId = userInfo.getLanguage().getId();
-        super.remove(id, classEntity);
-        languageRepository.remove(languageId,Language.class);
-        userRepository.remove(userId , User.class);
+        super.remove(id);
+        languageRepository.remove(languageId);
+        userRepository.remove(userId);
     }
 }

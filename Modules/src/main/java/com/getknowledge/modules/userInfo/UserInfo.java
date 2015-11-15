@@ -1,6 +1,7 @@
 package com.getknowledge.modules.userInfo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.modules.dictionaries.city.City;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.platform.annotations.Access;
 import com.getknowledge.platform.annotations.ModuleInfo;
@@ -38,6 +39,9 @@ public class UserInfo  extends AbstractEntity implements IUser {
     @ManyToOne
     @JoinTable(name = "users_language")
     private Language language;
+
+    @ManyToOne
+    private City city;
 
     @Access(roles = {"ROLE_ADMIN"})
     @OneToOne

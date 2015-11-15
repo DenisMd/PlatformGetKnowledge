@@ -6,12 +6,12 @@ import org.jsoup.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TransientRepository<T extends AbstractEntity> extends BaseRepository<T> {
+public abstract class TransientRepository<T extends AbstractEntity> extends BaseRepository<T> {
 
     protected List<T> list = new ArrayList<>();
 
     @Override
-    public Long count(Class<T> classEntity) {
+    public Long count() {
         return new Long(list.size());
     }
 
@@ -21,32 +21,32 @@ public class TransientRepository<T extends AbstractEntity> extends BaseRepositor
     }
 
     @Override
-    public List<T> getEntitiesByFieldAndValue(Class<T> classEntity, String field, Object value) {
+    public List<T> getEntitiesByFieldAndValue(String field, Object value) {
         throw new UnsupportedOperationException("getEntitiesByFieldAndValue unsupported in TransientRepository");
     }
 
     @Override
-    public T getSingleEntityByFieldAndValue(Class<T> classEntity, String field, Object value) {
+    public T getSingleEntityByFieldAndValue(String field, Object value) {
         throw new UnsupportedOperationException("getSingleEntityByFieldAndValue unsupported in TransientRepository");
     }
 
     @Override
-    public List<T> list(Class<T> classEntity) {
+    public List<T> list() {
         return list;
     }
 
     @Override
-    public List<T> listPartial(Class<T> classEntity, int first, int max) {
+    public List<T> listPartial(int first, int max) {
         return list.subList(first , max);
     }
 
     @Override
-    public T read(Long id, Class<T> classEntity) {
+    public T read(Long id) {
         return list.get(id.intValue());
     }
 
     @Override
-    public void remove(Long id, Class<T> classEntity) {
+    public void remove(Long id) {
         throw new UnsupportedOperationException("remove unsupported in TransientRepository");
     }
 

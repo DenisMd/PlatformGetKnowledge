@@ -8,6 +8,11 @@ import sun.reflect.generics.repository.AbstractRepository;
 public class TaskRepository extends BaseRepository<Task> {
 
     @Override
+    protected Class<Task> getClassEntity() {
+        return Task.class;
+    }
+
+    @Override
     public void create(Task object) {
         super.create(object);
         TaskService.thread.interrupt();

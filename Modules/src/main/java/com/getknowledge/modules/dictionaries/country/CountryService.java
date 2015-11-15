@@ -39,7 +39,7 @@ public class CountryService extends AbstractService implements BootstrapService 
 
     @Override
     public void bootstrap(HashMap<String, Object> map) throws Exception {
-        if (countryRepository.count(Country.class) == 0) {
+        if (countryRepository.count() == 0) {
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/dictionaries/countries/rocid.xml");
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -72,7 +72,7 @@ public class CountryService extends AbstractService implements BootstrapService 
                     String name = element.getElementsByTagName("name").item(0).getTextContent();
                     Region region = new Region();
                     region.setXmlId(Long.parseLong(id));
-                    region.setCountry(countryRepository.getSingleEntityByFieldAndValue(Country.class, "xmlId", Long.parseLong(countryId)));
+                    region.setCountry(countryRepository.getSingleEntityByFieldAndValue("xmlId", Long.parseLong(countryId)));
                     region.setRegionName(name);
                     regionRepository.create(region);
                 }
@@ -87,7 +87,7 @@ public class CountryService extends AbstractService implements BootstrapService 
                     String regionId = element.getElementsByTagName("region_id").item(0).getTextContent();
                     String name = element.getElementsByTagName("name").item(0).getTextContent();
                     City city = new City();
-                    city.setRegion(regionRepository.getSingleEntityByFieldAndValue(Region.class,"xmlId",Long.parseLong(regionId)));
+                    city.setRegion(regionRepository.getSingleEntityByFieldAndValue("xmlId",Long.parseLong(regionId)));
                     city.setCityName(name);
                     cityRepository.create(city);
                 }
