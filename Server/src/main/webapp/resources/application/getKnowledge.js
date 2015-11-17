@@ -1,4 +1,5 @@
 var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap"]);
+
 model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService, className) {
     $scope.menuScrollConfig = {
         theme: 'light-3',
@@ -36,7 +37,6 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
                 language: language
             });
         }
-        applicationService.pageInfo($rootScope);
         return true;
     };
 
@@ -161,4 +161,81 @@ model.controller("videoCtrl",function($scope){
             });
         }
     }
+});
+
+model.controller("inputCtrl",function($scope) {
+    $scope.choose = false;
+    $scope.model;
+    $scope.selectValue;
+    $scope.filteredData = [];
+
+
+    $scope.filter = 'name';
+    $scope.id = "test";
+    $scope.count = 3;
+
+    $scope.getItem = function (item) {
+        if (angular.isObject(item)) {
+            return item[$scope.filter];
+        } else {
+            return item;
+        }
+    };
+
+    $scope.getFilter = function () {
+        var filter = {};
+        if (!$scope.filter || angular.isArray($scope.getData().list)) {
+            filter = $scope.model;
+        } else {
+            filter[$scope.filter] = $scope.model;
+        }
+        if ($scope.filteredData) {
+            if ($scope.filteredData.length == 1) {
+
+                if ($scope.model === $scope.filteredData[0]) {
+                    $scope.setModel($scope.filteredData[0]);
+                }
+            }
+        }
+        return filter;
+    };
+
+    $scope.setSelect = function (value) {
+        $scope.choose = value;
+    };
+
+    $scope.onEvent = function (event) {
+        var elem = angular.element(event.currentTarget);
+        switch (event.type) {
+            case "mouseover":
+                elem.addClass("active");
+                break;
+            case "mouseout":
+                elem.removeClass("active");
+                break;
+        }
+    };
+
+    $scope.resetModel = function () {
+        $scope.model = null;
+        $scope.selectValue = null;
+        $scope.filteredData = [];
+        $scope.choose = false;
+    };
+
+    $scope.setModel = function (value) {
+        if (angular.isObject(value)) {
+            $scope.model = value[$scope.filter];
+        } else {
+            $scope.model = value;
+        }
+        $scope.selectValue = value;
+        $scope.choose = false;
+    };
+
+    $scope.open = function () {
+        var selector = '#' + $scope.id;
+        $(selector).modal('show');
+        $scope.resetModel();
+    };
 });

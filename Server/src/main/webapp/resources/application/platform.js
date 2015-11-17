@@ -28,75 +28,17 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
 
             return "";
         };
+
+        var lang;
+        this.setLanguage = function(lang){
+
+        }
     })
     .service("applicationService", function ($http,$sce,modules,resourceUrl,errorService) {
         "use strict";
 
         var platformDataUrl = "/data/";
 
-        this.pageInfo = function ($scope) {
-            $http.get(resourceUrl + 'page-info/pageInfo.json').success(function(data) {
-                $scope.application = data;
-                var currentUrl = window.location.hash;
-                var urlSplit = currentUrl.split("/");
-                var language = urlSplit[1];
-                var moduleUrlSplit = urlSplit.splice(2);
-                var moduleUrl = "";
-                for (var i=0; i < moduleUrlSplit.length; i++) {
-                    var isContains = false;
-                    for (var j=0; j < modules.length; j++) {
-                        if (modules[j] == moduleUrlSplit[i-1]) {
-                            isContains = true;
-                            break;
-                        }
-                    }
-                    if (isContains) continue;
-                    moduleUrl += "/" + moduleUrlSplit[i];
-                }
-                $http.get(resourceUrl+"page-info/"+language+".json")
-                    .success(function(data){
-                    $scope.application.text = {};
-
-                    for (var stingData in data.text){
-                        $scope.application.text[stingData] = $sce.trustAsHtml(data.text[stingData]);
-                    }
-
-                    $scope.application.language = data.language;
-                    if(moduleUrl) {
-                        $http.get(resourceUrl+"module/"+moduleUrl+"/page-info/pageInfo.json").success(
-                            function(data) {
-                                var key;
-                                for(key in data) {
-                                    if(key != "text") {
-                                        $scope.application[key] = data[key];
-                                    }
-                                }
-                            }
-                        ).error(function(error, status, headers, config){
-                                errorService.showError(error,status);
-                        });
-                        $http.get(resourceUrl+"module/"+moduleUrl+"/page-info/"+language+".json").success(
-                            function(data) {
-                                var key;
-                                for(key in data.text) {
-                                    if($scope.application.text[key]) {
-                                        continue;
-                                    }
-                                    $scope.application.text[key] = data.text[key];
-                                }
-                            }
-                        ).error(function(error, status, headers, config){
-                                errorService.showError(error,status);
-                        });
-                    }
-                })
-                    .error(function(error, status, headers, config){
-                    errorService.showError(error,status);
-                });
-            }).error(function(error, status, headers, config){
-                errorService.showError(error,status);
-            });
-        };
 
         this.login = function ($scope,name, user, pass,callback) {
             var isCallbackFunction = isFunction(callback);
@@ -144,8 +86,8 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             $http.get(platformDataUrl+"list?className="+className).success(function(data){
                 $scope[name] = data;
                 if (isCallbackFunction){
-                    data.forEach(function(item){
-                        callback(item);
+                    data.forEach(function(item,i,array){
+                        callback(item,i,array);
                     });
                 }
             }).error(function(error, status, headers, config){
@@ -159,8 +101,8 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             $http.get(platformDataUrl+"listPartial?className="+className+"&first="+first+"&max="+max).success(function(data){
                 $scope[name] = data;
                 if (isCallbackFunction){
-                    data.forEach(function(item){
-                        callback(item);
+                    data.forEach(function(item,i,array){
+                        callback(item,i,array);
                     });
                 }
             }).error(function(error, status, headers, config){
@@ -181,8 +123,8 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 $scope[name] = data;
                 if (isCallbackFunction){
                     if (angular.isArray(data)){
-                        data.forEach(function(item){
-                            callback(item);
+                        data.forEach(function(item,i,array){
+                            callback(item,i,array);
                         });
                     } else {
                         callback(data);
@@ -276,6 +218,65 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
     })
 
     .config(function ($stateProvider, $urlRouterProvider,$urlMatcherFactoryProvider,resourceTemplate) {
+        var pageInfo = function($http, $stateParams,$sce,pageService,errorService,resourceUrl,modules){
+            var application;
+            var moduleUrl = "";
+            var language = $stateParams.language;
+            return $http.get(resourceUrl + 'page-info/pageInfo.json')
+                .then(function (response) {
+                    var data = response.data;
+                    application = data;
+                    language = $stateParams.language;
+                    var moduleUrlSplit = $stateParams.path? $stateParams.path.split("/"):"";
+                    for (var i = 0; i < moduleUrlSplit.length; i++) {
+                        var isContains = false;
+                        for (var j = 0; j < modules.length; j++) {
+                            if (modules[j] == moduleUrlSplit[i - 1]) {
+                                isContains = true;
+                                break;
+                            }
+                        }
+                        if (isContains) continue;
+                        moduleUrl += "/" + moduleUrlSplit[i];
+                    }
+                 return $http.get(resourceUrl + "page-info/" + language + ".json")
+                }).then(function(response) {
+                    var data = response.data;
+                    application.text = {};
+                    for (var stingData in data.text) {
+                        application.text[stingData] = $sce.trustAsHtml(data.text[stingData]);
+                    }
+
+                    application.language = data.language;
+
+                    if (moduleUrl) {
+                        return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/pageInfo.json")
+                    } else return application;
+                }).then(function (response) {
+                    if (response === application) return application;
+
+                    var data = response.data;
+                    for (var key in data) {
+                        if (key != "text") {
+                            application[key] = data[key];
+                        }
+                    }
+                    return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/" + language + ".json")
+                }).then(function (response) {
+                    if (response === application) return application;
+
+                    var data = response.data;
+                    for (var key in data.text) {
+                        if (application.text[key]) {
+                            continue;
+                        }
+                        application.text[key] = data.text[key];
+                    }
+                    return application;
+                }, function(error) {
+                    errorService.showError("Error loading page translation(" + error. error.config.url + ")", status);
+                });
+        };
 
         function valToString(val) {
             return val !== null ? val.toString() : val;
@@ -291,7 +292,8 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             return "module/" + $stateParams.path;
         }
 
-        function getCtrl ($stateParams,modules){
+        function getCtrl ($stateParams,$rootScope,pageInfo,modules){
+            $rootScope.application = pageInfo;
             var url = $stateParams.path.split("/");
             for (var i=0; i < modules.length; i++) {
                 if (modules[i] == url [url.length - 2]) {
@@ -308,27 +310,38 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
 
         $stateProvider.state('home', {
             url : "/:language",
+            resolve: {
+                pageInfo : pageInfo
+            },
             views : {
                 '' : {
-                    templateUrl : resourceTemplate + 'indexTemplate.html'
+                    templateUrl : resourceTemplate + 'indexTemplate.html',
+                    controller : function($rootScope,pageInfo){
+                        $rootScope.application = pageInfo;
+                    }
                 }
             }
         }).state('modules',{
             url : '/:language/{path:nonURIEncoded}',
+            resolve: {
+                pageInfo : pageInfo
+            },
             views : {
                 '' : {
                     templateUrl : getURL,
                     controllerProvider : getCtrl
+
                 }
             }
-        });
+        })  .state("404",{
+            templateUrl: "/404"
+        })
+            .state("accessDenied",{
+                templateUrl: "/accessDenied"
+            });
     })
 
-    .run(function($rootScope,applicationService){
-        $rootScope.$on('$stateChangeSuccess',
-            function(event, toState, toParams, fromState, fromParams){
-                applicationService.pageInfo($rootScope);
-            });
+    .run(function($rootScope){
         angular.element("body").append("<error-modal-template></error-modal-template>");
     })
 
