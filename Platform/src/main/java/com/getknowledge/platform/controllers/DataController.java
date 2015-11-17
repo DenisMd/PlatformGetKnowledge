@@ -10,6 +10,7 @@ import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
+import com.getknowledge.platform.base.jsonViews.View;
 import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.base.repositories.PrepareEntity;
 import com.getknowledge.platform.base.repositories.PrepareRepository;

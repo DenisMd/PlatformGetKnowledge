@@ -1,13 +1,17 @@
 package com.getknowledge.modules.userInfo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.getknowledge.modules.dictionaries.city.City;
 import com.getknowledge.modules.dictionaries.language.Language;
+import com.getknowledge.modules.userInfo.post.Post;
 import com.getknowledge.platform.annotations.Access;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.entities.IUser;
+import com.getknowledge.platform.base.jsonViews.View;
 import com.getknowledge.platform.modules.user.User;
 
 import javax.persistence.*;
@@ -49,6 +53,9 @@ public class UserInfo  extends AbstractEntity implements IUser {
 
     @Column(name = "man")
     private Boolean man;
+
+    @OneToOne
+    private Post post;
 
     public Boolean isMan() {
         return man;
@@ -113,6 +120,26 @@ public class UserInfo  extends AbstractEntity implements IUser {
 
     public void setBirthDay(Calendar birthDay) {
         this.birthDay = birthDay;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
+    public Boolean getMan() {
+        return isMan();
     }
 
     @Override

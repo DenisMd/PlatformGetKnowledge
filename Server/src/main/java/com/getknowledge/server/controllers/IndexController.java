@@ -31,6 +31,16 @@ public class IndexController {
         return "index";
     }
 
+    @RequestMapping(value = "/404")
+    public String notFound(Model model) {
+        return "404";
+    }
+
+    @RequestMapping(value = "/accessDenied")
+    public String accessDenied(Model model) {
+        return "accessDenied";
+    }
+
 
     @RequestMapping("favicon.ico")
     String favicon() {

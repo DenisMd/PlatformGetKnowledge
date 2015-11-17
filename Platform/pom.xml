@@ -12,7 +12,7 @@
     <artifactId>Platform</artifactId>
 
     <properties>
-        <spring.version>4.1.4.RELEASE</spring.version>
+        <spring.version>4.2.0.RELEASE</spring.version>
     </properties>
 
     <dependencies>
