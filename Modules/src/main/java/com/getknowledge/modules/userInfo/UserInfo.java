@@ -11,7 +11,6 @@ import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.entities.IUser;
-import com.getknowledge.platform.base.jsonViews.View;
 import com.getknowledge.platform.modules.user.User;
 
 import javax.persistence.*;
