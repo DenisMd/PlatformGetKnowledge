@@ -274,7 +274,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     }
                     return application;
                 }, function(error) {
-                    errorService.showError("Error loading page translation(" + error. error.config.url + ")", status);
+                    errorService.showError({"message" : "Error loading page translation(" + error.config.url + ")"}, error.status);
                 });
         };
 
@@ -334,15 +334,35 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 }
             }
         })  .state("404",{
-            templateUrl: "/404"
+            resolve: {
+                pageInfo : pageInfo
+            },
+            templateUrl: "/404",
+            controller : function($rootScope,pageInfo, $scope){
+                $rootScope.application = pageInfo;
+            }
+
         })
             .state("accessDenied",{
-                templateUrl: "/accessDenied"
+                resolve: {
+                    pageInfo : pageInfo
+                },
+                templateUrl: "/accessDenied",
+                controller : function($rootScope,pageInfo, $scope){
+                    $rootScope.application = pageInfo;
+                }
             });
     })
 
-    .run(function($rootScope){
+    .run(function($rootScope,$state){
         angular.element("body").append("<error-modal-template></error-modal-template>");
+        $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
+            switch (error.status) {
+                case 403 : $state.go('accessDenied');
+                    break;
+                default : $state.go('404');
+            }
+        });
     })
 
     .directive("errorModalTemplate",function(resourceTemplate){
