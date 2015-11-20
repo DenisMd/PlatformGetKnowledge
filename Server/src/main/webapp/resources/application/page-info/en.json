@@ -16,6 +16,9 @@
     "design" : "Design",
     "news" : "News",
     "contactUs" : "Contact us",
-    "go_to_course" : "Go"
+    "go_to_course" : "Go",
+    "error" : "Error",
+    "404_response" : "Page not found!",
+    "403_response" : "Access for page denied!"
   }
 }
