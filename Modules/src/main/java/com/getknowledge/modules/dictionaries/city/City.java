@@ -1,16 +1,14 @@
 package com.getknowledge.modules.dictionaries.city;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.region.Region;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import org.hibernate.search.annotations.Field;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "city")
@@ -22,6 +20,17 @@ public class City extends AbstractEntity {
 
     @ManyToOne
     private Region region;
+
+    @OneToOne
+    private Language language;
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
+    }
 
     public Region getRegion() {
         return region;

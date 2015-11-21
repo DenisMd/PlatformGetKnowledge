@@ -101,6 +101,10 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
     });
     applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {});
 
+    applicationService.action($scope , "countries" , "com.getknowledge.modules.dictionaries.country.Country" , "getCountries",{
+        language : "Ru"
+    });
+
     $scope.getRow = function (index, length, array) {
         var result = [];
         for (var i = index*length; i < length*(index+1); i++) {
