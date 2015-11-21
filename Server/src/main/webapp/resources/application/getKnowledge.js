@@ -26,18 +26,23 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         if (!$scope.application.language || $scope.application.language === language) {
             return false;
         }
-        var str = window.location.hash.split("/").splice(2).join("/");
-        if (str) {
-            $state.go("modules", {
-                language: language,
-                path: str
-            });
+        if ($state.includes('404') || $state.includes('accessDenied')){
+            $rootScope.application = pageInfo;
+            return true;
         } else {
-            $state.go("home", {
-                language: language
-            });
+            var str = window.location.hash.split("/").splice(2).join("/");
+            if (str) {
+                $state.go("modules", {
+                    language: language,
+                    path: str
+                });
+            } else {
+                $state.go("home", {
+                    language: language
+                });
+            }
+            return true;
         }
-        return true;
     };
 
     $scope.toggelMenu = true;
@@ -170,9 +175,9 @@ model.controller("inputCtrl",function($scope) {
     $scope.filteredData = [];
 
 
-    $scope.filter = 'name';
-    $scope.id = "test";
-    $scope.count = 3;
+    $scope.filter = $scope.getData().filter;
+    $scope.id = $scope.getData().id;
+    $scope.count = $scope.getData().count;
 
     $scope.getItem = function (item) {
         if (angular.isObject(item)) {
@@ -183,21 +188,21 @@ model.controller("inputCtrl",function($scope) {
     };
 
     $scope.getFilter = function () {
-        var filter = {};
-        if (!$scope.filter || angular.isArray($scope.getData().list)) {
-            filter = $scope.model;
-        } else {
-            filter[$scope.filter] = $scope.model;
-        }
-        if ($scope.filteredData) {
-            if ($scope.filteredData.length == 1) {
-
-                if ($scope.model === $scope.filteredData[0]) {
-                    $scope.setModel($scope.filteredData[0]);
-                }
-            }
-        }
-        return filter;
+        //var filter = {};
+        //if (!$scope.filter || angular.isArray($scope.getData().list)) {
+        //    filter = $scope.model;
+        //} else {
+        //    filter.list[$scope.filter] = $scope.model;
+        //}
+        //if ($scope.filteredData) {
+        //    if ($scope.filteredData.length == 1) {
+        //
+        //        if ($scope.model === $scope.filteredData[0]) {
+        //            $scope.setModel($scope.filteredData[0]);
+        //        }
+        //    }
+        //}
+        //return filter;
     };
 
     $scope.setSelect = function (value) {

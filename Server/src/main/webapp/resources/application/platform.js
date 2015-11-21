@@ -29,16 +29,78 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             return "";
         };
 
-        var lang;
+        var language;
         this.setLanguage = function(lang){
-
+            language = lang;
+        }
+        this.getLanguage = function(){
+            return language;
         }
     })
-    .service("applicationService", function ($http,$sce,modules,resourceUrl,errorService) {
+    .service("applicationService", function ($http,$stateParams,$sce,pageService,modules,resourceUrl,errorService) {
         "use strict";
 
         var platformDataUrl = "/data/";
 
+        this.pageInfo = function($http,$stateParams,$sce,pageService,modules,resourceUrl,errorService){
+            var application;
+            var moduleUrl = "";
+            var language = $stateParams.language? $stateParams.language:pageService.getLanguage();
+            return $http.get(resourceUrl + 'page-info/pageInfo.json')
+                .then(function (response) {
+                    var data = response.data;
+                    application = data;
+                    var moduleUrlSplit = $stateParams.path? $stateParams.path.split("/"):"";
+                    for (var i = 0; i < moduleUrlSplit.length; i++) {
+                        var isContains = false;
+                        for (var j = 0; j < modules.length; j++) {
+                            if (modules[j] == moduleUrlSplit[i - 1]) {
+                                isContains = true;
+                                break;
+                            }
+                        }
+                        if (isContains) continue;
+                        moduleUrl += "/" + moduleUrlSplit[i];
+                    }
+
+                    return $http.get(resourceUrl + "page-info/" + language + ".json")
+                }).then(function(response) {
+                    var data = response.data;
+                    application.text = {};
+                    for (var stingData in data.text) {
+                        application.text[stingData] = $sce.trustAsHtml(data.text[stingData]);
+                    }
+
+                    application.language = data.language;
+
+                    if (moduleUrl) {
+                        return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/pageInfo.json")
+                    } else return application;
+                }).then(function (response) {
+                    if (response === application) return application;
+
+                    var data = response.data;
+                    for (var key in data) {
+                        if (key != "text") {
+                            application[key] = data[key];
+                        }
+                    }
+                    return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/" + language + ".json")
+                }).then(function (response) {
+                    if (response === application) return application;
+
+                    var data = response.data;
+                    for (var key in data.text) {
+                        if (application.text[key]) {
+                            continue;
+                        }
+                        application.text[key] = data.text[key];
+                    }
+                    return application;
+                }, function(error) {
+                    console.log("Error loading page translation(" + error.config.url + ")");
+                });
+        };
 
         this.login = function ($scope,name, user, pass,callback) {
             var isCallbackFunction = isFunction(callback);
@@ -217,16 +279,23 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
 
     })
 
-    .config(function ($stateProvider, $urlRouterProvider,$urlMatcherFactoryProvider,resourceTemplate) {
-        var pageInfo = function($http, $stateParams,$sce,pageService,errorService,resourceUrl,modules){
+    .provider('applicationProvider', function ApplicationServiceProvider() {
+        this.$get= ['$http','$stateParams','$sce','pageService','modules','resourceUrl','errorService',function applicationServiceFactory($http,$stateParams,$sce,pageService,modules,resourceUrl,errorService){
+            return new applicationService($http,$stateParams,$sce,pageService,modules,resourceUrl,errorService);
+        }];
+
+    })
+
+    .config(function ($stateProvider, $urlRouterProvider,$urlMatcherFactoryProvider,applicationServiceProvider,resourceTemplate) {
+        //console.log(applicationServiceProvider.$get.pageInfo());
+        var pageInfo = function($http,$stateParams,$sce,pageService,modules,resourceUrl,errorService){
             var application;
             var moduleUrl = "";
-            var language = $stateParams.language;
+            var language = $stateParams.language? $stateParams.language:pageService.getLanguage();
             return $http.get(resourceUrl + 'page-info/pageInfo.json')
                 .then(function (response) {
                     var data = response.data;
                     application = data;
-                    language = $stateParams.language;
                     var moduleUrlSplit = $stateParams.path? $stateParams.path.split("/"):"";
                     for (var i = 0; i < moduleUrlSplit.length; i++) {
                         var isContains = false;
@@ -239,7 +308,8 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                         if (isContains) continue;
                         moduleUrl += "/" + moduleUrlSplit[i];
                     }
-                 return $http.get(resourceUrl + "page-info/" + language + ".json")
+
+                    return $http.get(resourceUrl + "page-info/" + language + ".json")
                 }).then(function(response) {
                     var data = response.data;
                     application.text = {};
@@ -274,10 +344,9 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     }
                     return application;
                 }, function(error) {
-                    errorService.showError({"message" : "Error loading page translation(" + error.config.url + ")"}, error.status);
+                    console.log("Error loading page translation(" + error.config.url + ")");
                 });
         };
-
         function valToString(val) {
             return val !== null ? val.toString() : val;
         }
@@ -341,9 +410,9 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             controller : function($rootScope,pageInfo, $scope){
                 $rootScope.application = pageInfo;
             }
-
         })
             .state("accessDenied",{
+
                 resolve: {
                     pageInfo : pageInfo
                 },
@@ -352,15 +421,39 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     $rootScope.application = pageInfo;
                 }
             });
+        $urlRouterProvider.otherwise(function($injector) {
+
+            var $state = $injector.get('$state');
+
+            $state.go('404', null, {
+                location: false
+            });
+
+        });
     })
 
-    .run(function($rootScope,$state){
+    .run(function($rootScope,$state,$q,pageService){
         angular.element("body").append("<error-modal-template></error-modal-template>");
+        $rootScope.$on('$stateChangeStart',
+            function(event, toState, toParams, fromState, fromParams) {
+                if (toParams && toParams.language) {
+                    pageService.setLanguage(toParams.language);
+                }
+
+            });
         $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, error) {
+            event.preventDefault();
+            if (toParams && toParams.language) {
+                pageService.setLanguage(toParams.language);
+            } else {
+                pageService.setLanguage("en");
+            }
             switch (error.status) {
                 case 403 : $state.go('accessDenied');
                     break;
-                default : $state.go('404');
+                default : $state.transitionTo('404',null, {
+                    location: false
+                });
             }
         });
     })

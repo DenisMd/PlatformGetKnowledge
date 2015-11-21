@@ -2,9 +2,14 @@ model.controller("registerCtrl", function ($scope, $http,applicationService,clas
     $scope.info = {
         "sex" : true
     };
+    $scope.languageData = {
+        "id" : "languages",
+        "filter" : "name",
+        "count" : 3,
+        "list" : []
+    };
     applicationService.list($scope,"langs",className.language, function (item) {
-        item.name = item.name.toLowerCase();
-        console.log(item);
+        $scope.languageData.list.push($scope.translate(item.name.toLowerCase()));
     });
 
     $scope.password = "";

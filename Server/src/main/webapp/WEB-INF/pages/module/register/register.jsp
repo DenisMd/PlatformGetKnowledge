@@ -36,6 +36,11 @@
         <label for="inputLastName" class="control-label">{{translate("lastName")}}</label>
         <input type="text" class="form-control input-lg" required id="inputLastName" placeholder='{{translate("lastName")}}' ng-model="info.lastName">
     </div>
+
+    <div class="form-group">
+        <module-template data="languageData" name="inputs/select"></module-template>
+    </div>
+
     <div class="form-group">
         <div class="register-switch">
             <input type="radio" ng-model="info.sex" name="sex" ng-value="true" id="male" class="register-switch-input" checked>

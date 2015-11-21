@@ -4,8 +4,9 @@ body {
 
 .notFound {
     margin-top: 15%;
+    line-height: initial;
 }
-h1 {
+.notFound-title {
     text-align: center;
     font-family: helvetica;
     font-weight: lighter;
@@ -14,11 +15,12 @@ h1 {
     font-size: 3em;
     margin-top: 10px;
 }
-p {
+.notFound-text {
     text-align: center;
     font-family: helvetica;
     color: #aaa;
     font-size: 12px;
+    margin: 12px;
 }
 .window-error {
     margin: 0 auto;
