@@ -3,9 +3,9 @@
 <div class="notFound">
     <h1>Error: 403</h1>
 
-    <div class="window">
-        <div class="button"></div>
-        <div class="display">X</div>
+    <div class="window-error">
+        <div class="button-error"></div>
+        <div class="display-error">X</div>
     </div>
     <!--end window-->
     <p>Nope! You can't</p>
