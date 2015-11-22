@@ -38,20 +38,22 @@
     </div>
 
     <div class="form-group">
+        <label class="control-label">Выберите язык</label><br/>
         <module-template data="languageData" name="inputs/select"></module-template>
     </div>
 
 
 
     <div class="form-group">
-        <label class="radio-inline">
+        <label class="label-block">Ваш пол</label>
+        <span class="radio-inline">
             <input type="radio" ng-model="info.sex" name="sex" ng-value="true" id="male" checked>
-            {{translate("male")}}
-        </label>
-        <label class="radio-inline">
+            <label for="male">{{translate("male")}}</label>
+        </span>
+        <span class="radio-inline">
             <input type="radio" ng-model="info.sex" name="sex"  ng-value="false" id="female">
-            {{translate("female")}}
-        </label>
+            <label for="female">{{translate("female")}}</label>
+        </span>
     </div>
 
     <div class="form-group login-btns">
