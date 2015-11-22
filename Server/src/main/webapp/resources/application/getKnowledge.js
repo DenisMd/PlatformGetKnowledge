@@ -172,22 +172,19 @@ model.controller("videoCtrl",function($scope){
     }
 });
 
-model.filter('htmlFilter', function($filter) {
-    return function(input) {
-        return input ? '\u2713' : '\u2718';
-    };
-});
-
-model.controller("inputCtrl",function($scope,$sce,$filter) {
+model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     $scope.choose = false;
     $scope.model;
     $scope.selectValue;
     var filteredData = [];
+    var chooseElement = angular.element(document.getElementsByClassName("select-with-input"))[0];
+
 
 
     $scope.filter = $scope.getData().filter;
     $scope.id = $scope.getData().id;
     $scope.count = $scope.getData().count;
+    $scope.class = $scope.getData().class;
 
     $scope.getItem = function (item) {
         if (item.$$unwrapTrustedValue) {
@@ -209,22 +206,22 @@ model.controller("inputCtrl",function($scope,$sce,$filter) {
         } else {
             filter.list[$scope.filter] = $scope.model;
         }
-        console.log($scope.getList());
-        console.log(filter);
         filteredData = $filter('filter')($scope.getList(),filter);
-        filteredData = $filter('limitTo')($scope.filteredData, $scope.count);
-        if ($scope.filteredData) {
-            $scope.selectForm['main-select'].$setValidity("select", true);
-            if ($scope.filteredData.length === 1) {
-                if ($scope.model === $scope.filteredData[0]) {
-                    $scope.setModel($scope.filteredData[0]);
+        filteredData = $filter('limitTo')(filteredData, $scope.count);
+        if (filteredData) {
+            $scope.selectForm['main-select'].$setValidity("selectValue", true);
+            if (filteredData.length === 1) {
+                if ($scope.model.toString() === filteredData[0].toString()) {
+                    $scope.setModel(filteredData[0]);
                 }
             } else {
-                if ($scope.filteredData.length === 0 && $scope.selectValue){
-                  $scope.selectForm['main-select'].$setValidity("selectValue", false);
-                    console.log($scope.selectForm);
+                if (filteredData.length === 0){
+                    $scope.selectForm['main-select'].$setValidity("selectValue", false);
                 }
             }
+        }
+        if (filteredData.length !== 1 || $scope.model.toString() !== filteredData[0].toString()){
+            $scope.selectForm['main-select'].$setValidity("selectValue", false);
         }
         return filteredData;
     };
@@ -266,5 +263,36 @@ model.controller("inputCtrl",function($scope,$sce,$filter) {
         var selector = '#' + $scope.id;
         $(selector).modal('show');
         $scope.resetModel();
+    };
+
+    $scope.hideSelect = function(){
+        $scope.$apply(function () {
+            $scope.choose = false;
+        });
+    }
+});
+
+model.directive("hideOptions",function($document){
+    return {
+        restrict: 'A',
+        scope:{
+            "callback":"&hideOptions"
+        },
+        link: function (scope, element, attr) {
+            var input = element.find("input")[0];
+            var button = element.find("button")[0];
+            if (scope.callback && angular.isFunction(scope.callback)){
+                $document.on("click", function (event) {
+                    switch (event.target){
+                        case input:
+                        case button:
+                            return;
+                    }
+
+                    scope.$apply(scope.callback());
+
+                });
+            }
+        }
     };
 });

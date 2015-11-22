@@ -1,7 +1,7 @@
-<div ng-controller="inputCtrl" ng-if="getData().list" ng-form name="selectForm">
-
-    <div class="select-with-input">
-        <div class="input-group" >
+<div ng-controller="inputCtrl" ng-form name="selectForm">
+<!-- ng-if="getList().length"-->
+    <div class="select-with-input" hide-options="hideSelect()">
+        <div class="input-group"  ng-class="class">
             <input name="main-select" type="text" class="form-control select-input" placeholder="Search for..." ng-keyup="setSelect(true)" ng-model="model">
             <div class="input-group-btn">
                 <button class="btn btn-default" type="button" ng-click="open()">
@@ -12,14 +12,9 @@
         </div><!-- /input-group -->
         <div class="select-options-container" ng-show="choose">
             <ul class="select-options">
-
-
                 <li class="select-option" ng-repeat="item in getFilteredData()" ng-mouseenter="onEvent($event)" ng-mouseleave="onEvent($event)" ng-click="setModel(getItem(item))">{{getItem(item)}}</li>
             </ul>
         </div>
-
-
-
     </div>
 
     <div class="modal fade" ng-attr-id="{{id}}">

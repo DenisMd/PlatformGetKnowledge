@@ -5,6 +5,7 @@ model.controller("registerCtrl", function ($scope, $http,applicationService,clas
     $scope.languageData = {
         "id" : "languages",
         "count" : 3,
+        "class" : "input-group-lg",
         "list" : []
     };
     applicationService.list($scope,"langs",className.language, function (item) {
