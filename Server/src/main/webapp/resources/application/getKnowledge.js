@@ -1,4 +1,4 @@
-var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap"]);
+var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap", "ngImgCrop"]);
 
 model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService, className) {
     $scope.menuScrollConfig = {

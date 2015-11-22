@@ -27,12 +27,13 @@
     "angular": "~1.4.6",
     "angular-animate": "1.4.7",
     "angular-bootstrap": "0.14.2",
+    "angular-loading-bar": "~0.8.0",
     "angular-sanitize": "1.4.7",
     "angular-ui-router": "~0.2.15",
     "bootstrap": "~3.3.5",
+    "ng-img-crop": "ngImgCrop#~0.3.2",
     "ng-scrollbars": "~0.0.5",
     "video.js": "~5.0.2",
-    "videojs-hotkeys": "~0.2.10",
-    "angular-loading-bar": "~0.8.0"
+    "videojs-hotkeys": "~0.2.10"
   }
 }

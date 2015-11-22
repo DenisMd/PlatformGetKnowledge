@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/resources/bower_components/video.js/dist/video-js.min.css" type="text/css"/>
     <link rel="stylesheet" href="/resources/bower_components/angular-loading-bar/build/loading-bar.css" type="text/css"/>
     <link rel="stylesheet" href="/resources/css/index.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/resources/bower_components/ng-img-crop/compile/minified/ng-img-crop.css">
     <meta charset="utf-8">
 </head>
 <body>
@@ -44,6 +45,7 @@
     <script src="/resources/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="/resources/bower_components/ng-scrollbars/dist/scrollbars.min.js"></script>
     <script src="/resources/bower_components/video.js/dist/video.min.js"></script>
+    <script src="/resources/bower_components/ng-img-crop/compile/minified/ng-img-crop.js"></script>
     <%--<script src="/resources/bower_components/videojs-hotkeys/videojs.hotkeys.min.js"></script>--%>
     <script src="/resources/application/platform.js"></script>
     <script src="/resources/application/getKnowledge.js"></script>
