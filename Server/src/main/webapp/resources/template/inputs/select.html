@@ -1,8 +1,8 @@
-<div ng-controller="inputCtrl">
+<div ng-controller="inputCtrl" ng-if="getData().list" ng-form name="selectForm">
 
     <div class="select-with-input">
-        <div class="input-group">
-            <input type="text" class="form-control select-input" placeholder="Search for..." ng-keyup="setSelect(true)" ng-model="model">
+        <div class="input-group" >
+            <input name="main-select" type="text" class="form-control select-input" placeholder="Search for..." ng-keyup="setSelect(true)" ng-model="model">
             <div class="input-group-btn">
                 <button class="btn btn-default" type="button" ng-click="open()">
                     <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
@@ -10,11 +10,11 @@
             </div>
 
         </div><!-- /input-group -->
-
         <div class="select-options-container" ng-show="choose">
             <ul class="select-options">
-                <!--{{getItem(item)}}-->
-                <li class="select-option" ng-repeat="item in filteredData =  (getData().list | filter: getFilter() | limitTo:count)" ng-mouseenter="onEvent($event)" ng-mouseleave="onEvent($event)" ng-click="setModel(item)">{{item}}</li>
+
+
+                <li class="select-option" ng-repeat="item in getFilteredData()" ng-mouseenter="onEvent($event)" ng-mouseleave="onEvent($event)" ng-click="setModel(getItem(item))">{{getItem(item)}}</li>
             </ul>
         </div>
 
@@ -30,12 +30,16 @@
                         <caption class="caption-find">
                             <input type="text" class="form-control select-input" placeholder="Search for..." ng-model="model">
                         </caption>
-                        <tr class="caption-find" ng-repeat="item in data"  ng-mouseenter="onEvent($event)" ng-mouseleave="onEvent($event)" ng-click="setModel(item)">
+                        <tr class="caption-find" ng-repeat="item in getList()"  ng-mouseenter="onEvent($event)" ng-mouseleave="onEvent($event)" ng-click="setModel(getItem(item))">
                             <td>
                                 {{getItem(item)}}
                             </td>
                         </tr>
                     </table>
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

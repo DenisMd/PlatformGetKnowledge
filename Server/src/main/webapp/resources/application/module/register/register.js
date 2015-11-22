@@ -4,7 +4,6 @@ model.controller("registerCtrl", function ($scope, $http,applicationService,clas
     };
     $scope.languageData = {
         "id" : "languages",
-        "filter" : "name",
         "count" : 3,
         "list" : []
     };
@@ -14,7 +13,7 @@ model.controller("registerCtrl", function ($scope, $http,applicationService,clas
 
     $scope.password = "";
     $scope.signUp = function() {
-        if (registerForm.$invalid) return;
+        if ($scope.registerForm.$invalid) return;
         $scope.info.language = 'En';
         applicationService.action($scope,"registerInfo" , className.userInfo , "register", $scope.info, function(registerInfo) {
             $scope.error = false;

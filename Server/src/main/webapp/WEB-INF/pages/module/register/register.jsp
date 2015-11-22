@@ -41,13 +41,17 @@
         <module-template data="languageData" name="inputs/select"></module-template>
     </div>
 
+
+
     <div class="form-group">
-        <div class="register-switch">
-            <input type="radio" ng-model="info.sex" name="sex" ng-value="true" id="male" class="register-switch-input" checked>
-            <label for="male" class="register-switch-label">{{translate("male")}}</label>
-            <input type="radio" ng-model="info.sex" name="sex"  ng-value="false" id="female" class="register-switch-input">
-            <label for="female" class="register-switch-label">{{translate("female")}}</label>
-        </div>
+        <label class="radio-inline">
+            <input type="radio" ng-model="info.sex" name="sex" ng-value="true" id="male" checked>
+            {{translate("male")}}
+        </label>
+        <label class="radio-inline">
+            <input type="radio" ng-model="info.sex" name="sex"  ng-value="false" id="female">
+            {{translate("female")}}
+        </label>
     </div>
 
     <div class="form-group login-btns">

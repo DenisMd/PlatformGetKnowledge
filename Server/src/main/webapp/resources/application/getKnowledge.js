@@ -168,11 +168,17 @@ model.controller("videoCtrl",function($scope){
     }
 });
 
-model.controller("inputCtrl",function($scope) {
+model.filter('htmlFilter', function($filter) {
+    return function(input) {
+        return input ? '\u2713' : '\u2718';
+    };
+});
+
+model.controller("inputCtrl",function($scope,$sce,$filter) {
     $scope.choose = false;
     $scope.model;
     $scope.selectValue;
-    $scope.filteredData = [];
+    var filteredData = [];
 
 
     $scope.filter = $scope.getData().filter;
@@ -180,29 +186,43 @@ model.controller("inputCtrl",function($scope) {
     $scope.count = $scope.getData().count;
 
     $scope.getItem = function (item) {
-        if (angular.isObject(item)) {
-            return item[$scope.filter];
-        } else {
+        if (item.$$unwrapTrustedValue) {
             return item;
+        } else {
+            return item[$scope.filter];
         }
     };
 
-    $scope.getFilter = function () {
-        //var filter = {};
-        //if (!$scope.filter || angular.isArray($scope.getData().list)) {
-        //    filter = $scope.model;
-        //} else {
-        //    filter.list[$scope.filter] = $scope.model;
-        //}
-        //if ($scope.filteredData) {
-        //    if ($scope.filteredData.length == 1) {
-        //
-        //        if ($scope.model === $scope.filteredData[0]) {
-        //            $scope.setModel($scope.filteredData[0]);
-        //        }
-        //    }
-        //}
-        //return filter;
+    $scope.getList = function(){
+        return $scope.getData().list;
+    };
+
+    $scope.getFilteredData = function () {
+
+        var filter = {};
+        if (!$scope.filter || angular.isArray($scope.getList())) {
+            filter = $scope.model;
+        } else {
+            filter.list[$scope.filter] = $scope.model;
+        }
+        console.log($scope.getList());
+        console.log(filter);
+        filteredData = $filter('filter')($scope.getList(),filter);
+        filteredData = $filter('limitTo')($scope.filteredData, $scope.count);
+        if ($scope.filteredData) {
+            $scope.selectForm['main-select'].$setValidity("select", true);
+            if ($scope.filteredData.length === 1) {
+                if ($scope.model === $scope.filteredData[0]) {
+                    $scope.setModel($scope.filteredData[0]);
+                }
+            } else {
+                if ($scope.filteredData.length === 0 && $scope.selectValue){
+                  $scope.selectForm['main-select'].$setValidity("selectValue", false);
+                    console.log($scope.selectForm);
+                }
+            }
+        }
+        return filteredData;
     };
 
     $scope.setSelect = function (value) {
@@ -229,10 +249,10 @@ model.controller("inputCtrl",function($scope) {
     };
 
     $scope.setModel = function (value) {
-        if (angular.isObject(value)) {
-            $scope.model = value[$scope.filter];
-        } else {
+        if (value.$$unwrapTrustedValue) {
             $scope.model = value;
+        } else {
+            $scope.model = value[$scope.filter];
         }
         $scope.selectValue = value;
         $scope.choose = false;
