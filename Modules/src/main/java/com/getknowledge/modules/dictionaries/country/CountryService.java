@@ -7,6 +7,7 @@ import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
 import com.getknowledge.modules.dictionaries.region.Region;
 import com.getknowledge.modules.dictionaries.region.RegionRepository;
+import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.BootstrapService;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
@@ -23,6 +24,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 
 @Service("CountryService")
@@ -103,4 +105,10 @@ public class CountryService extends AbstractService implements BootstrapService 
         bootstrapInfo.setOrder(1);
         return  bootstrapInfo;
     }
+
+    @Action(name = "getCountries" , mandatoryFields = {"language"})
+    public List<Country> getCountries (HashMap<String,Object> data) {
+        return countryRepository.getEntitiesByFieldAndValue("language.name" , data.get("language"));
+    }
+
 }
