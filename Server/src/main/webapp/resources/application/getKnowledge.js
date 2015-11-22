@@ -233,10 +233,10 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     $scope.onEvent = function (event) {
         var elem = angular.element(event.currentTarget);
         switch (event.type) {
-            case "mouseover":
+            case "mouseenter":
                 elem.addClass("active");
                 break;
-            case "mouseout":
+            case "mouseleave":
                 elem.removeClass("active");
                 break;
         }
