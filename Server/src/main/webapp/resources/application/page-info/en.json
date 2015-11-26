@@ -34,6 +34,9 @@
     "contactUs_card" : "Возник вопрос? Или обноружили баг на сайте? А может хотите поделиться идеями или замечаниями? Пишите, сам активным в подарок курсы!",
     "error" : "Error",
     "404_response" : "Page not found!",
-    "403_response" : "Access for page denied!"
+    "403_response" : "Access for page denied!",
+    "uploadAvatar" : "Upload your avatar",
+    "save" : "Save",
+    "close" : "Close"
   }
 }
