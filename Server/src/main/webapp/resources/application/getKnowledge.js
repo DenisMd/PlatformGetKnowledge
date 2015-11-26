@@ -304,6 +304,23 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     }
 });
 
+model.controller("selectImgCtrl", function($scope){
+    $scope.originalImg='';
+    $scope.croppedImg='';
+    var handleFileSelect=function(evt) {
+        var file=evt.currentTarget.files[0];
+        var reader = new FileReader();
+        reader.onload = function (evt) {
+            $scope.$apply(function($scope){
+                $scope.originalImg=evt.target.result;
+                $('#myModal').modal('show');
+            });
+        };
+        reader.readAsDataURL(file);
+    };
+    angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
+});
+
 model.directive("hideOptions",function($document){
     return {
         restrict: 'A',

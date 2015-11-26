@@ -1,0 +1,25 @@
+<div ng-controller="selectImgCtrl">
+    <div class="fileUpload btn btn-primary">
+        <span>{{translate("uploadAvatar")}}</span>
+        <input type="file" id="fileInput" class="upload"/>
+    </div>
+
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="cropArea">
+                        <img-crop image="originalImg" result-image="croppedImg"></img-crop>
+                    </div>
+                    <!--<div>Cropped Image:</div>-->
+                    <!--<img ng-src="{{croppedImg}}"/>-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{translate("close")}}</button>
+                    <button type="button" class="btn btn-primary">{{translate("save")}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

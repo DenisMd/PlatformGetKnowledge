@@ -1,21 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet" href="/resources/css/login.css">
 
-<style>
-    .cropArea {
-        background: #E4E4E4;
-        overflow: hidden;
-        width:500px;
-        height:350px;
-    }
-</style>
-<div>Select an image file: <input type="file" id="fileInput" /></div>
-<div class="cropArea">
-    <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
-</div>
-<div>Cropped Image:</div>
-<div><img ng-src="{{myCroppedImage}}" /></div>
-
 <form class="center-form" name="registerForm">
     <div ng-class="error?'':'err-hidden'" class="alert alert-danger text-center" role="alert">
         {{translate(registerInfo)}}
@@ -57,7 +42,7 @@
         <module-template data="languageData" name="inputs/select"></module-template>
     </div>
 
-
+    <module-template data="languageData" name="inputs/selectImage"></module-template>
 
     <div class="form-group">
         <label class="label-block">Ваш пол</label>
