@@ -6,7 +6,8 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "menu" : "com.getknowledge.modules.menu.Menu",
             "video" : "com.getknowledge.modules.video.Video",
             "language" : "com.getknowledge.modules.dictionaries.language.Language",
-            "registerInfo" : "com.getknowledge.modules.userInfo.registerInfo.RegisterInfo"
+            "registerInfo" : "com.getknowledge.modules.userInfo.registerInfo.RegisterInfo",
+            "country" : "com.getknowledge.modules.dictionaries.country.Country"
         };
     })
     .factory('modules',function(){
@@ -32,7 +33,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         var language;
         this.setLanguage = function(lang){
             language = lang;
-        }
+        };
         this.getLanguage = function(){
             return language;
         }

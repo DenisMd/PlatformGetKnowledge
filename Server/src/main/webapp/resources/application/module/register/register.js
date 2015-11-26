@@ -5,11 +5,16 @@ model.controller("registerCtrl", function ($scope, $http,applicationService,clas
     $scope.languageData = {
         "id" : "languages",
         "count" : 3,
+        "filter":"title",
         "class" : "input-group-lg",
-        "list" : []
+        "listName" : "lang"
     };
-    applicationService.list($scope,"langs",className.language, function (item) {
-        $scope.languageData.list.push($scope.translate(item.name.toLowerCase()));
+    //applicationService.list($scope,"langs",className.language, function (item) {
+    //    var key = item.name.toLowerCase();
+    //    $scope.languageData.list.push({key: key,title:$scope.translate(key)});
+    //});
+    applicationService.action($scope, "lang", className.country, "getCountries", {language : 'Ru'}, function (item) {
+        item.title = $scope.translate(item.countryName);
     });
 
     $scope.password = "";
@@ -22,7 +27,7 @@ model.controller("registerCtrl", function ($scope, $http,applicationService,clas
                 $scope.error = true;
             }
         });
-    }
+    };
 
     $scope.myImage='';
     $scope.myCroppedImage='';

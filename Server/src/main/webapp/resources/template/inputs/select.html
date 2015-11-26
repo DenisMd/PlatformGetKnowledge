@@ -1,4 +1,4 @@
-<div ng-controller="inputCtrl" ng-form name="selectForm">
+<div style="position: relative" ng-controller="inputCtrl" ng-form name="selectForm">
 <!-- ng-if="getList().length"-->
     <div class="select-with-input" hide-options="hideSelect()">
         <div class="input-group"  ng-class="class">
@@ -20,23 +20,51 @@
     <div class="modal fade" ng-attr-id="{{id}}">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-find">
-                    <table class="table table-border">
-                        <caption class="caption-find">
-                            <input type="text" class="form-control select-input" placeholder="Search for..." ng-model="model">
-                        </caption>
-                        <tr class="caption-find" ng-repeat="item in getList()"  ng-mouseenter="onEvent($event)" ng-mouseleave="onEvent($event)" ng-click="setModel(getItem(item))">
-                            <td>
-                                {{getItem(item)}}
-                            </td>
-                        </tr>
-                    </table>
+                <div class="modal-header modal-find">
+                    <span class="caption-find">
+                        <input type="text" class="form-control select-input" placeholder="Search for..."
+                               ng-model="modalModel">
+                    </span>
                 </div>
-                <div class="modal-footer text-center">
+                <div class="modal-body modal-find">
+                    <div class="table-content" ng-scrollbars ng-scrollbars-config="selectScrollConfig">
+                        <table class="table table-border">
+                            <tr class="caption-find" ng-repeat="item in getList()" ng-mouseenter="onEvent($event)"
+                                ng-mouseleave="onEvent($event)" ng-click="setModalModel(getItem(item))">
+                                <td>
+                                    {{getItem(item)}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer modal-find">
                     <button type="button" class="btn btn-primary">Save</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+    <div class="table-content" ng-scrollbars  ng-scrollbars-config="selectScrollConfig">
+        <table class="table table-border">
+            <tr><td>Row 1</td></tr>
+            <tr><td>Row 1</td></tr>
+            <tr><td>Row 1</td></tr>
+            <tr><td>Row 1</td></tr>
+            <tr><td>Row 1</td></tr>
+            <tr><td>Row 1</td></tr>
+            <tr><td>Row 1</td></tr>
+            <tr><td>Row 1</td></tr>
+            <tr><td>Row 1</td></tr>
+            <tr><td>Row 1</td></tr>
+            <tr><td>Row 1</td></tr>
+            <tr><td>Row 1</td></tr>
+            <tr><td>Row 1</td></tr>
+            <tr><td>Row 1</td></tr>
+            <tr><td>Row 1</td></tr>
+            <tr><td>Row 1</td></tr>
+            <tr><td>Row 1</td></tr>
+            <tr><td>Row 1</td></tr>
+        </table>
+    </div>
 </div>

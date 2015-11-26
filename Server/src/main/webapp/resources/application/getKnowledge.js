@@ -175,16 +175,16 @@ model.controller("videoCtrl",function($scope){
 model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     $scope.choose = false;
     $scope.model;
+    $scope.modalModel;
+    $scope.selectModalValue;
     $scope.selectValue;
     var filteredData = [];
-    var chooseElement = angular.element(document.getElementsByClassName("select-with-input"))[0];
-
-
 
     $scope.filter = $scope.getData().filter;
     $scope.id = $scope.getData().id;
     $scope.count = $scope.getData().count;
     $scope.class = $scope.getData().class;
+    $scope.list = [];
 
     $scope.getItem = function (item) {
         if (item.$$unwrapTrustedValue) {
@@ -195,7 +195,10 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     };
 
     $scope.getList = function(){
-        return $scope.getData().list;
+        if (!$scope.list.length){
+            $scope.list = $scope[$scope.getData().listName]? $scope[$scope.getData().listName]:[];
+        }
+        return $scope.list;
     };
 
     $scope.getFilteredData = function () {
@@ -250,11 +253,8 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     };
 
     $scope.setModel = function (value) {
-        if (value.$$unwrapTrustedValue) {
-            $scope.model = value;
-        } else {
-            $scope.model = value[$scope.filter];
-        }
+
+        $scope.model = getValue(value);
         $scope.selectValue = value;
         $scope.choose = false;
     };
@@ -262,13 +262,45 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     $scope.open = function () {
         var selector = '#' + $scope.id;
         $(selector).modal('show');
+        $("#"+$scope.id+" .table-content").height(getHeight());
         $scope.resetModel();
+    };
+
+    var currentElement;
+    $scope.setModalModel = function(event,value){
+        var elem = angular.element(event.currentTarget);
+        currentElement = elem;
+        elem.addClass("success");
+        $scope.modalModel = getValue(value);
+        $scope.selectModalValue = value;
     };
 
     $scope.hideSelect = function(){
         $scope.$apply(function () {
             $scope.choose = false;
         });
+    };
+
+    $scope.selectScrollConfig = {
+        theme: 'dark-3',
+        advanced: {
+            updateOnContentResize: true,
+            updateOnSelectorChange: true
+        },
+        setHeight : getHeight()
+    };
+
+    function getHeight(){
+        var temp = 40 * $scope.getList().length;
+        return !temp || temp > 400? 400 : temp;
+    }
+
+    function getValue(value){
+        if (value.$$unwrapTrustedValue) {
+            return value;
+        } else {
+            return value[$scope.filter];
+        }
     }
 });
 
