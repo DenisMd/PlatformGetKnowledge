@@ -568,7 +568,7 @@ html, body{
 .card-image{
     position: absolute;
     top: -25px;
-    background: #11171c;
+    background: #fff;
     border-radius: 50%;
     padding: 5px;
     margin-left: -20px;
