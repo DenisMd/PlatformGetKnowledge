@@ -1,24 +1,42 @@
 var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap", "ngImgCrop"]);
 
-model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService, className) {
-    $scope.menuScrollConfig = {
-        theme: 'light-3',
-        snapOffset: 100,
-        advanced: {
-            updateOnContentResize: true,
-            updateOnSelectorChange: "ul li"
-        }
-    };
+var player;
 
+function init() {
+    var options = {
+        "controls": true,
+        "preload": "matadata",
+        "autoplay": false,
+        "width": 720,
+        "height": 480
+    };
+    player = videojs(document.getElementById('main-video'), options, function () {
+        player = this;
+    });
+};
+
+model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService, className) {
+
+    //---------------------------------------- системные методы
+    //Получаем url для загрузки видео
     $scope.getVideoUrl = function (id) {
         return "/data/readVideo?className="+className.video+"&id="+id;
     };
 
-    $scope.logout = function(){
-        if (!$scope.user) return;
-        $http.get("/j_spring_security_logout").success(function(){
-            applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {});
-        });
+    //перевести по ключу
+    $scope.translate = function (key) {
+        if (!$scope.application || !$scope.application.text || !(key in $scope.application.text)) {
+            return key;
+        }
+
+        return $scope.application.text[key];
+
+    };
+
+    //создать ссылку на страницу с учетом языка
+    $scope.createUrl = function (url) {
+        if (!$scope.application) return;
+        return '#/' + $scope.application.language + url;
     };
 
     //смена языка
@@ -45,6 +63,31 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         }
     };
 
+    //создает массив для ng-repeat
+    $scope.range = function(n) {
+        if (!n) return 1;
+        return new Array(Math.ceil(n));
+    };
+
+    //создаем массив по диапозону
+    $scope.getRow = function (index, length, array) {
+        var result = [];
+        for (var i = index*length; i < length*(index+1); i++) {
+            if (array.length <= i) return result;
+            result.push(array[i]);
+        }
+        return result;
+    };
+
+    //---------------------------------------- методы для меню
+    //Разлогиниваемся
+    $scope.logout = function(){
+        if (!$scope.user) return;
+        $http.get("/j_spring_security_logout").success(function(){
+            applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {});
+        });
+    };
+
     $scope.toggelMenu = true;
 
     $scope.toggelClick = function () {
@@ -53,25 +96,20 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         wrapper.toggleClass("wrapper-left");
     };
 
-    $scope.translate = function (key) {
-        if (!$scope.application || !$scope.application.text || !(key in $scope.application.text)) {
-            return key;
+    $scope.menuScrollConfig = {
+        theme: 'light-3',
+        snapOffset: 100,
+        advanced: {
+            updateOnContentResize: true,
+            updateOnSelectorChange: "ul li"
         }
-
-        return $scope.application.text[key];
-
     };
 
-    $scope.createUrl = function (url) {
-        if (!$scope.application) return;
-        return '#/' + $scope.application.language + url;
+    $scope.userImg = function(id){
+        return applicationService.imageHref(className.userInfo,id);
     };
 
-    $scope.range = function(n) {
-        if (!n) return 1;
-        return new Array(Math.ceil(n));
-    };
-
+    //--------------------------------------------- опции слайдера
     $scope.carouselData = {
         interval : 5000,
         slides : [
@@ -109,20 +147,6 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
     applicationService.action($scope , "countries" , "com.getknowledge.modules.dictionaries.country.Country" , "getCountries",{
         language : "Ru"
     });
-
-    $scope.getRow = function (index, length, array) {
-        var result = [];
-        for (var i = index*length; i < length*(index+1); i++) {
-            if (array.length <= i) return result;
-            result.push(array[i]);
-        }
-        return result;
-    };
-
-    $scope.userImg = function(id){
-        return applicationService.imageHref(className.userInfo,id);
-    };
-
 });
 
 model.controller("videoCtrl",function($scope){
@@ -130,8 +154,6 @@ model.controller("videoCtrl",function($scope){
 
     var videoUrl = $scope.getVideoUrl(1);
     $scope.url = {type: "video/mp4", src: videoUrl};
-
-
 
     $scope.open = function() {
         if (!player ||player.currentSrc() != $scope.url.src) {
@@ -153,23 +175,6 @@ model.controller("videoCtrl",function($scope){
     $('#videoModal').on("hidden.bs.modal",function(){
         $scope.close();
     });
-
-    var player;
-
-    function init(){
-        if (!player){
-            var options = {
-                "controls": true,
-                "preload" : "matadata",
-                "autoplay" : false,
-                "width": 720,
-                "height":480
-            };
-            player = videojs('main-video', options, function () {
-                player = this;
-            });
-        }
-    }
 });
 
 model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
@@ -354,7 +359,7 @@ model.controller("selectImgCtrl", function($scope){
         };
         reader.readAsDataURL(file);
     };
-    angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
+    angular.element('#fileInput').on('change',handleFileSelect);
 });
 
 model.directive("hideOptions",function($document){
