@@ -178,14 +178,21 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     $scope.modalModel;
     $scope.selectModalValue;
     $scope.selectValue;
-    var filteredData = [];
 
     $scope.filter = $scope.getData().filter;
     $scope.id = $scope.getData().id;
     $scope.count = $scope.getData().count;
     $scope.class = $scope.getData().class;
+    $scope.callback = angular.isFunction($scope.getData().callback)? $scope.getData().callback : null;
     $scope.list = [];
+    var selector = '#' + $scope.id;
 
+    $scope.closeModal = function(){
+        $(selector).modal("hide");
+        $scope.resetActiveElementInModal();
+        $scope.modalModel = "";
+        $scope.selectModalValue = null;
+    } ;
     $scope.getItem = function (item) {
         if (item.$$unwrapTrustedValue) {
             return item;
@@ -201,32 +208,46 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
         return $scope.list;
     };
 
-    $scope.getFilteredData = function () {
+    $scope.getFilteredData = function (isModal) {
+        var list = $scope.getList();
 
         var filter = {};
-        if (!$scope.filter || angular.isArray($scope.getList())) {
-            filter = $scope.model;
+        if (!$scope.filter) {
+            filter = isModal?$scope.modalModel:$scope.model;
         } else {
-            filter.list[$scope.filter] = $scope.model;
+            filter[$scope.filter] = isModal?$scope.modalModel:$scope.model;
         }
-        filteredData = $filter('filter')($scope.getList(),filter);
-        filteredData = $filter('limitTo')(filteredData, $scope.count);
-        if (filteredData) {
-            $scope.selectForm['main-select'].$setValidity("selectValue", true);
-            if (filteredData.length === 1) {
-                if ($scope.model.toString() === filteredData[0].toString()) {
-                    $scope.setModel(filteredData[0]);
-                }
-            } else {
-                if (filteredData.length === 0){
-                    $scope.selectForm['main-select'].$setValidity("selectValue", false);
+        var filteredData = $filter('filter')(list,filter);
+        if (!isModal) {
+            filteredData = $filter('limitTo')(filteredData, $scope.count);
+
+            if (filteredData) {
+                $scope.selectForm['main-select'].$setValidity("selectValue", true);
+                if (filteredData.length === 1) {
+                    if ($scope.model.toString() === filteredData[0].toString()) {
+                        $scope.setModel(filteredData[0]);
+                    }
+                } else {
+                    if (filteredData.length === 0) {
+                        $scope.selectForm['main-select'].$setValidity("selectValue", false);
+                    }
                 }
             }
-        }
-        if (filteredData.length !== 1 || $scope.model.toString() !== filteredData[0].toString()){
-            $scope.selectForm['main-select'].$setValidity("selectValue", false);
+            if (filteredData.length !== 1 || $scope.model.toString() !== filteredData[0].toString()) {
+                $scope.selectForm['main-select'].$setValidity("selectValue", false);
+            }
+        } else {
+            if (filteredData.length === 0){
+                $scope.selectForm['search-input'].$setValidity("searchValue", false);
+            } else {
+                $scope.selectForm['search-input'].$setValidity("searchValue", true);
+            }
         }
         return filteredData;
+    };
+
+    $scope.empty = function(isModal){
+          return $scope.getFilteredData(isModal).length === 0;
     };
 
     $scope.setSelect = function (value) {
@@ -248,7 +269,6 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     $scope.resetModel = function () {
         $scope.model = null;
         $scope.selectValue = null;
-        $scope.filteredData = [];
         $scope.choose = false;
     };
 
@@ -260,19 +280,35 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     };
 
     $scope.open = function () {
-        var selector = '#' + $scope.id;
+        $(selector).modal({
+            backdrop: 'static',
+            keyboard: false
+        });
         $(selector).modal('show');
-        $("#"+$scope.id+" .table-content").height(getHeight());
-        $scope.resetModel();
+        $(selector+" .table-content").height(getHeight());
     };
 
     var currentElement;
+    $scope.resetActiveElementInModal = function(){
+        if (currentElement) {
+            currentElement.removeClass("info");
+            currentElement = null;
+        }
+    };
+
     $scope.setModalModel = function(event,value){
+        $scope.resetActiveElementInModal();
         var elem = angular.element(event.currentTarget);
         currentElement = elem;
-        elem.addClass("success");
-        $scope.modalModel = getValue(value);
+        elem.addClass("info");
         $scope.selectModalValue = value;
+    };
+
+    $scope.saveModalModel = function(){
+        $scope.selectValue = $scope.selectModalValue;
+        $scope.model = getValue($scope.selectModalValue);
+        $('#' + $scope.id).modal('hide');
+        $scope.resetActiveElementInModal();
     };
 
     $scope.hideSelect = function(){
@@ -296,7 +332,7 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     }
 
     function getValue(value){
-        if (value.$$unwrapTrustedValue) {
+        if (angular.isString(value) || value.$$unwrapTrustedValue) {
             return value;
         } else {
             return value[$scope.filter];
