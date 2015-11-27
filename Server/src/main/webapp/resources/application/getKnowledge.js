@@ -1,5 +1,20 @@
 var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap", "ngImgCrop"]);
 
+var player;
+
+function init() {
+    var options = {
+        "controls": true,
+        "preload": "matadata",
+        "autoplay": false,
+        "width": 720,
+        "height": 480
+    };
+    player = videojs(document.getElementById('main-video'), options, function () {
+        player = this;
+    });
+};
+
 model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService, className) {
     $scope.menuScrollConfig = {
         theme: 'light-3',
@@ -131,8 +146,6 @@ model.controller("videoCtrl",function($scope){
     var videoUrl = $scope.getVideoUrl(1);
     $scope.url = {type: "video/mp4", src: videoUrl};
 
-
-
     $scope.open = function() {
         if (!player ||player.currentSrc() != $scope.url.src) {
             player.src($scope.url);
@@ -153,23 +166,6 @@ model.controller("videoCtrl",function($scope){
     $('#videoModal').on("hidden.bs.modal",function(){
         $scope.close();
     });
-
-    var player;
-
-    function init(){
-        if (!player){
-            var options = {
-                "controls": true,
-                "preload" : "matadata",
-                "autoplay" : false,
-                "width": 720,
-                "height":480
-            };
-            player = videojs('main-video', options, function () {
-                player = this;
-            });
-        }
-    }
 });
 
 model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
@@ -318,7 +314,7 @@ model.controller("selectImgCtrl", function($scope){
         };
         reader.readAsDataURL(file);
     };
-    angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
+    angular.element('#fileInput').on('change',handleFileSelect);
 });
 
 model.directive("hideOptions",function($document){
