@@ -23,7 +23,6 @@ public class Menu extends AbstractEntity{
     private Role role;
 
     @OneToMany
-    @JoinTable(name = "menu_items_join")
     private List<MenuItem> items = new ArrayList<>();
 
     public List<MenuItem> getItems() {

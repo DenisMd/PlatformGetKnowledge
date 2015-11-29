@@ -22,7 +22,7 @@ General
 
 # Admin menu
 Admin : ROLE_ADMIN
-    panel : /panel/admin : /resources/image/menu/icons/panel.png : 999999
+    panel : /section/admin : /resources/image/menu/icons/panel.png : 999999
         bootstrap : /bootstrap
         users : /users
         menu : /menu
@@ -47,7 +47,7 @@ Admin : ROLE_ADMIN
 
 # Author menu
 Author : ROLE_AUTHOR
-    panel : /panel/author : /resources/image/menu/icons/panel.png : 999999
+    panel : /section/author : /resources/image/menu/icons/panel.png : 999999
         courses : /courses
         statistic : /statistic
         reviews : /reviews
@@ -72,7 +72,7 @@ Author : ROLE_AUTHOR
 
 # HelpDesk menu
 HelpDesk : ROLE_HELPDESK
-    panel : /panel/helpdesk : /resources/image/menu/icons/panel.png : 999999
+    panel : /section/helpdesk : /resources/image/menu/icons/panel.png : 999999
         mailbox : /mailbox
         logs : /logs
     programming : /section/programming : /resources/image/menu/icons/programming.png : d35136

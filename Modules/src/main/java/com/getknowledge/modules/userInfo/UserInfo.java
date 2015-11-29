@@ -40,7 +40,6 @@ public class UserInfo  extends AbstractEntity implements IUser {
 
     @Access(myself = true)
     @ManyToOne
-    @JoinTable(name = "users_language")
     private Language language;
 
     @ManyToOne
