@@ -1,19 +1,28 @@
 package com.getknowledge.modules.email;
 
+import com.getknowledge.platform.modules.trace.TraceService;
+import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.io.*;
 
 @Service("emailService")
 public class EmailService {
 
     @Autowired
-    private MailSender mailSender;
+    private JavaMailSenderImpl mailSender;
+
+    @Autowired
+    private TraceService trace;
 
     public void send(String toAddress, String fromAddress, String subject, String msgBody) {
 
@@ -25,13 +34,18 @@ public class EmailService {
         mailSender.send(msg);
     }
 
-    public void sendTemplate(String toAddress, String fromAddress,String subject, String templateName, String [] args) throws IOException {
+    public void sendTemplate(String toAddress, String fromAddress,String subject, String templateName, String [] args)  {
 
-        SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setFrom(fromAddress);
-        msg.setTo(toAddress);
-        msg.setSubject(subject);
-        msg.setText(getMessageFromTemplate(templateName , args));
+        MimeMessage msg = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(msg, true,"UTF-8");
+            helper.setFrom(fromAddress);
+            helper.setTo(toAddress);
+            helper.setSubject(subject);
+            helper.setText(getMessageFromTemplate(templateName , args),true);
+        } catch (MessagingException | IOException e) {
+            trace.logException("Can not receive email for " + toAddress,e, TraceLevel.Warning);
+        }
         mailSender.send(msg);
     }
 
