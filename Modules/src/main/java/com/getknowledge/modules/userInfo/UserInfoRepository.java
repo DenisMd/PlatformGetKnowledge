@@ -19,8 +19,6 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private LanguageRepository languageRepository;
 
     @Override
     public UserInfo clone(UserInfo entity) {
@@ -33,6 +31,7 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
         userInfo.setProfileImage(entity.getProfileImage());
         userInfo.setSpecialty(entity.getSpecialty());
         userInfo.setUser(entity.getUser());
+        userInfo.setFirstLogin(entity.getFirstLogin());
         return userInfo;
     }
 
@@ -40,9 +39,7 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
     public void remove(Long id) {
         UserInfo userInfo = entityManager.find(getClassEntity() , id);
         long userId = userInfo.getUser().getId();
-        long languageId = userInfo.getLanguage().getId();
         super.remove(id);
-        languageRepository.remove(languageId);
         userRepository.remove(userId);
     }
 }

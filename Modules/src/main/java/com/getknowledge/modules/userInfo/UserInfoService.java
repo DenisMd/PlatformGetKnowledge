@@ -157,6 +157,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
         userInfo.setFirstName(firstName);
         userInfo.setLastName(lastName);
         userInfo.setMan(sex);
+        userInfo.setFirstLogin(true);
 
         InputStream is = null;
         if (sex) {

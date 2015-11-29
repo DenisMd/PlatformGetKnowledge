@@ -56,6 +56,17 @@ public class UserInfo  extends AbstractEntity implements IUser {
     @OneToOne
     private Post post;
 
+    @Access(myself = true)
+    private Boolean isFirstLogin;
+
+    public Boolean getFirstLogin() {
+        return isFirstLogin;
+    }
+
+    public void setFirstLogin(Boolean firstLogin) {
+        isFirstLogin = firstLogin;
+    }
+
     public Boolean isMan() {
         return man;
     }
