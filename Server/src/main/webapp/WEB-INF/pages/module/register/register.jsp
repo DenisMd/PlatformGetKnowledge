@@ -1,10 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet" href="/resources/css/login.css">
-
+<div ng-class="getClass()" class="alert text-center" role="alert">
+    {{translate(registerInfo)}}
+</div>
 <form class="center-form" name="registerForm">
-    <div ng-class="getClass()" class="alert text-center" role="alert">
-        {{translate(registerInfo)}}
-    </div>
+
     <div class="form-group form-title">
         {{translate("signUp")}}
     </div>

@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="/resources/css/login.css">
 
 <div>
-    <div ng-class="error?'':'err-hidden'" class="alert alert-danger text-center" role="alert">
+    <div ng-class="error?'':'div-hidden'" class="alert alert-danger text-center" role="alert">
         {{translate("loginError")}}
     </div>
     <form class="center-form">
