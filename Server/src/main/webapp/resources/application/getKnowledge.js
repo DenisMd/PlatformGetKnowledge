@@ -2,7 +2,7 @@ var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap", "ngImgC
 
 var player;
 
-function init() {
+function initVideoPlayer() {
     var options = {
         "controls": true,
         "preload": "matadata",
@@ -150,7 +150,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
 });
 
 model.controller("videoCtrl",function($scope){
-    init();
+    initVideoPlayer();
 
     var videoUrl = $scope.getVideoUrl(1);
     $scope.url = {type: "video/mp4", src: videoUrl};
@@ -229,7 +229,7 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
             if (filteredData) {
                 $scope.selectForm['main-select'].$setValidity("selectValue", true);
                 if (filteredData.length === 1) {
-                    if ($scope.model.toString() === filteredData[0].toString()) {
+                    if ($scope.model.toString() === $scope.getItem(filteredData[0]).toString()) {
                         $scope.setModel(filteredData[0]);
                     }
                 } else {
@@ -238,7 +238,7 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
                     }
                 }
             }
-            if (filteredData.length !== 1 || $scope.model.toString() !== filteredData[0].toString()) {
+            if (!$scope.choose && filteredData.length !== list.length){
                 $scope.selectForm['main-select'].$setValidity("selectValue", false);
             }
         } else {
@@ -282,6 +282,7 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
         $scope.model = getValue(value);
         $scope.selectValue = value;
         $scope.choose = false;
+        $scope.callback(value);
     };
 
     $scope.open = function () {

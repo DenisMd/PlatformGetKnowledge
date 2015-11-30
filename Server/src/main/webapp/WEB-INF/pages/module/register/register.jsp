@@ -14,35 +14,33 @@
 
     <div class="form-group">
         <label for="inputEmail" class="control-label">{{translate("email")}}</label>
-        <input type="email" class="form-control input-lg validation" required name="inputEmail" id="inputEmail" placeholder="{{translate('email')}}" ng-model="info.email">
+        <input type="email" class="form-control input-lg on-error on-success" required name="inputEmail" id="inputEmail" placeholder="{{translate('email')}}" ng-model="info.email">
     </div>
 
     <div class="form-group">
         <label for="inputPassword" class="control-label">{{translate("password")}}</label>
-        <input type="password" class="form-control input-lg validation" ng-minlength="6" required name="inputPassword" id="inputPassword" placeholder="{{translate('password')}}" ng-model="info.password">
+        <input type="password" class="form-control input-lg on-error on-success" ng-minlength="6" required name="inputPassword" id="inputPassword" placeholder="{{translate('password')}}" ng-model="info.password">
     </div>
 
     <div class="form-group">
         <label for="inputRepeatPassword" class="control-label">{{translate("repeatPassword")}}</label>
-        <input type="password" use-validation="compareTo" required options="{'value':info.password}" class="form-control input-lg validation" id="inputRepeatPassword" placeholder='{{translate("repeatPassword")}}' ng-model="password">
+        <input type="password" use-validation="compareTo" required options="{'value':info.password}" class="form-control input-lg on-error on-success" id="inputRepeatPassword" placeholder='{{translate("repeatPassword")}}' ng-model="password">
     </div>
 
     <div class="form-group">
         <label for="inputFirstName" class="control-label">{{translate("firstName")}}</label>
-        <input type="text" class="form-control input-lg validation" required id="inputFirstName" placeholder='{{translate("firstName")}}' ng-model="info.firstName">
+        <input type="text" class="form-control input-lg  on-error on-success" required id="inputFirstName" placeholder='{{translate("firstName")}}' ng-model="info.firstName">
     </div>
 
     <div class="form-group">
         <label for="inputLastName" class="control-label">{{translate("lastName")}}</label>
-        <input type="text" class="form-control input-lg validation" required id="inputLastName" placeholder='{{translate("lastName")}}' ng-model="info.lastName">
+        <input type="text" class="form-control input-lg on-error on-success" required id="inputLastName" placeholder='{{translate("lastName")}}' ng-model="info.lastName">
     </div>
 
     <div class="form-group">
         <label class="control-label">Выберите язык</label><br/>
         <module-template data="languageData" name="inputs/select"></module-template>
     </div>
-
-    <module-template data="languageData" name="inputs/selectImage"></module-template>
 
     <div class="form-group">
         <label class="label-block">Ваш пол</label>

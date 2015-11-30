@@ -1,6 +1,9 @@
 html, body{
     height: 100%;
 }
+button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
+    outline: 0;
+}
 
 /*for loader bar*/
 #loading-bar-spinner{
@@ -678,9 +681,9 @@ html, body{
     -moz-transition: all 0.1s ease-in-out;
     transition: all 0.1s ease-in-out;
 }
-.table-border td, .table-border th {
+.table-border > tbody > tr >td, .table-border > tbody > tr >th {
     border-left: 1px solid #ccc;
-    border-top: 1px solid #ccc;
+    border-top: 0;
     padding: 10px;
     text-align: left;
 }
@@ -731,6 +734,7 @@ html, body{
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    padding: 0 1px;
 }
 
 /*select image*/

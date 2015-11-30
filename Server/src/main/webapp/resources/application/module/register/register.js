@@ -7,15 +7,19 @@ model.controller("registerCtrl", function ($scope, $http,applicationService,clas
         "count" : 3,
         "filter":"title",
         "class" : "input-group-lg",
-        "listName" : "lang"
+        "listName" : "lang",
+        "selectValue": null,
+        "callback" : function (value){
+            $scope.info.language = value.name;
+        }
     };
-    //applicationService.list($scope,"langs",className.language, function (item) {
-    //    var key = item.name.toLowerCase();
-    //    $scope.languageData.list.push({key: key,title:$scope.translate(key)});
-    //});
-    applicationService.action($scope, "lang", className.country, "getCountries", {language : 'Ru'}, function (item) {
-        item.title = $scope.translate(item.countryName);
+
+    applicationService.list($scope,"lang",className.language, function (item) {
+        item.title = $scope.translate(item.name.toLowerCase())
     });
+    //applicationService.action($scope, "lang", className.country, "getCountries", {language : 'Ru'}, function (item) {
+    //    item.title = $scope.translate(item.countryName);
+    //});
 
     $scope.password = "";
     $scope.signUp = function() {
