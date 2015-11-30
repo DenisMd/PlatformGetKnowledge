@@ -30,7 +30,7 @@ public class RegisterInfoService extends AbstractService {
     public RegisterResult completeRegistration(HashMap<String , Object> data) {
         String uuid = (String) data.get("uuid");
         RegisterInfo registerInfo = registerInfoRepository.getSingleEntityByFieldAndValue("uuid", uuid);
-        if (registerInfo == null) return null;
+        if (registerInfo == null) return RegisterResult.NotFound;
         User user = registerInfo.getUserInfo().getUser();
         if (!user.isEnabled()) {
             user.setEnabled(true);

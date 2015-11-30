@@ -1,1 +1,1 @@
-Accept page {{result}}
+{{translate(result)}}

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletContext;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
@@ -36,10 +37,13 @@ public class SettingsService extends AbstractService implements BootstrapService
 
             Settings settings = new Settings();
             settings.setDomain(domainName);
-            Manifest manifest = new Manifest(servletContext.getResourceAsStream("/META-INF/MANIFEST.MF"));
-            Attributes mainAttribs = manifest.getMainAttributes();
-            String version = mainAttribs.getValue("Implementation-Version");
-            settings.setVersion(version);
+            InputStream is = servletContext.getResourceAsStream("/META-INF/MANIFEST.MF");
+            if (is != null) {
+                Manifest manifest = new Manifest(is);
+                Attributes mainAttribs = manifest.getMainAttributes();
+                String version = mainAttribs.getValue("Implementation-Version");
+                settings.setVersion(version);
+            }
             settingsRepository.create(settings);
         }
     }
