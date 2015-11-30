@@ -185,7 +185,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
         registerInfoRepository.create(registerInfo);
 
         try {
-            String url = settingsRepository.getSettings().getDomain() + "#/"+language.getName().toLowerCase()+"/accept/" +  registerInfo.getUuid();
+            String url = settingsRepository.getSettings().getDomain() + "/#/"+language.getName().toLowerCase()+"/accept/" +  registerInfo.getUuid();
             emailService.sendTemplate(login,"markovdenis2013@gmail.com", "Регистрация на getKnowledge();",
                     "register",new String[] {url});
         } catch (Exception e) {
