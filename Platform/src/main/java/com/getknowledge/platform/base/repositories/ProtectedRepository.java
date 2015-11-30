@@ -8,6 +8,7 @@ import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.user.User;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.jws.soap.SOAPBinding;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +24,10 @@ public abstract class ProtectedRepository <T extends AbstractEntity> extends Pre
     @Override
     public T prepare(T entity) {
         if (entity == null) {return null;}
+        User owner = null;
+        if (entity instanceof IUser) {
+            owner = ((IUser)entity).getUser();
+        }
         entity = clone(entity);
         for (Field field : entity.getClass().getDeclaredFields()) {
             field.setAccessible(true);
@@ -30,12 +35,9 @@ public abstract class ProtectedRepository <T extends AbstractEntity> extends Pre
                 if (currentUser != null) {
 
                     if (access.myself()) {
-                        if (entity instanceof IUser) {
-                            User user = ((IUser)entity).getUser();
-                            if (user != null) {
-                                if (user.getLogin().equals(currentUser.getLogin())) {
-                                    break mainFor;
-                                }
+                        if (owner != null) {
+                            if (owner.getLogin().equals(currentUser.getLogin())) {
+                                break mainFor;
                             }
                         }
                     }

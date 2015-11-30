@@ -56,22 +56,23 @@ public class UserInfo  extends AbstractEntity implements IUser {
     private Post post;
 
     @Access(myself = true)
-    private Boolean isFirstLogin;
+    private Boolean firstLogin;
 
-    public Boolean getFirstLogin() {
-        return isFirstLogin;
-    }
 
     public void setFirstLogin(Boolean firstLogin) {
-        isFirstLogin = firstLogin;
-    }
-
-    public Boolean isMan() {
-        return man;
+        this.firstLogin = firstLogin;
     }
 
     public void setMan(Boolean man) {
         this.man = man;
+    }
+
+    public Boolean getFirstLogin() {
+        return firstLogin;
+    }
+
+    public Boolean getMan() {
+        return man;
     }
 
     public Language getLanguage() {
@@ -145,10 +146,6 @@ public class UserInfo  extends AbstractEntity implements IUser {
 
     public void setPost(Post post) {
         this.post = post;
-    }
-
-    public Boolean getMan() {
-        return isMan();
     }
 
     @Override

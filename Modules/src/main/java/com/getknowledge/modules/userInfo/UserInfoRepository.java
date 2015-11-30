@@ -31,6 +31,7 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
         userInfo.setProfileImage(entity.getProfileImage());
         userInfo.setSpecialty(entity.getSpecialty());
         userInfo.setUser(entity.getUser());
+        userInfo.setMan(entity.getMan());
         userInfo.setFirstLogin(entity.getFirstLogin());
         return userInfo;
     }
