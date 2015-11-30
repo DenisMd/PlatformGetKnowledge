@@ -2,6 +2,7 @@
   "text" : {
     "NotFound" : "Identifications not found!",
     "Complete" : "Registration completed! May sign in by your login.",
-    "AlreadyActivate" : "This identifications already activated!"
+    "AlreadyActivate" : "This identifications already activated!",
+    "loginPage" : "Login page"
   }
 }
