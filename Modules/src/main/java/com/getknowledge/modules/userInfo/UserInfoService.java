@@ -5,6 +5,7 @@ import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
 import com.getknowledge.modules.email.EmailService;
+import com.getknowledge.modules.settings.SettingsRepository;
 import com.getknowledge.modules.userInfo.registerInfo.RegisterInfo;
 import com.getknowledge.modules.userInfo.registerInfo.RegisterInfoRepository;
 import com.getknowledge.modules.userInfo.results.RegisterResult;
@@ -59,6 +60,9 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
     @Autowired
     private LanguageRepository languageRepository;
+
+    @Autowired
+    private SettingsRepository settingsRepository;
 
     @Override
     public void bootstrap(HashMap<String, Object> map) {
@@ -181,8 +185,9 @@ public class UserInfoService extends AbstractService implements BootstrapService
         registerInfoRepository.create(registerInfo);
 
         try {
+            String url = settingsRepository.getSettings().getDomain() + "/accept" +  registerInfo.getUuid();
             emailService.sendTemplate(login,"markovdenis2013@gmail.com", "Регистрация на getKnowledge();",
-                    "register",new String[] {registerInfo.getUuid()});
+                    "register",new String[] {url});
         } catch (Exception e) {
             trace.logException("Error send register email to " + login , e , TraceLevel.Error);
         }
