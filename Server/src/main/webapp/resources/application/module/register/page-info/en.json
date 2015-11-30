@@ -12,6 +12,7 @@
     "UserAlreadyCreated" : "User with email already created",
     "PasswordLessThan6" : "Password less then 6 characters",
     "Complete" : "For continue registration check email. If mail not received, support about it in help desk.",
-    "LanguageNotSupported" : "Selected language not supported."
+    "LanguageNotSupported" : "Selected language not supported.",
+    "EmailNotSend" : "Email not scented. Try again. If not sending again support to help desk."
   }
 }
