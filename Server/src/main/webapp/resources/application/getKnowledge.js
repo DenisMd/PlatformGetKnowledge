@@ -189,6 +189,7 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     $scope.count = $scope.getData().count;
     $scope.class = $scope.getData().class;
     $scope.callback = angular.isFunction($scope.getData().callback)? $scope.getData().callback : null;
+    $scope.required = $scope.getData().required;
     $scope.list = [];
     var selector = '#' + $scope.id;
 
