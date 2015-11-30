@@ -176,21 +176,24 @@ public class UserInfoService extends AbstractService implements BootstrapService
             trace.logException("Error load file: " + e.getMessage(), e, TraceLevel.Warning);
         }
 
+        String uuid = UUID.randomUUID().toString();
+
+        try {
+            String url = settingsRepository.getSettings().getDomain() + "/#/"+language.getName().toLowerCase()+"/accept/" + uuid;
+            emailService.sendTemplate(login,"markovdenis2013@gmail.com", "Регистрация на getKnowledge();",
+                    "register",new String[] {url});
+        } catch (Exception e) {
+            trace.logException("Error send register email to " + login , e , TraceLevel.Error);
+            return RegisterResult.EmailNotSend;
+        }
+
         userInfoRepository.create(userInfo);
 
         RegisterInfo registerInfo = new RegisterInfo();
         registerInfo.setUserInfo(userInfo);
         registerInfo.setCalendar(Calendar.getInstance());
-        registerInfo.setUuid(UUID.randomUUID().toString());
+        registerInfo.setUuid(uuid);
         registerInfoRepository.create(registerInfo);
-
-        try {
-            String url = settingsRepository.getSettings().getDomain() + "/#/"+language.getName().toLowerCase()+"/accept/" +  registerInfo.getUuid();
-            emailService.sendTemplate(login,"markovdenis2013@gmail.com", "Регистрация на getKnowledge();",
-                    "register",new String[] {url});
-        } catch (Exception e) {
-            trace.logException("Error send register email to " + login , e , TraceLevel.Error);
-        }
 
         RegisterResult registerResult = RegisterResult.Complete;
         registerResult.setUserInfoId(userInfo.getId());
@@ -208,7 +211,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
             task.setStartDate(calendar);
             taskRepository.create(task);
         } catch (JsonProcessingException e) {
-            trace.logException("Can't parse register info to josn" , e , TraceLevel.Warning);
+            trace.logException("Can't parse register info to json" , e , TraceLevel.Warning);
         }
 
 
