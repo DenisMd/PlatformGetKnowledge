@@ -11,6 +11,6 @@ public class SettingsRepository extends BaseRepository<Settings> {
     }
 
     public Settings getSettings(){
-        return read(0l);
+        return listPartial(0,1).get(0);
     }
 }
