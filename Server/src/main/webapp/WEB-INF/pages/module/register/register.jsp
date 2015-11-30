@@ -2,10 +2,7 @@
 <link rel="stylesheet" href="/resources/css/login.css">
 
 <form class="center-form" name="registerForm">
-    <div ng-class="error?'':'err-hidden'" class="alert alert-danger text-center" role="alert">
-        {{translate(registerInfo)}}
-    </div>
-    <div ng-show="registerInfo == 'Complete'" class="alert  alert-info text-center" role="alert">
+    <div ng-class="getClass()" class="alert text-center" role="alert">
         {{translate(registerInfo)}}
     </div>
     <div class="form-group form-title">

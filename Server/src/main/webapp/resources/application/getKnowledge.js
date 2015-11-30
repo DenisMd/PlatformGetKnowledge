@@ -312,9 +312,8 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     };
 
     $scope.saveModalModel = function(){
-        $scope.selectValue = $scope.selectModalValue;
-        $scope.model = getValue($scope.selectModalValue);
         $('#' + $scope.id).modal('hide');
+        $scope.setModel($scope.selectModalValue);
         $scope.resetActiveElementInModal();
     };
 

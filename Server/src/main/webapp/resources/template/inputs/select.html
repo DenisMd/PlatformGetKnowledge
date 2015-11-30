@@ -11,7 +11,7 @@
         </div><!-- /input-group -->
         <div class="select-options-container" ng-show="choose">
             <ul class="select-options">
-                <li class="select-option" ng-repeat="item in getFilteredData()" ng-mouseenter="onEvent($event)" ng-mouseleave="onEvent($event)" ng-click="setModel(getItem(item))">{{getItem(item)}}</li>
+                <li class="select-option" ng-repeat="item in getFilteredData()" ng-mouseenter="onEvent($event)" ng-mouseleave="onEvent($event)" ng-click="setModel(item)">{{getItem(item)}}</li>
             </ul>
         </div>
     </div>

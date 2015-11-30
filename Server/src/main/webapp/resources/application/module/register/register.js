@@ -25,12 +25,23 @@ model.controller("registerCtrl", function ($scope, $http,applicationService,clas
     $scope.password = "";
     $scope.signUp = function() {
         if ($scope.registerForm.$invalid) return;
-        $scope.info.language = 'En';
         applicationService.action($scope,"registerInfo" , className.userInfo , "register", $scope.info, function(registerInfo) {
             $scope.error = false;
             if (registerInfo != 'Complete') {
                 $scope.error = true;
             }
         });
-    }
+    };
+
+    $scope.getClass = function(){
+        var cssClass = "";
+        if ($scope.error){
+            cssClass = "alert-danger";
+        } else if ($scope.registerInfo == 'Complete'){
+            cssClass = "alert-info";
+        } else {
+            cssClass = "div-hidden";
+        }
+        return cssClass;
+    };
 });
