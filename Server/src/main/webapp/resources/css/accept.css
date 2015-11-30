@@ -1,0 +1,13 @@
+.info {
+    font-size: 35px;
+    margin: auto;
+    width: 60%;
+}
+
+.accepted {
+    color : green;
+}
+
+.not-accepted {
+    color : red;
+}
