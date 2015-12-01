@@ -208,9 +208,7 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     };
 
     $scope.getList = function(){
-        if (!$scope.list.length){
-            $scope.list = $scope[$scope.getData().listName]? $scope[$scope.getData().listName]:[];
-        }
+        $scope.list = $scope[$scope.getData().listName]? $scope[$scope.getData().listName]:[];
         return $scope.list;
     };
 
@@ -230,7 +228,7 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
             if (filteredData) {
                 $scope.selectForm['main-select'].$setValidity("selectValue", true);
                 if (filteredData.length === 1) {
-                    if ($scope.model.toString() === $scope.getItem(filteredData[0]).toString()) {
+                    if ($scope.choose && $scope.model.toString() === $scope.getItem(filteredData[0]).toString()) {
                         $scope.setModel(filteredData[0]);
                     }
                 } else {
@@ -279,7 +277,6 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     };
 
     $scope.setModel = function (value) {
-
         $scope.model = getValue(value);
         $scope.selectValue = value;
         $scope.choose = false;
@@ -319,7 +316,10 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
 
     $scope.hideSelect = function(){
         $scope.$apply(function () {
-            $scope.choose = false;
+            if ($scope.choose) {
+                $scope.getFilteredData();
+                $scope.choose = false;
+            }
         });
     };
 
@@ -333,8 +333,9 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     };
 
     function getHeight(){
+        var height = $scope.getData().maxHeight? $scope.getData().maxHeight: 400;
         var temp = 40 * $scope.getList().length;
-        return !temp || temp > 400? 400 : temp;
+        return !temp || temp > height? height : temp;
     }
 
     function getValue(value){

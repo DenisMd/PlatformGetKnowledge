@@ -8,7 +8,6 @@ model.controller("registerCtrl", function ($scope, $http,applicationService,clas
         "filter":"title",
         "class" : "input-group-lg",
         "listName" : "lang",
-        "selectValue": null,
         "required" : true,
         "callback" : function (value){
             $scope.info.language = value.name;
@@ -18,9 +17,6 @@ model.controller("registerCtrl", function ($scope, $http,applicationService,clas
     applicationService.list($scope,"lang",className.language, function (item) {
         item.title = $scope.translate(item.name.toLowerCase())
     });
-    //applicationService.action($scope, "lang", className.country, "getCountries", {language : 'Ru'}, function (item) {
-    //    item.title = $scope.translate(item.countryName);
-    //});
 
     $scope.password = "";
     $scope.signUp = function() {

@@ -1,4 +1,8 @@
 ;
+String.prototype.capitalizeFirstLetter = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+};
+
 angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angular-loading-bar','ngAnimate'])
     .factory('className', function() {
         return {
@@ -7,7 +11,9 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "video" : "com.getknowledge.modules.video.Video",
             "language" : "com.getknowledge.modules.dictionaries.language.Language",
             "registerInfo" : "com.getknowledge.modules.userInfo.registerInfo.RegisterInfo",
-            "country" : "com.getknowledge.modules.dictionaries.country.Country"
+            "country" : "com.getknowledge.modules.dictionaries.country.Country",
+            "region" : "com.getknowledge.modules.dictionaries.region.Region",
+            "city" : "com.getknowledge.modules.dictionaries.city.City"
         };
     })
     .factory('modules',function(){
