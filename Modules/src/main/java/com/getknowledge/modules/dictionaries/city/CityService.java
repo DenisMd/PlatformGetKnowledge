@@ -19,7 +19,7 @@ public class CityService extends AbstractService {
         Long regionId = new Long((Integer)data.get("regionId"));
         List<City> list = entityManager.createQuery("select city from City city where city.region.id=:id and city.language.name=:name")
                 .setParameter("id" , regionId)
-                .setParameter("name" , data.get("name")).getResultList();
+                .setParameter("name" , data.get("language")).getResultList();
         return list;
     }
 }
