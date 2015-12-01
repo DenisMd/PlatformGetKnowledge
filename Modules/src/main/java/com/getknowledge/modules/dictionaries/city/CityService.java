@@ -16,8 +16,9 @@ public class CityService extends AbstractService {
 
     @Action(name = "getCitiesByRegion" , mandatoryFields = {"regionId","language"})
     public List<City> getCities(HashMap<String,Object> data) {
-        List<City> list = entityManager.createQuery("select c from City c where c.region.id = :id and c.language.name = :name")
-                .setParameter("id" , new Long((Integer)data.get("regionId")))
+        Long regionId = new Long((Integer)data.get("regionId"));
+        List<City> list = entityManager.createQuery("select city from City city where city.region.id=:id and city.language.name=:name")
+                .setParameter("id" , regionId)
                 .setParameter("name" , data.get("name")).getResultList();
         return list;
     }
