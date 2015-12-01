@@ -219,7 +219,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
         return registerResult;
     }
 
-    @ActionWithFile(name = "extraInfo" , mandatoryFields = {"image" , "specialty" , "birth_day"})
+    @ActionWithFile(name = "updateExtraInfo")
     public RegisterResult registerExtraInfo (HashMap<String,Object> data,MultipartFile file) {
 
         for (Map.Entry<String , Object> entry : data.entrySet()) {
