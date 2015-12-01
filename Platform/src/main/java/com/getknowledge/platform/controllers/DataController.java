@@ -335,7 +335,7 @@ public class DataController {
             if (jsonObject == null || className == null) return null;
             Class classEntity = Class.forName(className);
             AbstractEntity abstractEntity = (AbstractEntity) objectMapper.readValue(jsonObject, classEntity);
-            if (isAccessEdit(principal, abstractEntity) ) {
+            if (!isAccessEdit(principal, abstractEntity) ) {
                 throw new NotAuthorized("access denied for update entity" , trace, TraceLevel.Warning);
             }
             moduleLocator.findRepository(classEntity).update(abstractEntity);
