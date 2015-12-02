@@ -177,6 +177,8 @@ model.controller("videoCtrl",function($scope){
     });
 });
 
+
+//select value
 model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     $scope.choose = false;
     $scope.model;
@@ -208,7 +210,7 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     };
 
     $scope.getList = function(){
-        $scope.list = $scope[$scope.getData().listName]? $scope[$scope.getData().listName]:[];
+        $scope.list = $scope[$scope.getData().listName] ? $scope[$scope.getData().listName] : [];
         return $scope.list;
     };
 
@@ -271,7 +273,7 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     };
 
     $scope.resetModel = function () {
-        $scope.model = null;
+        $scope.model = "";
         $scope.selectValue = null;
         $scope.choose = false;
     };
@@ -323,6 +325,19 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
         });
     };
 
+    $scope.isDisabled = function(){
+        var val = $scope.getData().disable;
+
+        if (!val) return false;
+
+        if (angular.isFunction(val)){
+            return val();
+        } else{
+            return val;
+        }
+    }
+
+    //scroll для таблицы
     $scope.selectScrollConfig = {
         theme: 'dark-3',
         advanced: {
@@ -332,12 +347,19 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
         setHeight : getHeight()
     };
 
+    //ожидание сброса значения
+    $scope.$on('reset'+$scope.id.capitalizeFirstLetter()+'Event', function(event, args) {
+        $scope.resetModel();
+    });
+
+    //подсчет высоты основного содержания модалки
     function getHeight(){
         var height = $scope.getData().maxHeight? $scope.getData().maxHeight: 400;
         var temp = 40 * $scope.getList().length;
         return !temp || temp > height? height : temp;
     }
 
+    //текст отображающийся в input
     function getValue(value){
         if (angular.isString(value) || value.$$unwrapTrustedValue) {
             return value;
@@ -345,23 +367,7 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
             return value[$scope.filter];
         }
     }
-});
 
-model.controller("selectImgCtrl", function($scope){
-    $scope.originalImg='';
-    $scope.croppedImg='';
-    var handleFileSelect=function(evt) {
-        var file=evt.currentTarget.files[0];
-        var reader = new FileReader();
-        reader.onload = function (evt) {
-            $scope.$apply(function($scope){
-                $scope.originalImg=evt.target.result;
-                $('#myModal').modal('show');
-            });
-        };
-        reader.readAsDataURL(file);
-    };
-    angular.element('#fileInput').on('change',handleFileSelect);
 });
 
 model.directive("hideOptions",function($document){
@@ -388,3 +394,24 @@ model.directive("hideOptions",function($document){
         }
     };
 });
+
+
+//crop image
+model.controller("selectImgCtrl", function($scope){
+    $scope.originalImg='';
+    $scope.croppedImg='';
+    var handleFileSelect=function(evt) {
+        var file=evt.currentTarget.files[0];
+        var reader = new FileReader();
+        reader.onload = function (evt) {
+            $scope.$apply(function($scope){
+                $scope.originalImg=evt.target.result;
+                $('#myModal').modal('show');
+            });
+        };
+        reader.readAsDataURL(file);
+    };
+    angular.element('#fileInput').on('change',handleFileSelect);
+});
+
+

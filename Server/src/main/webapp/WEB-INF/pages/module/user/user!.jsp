@@ -17,6 +17,10 @@ User page
                         <label class="control-label">{{translate("region")}}</label>
                         <module-template data="regionData" name="inputs/select"></module-template>
                     </div>
+                    <div class="form-group">
+                        <label class="control-label">{{translate("city")}}</label>
+                        <module-template data="cityData" name="inputs/select"></module-template>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer modal-find">
