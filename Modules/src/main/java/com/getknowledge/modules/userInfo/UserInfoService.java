@@ -181,7 +181,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
         try {
             String url = settingsRepository.getSettings().getDomain() + "/#/"+language.getName().toLowerCase()+"/accept/" + uuid;
             emailService.sendTemplate(login,"markovdenis2013@gmail.com", "Регистрация на getKnowledge();",
-                    "register",new String[] {url});
+                    "register",new String[] {settingsRepository.getSettings().getDomain(),url});
         } catch (Exception e) {
             trace.logException("Error send register email to " + login , e , TraceLevel.Error);
             return RegisterResult.EmailNotSend;
