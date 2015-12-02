@@ -1,5 +1,10 @@
 {
   "text" : {
-
+    "country_select" : "Choose country",
+    "region_select" : "Choose region",
+    "city_select" : "Choose city",
+    "specialty_select" : "Choose specialization",
+    "birthday_select" : "Enter your birthday",
+    "avatar_load" :  "Upload your avatar"
   }
 }

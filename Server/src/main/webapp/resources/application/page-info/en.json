@@ -37,6 +37,7 @@
     "403_response" : "Access for page denied!",
     "uploadAvatar" : "Upload your avatar",
     "save" : "Save",
-    "close" : "Close"
+    "close" : "Close",
+    "skip" : "Skip"
   }
 }
