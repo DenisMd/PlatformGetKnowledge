@@ -9,6 +9,7 @@
             </div>
 
         </div><!-- /input-group -->
+        <input type="text" style="display:none;width:0;height:0"/>
         <div class="select-options-container" ng-show="choose">
             <ul class="select-options">
                 <li class="select-option" ng-repeat="item in getFilteredData()" ng-mouseenter="onEvent($event)" ng-mouseleave="onEvent($event)" ng-click="setModel(item)">{{getItem(item)}}</li>

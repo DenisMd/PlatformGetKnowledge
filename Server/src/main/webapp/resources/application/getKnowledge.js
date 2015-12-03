@@ -181,7 +181,7 @@ model.controller("videoCtrl",function($scope){
 //select value
 model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     $scope.choose = false;
-    $scope.model;
+    $scope.model = "";
     $scope.modalModel;
     $scope.selectModalValue;
     $scope.selectValue;
@@ -202,6 +202,7 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
         $scope.selectModalValue = null;
     } ;
     $scope.getItem = function (item) {
+        if (!item) return "";
         if (item.$$unwrapTrustedValue) {
             return item;
         } else {
@@ -239,9 +240,10 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
                     }
                 }
             }
-            if (!$scope.choose && filteredData.length !== list.length){
+            if (!$scope.choose && $scope.model && !($scope.model.toString() === $scope.getItem(filteredData[0]).toString())){
                 $scope.selectForm['main-select'].$setValidity("selectValue", false);
             }
+            $scope.setValid();
         } else {
             if (filteredData.length === 0){
                 $scope.selectForm['search-input'].$setValidity("searchValue", false);
@@ -316,6 +318,7 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
         $scope.resetActiveElementInModal();
     };
 
+    //закрытие подсказки, если щелчок происходдит за пределами элемнта
     $scope.hideSelect = function(){
         $scope.$apply(function () {
             if ($scope.choose) {
@@ -325,6 +328,7 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
         });
     };
 
+    //есть ли запрет на редактирование
     $scope.isDisabled = function(){
         var val = $scope.getData().disable;
 
@@ -335,7 +339,16 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
         } else{
             return val;
         }
-    }
+    };
+
+    $scope.setValid = function(){
+        var val = $scope.getData().isValid;
+
+        if (!val) return false;
+        if (angular.isFunction(val)) {
+            val($scope.selectForm['main-select'].$valid);
+        }
+    };
 
     //scroll для таблицы
     $scope.selectScrollConfig = {
@@ -414,4 +427,27 @@ model.controller("selectImgCtrl", function($scope){
     angular.element('#fileInput').on('change',handleFileSelect);
 });
 
+//datapicker
+model.controller("datapickerCtrl", function($scope){
+    $scope.format = $scope.getData().format? $scope.getData().format : 'dd.MM.yyyy';
+    $scope.minDate = $scope.getData().minDate ? $scope.getData().minDate : null;
+    $scope.maxDate = $scope.getData().maxDate ? $scope.getData().maxDate : null;
+
+    $scope.status = {
+        opened: false
+    };
+    $scope.date;
+
+    $scope.open = function($event) {
+        $scope.status.opened = true;
+    };
+
+    $scope.setDate = function(year, month, day) {
+        $scope.dt = new Date(year, month, day);
+    };
+
+    $scope.clear = function () {
+        $scope.dt = null;
+    };
+});
 

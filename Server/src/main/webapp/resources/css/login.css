@@ -1,14 +1,3 @@
-/*validation*/
-.on-error.ng-invalid.ng-dirty {
-    border-color: red;
-    outline-color: red;
-}
-
-.on-success.ng-valid.ng-dirty {
-    border-color: green;
-    outline-color: green;
-}
-
 
 /*forms*/
 .center-form {

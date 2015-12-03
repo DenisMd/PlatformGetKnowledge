@@ -1,13 +1,15 @@
 model.controller("userCtrl", function ($scope, $state,$http,applicationService,pageService,className) {
     var userId = pageService.getPathVariable("user",$state.params.path);
     if (userId) {
-        applicationService.read($scope, "user_info" , className.userInfo, userId, function(){
-            applicationService.action($scope, "countriesList", className.country, "getCountries", {language : $scope.application.language.capitalizeFirstLetter()});
-            $("#userModal").modal({
-                backdrop: 'static',
-                keyboard: false
-            });
-            $("#userModal").modal('show');
+        applicationService.read($scope, "user_info" , className.userInfo, userId, function(item){
+            if (item.firstLogin) {
+                applicationService.action($scope, "countriesList", className.country, "getCountries", {language: $scope.application.language.capitalizeFirstLetter()});
+                $("#userModal").modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                $("#userModal").modal('show');
+            }
         });
     }
     $scope.closeModal = function(){
@@ -16,8 +18,11 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
 
 
     //даннкые для select
+    var isCountryValid = false;
+    var isRegionValid = false;
     var isRegionDisable = true;
     var isCityDisable = true;
+
 
     $scope.countryData = {
         "id" : "country",
@@ -26,6 +31,9 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         "listName" : "countriesList",
         "required" : true,
         "maxHeight" : 300,
+        "isValid" : function(value){
+            isCountryValid = value;
+        },
         "callback" : function (value){
             $scope.country = value;
             $scope.$broadcast('reset' + $scope.cityData.id.capitalizeFirstLetter() + 'Event');
@@ -44,7 +52,10 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         "required" : true,//
         "maxHeight" : 300,//
         "disable" : function(){
-            return !$scope.country || isRegionDisable;
+            return !isCountryValid || isRegionDisable;
+        },
+        "isValid" : function(value){
+            isRegionValid = value;
         },
         "callback" : function (value){
             $scope.region = value;
@@ -62,7 +73,7 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         "required" : true,
         "maxHeight" : 300,
         "disable" : function(){
-            return !$scope.country || !$scope.region || isCityDisable;
+            return !isCountryValid || !isRegionValid || isCityDisable;
         },
         "callback" : function (value){
             $scope.city = value;

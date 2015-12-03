@@ -20,6 +20,10 @@ User page
                         <label class="control-label">{{translate("city_select")}}</label>
                         <module-template data="cityData" name="inputs/select"></module-template>
                     </div>
+                    <div class="form-group">
+                        <label class="control-label">{{translate("birthday")}}</label>
+                        <module-template data="cityData" name="inputs/datepicker"></module-template>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer modal-find">
