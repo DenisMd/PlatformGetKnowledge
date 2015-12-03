@@ -67,6 +67,8 @@
     <jpa:repositories base-package="com.getknowledge.modules , com.getknowledge.platform.modules" />
     <import resource="security-config.xml"/>
 
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerExceptionResolver" />
+
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="${email.host}" />
         <property name="port" value="${email.port}" />
