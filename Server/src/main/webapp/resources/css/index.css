@@ -795,3 +795,14 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     height: 300px;
 }
 
+/*validation*/
+.on-error.ng-invalid.ng-dirty {
+    border-color: red;
+    outline-color: red;
+}
+
+.on-success.ng-valid.ng-dirty {
+    border-color: green;
+    outline-color: green;
+}
+
