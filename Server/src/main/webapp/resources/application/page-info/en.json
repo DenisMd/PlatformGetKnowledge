@@ -38,6 +38,8 @@
     "uploadAvatar" : "Upload your avatar",
     "save" : "Save",
     "close" : "Close",
-    "skip" : "Skip"
+    "skip" : "Skip",
+    "categories" : "Categories",
+    "ourCourses" : "Our courses"
   }
 }

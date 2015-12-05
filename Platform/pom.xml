@@ -84,6 +84,13 @@
             <version>1.5.4</version>
         </dependency>
 
+        <!--Web-->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+
         <!-- Mail-->
         <dependency>
             <groupId>com.sun.mail</groupId>
