@@ -58,6 +58,16 @@ public class UserInfo  extends AbstractEntity implements IUser {
     @Access(myself = true)
     private Boolean firstLogin;
 
+    @Column
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public void setFirstLogin(Boolean firstLogin) {
         this.firstLogin = firstLogin;

@@ -2,6 +2,7 @@ package com.getknowledge.platform.controllers;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -365,6 +366,32 @@ public class DataController {
         }
     }
 
+    private HashMap<String, Object> getDataForAction(String name, String actionName , String [] mandatoryFields, String jsonData, Principal principal) throws MandatoryFieldNotContainException, IOException, InvocationTargetException, IllegalAccessException {
+        if (name.equals(actionName)) {
+            TypeReference<HashMap<String, Object>> typeRef
+                    = new TypeReference<HashMap<String, Object>>() {
+            };
+
+            HashMap<String, Object> data = objectMapper.readValue(jsonData, typeRef);
+
+            if (!mandatoryFields[0].isEmpty()) {
+                for (String mandatoryField : mandatoryFields) {
+                    if (!data.containsKey(mandatoryField)) {
+                        throw new MandatoryFieldNotContainException("mandatory field not contain " + mandatoryField);
+                    }
+                }
+            }
+
+            if(principal != null) {
+                data.put("principalName", principal.getName());
+            } else {
+                data.put("principalName" , null);
+            }
+            return data;
+        }
+        return null;
+    }
+
     @RequestMapping(value = "/action", method = RequestMethod.POST)
     public @ResponseBody
     String action(@RequestParam("className") String className, @RequestParam("actionName") String actionName, @RequestParam("data") String jsonData
@@ -378,31 +405,9 @@ public class DataController {
                 if(action == null) {
                     continue;
                 }
-
-                if (action.name().equals(actionName)) {
-                    TypeReference<HashMap<String, Object>> typeRef
-                            = new TypeReference<HashMap<String, Object>>() {
-                    };
-
-                    HashMap<String, Object> data = objectMapper.readValue(jsonData, typeRef);
-
-                    if (!action.mandatoryFields()[0].isEmpty()) {
-                        for (String mandatoryField : action.mandatoryFields()) {
-                            if (!data.containsKey(mandatoryField)) {
-                                throw new MandatoryFieldNotContainException("mandatory field not contain " + mandatoryField);
-                            }
-                        }
-                    }
-
-                    if(principal != null) {
-                        data.put("principalName", principal.getName());
-                    } else {
-                        data.put("principalName" , null);
-                    }
+                HashMap<String,Object> data = getDataForAction(actionName, action.name() , action.mandatoryFields(), jsonData,principal);
+                if (data != null) {
                     Object result = method.invoke(abstractService, data);
-                    if (result instanceof AbstractEntity) {
-                        prepare((AbstractEntity)result,moduleLocator.findRepository(classEntity),principal,new ArrayList<>());
-                    }
                     return objectMapper.writeValueAsString(result);
                 }
             }
@@ -435,26 +440,9 @@ public class DataController {
                     continue;
                 }
 
-                if (action.name().equals(actionName)) {
-                    TypeReference<HashMap<String, Object>> typeRef
-                            = new TypeReference<HashMap<String, Object>>() {
-                    };
+                HashMap<String,Object> data = getDataForAction(actionName, action.name(), action.mandatoryFields(), jsonData, principal);
 
-                    HashMap<String, Object> data = objectMapper.readValue(jsonData, typeRef);
-
-                    if (!action.mandatoryFields()[0].isEmpty()) {
-                        for (String mandatoryField : action.mandatoryFields()) {
-                            if (!data.containsKey(mandatoryField)) {
-                                throw new MandatoryFieldNotContainException("mandatory field not contain " + mandatoryField);
-                            }
-                        }
-                    }
-
-                    if(principal != null) {
-                        data.put("principalName", principal.getName());
-                    } else {
-                        data.put("principalName" , null);
-                    }
+                if (data != null) {
                     Object result = method.invoke(abstractService, data, file);
                     return objectMapper.writeValueAsString(result);
                 }
