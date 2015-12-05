@@ -806,3 +806,8 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     outline-color: green;
 }
 
+/*datepicker*/
+.datepicker table{
+    margin: 0 auto;
+    outline: 0;
+}

@@ -29,7 +29,7 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         "count" : 3,
         "filter":"countryName",
         "listName" : "countriesList",
-        "required" : true,
+        //"required" : true,
         "maxHeight" : 300,
         "isValid" : function(value){
             isCountryValid = value;
@@ -49,7 +49,7 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         "count" : 3,//
         "filter":"regionName",
         "listName" : "regionsList",
-        "required" : true,//
+        //"required" : true,//
         "maxHeight" : 300,//
         "disable" : function(){
             return !isCountryValid || isRegionDisable;
@@ -70,7 +70,7 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         "count" : 3,
         "filter":"cityName",
         "listName" : "citiesList",
-        "required" : true,
+        //"required" : true,
         "maxHeight" : 300,
         "disable" : function(){
             return !isCountryValid || !isRegionValid || isCityDisable;

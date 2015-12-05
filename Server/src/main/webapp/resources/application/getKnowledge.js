@@ -428,26 +428,37 @@ model.controller("selectImgCtrl", function($scope){
 });
 
 //datapicker
-model.controller("datapickerCtrl", function($scope){
-    $scope.format = $scope.getData().format? $scope.getData().format : 'dd.MM.yyyy';
-    $scope.minDate = $scope.getData().minDate ? $scope.getData().minDate : null;
-    $scope.maxDate = $scope.getData().maxDate ? $scope.getData().maxDate : null;
+model.controller("datepickerCtrl", function($scope){
+    init();
+    $scope.popupOptions = {
+        "format" : "dd.MM.yyyy",
+        "current" : $scope.translate("datapiker-today"),
+        "clear" : $scope.translate("datapiker-clear"),
+        "close" : $scope.translate("datapiker-close")
+    };
+
+    $scope.required = $scope.getData().required;
 
     $scope.status = {
         opened: false
     };
-    $scope.date;
+    $scope.date = null;
 
     $scope.open = function($event) {
         $scope.status.opened = true;
     };
 
-    $scope.setDate = function(year, month, day) {
-        $scope.dt = new Date(year, month, day);
-    };
+    function init(){
+        var options = $scope.getData().options;
+        if (options){
+            $scope.dataOptions = options;
+            $scope.dataOptions["show-weeks"] = $scope.dataOptions["show-weeks"]? true:false;
+        } else {
+            $scope.dataOptions = {
+                "show-weeks": false
+            };
+        }
 
-    $scope.clear = function () {
-        $scope.dt = null;
-    };
+    }
 });
 
