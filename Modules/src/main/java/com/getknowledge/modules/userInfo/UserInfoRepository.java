@@ -33,6 +33,7 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
         userInfo.setUser(entity.getUser());
         userInfo.setMan(entity.getMan());
         userInfo.setFirstLogin(entity.getFirstLogin());
+        userInfo.setStatus(entity.getStatus());
         return userInfo;
     }
 

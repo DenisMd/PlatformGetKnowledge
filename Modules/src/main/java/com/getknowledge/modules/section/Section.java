@@ -1,19 +1,22 @@
 package com.getknowledge.modules.section;
 
+import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.menu.item.MenuItem;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
+import org.hibernate.search.annotations.Field;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "section")
+@Table(name = "section" , indexes =
+        {@Index(name="index_by_name" , columnList = "name,language",unique = true)})
 @ModuleInfo(repositoryName = "SectionRepository" , serviceName = "SectionService")
 public class Section extends AbstractEntity {
 
     @Column
-    private String title;
+    private String name;
 
     @Column
     private String description;
@@ -25,6 +28,18 @@ public class Section extends AbstractEntity {
     @Basic(fetch=FetchType.LAZY)
     @Lob @Column(name="cover")
     private byte[] cover;
+
+    @ManyToOne
+    @JoinColumn(name = "language" , nullable = false)
+    private Language language;
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
+    }
 
     public byte[] getCover() {
         return cover;
@@ -50,16 +65,18 @@ public class Section extends AbstractEntity {
         this.menuItem = menuItem;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public AuthorizationList getAuthorizationList() {
-        return null;
+        AuthorizationList authorizationList = new AuthorizationList();
+        authorizationList.allowReadEveryOne = true;
+        return authorizationList;
     }
 }

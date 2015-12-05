@@ -13,11 +13,12 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "registerInfo" : "com.getknowledge.modules.userInfo.registerInfo.RegisterInfo",
             "country" : "com.getknowledge.modules.dictionaries.country.Country",
             "region" : "com.getknowledge.modules.dictionaries.region.Region",
-            "city" : "com.getknowledge.modules.dictionaries.city.City"
+            "city" : "com.getknowledge.modules.dictionaries.city.City",
+            "section" : "com.getknowledge.modules.section.Section"
         };
     })
     .factory('modules',function(){
-        return ["user" , "accept"];
+        return ["user" , "accept" , "section"];
     })
     .constant("resourceUrl", "/resources/application/")
     .constant("resourceTemplate","/resources/template/")
