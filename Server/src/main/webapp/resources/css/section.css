@@ -1,0 +1,21 @@
+.cover-img {
+    width: 600px;
+    height: 370px;
+    float: left;
+    border-radius:15px;
+    -moz-border-radius:15px;
+    -webkit-border-radius:15px;
+    border: 2px solid red;
+    margin: 0 20px;
+}
+
+.description {
+    border : 2px solid #ccc;
+    padding: 10px;
+    height: 370px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 16px;
+}

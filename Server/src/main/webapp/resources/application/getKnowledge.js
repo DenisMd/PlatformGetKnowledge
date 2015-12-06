@@ -138,6 +138,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
 
     applicationService.action($scope, "menu", className.menu, "getMenu", {}, function(menu){
         $scope.cardsData = {
+            title : "ourCourses",
             cardsInRow : 3,
             cards : menu.items
         };

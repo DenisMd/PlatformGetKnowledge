@@ -1,5 +1,5 @@
 <div class="site-info-card">
-    <h2 class="text-center">Our courses</h2>
+    <h2 class="text-center">{{translate(getData().title)}}</h2>
     <div class="row  thumbnail-card" ng-repeat="index in range(getData().cards.length / getData().cardsInRow) track by $index">
         <div class="col-lg-{{12 / getData().cardsInRow}} col-info" ng-repeat="card in getRow($index, getData().cardsInRow, getData().cards)">
             <div class="thumbnail thumbnail-height-300">
