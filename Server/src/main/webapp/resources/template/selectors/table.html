@@ -1,0 +1,17 @@
+<table class="table table-hover">
+    <caption>{{translate(getData().title)}}</caption>
+    <thead>
+    <tr>
+        <th ng-repeat="column in getData().columns">
+            {{translate(column)}}
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="index in range(getData().content.length) track by $index">
+            <td ng-repeat="column in getData().columns">
+                {{getData().content[$parent.$index][column]}}
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -18,7 +18,7 @@ public class Section extends AbstractEntity {
     @Column
     private String name;
 
-    @Column
+    @Column(columnDefinition = "Text" , name = "description")
     private String description;
 
     @OneToOne

@@ -41,6 +41,8 @@
     "close" : "Close",
     "skip" : "Skip",
     "categories" : "Categories",
-    "ourCourses" : "Our courses"
+    "ourCourses" : "Our courses",
+    "name" : "Name",
+    "id" : "Id"
   }
 }

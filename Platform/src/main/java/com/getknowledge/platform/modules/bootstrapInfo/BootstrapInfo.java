@@ -26,6 +26,17 @@ public class BootstrapInfo extends AbstractEntity {
     @Column(name = "error_message" , length = 2000)
     private String errorMessage;
 
+    @Column(columnDefinition = "Text" , name = "stack_trace")
+    private String stackTrace;
+
+    public String getStackTrace() {
+        return stackTrace;
+    }
+
+    public void setStackTrace(String stackTrace) {
+        this.stackTrace = stackTrace;
+    }
+
     private boolean repeat = false;
 
     public boolean isRepeat() {
