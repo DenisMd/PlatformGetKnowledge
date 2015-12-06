@@ -2,6 +2,7 @@
   "text" : {
     "bootstrap_title"  : "Initialize services of systems",
     "bootstrapState" : "Bootstrap state",
-    "repeat" : "Repeatable"
+    "repeat" : "Repeatable",
+    "order" : "Order"
   }
 }
