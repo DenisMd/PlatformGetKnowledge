@@ -426,7 +426,7 @@ public class DataController {
         }
     }
 
-    @RequestMapping(value = "/actionWithFile", method = RequestMethod.POST)
+    @RequestMapping(value = "/actionWithFile", method = RequestMethod.POST, headers=("content-type=multipart/*"))
     public @ResponseBody String actionWithFile(@RequestParam("className") String className, @RequestParam("actionName") String actionName,
                                                @RequestParam("data") String jsonData, @RequestParam("file") MultipartFile file,
                                                Principal principal) throws PlatformException {

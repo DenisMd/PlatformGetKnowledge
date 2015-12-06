@@ -206,6 +206,51 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             });
         };
 
+        this.actionWithFile = function ($scope,name,className,actionName,data,file,callback){
+            "use strict";
+
+            var isCallbackFunction = isFunction(callback);
+            //var multipart/form-data
+            $http({
+                method: 'POST',
+                url: platformDataUrl+'actionWithFile',
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                data: {
+                    className: className,
+                    actionName: actionName,
+                    data: JSON.stringify(data),
+                    file: file
+                },
+                transformRequest: function (data, headersGetter) {
+                        var formData = new FormData();
+                        angular.forEach(data, function (value, key) {
+                            formData.append(key, value);
+                        });
+
+                        var headers = headersGetter();
+                        delete headers['Content-Type'];
+
+                        return formData;
+                }
+            }).success(function (data){
+                $scope[name] = data;
+                if (isCallbackFunction){
+                    if (angular.isArray(data)){
+                        data.forEach(function(item,i,array){
+                            callback(item,i,array);
+                        });
+                    } else {
+                        callback(data);
+                    }
+
+                }
+            }).error(function(error, status, headers, config){
+                errorService.showError(error,status);
+            });
+        };
+
         this.create = function ($scope,name,className,data){
             $http({
                 method: 'POST',
@@ -271,7 +316,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         this.hideErrorCallback = hideModalError;
 
         this.showError = function(errorMessage,status){
-            error = errorMessage;
+            error = errorMessage?errorMessage:{};
             error.status = status;
             this.showErrorCallback();
         };

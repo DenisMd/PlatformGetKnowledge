@@ -17,7 +17,7 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
     };
 
 
-    //даннкые для select
+    //данные для select
     var isCountryValid = false;
     var isRegionValid = false;
     var isRegionDisable = true;
@@ -79,5 +79,18 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
             $scope.city = value;
         }
     };
+
+
+    //данные для image
+    $scope.imageLoad = {
+        id : "image-loud",
+        save : function(data){
+            $scope.image = data;
+        }
+    };
+
+    $scope.save = function(){
+        applicationService.actionWithFile($scope, "status", className.userInfo, "updateExtraInfo", {},$scope.image);
+    }
 
 });

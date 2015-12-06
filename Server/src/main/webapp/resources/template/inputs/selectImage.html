@@ -10,14 +10,18 @@
             <div class="modal-content modal-center">
                 <!--<div class="modal-body">-->
                     <div class="cropArea">
-                        <img-crop image="originalImg" result-image="croppedImg"></img-crop>
+                        <img-crop image="originalImg" result-image="croppedImg"
+                                  on-change="onChange($dataURI)"
+                                  on-load-begin="onLoadBegin()"
+                                  on-load-done="onLoadDone()"
+                                  on-load-error="onLoadError()"></img-crop>
                     </div>
                     <!--<div>Cropped Image:</div>-->
                     <!--<img ng-src="{{croppedImg}}"/>-->
                 <!--</div>-->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">{{translate("close")}}</button>
-                    <button type="button" class="btn btn-primary">{{translate("save")}}</button>
+                    <button type="button" class="btn btn-primary" ng-click="save()">{{translate("save")}}</button>
                 </div>
             </div>
         </div>
