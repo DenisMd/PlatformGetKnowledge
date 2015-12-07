@@ -10,7 +10,9 @@ model.controller("loginCtrl", function ($scope, $state,$http,applicationService,
                     } else {
                         language = language.name.toLowerCase();
                     }
-                    $state.go($state.$current, {"language": language, path:"user/"+user.id});
+                    $scope.reloadMenu(function(menu){
+                        $state.go($state.$current, {"language": language, path:"user/"+user.id});
+                    });
                 });
             } else {
                 $scope.error = true;

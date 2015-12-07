@@ -538,10 +538,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             controller : function($scope,$attrs){
                 $scope.data = null;
                 $scope.getData = function (){
-                    if (!$scope.data){
-                        $scope.data = $scope[$attrs.data];
-                    }
-                    return  $scope.data;
+                    return  $scope[$attrs.data];
                 }
             }
         };

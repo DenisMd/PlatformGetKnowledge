@@ -13,6 +13,7 @@ function initVideoPlayer() {
     player = videojs(document.getElementById('main-video'), options, function () {
         player = this;
     });
+
 };
 
 model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService, className) {
@@ -84,7 +85,9 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
     $scope.logout = function(){
         if (!$scope.user) return;
         $http.get("/j_spring_security_logout").success(function(){
-            applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {});
+            applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {},function(){
+                $scope.reloadMenu();
+            });
         });
     };
 
@@ -136,7 +139,14 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         ]
     };
 
-    applicationService.action($scope, "menu", className.menu, "getMenu", {}, function(menu){
+    $scope.reloadMenu = function(callback){
+        applicationService.action($scope, "menu", className.menu, "getMenu", {}, function(menu){
+            if (angular.isFunction(callback)){
+                callback(menu);
+            }
+        });
+    };
+    $scope.reloadMenu(function(menu){
         $scope.cardsData = {
             title : "ourCourses",
             cardsInRow : 3,
@@ -144,6 +154,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
             prefix : ''
         };
     });
+
     applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {});
 
     applicationService.action($scope , "countries" , "com.getknowledge.modules.dictionaries.country.Country" , "getCountries",{
