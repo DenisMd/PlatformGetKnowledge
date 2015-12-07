@@ -22,7 +22,6 @@
     </div>
     <div>
         <ul class="first-menu-items">
-            {{getData().items}}
             <li class="first-menu-item" ng-repeat="menuItem in getData().items">
                 <a ng-style="{color: '#' + menuItem.color}" ng-href="{{createUrl(menuItem.url)}}">
                     <img ng-src="{{menuItem.iconUrl}}"/>
