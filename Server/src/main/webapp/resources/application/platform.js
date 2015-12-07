@@ -3,7 +3,7 @@ String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
-angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angular-loading-bar','ngAnimate'])
+angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angular-loading-bar','ngAnimate','angularFileUpload'])
     .factory('className', function() {
         return {
             "userInfo" : "com.getknowledge.modules.userInfo.UserInfo",
@@ -210,7 +210,6 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "use strict";
 
             var isCallbackFunction = isFunction(callback);
-            //var multipart/form-data
             $http({
                 method: 'POST',
                 url: platformDataUrl+'actionWithFile',

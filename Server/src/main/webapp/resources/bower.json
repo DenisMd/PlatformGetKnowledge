@@ -34,6 +34,7 @@
     "ng-img-crop": "ngImgCrop#~0.3.2",
     "ng-scrollbars": "~0.0.5",
     "video.js": "~5.0.2",
-    "videojs-hotkeys": "~0.2.10"
+    "videojs-hotkeys": "~0.2.10",
+    "angular-file-upload": "~2.2.0"
   }
 }

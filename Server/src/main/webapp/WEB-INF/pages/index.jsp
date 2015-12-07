@@ -40,6 +40,7 @@
     <script src="/resources/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="/resources/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
     <script src="/resources/bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="/resources/bower_components/angular-file-upload/dist/angular-file-upload.min.js"></script>
     <script src="/resources/bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
     <script src="/resources/bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
     <script src="/resources/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>

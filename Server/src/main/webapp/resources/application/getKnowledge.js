@@ -444,8 +444,8 @@ model.controller("selectImgCtrl", function($scope){
 
     $scope.save = function(){
         if (angular.isFunction($scope.getData().save)) {
-            //var file = base64ToBlob($scope.croppedImg.replace('data:image/png;base64,',''), 'image/jpeg');
-            $scope.getData().save($scope.croppedImg);
+            var file = base64ToBlob($scope.croppedImg.replace('data:image/png;base64,',''), 'image/jpeg');
+            $scope.getData().save(file);
 
         }
         $('#myModal').modal('hide');
