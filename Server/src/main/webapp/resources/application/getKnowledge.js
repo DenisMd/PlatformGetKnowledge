@@ -140,7 +140,8 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         $scope.cardsData = {
             title : "ourCourses",
             cardsInRow : 3,
-            cards : menu.items
+            cards : menu.items,
+            prefix : ''
         };
     });
     applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {});

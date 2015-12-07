@@ -7,7 +7,7 @@
                     <p class="card-image text-center"><img ng-src="{{card.iconUrl}}"></p>
                     <h3 class="card-title">{{translate(card.title)}}</h3>
                     <p class="text-justify">{{translate(card.title+"_card")}}</p>
-                    <p class="card-footer"><a href="#" class="btn btn-primary" role="button">{{translate('go_to_course')}}</a></p>
+                    <p class="card-footer"><a ng-href="{{createUrl(getData().prefix + card.url)}}" class="btn btn-primary" role="button">{{translate('go_to_course')}}</a></p>
                 </div>
             </div>
         </div>

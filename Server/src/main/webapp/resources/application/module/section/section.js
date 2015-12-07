@@ -9,6 +9,7 @@ model.controller("sectionCtrl", function ($scope, $state,$http,applicationServic
             title : "categories",
             cardsInRow : 3,
             cards : section.menuItem.subItems,
+            prefix : section.menuItem.url
         };
     });
 

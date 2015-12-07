@@ -33,6 +33,10 @@ public class RoleService extends AbstractService implements BootstrapService {
             Role author = new Role();
             author.setRoleName(RoleName.ROLE_AUTHOR.name());
             roleRepository.create(author);
+
+            Role moderator = new Role();
+            moderator.setRoleName(RoleName.ROLE_MODERATOR.name());
+            roleRepository.create(moderator);
         }
     }
 
