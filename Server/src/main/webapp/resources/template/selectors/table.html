@@ -1,17 +1,32 @@
-<table class="table table-hover">
-    <caption>{{translate(getData().title)}}</caption>
-    <thead>
-    <tr>
-        <th ng-repeat="column in getData().columns">
-            {{translate(column)}}
-        </th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr ng-repeat="index in range(getData().content.length) track by $index">
-            <td ng-repeat="column in getData().columns">
-                {{getData().content[$parent.$index][column]}}
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div ng-controller="tableSelectorCtrl">
+    <div class="table-selector">
+        <table class="table table-hover ">
+            <caption>{{translate(getData().title)}}</caption>
+            <thead>
+            <tr>
+                <th ng-repeat="column in getData().columns">
+                    {{translate(column)}}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="index in range(getData().content.length) track by $index" class="selected-row" ng-click="setCurrentItem(getData().content[$index])">
+                <td ng-repeat="column in getData().columns" \>
+                    {{getData().content[$parent.$index][column]}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <uib-tabset>
+            <uib-tab ng-repeat="tab in getData().tabs" heading="{{translate(tab.title)}}" ng-init="test = {}">
+                <div ng-repeat="element in tab.columns">
+                    <label>{{translate(element.name)}} : </label>
+                    <input type="{{element.type}}" value="{{currentItem[element.name]}}">
+                </div>
+                <button ng-hide="tab.readOnly" class="btn btn-primary" ng-click="doButton(tab.className,tab.actionName,test)">{{translate(tab.buttonText)}}</button>
+            </uib-tab>
+        </uib-tabset>
+    </div>
+</div>

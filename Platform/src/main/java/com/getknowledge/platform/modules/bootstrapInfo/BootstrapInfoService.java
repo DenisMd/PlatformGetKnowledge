@@ -19,7 +19,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-@Service
+@Service("BootstrapInfoService")
 public class BootstrapInfoService extends AbstractService {
 
     @Autowired

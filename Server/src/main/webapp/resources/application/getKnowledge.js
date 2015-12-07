@@ -179,6 +179,16 @@ model.controller("videoCtrl",function($scope){
     });
 });
 
+model.controller("tableSelectorCtrl" , function($scope,applicationService){
+    $scope.currentItem = null;
+    $scope.setCurrentItem = function (item) {
+        $scope.currentItem = item;
+    }
+
+    $scope.doButton = function (className , actionName, model) {
+        applicationService.action($scope,"doButtonResult",className,actionName,model);
+    }
+});
 
 //select value
 model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
