@@ -1,6 +1,8 @@
 package com.getknowledge.modules.userInfo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.getknowledge.modules.dictionaries.city.City;
+import com.getknowledge.modules.dictionaries.city.CityRepository;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
@@ -14,6 +16,8 @@ import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.BootstrapService;
 import com.getknowledge.platform.base.services.ImageService;
+import com.getknowledge.platform.exceptions.NotAuthorized;
+import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
 import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.role.names.RoleName;
@@ -26,12 +30,15 @@ import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.Principal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service("UserInfoService")
@@ -63,6 +70,9 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
     @Autowired
     private SettingsRepository settingsRepository;
+
+    @Autowired
+    private CityRepository cityRepository;
 
     @Override
     public void bootstrap(HashMap<String, Object> map) {
@@ -122,7 +132,6 @@ public class UserInfoService extends AbstractService implements BootstrapService
         if (login == null) {return  null;}
 
         User user = userRepository.getSingleEntityByFieldAndValue("login", login);
-        userInfoRepository.setCurrentUser(user);
         UserInfo userInfo = userInfoRepository.getSingleEntityByFieldAndValue("user.login",login);
         return userInfo;
     }
@@ -219,12 +228,50 @@ public class UserInfoService extends AbstractService implements BootstrapService
         return registerResult;
     }
 
-    @ActionWithFile(name = "updateExtraInfo")
-    public RegisterResult registerExtraInfo (HashMap<String,Object> data,MultipartFile file) {
+    @ActionWithFile(name = "updateExtraInfo" , mandatoryFields = {"userId"})
+    public RegisterResult registerExtraInfo (HashMap<String,Object> data,MultipartFile file) throws PlatformException {
 
-        for (Map.Entry<String , Object> entry : data.entrySet()) {
-            System.err.println("key " + entry.getKey() + " : value : " + entry.getValue());
+        Long id = new Long((Integer)data.get("userId"));
+
+        UserInfo userInfo = getAuthorizedUser(data);
+
+        if (userInfo.getId() != id) {
+            throw new NotAuthorized("User id is not correct" , trace, TraceLevel.Event);
         }
+
+
+        if (file != null) {
+            try {
+                userInfo.setProfileImage(file.getBytes());
+            } catch (IOException e) {
+                trace.logException("Error get bytes for image", e, TraceLevel.Error);
+            }
+        }
+
+        if (data.containsKey("cityId")) {
+            Long cityId = new Long((Integer)data.get("cityId"));
+            City city = cityRepository.read(cityId);
+            if (city != null) {
+                userInfo.setCity(city);
+            }
+        }
+
+        if (data.containsKey("speciality")) {
+            userInfo.setSpecialty((String) data.get("speciality"));
+        }
+
+        if (data.containsKey("date")) {
+            try {
+                Date date = new SimpleDateFormat("dd.MM.yyyy").parse((String) data.get("date"));
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                userInfo.setBirthDay(calendar);
+            } catch (ParseException e) {
+                trace.logException("Error date format : " + (String) data.get("date"), e, TraceLevel.Event);
+            }
+        }
+
+        userInfoRepository.update(userInfo);
 
         return RegisterResult.Complete;
     }

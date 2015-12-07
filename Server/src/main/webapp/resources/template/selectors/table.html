@@ -23,8 +23,10 @@
             <uib-tab ng-repeat="tab in getData().tabs" heading="{{translate(tab.title)}}" ng-init="test = {}">
                 <div ng-repeat="element in tab.columns">
                     <label>{{translate(element.name)}} : </label>
-                    <input type="{{element.type}}" value="{{currentItem[element.name]}}">
+                    <input type="{{element.type}}" ng-model="test[element.name]" ng-init="test[element.name]=currentItem[element.name]">
                 </div>
+                {{currentItem}}
+                {{test}}
                 <button ng-hide="tab.readOnly" class="btn btn-primary" ng-click="doButton(tab.className,tab.actionName,test)">{{translate(tab.buttonText)}}</button>
             </uib-tab>
         </uib-tabset>
