@@ -90,7 +90,9 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
     };
 
     $scope.save = function(){
-        applicationService.actionWithFile($scope, "status", className.userInfo, "updateExtraInfo", {},$scope.image);
+        if ($scope.user) {
+            applicationService.actionWithFile($scope, "status", className.userInfo, "updateExtraInfo", {userId: $scope.user.id}, $scope.image);
+        }
     }
 
 });

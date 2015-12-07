@@ -46,7 +46,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             return language;
         }
     })
-    .service("applicationService", function ($http,$stateParams,$sce,pageService,modules,resourceUrl,errorService) {
+    .service("applicationService", function ($http,$stateParams,$sce,FileUploader,pageService,modules,resourceUrl,errorService) {
         "use strict";
 
         var platformDataUrl = "/data/";
@@ -210,31 +210,20 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         this.actionWithFile = function ($scope,name,className,actionName,data,file,callback){
             "use strict";
 
-            var isCallbackFunction = isFunction(callback);
-            $http({
-                method: 'POST',
+            var uploader = $scope.uploader = new FileUploader({
                 url: platformDataUrl+'actionWithFile',
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                },
-                data: {
-                    className: className,
-                    actionName: actionName,
-                    data: JSON.stringify(data),
-                    file: file
-                },
-                transformRequest: function (data, headersGetter) {
-                        var formData = new FormData();
-                        angular.forEach(data, function (value, key) {
-                            formData.append(key, value);
-                        });
-
-                        var headers = headersGetter();
-                        delete headers['Content-Type'];
-
-                        return formData;
+                autoUpload: false,
+                onBeforeUploadItem: function(item) {
+                    item.formData.push({className: className,
+                        actionName: actionName,
+                        data: JSON.stringify(data)});
+                    console.log(item);
                 }
-            }).success(function (data){
+            });
+            var isCallbackFunction = isFunction(callback);
+
+            uploader.onSuccessItem = function(fileItem, response, status, headers) {
+                var data = response;
                 $scope[name] = data;
                 if (isCallbackFunction){
                     if (angular.isArray(data)){
@@ -246,9 +235,27 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     }
 
                 }
-            }).error(function(error, status, headers, config){
-                errorService.showError(error,status);
-            });
+            };
+            uploader.onErrorItem = function(fileItem, response, status, headers) {
+                errorService.showError(response,status);
+            };
+            uploader.addToQueue(file);
+            uploader.uploadAll();
+            //$http({
+            //    method: 'POST',
+            //    url: platformDataUrl+'actionWithFile',
+            //    headers: {
+            //        'Content-Type': 'multipart/form-data'
+            //    },
+            //    data: {
+            //
+            //        file: file
+            //    }
+            //}).success(function (data){
+            //
+            //}).error(function(error, status, headers, config){
+            //    errorService.showError(error,status);
+            //});
         };
 
         this.create = function ($scope,name,className,data){
