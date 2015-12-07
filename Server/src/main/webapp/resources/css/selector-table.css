@@ -1,0 +1,11 @@
+.edit-screen {
+}
+
+.table-selector {
+    height: 250px;
+    overflow-y: scroll;
+}
+
+.selected-row {
+    cursor: pointer;
+}

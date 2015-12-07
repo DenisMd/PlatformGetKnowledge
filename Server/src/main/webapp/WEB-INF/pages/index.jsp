@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/resources/bower_components/angular-loading-bar/build/loading-bar.css" type="text/css"/>
     <link rel="stylesheet" href="/resources/css/index.css" type="text/css">
     <link rel="stylesheet" type="text/css" href="/resources/bower_components/ng-img-crop/compile/minified/ng-img-crop.css">
+    <link rel="stylesheet" type="text/css" href="/resources/css/selector-table.css">
     <meta charset="utf-8">
 </head>
 <body>
