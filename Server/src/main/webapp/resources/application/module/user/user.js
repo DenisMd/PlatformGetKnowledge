@@ -2,13 +2,15 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
     var userId = pageService.getPathVariable("user",$state.params.path);
     if (userId) {
         applicationService.read($scope, "user_info" , className.userInfo, userId, function(item){
-            if (item.firstLogin) {
-                applicationService.action($scope, "countriesList", className.country, "getCountries", {language: $scope.application.language.capitalizeFirstLetter()});
-                $("#userModal").modal({
-                    backdrop: 'static',
-                    keyboard: false
-                });
-                $("#userModal").modal('show');
+            if ($scope.user.id === userId) {
+                if (item.firstLogin) {
+                    applicationService.action($scope, "countriesList", className.country, "getCountries", {language: $scope.application.language.capitalizeFirstLetter()});
+                    $("#userModal").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    $("#userModal").modal('show');
+                }
             }
         });
     }
