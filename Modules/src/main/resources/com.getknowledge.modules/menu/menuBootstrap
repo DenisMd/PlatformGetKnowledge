@@ -18,7 +18,7 @@ General
         books : /books : /resources/image/menu/icons/books.png
         programs : /programs : /resources/image/menu/icons/programs.png
     news : /news : /resources/image/menu/icons/news.png : e5d525
-    contactUs : /contacts : /resources/image/menu/icons/contacts.png : 315d18
+    contactUs : /contacts : /resources/image/menu/icons/contacts.png : ffffff
 
 # Admin menu
 Admin : ROLE_ADMIN
@@ -43,7 +43,7 @@ Admin : ROLE_ADMIN
         books : /books : /resources/image/menu/icons/books.png
         programs : /programs : /resources/image/menu/icons/programs.png
     news : /news : /resources/image/menu/icons/news.png : e5d525
-    contactUs : /contacts : /resources/image/menu/icons/contacts.png : 315d18
+    contactUs : /contacts : /resources/image/menu/icons/contacts.png : ffffff
 
 # Author menu
 Author : ROLE_AUTHOR
@@ -68,7 +68,7 @@ Author : ROLE_AUTHOR
         books : /books : /resources/image/menu/icons/books.png
         programs : /programs : /resources/image/menu/icons/programs.png
     news : /news : /resources/image/menu/icons/news.png : e5d525
-    contactUs : /contacts : /resources/image/menu/icons/contacts.png : 315d18
+    contactUs : /contacts : /resources/image/menu/icons/contacts.png : ffffff
 
 # HelpDesk menu
 HelpDesk : ROLE_HELPDESK
@@ -92,7 +92,7 @@ HelpDesk : ROLE_HELPDESK
         books : /books : /resources/image/menu/icons/books.png
         programs : /programs : /resources/image/menu/icons/programs.png
     news : /news : /resources/image/menu/icons/news.png : e5d525
-    contactUs : /contacts : /resources/image/menu/icons/contacts.png : 315d18
+    contactUs : /contacts : /resources/image/menu/icons/contacts.png : ffffff
 
 # Moderator menu
 Moderator : ROLE_MODERATOR
@@ -117,4 +117,4 @@ Moderator : ROLE_MODERATOR
         books : /books : /resources/image/menu/icons/books.png
         programs : /programs : /resources/image/menu/icons/programs.png
     news : /news : /resources/image/menu/icons/news.png : e5d525
-    contactUs : /contacts : /resources/image/menu/icons/contacts.png : 315d18
+    contactUs : /contacts : /resources/image/menu/icons/contacts.png : ffffff

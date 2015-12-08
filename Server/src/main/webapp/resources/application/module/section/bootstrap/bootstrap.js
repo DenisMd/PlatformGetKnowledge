@@ -5,7 +5,7 @@ model.controller("bootstrapCtrl", function ($scope, $state,$http,applicationServ
         content : [],
         tabs : [{
             title : "Service",
-            columns : [{name : "id" , "type" : "number"} , {name : "name" , "type" : "string"},{name : "bootstrapState" , "type" : "string"},{name : "errorMessage" , "type" : "string"},{name : "stackTrace" , "type" : "textarea"}],
+            columns : [{name : "id" , "type" : "number", disabled : true} , {name : "name" , "type" : "string", disabled : true},{name : "bootstrapState" , "type" : "string", disabled : true},{name : "errorMessage" , "type" : "string" , disabled : true},{name : "stackTrace" , "type" : "textarea" , disabled : true}],
             readOnly : true
         } , {
             title : "doBootstrap",

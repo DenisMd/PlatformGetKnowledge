@@ -22,10 +22,11 @@
         <uib-tabset>
             <uib-tab ng-repeat="tab in getData().tabs" heading="{{translate(tab.title)}}" ng-init="test = {}">
                 <div ng-repeat="element in tab.columns">
-                    <label>{{translate(element.name)}} : </label>
-                    <input type="{{element.type}}" ng-model="test[element.name]" ng-init="test[element.name]=currentItem[element.name]">
+                    <div class="form-group"  ng-init="test[element.name]=currentItem[element.name]">
+                        <label>{{translate(element.name)}} {{element.disabled}}</label>
+                        <input type="{{element.type}}" ng-model="test[element.name]" class="form-control"  ng-disabled="element.disabled && 'disabled' || undefined">
+                    </div>
                 </div>
-                {{currentItem}}
                 {{test}}
                 <button ng-hide="tab.readOnly" class="btn btn-primary" ng-click="doButton(tab.className,tab.actionName,test)">{{translate(tab.buttonText)}}</button>
             </uib-tab>
