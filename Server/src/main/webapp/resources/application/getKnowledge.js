@@ -487,8 +487,8 @@ model.controller("selectImgCtrl", function($scope){
 //datapicker
 model.controller("datepickerCtrl", function($scope){
     init();
+    var defaultFormat = "dd.MM.yyyy";
     $scope.popupOptions = {
-        "format" : "dd.MM.yyyy",
         "current" : $scope.translate("datapiker-today"),
         "clear" : $scope.translate("datapiker-clear"),
         "close" : $scope.translate("datapiker-close")
@@ -496,6 +496,14 @@ model.controller("datepickerCtrl", function($scope){
 
     $scope.required = $scope.getData().required;
     $scope.onChange = $scope.getData().onChange;
+    $scope.format = $scope.getData().format;
+
+    $scope.getFormat = function(){
+        if ($scope.format){
+            return $scope.format;
+        }
+        return defaultFormat;
+    };
 
     $scope.change = function(){
         if (angular.isFunction($scope.onChange)){

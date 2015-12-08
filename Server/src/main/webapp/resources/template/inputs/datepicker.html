@@ -1,7 +1,7 @@
 <div ng-controller="datepickerCtrl" class="datepicker">
     <p class="input-group">
         <input type="text" class="form-control on-error on-success" ng-model="date"
-               uib-datepicker-popup="{{popupOptions.format}}" datepicker-popup-format
+               uib-datepicker-popup="{{getFormat()}}" datepicker-popup-format
                is-open="status.opened"
                min-date="minDate" max-date="maxDate" datepicker-options="dataOptions"
                current-text="{{popupOptions.current}}" clear-text="{{popupOptions.clear}}" close-text="{{popupOptions.close}}"
