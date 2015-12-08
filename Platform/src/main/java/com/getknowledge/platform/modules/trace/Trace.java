@@ -20,6 +20,21 @@ public class Trace extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private TraceLevel traceLevel;
 
+    @Column(columnDefinition = "Text" , name = "stack_trace")
+    private String stackTrace;
+
+    public void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
+    }
+
+    public String getStackTrace() {
+        return stackTrace;
+    }
+
+    public void setStackTrace(String stackTrace) {
+        this.stackTrace = stackTrace;
+    }
+
     private Calendar calendar = Calendar.getInstance();
 
     public TraceLevel getTraceLevel() {

@@ -2,6 +2,7 @@ package com.getknowledge.platform.modules.trace;
 
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,31 +17,7 @@ public class TraceService extends AbstractService {
     private TraceRepository traceRepository;
 
     public void log(String message, TraceLevel traceLevel) {
-        if (message == null) message = "";
-        if (traceLevel == null) traceLevel = TraceLevel.Debug;
-
-        switch (traceLevel) {
-            case Debug:
-                logger.debug(message);
-                break;
-            case Event:
-                logger.info(message);
-                break;
-            case Warning:
-                logger.warn(message);
-                break;
-            case Error:
-                logger.error(message);
-                break;
-            case Critical:
-                logger.error(message);
-                break;
-        }
-
-        Trace trace = new Trace();
-        trace.setMessage(message);
-        trace.setTraceLevel(traceLevel);
-        traceRepository.create(trace);
+        logException(message,null,traceLevel);
     }
 
     public void logException(String message, Exception e, TraceLevel traceLevel) {
@@ -49,27 +26,32 @@ public class TraceService extends AbstractService {
 
         switch (traceLevel) {
             case Debug:
-                logger.debug(message,e);
+                if (e == null) logger.debug(message);
+                else logger.debug(message,e);
                 break;
             case Event:
-                logger.info(message,e);
+                if (e == null) logger.info(message);
+                else logger.info(message,e);
                 break;
             case Warning:
-                logger.warn(message,e);
+                if (e == null) logger.warn(message);
+                else logger.warn(message,e);
                 break;
             case Error:
-                logger.error(message,e);
+                if (e == null) logger.error(message);
+                else logger.error(message,e);
                 break;
             case Critical:
-                logger.error(message,e);
+                if (e == null) logger.error(message);
+                else logger.error(message,e);
                 break;
         }
 
         Trace trace = new Trace();
         trace.setMessage(message);
         trace.setTraceLevel(traceLevel);
+        if (e != null)
+            trace.setStackTrace(ExceptionUtils.getStackTrace(e));
         traceRepository.create(trace);
-
-
     }
 }
