@@ -235,7 +235,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
         UserInfo userInfo = getAuthorizedUser(data);
 
-        if (userInfo.getId() != id) {
+        if (!userInfo.getId().equals(id)) {
             throw new NotAuthorized("User id is not correct" , trace, TraceLevel.Event);
         }
 

@@ -194,7 +194,7 @@ model.controller("tableSelectorCtrl" , function($scope,applicationService){
     $scope.currentItem = null;
     $scope.setCurrentItem = function (item) {
         $scope.currentItem = item;
-    }
+    };
 
     $scope.doButton = function (className , actionName, model) {
         applicationService.action($scope,"doButtonResult",className,actionName,model);
@@ -435,6 +435,7 @@ model.directive("hideOptions",function($document){
 //crop image
 model.controller("selectImgCtrl", function($scope){
     $scope.id = $scope.getData().id;
+    $scope.
     $scope.isInModel = $scope.getData().isInModel? $scope.getData().isInModel : true;
     $scope.originalImg='';
     $scope.croppedImg='';
@@ -450,19 +451,6 @@ model.controller("selectImgCtrl", function($scope){
         reader.readAsDataURL(file);
     };
     angular.element('#fileInput').on('change',handleFileSelect);
-
-    $scope.onChange=function($dataURI) {
-        console.log('onChange fired' + $scope.croppedImg +" \n "+ $dataURI);
-    };
-    $scope.onLoadBegin=function() {
-        console.log('onLoadBegin fired' + $scope.croppedImg);
-    };
-    $scope.onLoadDone=function() {
-        console.log('onLoadDone fired' + $scope.croppedImg);
-    };
-    $scope.onLoadError=function() {
-        console.log('onLoadError fired');
-    };
 
     $scope.save = function(){
         if (angular.isFunction($scope.getData().save)) {
@@ -506,6 +494,13 @@ model.controller("datepickerCtrl", function($scope){
     };
 
     $scope.required = $scope.getData().required;
+    $scope.onChange = $scope.getData().onChange;
+
+    $scope.change = function(){
+        if (angular.isFunction($scope.onChange)){
+            $scope.onChange($scope.date);
+        }
+    };
 
     $scope.status = {
         opened: false
@@ -515,6 +510,12 @@ model.controller("datepickerCtrl", function($scope){
     $scope.open = function($event) {
         $scope.status.opened = true;
     };
+
+    $scope.$watch("date", function(newVal,oldVal){
+        if (newVal != oldVal){
+            $scope.change();
+        }
+    });
 
     function init(){
         var options = $scope.getData().options;
@@ -530,3 +531,14 @@ model.controller("datepickerCtrl", function($scope){
     }
 });
 
+model.directive('datepickerPopupFormat',function(dateFilter,$parse){
+    return{
+        restrict:'A',
+        require:'?ngModel',
+        link:function(scope,element,attrs,ngModel,ctrl){
+            ngModel.$parsers.push(function(viewValue){
+                 return dateFilter(viewValue,attrs.uibDatepickerPopup);
+            });
+        }
+    }
+    });

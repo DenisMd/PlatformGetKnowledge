@@ -22,7 +22,11 @@ User page
                     </div>
                     <div class="form-group">
                         <label class="control-label">{{translate("birthday")}}</label>
-                        <module-template data="cityData" name="inputs/datepicker"></module-template>
+                        <module-template data="dateData" name="inputs/datepicker"></module-template>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">{{translate("speciality")}}</label>
+                        <input type="text" ng-model="speciality" ng-maxlength="40">
                     </div>
                     <div class="form-group">
                         <label class="control-label">{{translate("own-image")}}</label>
@@ -38,11 +42,3 @@ User page
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<form method="POST" enctype="multipart/form-data"
-      action="/data/actionWithFile">
-    <input type="hidden" name="className" value="{{className.userInfo}}">
-    <input type="hidden" name="actionName" value="{{className.userInfo}}">
-    <input type="hidden" name="data" value="{{className.userInfo}}">
-    File to upload: <input type="file" name="file"><br /> <br /> <input type="submit"
-                                                     value="Upload"> Press here to upload the file!
-</form>

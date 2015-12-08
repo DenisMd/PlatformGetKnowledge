@@ -81,6 +81,13 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
     };
 
 
+    $scope.dateData = {
+        onChange: function(date){
+            $scope.date = date;
+        }
+    };
+
+
     //данные для image
     $scope.imageLoad = {
         id : "image-loud",
@@ -89,9 +96,19 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         }
     };
 
+    //
+    $scope.speciality = "";
+    //сохранение
     $scope.save = function(){
         if ($scope.user) {
-            applicationService.actionWithFile($scope, "status", className.userInfo, "updateExtraInfo", {userId: $scope.user.id}, $scope.image);
+            var data = {
+                userId: $scope.user.id
+            };
+            if ($scope.city) data.cityId = $scope.city.id;
+            if ($scope.speciality) data.speciality = $scope.speciality;
+            if ($scope.date) data.date = $scope.date;
+
+            applicationService.actionWithFile($scope, "status", className.userInfo, "updateExtraInfo", data, $scope.image);
         }
     }
 
