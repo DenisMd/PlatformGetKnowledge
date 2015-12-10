@@ -336,7 +336,6 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
 .main-image {
     width: 100px;
     height: 100px;
-    background: white;
     border-radius: 50%;
     position: relative;
     cursor: pointer;

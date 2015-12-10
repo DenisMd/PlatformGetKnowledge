@@ -1,8 +1,6 @@
 {
   "text" : {
     "signIn" : "Sign in",
-    "email" : "Email",
-    "password" : "Password",
     "forgotPassword" : "Forgot your password?",
     "dontHaveAccount" : "Don't have an account?",
     "SignUp" : "Sign up",

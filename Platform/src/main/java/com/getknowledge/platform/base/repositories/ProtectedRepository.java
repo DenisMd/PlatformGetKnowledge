@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
-public abstract class ProtectedRepository <T extends AbstractEntity> extends PrepareRepository<T> {
+public abstract class ProtectedRepository <T extends CloneableEntity<T>> extends PrepareRepository<T> {
     protected User currentUser = null;
 
     public void setCurrentUser(User user) {
@@ -28,7 +28,7 @@ public abstract class ProtectedRepository <T extends AbstractEntity> extends Pre
         if (entity instanceof IUser) {
             owner = ((IUser)entity).getUser();
         }
-        entity = clone(entity);
+        entity = entity.clone();
         for (Field field : entity.getClass().getDeclaredFields()) {
             field.setAccessible(true);
             mainFor : for (Access access : field.getAnnotationsByType(Access.class)) {

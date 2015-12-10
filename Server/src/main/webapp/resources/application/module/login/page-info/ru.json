@@ -1,8 +1,6 @@
 {
   "text" : {
     "signIn" : "Войти",
-    "email" : "Электронная почта",
-    "password" : "Пароль",
     "forgotPassword" : "Забыли свой пароль?",
     "dontHaveAccount" : "Нету аккаунта?",
     "SignUp" : "Зарегистрироваться",

@@ -20,14 +20,13 @@
     </div>
     <div class="row">
         <uib-tabset>
-            <uib-tab ng-repeat="tab in getData().tabs" heading="{{translate(tab.title)}}" ng-init="test = {}">
+            <uib-tab ng-repeat="tab in getData().tabs" heading="{{translate(tab.title)}}">
                 <div ng-repeat="element in tab.columns">
-                    <div class="form-group"  ng-init="test[element.name]=currentItem[element.name]">
-                        <label>{{translate(element.name)}} {{element.disabled}}</label>
-                        <input type="{{element.type}}" ng-model="test[element.name]" class="form-control"  ng-disabled="element.disabled && 'disabled' || undefined">
+                    <div class="form-group">
+                        <label>{{translate(element.name)}}</label>
+                        <input type="{{element.type}}" ng-model="currentItem[element.name]" class="form-control"  ng-disabled="element.disabled && 'disabled' || undefined">
                     </div>
                 </div>
-                {{test}}
                 <button ng-hide="tab.readOnly" class="btn btn-primary" ng-click="doButton(tab.className,tab.actionName,test)">{{translate(tab.buttonText)}}</button>
             </uib-tab>
         </uib-tabset>

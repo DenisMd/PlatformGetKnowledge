@@ -43,6 +43,10 @@
     "categories" : "Categories",
     "ourCourses" : "Our courses",
     "name" : "Name",
-    "id" : "Id"
+    "id" : "Id",
+    "email" : "Email",
+    "password" : "Password",
+    "firstName" : "First name",
+    "lastName" : "Last name"
   }
 }
