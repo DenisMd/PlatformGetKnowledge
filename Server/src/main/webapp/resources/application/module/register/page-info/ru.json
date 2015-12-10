@@ -1,8 +1,6 @@
 {
   "text" : {
     "signUp": "Регистрация",
-    "email" : "Электронная почта",
-    "password" : "Пароль",
     "repeatPassword": "Подтвердите пароль",
     "firstName" : "Имя",
     "lastName" : "Фамилия",

@@ -3,6 +3,12 @@
     "bootstrap_title"  : "Initialize services of systems",
     "bootstrapState" : "Bootstrap state",
     "repeat" : "Repeatable",
-    "order" : "Order"
+    "order" : "Order",
+    "errorMessage" : "Error message",
+    "stackTrace" : "Stack trace",
+    "service" : "Service",
+    "doBootstrap" : "Do bootstrap",
+    "domain" : "Domain",
+    "initPassword" : "Password for init"
   }
 }
