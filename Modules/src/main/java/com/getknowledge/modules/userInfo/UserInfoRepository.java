@@ -21,24 +21,6 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
 
 
     @Override
-    public UserInfo clone(UserInfo entity) {
-        UserInfo userInfo = new UserInfo();
-        userInfo.setId(entity.getId());
-        userInfo.setBirthDay(entity.getBirthDay());
-        userInfo.setFirstName(entity.getFirstName());
-        userInfo.setLanguage(entity.getLanguage());
-        userInfo.setLastName(entity.getLastName());
-        userInfo.setProfileImage(entity.getProfileImage());
-        userInfo.setSpecialty(entity.getSpecialty());
-        userInfo.setUser(entity.getUser());
-        userInfo.setMan(entity.getMan());
-        userInfo.setFirstLogin(entity.getFirstLogin());
-        userInfo.setStatus(entity.getStatus());
-        userInfo.setCity(entity.getCity());
-        return userInfo;
-    }
-
-    @Override
     public void remove(Long id) {
         UserInfo userInfo = entityManager.find(getClassEntity() , id);
         long userId = userInfo.getUser().getId();

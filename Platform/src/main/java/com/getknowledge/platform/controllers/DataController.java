@@ -11,10 +11,7 @@ import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
-import com.getknowledge.platform.base.repositories.BaseRepository;
-import com.getknowledge.platform.base.repositories.PrepareEntity;
-import com.getknowledge.platform.base.repositories.PrepareRepository;
-import com.getknowledge.platform.base.repositories.ProtectedRepository;
+import com.getknowledge.platform.base.repositories.*;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.FileLinkService;
 import com.getknowledge.platform.base.services.ImageService;
@@ -85,7 +82,7 @@ public class DataController {
         if (repository instanceof PrepareEntity) {
 
             if (repository instanceof ProtectedRepository) {
-                ProtectedRepository<AbstractEntity> protectedRepository = (ProtectedRepository<AbstractEntity>) repository;
+                ProtectedRepository protectedRepository = (ProtectedRepository) repository;
                 protectedRepository.setCurrentUser(getCurrentUser(principal));
             }
 

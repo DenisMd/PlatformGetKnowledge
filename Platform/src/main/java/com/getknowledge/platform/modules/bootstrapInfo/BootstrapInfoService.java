@@ -9,9 +9,14 @@ import com.getknowledge.platform.modules.bootstrapInfo.states.BootstrapState;
 import com.getknowledge.platform.modules.trace.Trace;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
+import com.getknowledge.platform.modules.user.User;
+import com.getknowledge.platform.modules.user.UserRepository;
+import com.getknowledge.platform.modules.user.UserService;
 import com.getknowledge.platform.utils.ModuleLocator;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -31,8 +36,34 @@ public class BootstrapInfoService extends AbstractService {
     @Autowired
     private TraceService log;
 
+    @Value("${bootstrap.password}")
+    private String hashPassword;
+
+    @Autowired
+    private UserRepository userRepository;
+
     @Action(name = "do")
     public BootstrapResult doBootstrap(HashMap<String, Object> data) throws ParseException {
+
+        boolean isAuthorized = false;
+
+        String login = (String) data.get("principalName");
+        User user = userRepository.getSingleEntityByFieldAndValue("login", login);
+
+        if (user != null) {
+            isAuthorized = true;
+        }
+
+        if (data.containsKey("initPassword")) {
+            if (BCrypt.checkpw((String) data.get("initPassword"), hashPassword)) {
+                isAuthorized = true;
+            }
+        }
+
+        if (!isAuthorized) {
+            return BootstrapResult.NotAuthorized;
+        }
+
         List<BootstrapService> bootstrapServices = moduleLocator.findAllBootstrapServices();
         bootstrapServices.sort(
                 new Comparator<BootstrapService>() {

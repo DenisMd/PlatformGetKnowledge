@@ -11,6 +11,7 @@ import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.entities.IUser;
+import com.getknowledge.platform.base.repositories.CloneableEntity;
 import com.getknowledge.platform.modules.user.User;
 
 import javax.persistence.*;
@@ -19,7 +20,7 @@ import java.util.Calendar;
 @Entity
 @Table(name = "user_info")
 @ModuleInfo(repositoryName = "UserInfoRepository" , serviceName = "UserInfoService")
-public class UserInfo  extends AbstractEntity implements IUser {
+public class UserInfo  extends CloneableEntity<UserInfo> implements IUser {
 
     @Column(name = "first_name")
     private String firstName;
@@ -164,5 +165,23 @@ public class UserInfo  extends AbstractEntity implements IUser {
         authorizationList.allowCreateEveryOne = false;
         authorizationList.allowReadEveryOne = true;
         return authorizationList;
+    }
+
+    @Override
+    public UserInfo clone() {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(this.getId());
+        userInfo.setBirthDay(this.getBirthDay());
+        userInfo.setFirstName(this.getFirstName());
+        userInfo.setLanguage(this.getLanguage());
+        userInfo.setLastName(this.getLastName());
+        userInfo.setProfileImage(this.getProfileImage());
+        userInfo.setSpecialty(this.getSpecialty());
+        userInfo.setUser(this.getUser());
+        userInfo.setMan(this.getMan());
+        userInfo.setFirstLogin(this.getFirstLogin());
+        userInfo.setStatus(this.getStatus());
+        userInfo.setCity(this.getCity());
+        return userInfo;
     }
 }
