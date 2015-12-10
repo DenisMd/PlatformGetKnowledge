@@ -108,6 +108,15 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         }
     };
 
+    //scroll для модалок
+    $scope.modalScrollConfig = {
+        theme: 'dark-3',
+        advanced: {
+            updateOnContentResize: true,
+            updateOnSelectorChange: true
+        }
+    };
+
     $scope.userImg = function(id){
         return applicationService.imageHref(className.userInfo,id);
     };
@@ -376,14 +385,7 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     };
 
     //scroll для таблицы
-    $scope.selectScrollConfig = {
-        theme: 'dark-3',
-        advanced: {
-            updateOnContentResize: true,
-            updateOnSelectorChange: true
-        },
-        setHeight : getHeight()
-    };
+    $scope.selectScrollConfig = angular.merge({setHeight: getHeight()}, $scope.modalScrollConfig);
 
     //ожидание сброса значения
     $scope.$on('reset'+$scope.id.capitalizeFirstLetter()+'Event', function(event, args) {
@@ -436,22 +438,40 @@ model.directive("hideOptions",function($document){
 
 //crop image
 model.controller("selectImgCtrl", function($scope){
-    $scope.id = $scope.getData().id;
+    $scope.id = $scope.getData().id? $scope.getData().id: 'cropModal';
     $scope.isInModel = $scope.getData().isInModel? $scope.getData().isInModel : true;
     $scope.originalImg='';
     $scope.croppedImg='';
-    var handleFileSelect=function(evt) {
-        var file = evt.currentTarget.files[0];
-        var reader = new FileReader();
-        reader.onload = function (evt) {
-            $scope.$apply(function($scope){
-                $scope.originalImg = evt.target.result;
-                $('#myModal').modal('show');
-            });
-        };
-        reader.readAsDataURL(file);
+
+    $($scope.id).modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+
+    $scope.uploadFile = function(file) {
+        if (file) {
+            // ng-img-crop
+            var imageReader = new FileReader();
+            imageReader.onload = function(image) {
+
+                initModalImage(image);
+            };
+            imageReader.readAsDataURL(file);
+        }
     };
-    angular.element('#fileInput').on('change',handleFileSelect);
+
+
+
+    $scope.getType = function(){
+        return $scope.getData().isModal;
+    };
+
+    $scope.getAreaType = function(){
+        if ($scope.getData().isSquare){
+            return "square";
+        }
+        return "circle";
+    };
 
     $scope.save = function(){
         if (angular.isFunction($scope.getData().save)) {
@@ -462,6 +482,20 @@ model.controller("selectImgCtrl", function($scope){
         $('#myModal').modal('hide');
     };
 
+    function initModalImage(image){
+        var selector = '#' + $scope.id;
+        $(selector).modal('show');
+        $(selector).on('shown.bs.modal', function() {
+            $scope.$apply(function($scope) {
+                $scope.originalImg = image.target.result;
+            });
+        });
+        $(selector).on('hidden.bs.modal', function() {
+            $scope.$apply(function($scope) {
+                $scope.originalImg = "";
+            });
+        });
+    }
     function base64ToBlob(base64Data, contentType) {
         contentType = contentType || '';
         var sliceSize = 1024;

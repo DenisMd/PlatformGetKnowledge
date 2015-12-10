@@ -795,6 +795,15 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     height: 300px;
 }
 
+.well-dotted{
+    border: dotted 3px lightgray;
+    background: inherit;
+}
+
+.crop-modal {
+    padding-top: 20px;
+}
+
 /*validation*/
 .on-error.ng-invalid.ng-dirty {
     border-color: red;

@@ -1,24 +1,31 @@
 <div ng-controller="selectImgCtrl">
+    <div class="well well-dotted cropArea">
+        <img-crop image="originalImg" result-image="croppedImg"
+                  on-change="onChange($dataURI)"
+                  on-load-begin="onLoadBegin()"
+                  on-load-done="onLoadDone()"
+                  on-load-error="onLoadError()"
+                  area-type="{{getAreaType()}}"></img-crop>
+    </div>
+
     <div class="fileUpload btn btn-primary">
         <span>{{translate("uploadAvatar")}}</span>
-        <input type="file" id="fileInput" class="upload"/>
+        <input type="file" id="fileInput" class="upload" onchange="angular.element(this).scope().uploadFile(this.files[0]);"/>
     </div>
 
 
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade"ng-attr-id="{{id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content modal-center">
-                <!--<div class="modal-body">-->
-                    <div class="cropArea">
+                    <div class="crop-modal cropArea">
                         <img-crop image="originalImg" result-image="croppedImg"
                                   on-change="onChange($dataURI)"
                                   on-load-begin="onLoadBegin()"
                                   on-load-done="onLoadDone()"
-                                  on-load-error="onLoadError()"></img-crop>
+                                  on-load-error="onLoadError()"
+                                  area-type="{{getAreaType()}}">
+                        </img-crop>
                     </div>
-                    <!--<div>Cropped Image:</div>-->
-                    <!--<img ng-src="{{croppedImg}}"/>-->
-                <!--</div>-->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">{{translate("close")}}</button>
                     <button type="button" class="btn btn-primary" ng-click="save()">{{translate("save")}}</button>

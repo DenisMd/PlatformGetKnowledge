@@ -2,11 +2,15 @@
 <link rel="stylesheet" href="/resources/css/user.css">
 User page
 {{user_info}}
+<div class="form-group">
+    <label class="control-label">{{translate("own-image")}}</label>
+    <module-template data="imageLoad" name="inputs/selectImage"></module-template>
+</div>
 
 <div class="modal fade" id="userModal">
     <div class="modal-dialog first-form-modal">
         <div class="modal-content">
-            <div class="modal-body first-form-body">
+            <div class="modal-body first-form-body"   ng-scrollbars ng-scrollbars-config="modalScrollConfig">
                 <form name="firsTimeForm" style="position: relative;">
                     <div class="form-group">
                         <label class="control-label">{{translate("country_select")}}</label>
