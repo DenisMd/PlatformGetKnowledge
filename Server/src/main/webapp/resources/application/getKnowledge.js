@@ -439,7 +439,7 @@ model.directive("hideOptions",function($document){
 //crop image
 model.controller("selectImgCtrl", function($scope){
     $scope.id = $scope.getData().id? $scope.getData().id: 'cropModal';
-    $scope.isInModel = $scope.getData().isInModel? $scope.getData().isInModel : true;
+    $scope.isInModel = $scope.getData().isInModel? $scope.getData().isInModel : false;
     $scope.originalImg='';
     $scope.croppedImg='';
 
