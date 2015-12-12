@@ -309,7 +309,7 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     position: fixed;
     background-color: #11171c;
     bottom:0;
-    left: 0px;
+    left: 0;
     top: 44px;
     color: #ffffff;
     border-top:1px solid #000;
@@ -377,13 +377,12 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
 
 .link{
     text-align: center;
-    background-image: url("../image/menu/social.png");
-    background-repeat:no-repeat;
     width: 45px;
     height: 45px;
     border-radius: 50%;
     border:0;
     padding: 0;
+    background: url("../image/menu/social.png") no-repeat;
     background-color: inherit;
 }
 .link:hover{
@@ -478,7 +477,6 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
 .wrapper{
     padding-top:60px;
     transition: all linear 0.5s;
-    padding-left: 0px;
     padding-right: 20px;
     margin-right: auto;
     margin-left: auto;
@@ -603,13 +601,12 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
 }
 
 .card-image{
-    margin: 0;
     position: absolute;
     top: -25px;
     background: #fff;
     border-radius: 50%;
     padding: 5px;
-    margin-left: -20px;
+    margin: 0 0 0 -20px;
     display: inline-block;
 }
 
@@ -818,4 +815,13 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
 .datepicker table{
     margin: 0 auto;
     outline: 0;
+}
+
+/*panel*/
+.panel-item {
+    cursor: pointer;
+}
+
+.result-panel {
+    padding: 5px;
 }

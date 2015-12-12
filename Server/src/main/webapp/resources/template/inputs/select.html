@@ -1,7 +1,7 @@
 <div style="position: relative" ng-controller="inputCtrl" ng-form name="selectForm">
     <div class="select-with-input" hide-options="hideSelect()">
         <div class="input-group"  ng-class="class">
-            <input name="main-select" type="text" ng-disabled="isDisabled()" ng-required="required" class="form-control select-input on-error" placeholder="Search for..." ng-keyup="setSelect(true)" ng-model="model">
+            <input name="main-select" type="text" ng-disabled="isDisabled()" ng-required="required" class="form-control select-input on-error" placeholder="{{translate('searchFor')}}" ng-keyup="setSelect(true)" ng-model="model">
             <div class="input-group-btn">
                 <button class="btn btn-default" ng-disabled="isDisabled()" type="button" ng-click="open()">
                     <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
@@ -22,7 +22,7 @@
             <div class="modal-content">
                 <div class="modal-header modal-find">
                     <span class="caption-find">
-                        <input name="search-input" type="text" class="form-control select-input on-error" placeholder="Search for..."
+                        <input name="search-input" type="text" class="form-control select-input on-error" placeholder="{{translate('searchFor')}}"
                                ng-model="modalModel">
                     </span>
                 </div>

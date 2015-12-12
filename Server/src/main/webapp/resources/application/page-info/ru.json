@@ -47,6 +47,7 @@
     "email" : "Электронная почта",
     "password" : "Пароль",
     "firstName" : "Имя",
-    "lastName" : "Фамилия"
+    "lastName" : "Фамилия",
+    "searchFor" : "Поиск в ..."
   }
 }
