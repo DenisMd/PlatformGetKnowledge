@@ -218,7 +218,7 @@ model.controller("panelCtrl", function ($scope, $uibModal) {
         var modalInstance = $uibModal.open({
             animation: true,
             templateUrl: 'panelModalContent.html',
-            controller: 'PanelModalCtrl',
+            controller: 'panelModalCtrl',
             size: size,
             resolve: {
                 item: function () {
@@ -232,7 +232,7 @@ model.controller("panelCtrl", function ($scope, $uibModal) {
     }
 });
 
-model.controller("PanelModalCtrl" , function($scope,applicationService,$modalInstance,item,parentScope) {
+model.controller("panelModalCtrl" , function($scope,applicationService,$modalInstance,item,parentScope,callbackForClose) {
     $scope.item = item;
     $scope.parentScope = parentScope;
     $scope.actionModel = {};
@@ -243,7 +243,10 @@ model.controller("PanelModalCtrl" , function($scope,applicationService,$modalIns
 
 
     $scope.cancel = function () {
-        $modalInstance.dismiss();
+        if (callbackForClose) {
+            callbackForClose();
+            $modalInstance.dismiss();
+        }
     };
 });
 
@@ -253,7 +256,7 @@ model.controller("textPlainCtrl" , function($scope,$uibModal) {
         var modalInstance = $uibModal.open({
             animation: true,
             templateUrl: 'textPlaneContent.html',
-            controller: 'PanelModalCtrl',
+            controller: 'panelModalCtrl',
             size: size,
             resolve: {
                 item: function () {
@@ -266,7 +269,6 @@ model.controller("textPlainCtrl" , function($scope,$uibModal) {
         });
     }
 });
-
 
 //select value
 model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
@@ -491,25 +493,44 @@ model.directive("hideOptions",function($document){
     };
 });
 
-
 //crop image
-model.controller("selectImgCtrl", function($scope){
-    $scope.id = $scope.getData().id? $scope.getData().id: 'cropModal';
+model.controller("selectImgCtrl", function($scope,$uibModal){
+
+    var open = function (size , item , callBackForClose) {
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'cropModal.html',
+            controller: 'panelModalCtrl',
+            size: size,
+            resolve: {
+                item: function () {
+                    return item;
+                },
+                callbackForClose: function() {
+                    return callBackForClose;
+                }
+                ,
+                parentScope : function () {
+                    return $scope;
+                }
+            }
+        });
+    };
+
     $scope.isInModel = $scope.getData().isInModel? $scope.getData().isInModel : true;
     $scope.originalImg='';
     $scope.croppedImg='';
 
-    $($scope.id).modal({
-        backdrop: 'static',
-        keyboard: false
-    });
+    //$($scope.id).modal({
+    //    backdrop: 'static',
+    //    keyboard: false
+    //});
 
     $scope.uploadFile = function(file) {
         if (file) {
             // ng-img-crop
             var imageReader = new FileReader();
             imageReader.onload = function(image) {
-
                 initModalImage(image);
             };
             imageReader.readAsDataURL(file);
@@ -529,29 +550,24 @@ model.controller("selectImgCtrl", function($scope){
         return "circle";
     };
 
-    $scope.save = function(){
+    var save = function(){
         if (angular.isFunction($scope.getData().save)) {
             var file = base64ToBlob($scope.croppedImg.replace('data:image/png;base64,',''), 'image/jpeg');
             $scope.getData().save(file);
-
         }
-        $('#myModal').modal('hide');
     };
 
     function initModalImage(image){
-        var selector = '#' + $scope.id;
-        $(selector).modal('show');
-        $(selector).on('shown.bs.modal', function() {
-            $scope.$apply(function($scope) {
-                $scope.originalImg = image.target.result;
-            });
-        });
-        $(selector).on('hidden.bs.modal', function() {
-            $scope.$apply(function($scope) {
-                $scope.originalImg = "";
-            });
+        $scope.$apply(function($scope) {
+            $scope.originalImg = image.target.result;
+            var item = {
+                original : $scope.originalImg,
+                cropImage:  $scope.croppedImg
+            };
+            open('lg',item,save);
         });
     }
+
     function base64ToBlob(base64Data, contentType) {
         contentType = contentType || '';
         var sliceSize = 1024;

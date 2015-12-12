@@ -14,23 +14,31 @@
     </div>
 
 
-    <div class="modal fade"ng-attr-id="{{id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content modal-center">
-                    <div class="crop-modal cropArea">
-                        <img-crop image="originalImg" result-image="croppedImg"
-                                  on-change="onChange($dataURI)"
-                                  on-load-begin="onLoadBegin()"
-                                  on-load-done="onLoadDone()"
-                                  on-load-error="onLoadError()"
-                                  area-type="{{getAreaType()}}">
-                        </img-crop>
-                    </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{{translate("close")}}</button>
-                    <button type="button" class="btn btn-primary" ng-click="save()">{{translate("save")}}</button>
-                </div>
+    <script type="text/ng-template" id="cropModal.html">
+        <div class="modal-body">
+            <div class="crop-modal cropArea">
+                {{item}}
+                <img-crop image="item.original" result-image="item.cropImage"
+                          on-change="onChange($dataURI)"
+                          on-load-begin="onLoadBegin()"
+                          on-load-done="onLoadDone()"
+                          on-load-error="onLoadError()"
+                          area-type="{{getAreaType()}}">
+                </img-crop>
             </div>
         </div>
-    </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" ng-click="cancel()">{{parentScope.translate('save')}}</button>
+        </div>
+    </script>
+    <!--<div class="modal fade" ng-attr-id="{{id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">-->
+        <!--<div class="modal-dialog" role="document">-->
+            <!--<div class="modal-content modal-center">-->
+                    <!---->
+                <!--<div class="modal-footer">-->
+                    <!---->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
 </div>
