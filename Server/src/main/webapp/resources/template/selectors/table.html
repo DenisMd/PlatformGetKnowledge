@@ -24,7 +24,9 @@
                 <div ng-repeat="element in tab.columns">
                     <div class="form-group">
                         <label>{{translate(element.name)}}</label>
-                        <input type="{{element.type}}" ng-model="currentItem[element.name]" class="form-control"  ng-disabled="element.disabled && 'disabled' || undefined">
+                        <input ng-if="!element.modal" type="{{element.type}}" ng-model="currentItem[element.name]" class="form-control"  ng-disabled="element.disabled && 'disabled' || undefined">
+
+                        <module-template ng-if="element.modal" name="{{element.modal}}" data="currentItem[element.name]"></module-template>
                     </div>
                 </div>
                 <button ng-hide="tab.readOnly" class="btn btn-primary" ng-click="doButton(tab.className,tab.actionName,test)">{{translate(tab.buttonText)}}</button>

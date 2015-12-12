@@ -14,7 +14,7 @@ function initVideoPlayer() {
         player = this;
     });
 
-};
+}
 
 model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService, className) {
 
@@ -211,6 +211,62 @@ model.controller("tableSelectorCtrl" , function($scope,applicationService){
         applicationService.action($scope,"doButtonResult",className,actionName,model);
     };
 });
+
+model.controller("panelCtrl", function ($scope, $uibModal) {
+    $scope.open = function (size , item) {
+
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'panelModalContent.html',
+            controller: 'PanelModalCtrl',
+            size: size,
+            resolve: {
+                item: function () {
+                    return item;
+                },
+                parentScope : function () {
+                    return $scope;
+                }
+            }
+        });
+    }
+});
+
+model.controller("PanelModalCtrl" , function($scope,applicationService,$modalInstance,item,parentScope) {
+    $scope.item = item;
+    $scope.parentScope = parentScope;
+    $scope.actionModel = {};
+
+    $scope.ok = function (className , actionName) {
+        applicationService.action($scope,"doButtonResult",className,actionName,$scope.actionModel);
+    };
+
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss();
+    };
+});
+
+model.controller("textPlainCtrl" , function($scope,$uibModal) {
+    $scope.open = function (size , item) {
+
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'textPlaneContent.html',
+            controller: 'PanelModalCtrl',
+            size: size,
+            resolve: {
+                item: function () {
+                    return item;
+                },
+                parentScope : function () {
+                    return $scope;
+                }
+            }
+        });
+    }
+});
+
 
 //select value
 model.controller("inputCtrl",function($scope,$sce,$filter,$document) {

@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/resources/css/index.css" type="text/css">
     <link rel="stylesheet" type="text/css" href="/resources/bower_components/ng-img-crop/compile/minified/ng-img-crop.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/selector-table.css">
+    <link rel="stylesheet" href="/resources/bower_components/font-awesome/css/font-awesome.min.css">
     <meta charset="utf-8">
 </head>
 <body>

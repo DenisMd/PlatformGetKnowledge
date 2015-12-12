@@ -545,11 +545,12 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         }
     })
 
-    .directive('moduleTemplate', function(resourceTemplate) {
+    .directive('moduleTemplate', function($interpolate,$parse, $rootScope, resourceTemplate) {
         return {
             restrict: 'E',
             scope: true,
             templateUrl: function(elem,attrs){
+                //var name = $parse(attrs.name)($rootScope);
                 return resourceTemplate + attrs.name + ".html";
             },
             controller : function($scope,$attrs){
