@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Entity
@@ -40,6 +41,21 @@ public class User extends AbstractEntity {
     @OneToMany
     @JoinTable(name = "permissions_of_user")
     private List<Permission> permissions = new ArrayList<>();
+
+    @Column(name = "create_date")
+    private Calendar createDate;
+
+    public User() {
+        createDate = Calendar.getInstance();
+    }
+
+    public Calendar getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Calendar createDate) {
+        this.createDate = createDate;
+    }
 
     public Role getRole() {
         return role;
