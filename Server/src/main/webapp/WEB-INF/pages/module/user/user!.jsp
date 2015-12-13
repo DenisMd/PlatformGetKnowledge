@@ -1,12 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet" href="/resources/css/user.css">
-User page
 {{user_info}}
-<div class="form-group" ng-init="name='inputs/selectImage'">
-    <label class="control-label">{{translate("own-image")}}</label>
-    <module-template data="imageLoad" name="{{name}}"></module-template>
-</div>
-{{imageLoad}}
 <div class="modal fade" id="userModal">
     <div class="modal-dialog first-form-modal">
         <div class="modal-content">
