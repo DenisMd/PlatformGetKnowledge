@@ -1,11 +1,11 @@
 model.controller("permissionsCtrl", function ($scope, $state,$http,applicationService,pageService,className) {
-    $scope.bootstrapSelector = {
+    $scope.permissionSelector = {
         title : "permissions_title",
         columns : ["id", "permissionName", "note"],
         content : [],
         tabs : [{
             title : "permission",
-            columns : [{name : "id" , "type" : "number"} , {name : "permissionName" , "type" : "string"},{name : "note" , "type" : "string"}],
+            columns : [{name : "permissionName" , "type" : "string"},{name : "note" , "type" : "string"}],
             buttonText  : "updatePermission",
             actionName : "update",
             className : className.permissions
@@ -25,6 +25,6 @@ model.controller("permissionsCtrl", function ($scope, $state,$http,applicationSe
     };
 
     applicationService.list($scope , "services",className.permissions , function(permission){
-        $scope.bootstrapSelector.content.push(permission);
+        $scope.permissionSelector.content.push(permission);
     });
 });

@@ -21,6 +21,17 @@ public class Role extends AbstractEntity {
     @JoinTable(name = "permissions_of_roles")
     private List<Permission> permissions = new ArrayList<>();
 
+    @Column
+    private String note;
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
     public String getRoleName() {
         return roleName;
     }

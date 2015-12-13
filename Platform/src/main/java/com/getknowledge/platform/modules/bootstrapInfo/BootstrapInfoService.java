@@ -64,6 +64,8 @@ public class BootstrapInfoService extends AbstractService {
             return BootstrapResult.NotAuthorized;
         }
 
+        repository.list();
+
         List<BootstrapService> bootstrapServices = moduleLocator.findAllBootstrapServices();
         bootstrapServices.sort(
                 new Comparator<BootstrapService>() {

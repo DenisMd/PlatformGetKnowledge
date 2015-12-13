@@ -1,0 +1,9 @@
+{
+  "text" : {
+    "roles_title" : "User roles",
+    "roleName" : "Name",
+    "note" : "Note",
+    "updateRole" : "Update role",
+    "createRole" : "Create role"
+  }
+}
