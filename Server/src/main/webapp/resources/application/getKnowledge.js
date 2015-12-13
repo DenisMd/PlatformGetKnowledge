@@ -226,6 +226,9 @@ model.controller("panelCtrl", function ($scope, $uibModal) {
                 },
                 parentScope : function () {
                     return $scope;
+                },
+                callbackForClose: function(){
+                    return;
                 }
             }
         });
@@ -245,8 +248,8 @@ model.controller("panelModalCtrl" , function($scope,applicationService,$modalIns
     $scope.cancel = function () {
         if (callbackForClose) {
             callbackForClose();
-            $modalInstance.dismiss();
         }
+        $modalInstance.dismiss();
     };
 });
 
@@ -264,6 +267,9 @@ model.controller("textPlainCtrl" , function($scope,$uibModal) {
                 },
                 parentScope : function () {
                     return $scope;
+                },
+                callbackForClose: function(){
+                    return;
                 }
             }
         });

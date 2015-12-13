@@ -545,18 +545,26 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         }
     })
 
-    .directive('moduleTemplate', function($interpolate,$parse, $rootScope, resourceTemplate) {
+    .directive('moduleTemplate', function(resourceTemplate) {
         return {
             restrict: 'E',
             scope: true,
-            templateUrl: function(elem,attrs){
-                //var name = $parse(attrs.name)($rootScope);
-                return resourceTemplate + attrs.name + ".html";
+            link: function(scope, element, attrs) {
+                scope.getContentUrl = function() {
+                    return resourceTemplate + attrs.name + ".html";
+                }
             },
-            controller : function($scope,$attrs){
+            template: '<div ng-include="getContentUrl()"></div>',
+            controller : function($scope,$attrs,$parse,$interpolate){
                 $scope.data = null;
+                $scope.data = $parse($attrs.data)($scope);
                 $scope.getData = function (){
-                    return  $scope[$attrs.data];
+                    //if ($attrs.name == "textPlain")
+                    if ($scope.data){
+                        return $scope.data;
+                    }else {
+                        return $scope[$attrs.data] || {};
+                    }
                 }
             }
         };
