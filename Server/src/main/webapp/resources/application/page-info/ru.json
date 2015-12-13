@@ -53,6 +53,7 @@
     "password" : "Пароль",
     "firstName" : "Имя",
     "lastName" : "Фамилия",
-    "searchFor" : "Поиск в ..."
+    "searchFor" : "Поиск в ...",
+    "create" : "Создать"
   }
 }

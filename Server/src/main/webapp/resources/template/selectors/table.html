@@ -28,9 +28,8 @@
                         <textarea ng-if="element.type == 'textarea'" class="form-control" rows="{{element.rows}}">{{currentItem[element.name]}}</textarea>
                         <module-template ng-if="element.modal" name="{{element.modal}}" data="currentItem"></module-template>
                     </div>
-
                 </div>
-                <button ng-hide="tab.readOnly" class="btn btn-primary" ng-click="doButton(tab.className,tab.actionName,test)">{{translate(tab.buttonText)}}</button>
+                <button ng-hide="tab.readOnly" class="btn btn-primary" ng-click="doButton(tab.className,tab.actionName,currentItem)">{{translate(tab.buttonText)}}</button>
             </uib-tab>
         </uib-tabset>
     </div>

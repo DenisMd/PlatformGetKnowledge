@@ -1,0 +1,10 @@
+{
+  "text" : {
+    "permissions_title" : "Права",
+    "permission" : "Право",
+    "permissionName" : "Имя",
+    "note" : "Описание",
+    "updatePermission" : "Обновить право",
+    "createPermission" : "Создать право"
+  }
+}

@@ -208,7 +208,11 @@ model.controller("tableSelectorCtrl" , function($scope,applicationService){
     };
 
     $scope.doButton = function (className , actionName, model) {
-        applicationService.action($scope,"doButtonResult",className,actionName,model);
+        if (actionName == 'update') {
+            applicationService.update($scope, "doButtonResult",className,model);
+        } else {
+            applicationService.action($scope, "doButtonResult", className, actionName, model);
+        }
     };
 });
 
@@ -241,7 +245,11 @@ model.controller("panelModalCtrl" , function($scope,applicationService,$modalIns
     $scope.actionModel = {};
 
     $scope.ok = function (className , actionName) {
-        applicationService.action($scope,"doButtonResult",className,actionName,$scope.actionModel);
+        if (actionName == 'create') {
+            applicationService.create($scope,"doButtonResult",className,$scope.actionModel);
+        } else {
+            applicationService.action($scope, "doButtonResult", className, actionName, $scope.actionModel);
+        }
     };
 
 

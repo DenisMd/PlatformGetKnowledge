@@ -1,0 +1,10 @@
+{
+  "text" : {
+    "permissions_title" : "Permissions",
+    "permission" : "Permission",
+    "permissionName" : "Name",
+    "note" : "Note",
+    "updatePermission" : "Update permission",
+    "createPermission" : "Create permission"
+  }
+}

@@ -16,6 +16,9 @@ public class Permission extends AbstractEntity{
     @Column(name =  "permission_name" , unique = true)
     private String permissionName;
 
+    @Column
+    private String note;
+
     public Permission() {
         permissionName = "";
     }
@@ -30,6 +33,14 @@ public class Permission extends AbstractEntity{
 
     public void setPermissionName(String permissionName) {
         this.permissionName = permissionName;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     @Override

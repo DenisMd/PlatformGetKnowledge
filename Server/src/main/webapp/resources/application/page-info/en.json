@@ -53,6 +53,7 @@
     "password" : "Password",
     "firstName" : "First name",
     "lastName" : "Last name",
-    "searchFor" : "Search for ..."
+    "searchFor" : "Search for ...",
+    "create" : "Create"
   }
 }
