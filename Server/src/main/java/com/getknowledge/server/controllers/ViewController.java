@@ -48,10 +48,10 @@ public class ViewController {
 
     private void fillMarshalling() {
         if (marshalling.isEmpty()) {
-            marshalling.put("section/admin/" , RoleName.ROLE_ADMIN.name());
-            marshalling.put("section/helpdesk/" , RoleName.ROLE_HELPDESK.name());
-            marshalling.put("section/author/" , RoleName.ROLE_AUTHOR.name());
-            marshalling.put("section/moderator/" , RoleName.ROLE_MODERATOR.name());
+            marshalling.put("admin/" , RoleName.ROLE_ADMIN.name());
+            marshalling.put("helpdesk/" , RoleName.ROLE_HELPDESK.name());
+            marshalling.put("author/" , RoleName.ROLE_AUTHOR.name());
+            marshalling.put("moderator/" , RoleName.ROLE_MODERATOR.name());
         }
     }
 

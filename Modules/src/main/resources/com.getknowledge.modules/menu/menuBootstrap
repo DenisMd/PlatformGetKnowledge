@@ -18,11 +18,11 @@ General
         books : /books : /resources/image/menu/icons/books.png
         programs : /programs : /resources/image/menu/icons/programs.png
     news : /news : /resources/image/menu/icons/news.png : e5d525
-    contactUs : /contacts : /resources/image/menu/icons/contacts.png : ffffff
+    contactUs : /contacts : /resources/image/menu/icons/contacts.png : 29CE1F
 
 # Admin menu
 Admin : ROLE_ADMIN
-    admin : /section/admin : /resources/image/menu/icons/panel.png : 999999
+    admin : /admin : /resources/image/menu/icons/panel.png : 999999
         bootstrap : /bootstrap : /resources/image/menu/icons/bootstrap.png
         users : /users : /resources/image/menu/icons/users.png
         roles : /roles : /resources/image/menu/icons/roles.png
@@ -46,11 +46,11 @@ Admin : ROLE_ADMIN
         books : /books : /resources/image/menu/icons/books.png
         programs : /programs : /resources/image/menu/icons/programs.png
     news : /news : /resources/image/menu/icons/news.png : e5d525
-    contactUs : /contacts : /resources/image/menu/icons/contacts.png : ffffff
+    contactUs : /contacts : /resources/image/menu/icons/contacts.png : 29CE1F
 
 # Author menu
 Author : ROLE_AUTHOR
-    author : /section/author : /resources/image/menu/icons/panel.png : 999999
+    author : /author : /resources/image/menu/icons/panel.png : 999999
         courses : /courses
         statistic : /statistic
         reviews : /reviews
@@ -71,11 +71,11 @@ Author : ROLE_AUTHOR
         books : /books : /resources/image/menu/icons/books.png
         programs : /programs : /resources/image/menu/icons/programs.png
     news : /news : /resources/image/menu/icons/news.png : e5d525
-    contactUs : /contacts : /resources/image/menu/icons/contacts.png : ffffff
+    contactUs : /contacts : /resources/image/menu/icons/contacts.png : 29CE1F
 
 # HelpDesk menu
 HelpDesk : ROLE_HELPDESK
-    helpDesk : /section/helpdesk : /resources/image/menu/icons/panel.png : 999999
+    helpDesk : /helpdesk : /resources/image/menu/icons/panel.png : 999999
         mailbox : /mailbox
         logs : /logs
     programming : /section/programming : /resources/image/menu/icons/programming.png : d35136
@@ -95,11 +95,11 @@ HelpDesk : ROLE_HELPDESK
         books : /books : /resources/image/menu/icons/books.png
         programs : /programs : /resources/image/menu/icons/programs.png
     news : /news : /resources/image/menu/icons/news.png : e5d525
-    contactUs : /contacts : /resources/image/menu/icons/contacts.png : ffffff
+    contactUs : /contacts : /resources/image/menu/icons/contacts.png : 29CE1F
 
 # Moderator menu
 Moderator : ROLE_MODERATOR
-    moderator : /section/moderator : /resources/image/menu/icons/panel.png : 999999
+    moderator : /moderator : /resources/image/menu/icons/panel.png : 999999
         sections : /sections
         menu : /menu
         users : /users
@@ -120,4 +120,4 @@ Moderator : ROLE_MODERATOR
         books : /books : /resources/image/menu/icons/books.png
         programs : /programs : /resources/image/menu/icons/programs.png
     news : /news : /resources/image/menu/icons/news.png : e5d525
-    contactUs : /contacts : /resources/image/menu/icons/contacts.png : ffffff
+    contactUs : /contacts : /resources/image/menu/icons/contacts.png : 29CE1F
