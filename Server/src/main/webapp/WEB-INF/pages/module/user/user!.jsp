@@ -19,15 +19,15 @@
                         <module-template data="cityData" name="inputs/select"></module-template>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">{{translate("birthday")}}</label>
+                        <label class="control-label">{{translate("birthday_select")}}</label>
                         <module-template data="dateData" name="inputs/datepicker"></module-template>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">{{translate("speciality")}}</label>
-                        <input type="text" ng-model="speciality" ng-maxlength="40">
+                        <label class="control-label">{{translate("specialty_select")}}</label>
+                        <input class="form-control" type="text" ng-model="speciality" ng-maxlength="40">
                     </div>
                     <div class="form-group">
-                        <label class="control-label">{{translate("own-image")}}</label>
+                        <label class="control-label">{{translate("avatar_load")}}</label>
                         <module-template data="imageLoad" name="inputs/selectImage"></module-template>
                     </div>
                 </form>
