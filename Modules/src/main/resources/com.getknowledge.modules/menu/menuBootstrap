@@ -24,6 +24,9 @@ General
 Admin : ROLE_ADMIN
     admin : /section/admin : /resources/image/menu/icons/panel.png : 999999
         bootstrap : /bootstrap : /resources/image/menu/icons/bootstrap.png
+        users : /users : /resources/image/menu/icons/users.png
+        roles : /roles : /resources/image/menu/icons/roles.png
+        permissions : /permissions : /resources/image/menu/icons/lock.png
         logs : /logs
         tasks: /tasks
     programming : /section/programming : /resources/image/menu/icons/programming.png : d35136

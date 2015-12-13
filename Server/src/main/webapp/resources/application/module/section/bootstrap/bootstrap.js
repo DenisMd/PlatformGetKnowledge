@@ -7,6 +7,10 @@ model.controller("bootstrapCtrl", function ($scope, $state,$http,applicationServ
             title : "service",
             columns : [{name : "id" , "type" : "number", disabled : true} , {name : "name" , "type" : "string", disabled : true},{name : "bootstrapState" , "type" : "string", disabled : true},{name : "errorMessage" , "type" : "string" , disabled : true},{name : "stackTrace" , "modal" : "inputs/textPlain" , disabled : true}],
             readOnly : true
+        } , {
+            title : "stackTrace",
+            columns : [{name : "stackTrace",type : "textarea" , rows : 5}],
+            readOnly : true
         }]
     };
 
