@@ -278,6 +278,14 @@ public class UserInfoService extends AbstractService implements BootstrapService
         return RegisterResult.Complete;
     }
 
+    @Action(name = "skipExtraRegistration")
+    public RegisterResult skipExtraRegistration(HashMap<String,Object> data) {
+        UserInfo userInfo = getAuthorizedUser(data);
+        userInfo.setFirstLogin(false);
+        userInfoRepository.update(userInfo);
+        return RegisterResult.Complete;
+    }
+
     public UserInfo getCurrentUser(Principal p) {
         if (p == null) return null;
         UserInfo result = userInfoRepository.getSingleEntityByFieldAndValue("user.login", p.getName());
