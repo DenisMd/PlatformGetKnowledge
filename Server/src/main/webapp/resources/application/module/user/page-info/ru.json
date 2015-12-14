@@ -4,7 +4,7 @@
     "country_select" : "Выберите страну",
     "region_select" : "Выберите область",
     "city_select" : "Выберите город",
-    "specialty_select" : "Выберите специальность",
+    "specialty_select" : "Укажите вашу специальность",
     "birthday_select" : "Введите ваш день рождения",
     "avatar_load" :  "Загрузите свой аватар"
   }
