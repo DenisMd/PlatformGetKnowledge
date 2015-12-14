@@ -271,6 +271,8 @@ public class UserInfoService extends AbstractService implements BootstrapService
             }
         }
 
+        userInfo.setFirstLogin(false);
+
         userInfoRepository.update(userInfo);
 
         return RegisterResult.Complete;
