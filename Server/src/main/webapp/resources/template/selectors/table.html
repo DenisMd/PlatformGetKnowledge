@@ -18,19 +18,4 @@
             </tbody>
         </table>
     </div>
-    <div class="row">
-        <uib-tabset>
-            <uib-tab ng-repeat="tab in getData().tabs" heading="{{translate(tab.title)}}">
-                <div ng-repeat="element in tab.columns">
-                    <div class="form-group">
-                        <label>{{translate(element.name)}}</label>
-                        <input ng-if="!element.modal && element.type != 'textarea'" type="{{element.type}}" ng-model="currentItem[element.name]" class="form-control"  ng-disabled="element.disabled && 'disabled' || undefined">
-                        <textarea ng-if="element.type == 'textarea'" class="form-control" rows="{{element.rows}}">{{currentItem[element.name]}}</textarea>
-                        <module-template ng-if="element.modal" name="{{element.modal}}" data="currentItem"></module-template>
-                    </div>
-                </div>
-                <button ng-hide="tab.readOnly" class="btn btn-primary" ng-click="doButton(tab.className,tab.actionName,currentItem)">{{translate(tab.buttonText)}}</button>
-            </uib-tab>
-        </uib-tabset>
-    </div>
 </div>
