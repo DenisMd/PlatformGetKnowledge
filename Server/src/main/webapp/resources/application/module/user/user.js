@@ -98,7 +98,7 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         }
     };
 
-    //
+
     $scope.speciality = "";
     //сохранение
     $scope.save = function(){

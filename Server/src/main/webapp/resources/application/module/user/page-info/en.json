@@ -1,5 +1,6 @@
 {
   "text" : {
+    "extraRegister" : "User information",
     "country_select" : "Choose country",
     "region_select" : "Choose region",
     "city_select" : "Choose city",

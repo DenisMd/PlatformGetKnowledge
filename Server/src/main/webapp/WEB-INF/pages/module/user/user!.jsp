@@ -4,6 +4,9 @@
 <div class="modal fade" id="userModal">
     <div class="modal-dialog first-form-modal">
         <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{translate("extraRegister")}}</h4>
+            </div>
             <div class="modal-body first-form-body"   ng-scrollbars ng-scrollbars-config="modalScrollConfig">
                 <form name="firsTimeForm" style="position: relative;">
                     <div class="form-group">

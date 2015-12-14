@@ -1,5 +1,6 @@
 {
   "text" : {
+    "extraRegister" : "Пользовательская информация",
     "country_select" : "Выберите страну",
     "region_select" : "Выберите область",
     "city_select" : "Выберите город",

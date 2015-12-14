@@ -569,9 +569,9 @@ model.controller("selectImgCtrl", function($scope,$uibModal){
         return "circle";
     };
 
-    var save = function(){
+    $scope.onChange = function (element) {
         if (angular.isFunction($scope.getData().save)) {
-            var file = base64ToBlob($scope.croppedImg.replace('data:image/png;base64,',''), 'image/jpeg');
+            var file = base64ToBlob(element.replace('data:image/png;base64,',''), 'image/jpeg');
             $scope.getData().save(file);
         }
     };
