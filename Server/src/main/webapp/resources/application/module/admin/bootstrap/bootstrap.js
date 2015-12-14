@@ -3,6 +3,13 @@ model.controller("bootstrapCtrl", function ($scope, $state,$http,applicationServ
         title : "bootstrap_title",
         columns : ["id", "name", "bootstrapState", "order", "repeat"],
         content : [],
+        callback : function (item) {
+            $scope.editorData.item = item;
+        }
+    };
+
+    $scope.editorData = {
+        item : null,
         tabs : [{
             title : "service",
             columns : [{name : "id" , "type" : "number", disabled : true} , {name : "name" , "type" : "string", disabled : true},{name : "bootstrapState" , "type" : "string", disabled : true},{name : "errorMessage" , "type" : "string" , disabled : true},{name : "stackTrace" , "modal" : "inputs/textPlain" , disabled : true}],

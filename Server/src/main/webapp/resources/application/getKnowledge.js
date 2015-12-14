@@ -199,14 +199,13 @@ model.controller("videoCtrl",function($scope){
     });
 });
 
-model.controller("tableSelectorCtrl" , function($scope,applicationService){
-    $scope.currentItem = null;
-
+model.controller("tableSelectorCtrl" , function($scope){
     $scope.setCurrentItem = function (item) {
-        $scope.currentItem = item;
-
+       $scope.getData().callback(item);
     };
+});
 
+model.controller("editorCtrl" , function($scope,applicationService){
     $scope.doButton = function (className , actionName, model) {
         if (actionName == 'update') {
             applicationService.update($scope, "doButtonResult",className,model);
