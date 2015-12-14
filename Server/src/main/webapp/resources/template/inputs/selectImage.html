@@ -1,14 +1,15 @@
 <div ng-controller="selectImgCtrl">
-    <div class="well well-dotted cropArea">
+    <div class="well well-dotted cropArea" ng-if="!isInModal">
         <img-crop image="originalImg" result-image="croppedImg"
                   on-change="onChange($dataURI)"
                   on-load-begin="onLoadBegin()"
                   on-load-done="onLoadDone()"
                   on-load-error="onLoadError()"
-                  area-type="{{getAreaType()}}"></img-crop>
+                  area-type="{{getAreaType()}}">
+        </img-crop>
     </div>
 
-    <div class="fileUpload btn btn-primary">
+    <div class="fileUpload btn btn-default">
         <span>{{translate("uploadAvatar")}}</span>
         <input type="file" id="fileInput" class="upload" onchange="angular.element(this).scope().uploadFile(this.files[0]);"/>
     </div>
@@ -17,7 +18,6 @@
     <script type="text/ng-template" id="cropModal.html">
         <div class="modal-body">
             <div class="crop-modal cropArea">
-                {{item}}
                 <img-crop image="item.original" result-image="item.cropImage"
                           on-change="onChange($dataURI)"
                           on-load-begin="onLoadBegin()"

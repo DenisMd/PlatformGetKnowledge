@@ -532,7 +532,7 @@ model.controller("selectImgCtrl", function($scope,$uibModal){
         });
     };
 
-    $scope.isInModel = $scope.getData().isInModel? $scope.getData().isInModel : true;
+    $scope.isInModal = $scope.getData().isInModal? $scope.getData().isInModal : false;
     $scope.originalImg='';
     $scope.croppedImg='';
 
@@ -540,23 +540,28 @@ model.controller("selectImgCtrl", function($scope,$uibModal){
     //    backdrop: 'static',
     //    keyboard: false
     //});
+    $scope.onChange = function(data){
+        save();
+    };
 
     $scope.uploadFile = function(file) {
         if (file) {
             // ng-img-crop
             var imageReader = new FileReader();
             imageReader.onload = function(image) {
-                initModalImage(image);
+                if ($scope.isInModal) {
+                    initModalImage(image);
+                } else {
+                    $scope.$apply(function($scope) {
+                        $scope.originalImg = image.target.result;
+                    });
+
+                }
             };
             imageReader.readAsDataURL(file);
         }
     };
 
-
-
-    $scope.getType = function(){
-        return $scope.getData().isModal;
-    };
 
     $scope.getAreaType = function(){
         if ($scope.getData().isSquare){

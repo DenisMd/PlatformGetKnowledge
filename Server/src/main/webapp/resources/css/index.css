@@ -774,6 +774,7 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     position: relative;
     overflow: hidden;
     margin: 10px;
+    margin-left: 2px;
 }
 .fileUpload input.upload {
     position: absolute;
