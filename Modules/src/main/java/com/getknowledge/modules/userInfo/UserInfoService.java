@@ -230,17 +230,11 @@ public class UserInfoService extends AbstractService implements BootstrapService
         return registerResult;
     }
 
-    @ActionWithFile(name = "updateExtraInfo" , mandatoryFields = {"userId"})
-    public RegisterResult registerExtraInfo (HashMap<String,Object> data,MultipartFile file) throws PlatformException {
-
-        Long id = new Long((Integer)data.get("userId"));
-
+    @ActionWithFile(name = "updateImage")
+    public Result updateImage (HashMap<String,Object> data,MultipartFile file) throws PlatformException {
         UserInfo userInfo = getAuthorizedUser(data);
 
-        if (!userInfo.getId().equals(id)) {
-            throw new NotAuthorized("User id is not correct" , trace, TraceLevel.Event);
-        }
-
+        if (userInfo == null) return Result.SessionFailed;
 
         if (file != null) {
             try {
@@ -248,6 +242,22 @@ public class UserInfoService extends AbstractService implements BootstrapService
             } catch (IOException e) {
                 trace.logException("Error get bytes for image", e, TraceLevel.Error);
             }
+        }
+
+        userInfoRepository.update(userInfo);
+
+        return Result.Complete;
+    }
+
+    @Action(name = "updateExtraInfo" , mandatoryFields = {"userId"})
+    public RegisterResult registerExtraInfo (HashMap<String,Object> data) throws PlatformException {
+
+        Long id = new Long((Integer)data.get("userId"));
+
+        UserInfo userInfo = getAuthorizedUser(data);
+
+        if (!userInfo.getId().equals(id)) {
+            throw new NotAuthorized("User id is not correct" , trace, TraceLevel.Event);
         }
 
         if (data.containsKey("cityId")) {
