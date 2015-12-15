@@ -2,6 +2,8 @@ package com.getknowledge.modules.userInfo;
 
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.LanguageRepository;
+import com.getknowledge.modules.menu.MenuNames;
+import com.getknowledge.modules.menu.MenuRepository;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
@@ -19,6 +21,19 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private MenuRepository menuRepository;
+
+    @Override
+    public UserInfo read(Long id) {
+        UserInfo userInfo = super.read(id);
+        if (currentUser != null && currentUser.getId().equals(userInfo.getId())) {
+            userInfo.setUserMenu(menuRepository.getSingleEntityByFieldAndValue("name", MenuNames.AuthorizedUser.name()));
+        } else {
+            userInfo.setUserMenu(menuRepository.getSingleEntityByFieldAndValue("name", MenuNames.NotAuthorizedUser.name()));
+        }
+        return userInfo;
+    }
 
     @Override
     public void remove(Long id) {

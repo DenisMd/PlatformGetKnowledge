@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.getknowledge.modules.dictionaries.city.City;
 import com.getknowledge.modules.dictionaries.language.Language;
+import com.getknowledge.modules.menu.Menu;
 import com.getknowledge.modules.userInfo.post.Post;
+import com.getknowledge.modules.userInfo.socialLink.UserSocialLink;
 import com.getknowledge.platform.annotations.Access;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
@@ -59,8 +61,41 @@ public class UserInfo  extends CloneableEntity<UserInfo> implements IUser {
     @Access(myself = true)
     private Boolean firstLogin;
 
-    @Column
+    @Column(length = 120)
     private String status;
+
+    @Column(length = 500)
+    private String webSite;
+
+    @Embedded
+    private UserSocialLink links;
+
+    @Transient
+    private Menu userMenu;
+
+    public Menu getUserMenu() {
+        return userMenu;
+    }
+
+    public void setUserMenu(Menu userMenu) {
+        this.userMenu = userMenu;
+    }
+
+    public UserSocialLink getLinks() {
+        return links;
+    }
+
+    public void setLinks(UserSocialLink links) {
+        this.links = links;
+    }
+
+    public String getWebSite() {
+        return webSite;
+    }
+
+    public void setWebSite(String webSite) {
+        this.webSite = webSite;
+    }
 
     public String getStatus() {
         return status;
@@ -182,6 +217,9 @@ public class UserInfo  extends CloneableEntity<UserInfo> implements IUser {
         userInfo.setFirstLogin(this.getFirstLogin());
         userInfo.setStatus(this.getStatus());
         userInfo.setCity(this.getCity());
+        userInfo.setWebSite(this.webSite);
+        userInfo.setLinks(this.links);
+        userInfo.setUserMenu(this.userMenu);
         return userInfo;
     }
 }

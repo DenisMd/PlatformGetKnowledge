@@ -121,3 +121,15 @@ Moderator : ROLE_MODERATOR
         programs : /programs : /resources/image/menu/icons/programs.png
     news : /news : /resources/image/menu/icons/news.png : e5d525
     contactUs : /contacts : /resources/image/menu/icons/contacts.png : 29CE1F
+
+# Menu for authorized user
+AuthorizedUser
+    mailBox : /mailBox
+    progress : /progress
+    friends : /friends
+    settings : /settings
+
+# Menu for not authorized user
+NotAuthorizedUser
+    progress : /progress
+    friends : /friends

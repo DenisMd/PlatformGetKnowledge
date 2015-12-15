@@ -11,6 +11,8 @@ import com.getknowledge.modules.settings.SettingsRepository;
 import com.getknowledge.modules.userInfo.registerInfo.RegisterInfo;
 import com.getknowledge.modules.userInfo.registerInfo.RegisterInfoRepository;
 import com.getknowledge.modules.userInfo.results.RegisterResult;
+import com.getknowledge.modules.userInfo.results.Result;
+import com.getknowledge.modules.userInfo.socialLink.UserSocialLink;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.services.AbstractService;
@@ -279,11 +281,65 @@ public class UserInfoService extends AbstractService implements BootstrapService
     }
 
     @Action(name = "skipExtraRegistration")
-    public RegisterResult skipExtraRegistration(HashMap<String,Object> data) {
+    public Result skipExtraRegistration(HashMap<String,Object> data) {
         UserInfo userInfo = getAuthorizedUser(data);
+        if (userInfo == null) return Result.SessionFailed;
         userInfo.setFirstLogin(false);
         userInfoRepository.update(userInfo);
-        return RegisterResult.Complete;
+        return Result.Complete;
+    }
+
+    @Action(name = "updateStatus" , mandatoryFields = "status")
+    public Result updateStatus (HashMap<String , Object> data) {
+        UserInfo userInfo = getAuthorizedUser(data);
+        if (userInfo == null) return Result.SessionFailed;
+        userInfo.setStatus((String) data.get("status"));
+        userInfoRepository.update(userInfo);
+        return Result.Complete;
+    }
+
+    @Action(name = "setLinks")
+    public Result setLinks(HashMap<String , Object> data) {
+        UserInfo userInfo = getAuthorizedUser(data);
+        if (userInfo == null) return Result.SessionFailed;
+
+        if (data.containsKey("webSite")) {
+            String webSite = (String) data.get("webSite");
+            userInfo.setWebSite(webSite);
+        }
+
+        String vk = "";
+        String facebook = "";
+        String github = "";
+        String twitter = "";
+
+        UserSocialLink userSocialLink = userInfo.getLinks();
+        if (userInfo == null) userSocialLink = new UserSocialLink();
+
+        if (data.containsKey("vkLink")) {
+            vk = (String) data.get("vkLink");
+            userSocialLink.setVkLink(vk);
+        }
+
+        if (data.containsKey("facebookLink")) {
+            facebook = (String) data.get("facebookLink");
+            userSocialLink.setFacebookLink(facebook);
+        }
+
+        if (data.containsKey("githubLink")) {
+            github = (String) data.get("githubLink");
+            userSocialLink.setGithubLink(github);
+        }
+
+        if (data.containsKey("twitterLink")) {
+            twitter = (String) data.get("twitterLink");
+            userSocialLink.setTwitterLink(twitter);
+        }
+
+        userInfo.setLinks(userSocialLink);
+        userInfoRepository.update(userInfo);
+
+        return Result.Complete;
     }
 
     public UserInfo getCurrentUser(Principal p) {
