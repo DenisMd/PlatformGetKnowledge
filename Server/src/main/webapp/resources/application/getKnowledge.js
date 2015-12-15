@@ -286,6 +286,7 @@ model.controller("textPlainCtrl" , function($scope,$uibModal) {
 //select value
 model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     $scope.choose = false;
+    var isModelOpen = false;
     $scope.model = "";
     $scope.modalModel;
     $scope.selectModalValue;
@@ -304,6 +305,7 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
         $scope.resetActiveElementInModal();
         $scope.modalModel = "";
         $scope.selectModalValue = null;
+        isModelOpen = false;
     } ;
     $scope.getItem = function (item) {
         if (!item) return "";
@@ -333,26 +335,32 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
             filteredData = $filter('limitTo')(filteredData, $scope.count);
 
             if (filteredData) {
-                $scope.selectForm['main-select'].$setValidity("selectValue", true);
+                var valid = true;
+
                 if (filteredData.length === 1) {
                     if ($scope.choose && $scope.model.toString() === $scope.getItem(filteredData[0]).toString()) {
                         $scope.setModel(filteredData[0]);
                     }
                 } else {
                     if (filteredData.length === 0) {
-                        $scope.selectForm['main-select'].$setValidity("selectValue", false);
+                        if ($scope.isRequired()) {
+                            valid = false;
+                        }
                     }
                 }
             }
             if (!$scope.choose && $scope.model && !($scope.model.toString() === $scope.getItem(filteredData[0]).toString())){
-                $scope.selectForm['main-select'].$setValidity("selectValue", false);
+                valid = false;
             }
+            $scope.selectForm['main-select'].$setValidity("selectValue", valid);
             $scope.setValid();
         } else {
-            if (filteredData.length === 0){
-                $scope.selectForm['search-input'].$setValidity("searchValue", false);
-            } else {
-                $scope.selectForm['search-input'].$setValidity("searchValue", true);
+            if (isModelOpen) {
+                if (filteredData.length === 0) {
+                    $scope.selectForm['search-input'].$setValidity("searchValue", false);
+                } else {
+                    $scope.selectForm['search-input'].$setValidity("searchValue", true);
+                }
             }
         }
         return filteredData;
@@ -398,6 +406,7 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
         });
         $(selector).modal('show');
         $(selector+" .table-content").height(getHeight());
+        isModelOpen = true;
     };
 
     var currentElement;

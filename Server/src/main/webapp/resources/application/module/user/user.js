@@ -35,7 +35,8 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         "isValid" : function(value){
             isCountryValid = value;
         },
-        "callback" : function (value){
+        required: false,
+        "callback": function(value){
             $scope.country = value;
             $scope.$broadcast('reset' + $scope.cityData.id.capitalizeFirstLetter() + 'Event');
             $scope.$broadcast('reset' + $scope.regionData.id.capitalizeFirstLetter() + 'Event');
@@ -52,7 +53,7 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         "listName" : "regionsList",
         "maxHeight" : 300,//
         "disable" : function(){
-            return !isCountryValid || isRegionDisable;
+            return !isCountryValid || !$scope.country || isRegionDisable;
         },
         "required" : function(){
             return $scope.country;
@@ -76,7 +77,7 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         //"required" : true,
         "maxHeight" : 300,
         "disable" : function(){
-            return !isCountryValid || !isRegionValid || isCityDisable;
+            return !isCountryValid || !isRegionValid  || !$scope.country  || !$scope.region  || isCityDisable;
         },
         "required" : function(){
             return $scope.country;
@@ -99,8 +100,7 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         id : "image-loud",
         save : function(data){
             $scope.image = data;
-        },
-        required: true
+        }
     };
 
 
@@ -115,7 +115,7 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
             if ($scope.speciality) data.speciality = $scope.speciality;
             if ($scope.date) data.date = $scope.date;
 
-            applicationService.actionWithFile($scope, "status", className.userInfo, "updateExtraInfo", data, $scope.image, function(item){
+            applicationService.action($scope, "status", className.userInfo, "updateExtraInfo", data, function(item){
                 if (item === '"Complete"'){
                     applicationService.read($scope, "user_info" , className.userInfo, userId);
                     $("#userModal").modal('hide');

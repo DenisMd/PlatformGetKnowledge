@@ -31,8 +31,9 @@
                     </div>
                 </form>
             </div>
+
             <div class="modal-footer modal-find">
-                <button type="button" class="btn btn-primary" ng-disabled="false" ng-click="save()">{{translate("save")}}</button>
+                <button type="button" class="btn btn-primary" ng-disabled="firsTimeForm.$invalid" ng-click="save()">{{translate("save")}}</button>
                 <button type="button" class="btn btn-default" ng-click="closeModal()">{{translate("skip")}}</button>
             </div>
         </div><!-- /.modal-content -->
