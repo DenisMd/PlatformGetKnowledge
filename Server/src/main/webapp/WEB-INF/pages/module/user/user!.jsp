@@ -7,7 +7,7 @@
             <div class="modal-header">
                 <h4 class="modal-title">{{translate("extraRegister")}}</h4>
             </div>
-            <div class="modal-body first-form-body"   ng-scrollbars ng-scrollbars-config="modalScrollConfig">
+            <div class="modal-body first-form-body"  ng-scrollbars ng-scrollbars-config="modalScrollConfig">
                 <form name="firsTimeForm" style="position: relative;">
                     <div class="form-group">
                         <label class="control-label">{{translate("country_select")}}</label>
@@ -28,10 +28,6 @@
                     <div class="form-group">
                         <label class="control-label">{{translate("specialty_select")}}</label>
                         <input class="form-control" type="text" ng-model="speciality" ng-maxlength="40">
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">{{translate("avatar_load")}}</label>
-                        <module-template data="imageLoad" name="inputs/selectImage"></module-template>
                     </div>
                 </form>
             </div>

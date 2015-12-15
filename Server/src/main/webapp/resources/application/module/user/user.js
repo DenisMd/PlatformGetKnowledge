@@ -31,7 +31,6 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         "count" : 3,
         "filter":"countryName",
         "listName" : "countriesList",
-        //"required" : true,
         "maxHeight" : 300,
         "isValid" : function(value){
             isCountryValid = value;
@@ -51,10 +50,12 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         "count" : 3,//
         "filter":"regionName",
         "listName" : "regionsList",
-        //"required" : true,//
         "maxHeight" : 300,//
         "disable" : function(){
             return !isCountryValid || isRegionDisable;
+        },
+        "required" : function(){
+            return $scope.country;
         },
         "isValid" : function(value){
             isRegionValid = value;
@@ -77,6 +78,9 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         "disable" : function(){
             return !isCountryValid || !isRegionValid || isCityDisable;
         },
+        "required" : function(){
+            return $scope.country;
+        },
         "callback" : function (value){
             $scope.city = value;
         }
@@ -95,7 +99,8 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         id : "image-loud",
         save : function(data){
             $scope.image = data;
-        }
+        },
+        required: true
     };
 
 
@@ -110,7 +115,12 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
             if ($scope.speciality) data.speciality = $scope.speciality;
             if ($scope.date) data.date = $scope.date;
 
-            applicationService.actionWithFile($scope, "status", className.userInfo, "updateExtraInfo", data, $scope.image);
+            applicationService.actionWithFile($scope, "status", className.userInfo, "updateExtraInfo", data, $scope.image, function(item){
+                if (item === '"Complete"'){
+                    applicationService.read($scope, "user_info" , className.userInfo, userId);
+                    $("#userModal").modal('hide');
+                }
+            });
         }
     }
 

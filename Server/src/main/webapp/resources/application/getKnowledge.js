@@ -296,7 +296,6 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     $scope.count = $scope.getData().count;
     $scope.class = $scope.getData().class;
     $scope.callback = angular.isFunction($scope.getData().callback)? $scope.getData().callback : null;
-    $scope.required = $scope.getData().required;
     $scope.list = [];
     var selector = '#' + $scope.id;
 
@@ -433,6 +432,18 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
         });
     };
 
+    $scope.isRequired = function(){
+        var val = $scope.getData().required;
+
+        if (!val) return false;
+
+        if (angular.isFunction(val)){
+            return val();
+        } else{
+            return val;
+        }
+    };
+
     //есть ли запрет на редактирование
     $scope.isDisabled = function(){
         var val = $scope.getData().disable;
@@ -539,9 +550,6 @@ model.controller("selectImgCtrl", function($scope,$uibModal){
     //    backdrop: 'static',
     //    keyboard: false
     //});
-    $scope.onChange = function(data){
-        save();
-    };
 
     $scope.uploadFile = function(file) {
         if (file) {
@@ -570,8 +578,10 @@ model.controller("selectImgCtrl", function($scope,$uibModal){
     };
 
     $scope.onChange = function (element) {
+        console.log(element);
         if (angular.isFunction($scope.getData().save)) {
             var file = base64ToBlob(element.replace('data:image/png;base64,',''), 'image/jpeg');
+            //DwENAIJ4HAYF4AwSagD9IczM1IiCQkUNbswkIpLmZGhEQyMihrdkEBNLcTI0ICGTk0NZsAgJpbqZGBAQycmhrNgGBNDdTIwICGTm0NZuAQJqbqREBgYwc2ppNQCDNzdSIgEBGDm3NJiCQ5mZqREAgI4e2ZhMQSHMzNSIgkJFDW7MJCKS5mRoREMjIoa3ZBATS3EyNCAhk5NDWbAICaW6mRgQEMnJoazYBgTQ3UyMCAhk5tDWbgECam6kRAYGMHNqaTUAgzc3UiIBARg5tzSYgkOZmakRAICOHtmYTEEhzMzUiIJCRQ1uzCQikuZkaERDIyKGt2QQE0txMjQgIZOTQ1mwCAmlupkYEBDJyaGs2AYE0N1MjAgIZObQ1m4BAmpupEQGBjBzamk1AIM3N1IiAQEYObc0mIJDmZmpEQCAjh7ZmExBIczM1IiCQkUNbswkIpLmZGhEQyMihrdkEBNLcTI0ICGTk0NZsAgJpbqZGBAQycmhrNgGBNDdTIwICGTm0NZuAQJqbqREBgYwc2ppNQCDNzdSIgEBGDm3NJiCQ5mZqREAgI4e2ZhMQSHMzNSIgkJFDW7MJCKS5mRoREMjIoa3ZBATS3EyNCAhk5NDWbAICaW6mRgQEMnJoazYBgTQ3UyMCAhk5tDWbgECam6kRAYGMHNqaTUAgzc3UiIBARg5tzSYgkOZmakRAICOHtmYTEEhzMzUiIJCRQ1uzCQikuZkaERDIyKGt2QQE0txMjQgIZOTQ1mwCAmlupkYEBDJyaGs2AYE0N1MjAgIZObQ1m4BAmpupEQGBjBzamk1AIM3N1IiAQEYObc0mIJDmZmpEQCAjh7ZmExBIczM1IiCQkUNbswkIpLmZGhEQyMihrdkEBNLcTI0ICGTk0NZsAgJpbqZGBAQycmhrNgGBNDdTIwICGTm0NZuAQJqbqREBgYwc2ppNQCDNzdSIgEBGDm3NJiCQ5mZqREAgI4e2ZhMQSHMzNSIgkJFDW7MJCKS5mRoREMjIoa3ZBATS3EyNCAhk5NDWbAICaW6mRgQEMnJoazYBgTQ3UyMCAhk5tDWbgECam6kRAYGMHNqaTUAgzc3UiIBARg5tzSYgkOZmakRAICOHtmYTEEhzMzUiIJCRQ1uzCQikuZkaERDIyKGt2QQE0txMjQgIZOTQ1mwCAmlupkYEBDJyaGs2AYE0N1MjAgIZObQ1m4BAmpupEQGBjBzamk1AIM3N1IiAQEYObc0mIJDmZmpEQCAjh7ZmExBIczM1IiCQkUNbswkIpLmZGhEQyMihrdkEBNLcTI0ICGTk0NZsAgJpbqZGBAQycmhrNgGBNDdTIwICGTm0NZuAQJqbqREBgYwc2ppNQCDNzdSIgEBGDm3NJiCQ5mZqREAgI4e2ZhMQSHMzNSIgkJFDW7MJCKS5mRoREMjIoa3ZBATS3EyNCAhk5NDWbAICaW6mRgQEMnJoazYBgTQ3UyMCAhk5tDWbgECam6kRAYGMHNqaTUAgzc3UiIBARg5tzSYgkOZmakRAICOHtmYTEEhzMzUiIJCRQ1uzCQikuZkaERDIyKGt2QQE0txMjQgIZOTQ1mwCAmlupkYEBDJyaGs2AYE0N1MjAgIZObQ1m4BAmpupEQGBjBzamk1AIM3N1IiAQEYObc0mIJDmZmpEQCAjh7ZmExBIczM1IiCQkUNbswkIpLmZGhH4AStUAMmSuOW2AAAAAElFTkSuQmCC
             $scope.getData().save(file);
         }
     };
@@ -608,6 +618,7 @@ model.controller("selectImgCtrl", function($scope,$uibModal){
         return new Blob(byteArrays, { type: contentType });
     };
 });
+
 
 //datapicker
 model.controller("datepickerCtrl", function($scope){
