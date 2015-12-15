@@ -283,7 +283,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
             }
         }
 
-        //userInfo.setFirstLogin(false);
+        userInfo.setFirstLogin(false);
 
         userInfoRepository.update(userInfo);
 
