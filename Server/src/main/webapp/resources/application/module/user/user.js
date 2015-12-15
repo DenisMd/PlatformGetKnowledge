@@ -15,6 +15,7 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         });
     }
     $scope.closeModal = function(){
+        applicationService.action($scope,"skipResult",className.userInfo,"skipExtraRegistration",{});
         $("#userModal").modal('hide');
     };
 
@@ -116,7 +117,8 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
             if ($scope.date) data.date = $scope.date;
 
             applicationService.action($scope, "status", className.userInfo, "updateExtraInfo", data, function(item){
-                if (item === '"Complete"'){
+                console.log(item);
+                if (item === "Complete"){
                     applicationService.read($scope, "user_info" , className.userInfo, userId);
                     $("#userModal").modal('hide');
                 }
