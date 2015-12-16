@@ -1,6 +1,32 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet" href="/resources/css/user.css">
 {{user_info}}
+<div class="user-menu">
+    <div class="user-photo">
+        <img ng-src="{{userImg(user.id)}}" class="main-image user-image" />
+    </div>
+    <div class="user-menu-content">
+        <p class="main-label">{{user.firstName}} {{user.lastName}}</p>
+        <p class="info-about-user">{{user.specialty}}</p>
+    </div>
+</div>
+
+
+<div style="padding: 300px">
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
 <div class="modal fade" id="userModal">
     <div class="modal-dialog first-form-modal">
         <div class="modal-content">

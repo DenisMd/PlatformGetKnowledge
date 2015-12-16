@@ -99,10 +99,11 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
     //данные для image
     $scope.imageLoad = {
         id : "image-loud",
-        save : function(data){
-            $scope.image = data;
+        save : function(file){
+            applicationService.actionWithFile($scope,"updateImage",className.userInfo,"updateImage",{},file);
         }
     };
+
 
 
     $scope.speciality = "";

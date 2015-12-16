@@ -13,3 +13,32 @@
         box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
     }
 }
+
+/*menu*/
+.user-photo{
+    height: 200px;
+    width: 200px;
+    top: -100px;
+    position:absolute;
+    /*background: #ffffff;*/
+    left: 50px;
+}
+.user-image{
+    height: 100%;
+    width: 100%;
+    border:#999999;
+}
+
+.user-menu{
+    width: 300px;
+    top: 150px;
+    position:fixed;
+    height: 100%;
+    border: 1px solid #F0F0F0;
+    background: white;
+}
+
+.user-menu-content{
+    padding-top: 100px;
+    text-align: center;
+}
