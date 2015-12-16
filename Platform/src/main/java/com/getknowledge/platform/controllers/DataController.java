@@ -2,9 +2,7 @@ package com.getknowledge.platform.controllers;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -13,7 +11,9 @@ import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
-import com.getknowledge.platform.base.repositories.*;
+import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.base.repositories.PrepareEntity;
+import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.FileLinkService;
 import com.getknowledge.platform.base.services.ImageService;
@@ -33,7 +33,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
@@ -50,9 +53,7 @@ import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/data")
@@ -103,7 +104,7 @@ public class DataController {
                             }
 
                             AbstractEntity abstractEntity = (AbstractEntity) result;
-                            BaseRepository<AbstractEntity> repository2 = moduleLocator.findRepository(abstractEntity.getClass());
+                            BaseRepository<AbstractEntity> repository2 = (BaseRepository<AbstractEntity>)moduleLocator.findRepository(abstractEntity.getClass());
                             pd.getWriteMethod().invoke(entity, prepare(abstractEntity,repository2,principal,classNames));
                         }
                     }
@@ -208,7 +209,7 @@ public class DataController {
                 ImageService imageService = ((ImageService)abstractService);
                 final HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.IMAGE_JPEG);
-                return new ResponseEntity<byte[]>(imageService.getImageById(id),headers, HttpStatus.OK);
+                return new ResponseEntity<>(imageService.getImageById(id), headers, HttpStatus.OK);
             }
 
 
@@ -480,16 +481,15 @@ public class DataController {
         }
 
         User user = getCurrentUser(principal);
-        if (user == null) throw new NotAuthorized("User not found");;
+        if (user == null) throw new NotAuthorized("User not found");
 
         if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
             return true;
         }
 
 
-        if (al == null) {return false;}
+        return al != null && (checkRight(user, al.getPermissionsForRead()) || checkUserList(user, al.getUserList()));
 
-        return checkRight(user, al.getPermissionsForRead()) || checkUserList(user , al.getUserList());
     }
 
     private boolean isAccessCreate(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {
@@ -507,9 +507,8 @@ public class DataController {
             return true;
         }
 
-        if (al == null) {return false;}
+        return al != null && (checkRight(user, al.getPermissionsForCreate()) || checkUserList(user, al.getUserList()));
 
-        return checkRight(user, al.getPermissionsForCreate()) || checkUserList(user , al.getUserList());
     }
 
     private boolean isAccessEdit(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {
@@ -526,9 +525,8 @@ public class DataController {
             return true;
         }
 
-        if (al == null) {return false;}
+        return al != null && (checkRight(user, al.getPermissionsForEdit()) || checkUserList(user, al.getUserList()));
 
-        return checkRight(user, al.getPermissionsForEdit()) || checkUserList(user , al.getUserList());
     }
 
     private boolean isAccessRemove(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {
@@ -545,9 +543,8 @@ public class DataController {
             return true;
         }
 
-        if (al == null) {return false;}
+        return al != null && (checkRight(user, al.getPermissionsForRemove()) || checkUserList(user, al.getUserList()));
 
-        return checkRight(user, al.getPermissionsForRemove()) || checkUserList(user , al.getUserList());
     }
 
     private boolean checkRight(User user , List<Permission> permissions) throws NotAuthorized {
@@ -566,7 +563,6 @@ public class DataController {
     }
 
     private boolean checkUserList(User user, List<User> users) {
-        if (users == null) return false;
-        return users.contains(user);
+        return users != null && users.contains(user);
     }
 }

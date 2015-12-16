@@ -60,7 +60,7 @@ public abstract class BaseRepository<T extends AbstractEntity> {
     }
 
     public List<T> list() {
-        List<T> list = entityManager.createQuery("Select t from " + getClassEntity().getSimpleName() + " t").getResultList();
+        List<T> list = (List<T>)entityManager.createQuery("Select t from " + getClassEntity().getSimpleName() + " t").getResultList();
         return list;
     }
 
@@ -68,7 +68,7 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         Query query = entityManager.createQuery("Select t from " + getClassEntity().getSimpleName() + " t");
         query.setFirstResult(first);
         query.setMaxResults(max);
-        List<T> list = query.getResultList();
+        List<T> list = (List<T>)query.getResultList();
         return list;
     }
 
@@ -78,7 +78,7 @@ public abstract class BaseRepository<T extends AbstractEntity> {
     }
 
     public List<T> getEntitiesByFieldAndValue(String field, Object value) {
-        List<T> list = entityManager.createQuery("select ent from " + getClassEntity().getSimpleName() + " ent where ent."+field+"=:value")
+        List<T> list = (List<T>)entityManager.createQuery("select ent from " + getClassEntity().getSimpleName() + " ent where ent."+field+"=:value")
                 .setParameter("value" , value).getResultList();
         return list;
     }

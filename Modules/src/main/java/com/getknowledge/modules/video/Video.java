@@ -5,12 +5,10 @@ import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
-import com.getknowledge.platform.modules.user.User;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.util.List;
 
 @Entity
 @Table(name = "video")

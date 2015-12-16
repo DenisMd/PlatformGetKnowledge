@@ -2,7 +2,6 @@ package com.getknowledge.modules.dictionaries.country;
 
 import com.getknowledge.modules.dictionaries.city.City;
 import com.getknowledge.modules.dictionaries.city.CityRepository;
-import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
 import com.getknowledge.modules.dictionaries.region.Region;
@@ -21,11 +20,8 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
 
 @Service("CountryService")
 public class CountryService extends AbstractService implements BootstrapService {

@@ -1,7 +1,6 @@
 package com.getknowledge.platform.base.repositories;
 
 import com.getknowledge.platform.base.entities.AbstractEntity;
-import org.jsoup.Connection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +11,7 @@ public abstract class TransientRepository<T extends AbstractEntity> extends Base
 
     @Override
     public Long count() {
-        return new Long(list.size());
+        return (long) list.size();
     }
 
     @Override

@@ -5,7 +5,6 @@ import com.getknowledge.modules.menu.item.MenuItem;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
-import org.hibernate.search.annotations.Field;
 
 import javax.persistence.*;
 

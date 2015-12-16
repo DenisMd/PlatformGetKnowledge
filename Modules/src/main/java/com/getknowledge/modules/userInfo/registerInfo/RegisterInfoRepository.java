@@ -1,6 +1,5 @@
 package com.getknowledge.modules.userInfo.registerInfo;
 
-import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoRepository;
 import com.getknowledge.platform.base.repositories.BaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;

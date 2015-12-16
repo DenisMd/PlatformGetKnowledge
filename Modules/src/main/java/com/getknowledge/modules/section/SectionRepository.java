@@ -1,10 +1,7 @@
 package com.getknowledge.modules.section;
 
-import com.getknowledge.modules.menu.item.MenuItem;
 import com.getknowledge.platform.base.repositories.BaseRepository;
-import com.getknowledge.platform.base.repositories.PrepareRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository("SectionRepository")
 public class SectionRepository extends BaseRepository<Section> {

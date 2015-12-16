@@ -40,18 +40,15 @@ public class BootstrapInfoRepository extends BaseRepository<BootstrapInfo> {
                 (bootstrapInfo -> createIfNotExist(bootstrapInfo.getBootstrapInfo()))
                 .collect(Collectors.toList()));
 
-        bootstrapInfos.sort(new Comparator<BootstrapInfo>() {
-            @Override
-            public int compare(BootstrapInfo o1, BootstrapInfo o2) {
-                if (o1.getOrder() > o2.getOrder()) {
-                    return 1;
-                }
-
-                if (o1.getOrder() < o2.getOrder()) {
-                    return -1;
-                }
-                return 0;
+        bootstrapInfos.sort((o1, o2) -> {
+            if (o1.getOrder() > o2.getOrder()) {
+                return 1;
             }
+
+            if (o1.getOrder() < o2.getOrder()) {
+                return -1;
+            }
+            return 0;
         });
 
         return bootstrapInfos;

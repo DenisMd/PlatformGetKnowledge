@@ -1,8 +1,6 @@
 package com.getknowledge.modules.userInfo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.getknowledge.modules.dictionaries.city.City;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.menu.Menu;
@@ -10,7 +8,6 @@ import com.getknowledge.modules.userInfo.post.Post;
 import com.getknowledge.modules.userInfo.socialLink.UserSocialLink;
 import com.getknowledge.platform.annotations.Access;
 import com.getknowledge.platform.annotations.ModuleInfo;
-import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.entities.IUser;
 import com.getknowledge.platform.base.repositories.CloneableEntity;

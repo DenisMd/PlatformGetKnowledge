@@ -2,7 +2,6 @@ package com.getknowledge.platform.base.entities;
 
 
 import com.getknowledge.platform.modules.permission.Permission;
-import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.user.User;
 
 import java.util.ArrayList;

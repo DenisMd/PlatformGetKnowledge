@@ -2,9 +2,6 @@ package com.getknowledge.modules.menu;
 
 import com.getknowledge.modules.menu.item.MenuItem;
 import com.getknowledge.modules.menu.item.MenuItemsRepository;
-import com.getknowledge.modules.userInfo.UserInfo;
-import com.getknowledge.modules.userInfo.UserInfoRepository;
-import com.getknowledge.modules.userInfo.UserInfoService;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.BootstrapService;
@@ -15,12 +12,13 @@ import com.getknowledge.platform.modules.role.RoleRepository;
 import com.getknowledge.platform.modules.role.names.RoleName;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
-import com.getknowledge.platform.modules.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletContext;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

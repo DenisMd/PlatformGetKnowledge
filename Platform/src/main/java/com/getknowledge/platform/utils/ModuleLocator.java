@@ -50,12 +50,10 @@ public class  ModuleLocator {
 
     public List<BootstrapService> findAllBootstrapServices(){
         List<BootstrapService> bootstraps = new ArrayList<>(50);
-        for ( Map.Entry< String, Object > b : ac.getBeansWithAnnotation( Service.class ).entrySet () ) {
-            if (b.getValue() instanceof BootstrapService) {
-                BootstrapService info = ((BootstrapService) b.getValue());
-                bootstraps.add(info);
-            }
-        }
+        ac.getBeansWithAnnotation(Service.class).entrySet().stream().filter(b -> b.getValue() instanceof BootstrapService).forEach(b -> {
+            BootstrapService info = ((BootstrapService) b.getValue());
+            bootstraps.add(info);
+        });
         return bootstraps;
     }
 }

@@ -1,17 +1,13 @@
 package com.getknowledge.platform.base.repositories;
 
 import com.getknowledge.platform.annotations.Access;
-import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.IUser;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.user.User;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.jws.soap.SOAPBinding;
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
 public abstract class ProtectedRepository <T extends CloneableEntity<T>> extends PrepareRepository<T> {
@@ -37,7 +33,7 @@ public abstract class ProtectedRepository <T extends CloneableEntity<T>> extends
                     if (access.myself()) {
                         if (owner != null) {
                             if (owner.getLogin().equals(currentUser.getLogin())) {
-                                break mainFor;
+                                break;
                             }
                         }
                     }

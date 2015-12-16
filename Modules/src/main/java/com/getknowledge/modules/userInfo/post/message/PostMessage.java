@@ -1,7 +1,6 @@
 package com.getknowledge.modules.userInfo.post.message;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;

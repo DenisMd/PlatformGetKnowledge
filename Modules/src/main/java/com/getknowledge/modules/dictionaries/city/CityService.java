@@ -4,7 +4,6 @@ import com.getknowledge.modules.dictionaries.language.names.Languages;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.base.services.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;

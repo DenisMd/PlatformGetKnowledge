@@ -22,8 +22,8 @@ import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
 import com.getknowledge.platform.modules.role.Role;
-import com.getknowledge.platform.modules.role.names.RoleName;
 import com.getknowledge.platform.modules.role.RoleRepository;
+import com.getknowledge.platform.modules.role.names.RoleName;
 import com.getknowledge.platform.modules.task.Task;
 import com.getknowledge.platform.modules.task.TaskRepository;
 import com.getknowledge.platform.modules.task.enumerations.TaskStatus;
@@ -32,7 +32,6 @@ import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,7 +40,10 @@ import java.io.InputStream;
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.UUID;
 
 @Service("UserInfoService")
 public class UserInfoService extends AbstractService implements BootstrapService,ImageService {

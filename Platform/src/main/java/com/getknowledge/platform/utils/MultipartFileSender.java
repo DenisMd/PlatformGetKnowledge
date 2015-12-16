@@ -1,7 +1,6 @@
 package com.getknowledge.platform.utils;
 
 import org.slf4j.LoggerFactory;
-import org.springframework.util.MimeTypeUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletOutputStream;
@@ -18,7 +17,6 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class MultipartFileSender {
 

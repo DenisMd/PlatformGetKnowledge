@@ -41,8 +41,7 @@ public abstract class AbstractEntity {
         AbstractEntity that = (AbstractEntity) o;
 
         if (!className.equals(that.className)) return false;
-        if (!id.equals(that.id)) return false;
+        return id.equals(that.id);
 
-        return true;
     }
 }

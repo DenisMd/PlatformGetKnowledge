@@ -1,12 +1,10 @@
 package com.getknowledge.modules.dictionaries.city;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.region.Region;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
-import org.hibernate.search.annotations.Field;
 
 import javax.persistence.*;
 

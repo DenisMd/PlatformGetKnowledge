@@ -1,6 +1,5 @@
 package com.getknowledge.modules.menu.item;
 
-import com.getknowledge.modules.menu.Menu;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;

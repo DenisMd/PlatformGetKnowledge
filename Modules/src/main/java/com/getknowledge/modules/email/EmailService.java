@@ -5,7 +5,6 @@ import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -13,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
 
 @Service("emailService")
 public class EmailService {
