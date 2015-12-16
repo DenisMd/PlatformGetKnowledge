@@ -119,6 +119,7 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
             applicationService.action($scope, "status", className.userInfo, "updateExtraInfo", data, function(item){
                 console.log(item);
                 if (item === "Complete"){
+                    $scope.user.specialty = data.speciality;
                     applicationService.read($scope, "user_info" , className.userInfo, userId);
                     $("#userModal").modal('hide');
                 }
