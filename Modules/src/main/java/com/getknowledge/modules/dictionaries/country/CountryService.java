@@ -115,7 +115,8 @@ public class CountryService extends AbstractService implements BootstrapService 
 
     @Action(name = "getCountries" , mandatoryFields = {"language"})
     public List<Country> getCountries (HashMap<String,Object> data) {
-        return countryRepository.getEntitiesByFieldAndValue("language.name" , data.get("language"));
+        //data.get("language")
+        return countryRepository.getEntitiesByFieldAndValue("language.name" , Languages.Ru.name());
     }
 
 }
