@@ -1,13 +1,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet" href="/resources/css/user.css">
-{{user_info}}
+
 <div class="user-menu">
     <div class="user-photo">
-        <img ng-src="{{userImg(user.id)}}" class="main-image user-image" />
+        <img ng-src="{{userImg(user_info.id)}}" class="main-image user-image" />
     </div>
     <div class="user-menu-content">
-        <p class="main-label">{{user.firstName}} {{user.lastName}}</p>
-        <p class="info-about-user">{{user.specialty}}</p>
+        <p class="main-label">{{user_info.firstName}} {{user_info.lastName}}</p>
+        <p class="info-about-user">{{user_info.specialty}}</p>
+    </div>
+    <div class="user-status">
+        <span class="circle-online"></span>
+        Online
     </div>
 </div>
 
