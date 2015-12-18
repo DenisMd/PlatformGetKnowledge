@@ -19,23 +19,12 @@ public class Region extends AbstractEntity {
     private String regionName;
 
     @JsonIgnore
-    @Column(name = "xml_id")
+    @Column(name = "external_id")
     @Field
     private Long xmlId;
 
     @ManyToOne
     private Country country;
-
-    @OneToOne
-    private Language language;
-
-    public Language getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(Language language) {
-        this.language = language;
-    }
 
     public Long getXmlId() {
         return xmlId;

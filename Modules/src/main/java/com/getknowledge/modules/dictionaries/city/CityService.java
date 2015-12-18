@@ -14,13 +14,11 @@ public class CityService extends AbstractService {
     @Autowired
     private CityRepository cityRepository;
 
-    @Action(name = "getCitiesByRegion" , mandatoryFields = {"regionId","language"})
+    @Action(name = "getCitiesByRegion" , mandatoryFields = {"regionId"})
     public List<City> getCities(HashMap<String,Object> data) {
         Long regionId = new Long((Integer)data.get("regionId"));
-        //data.get("language")
-        List<City> list = entityManager.createQuery("select city from City city where city.region.id=:id and city.language.name=:name")
-                .setParameter("id" , regionId)
-                .setParameter("name" , Languages.Ru.name()).getResultList();
+        List<City> list = entityManager.createQuery("select city from City city where city.region.id=:id")
+                .setParameter("id" , regionId).getResultList();
         return list;
     }
 }

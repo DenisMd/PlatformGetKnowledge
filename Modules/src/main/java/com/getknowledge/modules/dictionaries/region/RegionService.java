@@ -17,13 +17,11 @@ public class RegionService extends AbstractService {
     @Autowired
     private CountryRepository countryRepository;
 
-    @Action(name = "chooseRegionsByCountry" ,mandatoryFields = {"countryId" , "language"})
+    @Action(name = "chooseRegionsByCountry" ,mandatoryFields = {"countryId" })
     public List<Region> chooseRegionsByCountry(HashMap<String,Object> data) {
         Long countryLong = new Long((Integer) data.get("countryId"));
-        //data.get("language")
-        List<Region> regionList = entityManager.createQuery("select r from Region r where r.country.id=:id and r.language.name=:languageName")
-                .setParameter("id" , countryLong)
-                .setParameter("languageName", Languages.Ru.name()).getResultList();
+        List<Region> regionList = entityManager.createQuery("select r from Region r where r.country.id=:id")
+                .setParameter("id" , countryLong).getResultList();
         return regionList;
     }
 }
