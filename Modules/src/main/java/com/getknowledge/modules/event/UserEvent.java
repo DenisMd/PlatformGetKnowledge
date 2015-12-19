@@ -1,19 +1,20 @@
-package com.getknowledge.modules.userInfo.registerInfo;
+package com.getknowledge.modules.event;
 
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Calendar;
 
 @Entity
-@Table(name = "register_info")
-@ModuleInfo(repositoryName = "RegisterInfoRepository" , serviceName = "RegisterInfoService")
-public class RegisterInfo extends AbstractEntity {
+@Table(name = "user_event")
+@ModuleInfo(repositoryName = "UserEventRepository" , serviceName = "UserEventService")
+public class UserEvent extends AbstractEntity {
+
+    @Enumerated(EnumType.STRING)
+    UserEventType userEventType;
 
     @OneToOne
     private UserInfo userInfo;
@@ -21,6 +22,14 @@ public class RegisterInfo extends AbstractEntity {
     private String uuid;
 
     private Calendar calendar;
+
+    public UserEventType getUserEventType() {
+        return userEventType;
+    }
+
+    public void setUserEventType(UserEventType userEventType) {
+        this.userEventType = userEventType;
+    }
 
     public Calendar getCalendar() {
         return calendar;

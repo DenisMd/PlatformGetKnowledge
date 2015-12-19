@@ -7,12 +7,11 @@ import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
 import com.getknowledge.modules.email.EmailService;
+import com.getknowledge.modules.event.UserEvent;
+import com.getknowledge.modules.event.UserEventRepository;
+import com.getknowledge.modules.event.UserEventType;
 import com.getknowledge.modules.settings.Settings;
 import com.getknowledge.modules.settings.SettingsRepository;
-import com.getknowledge.modules.userInfo.registerInfo.RegisterInfo;
-import com.getknowledge.modules.userInfo.registerInfo.RegisterInfoRepository;
-import com.getknowledge.modules.userInfo.restore.password.RestorePasswordInfo;
-import com.getknowledge.modules.userInfo.restore.password.RestorePasswordInfoRepository;
 import com.getknowledge.modules.userInfo.results.RegisterResult;
 import com.getknowledge.modules.userInfo.results.Result;
 import com.getknowledge.modules.userInfo.socialLink.UserSocialLink;
@@ -64,10 +63,8 @@ public class UserInfoService extends AbstractService implements BootstrapService
     private EmailService emailService;
 
     @Autowired
-    private RegisterInfoRepository registerInfoRepository;
+    private UserEventRepository userEventRepository;
 
-    @Autowired
-    private RestorePasswordInfoRepository restorePasswordInfoRepository;
 
     @Autowired
     private TraceService trace;
@@ -208,11 +205,12 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
         userInfoRepository.create(userInfo);
 
-        RegisterInfo registerInfo = new RegisterInfo();
+        UserEvent registerInfo = new UserEvent();
         registerInfo.setUserInfo(userInfo);
         registerInfo.setCalendar(Calendar.getInstance());
         registerInfo.setUuid(uuid);
-        registerInfoRepository.create(registerInfo);
+        registerInfo.setUserEventType(UserEventType.Register);
+        userEventRepository.create(registerInfo);
 
         RegisterResult registerResult = RegisterResult.Complete;
         registerResult.setUserInfoId(userInfo.getId());
@@ -378,11 +376,12 @@ public class UserInfoService extends AbstractService implements BootstrapService
             return Result.EmailNotSend;
         }
 
-        RestorePasswordInfo restorePasswordInfo = new RestorePasswordInfo();
+        UserEvent restorePasswordInfo = new UserEvent();
         restorePasswordInfo.setUserInfo(userInfo);
         restorePasswordInfo.setCalendar(Calendar.getInstance());
         restorePasswordInfo.setUuid(uuid);
-        restorePasswordInfoRepository.create(restorePasswordInfo);
+        restorePasswordInfo.setUserEventType(UserEventType.RestorePassword);
+        userEventRepository.create(restorePasswordInfo);
 
         try {
             Task task = new Task();

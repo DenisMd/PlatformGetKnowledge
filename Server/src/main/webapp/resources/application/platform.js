@@ -10,7 +10,6 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "menu" : "com.getknowledge.modules.menu.Menu",
             "video" : "com.getknowledge.modules.video.Video",
             "language" : "com.getknowledge.modules.dictionaries.language.Language",
-            "registerInfo" : "com.getknowledge.modules.userInfo.registerInfo.RegisterInfo",
             "country" : "com.getknowledge.modules.dictionaries.country.Country",
             "region" : "com.getknowledge.modules.dictionaries.region.Region",
             "city" : "com.getknowledge.modules.dictionaries.city.City",
@@ -19,7 +18,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "permissions" : "com.getknowledge.platform.modules.permission.Permission",
             "roles" : "com.getknowledge.platform.modules.role.Role",
             "users" : "com.getknowledge.platform.modules.user.User",
-            "restorePassword" : "com.getknowledge.modules.userInfo.restore.password.RestorePasswordInfo"
+            "user_event" : "com.getknowledge.modules.event.UserEvent"
          };
     })
     .factory('modules',function(){
