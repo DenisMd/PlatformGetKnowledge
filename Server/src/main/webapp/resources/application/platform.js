@@ -18,11 +18,12 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "bootstrap_services" : "com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo",
             "permissions" : "com.getknowledge.platform.modules.permission.Permission",
             "roles" : "com.getknowledge.platform.modules.role.Role",
-            "users" : "com.getknowledge.platform.modules.user.User"
+            "users" : "com.getknowledge.platform.modules.user.User",
+            "restorePassword" : "com.getknowledge.modules.userInfo.restore.password.RestorePasswordInfo"
          };
     })
     .factory('modules',function(){
-        return ["user" , "accept" , "section"];
+        return ["user" , "accept" , "section" , "restorePassword"];
     })
     .constant("resourceUrl", "/resources/application/")
     .constant("resourceTemplate","/resources/template/")

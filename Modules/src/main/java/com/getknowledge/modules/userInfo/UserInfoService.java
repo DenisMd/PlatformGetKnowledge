@@ -7,9 +7,12 @@ import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
 import com.getknowledge.modules.email.EmailService;
+import com.getknowledge.modules.settings.Settings;
 import com.getknowledge.modules.settings.SettingsRepository;
 import com.getknowledge.modules.userInfo.registerInfo.RegisterInfo;
 import com.getknowledge.modules.userInfo.registerInfo.RegisterInfoRepository;
+import com.getknowledge.modules.userInfo.restore.password.RestorePasswordInfo;
+import com.getknowledge.modules.userInfo.restore.password.RestorePasswordInfoRepository;
 import com.getknowledge.modules.userInfo.results.RegisterResult;
 import com.getknowledge.modules.userInfo.results.Result;
 import com.getknowledge.modules.userInfo.socialLink.UserSocialLink;
@@ -62,6 +65,9 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
     @Autowired
     private RegisterInfoRepository registerInfoRepository;
+
+    @Autowired
+    private RestorePasswordInfoRepository restorePasswordInfoRepository;
 
     @Autowired
     private TraceService trace;
@@ -190,10 +196,10 @@ public class UserInfoService extends AbstractService implements BootstrapService
         }
 
         String uuid = UUID.randomUUID().toString();
-
+        Settings settings = settingsRepository.getSettings();
         try {
-            String url = settingsRepository.getSettings().getDomain() + "/#/"+language.getName().toLowerCase()+"/accept/" + uuid;
-            emailService.sendTemplate(login,"markovdenis2013@gmail.com", "Регистрация на getKnowledge();",
+            String url = settings.getDomain() + "/#/"+language.getName().toLowerCase()+"/accept/" + uuid;
+            emailService.sendTemplate(login,settings.getEmail(), "Регистрация на getKnowledge();",
                     "register",new String[] {settingsRepository.getSettings().getDomain(),url});
         } catch (Exception e) {
             trace.logException("Error send register email to " + login , e , TraceLevel.Error);
@@ -350,6 +356,48 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
         userInfo.setLinks(userSocialLink);
         userInfoRepository.update(userInfo);
+
+        return Result.Complete;
+    }
+
+    @Action(name = "forgotPassword" , mandatoryFields = {"email"})
+    public Result forgotPassword(HashMap<String , Object> data) {
+        UserInfo userInfo = userInfoRepository.getSingleEntityByFieldAndValue("user.login" , data.get("email"));
+        if (userInfo == null || !userInfo.getUser().isEnabled())
+            return Result.Failed;
+
+        String uuid = UUID.randomUUID().toString();
+
+        Settings settings = settingsRepository.getSettings();
+        try {
+            String url = settings.getDomain() + "/#/"+userInfo.getLanguage().getName().toLowerCase()+"/restorePassword/" + uuid;
+            emailService.sendTemplate(userInfo.getUser().getLogin(),settings.getEmail(), "Востановление пароля на getKnowledge();",
+                    "forgotPassword",new String[] {settingsRepository.getSettings().getDomain(),url});
+        } catch (Exception e) {
+            trace.logException("Error send register email to " + userInfo.getUser().getLogin() , e , TraceLevel.Error);
+            return Result.EmailNotSend;
+        }
+
+        RestorePasswordInfo restorePasswordInfo = new RestorePasswordInfo();
+        restorePasswordInfo.setUserInfo(userInfo);
+        restorePasswordInfo.setCalendar(Calendar.getInstance());
+        restorePasswordInfo.setUuid(uuid);
+        restorePasswordInfoRepository.create(restorePasswordInfo);
+
+        try {
+            Task task = new Task();
+            task.setServiceName("Remove restore info");
+            task.setTaskName("removeRestorePasswordInfo");
+            task.setJsonData(objectMapper.writeValueAsString(restorePasswordInfo));
+            task.setTaskStatus(TaskStatus.NotStarted);
+            //next day
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DATE , 2);
+            task.setStartDate(calendar);
+            taskRepository.create(task);
+        } catch (JsonProcessingException e) {
+            trace.logException("Can't parse restore password info to json" , e , TraceLevel.Warning);
+        }
 
         return Result.Complete;
     }

@@ -1,0 +1,6 @@
+{
+  "text" : {
+    "forgetMessage" : "If you forgot password, you can restore from email. Next instruction you recieved in email.",
+    "restorePassword" : "Restore password"
+  }
+}
