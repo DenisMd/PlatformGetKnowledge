@@ -60,7 +60,6 @@ public class CountryService extends AbstractService implements BootstrapService 
                     Country country = new Country();
                     country.setCountryName(name);
                     country.setXmlId(Long.parseLong(id));
-                    country.setLanguage(languageRepository.getLanguage(Languages.Ru));
                     countryRepository.create(country);
                 }
             }
@@ -77,7 +76,6 @@ public class CountryService extends AbstractService implements BootstrapService 
                     region.setXmlId(Long.parseLong(id));
                     region.setCountry(countryRepository.getSingleEntityByFieldAndValue("xmlId", Long.parseLong(countryId)));
                     region.setRegionName(name);
-                    region.setLanguage(languageRepository.getLanguage(Languages.Ru));
                     regionRepository.create(region);
                 }
             }
@@ -93,7 +91,6 @@ public class CountryService extends AbstractService implements BootstrapService 
                     City city = new City();
                     city.setRegion(regionRepository.getSingleEntityByFieldAndValue("xmlId",Long.parseLong(regionId)));
                     city.setCityName(name);
-                    city.setLanguage(languageRepository.getLanguage(Languages.Ru));
                     cityRepository.create(city);
                 }
             }
@@ -107,12 +104,6 @@ public class CountryService extends AbstractService implements BootstrapService 
         bootstrapInfo.setName("CountryService");
         bootstrapInfo.setOrder(1);
         return  bootstrapInfo;
-    }
-
-    @Action(name = "getCountries" , mandatoryFields = {"language"})
-    public List<Country> getCountries (HashMap<String,Object> data) {
-        //data.get("language")
-        return countryRepository.getEntitiesByFieldAndValue("language.name" , Languages.Ru.name());
     }
 
 }

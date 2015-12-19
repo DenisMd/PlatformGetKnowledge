@@ -25,8 +25,6 @@ public class PermissionService implements BootstrapService{
     public void bootstrap(HashMap<String, Object> map) throws ParseException {
         permissionRepository.ifNotExistCreate(new Permission(PermissionNames.ReadUserInfo.name()));
         permissionRepository.ifNotExistCreate(new Permission(PermissionNames.VideoRead.name()));
-
-        throw new ParseException("Test Exception message" , traceService, TraceLevel.Error);
     }
 
     @Override

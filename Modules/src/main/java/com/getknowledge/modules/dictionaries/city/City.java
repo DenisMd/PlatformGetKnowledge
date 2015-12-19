@@ -19,17 +19,6 @@ public class City extends AbstractEntity {
     @ManyToOne
     private Region region;
 
-    @OneToOne
-    private Language language;
-
-    public Language getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(Language language) {
-        this.language = language;
-    }
-
     public Region getRegion() {
         return region;
     }

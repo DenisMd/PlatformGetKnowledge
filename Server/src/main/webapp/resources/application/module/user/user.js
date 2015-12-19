@@ -4,7 +4,7 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         applicationService.read($scope, "user_info" , className.userInfo, userId, function(item){
             if ($scope.user && $scope.user.id === parseInt(userId, 10)) {
                 if (item.firstLogin) {
-                    applicationService.action($scope, "countriesList", className.country, "getCountries", {language: $scope.application.language.capitalizeFirstLetter()});
+                    applicationService.list($scope, "countriesList", className.country);
                     $("#userModal").modal({
                         backdrop: 'static',
                         keyboard: false
@@ -41,7 +41,7 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
             $scope.country = value;
             $scope.$broadcast('reset' + $scope.cityData.id.capitalizeFirstLetter() + 'Event');
             $scope.$broadcast('reset' + $scope.regionData.id.capitalizeFirstLetter() + 'Event');
-            applicationService.action($scope, "regionsList", className.region, "chooseRegionsByCountry", {countryId:value.id,language : $scope.application.language.capitalizeFirstLetter()});
+            applicationService.action($scope, "regionsList", className.region, "chooseRegionsByCountry", {countryId:value.id});
             isRegionDisable = false;
             isCityDisable = true;
         }
@@ -65,7 +65,7 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         "callback" : function (value){
             $scope.region = value;
             $scope.$broadcast('reset' + $scope.cityData.id.capitalizeFirstLetter() + 'Event');
-            applicationService.action($scope, "citiesList", className.city, "getCitiesByRegion", {regionId:value.id,language : $scope.application.language.capitalizeFirstLetter()});
+            applicationService.action($scope, "citiesList", className.city, "getCitiesByRegion", {regionId:value.id});
             isCityDisable = false;
         }
     };
