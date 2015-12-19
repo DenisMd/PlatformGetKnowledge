@@ -695,4 +695,15 @@ model.directive('datepickerPopupFormat',function(dateFilter,$parse){
             });
         }
     }
-    });
+});
+
+
+model.controller("textareaCtrl",function($scope){
+    $scope.showingTextarea = false;
+    $scope.text = $scope.getData();
+
+    $scope.showTextarea = function(){
+        $scope.showTextarea = !$scope.showTextarea;
+    }
+});
+

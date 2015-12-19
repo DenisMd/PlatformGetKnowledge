@@ -826,3 +826,17 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
 .result-panel {
     padding: 5px;
 }
+
+
+/*editable textarea*/
+.editable-textarea{
+    width: 100%;
+    height: 100%;
+    resize: none;
+}
+
+.editable-text{
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
