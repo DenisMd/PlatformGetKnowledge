@@ -22,12 +22,16 @@
     background-color: #21abc7;
     border: 1px solid #21abc7;
     color: #fff;
-    border-radius: 100px;
+    /*border-radius: 100px;*/
     font-family: "Open Sans",Helvetica,Arial,sans-serif;
     font-weight: 600;
-    min-width: 18.75em;
+    min-width: 19.45em;
     height: 40px;
     font-size: 18px;
+}
+
+.login-btn-margin {
+    margin: 20px 0;
 }
 
 .login-btn:hover, .login-btn:focus{

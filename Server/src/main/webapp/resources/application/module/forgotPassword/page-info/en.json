@@ -1,5 +1,6 @@
 {
   "text" : {
+    "forgotPassword" : "Forgot your password?",
     "restorePassword" : "Restore password"
   }
 }
