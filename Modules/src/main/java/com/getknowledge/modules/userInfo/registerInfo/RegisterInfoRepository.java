@@ -24,4 +24,8 @@ public class RegisterInfoRepository extends BaseRepository<RegisterInfo> {
         super.remove(id);
         userInfoRepository.remove(userInfoId);
     }
+
+    public void removeOldInfo (Long id) {
+        super.remove(id);
+    }
 }

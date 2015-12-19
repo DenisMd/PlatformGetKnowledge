@@ -49,6 +49,8 @@ public class RegisterInfoService extends AbstractService {
         if (!registerInfo.getUserInfo().getUser().isEnabled()) {
             trace.log("Cancel registration for user " + registerInfo.getUserInfo().getUser().getLogin() , TraceLevel.Event);
             registerInfoRepository.remove(registerInfo.getId());
+        } else {
+            registerInfoRepository.removeOldInfo(registerInfo.getId());
         }
     }
 

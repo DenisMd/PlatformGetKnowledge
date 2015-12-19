@@ -5,6 +5,7 @@ import com.getknowledge.platform.base.services.BootstrapService;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletContext;
@@ -25,6 +26,8 @@ public class SettingsService extends AbstractService implements BootstrapService
     @Autowired
     private ServletContext servletContext;
 
+    @Value(value = "${email.domain}")
+    private String email;
 
     @Override
     public void bootstrap(HashMap<String, Object> map) throws Exception {
@@ -37,6 +40,7 @@ public class SettingsService extends AbstractService implements BootstrapService
 
             Settings settings = new Settings();
             settings.setDomain(domainName);
+            settings.setEmail(email);
             InputStream is = servletContext.getResourceAsStream("/META-INF/MANIFEST.MF");
             if (is != null) {
                 Manifest manifest = new Manifest(is);

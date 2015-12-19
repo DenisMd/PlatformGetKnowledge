@@ -21,7 +21,7 @@
         </div>
 
         <div class="form-group">
-            <label class="control-label"><a><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> {{translate("forgotPassword")}}</a></label>
+            <label class="control-label"><a ng-href="{{createUrl('/forgetPassword')}}"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> {{translate("forgotPassword")}}</a></label>
         </div>
 
         <div class="form-group login-btns">

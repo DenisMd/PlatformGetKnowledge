@@ -82,6 +82,8 @@ public class BootstrapInfoService extends AbstractService {
                 bootstrapInfo = repository.getSingleEntityByFieldAndValue("name", bootstrapService.getBootstrapInfo().getName());
                 if (!(bootstrapInfo != null && bootstrapInfo.getBootstrapState() == BootstrapState.Completed && !bootstrapInfo.isRepeat())) {
                     bootstrapService.bootstrap(data);
+                    bootstrapInfo.setErrorMessage(null);
+                    bootstrapInfo.setStackTrace(null);
                     bootstrapInfo.setBootstrapState(BootstrapState.Completed);
                     repository.update(bootstrapInfo);
                 }
