@@ -555,19 +555,25 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             link: function(scope, element, attrs) {
                 scope.getContentUrl = function() {
                     return resourceTemplate + attrs.name + ".html";
-                }
+                };
             },
             template: '<div ng-include="getContentUrl()"></div>',
             controller : function($scope,$attrs,$parse,$interpolate){
-                $scope.data = null;
-                $scope.data = $parse($attrs.data)($scope);
-                $scope.getData = function (){
-                    //if ($attrs.name == "textPlain")
-                    if ($scope.data){
-                        return $scope.data;
-                    }else {
-                        return $scope[$attrs.data] || {};
+                $scope.data = $scope[$attrs.data];
+                $scope.$watch($attrs.data, function(value,oldValue) {
+                    if (value != oldValue) {
+                        console.log(value);
+                        $scope.data = value;
                     }
+
+                });
+                $scope.getData = function (){
+                    return $scope.data;
+                    //if ($scope.data){
+                    //
+                    //}else {
+                    //    return $scope[$attrs.data] || {};
+                    //}
                 }
             }
         };

@@ -13,6 +13,9 @@
         <span class="circle-online"></span>
         Online
     </div>
+    <div>
+        <module-template data="user_info.specialty" name="inputs/editableTextarea"></module-template>
+    </div>
 </div>
 
 
