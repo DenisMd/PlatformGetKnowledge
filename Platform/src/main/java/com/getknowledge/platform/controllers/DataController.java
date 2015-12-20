@@ -74,6 +74,7 @@ public class DataController {
     static ObjectMapper objectMapper = new ObjectMapper();
     static {
         Hibernate4Module hbm = new Hibernate4Module();
+        hbm.disable(Hibernate4Module.Feature.USE_TRANSIENT_ANNOTATION);
         hbm.enable(Hibernate4Module.Feature.FORCE_LAZY_LOADING);
         objectMapper.registerModule(hbm);
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
