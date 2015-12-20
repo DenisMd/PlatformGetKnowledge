@@ -38,14 +38,10 @@ public class SectionService extends AbstractService implements BootstrapService{
             for (Menu menu : menuRepository.list()) {
                 for (MenuItem menuItem : menu.getItems()) {
                     if (sectionRepository.getSingleEntityByFieldAndValue("name" , menuItem.getTitle()) == null) {
-                        for (Language language : languageRepository.list()) {
-                            Section section = new Section();
-                            section.setName(menuItem.getTitle());
-                            section.setLanguage(language);
-                            section.setDescription("empty");
-                            section.setMenuItem(menuItem);
-                            sectionRepository.create(section);
-                        }
+                        Section section = new Section();
+                        section.setName(menuItem.getTitle());
+                        section.setMenuItem(menuItem);
+                        sectionRepository.create(section);
                     }
                 }
             }

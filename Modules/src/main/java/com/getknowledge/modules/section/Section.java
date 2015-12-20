@@ -10,15 +10,18 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "section" , indexes =
-        {@Index(name="index_by_name" , columnList = "name,language",unique = true)})
+        {@Index(name="index_by_name" , columnList = "name",unique = true)})
 @ModuleInfo(repositoryName = "SectionRepository" , serviceName = "SectionService")
 public class Section extends AbstractEntity {
 
     @Column
     private String name;
 
-    @Column(columnDefinition = "Text" , name = "description")
-    private String description;
+    @Column(columnDefinition = "Text" , name = "description_ru")
+    private String descriptionRu;
+
+    @Column(columnDefinition = "Text" , name = "description_en")
+    private String descriptionEn;
 
     @OneToOne
     @JoinColumn(name = "menu_item")
@@ -28,18 +31,6 @@ public class Section extends AbstractEntity {
     @Lob @Column(name="cover")
     private byte[] cover;
 
-    @ManyToOne
-    @JoinColumn(name = "language" , nullable = false)
-    private Language language;
-
-    public Language getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(Language language) {
-        this.language = language;
-    }
-
     public byte[] getCover() {
         return cover;
     }
@@ -48,12 +39,20 @@ public class Section extends AbstractEntity {
         this.cover = cover;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescriptionEn() {
+        return descriptionEn;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescriptionEn(String descriptionEn) {
+        this.descriptionEn = descriptionEn;
+    }
+
+    public String getDescriptionRu() {
+        return descriptionRu;
+    }
+
+    public void setDescriptionRu(String descriptionRu) {
+        this.descriptionRu = descriptionRu;
     }
 
     public MenuItem getMenuItem() {
