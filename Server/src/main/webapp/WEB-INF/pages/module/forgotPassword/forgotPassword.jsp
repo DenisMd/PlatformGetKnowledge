@@ -2,8 +2,8 @@
 <link rel="stylesheet" href="/resources/css/login.css">
 
 <form class="center-form">
-    <div class="alert alert-info text-center" role="alert">
-        {{resultForgetPassword}}
+    <div ng-class="resultForgotPassword?'':'div-hidden'" class="alert alert-info text-center" role="alert">
+        {{translate(resultForgotPassword)}}
     </div>
     <div class="form-group form-title">
         {{translate("forgotPassword")}}
@@ -14,7 +14,7 @@
         <input type="text" class="form-control" id="inputEmail" placeholder="{{translate('email')}}" ng-model="email">
     </div>
     <div class="form-group login-btns">
-        <button class="btn login-btn login-btn-margin" ng-click="forgetPassword(email)">{{translate("restorePassword")}}</button>
+        <button class="btn login-btn login-btn-margin" ng-click="forgotPassword(email)">{{translate("restorePassword")}}</button>
     </div>
 </form>
 

@@ -1,12 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet" href="/resources/css/login.css">
 
-
-
-
 <form class="center-form">
-    <div class="alert alert-info text-center" role="alert">
-        {{resultRestorePassword}}
+    <div ng-class="resultRestorePassword?'':'div-hidden'" class="alert alert-info text-center" role="alert">
+        {{translate(resultRestorePassword)}}
     </div>
     <div class="form-group form-title">
         {{translate("restorePassword")}}
