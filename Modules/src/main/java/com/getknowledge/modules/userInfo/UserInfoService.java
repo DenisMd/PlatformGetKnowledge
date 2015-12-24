@@ -132,6 +132,14 @@ public class UserInfoService extends AbstractService implements BootstrapService
         }
     }
 
+    @Override
+    public BootstrapInfo getBootstrapInfo() {
+        BootstrapInfo bootstrapInfo = new BootstrapInfo();
+        bootstrapInfo.setName("User Service");
+        bootstrapInfo.setOrder(1);
+        return bootstrapInfo;
+    }
+
     @Action(name = "getAuthorizedUser")
     public UserInfo getAuthorizedUser(HashMap<String,Object> data){
         String login = (String) data.get("principalName");
@@ -404,14 +412,6 @@ public class UserInfoService extends AbstractService implements BootstrapService
         if (p == null) return null;
         UserInfo result = userInfoRepository.getSingleEntityByFieldAndValue("user.login", p.getName());
         return result;
-    }
-
-    @Override
-    public BootstrapInfo getBootstrapInfo() {
-        BootstrapInfo bootstrapInfo = new BootstrapInfo();
-        bootstrapInfo.setName("User Service");
-        bootstrapInfo.setOrder(1);
-        return bootstrapInfo;
     }
 
     @Override
