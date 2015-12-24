@@ -35,6 +35,9 @@
         <property name="password" value="${db.password}" />
     </bean>
 
+    <bean id="sessionRegistry"
+          class="org.springframework.security.core.session.SessionRegistryImpl" />
+
     <!--  depends-on="flyway"-->
     <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory">
         <property name="packagesToScan" value="com.getknowledge.modules , com.getknowledge.platform.modules"/>

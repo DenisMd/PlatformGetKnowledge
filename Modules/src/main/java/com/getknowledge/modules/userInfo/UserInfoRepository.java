@@ -5,7 +5,11 @@ import com.getknowledge.modules.menu.MenuRepository;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository("UserInfoRepository")
 public class UserInfoRepository extends ProtectedRepository<UserInfo> {
@@ -21,6 +25,9 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
     @Autowired
     private MenuRepository menuRepository;
 
+    @Autowired
+    private SessionRegistry sessionRegistry;
+
     @Override
     public UserInfo read(Long id) {
         UserInfo userInfo = super.read(id);
@@ -29,6 +36,11 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
         } else {
             userInfo.setUserMenu(menuRepository.getSingleEntityByFieldAndValue("name", MenuNames.NotAuthorizedUser.name()));
         }
+
+        List<User> list = ((List<User>)(List<?>)sessionRegistry.getAllPrincipals());
+        userInfo.setOnline(list.stream().filter(
+                userDetail -> userDetail.getUsername().equals(userInfo.getUser().getLogin())
+        ).findFirst().isPresent());
         return userInfo;
     }
 

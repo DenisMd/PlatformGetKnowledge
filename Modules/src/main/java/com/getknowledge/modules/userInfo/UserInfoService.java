@@ -34,6 +34,8 @@ import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,10 +44,7 @@ import java.io.InputStream;
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 @Service("UserInfoService")
 public class UserInfoService extends AbstractService implements BootstrapService,ImageService {

@@ -12,11 +12,7 @@ model.controller("bootstrapCtrl", function ($scope, $state,$http,applicationServ
         item : null,
         tabs : [{
             title : "service",
-            columns : [{name : "id" , "type" : "number", disabled : true} , {name : "name" , "type" : "string", disabled : true},{name : "bootstrapState" , "type" : "string", disabled : true},{name : "errorMessage" , "type" : "string" , disabled : true},{name : "stackTrace" , "modal" : "inputs/textPlain" , disabled : true}],
-            readOnly : true
-        } , {
-            title : "stackTrace",
-            columns : [{name : "stackTrace",type : "textarea" , rows : 5}],
+            columns : [{name : "id" , "type" : "number", disabled : true} , {name : "name" , "type" : "string", disabled : true},{name : "bootstrapState" , "type" : "string", disabled : true}, {name : "repeat" , type : "comboBox"}, {name : "errorMessage" , "type" : "string" , disabled : true},{name : "stackTrace" , "modal" : "inputs/textPlain" , disabled : true}],
             readOnly : true
         }]
     };

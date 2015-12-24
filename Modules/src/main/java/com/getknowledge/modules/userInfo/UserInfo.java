@@ -70,6 +70,17 @@ public class UserInfo  extends CloneableEntity<UserInfo> implements IUser {
     @Transient
     private Menu userMenu;
 
+    @Transient
+    private boolean online = false;
+
+    public boolean isOnline() {
+        return online;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
+
     public Menu getUserMenu() {
         return userMenu;
     }
@@ -217,6 +228,7 @@ public class UserInfo  extends CloneableEntity<UserInfo> implements IUser {
         userInfo.setWebSite(this.webSite);
         userInfo.setLinks(this.links);
         userInfo.setUserMenu(this.userMenu);
+        userInfo.setOnline(this.online);
         return userInfo;
     }
 }

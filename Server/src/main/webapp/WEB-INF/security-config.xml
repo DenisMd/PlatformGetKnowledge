@@ -16,7 +16,14 @@
                 authentication-failure-url="/errorLogin"
                 username-parameter="username"
                 password-parameter="password" />
+
+        <session-management>
+            <concurrency-control
+                    session-registry-ref="sessionRegistry" max-sessions="1" expired-url="/login?expire" />
+        </session-management>
     </http>
+
+
 
     <authentication-manager>
         <authentication-provider>
