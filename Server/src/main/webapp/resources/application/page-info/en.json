@@ -54,6 +54,7 @@
     "firstName" : "First name",
     "lastName" : "Last name",
     "searchFor" : "Search for ...",
-    "create" : "Create"
+    "create" : "Create",
+    "update" : "Update"
   }
 }

@@ -4,10 +4,13 @@
             <uib-tab ng-repeat="tab in getData().tabs" heading="{{translate(tab.title)}}">
                 <div ng-repeat="element in tab.columns">
                     <div class="form-group">
-                        <label>{{translate(element.name)}}</label>
-                        <input ng-if="!element.modal && element.type != 'textarea'" type="{{element.type}}"
+                        <label ng-if="element.type !='boolean'">{{translate(element.name)}}</label>
+                        <input ng-if="!element.modal && element.type != 'textarea' && element.type !='boolean'" type="{{element.type}}"
                                ng-model="getData().item[element.name]" class="form-control"
                                ng-disabled="element.disabled && 'disabled' || undefined">
+                        <div class="checkbox" ng-if="element.type == 'boolean'">
+                            <label><input type="checkbox" ng-model="getData().item[element.name]" ng-disabled="element.disabled && 'disabled' || undefined">{{translate(element.name)}}</label>
+                        </div>
                         <textarea ng-if="element.type == 'textarea'" class="form-control" rows="{{element.rows}}">{{getData().item[element.name]}}</textarea>
                         <module-template ng-if="element.modal" name="{{element.modal}}"
                                          data="getData()"></module-template>
