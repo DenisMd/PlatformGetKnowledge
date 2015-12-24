@@ -113,6 +113,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
             user.setRole(role);
             user.setEnabled(true);
             user.setPwdTransient(password);
+            user.setDefaultEntity(true);
             userRepository.create(user);
 
             UserInfo userInfo = new UserInfo();
@@ -122,6 +123,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
             userInfo.setLanguage(languageRepository.getSingleEntityByFieldAndValue("name", Languages.Ru.name()));
             userInfo.setSpecialty("main admin");
             userInfo.setMan(true);
+            userInfo.setDefaultEntity(true);
             InputStream is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/image/photo.png");
             try {
                 userInfo.setProfileImage(org.apache.commons.io.IOUtils.toByteArray(is));
