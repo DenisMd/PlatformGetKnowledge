@@ -691,11 +691,14 @@ model.controller("datepickerCtrl", function($scope){
         init();
     };
 
-    function init(){
-        $scope.required = $scope.getData().required;
-        $scope.onChange = $scope.getData().onChange;
-        $scope.format = $scope.getData().format;
-        var options = $scope.getData().options;
+    function init() {
+        var options = null;
+        if ($scope.getData()){
+            $scope.required = $scope.getData().required;
+            $scope.onChange = $scope.getData().onChange;
+            $scope.format = $scope.getData().format;
+            options = $scope.getData().options;
+        }
         if (options){
             $scope.dataOptions = options;
             $scope.dataOptions["show-weeks"] = $scope.dataOptions["show-weeks"]? true:false;
