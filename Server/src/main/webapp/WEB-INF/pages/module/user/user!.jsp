@@ -1,37 +1,31 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet" href="/resources/css/user.css">
+<div class="user-content">
+    <div class="col-sm-3 user-menu-content">
+        <div class="user-photo">
+            <img ng-src="{{userImg(user_info.id)}}" class="main-image user-image"/>
+        </div>
+        <div class="user-menu">
+            <div class="">
+                <p class="main-label">{{user_info.firstName}} {{user_info.lastName}}</p>
 
-<div class="user-menu">
-    <div class="user-photo">
-        <img ng-src="{{userImg(user_info.id)}}" class="main-image user-image" />
+                <p class="info-about-user">{{user_info.specialty}}</p>
+            </div>
+            <div ng-show="user_info.online">
+                <span class="circle-status circle-online"></span>
+                Online
+            </div>
+            <div>
+                <module-template data="statusText" name="inputs/editableTextarea"></module-template>
+            </div>
+        </div>
     </div>
-    <div class="user-menu-content">
-        <p class="main-label">{{user_info.firstName}} {{user_info.lastName}}</p>
-        <p class="info-about-user">{{user_info.specialty}}</p>
+    <div class="col-sm-9">
+        {{user_info}}
     </div>
-    <div class="user-status">
-        <span class="circle-online"></span>
-        Online
-    </div>
-    <div>
-        <module-template data="user_info.specialty" name="inputs/editableTextarea"></module-template>
-    </div>
+
+
 </div>
-
-
-<div style="padding: 300px">
-
-</div>
-
-
-
-
-
-
-
-
-
-
 
 
 <div class="modal fade" id="userModal">
@@ -40,7 +34,7 @@
             <div class="modal-header">
                 <h4 class="modal-title">{{translate("extraRegister")}}</h4>
             </div>
-            <div class="modal-body first-form-body"  ng-scrollbars ng-scrollbars-config="modalScrollConfig">
+            <div class="modal-body first-form-body" ng-scrollbars ng-scrollbars-config="modalScrollConfig">
                 <form name="firsTimeForm" style="position: relative;">
                     <div class="form-group">
                         <label class="control-label">{{translate("country_select")}}</label>
@@ -66,11 +60,16 @@
             </div>
 
             <div class="modal-footer modal-find">
-                <button type="button" class="btn btn-primary" ng-disabled="firsTimeForm.$invalid" ng-click="save()">{{translate("save")}}</button>
+                <button type="button" class="btn btn-primary" ng-disabled="firsTimeForm.$invalid" ng-click="save()">
+                    {{translate("save")}}
+                </button>
                 <button type="button" class="btn btn-default" ng-click="closeModal()">{{translate("skip")}}</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
 

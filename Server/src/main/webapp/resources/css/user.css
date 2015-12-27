@@ -15,13 +15,16 @@
 }
 
 /*menu*/
+.user-menu-content{
+    height:100%;
+    position:relative;
+}
 .user-photo{
     height: 200px;
     width: 200px;
-    top: -100px;
-    position:absolute;
-    /*background: #ffffff;*/
-    left: 50px;
+    position: relative;
+    z-index: 10;
+    margin: 0 auto;
 }
 .user-image{
     height: 100%;
@@ -30,21 +33,24 @@
 }
 
 .user-menu{
-    width: 300px;
-    top: 150px;
-    position:fixed;
+    position:relative;
     height: 100%;
+    top: -100px;
+    padding-top:100px;
     border: 1px solid #F0F0F0;
     background: white;
-}
-
-.user-menu-content{
-    padding-top: 100px;
     text-align: center;
 }
 
 .user-status{
-    text-align: center;
+}
+
+.circle-status{
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .circle-online{
@@ -55,9 +61,4 @@
     background: -o-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%, rgba(155,211,0,1) 100%); /* opera 11.10+ */
     background: -ms-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%, rgba(155,211,0,1) 100%); /* ie10+ */
     background:radial-gradient(ellipse at center, rgba(255,255,255,1) 0%, rgba(155,211,0,1) 100%); /* w3c */
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    vertical-align: middle;
 }
