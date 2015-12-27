@@ -205,6 +205,26 @@ model.controller("tableSelectorCtrl" , function($scope){
     };
 });
 
+model.filter('picker', function($filter) {
+    return function()
+    {
+        var filterName = [].splice.call(arguments, 1, 1)[0] || "";
+        var filter = filterName.split(":");
+        if (filter.length > 1)
+        {
+            filterName = filter[0];
+            for (var i = 1, k = filter.length; i < k; i++)
+            {
+                [].push.call(arguments, filter[i]);
+            }
+        }
+
+        if (!filterName) return arguments[0];
+
+        return $filter(filterName).apply(null, arguments);
+    };
+});
+
 model.controller("editorCtrl" , function($scope,applicationService){
     $scope.doButton = function (className , actionName, model) {
         if (actionName == 'update') {
