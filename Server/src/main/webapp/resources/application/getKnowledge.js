@@ -639,10 +639,6 @@ model.controller("datepickerCtrl", function($scope){
         "close" : $scope.translate("datapiker-close")
     };
 
-    $scope.required = $scope.getData().required;
-    $scope.onChange = $scope.getData().onChange;
-    $scope.format = $scope.getData().format;
-
     $scope.getFormat = function(){
         if ($scope.format){
             return $scope.format;
@@ -671,7 +667,14 @@ model.controller("datepickerCtrl", function($scope){
         }
     });
 
+    $scope.updateValues = function(){
+        init();
+    };
+
     function init(){
+        $scope.required = $scope.getData().required;
+        $scope.onChange = $scope.getData().onChange;
+        $scope.format = $scope.getData().format;
         var options = $scope.getData().options;
         if (options){
             $scope.dataOptions = options;
@@ -681,7 +684,6 @@ model.controller("datepickerCtrl", function($scope){
                 "show-weeks": false
             };
         }
-
     }
 });
 
@@ -698,12 +700,28 @@ model.directive('datepickerPopupFormat',function(dateFilter,$parse){
 });
 
 
-model.controller("textareaCtrl",function($scope){
+model.controller("textareaCtrl",function($scope,$element){
+    var textarea = $element.find('textarea');
     $scope.showingTextarea = false;
-    $scope.text = $scope.getData();
+    $scope.model = {};
 
     $scope.showTextarea = function(){
-        $scope.showTextarea = !$scope.showTextarea;
+        $scope.showingTextarea = !$scope.showingTextarea;
+        if ($scope.showingTextarea){
+            $scope.model.text = $scope.getData().text;
+            textarea.focus();
+        }
+    };
+
+
+    $scope.save = function(){
+        if (!$scope.model.text) return;
+        if(angular.isFunction($scope.getData().onSave)){
+            $scope.getData().onSave($scope.model.text);
+        }
+
+        $scope.showTextarea();
     }
+
 });
 
