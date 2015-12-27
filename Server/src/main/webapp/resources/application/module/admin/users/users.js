@@ -1,28 +1,28 @@
 model.controller("usersCtrl", function ($scope, $state,$http,applicationService,pageService,className) {
     $scope.usersSelector = {
         title : "user_title",
-        columns : ["id", "login", "createDate"],
+        columns : ["id", "email", "createDate" , "enabled"],
         content : [],
-        tabs : [{
-            title : "user",
-            columns : [{name : "login" , "type" : "string"},{name : "createDate" , "type" : "string"}],
-            readOnly : true
-        }]
+        filters : [null,null,"date:medium"],
+        callback : function (item) {
+            $scope.editorData.item = item;
+        }
     };
 
     $scope.editorData = {
         item : null,
         tabs : [{
-            title : "service",
-            columns : [{name : "id" , "type" : "number", disabled : true} , {name : "name" , "type" : "string", disabled : true},{name : "bootstrapState" , "type" : "string", disabled : true}, {name : "repeat" , type : "boolean"}, {name : "errorMessage" , "type" : "string" , disabled : true},{name : "stackTrace" , "modal" : "inputs/textPlain" , disabled : true}],
-            readOnly : false,
-            className : className.bootstrap_services,
-            actionName : "update",
-            buttonText  : "update"
+            title : "user",
+            columns : [{name : "email" , "type" : "string" , disabled : true},{name : "createDate" , modal : "inputs/datepicker", disabled : true}],
+            readOnly : true,
+            className : className.users
         }]
     };
 
-    applicationService.list($scope , "services",className.users , function(permission){
-        $scope.usersSelector.content.push(permission);
+    applicationService.list($scope ,"users",className.users , function(user){
+        var tmpUser = user;
+        tmpUser.email = user.login;
+        delete user.login;
+        $scope.usersSelector.content.push(tmpUser);
     });
 });

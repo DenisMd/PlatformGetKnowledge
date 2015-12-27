@@ -561,20 +561,17 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             controller : function($scope,$attrs,$parse,$interpolate){
                 $scope.data = $scope[$attrs.data];
                 $scope.$watch($attrs.data, function(value,oldValue) {
+                    $scope.data = value;
                     if (value != oldValue) {
-                        console.log(value);
-                        $scope.data = value;
+                        if ($scope.updateValues && angular.isFunction($scope.updateValues)){
+                            $scope.updateValues();
+                        }
                     }
 
                 });
                 $scope.getData = function (){
                     return $scope.data;
-                    //if ($scope.data){
-                    //
-                    //}else {
-                    //    return $scope[$attrs.data] || {};
-                    //}
-                }
+                };
             }
         };
     })

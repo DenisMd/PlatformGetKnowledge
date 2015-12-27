@@ -205,6 +205,26 @@ model.controller("tableSelectorCtrl" , function($scope){
     };
 });
 
+model.filter('picker', function($filter) {
+    return function()
+    {
+        var filterName = [].splice.call(arguments, 1, 1)[0] || "";
+        var filter = filterName.split(":");
+        if (filter.length > 1)
+        {
+            filterName = filter[0];
+            for (var i = 1, k = filter.length; i < k; i++)
+            {
+                [].push.call(arguments, filter[i]);
+            }
+        }
+
+        if (!filterName) return arguments[0];
+
+        return $filter(filterName).apply(null, arguments);
+    };
+});
+
 model.controller("editorCtrl" , function($scope,applicationService){
     $scope.doButton = function (className , actionName, model) {
         if (actionName == 'update') {
@@ -639,10 +659,6 @@ model.controller("datepickerCtrl", function($scope){
         "close" : $scope.translate("datapiker-close")
     };
 
-    $scope.required = $scope.getData().required;
-    $scope.onChange = $scope.getData().onChange;
-    $scope.format = $scope.getData().format;
-
     $scope.getFormat = function(){
         if ($scope.format){
             return $scope.format;
@@ -671,8 +687,18 @@ model.controller("datepickerCtrl", function($scope){
         }
     });
 
-    function init(){
-        var options = $scope.getData().options;
+    $scope.updateValues = function(){
+        init();
+    };
+
+    function init() {
+        var options = null;
+        if ($scope.getData()){
+            $scope.required = $scope.getData().required;
+            $scope.onChange = $scope.getData().onChange;
+            $scope.format = $scope.getData().format;
+            options = $scope.getData().options;
+        }
         if (options){
             $scope.dataOptions = options;
             $scope.dataOptions["show-weeks"] = $scope.dataOptions["show-weeks"]? true:false;
@@ -681,7 +707,6 @@ model.controller("datepickerCtrl", function($scope){
                 "show-weeks": false
             };
         }
-
     }
 });
 
@@ -698,12 +723,28 @@ model.directive('datepickerPopupFormat',function(dateFilter,$parse){
 });
 
 
-model.controller("textareaCtrl",function($scope){
+model.controller("textareaCtrl",function($scope,$element){
+    var textarea = $element.find('textarea');
     $scope.showingTextarea = false;
-    $scope.text = $scope.getData();
+    $scope.model = {};
 
     $scope.showTextarea = function(){
-        $scope.showTextarea = !$scope.showTextarea;
+        $scope.showingTextarea = !$scope.showingTextarea;
+        if ($scope.showingTextarea){
+            $scope.model.text = $scope.getData().text;
+            textarea.focus();
+        }
+    };
+
+
+    $scope.save = function(){
+        if (!$scope.model.text) return;
+        if(angular.isFunction($scope.getData().onSave)){
+            $scope.getData().onSave($scope.model.text);
+        }
+
+        $scope.showTextarea();
     }
+
 });
 

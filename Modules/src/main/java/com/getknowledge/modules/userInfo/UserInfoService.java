@@ -174,6 +174,17 @@ public class UserInfoService extends AbstractService implements BootstrapService
             return RegisterResult.UserAlreadyCreated;
         }
 
+        String uuid = UUID.randomUUID().toString();
+        Settings settings = settingsRepository.getSettings();
+        try {
+            String url = settings.getDomain() + "/#/"+language.getName().toLowerCase()+"/accept/" + uuid;
+            emailService.sendTemplate(login,settings.getEmail(), "Регистрация на getKnowledge();",
+                    "register",new String[] {settingsRepository.getSettings().getDomain(),url});
+        } catch (Exception e) {
+            trace.logException("Error send register email to " + login , e , TraceLevel.Error);
+            return RegisterResult.EmailNotSend;
+        }
+
         User user = new User();
         user.setLogin(login);
         user.setPwdTransient(password);
@@ -199,17 +210,6 @@ public class UserInfoService extends AbstractService implements BootstrapService
             userInfo.setProfileImage(org.apache.commons.io.IOUtils.toByteArray(is));
         } catch (IOException e) {
             trace.logException("Error load file: " + e.getMessage(), e, TraceLevel.Warning);
-        }
-
-        String uuid = UUID.randomUUID().toString();
-        Settings settings = settingsRepository.getSettings();
-        try {
-            String url = settings.getDomain() + "/#/"+language.getName().toLowerCase()+"/accept/" + uuid;
-            emailService.sendTemplate(login,settings.getEmail(), "Регистрация на getKnowledge();",
-                    "register",new String[] {settingsRepository.getSettings().getDomain(),url});
-        } catch (Exception e) {
-            trace.logException("Error send register email to " + login , e , TraceLevel.Error);
-            return RegisterResult.EmailNotSend;
         }
 
         userInfoRepository.create(userInfo);
