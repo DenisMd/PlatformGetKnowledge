@@ -4,15 +4,15 @@
             <caption>{{translate(getData().title)}}</caption>
             <thead>
             <tr>
-                <th ng-repeat="column in getData().columns">
+                <th ng-repeat="column in getData().columns" ng-click="order(column)">
                     {{translate(column)}}
                 </th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="index in range(getData().content.length) track by $index" class="selected-row" ng-click="setCurrentItem(getData().content[$index])">
-                <td ng-repeat="column in getData().columns" \>
-                    {{getData().content[$parent.$index][column]}}
+                <td ng-repeat="column in getData().columns">
+                    {{getData().content[$parent.$index][column] | picker:getData().filters[$index]}}
                 </td>
             </tr>
             </tbody>

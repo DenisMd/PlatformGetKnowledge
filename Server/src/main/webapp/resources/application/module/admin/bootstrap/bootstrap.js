@@ -12,8 +12,11 @@ model.controller("bootstrapCtrl", function ($scope, $state,$http,applicationServ
         item : null,
         tabs : [{
             title : "service",
-            columns : [{name : "id" , "type" : "number", disabled : true} , {name : "name" , "type" : "string", disabled : true},{name : "bootstrapState" , "type" : "string", disabled : true}, {name : "repeat" , type : "comboBox"}, {name : "errorMessage" , "type" : "string" , disabled : true},{name : "stackTrace" , "modal" : "inputs/textPlain" , disabled : true}],
-            readOnly : true
+            columns : [{name : "id" , "type" : "number", disabled : true} , {name : "name" , "type" : "string", disabled : true},{name : "bootstrapState" , "type" : "string", disabled : true}, {name : "repeat" , type : "boolean"}, {name : "errorMessage" , "type" : "string" , disabled : true},{name : "stackTrace" , "modal" : "inputs/textPlain" , disabled : true}],
+            readOnly : false,
+            className : className.bootstrap_services,
+            actionName : "update",
+            buttonText  : "update"
         }]
     };
 
@@ -24,7 +27,7 @@ model.controller("bootstrapCtrl", function ($scope, $state,$http,applicationServ
             className : className.bootstrap_services,
             columns : [{name : "domain" , type : "text"} ,{name : "email" , type : "text"},{name : "password" , type : "text"},{name : "firstName" , type : "text"},{name : "lastName" , type : "text"},{name : "initPassword" , type : "text"}],
             buttonText  : "doBootstrap",
-            label : "fa-laptop",
+            label : "fa-cog fa-spin",
             style : {color : '#5E5DD6'}
         }]
     };

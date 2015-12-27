@@ -339,6 +339,9 @@ public class DataController {
             if (jsonObject == null || className == null) return null;
             Class classEntity = Class.forName(className);
             AbstractEntity abstractEntity = (AbstractEntity) objectMapper.readValue(jsonObject, classEntity);
+            if (abstractEntity.isDefaultEntity()) {
+                throw new NotAuthorized("access denied for update default entity" , trace, TraceLevel.Warning);
+            }
             if (!isAccessEdit(principal, abstractEntity) ) {
                 throw new NotAuthorized("access denied for update entity" , trace, TraceLevel.Warning);
             }
@@ -358,6 +361,9 @@ public class DataController {
             Class classEntity = Class.forName(className);
 
             AbstractEntity abstractEntity = moduleLocator.findRepository(classEntity).read(id);
+            if (abstractEntity.isDefaultEntity()) {
+                throw new NotAuthorized("access denied for remove default entity" , trace, TraceLevel.Warning);
+            }
             if (!isAccessRemove(principal, abstractEntity) ) {
                 throw new NotAuthorized("access denied for remove entity" , trace, TraceLevel.Warning);
             }

@@ -54,6 +54,7 @@
     "firstName" : "Имя",
     "lastName" : "Фамилия",
     "searchFor" : "Поиск в ...",
-    "create" : "Создать"
+    "create" : "Создать",
+    "update" : "Обновить"
   }
 }
