@@ -225,7 +225,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
         try {
             Task task = new Task();
-            task.setServiceName("RegisterInfoService");
+            task.setServiceName("TaskService");
             task.setTaskName("cancelRegistration");
             task.setJsonData(objectMapper.writeValueAsString(registerInfo));
             task.setTaskStatus(TaskStatus.NotStarted);
@@ -392,7 +392,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
         try {
             Task task = new Task();
-            task.setServiceName("Remove restore info");
+            task.setServiceName("TaskService");
             task.setTaskName("removeRestorePasswordInfo");
             task.setJsonData(objectMapper.writeValueAsString(restorePasswordInfo));
             task.setTaskStatus(TaskStatus.NotStarted);
