@@ -19,6 +19,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "roles" : "com.getknowledge.platform.modules.role.Role",
             "users" : "com.getknowledge.platform.modules.user.User",
             "user_event" : "com.getknowledge.modules.event.UserEvent",
+            "tasks" : "com.getknowledge.platform.modules.task.Task",
             "trace" : "com.getknowledge.platform.modules.trace.Trace"
          };
     })
@@ -272,7 +273,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             }
         };
 
-        this.create = function ($scope,name,className,data,callback){
+        this.create = function ($scope,name,className,data){
             $http({
                 method: 'POST',
                 url: platformDataUrl+'create',
@@ -281,17 +282,12 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (data){
                 $scope[name] = data;
-
-                if (isFunction(callback)) {
-                    callback(data);
-                }
-
             }).error(function(error, status, headers, config){
                 errorService.showError(error,status);
             });
         };
 
-        this.update = function ($scope,name,className,data,callback){
+        this.update = function ($scope,name,className,data){
             $http({
                 method: 'POST',
                 url: platformDataUrl+'update',
@@ -300,23 +296,14 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (data){
                 $scope[name] = data;
-
-                if (isFunction(callback)) {
-                    callback(data);
-                }
-
             }).error(function(error, status, headers, config){
                 errorService.showError(error,status);
             });
         };
 
-        this.remove = function ($scope,name,className,id,callback) {
+        this.remove = function ($scope,name,className,id) {
             $http.get(platformDataUrl+"remove?className="+className+"&id="+id).success(function(data){
                 $scope[name] = data;
-
-                if (isFunction(callback)) {
-                    callback(data);
-                }
             });
         };
 
