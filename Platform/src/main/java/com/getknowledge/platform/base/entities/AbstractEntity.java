@@ -14,17 +14,6 @@ public abstract class AbstractEntity {
     @Column(name = "class_name",length = 500)
     private String className;
 
-    @Column(name = "default_entity", columnDefinition = "BOOLEAN DEFAULT false")
-    private boolean defaultEntity = false;
-
-    public boolean isDefaultEntity() {
-        return defaultEntity;
-    }
-
-    public void setDefaultEntity(boolean defaultEntity) {
-        this.defaultEntity = defaultEntity;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }

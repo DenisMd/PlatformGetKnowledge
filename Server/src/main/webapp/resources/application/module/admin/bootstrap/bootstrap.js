@@ -1,23 +1,35 @@
-model.controller("bootstrapCtrl", function ($scope, $state,$http,applicationService,pageService,className) {
-    $scope.bootstrapSelector = {
-        title : "bootstrap_title",
-        columns : ["id", "name", "bootstrapState", "order", "repeat"],
-        content : [],
-        callback : function (item) {
-            $scope.editorData.item = item;
-        }
+model.controller("bootstrapCtrl", function ($scope, $state,$http,applicationService,pageService,className,$uibModal,$mdToast) {
+
+    $scope.openModal = function (size , item) {
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'panelModalContent.html',
+            controller: 'panelModalCtrl',
+            size: size,
+            resolve: {
+                item: function () {
+                    return item;
+                },
+                parentScope : function () {
+                    return $scope;
+                },
+                callbackForClose: function(){
+                    return;
+                }
+            }
+        });
     };
 
-    $scope.editorData = {
-        item : null,
-        tabs : [{
-            title : "service",
-            columns : [{name : "id" , "type" : "number", disabled : true} , {name : "name" , "type" : "string", disabled : true},{name : "bootstrapState" , "type" : "string", disabled : true}, {name : "repeat" , type : "boolean"}, {name : "errorMessage" , "type" : "string" , disabled : true},{name : "stackTrace" , "modal" : "inputs/textPlain" , disabled : true}],
-            readOnly : false,
-            className : className.bootstrap_services,
-            actionName : "update",
-            buttonText  : "update"
-        }]
+    $scope.updateService = function() {
+
+      applicationService.update($scope,"updateResult",className.bootstrap_services,$scope.currentService,function(result){
+          $mdToast.show(
+              $mdToast.simple()
+                  .textContent(result)
+                  .position("bottom right")
+                  .hideDelay(3000)
+          );
+      });
     };
 
     $scope.panelData = {
@@ -32,7 +44,10 @@ model.controller("bootstrapCtrl", function ($scope, $state,$http,applicationServ
         }]
     };
 
-    applicationService.list($scope , "services",className.bootstrap_services , function(bootstrapService){
-        $scope.bootstrapSelector.content.push(bootstrapService);
-    });
+    applicationService.list($scope , "bootstrap_services",className.bootstrap_services);
+
+    $scope.setCurrentItem = function (item) {
+        $scope.currentService = item;
+    };
+
 });
