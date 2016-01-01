@@ -23,9 +23,8 @@ public class Permission extends AbstractEntity{
         permissionName = "";
     }
 
-    public Permission(String permissionName , boolean isDefault) {
+    public Permission(String permissionName) {
         this.permissionName = permissionName;
-        setDefaultEntity(isDefault);
     }
 
     public String getPermissionName() {

@@ -1,4 +1,4 @@
-var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap", "ngImgCrop"]);
+var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap", "ngImgCrop" , "ngMaterial"]);
 
 var player;
 
@@ -199,12 +199,6 @@ model.controller("videoCtrl",function($scope){
     });
 });
 
-model.controller("tableSelectorCtrl" , function($scope){
-    $scope.setCurrentItem = function (item) {
-       $scope.getData().callback(item);
-    };
-});
-
 model.filter('picker', function($filter) {
     return function()
     {
@@ -223,39 +217,6 @@ model.filter('picker', function($filter) {
 
         return $filter(filterName).apply(null, arguments);
     };
-});
-
-model.controller("editorCtrl" , function($scope,applicationService){
-    $scope.doButton = function (className , actionName, model) {
-        if (actionName == 'update') {
-            applicationService.update($scope, "doButtonResult",className,model);
-        } else {
-            applicationService.action($scope, "doButtonResult", className, actionName, model);
-        }
-    };
-});
-
-model.controller("panelCtrl", function ($scope, $uibModal) {
-    $scope.open = function (size , item) {
-
-        var modalInstance = $uibModal.open({
-            animation: true,
-            templateUrl: 'panelModalContent.html',
-            controller: 'panelModalCtrl',
-            size: size,
-            resolve: {
-                item: function () {
-                    return item;
-                },
-                parentScope : function () {
-                    return $scope;
-                },
-                callbackForClose: function(){
-                    return;
-                }
-            }
-        });
-    }
 });
 
 model.controller("panelModalCtrl" , function($scope,applicationService,$modalInstance,item,parentScope,callbackForClose) {
@@ -546,7 +507,6 @@ model.directive("hideOptions",function($document){
     };
 });
 
-
 //crop image
 model.controller("selectImgCtrl", function($scope,$uibModal){
 
@@ -648,7 +608,6 @@ model.controller("selectImgCtrl", function($scope,$uibModal){
     };
 });
 
-
 //datapicker
 model.controller("datepickerCtrl", function($scope){
     init();
@@ -722,7 +681,6 @@ model.directive('datepickerPopupFormat',function(dateFilter,$parse){
     }
 });
 
-
 model.controller("textareaCtrl",function($scope,$element){
     var textarea = $element.find('textarea');
     $scope.showingTextarea = false;
@@ -735,7 +693,6 @@ model.controller("textareaCtrl",function($scope,$element){
             textarea.focus();
         }
     };
-
 
     $scope.save = function(){
         if (!$scope.model.text) return;

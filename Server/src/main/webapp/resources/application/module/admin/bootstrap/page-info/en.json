@@ -2,11 +2,12 @@
   "text" : {
     "bootstrap_title"  : "Initialize services of systems",
     "bootstrapState" : "Bootstrap state",
+    "bootstrap_services" : "Services",
     "repeat" : "Repeatable",
     "order" : "Order",
     "errorMessage" : "Error message",
     "stackTrace" : "Stack trace",
-    "service" : "Service",
+    "service_info" : "Service information",
     "doBootstrap" : "Do bootstrap",
     "domain" : "Domain",
     "initPassword" : "Password for init"

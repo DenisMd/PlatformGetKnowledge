@@ -23,8 +23,8 @@ public class PermissionService implements BootstrapService{
 
     @Override
     public void bootstrap(HashMap<String, Object> map) throws ParseException {
-        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.ReadUserInfo.name(), true));
-        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.VideoRead.name() , true));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.ReadUserInfo.name()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.VideoRead.name()));
     }
 
     @Override
