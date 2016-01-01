@@ -18,7 +18,9 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "permissions" : "com.getknowledge.platform.modules.permission.Permission",
             "roles" : "com.getknowledge.platform.modules.role.Role",
             "users" : "com.getknowledge.platform.modules.user.User",
-            "user_event" : "com.getknowledge.modules.event.UserEvent"
+            "user_event" : "com.getknowledge.modules.event.UserEvent",
+            "tasks" : "com.getknowledge.platform.modules.task.Task",
+            "trace" : "com.getknowledge.platform.modules.trace.Trace"
          };
     })
     .factory('modules',function(){

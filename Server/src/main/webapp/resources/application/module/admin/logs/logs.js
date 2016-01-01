@@ -1,5 +1,4 @@
 model.controller("logsCtrl", function ($scope, $state,$http,applicationService,pageService,className) {
-    $scope.biba = [4235,232352,2322,324234,"slfd",3242];
     applicationService.list($scope,"logs",className.trace,function(item, index, array){
         switch (item.traceLevel){
             case "Error": item.iconClassName = "fa-exclamation-circle red-error"; break;
@@ -18,16 +17,15 @@ model.controller("logsCtrl", function ($scope, $state,$http,applicationService,p
     $scope.setOrder = function (order) {
         reverse = !reverse;
         $scope.order = reverse?"-"+order:order;
-        console.log(order);
     };
     $scope.eventFilter = function(element){
-      switch (element.traceLevel){
-          case "Debug" : if ($scope.selectEvent == 0)return true;break;
-          case "Event" : if ($scope.selectEvent <= 1)return true;break;
-          case "Warning" : if ($scope.selectEvent <= 2)return true;break;
-          case "Error" : if ($scope.selectEvent <= 3)return true;break;
-          case "Critical" : if ($scope.selectEvent <= 4)return true;break;
-      }
+        switch (element.traceLevel){
+            case "Debug" : if ($scope.selectEvent == 0)return true;break;
+            case "Event" : if ($scope.selectEvent <= 1)return true;break;
+            case "Warning" : if ($scope.selectEvent <= 2)return true;break;
+            case "Error" : if ($scope.selectEvent <= 3)return true;break;
+            case "Critical" : if ($scope.selectEvent <= 4)return true;break;
+        }
         return false;
     }
     $scope.selectEvent = "1";
