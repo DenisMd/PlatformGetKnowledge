@@ -1,24 +1,4 @@
-model.controller("bootstrapCtrl", function ($scope, $state,$http,applicationService,pageService,className,$uibModal,$mdToast) {
-
-    $scope.openModal = function (size , item) {
-        var modalInstance = $uibModal.open({
-            animation: true,
-            templateUrl: 'panelModalContent.html',
-            controller: 'panelModalCtrl',
-            size: size,
-            resolve: {
-                item: function () {
-                    return item;
-                },
-                parentScope : function () {
-                    return $scope;
-                },
-                callbackForClose: function(){
-                    return;
-                }
-            }
-        });
-    };
+model.controller("bootstrapCtrl", function ($scope, $state,$http,applicationService,pageService,className,$mdToast,$mdDialog,$mdMedia) {
 
     $scope.updateService = function() {
 
@@ -32,22 +12,42 @@ model.controller("bootstrapCtrl", function ($scope, $state,$http,applicationServ
       });
     };
 
-    $scope.panelData = {
-        items : [{
-            title : "doBootstrap",
-            actionName : "do",
-            className : className.bootstrap_services,
-            columns : [{name : "domain" , type : "text"} ,{name : "email" , type : "text"},{name : "password" , type : "text"},{name : "firstName" , type : "text"},{name : "lastName" , type : "text"},{name : "initPassword" , type : "text"}],
-            buttonText  : "doBootstrap",
-            label : "fa-cog fa-spin",
-            style : {color : '#5E5DD6'}
-        }]
-    };
-
     applicationService.list($scope , "bootstrap_services",className.bootstrap_services);
 
     $scope.setCurrentItem = function (item) {
         $scope.currentService = item;
+    };
+
+
+    $scope.showAdvanced = function(ev) {
+        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+        $mdDialog.show({
+                controller: DialogController,
+                templateUrl: 'myModalContent.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                fullscreen: useFullScreen,
+                locals: {
+                    theScope: $scope
+                }
+            })
+            .then(function(answer) {
+                applicationService.action($scope,"bootstrapResult" , className.bootstrap_services,"do",answer,function(result){
+                    $mdToast.show(
+                        $mdToast.simple()
+                            .textContent(result)
+                            .position("bottom right")
+                            .hideDelay(3000)
+                    );
+                    applicationService.list($scope , "bootstrap_services",className.bootstrap_services);
+                });
+            });
+        $scope.$watch(function() {
+            return $mdMedia('xs') || $mdMedia('sm');
+        }, function(wantsFullScreen) {
+            $scope.customFullscreen = (wantsFullScreen === true);
+        });
     };
 
 });

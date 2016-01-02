@@ -2,25 +2,29 @@
 
 <link rel="stylesheet" type="text/css" href="/resources/css/selector-table.css">
 
-<md-toolbar layout="row">
-    <h1>{{translate("bootstrap_title")}}</h1>
-</md-toolbar>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <span class="panel-item fa fa-3x fa-cogs" tooltip-placement="bottom"
+              uib-tooltip="{{translate('doBootstrap')}}" ng-click="showAdvanced($event)">
+        </span>
+    </div>
+</div>
 
 <div class="table-selector">
     <table class="table table-hover ">
         <caption>{{translate("bootstrap_services")}}</caption>
         <thead>
         <tr>
-            <th>
+            <th ng-click="setOrder('id')">
                 {{translate("id")}}
             </th>
-            <th>
+            <th ng-click="setOrder('name')">
                 {{translate("name")}}
             </th>
-            <th>
+            <th ng-click="setOrder('bootstrapState')">
                 {{translate("bootstrapState")}}
             </th>
-            <th>
+            <th ng-click="setOrder('order')">
                 {{translate("order")}}
             </th>
             <th>
@@ -29,7 +33,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="service in bootstrap_services" class="selected-row"
+        <tr ng-repeat="service in bootstrap_services | orderBy:order" class="selected-row"
             ng-click="setCurrentItem(service)">
             <td>{{service.id}}</td>
             <td>{{service.name}}</td>
@@ -43,15 +47,12 @@
 
 <md-content>
     <md-tabs md-dynamic-height md-border-bottom>
-        <md-tab label="{{translate('service_info')}}">
+        <md-tab label="{{translate('service_info')}}" ng-if="currentService != null">
             <md-content class="md-padding">
-                <h1 class="md-display-2">{{translate('service_info')}}</h1>
-
                 <p>
                     {{translate('id')}} : {{currentService.id}} <br/>
                     {{translate('name')}} : {{currentService.name}}       <br/>
                     {{translate('order')}} : {{currentService.order}}     <br/>
-                    {{translate('repeat')}} : {{currentService.repeat}}   <br/>
                     <md-switch ng-model="currentService.repeat">
                         {{translate('repeat')}}
                     </md-switch>
@@ -59,6 +60,70 @@
                 </p>
             </md-content>
         </md-tab>
+        <md-tab label="{{translate('stackTrace')}}" ng-if="currentService != null && currentService.stackTrace != null">
+            <md-content class="md-padding">
+                <md-button class="btn md-raised md-warn"  data-clipboard-text="{{currentService.stackTrace}}">
+                    {{translate("copyToClipBoard")}}
+                </md-button>
+                <p id="bar">
+                    {{currentService.stackTrace}}
+                </p>
+            </md-content>
+        </md-tab>
     </md-tabs>
 </md-content>
 
+<script type="text/ng-template" id="myModalContent.html">
+    <md-dialog aria-label="Mango (Fruit)"  ng-cloak>
+        <form>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>{{parentScope.translate("doBootstrap")}}</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="cancel()">
+                        <md-icon md-svg-src="resources/image/svg/close.svg" aria-label="Close dialog"></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <div class="md-dialog-content">
+                    <div>
+                        <md-input-container>
+                            <label>{{parentScope.translate("domain")}}</label>
+                            <input ng-model="bootstrap.domain">
+                        </md-input-container>
+                    </div>
+                    <div>
+                        <md-input-container>
+                            <label>{{parentScope.translate("email")}}</label>
+                            <input ng-model="bootstrap.email">
+                        </md-input-container>
+                    </div>
+                    <div>
+                        <md-input-container>
+                            <label>{{parentScope.translate("password")}}</label>
+                            <input ng-model="bootstrap.password">
+                        </md-input-container>
+                    </div>
+                    <div>
+                        <md-input-container>
+                            <label>{{parentScope.translate("firstName")}}</label>
+                            <input ng-model="bootstrap.firstName">
+                        </md-input-container>
+                    </div>
+                    <div>
+                        <md-input-container>
+                            <label>{{parentScope.translate("lastName")}}</label>
+                            <input ng-model="bootstrap.lastName">
+                        </md-input-container>
+                    </div>
+                </div>
+            </md-dialog-content>
+            <md-dialog-actions layout="row">
+                <md-button class="md-raised md-primary" ng-click="answer(bootstrap)">
+                    {{parentScope.translate("doIt")}}
+                </md-button>
+            </md-dialog-actions>
+        </form>
+    </md-dialog>
+</script>

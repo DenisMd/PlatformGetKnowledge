@@ -55,6 +55,8 @@
     "lastName" : "Last name",
     "searchFor" : "Search for ...",
     "create" : "Create",
-    "update" : "Update"
+    "update" : "Update",
+    "copyToClipBoard" : "copy to clipboard",
+    "doIt" : "Do it"
   }
 }

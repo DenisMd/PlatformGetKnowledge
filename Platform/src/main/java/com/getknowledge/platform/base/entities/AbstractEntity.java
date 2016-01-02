@@ -11,23 +11,12 @@ public abstract class AbstractEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "class_name",length = 500)
-    private String className;
-
     public void setId(Long id) {
         this.id = id;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public String getClassName() {
-        return className;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
     }
 
     @JsonIgnore
@@ -40,7 +29,6 @@ public abstract class AbstractEntity {
 
         AbstractEntity that = (AbstractEntity) o;
 
-        if (!className.equals(that.className)) return false;
         return id.equals(that.id);
 
     }

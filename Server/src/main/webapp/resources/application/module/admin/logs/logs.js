@@ -27,6 +27,6 @@ model.controller("logsCtrl", function ($scope, $state,$http,applicationService,p
             case "Critical" : if ($scope.selectEvent <= 4)return true;break;
         }
         return false;
-    }
+    };
     $scope.selectEvent = "1";
 });

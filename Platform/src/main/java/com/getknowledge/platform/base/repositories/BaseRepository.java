@@ -28,7 +28,6 @@ public abstract class BaseRepository<T extends AbstractEntity> {
             throw new NullPointerException();
         }
 
-        object.setClassName(object.getClass().getName());
         entityManager.persist(object);
         entityManager.flush();
     }

@@ -287,7 +287,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             });
         };
 
-        this.update = function ($scope,name,className,data){
+        this.update = function ($scope,name,className,data,callback){
             $http({
                 method: 'POST',
                 url: platformDataUrl+'update',
@@ -296,6 +296,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (data){
                 $scope[name] = data;
+                callback(data);
             }).error(function(error, status, headers, config){
                 errorService.showError(error,status);
             });

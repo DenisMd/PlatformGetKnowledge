@@ -1,3 +1,5 @@
+new Clipboard('.btn');
+
 var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap", "ngImgCrop" , "ngMaterial"]);
 
 var player;
@@ -17,6 +19,14 @@ function initVideoPlayer() {
 }
 
 model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService, className) {
+
+    //Устанавливает сортировку для массива
+    var reverse = false;
+    $scope.setOrder = function (order) {
+        reverse = !reverse;
+        $scope.order = reverse?"-"+order:order;
+    };
+
 
     //---------------------------------------- системные методы
     //Получаем url для загрузки видео
@@ -197,48 +207,6 @@ model.controller("videoCtrl",function($scope){
     $('#videoModal').on("hidden.bs.modal",function(){
         $scope.close();
     });
-});
-
-model.filter('picker', function($filter) {
-    return function()
-    {
-        var filterName = [].splice.call(arguments, 1, 1)[0] || "";
-        var filter = filterName.split(":");
-        if (filter.length > 1)
-        {
-            filterName = filter[0];
-            for (var i = 1, k = filter.length; i < k; i++)
-            {
-                [].push.call(arguments, filter[i]);
-            }
-        }
-
-        if (!filterName) return arguments[0];
-
-        return $filter(filterName).apply(null, arguments);
-    };
-});
-
-model.controller("panelModalCtrl" , function($scope,applicationService,$modalInstance,item,parentScope,callbackForClose) {
-    $scope.item = item;
-    $scope.parentScope = parentScope;
-    $scope.actionModel = {};
-
-    $scope.ok = function (className , actionName) {
-        if (actionName == 'create') {
-            applicationService.create($scope,"doButtonResult",className,$scope.actionModel);
-        } else {
-            applicationService.action($scope, "doButtonResult", className, actionName, $scope.actionModel);
-        }
-    };
-
-
-    $scope.cancel = function () {
-        if (callbackForClose) {
-            callbackForClose();
-        }
-        $modalInstance.dismiss();
-    };
 });
 
 model.controller("textPlainCtrl" , function($scope,$uibModal) {
@@ -704,4 +672,19 @@ model.controller("textareaCtrl",function($scope,$element){
     }
 
 });
+
+
+//dialogs
+function DialogController($scope, $mdDialog , theScope) {
+    $scope.parentScope = theScope;
+    $scope.hide = function () {
+        $mdDialog.hide();
+    };
+    $scope.cancel = function () {
+        $mdDialog.cancel();
+    };
+    $scope.answer = function (answer) {
+        $mdDialog.hide(answer);
+    };
+}
 
