@@ -9,3 +9,15 @@
 .selected-row {
     cursor: pointer;
 }
+
+.panel-item {
+    padding: 0 8px;
+}
+
+.create {
+    color : #4ed272;
+}
+
+.delete {
+    color : #f85f6f;
+}

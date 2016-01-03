@@ -1,14 +1,9 @@
-model.controller("bootstrapCtrl", function ($scope, $state,$http,applicationService,pageService,className,$mdToast,$mdDialog,$mdMedia) {
+model.controller("bootstrapCtrl", function ($scope,applicationService,className,$mdDialog,$mdMedia) {
 
     $scope.updateService = function() {
 
       applicationService.update($scope,"updateResult",className.bootstrap_services,$scope.currentService,function(result){
-          $mdToast.show(
-              $mdToast.simple()
-                  .textContent(result)
-                  .position("bottom right")
-                  .hideDelay(3000)
-          );
+         $scope.showToast(result);
       });
     };
 
@@ -23,7 +18,7 @@ model.controller("bootstrapCtrl", function ($scope, $state,$http,applicationServ
         var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
         $mdDialog.show({
                 controller: DialogController,
-                templateUrl: 'myModalContent.html',
+                templateUrl: 'doBootstrapModal.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose:true,
@@ -34,12 +29,7 @@ model.controller("bootstrapCtrl", function ($scope, $state,$http,applicationServ
             })
             .then(function(answer) {
                 applicationService.action($scope,"bootstrapResult" , className.bootstrap_services,"do",answer,function(result){
-                    $mdToast.show(
-                        $mdToast.simple()
-                            .textContent(result)
-                            .position("bottom right")
-                            .hideDelay(3000)
-                    );
+                    $scope.showToast(result);
                     applicationService.list($scope , "bootstrap_services",className.bootstrap_services);
                 });
             });

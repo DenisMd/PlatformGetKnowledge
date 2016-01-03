@@ -57,7 +57,6 @@ public class Permission extends AbstractEntity{
         Permission that = (Permission) o;
 
         return permissionName.equals(that.permissionName);
-
     }
 
     @Override

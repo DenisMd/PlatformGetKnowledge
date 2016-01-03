@@ -1,10 +1,12 @@
 {
   "text" : {
-    "permissions_title" : "Permissions",
+    "permission_title" : "Permissions",
     "permission" : "Permission",
-    "permissionName" : "Name",
-    "note" : "Note",
-    "updatePermission" : "Update permission",
-    "createPermission" : "Create permission"
+    "permission_note" : "Note",
+    "permission_updatePermission" : "Update permission",
+    "permission_createPermission" : "Create permission",
+    "permission_deletePermission" : "Delete permission",
+    "permission_deleteMessage" : "Would you like remove permission",
+    "permission_deleteContentMessage" : "All references on right will be remove"
   }
 }

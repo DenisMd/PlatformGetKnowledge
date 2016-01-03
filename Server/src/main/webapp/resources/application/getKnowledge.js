@@ -18,7 +18,17 @@ function initVideoPlayer() {
 
 }
 
-model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService, className) {
+model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService, className,$mdToast) {
+
+    //Toast
+    $scope.showToast = function (text) {
+        $mdToast.show(
+            $mdToast.simple()
+                .textContent($scope.translate(text))
+                .position("bottom right")
+                .hideDelay(3000)
+        );
+    };
 
     //Устанавливает сортировку для массива
     var reverse = false;
@@ -687,4 +697,6 @@ function DialogController($scope, $mdDialog , theScope) {
         $mdDialog.hide(answer);
     };
 }
+
+
 
