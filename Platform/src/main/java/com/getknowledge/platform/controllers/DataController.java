@@ -492,7 +492,7 @@ public class DataController {
         }
 
 
-        return al != null && (checkRight(user, al.getPermissionsForRead()) || checkUserList(user, al.getUserList()));
+        return al != null && al.isAccessRead(user);
 
     }
 
@@ -511,7 +511,7 @@ public class DataController {
             return true;
         }
 
-        return al != null && (checkRight(user, al.getPermissionsForCreate()) || checkUserList(user, al.getUserList()));
+        return al != null && al.isAccessCreate(user);
 
     }
 
@@ -529,7 +529,7 @@ public class DataController {
             return true;
         }
 
-        return al != null && (checkRight(user, al.getPermissionsForEdit()) || checkUserList(user, al.getUserList()));
+        return al != null &&al.isAccessEdit(user);
 
     }
 
@@ -547,23 +547,8 @@ public class DataController {
             return true;
         }
 
-        return al != null && (checkRight(user, al.getPermissionsForRemove()) || checkUserList(user, al.getUserList()));
+        return al != null && al.isAccessRemove(user);
 
-    }
-
-    private boolean checkRight(User user , List<Permission> permissions) throws NotAuthorized {
-
-        if (user == null || permissions == null || permissions.isEmpty()) return false;
-
-        for (Permission element : user.getPermissions()) {
-            if (permissions.contains(element)) return true;
-        }
-
-        for (Permission element : user.getRole().getPermissions()) {
-            if (permissions.contains(element)) return true;
-        }
-
-        return false;
     }
 
     private boolean checkUserList(User user, List<User> users) {
