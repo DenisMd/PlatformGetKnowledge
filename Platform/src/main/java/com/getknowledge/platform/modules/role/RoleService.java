@@ -20,27 +20,22 @@ public class RoleService extends AbstractService implements BootstrapService {
         if(roleRepository.count() == 0) {
             Role roleAdmin = new Role();
             roleAdmin.setRoleName(RoleName.ROLE_ADMIN.name());
-            roleAdmin.setDefaultEntity(true);
             roleRepository.create(roleAdmin);
 
             Role roleUser = new Role();
             roleUser.setRoleName(RoleName.ROLE_USER.name());
-            roleUser.setDefaultEntity(true);
             roleRepository.create(roleUser);
 
             Role roleHelpDesk = new Role();
             roleHelpDesk.setRoleName(RoleName.ROLE_HELPDESK.name());
-            roleHelpDesk.setDefaultEntity(true);
             roleRepository.create(roleHelpDesk);
 
             Role author = new Role();
             author.setRoleName(RoleName.ROLE_AUTHOR.name());
-            author.setDefaultEntity(true);
             roleRepository.create(author);
 
             Role moderator = new Role();
             moderator.setRoleName(RoleName.ROLE_MODERATOR.name());
-            moderator.setDefaultEntity(true);
             roleRepository.create(moderator);
         }
     }

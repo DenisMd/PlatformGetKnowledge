@@ -1,7 +1,7 @@
 model.controller("usersCtrl", function ($scope, $state,$http,applicationService,pageService,className) {
     $scope.usersSelector = {
         title : "user_title",
-        columns : ["id", "email", "createDate"],
+        columns : ["id", "email", "createDate" , "enabled"],
         content : [],
         filters : [null,null,"date:medium"],
         callback : function (item) {

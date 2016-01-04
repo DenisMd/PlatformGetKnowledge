@@ -2,6 +2,7 @@ package com.getknowledge.platform.controllers;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -325,7 +326,7 @@ public class DataController {
                 throw new NotAuthorized("access denied for create entity" , trace, TraceLevel.Warning);
             }
             moduleLocator.findRepository(classEntity).create(abstractEntity);
-            return "object created";
+            return objectMapper.writeValueAsString("create success");
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found" , trace , TraceLevel.Warning);
         } catch (IOException e) {
@@ -339,14 +340,11 @@ public class DataController {
             if (jsonObject == null || className == null) return null;
             Class classEntity = Class.forName(className);
             AbstractEntity abstractEntity = (AbstractEntity) objectMapper.readValue(jsonObject, classEntity);
-            if (abstractEntity.isDefaultEntity()) {
-                throw new NotAuthorized("access denied for update default entity" , trace, TraceLevel.Warning);
-            }
             if (!isAccessEdit(principal, abstractEntity) ) {
                 throw new NotAuthorized("access denied for update entity" , trace, TraceLevel.Warning);
             }
             moduleLocator.findRepository(classEntity).update(abstractEntity);
-            return "object updated";
+            return objectMapper.writeValueAsString("update success");
         } catch (IOException e) {
             throw new ParseException("can't parse entities for update " + className,trace,TraceLevel.Warning,e);
         } catch (ClassNotFoundException e) {
@@ -361,17 +359,16 @@ public class DataController {
             Class classEntity = Class.forName(className);
 
             AbstractEntity abstractEntity = moduleLocator.findRepository(classEntity).read(id);
-            if (abstractEntity.isDefaultEntity()) {
-                throw new NotAuthorized("access denied for remove default entity" , trace, TraceLevel.Warning);
-            }
             if (!isAccessRemove(principal, abstractEntity) ) {
                 throw new NotAuthorized("access denied for remove entity" , trace, TraceLevel.Warning);
             }
             moduleLocator.findRepository(classEntity).remove(id);
 
-            return "object removed";
+            return objectMapper.writeValueAsString("remove success");
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+        } catch (JsonProcessingException e) {
+            throw new ParseException("can't parse entities for remove " + className,trace,TraceLevel.Warning,e);
         }
     }
 
@@ -495,7 +492,7 @@ public class DataController {
         }
 
 
-        return al != null && (checkRight(user, al.getPermissionsForRead()) || checkUserList(user, al.getUserList()));
+        return al != null && al.isAccessRead(user);
 
     }
 
@@ -514,7 +511,7 @@ public class DataController {
             return true;
         }
 
-        return al != null && (checkRight(user, al.getPermissionsForCreate()) || checkUserList(user, al.getUserList()));
+        return al != null && al.isAccessCreate(user);
 
     }
 
@@ -532,7 +529,7 @@ public class DataController {
             return true;
         }
 
-        return al != null && (checkRight(user, al.getPermissionsForEdit()) || checkUserList(user, al.getUserList()));
+        return al != null &&al.isAccessEdit(user);
 
     }
 
@@ -550,23 +547,8 @@ public class DataController {
             return true;
         }
 
-        return al != null && (checkRight(user, al.getPermissionsForRemove()) || checkUserList(user, al.getUserList()));
+        return al != null && al.isAccessRemove(user);
 
-    }
-
-    private boolean checkRight(User user , List<Permission> permissions) throws NotAuthorized {
-
-        if (user == null || permissions == null || permissions.isEmpty()) return false;
-
-        for (Permission element : user.getPermissions()) {
-            if (permissions.contains(element)) return true;
-        }
-
-        for (Permission element : user.getRole().getPermissions()) {
-            if (permissions.contains(element)) return true;
-        }
-
-        return false;
     }
 
     private boolean checkUserList(User user, List<User> users) {

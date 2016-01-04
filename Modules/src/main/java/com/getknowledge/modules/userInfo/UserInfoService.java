@@ -113,7 +113,6 @@ public class UserInfoService extends AbstractService implements BootstrapService
             user.setRole(role);
             user.setEnabled(true);
             user.setPwdTransient(password);
-            user.setDefaultEntity(true);
             userRepository.create(user);
 
             UserInfo userInfo = new UserInfo();
@@ -123,7 +122,6 @@ public class UserInfoService extends AbstractService implements BootstrapService
             userInfo.setLanguage(languageRepository.getSingleEntityByFieldAndValue("name", Languages.Ru.name()));
             userInfo.setSpecialty("main admin");
             userInfo.setMan(true);
-            userInfo.setDefaultEntity(true);
             InputStream is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/image/photo.png");
             try {
                 userInfo.setProfileImage(org.apache.commons.io.IOUtils.toByteArray(is));
@@ -174,6 +172,17 @@ public class UserInfoService extends AbstractService implements BootstrapService
             return RegisterResult.UserAlreadyCreated;
         }
 
+        String uuid = UUID.randomUUID().toString();
+        Settings settings = settingsRepository.getSettings();
+        try {
+            String url = settings.getDomain() + "/#/"+language.getName().toLowerCase()+"/accept/" + uuid;
+            emailService.sendTemplate(login,settings.getEmail(), "Регистрация на getKnowledge();",
+                    "register",new String[] {settingsRepository.getSettings().getDomain(),url});
+        } catch (Exception e) {
+            trace.logException("Error send register email to " + login , e , TraceLevel.Error);
+            return RegisterResult.EmailNotSend;
+        }
+
         User user = new User();
         user.setLogin(login);
         user.setPwdTransient(password);
@@ -201,17 +210,6 @@ public class UserInfoService extends AbstractService implements BootstrapService
             trace.logException("Error load file: " + e.getMessage(), e, TraceLevel.Warning);
         }
 
-        String uuid = UUID.randomUUID().toString();
-        Settings settings = settingsRepository.getSettings();
-        try {
-            String url = settings.getDomain() + "/#/"+language.getName().toLowerCase()+"/accept/" + uuid;
-            emailService.sendTemplate(login,settings.getEmail(), "Регистрация на getKnowledge();",
-                    "register",new String[] {settingsRepository.getSettings().getDomain(),url});
-        } catch (Exception e) {
-            trace.logException("Error send register email to " + login , e , TraceLevel.Error);
-            return RegisterResult.EmailNotSend;
-        }
-
         userInfoRepository.create(userInfo);
 
         UserEvent registerInfo = new UserEvent();
@@ -227,7 +225,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
         try {
             Task task = new Task();
-            task.setServiceName("RegisterInfoService");
+            task.setServiceName("TaskService");
             task.setTaskName("cancelRegistration");
             task.setJsonData(objectMapper.writeValueAsString(registerInfo));
             task.setTaskStatus(TaskStatus.NotStarted);
@@ -394,7 +392,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
         try {
             Task task = new Task();
-            task.setServiceName("Remove restore info");
+            task.setServiceName("TaskService");
             task.setTaskName("removeRestorePasswordInfo");
             task.setJsonData(objectMapper.writeValueAsString(restorePasswordInfo));
             task.setTaskStatus(TaskStatus.NotStarted);

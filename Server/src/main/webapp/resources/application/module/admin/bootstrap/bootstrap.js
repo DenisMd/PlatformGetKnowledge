@@ -1,38 +1,43 @@
-model.controller("bootstrapCtrl", function ($scope, $state,$http,applicationService,pageService,className) {
-    $scope.bootstrapSelector = {
-        title : "bootstrap_title",
-        columns : ["id", "name", "bootstrapState", "order", "repeat"],
-        content : [],
-        callback : function (item) {
-            $scope.editorData.item = item;
-        }
+model.controller("bootstrapCtrl", function ($scope,applicationService,className,$mdDialog,$mdMedia) {
+
+    $scope.updateService = function() {
+
+      applicationService.update($scope,"updateResult",className.bootstrap_services,$scope.currentService,function(result){
+         $scope.showToast(result);
+      });
     };
 
-    $scope.editorData = {
-        item : null,
-        tabs : [{
-            title : "service",
-            columns : [{name : "id" , "type" : "number", disabled : true} , {name : "name" , "type" : "string", disabled : true},{name : "bootstrapState" , "type" : "string", disabled : true}, {name : "repeat" , type : "boolean"}, {name : "errorMessage" , "type" : "string" , disabled : true},{name : "stackTrace" , "modal" : "inputs/textPlain" , disabled : true}],
-            readOnly : false,
-            className : className.bootstrap_services,
-            actionName : "update",
-            buttonText  : "update"
-        }]
+    applicationService.list($scope , "bootstrap_services",className.bootstrap_services);
+
+    $scope.setCurrentItem = function (item) {
+        $scope.currentService = item;
     };
 
-    $scope.panelData = {
-        items : [{
-            title : "doBootstrap",
-            actionName : "do",
-            className : className.bootstrap_services,
-            columns : [{name : "domain" , type : "text"} ,{name : "email" , type : "text"},{name : "password" , type : "text"},{name : "firstName" , type : "text"},{name : "lastName" , type : "text"},{name : "initPassword" , type : "text"}],
-            buttonText  : "doBootstrap",
-            label : "fa-cog fa-spin",
-            style : {color : '#5E5DD6'}
-        }]
+
+    $scope.showAdvanced = function(ev) {
+        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+        $mdDialog.show({
+                controller: DialogController,
+                templateUrl: 'doBootstrapModal.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                fullscreen: useFullScreen,
+                locals: {
+                    theScope: $scope
+                }
+            })
+            .then(function(answer) {
+                applicationService.action($scope,"bootstrapResult" , className.bootstrap_services,"do",answer,function(result){
+                    $scope.showToast(result);
+                    applicationService.list($scope , "bootstrap_services",className.bootstrap_services);
+                });
+            });
+        $scope.$watch(function() {
+            return $mdMedia('xs') || $mdMedia('sm');
+        }, function(wantsFullScreen) {
+            $scope.customFullscreen = (wantsFullScreen === true);
+        });
     };
 
-    applicationService.list($scope , "services",className.bootstrap_services , function(bootstrapService){
-        $scope.bootstrapSelector.content.push(bootstrapService);
-    });
 });

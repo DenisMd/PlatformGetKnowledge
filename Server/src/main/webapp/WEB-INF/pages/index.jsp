@@ -4,16 +4,20 @@
 <html ng-app="mainApp" ng-controller="mainController">
 <head>
     <title>Index</title>
+
+    <%--Библиотечные css--%>
     <link href='https://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="/resources/bower_components/bootstrap/dist/css/bootstrap.css" type="text/css">
     <link rel="stylesheet" href="/resources/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css" type="text/css"/>
     <link rel="stylesheet" href="/resources/bower_components/video.js/dist/video-js.min.css" type="text/css"/>
     <link rel="stylesheet" href="/resources/bower_components/angular-loading-bar/build/loading-bar.css" type="text/css"/>
-    <link rel="stylesheet" href="/resources/css/index.css" type="text/css">
-    <link rel="stylesheet" type="text/css" href="/resources/bower_components/ng-img-crop/compile/minified/ng-img-crop.css">
-    <link rel="stylesheet" type="text/css" href="/resources/css/selector-table.css">
     <link rel="stylesheet" href="/resources/bower_components/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="/resources/bower_components/angular-material/angular-material.min.css">
+
+    <%--Наши css--%>
+    <link rel="stylesheet" type="text/css" href="/resources/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/resources/bower_components/ng-img-crop/compile/minified/ng-img-crop.css">
+
     <meta charset="utf-8">
 </head>
 <body>
@@ -51,6 +55,10 @@
     <script src="/resources/bower_components/ng-scrollbars/dist/scrollbars.min.js"></script>
     <script src="/resources/bower_components/video.js/dist/video.min.js"></script>
     <script src="/resources/bower_components/ng-img-crop/compile/minified/ng-img-crop.js"></script>
+    <script src="/resources/bower_components/angular-animate/angular-animate.js" type="text/javascript" ></script>
+    <script src="/resources/bower_components/angular-aria/angular-aria.js" type="text/javascript" ></script>
+    <script src="/resources/bower_components/angular-material/angular-material.js" type="text/javascript" ></script>
+    <script src="/resources/bower_components/clipboard/dist/clipboard.min.js"></script>
     <%--<script src="/resources/bower_components/videojs-hotkeys/videojs.hotkeys.min.js"></script>--%>
     <script src="/resources/application/platform.js"></script>
     <script src="/resources/application/getKnowledge.js"></script>
