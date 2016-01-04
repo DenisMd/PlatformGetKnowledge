@@ -86,12 +86,6 @@ public class DataController {
 
     private AbstractEntity prepare (AbstractEntity entity , BaseRepository<AbstractEntity> repository,Principal principal, List<String> classNames) {
         if (repository instanceof PrepareEntity) {
-
-            if (repository instanceof ProtectedRepository) {
-                ProtectedRepository protectedRepository = (ProtectedRepository) repository;
-                protectedRepository.setCurrentUser(getCurrentUser(principal));
-            }
-
             try {
                 properties : for (PropertyDescriptor pd : Introspector.getBeanInfo(entity.getClass()).getPropertyDescriptors()) {
                     if (pd.getReadMethod() != null && !"class".equals(pd.getName())) {
@@ -127,6 +121,12 @@ public class DataController {
             if (id == null || className == null || className.isEmpty()) return null;
             Class classEntity = Class.forName(className);
             BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
+
+            if (repository instanceof ProtectedRepository) {
+                ProtectedRepository protectedRepository = (ProtectedRepository) repository;
+                protectedRepository.setCurrentUser(getCurrentUser(principal));
+            }
+
             AbstractEntity entity  = repository.read(id);
 
             if (entity == null) {
