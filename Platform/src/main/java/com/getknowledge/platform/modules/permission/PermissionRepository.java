@@ -1,6 +1,7 @@
 package com.getknowledge.platform.modules.permission;
 
 import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.role.RoleRepository;
 import com.getknowledge.platform.modules.user.User;
@@ -31,7 +32,7 @@ public class PermissionRepository extends BaseRepository<Permission> {
     }
 
     @Override
-    public void remove(Long id) {
+    public void remove(Long id) throws PlatformException {
         Permission permission = read(id);
         if (permission != null) {
             List<User> users = entityManager.createQuery("select u from User u join u.permissions as p where p.id = :id").

@@ -1,9 +1,11 @@
 {
   "text" : {
+    "role" : "Роль",
     "roles_title" : "Роли пользователя",
-    "roleName" : "Имя",
-    "note" : "Описание",
-    "updateRole" : "Обновить роль",
-    "createRole" : "Создавть роль"
+    "role_note" : "Описание",
+    "role_updateRole" : "Обновить роль",
+    "role_createRole" : "Создать роль",
+    "role_deleteRole" : "Удалить роль",
+    "role_deleteContentMessage" : "Удаление возможно если нету ссылкок на пользоватилей"
   }
 }

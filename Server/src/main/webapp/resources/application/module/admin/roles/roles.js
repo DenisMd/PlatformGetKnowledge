@@ -1,30 +1,39 @@
-model.controller("rolesCtrl", function ($scope, $state,$http,applicationService,pageService,className) {
-    $scope.rolesSelector = {
-        title : "roles_title",
-        columns : ["id", "roleName", "note"],
-        content : [],
-        tabs : [{
-            title : "role",
-            columns : [{name : "roleName" , "type" : "string"},{name : "note" , "type" : "string"}],
-            buttonText  : "updateRole",
-            actionName : "update",
-            className : className.roles
-        }]
+model.controller("rolesCtrl", function ($scope, applicationService, className,$mdDialog) {
+
+    $scope.setCurrentItem = function (item) {
+        $scope.currentRole = item;
     };
 
-    $scope.panelData = {
-        items : [{
-            title : "createRole",
-            actionName : "create",
-            className : className.roles,
-            columns : [{name : "roleName" , type : "text"} ,{name : "note" , type : "text"}],
-            buttonText  : "create",
-            label : "fa-plus",
-            style : {color : '#3CB13B'}
-        }]
+    $scope.updateRole = function(){
+        applicationService.update($scope,"updateResult",className.roles,$scope.currentRole,function(result){
+            $scope.showToast(result);
+        });
     };
 
-    applicationService.list($scope , "services",className.roles , function(permission){
-        $scope.rolesSelector.content.push(permission);
-    });
+    $scope.showAdvanced = function(ev) {
+        $scope.showDialog(ev,$scope,"createRole.html",function(answer){
+            applicationService.create($scope,"", className.roles,answer,function(result){
+                $scope.showToast(result);
+                applicationService.list($scope , "roles", className.roles);
+            });
+        });
+    };
+
+    $scope.showDeleteDialog = function(ev) {
+        var confirm = $mdDialog.confirm()
+            .title($scope.translate("role_deleteRole") + " " + $scope.currentRole.roleName)
+            .textContent($scope.translate("role_deleteContentMessage"))
+            .targetEvent(ev)
+            .ariaLabel('Delete permission')
+            .ok($scope.translate("delete"))
+            .cancel($scope.translate("cancel"));
+        $mdDialog.show(confirm).then(function() {
+            applicationService.remove($scope,"",className.roles,$scope.currentRole.id,function (result) {
+                $scope.showToast(result);
+                applicationService.list($scope , "roles", className.roles);
+            });
+        });
+    };
+
+    applicationService.list($scope, "roles", className.roles);
 });

@@ -15,28 +15,11 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className,
 
 
     $scope.showAdvanced = function(ev) {
-        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
-        $mdDialog.show({
-                controller: DialogController,
-                templateUrl: 'doBootstrapModal.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose:true,
-                fullscreen: useFullScreen,
-                locals: {
-                    theScope: $scope
-                }
-            })
-            .then(function(answer) {
-                applicationService.action($scope,"bootstrapResult" , className.bootstrap_services,"do",answer,function(result){
-                    $scope.showToast(result);
-                    applicationService.list($scope , "bootstrap_services",className.bootstrap_services);
-                });
+        $scope.showDialog(ev,$scope,"doBootstrapModal.html",function(answer){
+            applicationService.action($scope,"bootstrapResult" , className.bootstrap_services,"do",answer,function(result){
+                $scope.showToast(result);
+                applicationService.list($scope , "bootstrap_services",className.bootstrap_services);
             });
-        $scope.$watch(function() {
-            return $mdMedia('xs') || $mdMedia('sm');
-        }, function(wantsFullScreen) {
-            $scope.customFullscreen = (wantsFullScreen === true);
         });
     };
 

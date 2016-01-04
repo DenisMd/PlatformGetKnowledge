@@ -1,4 +1,4 @@
-model.controller("permissionsCtrl", function ($scope,applicationService,className,$mdDialog,$mdMedia) {
+model.controller("permissionsCtrl", function ($scope,applicationService,className,$mdDialog) {
 
     $scope.setCurrentItem = function (item) {
         $scope.currentPermission = item;
@@ -22,28 +22,11 @@ model.controller("permissionsCtrl", function ($scope,applicationService,classNam
 
 
     $scope.showAdvanced = function(ev) {
-        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
-        $mdDialog.show({
-                controller: DialogController,
-                templateUrl: 'createPermission.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose:true,
-                fullscreen: useFullScreen,
-                locals: {
-                    theScope: $scope
-                }
-            })
-            .then(function(answer) {
-                applicationService.create($scope,"createPermissionResult", className.permissions,answer,function(result){
-                    $scope.showToast(result);
-                    applicationService.list($scope , "permissions", className.permissions);
-                });
+        $scope.showDialog(ev,$scope,"createPermission.html",function(answer){
+            applicationService.create($scope,"createPermissionResult", className.permissions,answer,function(result){
+                $scope.showToast(result);
+                applicationService.list($scope , "permissions", className.permissions);
             });
-        $scope.$watch(function() {
-            return $mdMedia('xs') || $mdMedia('sm');
-        }, function(wantsFullScreen) {
-            $scope.customFullscreen = (wantsFullScreen === true);
         });
     };
 
