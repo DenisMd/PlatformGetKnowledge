@@ -2,6 +2,7 @@ package com.getknowledge.platform.base.repositories;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.getknowledge.platform.base.entities.AbstractEntity;
+import com.getknowledge.platform.exceptions.PlatformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +42,7 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         entityManager.flush();
     }
 
-    public void remove(Long id) {
+    public void remove(Long id) throws PlatformException {
         if(id == null) {
             throw new NullPointerException();
         }

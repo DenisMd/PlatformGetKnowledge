@@ -3,6 +3,7 @@ package com.getknowledge.modules.userInfo;
 import com.getknowledge.modules.menu.MenuNames;
 import com.getknowledge.modules.menu.MenuRepository;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
+import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionRegistry;
@@ -45,7 +46,7 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
     }
 
     @Override
-    public void remove(Long id) {
+    public void remove(Long id) throws PlatformException {
         UserInfo userInfo = entityManager.find(getClassEntity() , id);
         long userId = userInfo.getUser().getId();
         super.remove(id);

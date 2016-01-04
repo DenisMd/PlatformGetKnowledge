@@ -1,9 +1,11 @@
 {
   "text" : {
+    "role" : "Role",
     "roles_title" : "User roles",
-    "roleName" : "Name",
-    "note" : "Note",
-    "updateRole" : "Update role",
-    "createRole" : "Create role"
+    "role_note" : "Note",
+    "role_updateRole" : "Update role",
+    "role_createRole" : "Create role",
+    "role_deleteRole" : "Delete role",
+    "role_deleteContentMessage" : "Delete is impossible if exist reference on user"
   }
 }

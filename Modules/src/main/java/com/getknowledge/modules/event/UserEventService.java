@@ -5,6 +5,7 @@ import com.getknowledge.modules.userInfo.results.Result;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.Task;
 import com.getknowledge.platform.base.services.AbstractService;
+import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
@@ -44,7 +45,7 @@ public class UserEventService extends AbstractService {
     }
 
     @Task(name = "cancelRegistration")
-    public void cancelRegistration(HashMap<String , Object> data) {
+    public void cancelRegistration(HashMap<String , Object> data) throws PlatformException {
         UserEvent registerInfo = userEventRepository.getSingleEntityByFieldAndValue("uuid", data.get("uuid").toString());
         if (!registerInfo.getUserInfo().getUser().isEnabled()) {
             trace.log("Cancel registration for user " + registerInfo.getUserInfo().getUser().getLogin() , TraceLevel.Event);
@@ -55,7 +56,7 @@ public class UserEventService extends AbstractService {
     }
 
     @Action(name = "restorePassword", mandatoryFields = {"uuid" , "password"})
-    public Result restorePassword(HashMap<String , Object> data) {
+    public Result restorePassword(HashMap<String , Object> data) throws PlatformException {
         String uuid = (String) data.get("uuid");
         UserEvent restorePasswordInfo = userEventRepository.getSingleEntityByFieldAndValue("uuid", uuid);
         if (restorePasswordInfo == null || restorePasswordInfo.getUserEventType() != UserEventType.RestorePassword) return Result.Failed;
@@ -67,7 +68,7 @@ public class UserEventService extends AbstractService {
     }
 
     @Task(name = "removeRestorePasswordInfo")
-    public void removeRestorePasswordInfo(HashMap<String , Object> data) {
+    public void removeRestorePasswordInfo(HashMap<String , Object> data) throws PlatformException {
         UserEvent restorePasswordInfo = userEventRepository.getSingleEntityByFieldAndValue("uuid", data.get("uuid").toString());
         if (restorePasswordInfo == null) return;
         trace.log("Remove old restore password" + restorePasswordInfo.getUuid() , TraceLevel.Event);

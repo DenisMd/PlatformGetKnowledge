@@ -18,7 +18,7 @@ function initVideoPlayer() {
 
 }
 
-model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService, className,$mdToast) {
+model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService, className,$mdToast,$mdDialog, $mdMedia) {
 
     //Toast
     $scope.showToast = function (text) {
@@ -28,6 +28,30 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
                 .position("bottom right")
                 .hideDelay(3000)
         );
+    };
+
+    //Dialog
+    $scope.showDialog = function (ev,$scope,htmlName,callbackForOk) {
+        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+        $mdDialog.show({
+                controller: DialogController,
+                templateUrl: htmlName,
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                fullscreen: useFullScreen,
+                locals: {
+                    theScope: $scope
+                }
+            })
+            .then(function(answer) {
+                callbackForOk(answer);
+            });
+        $scope.$watch(function() {
+            return $mdMedia('xs') || $mdMedia('sm');
+        }, function(wantsFullScreen) {
+            $scope.customFullscreen = (wantsFullScreen === true);
+        });
     };
 
     //Устанавливает сортировку для массива
