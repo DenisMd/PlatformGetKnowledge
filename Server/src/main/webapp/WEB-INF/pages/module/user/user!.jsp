@@ -2,27 +2,43 @@
 <link rel="stylesheet" href="/resources/css/user.css">
 <div class="user-content">
     <div class="col-sm-3 user-menu-content">
-        <div class="user-photo">
-            <img ng-src="{{userImg(user_info.id)}}" class="main-image user-image"/>
-        </div>
         <div class="user-menu">
-            <div class="">
-                <p class="main-label">{{user_info.firstName}} {{user_info.lastName}}</p>
+            <div class="user-info-card">
+                <img ng-src="{{userImg(user_info.id)}}" class="img-circle" />
+            </div>
+            <div ng-show="user_info.online" class="text-center">
+                <span class="circle-status circle-online"></span> {{translate("Online")}}
+            </div>
+            <div ng-hide="user_info.online" class="text-center">
+                <span class="circle-status circle-offline"></span> {{translate("Offline")}}
+            </div>
+            <p class="user-name text-center">{{user_info.firstName}} {{user_info.lastName}}</p>
 
-                <p class="info-about-user">{{user_info.specialty}}</p>
+            <p class="user-speciality text-center">{{user_info.specialty}}</p>
+
+            <div class="user-status">
+                {{user_info.status}}
             </div>
-            <div ng-show="user_info.online">
-                <span class="circle-status circle-online"></span>
-                Online
-            </div>
-            <div>
-                <module-template data="statusText" name="inputs/editableTextarea"></module-template>
-            </div>
+            <a href="https://www.google.ru">google.ru</a>
+            <p class="link-card user-link text-center">
+                <span class=" col-xs-3"><i class="fa fa-vk"></i></span>
+                <span class=" col-xs-3"><i class="fa fa-facebook"></i></span>
+                <span class=" col-xs-3"><i class="fa fa-twitter"></i></span>
+                <span class=" col-xs-3"><i class="fa fa-git"></i></span>
+
+            </p>
+
+            <ul class="list-group user-nav">
+                <li  class="list-group-item" ng-repeat="menuItem in user_info.userMenu.items">
+                    <a ng-href="{{createUrl(menuItem.url)}}">{{translate(menuItem.title)}}</a>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="col-sm-9">
         {{user_info}}
     </div>
+
 
 
 </div>

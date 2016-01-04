@@ -16,7 +16,7 @@ function initVideoPlayer() {
 
 }
 
-model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService, className) {
+model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService,pageService, className) {
 
     //---------------------------------------- системные методы
     //Получаем url для загрузки видео
@@ -87,6 +87,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         $http.get("/j_spring_security_logout").success(function(){
             applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {},function(){
                 $scope.reloadMenu();
+                pageService.onLogout();
             });
         });
     };

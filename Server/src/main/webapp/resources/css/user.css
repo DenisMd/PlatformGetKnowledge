@@ -19,13 +19,7 @@
     height:100%;
     position:relative;
 }
-.user-photo{
-    height: 200px;
-    width: 200px;
-    position: relative;
-    z-index: 10;
-    margin: 0 auto;
-}
+
 .user-image{
     height: 100%;
     width: 100%;
@@ -34,23 +28,31 @@
 
 .user-menu{
     position:relative;
-    height: 100%;
-    top: -100px;
-    padding-top:100px;
     border: 1px solid #F0F0F0;
     background: white;
-    text-align: center;
+    padding: 0 10px;
+    font: 400 18px 'PT Sans', sans-serif;
 }
 
+.user-name{
+    font: 700 32px 'PT Sans', sans-serif;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.user-speciality{
+    margin: 5px auto 15px;
+}
 .user-status{
+    margin: 15px auto;
 }
 
 .circle-status{
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     display: inline-block;
-    vertical-align: middle;
+    text-align: center;
 }
 
 .circle-online{
@@ -61,4 +63,51 @@
     background: -o-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%, rgba(155,211,0,1) 100%); /* opera 11.10+ */
     background: -ms-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%, rgba(155,211,0,1) 100%); /* ie10+ */
     background:radial-gradient(ellipse at center, rgba(255,255,255,1) 0%, rgba(155,211,0,1) 100%); /* w3c */
+}
+
+.circle-offline{
+    background: #d02800;
+    background: -moz-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%, rgba(208, 40, 0,1) 100%); /* ff3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(255,255,255,1)), color-stop(100%, rgba(208, 40, 0,1))); /* safari4+,chrome */
+    background:-webkit-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%, rgba(208, 40, 0,1) 100%); /* safari5.1+,chrome10+ */
+    background: -o-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%, rgba(208, 40, 0,1) 100%); /* opera 11.10+ */
+    background: -ms-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%, rgba(208, 40, 0,1) 100%); /* ie10+ */
+    background:radial-gradient(ellipse at center, rgba(255,255,255,1) 0%, rgba(208, 40, 0,1) 100%); /* w3c */
+}
+
+.user-link{
+    font-size:25px;
+}
+
+.user-nav{
+    margin: -10px;
+}
+
+.user-nav>li{
+    margin-top:0 !important;
+    border-left: 0;
+    border-right: 0;
+}
+
+.user-nav>li a{
+    border-radius: 0;
+    margin:0;
+    color: #000;
+    text-decoration: none;
+    display: inline-block;
+    width:75%;
+}
+
+.user-nav>li a{
+    text-decoration: none;
+}
+
+
+.user-nav>li.list-group-item:first-child,
+.user-nav>li.list-group-item:last-child{
+    border-radius: 0;
+}
+
+.user-nav>li:hover{
+    background: #ddd;
 }
