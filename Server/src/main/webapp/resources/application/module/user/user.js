@@ -1,23 +1,50 @@
 model.controller("userCtrl", function ($scope, $state,$http,applicationService,pageService,className) {
     var userId = pageService.getPathVariable("user",$state.params.path);
+
     if (userId) {
-        applicationService.read($scope, "user_info" , className.userInfo, userId, function(item){
-            if ($scope.user && $scope.user.id === parseInt(userId, 10)) {
-                if (item.firstLogin) {
-                    applicationService.list($scope, "countriesList", className.country);
-                    $("#userModal").modal({
-                        backdrop: 'static',
-                        keyboard: false
-                    });
-                    $("#userModal").modal('show');
-                }
-            }
+        pageService.setOnLogout(function(){
+            init();
         });
+        init();
+        function init() {
+            applicationService.read($scope, "user_info", className.userInfo, userId, function (item) {
+                $scope.statusText.text = item.status;
+                if ($scope.user && $scope.user.id === parseInt(userId, 10)) {
+                    $scope.statusText.onSave = function (text) {
+                        applicationService.action($scope, "updateStatus", className.userInfo, "updateStatus", {status: text}, function (item) {
+                            if (item === "Complete") {
+                                applicationService.read($scope, "user_info", className.userInfo, userId, function (item) {
+                                    $scope.statusText.text = item.status;
+                                });
+                            }
+                        });
+                    };
+                    if (item.firstLogin) {
+                        applicationService.list($scope, "countriesList", className.country);
+                        $("#userModal").modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        });
+                        $("#userModal").modal('show');
+                    }
+
+
+                }
+            });
+        }
     }
     $scope.closeModal = function(){
         applicationService.action($scope,"skipResult",className.userInfo,"skipExtraRegistration",{});
         $("#userModal").modal('hide');
     };
+
+    //данные для status
+    $scope.statusText = {};
+
+
+
+
+
 
 
     //данные для select
@@ -117,11 +144,9 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
             if ($scope.speciality) data.speciality = $scope.speciality;
             if ($scope.date) data.date = $scope.date;
 
-            applicationService.action($scope, "status", className.userInfo, "updateExtraInfo", data, function(item){
-                console.log(item);
+            applicationService.action($scope, "updateExtraInfo", className.userInfo, "updateExtraInfo", data, function(item){
                 if (item === "Complete"){
                     $scope.user.specialty = data.speciality;
-                    applicationService.read($scope, "user_info" , className.userInfo, userId);
                     $("#userModal").modal('hide');
                 }
             });

@@ -37,8 +37,8 @@
 
     <module-template name="menus/mainMenu" data="menu"></module-template>
 
-    <div class="wrapper wrapper-left" id="wrapper">
-            <div ui-view></div>
+    <div class="full-window wrapper wrapper-left" id="wrapper">
+            <div ui-view class="full-window"></div>
     </div>
 
     <script src="/resources/bower_components/jquery/dist/jquery.min.js"></script>
@@ -67,5 +67,5 @@
         <script src="<c:out value="${src}"></c:out>"></script>
     </c:forEach>
 
-</body>
+<%----%></body>
 </html>

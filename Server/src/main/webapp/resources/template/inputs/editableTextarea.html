@@ -1,5 +1,13 @@
 <div class="editable-text" ng-controller="textareaCtrl">
-    <span class="editable-text" ng-if="!showingTextarea">{{text}}</span>
+    {{data}}
+    <p class="editable-textarea-buttons">
+        <span class="editable-text pull-left">
+            <button class="btn btn-sm btn-primary" ng-click="showTextarea()" ng-show="!showingTextarea"><i class="fa fa-pencil"></i></button>
+            <button class="btn btn-sm btn-primary" ng-click="save()" ng-show="showingTextarea"><i class="fa fa-check"></i></button>
+            <button class="btn btn-sm btn-danger" ng-click="showTextarea()" ng-show="showingTextarea"><i class="fa fa-ban"></i></button>
+        </span>
+    </p>
 
-    <textarea class="editable-textarea" ng-model="text" ng-if="showingTextarea"></textarea>
+    <p class="editable-text" ng-if="!showingTextarea">{{getData().text}}</p>
+    <textarea class="editable-textarea form-control" ng-model="model.text" ng-if="showingTextarea" ng-class="showingTextarea?'editable-text-focus':''"></textarea>
 </div>

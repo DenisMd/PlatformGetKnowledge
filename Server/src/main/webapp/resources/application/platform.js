@@ -50,6 +50,19 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         this.getLanguage = function(){
             return language;
         }
+
+        var onLogoutFun;
+        this.onLogout = function(){
+            if (angular.isFunction(onLogoutFun)){
+                onLogoutFun();
+            }
+        };
+
+        this.setOnLogout  = function(fun){
+            if (angular.isFunction(fun)){
+                onLogoutFun = fun;
+            }
+        };
     })
     .service("applicationService", function ($http,$stateParams,$sce,FileUploader,pageService,modules,resourceUrl,errorService) {
         "use strict";

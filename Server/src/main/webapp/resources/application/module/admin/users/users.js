@@ -13,7 +13,7 @@ model.controller("usersCtrl", function ($scope, $state,$http,applicationService,
         item : null,
         tabs : [{
             title : "user",
-            columns : [{name : "email" , "type" : "string" , disabled : true},{name : "createDate" , modal : "inputs/datepicker", disabled : true}],
+            columns : [{name : "email" , "type" : "string" , disabled : true},{name : "createDate" , "type" : "string", disabled : true}],
             readOnly : true,
             className : className.users
         }]
