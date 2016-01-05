@@ -18,7 +18,7 @@ function initVideoPlayer() {
 
 }
 
-model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService, className,$mdToast,$mdDialog, $mdMedia) {
+model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService,pageService, className,$mdToast,$mdDialog, $mdMedia) {
 
     //Toast
     $scope.showToast = function (text) {
