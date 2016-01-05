@@ -56,8 +56,11 @@
         </md-tab>
         <md-tab label="{{translate('permissions')}}" ng-if="currentRole != null">
             <md-content>
-                <p><a href="" ng-click="addNewPermission()">{{translate("role_addNewPermission")}}</a></p>
-                <p><a href="" ng-click="showDeleteColumn = !showDeleteColumn;">{{translate("role_removePermission")}}</a></p>
+                <p>
+                    <a href="" ng-click="addNewPermission()">{{translate("role_addNewPermission")}}</a>
+                     |
+                    <a href="" ng-click="showDeleteColumn = !showDeleteColumn;">{{translate("role_removePermission")}}</a>
+                </p>
                 <div ng-show="showAutoCompleteForRight">
                     <module-template data="languageData" name="inputs/select"></module-template>
                 </div>

@@ -1,7 +1,7 @@
 {
   "text" : {
     "user_title": "Пользователи",
-    "createDate" : "Дата создания",
+    "user_createDate" : "Дата создания",
     "user" : "Пользователь"
   }
 }
