@@ -60,7 +60,12 @@
             </md-content>
         </md-tab>
         <md-tab label="{{translate('bootstrap_stackTrace')}}" ng-if="currentService != null && currentService.stackTrace != null">
-            <md-content class="md-padding">
+            <md-toolbar class="md-warn">
+                <div class="md-toolbar-tools">
+                    <h2 class="md-flex">{{translate('bootstrap_stackTrace')}}</h2>
+                </div>
+            </md-toolbar>
+            <md-content flex layout-padding>
                 <md-button class="btn md-raised md-warn"  data-clipboard-text="{{currentService.stackTrace}}">
                     {{translate("copyToClipBoard")}}
                 </md-button>

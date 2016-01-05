@@ -6,6 +6,8 @@
     "role_updateRole" : "Обновить роль",
     "role_createRole" : "Создать роль",
     "role_deleteRole" : "Удалить роль",
-    "role_deleteContentMessage" : "Удаление возможно если нету ссылкок на пользоватилей"
+    "role_deleteContentMessage" : "Удаление возможно если нету ссылкок на пользоватилей",
+    "role_addNewPermission" : "Добавить новое право",
+    "role_removePermission" : "Удалить право"
   }
 }
