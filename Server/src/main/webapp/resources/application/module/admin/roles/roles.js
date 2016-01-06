@@ -69,7 +69,7 @@ model.controller("rolesCtrl", function ($scope, applicationService, className,$m
     $scope.removePermission = function(id){
         for (var i=0; i < $scope.currentRole.permissions.length; i++) {
             if ($scope.currentRole.permissions[i].id == id) {
-                $scope.currentRole.permissions.slice(i,1);
+                $scope.currentRole.permissions.splice(i,1);
                 return;
             }
         }
