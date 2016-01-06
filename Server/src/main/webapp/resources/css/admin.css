@@ -16,8 +16,10 @@
 
 .create {
     color : #4ed272;
+    cursor: pointer;
 }
 
 .delete {
     color : #f85f6f;
+    cursor: pointer;
 }

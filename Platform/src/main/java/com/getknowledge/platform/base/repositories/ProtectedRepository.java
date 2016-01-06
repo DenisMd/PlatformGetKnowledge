@@ -1,6 +1,7 @@
 package com.getknowledge.platform.base.repositories;
 
 import com.getknowledge.platform.annotations.Access;
+import com.getknowledge.platform.base.entities.CloneableEntity;
 import com.getknowledge.platform.base.entities.IUser;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.role.Role;

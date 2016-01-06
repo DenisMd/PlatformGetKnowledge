@@ -2,6 +2,8 @@ model.controller("rolesCtrl", function ($scope, applicationService, className,$m
 
     $scope.setCurrentItem = function (item) {
         $scope.currentRole = item;
+        $scope.showAutoCompleteForRight = false;
+        $scope.showDeleteColumn = false;
     };
 
     $scope.updateRole = function(){
@@ -33,6 +35,57 @@ model.controller("rolesCtrl", function ($scope, applicationService, className,$m
                 applicationService.list($scope , "roles", className.roles);
             });
         });
+    };
+
+    var updateFilterPermissions = function (item) {
+        var isContain = false;
+        $scope.currentRole.permissions.forEach(function(element){
+            if (element.permissionName == item.permissionName) {
+                isContain = true;
+                return;
+            }
+        });
+        if (!isContain) {
+            $scope.filterPermissions.push(item);
+        }
+    };
+
+    $scope.showAutoCompleteForRight = false;
+    $scope.showDeleteColumn = false;
+    $scope.addNewPermission = function() {
+        $scope.showAutoCompleteForRight = !$scope.showAutoCompleteForRight;
+        $scope.filterPermissions = [];
+        if ($scope.listPermissions) {
+            $scope.listPermissions.forEach(function(item){
+               updateFilterPermissions(item);
+            });
+        } else {
+            applicationService.list($scope, "listPermissions", className.permissions, function (item) {
+                updateFilterPermissions(item);
+            });
+        }
+    };
+
+    $scope.removePermission = function(id){
+        for (var i=0; i < $scope.currentRole.permissions.length; i++) {
+            if ($scope.currentRole.permissions[i].id == id) {
+                $scope.currentRole.permissions.splice(i,1);
+                return;
+            }
+        }
+    };
+
+    $scope.languageData = {
+        "id" : "permissions",
+        "count" : 1,
+        "filter":"permissionName",
+        "class" : "input-group-lg",
+        "listName" : "filterPermissions",
+        "required" : true,
+        "callback" : function (value){
+            $scope.currentRole.permissions.push(value);
+            $scope.showAutoCompleteForRight = false;
+        }
     };
 
     applicationService.list($scope, "roles", className.roles);

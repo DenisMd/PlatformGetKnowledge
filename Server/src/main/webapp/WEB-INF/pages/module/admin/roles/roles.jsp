@@ -54,6 +54,35 @@
                 </p>
             </md-content>
         </md-tab>
+        <md-tab label="{{translate('permissions')}}" ng-if="currentRole != null">
+            <md-content>
+                <p>
+                    <a href="" ng-click="addNewPermission()">{{translate("role_addNewPermission")}}</a>
+                     |
+                    <a href="" ng-click="showDeleteColumn = !showDeleteColumn;">{{translate("role_removePermission")}}</a>
+                </p>
+                <div ng-show="showAutoCompleteForRight">
+                    <module-template data="languageData" name="inputs/select"></module-template>
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th ng-show="showDeleteColumn">{{translate("role_removePermission")}}</th>
+                            <th>{{translate("id")}}</th>
+                            <th>{{translate("name")}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="permission in currentRole.permissions">
+                            <td ng-show="showDeleteColumn"><span class="fa fa-minus delete" ng-click="removePermission(permission.id)"></span></td>
+                            <td>{{permission.id}}</td>
+                            <td>{{permission.permissionName}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <md-button class="md-raised md-primary" ng-click="updateRole()" ng-disabled="!currentRole">{{translate("role_updateRole")}}</md-button>
+            </md-content>
+        </md-tab>
     </md-tabs>
 </md-content>
 

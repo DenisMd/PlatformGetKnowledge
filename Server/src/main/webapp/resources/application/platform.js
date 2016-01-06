@@ -327,7 +327,9 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 if (isFunction(callback)) {
                     callback(data);
                 }
-             });
+             }).error(function(error, status, headers, config){
+                errorService.showError(error,status);
+            });
         };
 
         this.imageHref = function(className,id){

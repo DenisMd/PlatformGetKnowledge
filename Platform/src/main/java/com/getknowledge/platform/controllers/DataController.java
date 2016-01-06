@@ -84,36 +84,6 @@ public class DataController {
 
 //    Methods for read ----------------------------------------------------------------------------
 
-    private AbstractEntity prepare (AbstractEntity entity , BaseRepository<AbstractEntity> repository,Principal principal, List<String> classNames) {
-        if (repository instanceof PrepareEntity) {
-            try {
-                properties : for (PropertyDescriptor pd : Introspector.getBeanInfo(entity.getClass()).getPropertyDescriptors()) {
-                    if (pd.getReadMethod() != null && !"class".equals(pd.getName())) {
-                        Object result = pd.getReadMethod().invoke(entity);
-                        if (result == null) continue;
-                        if (result instanceof AbstractEntity) {
-
-                            for (Annotation annotation : pd.getReadMethod().getAnnotations()) {
-                                if (annotation instanceof JsonIgnore) {
-                                    continue properties;
-                                }
-                            }
-
-                            AbstractEntity abstractEntity = (AbstractEntity) result;
-                            BaseRepository<AbstractEntity> repository2 = (BaseRepository<AbstractEntity>)moduleLocator.findRepository(abstractEntity.getClass());
-                            pd.getWriteMethod().invoke(entity, prepare(abstractEntity,repository2,principal,classNames));
-                        }
-                    }
-                }
-            } catch (IntrospectionException | InvocationTargetException | IllegalAccessException | ModuleNotFound   e) {
-                trace.logException("prepare exception", e, TraceLevel.Error);
-            }
-
-            return ((PrepareEntity) repository).prepare(entity);
-        }
-        return entity;
-    }
-
     @RequestMapping(value = "/read", method = RequestMethod.GET)
     public @ResponseBody String read(@RequestParam(value = "id" ,required = true) Long id,
                                      @RequestParam(value ="className" , required = true) String className, Principal principal) throws PlatformException {
@@ -137,7 +107,7 @@ public class DataController {
                 throw new NotAuthorized("access denied for read entity: " + className, trace , TraceLevel.Warning);
             }
 
-            entity = prepare(entity,repository,principal,new ArrayList<>());
+            entity = AbstractEntity.prepare(entity,repository,getCurrentUser(principal),moduleLocator);
 
             ObjectNode objectNode = objectMapper.valueToTree(entity);
             objectNode.put("editable" , isAccessEdit(principal,entity));
@@ -145,6 +115,9 @@ public class DataController {
             return objectNode.toString();
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+        } catch (Exception e) {
+            trace.logException("Prepare exception : " + e.getMessage(),e, TraceLevel.Error);
+            return null;
         }
     }
 
@@ -255,7 +228,7 @@ public class DataController {
                     // TODO: question may continue?
                     throw new NotAuthorized("access denied for read entity from list" , trace, TraceLevel.Warning);
                 }
-                prepare(abstractEntity,repository,principal,new ArrayList<>());
+                abstractEntity = AbstractEntity.prepare(abstractEntity,repository,getCurrentUser(principal),moduleLocator);
                 ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
                 objectNode.put("editable" , isAccessEdit(principal,abstractEntity));
                 objectNode.put("creatable" , isAccessCreate(principal,abstractEntity));
@@ -270,6 +243,9 @@ public class DataController {
             return jsonResult;
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+        } catch (Exception e) {
+            trace.logException("Prepare exception : " + e.getMessage(),e, TraceLevel.Error);
+            return null;
         }
     }
 
@@ -296,7 +272,7 @@ public class DataController {
                     // TODO: question may continue?
                     throw new NotAuthorized("access denied for read entity from list partial" , trace, TraceLevel.Warning);
                 }
-                prepare(abstractEntity,repository,principal,new ArrayList<>());
+                abstractEntity = AbstractEntity.prepare(abstractEntity,repository,getCurrentUser(principal),moduleLocator);
                 ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
                 objectNode.put("editable" , isAccessEdit(principal,abstractEntity));
                 objectNode.put("creatable" , isAccessCreate(principal,abstractEntity));
@@ -311,6 +287,9 @@ public class DataController {
             return jsonResult;
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+        } catch (Exception e) {
+            trace.logException("Prepare exception : " + e.getMessage(),e, TraceLevel.Error);
+            return null;
         }
     }
 

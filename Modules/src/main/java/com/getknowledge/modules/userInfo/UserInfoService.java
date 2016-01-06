@@ -17,6 +17,7 @@ import com.getknowledge.modules.userInfo.results.Result;
 import com.getknowledge.modules.userInfo.socialLink.UserSocialLink;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
+import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.BootstrapService;
 import com.getknowledge.platform.base.services.ImageService;
@@ -33,12 +34,15 @@ import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
+import com.getknowledge.platform.utils.ModuleLocator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.Query;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.Principal;
@@ -79,6 +83,9 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
     @Autowired
     private CityRepository cityRepository;
+
+    @Autowired
+    private ModuleLocator moduleLocator;
 
     @Override
     public void bootstrap(HashMap<String, Object> map) {
@@ -412,6 +419,43 @@ public class UserInfoService extends AbstractService implements BootstrapService
         if (p == null) return null;
         UserInfo result = userInfoRepository.getSingleEntityByFieldAndValue("user.login", p.getName());
         return result;
+    }
+
+    @Action(name = "findUsers" , mandatoryFields = {"first" , "max"})
+    public List<UserInfo> findUsers(HashMap<String,Object> data) throws NotAuthorized {
+
+        String orderField = "";
+        if (data.containsKey("order")) {
+            String tempOrder = (String) data.get("order");
+            if (tempOrder.equals("id"))
+                orderField = "order by ui.id";
+            if (tempOrder.equals("user.login"))
+                orderField = "order by ui.user.login";
+            if (tempOrder.equals("user.createDate"))
+                orderField = "order by ui.user.createDate";
+            if (tempOrder.equals("user.enabled"))
+                orderField = "order by ui.user.enabled";
+
+            if (data.containsKey("desc")) {
+                orderField += "desc";
+            }
+        }
+
+        int first = (int) data.get("first");
+        int max   = (int) data.get("max");
+
+        Query query = entityManager.createQuery("select ui from UserInfo ui" + orderField,UserInfo.class);
+        query.setFirstResult(first);
+        query.setMaxResults(max);
+        List<UserInfo> userInfos = query.getResultList();
+        userInfos.forEach(u -> {
+            try {
+                AbstractEntity.prepare(u,userInfoRepository,getAuthorizedUser(data).getUser(),moduleLocator);
+            } catch (Exception e) {
+                trace.logException("error prepare user : " + e.getMessage(),e,TraceLevel.Error);
+            }
+        });
+        return userInfos;
     }
 
     @Override

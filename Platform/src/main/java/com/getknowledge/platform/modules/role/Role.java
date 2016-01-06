@@ -17,7 +17,7 @@ public class Role extends AbstractEntity {
     @Column(name = "role_name" , unique = true)
     private String roleName;
 
-    @OneToMany
+    @ManyToMany
     @JoinTable(name = "permissions_of_roles")
     private List<Permission> permissions = new ArrayList<>();
 

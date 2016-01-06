@@ -6,6 +6,8 @@
     "role_updateRole" : "Update role",
     "role_createRole" : "Create role",
     "role_deleteRole" : "Delete role",
-    "role_deleteContentMessage" : "Delete is impossible if exist reference on user"
+    "role_deleteContentMessage" : "Delete is impossible if exist reference on user",
+    "role_addNewPermission" : "Add new permission",
+    "role_removePermission" : "Remove permission"
   }
 }

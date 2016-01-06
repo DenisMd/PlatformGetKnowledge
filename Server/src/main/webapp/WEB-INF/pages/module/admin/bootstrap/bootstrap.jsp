@@ -4,7 +4,7 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <span class="panel-item fa fa-3x fa-cogs" tooltip-placement="bottom"
-              uib-tooltip="{{translate('doBootstrap')}}" ng-click="showAdvanced($event)">
+              uib-tooltip="{{translate('bootstrap_doBootstrap')}}" ng-click="showAdvanced($event)">
         </span>
     </div>
 </div>
@@ -20,14 +20,14 @@
             <th ng-click="setOrder('name')">
                 {{translate("name")}}
             </th>
-            <th ng-click="setOrder('bootstrap_state')">
-                {{translate("bootstrapState")}}
+            <th ng-click="setOrder('bootstrapState')">
+                {{translate("bootstrap_state")}}
             </th>
-            <th ng-click="setOrder('bootstrap_order')">
-                {{translate("order")}}
+            <th ng-click="setOrder('order')">
+                {{translate("bootstrap_order")}}
             </th>
             <th>
-                {{translate("bootstrap_repeat")}}
+                {{translate("repeat")}}
             </th>
         </tr>
         </thead>
@@ -60,7 +60,12 @@
             </md-content>
         </md-tab>
         <md-tab label="{{translate('bootstrap_stackTrace')}}" ng-if="currentService != null && currentService.stackTrace != null">
-            <md-content class="md-padding">
+            <md-toolbar class="md-warn">
+                <div class="md-toolbar-tools">
+                    <h2 class="md-flex">{{translate('bootstrap_stackTrace')}}</h2>
+                </div>
+            </md-toolbar>
+            <md-content flex layout-padding>
                 <md-button class="btn md-raised md-warn"  data-clipboard-text="{{currentService.stackTrace}}">
                     {{translate("copyToClipBoard")}}
                 </md-button>
