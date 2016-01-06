@@ -687,11 +687,39 @@ model.directive('datepickerPopupFormat',function(dateFilter,$parse){
 model.controller("textareaCtrl",function($scope,$element){
     var textarea = $element.find('textarea');
     $scope.showingTextarea = false;
+    $scope.showEditButton = false;
     $scope.model = {};
 
-    $scope.showTextarea = function(){
+    $scope.toggelEditButton = function(event){
+        if ($scope.isReadonly()) return;
+
+        var elem = angular.element(event.currentTarget);
+        switch (event.type) {
+            case "mouseenter":
+                $scope.showEditButton = true;
+                if (!$scope.showingTextarea){
+                    elem.addClass("edit-text");
+                } else {
+                    elem.removeClass("edit-text");
+                }
+                break;
+            case "mouseleave":
+                $scope.showEditButton = false;
+                elem.removeClass("edit-text");
+                break;
+        }
+    };
+
+    $scope.showTextarea = function(event){
+        var elem = null;
+
+        if (event){
+            elem = angular.element(event.currentTarget).parent().parent();
+        }
+
         $scope.showingTextarea = !$scope.showingTextarea;
         if ($scope.showingTextarea){
+            elem.removeClass("edit-text");
             $scope.model.text = $scope.getData().text;
             textarea.focus();
         }
@@ -704,6 +732,13 @@ model.controller("textareaCtrl",function($scope,$element){
         }
 
         $scope.showTextarea();
+    };
+
+    $scope.isReadonly = function(){
+        if(angular.isFunction($scope.getData().readonly)){
+            return $scope.getData().readonly();
+        }
+        return $scope.getData().readonly;
     }
 
 });

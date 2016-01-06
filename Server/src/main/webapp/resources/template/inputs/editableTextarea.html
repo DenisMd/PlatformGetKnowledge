@@ -1,13 +1,11 @@
-<div class="editable-text" ng-controller="textareaCtrl">
-    {{data}}
-    <p class="editable-textarea-buttons">
-        <span class="editable-text pull-left">
-            <button class="btn btn-sm btn-primary" ng-click="showTextarea()" ng-show="!showingTextarea"><i class="fa fa-pencil"></i></button>
+<div class="editable-text" ng-controller="textareaCtrl" ng-mouseenter="toggelEditButton($event)" ng-mouseleave="toggelEditButton($event)" ng-cloak>
+
+    <p class="editable-textarea-buttons text-right" ng-hide="isReadonly()">
+            <button class="btn btn-sm btn-primary" ng-click="showTextarea($event)" ng-show="!showingTextarea&&showEditButton"><i class="fa fa-pencil"></i></button>
             <button class="btn btn-sm btn-primary" ng-click="save()" ng-show="showingTextarea"><i class="fa fa-check"></i></button>
-            <button class="btn btn-sm btn-danger" ng-click="showTextarea()" ng-show="showingTextarea"><i class="fa fa-ban"></i></button>
-        </span>
+            <button class="btn btn-sm btn-danger" ng-click="showTextarea($event)" ng-show="showingTextarea"><i class="fa fa-ban"></i></button>
     </p>
 
     <p class="editable-text" ng-if="!showingTextarea">{{getData().text}}</p>
-    <textarea class="editable-textarea form-control" ng-model="model.text" ng-if="showingTextarea" ng-class="showingTextarea?'editable-text-focus':''"></textarea>
+    <textarea class="editable-textarea form-control" ng-model="model.text" ng-if="showingTextarea && !isReadonly()" ng-class="showingTextarea?'editable-text-focus':''"></textarea>
 </div>

@@ -14,10 +14,17 @@
     }
 }
 
+
 /*menu*/
 .user-menu-content{
     height:100%;
     position:relative;
+}
+
+@media (max-width: 768px) {
+    .user-menu-content{
+        height: auto;
+    }
 }
 
 .user-image{
@@ -80,7 +87,9 @@
 }
 
 .user-nav{
-    margin: -10px;
+    margin-left: -10px;
+    margin-right: -10px;
+    margin-bottom: 0;
 }
 
 .user-nav>li{

@@ -845,6 +845,7 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
 
 .editable-textarea-buttons{
     margin:0;
+    line-height: 0;
 }
 
 .editable-textarea{
@@ -852,9 +853,18 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
 }
 
 .editable-text{
-    display: inline-block;
+    display: block;
+    margin: 0;
 }
 
 .editable-textarea-buttons button.btn{
     padding: 2px 6px;
+    background: initial;
+    border-color: #ddd;
+    color: black;
+}
+
+.edit-text{
+    border: 1px solid #ddd;
+    border-radius: 3px;
 }

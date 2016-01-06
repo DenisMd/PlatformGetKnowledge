@@ -38,6 +38,7 @@
     <module-template name="menus/mainMenu" data="menu"></module-template>
 
     <div class="full-window wrapper wrapper-left" id="wrapper">
+        <%--  ng-scrollbars ng-scrollbars-config="modalScrollConfig"--%>
             <div ui-view class="full-window"></div>
     </div>
 

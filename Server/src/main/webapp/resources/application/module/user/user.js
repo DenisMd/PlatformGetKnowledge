@@ -29,6 +29,8 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
                     }
 
 
+                } else {
+                    $scope.statusText.readonly = true;
                 }
             });
         }

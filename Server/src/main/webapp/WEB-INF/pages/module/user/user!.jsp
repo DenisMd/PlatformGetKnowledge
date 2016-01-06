@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet" href="/resources/css/user.css">
 <div class="user-content">
-    <div class="col-sm-3 user-menu-content">
+    <div class="col-sm-5 user-menu-content">
         <div class="user-menu">
             <div class="user-info-card">
                 <img ng-src="{{userImg(user_info.id)}}" class="img-circle" />
@@ -16,10 +16,12 @@
 
             <p class="user-speciality text-center">{{user_info.specialty}}</p>
 
-            <div class="user-status">
-                {{user_info.status}}
+            <div class="user-status text-center">
+                <module-template data="statusText" name="inputs/editableTextarea"></module-template>
             </div>
-            <a href="https://www.google.ru">google.ru</a>
+            <p class="text-center">
+                <a href="https://www.google.ru">google.ru</a>
+            </p>
             <p class="link-card user-link text-center">
                 <span class=" col-xs-3"><i class="fa fa-vk"></i></span>
                 <span class=" col-xs-3"><i class="fa fa-facebook"></i></span>
@@ -35,7 +37,7 @@
             </ul>
         </div>
     </div>
-    <div class="col-sm-9">
+    <div class="col-sm-7">
         {{user_info}}
     </div>
 
