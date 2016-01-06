@@ -37,20 +37,6 @@ public class PermissionService extends AbstractService implements BootstrapServi
     public void bootstrap(HashMap<String, Object> map) throws ParseException {
     }
 
-    private boolean isAccessToRead(HashMap<String,Object> data, Permission permission) throws NotAuthorized {
-        String principalName = (String) data.get("principalName");
-        if (principalName == null || principalName.isEmpty()) {
-            return  false;
-        }
-
-        User currentUser = userRepository.getSingleEntityByFieldAndValue("login" , principalName);
-
-        if (currentUser.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
-            return true;
-        }
-
-        return permission.getAuthorizationList() != null && permission.getAuthorizationList().isAccessRead(currentUser);
-    }
 
     @Action(name = "getUsersByPermission" , mandatoryFields = {"permissionId"})
     public List<User> getUsersByPermission(HashMap<String,Object> data) throws NotAuthorized {
@@ -61,7 +47,7 @@ public class PermissionService extends AbstractService implements BootstrapServi
         if (permission == null)
             return null;
 
-        if (!isAccessToRead(data,permission)) {
+        if (!isAccessToRead(data,permission,userRepository)) {
             throw new NotAuthorized("not authorized for read users for permission" , traceService , TraceLevel.Warning);
         }
 
@@ -79,7 +65,7 @@ public class PermissionService extends AbstractService implements BootstrapServi
         if (permission == null)
             return null;
 
-        if (!isAccessToRead(data,permission)) {
+        if (!isAccessToRead(data,permission,userRepository)) {
             throw new NotAuthorized("not authorized for read users for permission" , traceService , TraceLevel.Warning);
         }
 

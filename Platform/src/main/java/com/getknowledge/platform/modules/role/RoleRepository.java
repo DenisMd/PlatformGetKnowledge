@@ -24,12 +24,8 @@ public class RoleRepository extends BaseRepository<Role> {
 
         if (role == null) return;
 
-        try {
-            entityManager.createQuery("select 1 from User u where u.role.id = :id").setParameter("id", id).getSingleResult();
-            throw new DeleteException("Error remove role : " + role.getRoleName() + " constrain by user");
-        } catch (NoResultException noResultException) {
-            //Все хорошо никто не ссылается на роль
-        } catch (NonUniqueResultException result) {
+        long countUsers = entityManager.createQuery("select count(u) from User u where u.role.id = :id" , Long.class).setParameter("id", id).getSingleResult();
+        if (countUsers > 0) {
             throw new DeleteException("Error remove role : " + role.getRoleName() + " constrain by user");
         }
 

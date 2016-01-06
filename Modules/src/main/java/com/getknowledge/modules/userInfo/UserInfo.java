@@ -10,7 +10,7 @@ import com.getknowledge.platform.annotations.Access;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.entities.IUser;
-import com.getknowledge.platform.base.repositories.CloneableEntity;
+import com.getknowledge.platform.base.entities.CloneableEntity;
 import com.getknowledge.platform.modules.user.User;
 
 import javax.persistence.*;
@@ -19,7 +19,7 @@ import java.util.Calendar;
 @Entity
 @Table(name = "user_info")
 @ModuleInfo(repositoryName = "UserInfoRepository" , serviceName = "UserInfoService")
-public class UserInfo  extends CloneableEntity<UserInfo> implements IUser {
+public class UserInfo  extends CloneableEntity<UserInfo> implements IUser{
 
     @Column(name = "first_name")
     private String firstName;

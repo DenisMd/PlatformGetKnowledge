@@ -1,4 +1,4 @@
-package com.getknowledge.platform.base.repositories;
+package com.getknowledge.platform.base.entities;
 
 import com.getknowledge.platform.base.entities.AbstractEntity;
 

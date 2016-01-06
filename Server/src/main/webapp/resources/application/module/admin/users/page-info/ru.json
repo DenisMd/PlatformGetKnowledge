@@ -2,6 +2,7 @@
   "text" : {
     "user_title": "Пользователи",
     "user_createDate" : "Дата создания",
-    "user" : "Пользователь"
+    "user" : "Пользователь",
+    "user_enabled" : ""
   }
 }
