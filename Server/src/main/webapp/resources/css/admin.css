@@ -23,3 +23,9 @@
     color : #f85f6f;
     cursor: pointer;
 }
+
+.loadMore {
+    text-align: center;
+    cursor: pointer;
+    color: #00b3ee;
+}

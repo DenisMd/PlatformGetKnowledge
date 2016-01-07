@@ -59,6 +59,8 @@
     "cancel" : "Cancel",
     "update" : "Update",
     "copyToClipBoard" : "copy to clipboard",
-    "doIt" : "Do it"
+    "doIt" : "Do it",
+    "ofRecords" : "records",
+    "search" : "Поиск"
   }
 }

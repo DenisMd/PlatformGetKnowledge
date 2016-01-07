@@ -40,6 +40,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Query;
@@ -422,6 +423,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
     }
 
     @Action(name = "findUsers" , mandatoryFields = {"first" , "max"})
+    @Transactional
     public List<UserInfo> findUsers(HashMap<String,Object> data) throws NotAuthorized {
 
         String orderField = "";
@@ -437,14 +439,34 @@ public class UserInfoService extends AbstractService implements BootstrapService
                 orderField = "order by ui.user.enabled";
 
             if (data.containsKey("desc")) {
-                orderField += "desc";
+                orderField += " desc";
             }
         }
 
         int first = (int) data.get("first");
         int max   = (int) data.get("max");
 
-        Query query = entityManager.createQuery("select ui from UserInfo ui" + orderField,UserInfo.class);
+        String searchText = "";
+        if (data.containsKey("searchText")){
+            searchText = (String) data.get("searchText");
+        }
+
+        Query query = null;
+        if (searchText.isEmpty()) {
+            query = entityManager.createQuery("select ui from UserInfo ui " + orderField,UserInfo.class);
+        } else {
+            if (searchText.contains(" ")){
+                String [] split = searchText.split(" ");
+                String lastName = split[0];
+                String firstName = split[1];
+                query = entityManager.createQuery("select ui from UserInfo ui where ui.firstName like :firstName or ui.lastName like :lastName " + orderField, UserInfo.class)
+                        .setParameter("lastName" ,"%" + lastName + "%")
+                        .setParameter("firstName" , "%" + firstName + "%");
+            } else {
+                query = entityManager.createQuery("select ui from UserInfo ui where ui.firstName like :text or ui.lastName like :text or ui.user.login like :text " + orderField, UserInfo.class)
+                .setParameter("text" ,"%" + searchText + "%");
+            }
+        }
         query.setFirstResult(first);
         query.setMaxResults(max);
         List<UserInfo> userInfos = query.getResultList();

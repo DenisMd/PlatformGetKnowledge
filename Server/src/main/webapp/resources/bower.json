@@ -38,6 +38,7 @@
     "ng-scrollbars": "~0.0.5",
     "video.js": "~5.0.2",
     "videojs-hotkeys": "~0.2.10",
-    "clipboard": "~1.5.5"
+    "clipboard": "~1.5.5",
+    "ngInfiniteScroll": "1.0.0"
   }
 }

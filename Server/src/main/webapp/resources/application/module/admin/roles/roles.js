@@ -26,7 +26,7 @@ model.controller("rolesCtrl", function ($scope, applicationService, className,$m
             .title($scope.translate("role_deleteRole") + " " + $scope.currentRole.roleName)
             .textContent($scope.translate("role_deleteContentMessage"))
             .targetEvent(ev)
-            .ariaLabel('Delete permission')
+            .ariaLabel('Delete role')
             .ok($scope.translate("delete"))
             .cancel($scope.translate("cancel"));
         $mdDialog.show(confirm).then(function() {
@@ -75,11 +75,11 @@ model.controller("rolesCtrl", function ($scope, applicationService, className,$m
         }
     };
 
-    $scope.languageData = {
+    $scope.permissionsData = {
         "id" : "permissions",
         "count" : 1,
         "filter":"permissionName",
-        "class" : "input-group-lg",
+        "class" : "input-group-sm",
         "listName" : "filterPermissions",
         "required" : true,
         "callback" : function (value){

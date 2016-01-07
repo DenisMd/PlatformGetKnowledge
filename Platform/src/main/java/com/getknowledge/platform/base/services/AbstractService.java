@@ -32,4 +32,21 @@ public abstract class AbstractService {
         return abstractEntity.getAuthorizationList() != null && abstractEntity.getAuthorizationList().isAccessRead(currentUser);
 
     }
+
+
+    public boolean isAccessToEdit(HashMap<String,Object> data, AbstractEntity abstractEntity, UserRepository userRepository) throws NotAuthorized {
+        String principalName = (String) data.get("principalName");
+        if (principalName == null || principalName.isEmpty()) {
+            return  false;
+        }
+
+        User currentUser = userRepository.getSingleEntityByFieldAndValue("login" , principalName);
+
+        if (currentUser.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+            return true;
+        }
+
+        return abstractEntity.getAuthorizationList() != null && abstractEntity.getAuthorizationList().isAccessEdit(currentUser);
+
+    }
 }
