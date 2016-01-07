@@ -59,6 +59,8 @@
     <script src="/resources/bower_components/angular-animate/angular-animate.js" type="text/javascript" ></script>
     <script src="/resources/bower_components/angular-aria/angular-aria.js" type="text/javascript" ></script>
     <script src="/resources/bower_components/angular-material/angular-material.js" type="text/javascript" ></script>
+    <script src="/resources/bower_components/Chart.js/Chart.min.js" type="text/javascript" ></script>
+    <script src="/resources/bower_components/angular-chart.js/dist/angular-chart.min.js" type="text/javascript" ></script>
     <script src="/resources/bower_components/clipboard/dist/clipboard.min.js"></script>
     <%--<script src="/resources/bower_components/videojs-hotkeys/videojs.hotkeys.min.js"></script>--%>
     <script src="/resources/application/platform.js"></script>
