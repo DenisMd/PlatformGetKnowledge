@@ -44,6 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Query;
+import javax.persistence.criteria.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.Principal;
@@ -426,49 +427,63 @@ public class UserInfoService extends AbstractService implements BootstrapService
     @Transactional
     public List<UserInfo> findUsers(HashMap<String,Object> data) throws NotAuthorized {
 
-        String orderField = "";
-        if (data.containsKey("order")) {
-            String tempOrder = (String) data.get("order");
-            if (tempOrder.equals("id"))
-                orderField = "order by ui.id";
-            if (tempOrder.equals("user.login"))
-                orderField = "order by ui.user.login";
-            if (tempOrder.equals("user.createDate"))
-                orderField = "order by ui.user.createDate";
-            if (tempOrder.equals("user.enabled"))
-                orderField = "order by ui.user.enabled";
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<UserInfo> q = cb.createQuery(UserInfo.class);
+        Root<UserInfo> userInfoRoot = q.from(UserInfo.class);
+        Join<UserInfo,User> userJoin = userInfoRoot.join("user",JoinType.INNER);
+        q.select(userInfoRoot);
 
-            if (data.containsKey("desc")) {
-                orderField += " desc";
+        Order order = null;
+        if (data.containsKey("order")) {
+            Path path = null;
+            String orderColumn = (String) data.get("order");
+            if (orderColumn.equals("id"))
+                path = userInfoRoot.get("id");
+            if (orderColumn.equals("user.login"))
+                path = userJoin.get("login");
+            if (orderColumn.equals("user.createDate"))
+                path = userJoin.get("createDate");
+            if (orderColumn.equals("user.enabled"))
+                path = userJoin.get("enabled");
+
+            if (path != null) {
+                if (data.containsKey("desc")) {
+                   order = cb.desc(path);
+                } else {
+                    order = cb.asc(path);
+                }
+                q.orderBy(order);
+            }
+        }
+
+        if (data.containsKey("searchText")) {
+            String search = (String) data.get("searchText");
+            if (search.contains(" ")) {
+                String [] split = search.split(" ");
+                String lastName = split[0];
+                String firstName = split[1];
+
+                Predicate p1 = cb.like(userInfoRoot.get("firstName"),"%"+firstName+"%");
+                Predicate p2 = cb.like(userInfoRoot.get("lastName"),"%"+lastName+"%");
+
+                q.where(cb.or(p1,p2));
+
+            } else {
+                Predicate p1 = cb.like(userInfoRoot.get("firstName"),"%"+search+"%");
+                Predicate p2 = cb.like(userInfoRoot.get("lastName"),"%"+search+"%");
+                Predicate p3 = cb.like(userJoin.get("login"),"%"+search+"%");
+
+                q.where(cb.or(p1,cb.or(p2,p3)));
             }
         }
 
         int first = (int) data.get("first");
         int max   = (int) data.get("max");
 
-        String searchText = "";
-        if (data.containsKey("searchText")){
-            searchText = (String) data.get("searchText");
-        }
-
-        Query query = null;
-        if (searchText.isEmpty()) {
-            query = entityManager.createQuery("select ui from UserInfo ui " + orderField,UserInfo.class);
-        } else {
-            if (searchText.contains(" ")){
-                String [] split = searchText.split(" ");
-                String lastName = split[0];
-                String firstName = split[1];
-                query = entityManager.createQuery("select ui from UserInfo ui where ui.firstName like :firstName or ui.lastName like :lastName " + orderField, UserInfo.class)
-                        .setParameter("lastName" ,"%" + lastName + "%")
-                        .setParameter("firstName" , "%" + firstName + "%");
-            } else {
-                query = entityManager.createQuery("select ui from UserInfo ui where ui.firstName like :text or ui.lastName like :text or ui.user.login like :text " + orderField, UserInfo.class)
-                .setParameter("text" ,"%" + searchText + "%");
-            }
-        }
+        Query query = entityManager.createQuery(q);
         query.setFirstResult(first);
         query.setMaxResults(max);
+
         List<UserInfo> userInfos = query.getResultList();
         userInfos.forEach(u -> {
             try {

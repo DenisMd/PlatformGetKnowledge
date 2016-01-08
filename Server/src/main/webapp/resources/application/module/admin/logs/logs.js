@@ -1,32 +1,74 @@
 model.controller("logsCtrl", function ($scope, $state,$http,applicationService,pageService,className) {
-    applicationService.list($scope,"logs",className.trace,function(item, index, array){
-        switch (item.traceLevel){
-            case "Error": item.iconClassName = "fa-exclamation-circle red-error"; break;
-            case "Critical": item.iconClassName = "fa-exclamation-triangle red-critical"; break;
-            case "Warning": item.iconClassName = "fa-exclamation color-warning"; break;
-            case "Event": item.iconClassName = "fa-eye color-event"; break;
-            case "Debug": item.iconClassName = "fa-circle-thin color-debug"; break;
-        }
-    });
 
-    $scope.currentItem;
-    $scope.setCurrentItem = function(item){
-        $scope.currentItem = item;
-    };
+    var first = 0;
+    var max  = 10;
+    var order = "";
     var reverse = false;
-    $scope.setOrder = function (order) {
-        reverse = !reverse;
-        $scope.order = reverse?"-"+order:order;
-    };
-    $scope.eventFilter = function(element){
-        switch (element.traceLevel){
-            case "Debug" : if ($scope.selectEvent == 0)return true;break;
-            case "Event" : if ($scope.selectEvent <= 1)return true;break;
-            case "Warning" : if ($scope.selectEvent <= 2)return true;break;
-            case "Error" : if ($scope.selectEvent <= 3)return true;break;
-            case "Critical" : if ($scope.selectEvent <= 4)return true;break;
+    var filter = "";
+    var startDate = null;
+    var endDate = null;
+    $scope.logs = [];
+
+    var addLog = function(log){
+        switch (log.traceLevel){
+            case "Error": log.iconClassName = "fa-exclamation-circle red-error"; break;
+            case "Critical": log.iconClassName = "fa-exclamation-triangle red-critical"; break;
+            case "Warning": log.iconClassName = "fa-exclamation color-warning"; break;
+            case "Event": log.iconClassName = "fa-eye color-event"; break;
+            case "Debug": log.iconClassName = "fa-circle-thin color-debug"; break;
         }
-        return false;
+        $scope.logs.push(log);
     };
-    $scope.selectEvent = "1";
+
+    var doAction = function(){
+        var request = {
+            "first" : first,
+            "max" : max,
+            "order" : order
+        };
+
+        if (reverse){
+            request.desc = "desc";
+        }
+
+        if (filter){
+            request.filter = filter;
+        }
+
+        if (startDate != null && endDate != null) {
+            request.startDate = startDate;
+            request.endDate = endDate;
+        }
+
+        applicationService.action($scope,"",className.trace,"traceFilter",request,addLog);
+    };
+
+    doAction();
+
+    $scope.setLogOrder = function(orderName) {
+        reverse = !reverse;
+        order = orderName;
+        first = 0;
+        $scope.logs = [];
+        doAction();
+    };
+
+    $scope.searchLogs = function(traceLevel) {
+        first = 0;
+        $scope.logs = [];
+        filter = traceLevel;
+        doAction();
+    };
+
+    $scope.currentLog = null;
+    $scope.setCurrentItem = function(item){
+        $scope.currentLog = item;
+    };
+
+    $scope.loadMore = function () {
+        first += 10;
+        doAction();
+    };
+
+    applicationService.count($scope,"countLogs",className.trace);
 });

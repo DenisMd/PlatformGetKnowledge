@@ -1,32 +1,71 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet" href="/resources/css/logs.css">
-<h1>{{translate("logs")}}</h1>
-<select name="singleSelect" ng-model="selectEvent">
-    <option value="0">{{translate("Debug")}}</option>
-    <option value="1">{{translate("Event")}}</option>
-    <option value="2">{{translate("Warning")}}</option>
-    <option value="3">{{translate("Error")}}</option>
-    <option value="4">{{translate("Critical")}}</option>
-</select>
-<table class="table table-hover">
-    <thead>
-    <tr>
-        <th>icon</th>
-        <th ng-click="setOrder('calendar')">Date</th>
-        <th>Message</th>
-        <th ng-click="setOrder('traceLevel')">Trace level</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="log in logs | orderBy:order | filter:eventFilter" ng-click="setCurrentItem(log)">
-        <td><span class="fa fa-2x" ng-class="log.iconClassName"></span></td>
-        <td>{{log.calendar | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-        <td>{{log.message}}</td>
-        <td>{{translate(log.traceLevel)}}</td>
-    </tr>
+<link rel="stylesheet" href="/resources/css/admin.css">
 
-    </tbody>
-</table>
-<module-template name="inputs/textPlain" data="currentItem.stackTrace"></module-template>
+<div class="panel panel-default">
+    <div class="panel-body">
+
+        <md-input-container>
+            <label>{{translate("log_traceLevel")}}</label>
+            <md-select ng-model="traceLevel">
+                <md-option ng-repeat="state in ['','Debug','Event','Warning','Error','Critical']" value="{{state}}">
+                    {{translate(state == '' ? '' : "log_"+state)}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+        <md-button ng-click="searchLogs(traceLevel)" class="md-raised">{{translate("search")}}</md-button>
+    </div>
+</div>
+
+
+<div class="table-selector">
+    <table class="table table-hover ">
+        <caption>{{translate("logs")}} : {{countLogs + ' ' + translate("ofRecords")}}</caption>
+        <thead>
+        <tr>
+            <th>
+                {{translate("log_icon")}}
+            </th>
+            <th>
+                {{translate("log_message")}}
+            </th>
+            <th ng-click="setLogOrder('traceLevel')">
+                {{translate("log_traceLevel")}}
+            </th>
+            <th g-click="setLogOrder('calendar')">
+                {{translate("log_date")}}
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="log in logs" ng-click="setCurrentItem(log)">
+            {{log}}
+            <td><span class="fa fa-2x" ng-class="log.iconClassName"></span></td>
+            <td>{{log.message}}</td>
+            <td>{{log.traceLevel}}</td>
+            <td>{{log.calendar | date:'medium'}}</td>
+        </tr>
+        <tr>
+            <td colspan="4" ng-click="loadMore()" class="loadMore">
+                {{translate("log_loadMore")}}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<md-content>
+    <md-tabs md-dynamic-height md-border-bottom>
+        <md-tab label="{{translate('log_stackTrace')}}" ng-if="currentLog != null && currentLog.stackTrace != null">
+            <md-content flex layout-padding>
+                <md-button class="btn md-raised md-warn"  data-clipboard-text="{{currentLog.stackTrace}}">
+                    {{translate("copyToClipBoard")}}
+                </md-button>
+                <p id="bar">
+                    {{currentLog.stackTrace}}
+                </p>
+            </md-content>
+        </md-tab>
+    </md-tabs>
+</md-content>
 
 

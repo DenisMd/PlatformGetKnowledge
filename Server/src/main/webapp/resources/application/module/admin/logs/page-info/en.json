@@ -1,7 +1,16 @@
 {
   "text" : {
-    "logs"  : "logs"
-
+    "log_Event" : "Event",
+    "log_Error" : "Error",
+    "log_Warning" : "Warning",
+    "log_Critical" : "Critical",
+    "log_Debug" : "Debug",
+    "log_icon" : "Icon",
+    "log_message" : "Message",
+    "log_traceLevel" : "Trace level",
+    "log_date" : "Date",
+    "log_loadMore" : "Load more logs",
+    "log_stackTrace" : "Трасса стека"
 
   }
 }
