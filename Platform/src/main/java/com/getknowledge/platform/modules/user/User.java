@@ -121,6 +121,10 @@ public class User extends AbstractEntity {
         return result;
     }
 
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
+    }
+
     public boolean isHasRole (Role role) {
         return this.role.equals(role);
     }

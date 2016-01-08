@@ -18,6 +18,17 @@ public class UserRepository extends BaseRepository<User> {
     RoleRepository roleRepository;
 
     @Override
+    public void update(User object) {
+        User user = read(object.getId());
+        if (user != null){
+            user.setEnabled(object.isEnabled());
+            user.setRole(object.getRole());
+            user.setPermissions(object.getPermissions());
+            super.update(user);
+        }
+    }
+
+    @Override
     @Transactional
     public void create(User object) {
         if (object == null) {
