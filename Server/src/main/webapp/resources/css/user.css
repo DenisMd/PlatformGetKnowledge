@@ -28,9 +28,8 @@
 }
 
 .user-image{
-    height: 100%;
-    width: 100%;
-    border:#999999;
+    width: 25px;
+    margin-right: 10px;
 }
 
 .user-menu{

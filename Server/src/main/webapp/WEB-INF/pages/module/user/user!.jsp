@@ -33,7 +33,7 @@
             <ul class="list-group user-nav">
                 <li  class="list-group-item" ng-repeat="menuItem in user_info.userMenu.items">
                     <a ng-href="{{createUrl(menuItem.url)}}">
-                        <img ng-src="{{menuItem.iconUrl}}"/>
+                        <img class="user-image" ng-src="{{menuItem.iconUrl}}"/>
                         {{translate(menuItem.title)}}
                     </a>
                 </li>
