@@ -271,7 +271,7 @@ model.controller("textPlainCtrl" , function($scope,$uibModal) {
 model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     $scope.choose = false;
     var isModelOpen = false;
-    $scope.model = "";
+    $scope.model =  $scope.getData().defaultValue in $scope ? $scope[$scope.getData().defaultValue] : "";
     $scope.modalModel;
     $scope.selectModalValue;
     $scope.selectValue;
@@ -301,7 +301,7 @@ model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     };
 
     $scope.getList = function(){
-        $scope.list = $scope[$scope.getData().listName] ? $scope[$scope.getData().listName] : [];
+        $scope.list =  $scope.getData().listName in $scope ? $scope[$scope.getData().listName] : [];
         return $scope.list;
     };
 

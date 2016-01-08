@@ -23,3 +23,25 @@
     color : #f85f6f;
     cursor: pointer;
 }
+
+.loadMore {
+    text-align: center;
+    cursor: pointer;
+    color: #00b3ee;
+}
+
+.red-critical{
+    color: red;
+}
+.red-error{
+    color: #9b201f;
+}
+.color-warning{
+    color: #e98b00;
+}
+.color-event{
+    color: #652ac6;
+}
+.color-debug{
+    color: #747170;
+}

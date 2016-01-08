@@ -209,7 +209,8 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     data : JSON.stringify(data)}),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (data){
-                $scope[name] = data;
+                if (name)
+                    $scope[name] = data;
                 if (isCallbackFunction){
                     if (angular.isArray(data)){
                         data.forEach(function(item,i,array){

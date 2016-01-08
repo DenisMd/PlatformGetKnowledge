@@ -62,7 +62,7 @@
                     <a href="" ng-click="showDeleteColumn = !showDeleteColumn;">{{translate("role_removePermission")}}</a>
                 </p>
                 <div ng-show="showAutoCompleteForRight">
-                    <module-template data="languageData" name="inputs/select"></module-template>
+                    <module-template data="permissionsData" name="inputs/select"></module-template>
                 </div>
                 <table class="table table-hover">
                     <thead>

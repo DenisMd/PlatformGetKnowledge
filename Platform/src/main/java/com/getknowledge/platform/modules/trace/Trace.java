@@ -23,6 +23,9 @@ public class Trace extends AbstractEntity {
     @Column(columnDefinition = "Text" , name = "stack_trace")
     private String stackTrace;
 
+    @Temporal(TemporalType.DATE)
+    private Calendar calendar = Calendar.getInstance();
+
     public void setCalendar(Calendar calendar) {
         this.calendar = calendar;
     }
@@ -34,8 +37,6 @@ public class Trace extends AbstractEntity {
     public void setStackTrace(String stackTrace) {
         this.stackTrace = stackTrace;
     }
-
-    private Calendar calendar = Calendar.getInstance();
 
     public TraceLevel getTraceLevel() {
         return traceLevel;
@@ -56,7 +57,6 @@ public class Trace extends AbstractEntity {
     public Calendar getCalendar() {
         return calendar;
     }
-
 
     @Override
     public AuthorizationList getAuthorizationList() {

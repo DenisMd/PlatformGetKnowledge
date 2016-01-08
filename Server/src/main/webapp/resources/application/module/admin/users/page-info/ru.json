@@ -3,6 +3,15 @@
     "user_title": "Пользователи",
     "user_createDate" : "Дата создания",
     "user" : "Пользователь",
-    "user_enabled" : ""
+    "user_enabled" : "Доступный",
+    "user_loadMore" : "Загрузить больше пользователей...",
+    "user_role" : "Роль",
+    "user_findUser" : "Поиск пользователя",
+    "user_update" : "Обновить пользователя",
+    "user_remove" : "Удалить пользователя",
+    "user_block" : "Блокирвка пользователя",
+    "user_addNewPermission" : "Добавить новое право",
+    "user_removePermission" : "Удалить право",
+    "user_updatePermissions" : "Обновить права"
   }
 }
