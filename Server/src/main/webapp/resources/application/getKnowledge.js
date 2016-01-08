@@ -1,6 +1,6 @@
 new Clipboard('.btn');
 
-var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap", "ngImgCrop" , "ngMaterial"]);
+var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap", "ngImgCrop" , "ngMaterial","chart.js"]);
 
 var player;
 

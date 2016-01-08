@@ -124,12 +124,12 @@ Moderator : ROLE_MODERATOR
 
 # Menu for authorized user
 AuthorizedUser
-    mailBox : /mailBox
-    progress : /progress
-    friends : /friends
-    settings : /settings
+    mailBox : /mailBox : /resources/image/user-menu/mail.png
+    progress : /progress : /resources/image/user-menu/arrow.png
+    friends : /friends : /resources/image/user-menu/globe.png
+    settings : /settings : /resources/image/user-menu/gear.png
 
 # Menu for not authorized user
 NotAuthorizedUser
-    progress : /progress
-    friends : /friends
+    progress : /progress : /resources/image/user-menu/arrow.png
+    friends : /friends : /resources/image/user-menu/globe.png
