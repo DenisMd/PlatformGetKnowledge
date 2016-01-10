@@ -38,7 +38,6 @@
         </thead>
         <tbody>
         <tr ng-repeat="log in logs" ng-click="setCurrentItem(log)">
-            {{log}}
             <td><span class="fa fa-2x" ng-class="log.iconClassName"></span></td>
             <td>{{log.message}}</td>
             <td>{{log.traceLevel}}</td>

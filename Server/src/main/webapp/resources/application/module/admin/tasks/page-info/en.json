@@ -1,7 +1,14 @@
 {
   "text" : {
-    "tasks"  : "Tasks"
-
-
+    "tasks"  : "Tasks",
+    "task_Complete" : "Complete",
+    "task_Failed" : "Failed",
+    "task_NotStarted" : "Not started",
+    "task_Runnable" : "Runnable",
+    "task_status" : "Task status",
+    "task_calendar" : "Execution time",
+    "task_loadMore" : "Load more tasks....",
+    "task_jsonData" : "Json data",
+    "task_stackTrace" : "Stack trace"
   }
 }

@@ -71,7 +71,7 @@ public class TraceService extends AbstractService {
 
     @Action(name = "traceFilter" , mandatoryFields = {"first" , "max"})
     @Transactional
-    public List<Trace> findUsers(HashMap<String,Object> data) throws NotAuthorized {
+    public List<Trace> traceFilter(HashMap<String,Object> data) throws NotAuthorized {
 
         if (!isAccessToRead(data,new Trace(),userRepository)) {
             throw new NotAuthorized("access denied for read trace",this,TraceLevel.Warning);
