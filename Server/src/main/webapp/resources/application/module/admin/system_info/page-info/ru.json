@@ -1,0 +1,8 @@
+{
+  "text" : {
+    "system_info" : "Информация о системе",
+    "system_settingsInfo" : "Настройки системы",
+    "system_domain" : "Домен",
+    "system_services" : "Список сервисов"
+  }
+}
