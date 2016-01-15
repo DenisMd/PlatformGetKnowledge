@@ -1,0 +1,8 @@
+{
+  "text" : {
+    "system_info" : "Information about system",
+    "system_settingsInfo" : "System settings",
+    "system_domain" : "Domain",
+    "system_services" : "Service list"
+  }
+}

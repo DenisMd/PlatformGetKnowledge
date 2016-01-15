@@ -20,7 +20,9 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "users" : "com.getknowledge.platform.modules.user.User",
             "user_event" : "com.getknowledge.modules.event.UserEvent",
             "tasks" : "com.getknowledge.platform.modules.task.Task",
-            "trace" : "com.getknowledge.platform.modules.trace.Trace"
+            "trace" : "com.getknowledge.platform.modules.trace.Trace",
+            "settings" : "com.getknowledge.modules.settings.Settings",
+            "systemServices" : "com.getknowledge.platform.modules.service.Service"
          };
     })
     .factory('modules',function(){

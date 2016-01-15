@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/resources/bower_components/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="/resources/bower_components/angular-material/angular-material.min.css">
     <link rel="stylesheet" href="/resources/bower_components/angular-chart.js/dist/angular-chart.css">
+    <link rel="stylesheet" href="/resources/bower_components/highlightjs/styles/railscasts.css">
 
     <%--Наши css--%>
     <link rel="stylesheet" type="text/css" href="/resources/css/index.css">
@@ -63,6 +64,8 @@
     <script src="/resources/bower_components/Chart.js/Chart.min.js" type="text/javascript" ></script>
     <script src="/resources/bower_components/angular-chart.js/dist/angular-chart.min.js" type="text/javascript" ></script>
     <script src="/resources/bower_components/clipboard/dist/clipboard.min.js"></script>
+    <script src="/resources/bower_components/highlightjs/highlight.pack.min.js"></script>
+    <script src="/resources/bower_components/angular-highlightjs/build/angular-highlightjs.min.js"></script>
     <%--<script src="/resources/bower_components/videojs-hotkeys/videojs.hotkeys.min.js"></script>--%>
     <script src="/resources/application/platform.js"></script>
     <script src="/resources/application/getKnowledge.js"></script>

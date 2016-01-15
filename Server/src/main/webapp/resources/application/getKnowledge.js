@@ -1,6 +1,6 @@
 new Clipboard('.btn');
 
-var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap", "ngImgCrop" , "ngMaterial","chart.js"]);
+var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap", "ngImgCrop" , "ngMaterial","chart.js", "hljs"]);
 
 var player;
 
@@ -18,7 +18,14 @@ function initVideoPlayer() {
 
 }
 
-model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService,pageService, className,$mdToast,$mdDialog, $mdMedia) {
+model.config(function (hljsServiceProvider) {
+    hljsServiceProvider.setOptions({
+        // replace tab with 4 spaces
+        tabReplace: '    '
+    });
+});
+
+model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService,pageService, className,$mdToast,$mdDialog, $mdMedia,$parse) {
 
     //Toast
     $scope.showToast = function (text) {
@@ -28,6 +35,21 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
                 .position("bottom right")
                 .hideDelay(3000)
         );
+    };
+
+    //hightlights
+    $scope.toPrettyJSON = function (objStr, tabWidth) {
+        try {
+            var obj = $parse(objStr)({});
+        }catch(e){
+            // eat $parse error
+            return _lastGoodResult;
+        }
+
+        var result = JSON.stringify(obj, null, Number(tabWidth));
+        _lastGoodResult = result;
+
+        return result;
     };
 
     //Dialog

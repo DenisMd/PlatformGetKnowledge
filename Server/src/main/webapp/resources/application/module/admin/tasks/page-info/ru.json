@@ -1,9 +1,14 @@
 {
   "text" : {
     "tasks"  : "Задачи",
-    "Complete" : "Завершенное",
-    "Failed" : "Провалено",
-    "NotStarted" : "Не начат",
-    "Runnable" : "Выполняется"
+    "task_Complete" : "Завершенное",
+    "task_Failed" : "Провалено",
+    "task_NotStarted" : "Не начат",
+    "task_Runnable" : "Выполняется",
+    "task_status" : "Сосотояние задачи",
+    "task_calendar" : "Время исполнения",
+    "task_loadMore" : "Загрузить больше задач.....",
+    "task_jsonData" : "Json информация",
+    "task_stackTrace" : "Трасса стека"
   }
 }

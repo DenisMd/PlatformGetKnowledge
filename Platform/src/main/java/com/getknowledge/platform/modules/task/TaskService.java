@@ -1,25 +1,34 @@
 package com.getknowledge.platform.modules.task;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.exceptions.ModuleNotFound;
+import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.modules.task.enumerations.TaskStatus;
+import com.getknowledge.platform.modules.trace.Trace;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
+import com.getknowledge.platform.modules.user.UserRepository;
 import com.getknowledge.platform.utils.ModuleLocator;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Query;
 import javax.persistence.TemporalType;
+import javax.persistence.criteria.*;
 import java.lang.reflect.Method;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Semaphore;
 
 @Service("TaskService")
 public class TaskService extends AbstractService {
+
+    @Autowired
+    private UserRepository userRepository;
 
     public static Semaphore semaphore;
 
@@ -74,6 +83,7 @@ public class TaskService extends AbstractService {
                                 } catch (Exception e) {
                                     traceService.logException("Exception for task : " + task.getTaskName(), e, TraceLevel.Warning);
                                     task.setTaskStatus(TaskStatus.Failed);
+                                    task.setStackTrace(ExceptionUtils.getStackTrace(e));
                                     taskRepository.update(task);
                                 }
                             }).start();
@@ -102,5 +112,76 @@ public class TaskService extends AbstractService {
             }
         });
         thread.start();
+    }
+
+    @Action(name = "taskFilter" , mandatoryFields = {"first" , "max"})
+    @Transactional
+    public List<Task> taskFilter(HashMap<String,Object> data) throws NotAuthorized {
+
+        if (!isAccessToRead(data,new Task(),userRepository)) {
+            throw new NotAuthorized("access denied for read tasks",traceService,TraceLevel.Warning);
+        }
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Task> q = cb.createQuery(Task.class);
+        Root<Task> taskRoot = q.from(Task.class);
+        q.select(taskRoot);
+
+        Order order = null;
+        if (data.containsKey("order")) {
+            Path path = null;
+            String orderColumn = (String) data.get("order");
+            if (orderColumn.equals("id"))
+                path = taskRoot.get("id");
+            if (orderColumn.equals("taskStatus"))
+                path = taskRoot.get("taskStatus");
+            if (orderColumn.equals("calendar"))
+                path = taskRoot.get("calendar");
+
+            if (path != null) {
+                if (data.containsKey("desc")) {
+                    order = cb.desc(path);
+                } else {
+                    order = cb.asc(path);
+                }
+                q.orderBy(order);
+            }
+        }
+
+        Predicate equalPredicate = null;
+        if (data.containsKey("filter")){
+            String filter = (String) data.get("filter");
+            TaskStatus taskStatus = TaskStatus.valueOf(filter);
+            equalPredicate = cb.equal(taskRoot.get("taskStatus"),taskStatus);
+        }
+
+        Predicate betweenPredicate = null;
+        if (data.containsKey("startDate") && data.containsKey("endDate")) {
+
+            Date startDate = new Date((Integer)data.get("startDate"));
+            Date endDate = new Date((Integer)data.get("endDate"));
+
+            betweenPredicate = cb.between(taskRoot.get("calendar"),startDate,endDate);
+        }
+
+        if (betweenPredicate != null || equalPredicate != null) {
+            if (betweenPredicate != null && equalPredicate != null)
+                q.where(cb.and(betweenPredicate,equalPredicate));
+            else if (betweenPredicate == null)
+                q.where(equalPredicate);
+            else
+                q.where(betweenPredicate);
+        }
+
+
+        int first = (int) data.get("first");
+        int max   = (int) data.get("max");
+
+        Query query = entityManager.createQuery(q);
+        query.setFirstResult(first);
+        query.setMaxResults(max);
+
+        List<Task> tasks = query.getResultList();
+        return tasks;
     }
 }

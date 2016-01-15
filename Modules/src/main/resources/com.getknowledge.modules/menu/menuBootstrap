@@ -27,8 +27,9 @@ Admin : ROLE_ADMIN
         users : /users : /resources/image/menu/icons/users.png
         roles : /roles : /resources/image/menu/icons/roles.png
         permissions : /permissions : /resources/image/menu/icons/lock.png
-        logs : /logs
-        tasks: /tasks
+        logs : /logs : /resources/image/menu/icons/logs.png
+        tasks: /tasks : /resources/image/menu/icons/tasks.png
+        info: /system_info : /resources/image/menu/icons/systemInfo.png
     programming : /section/programming : /resources/image/menu/icons/programming.png : d35136
         courses : /courses : /resources/image/menu/icons/courses.png
         books : /books : /resources/image/menu/icons/books.png
