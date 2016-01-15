@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet" href="/resources/css/user.css">
 <div class="user-content">
-    <div class="col-sm-5 user-menu-content">
+    <div class="col-sm-5 col-md-4 col-lg-3 user-menu-content">
         <div class="user-menu">
             <div class="user-info-card">
                 <img ng-src="{{userImg(user_info.id)}}" class="img-circle" />
@@ -40,8 +40,61 @@
             </ul>
         </div>
     </div>
-    <div class="col-sm-7">
-        {{user_info}}
+    <div class="col-sm-7  col-md-8 col-lg-9">
+                <div class="col-md-7" >
+                        <div class="completion-desk" ng-scrollbars ng-scrollbars-config="arcScrollConfig">
+                            <a  class="completion-percentage" ng-repeat="item in dataForArcs">
+                                <canvas class="chart chart-doughnut"
+                                        chart-data="[item.percent,100-item.percent]" chart-labels="arcOptions.labels" chart-colours="arcOptions.getColours(item)" chart-options="arcOptions.arcOptions">
+                                </canvas>
+                                <h1>{{item.title}}</h1>
+                                <p>{{item.percent + "%"}}</p>
+                            </a>
+                        </div>
+                    <md-content layout="row" layout-align="start center" >
+                        <a ng-repeat="item in dataForArcs" class="completion-percentage" flex="33">
+                            <canvas class="chart chart-doughnut"
+                                    chart-data="[item.percent,100-item.percent]" chart-labels="arcOptions.labels" chart-colours="arcOptions.getColours(item)" chart-options="arcOptions.arcOptions">
+                            </canvas>
+                            <h1>{{item.title}}</h1>
+                            <p>{{item.percent + "%"}}</p>
+                        </a>
+
+                    </md-content>
+                </div>
+                <div class="col-md-5">
+                    <div layout="row" layout-align="center center">
+                        <div flex>
+                            Some text
+                        </div>
+                        <div flex>
+                            <canvas class="chart chart-line" chart-data="data"
+                                    chart-labels="labels" chart-series="series" chart-options="arcOptions.arcOptions">
+                            </canvas>
+                        </div>
+                    </div>
+                    <div layout="row" layout-align="center center">
+                        <div flex>
+                        Some text
+                        </div>
+                        <div flex>
+                            <canvas class="chart chart-bar" chart-data="data"
+                                    chart-labels="labels" chart-series="series" chart-options="arcOptions.arcOptions">
+                            </canvas>
+                        </div>
+                    </div>
+                    <div layout="row" layout-align="center center">
+                        <div flex>
+                        Some text
+                        </div>
+                        <div flex>
+                            <canvas class="chart chart-pie" chart-data="dataCircle"
+                                    chart-labels="labels" chart-options="arcOptions.mainOption">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+
     </div>
 
 

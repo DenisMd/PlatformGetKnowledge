@@ -1,4 +1,4 @@
-model.controller("userCtrl", function ($scope, $state,$http,applicationService,pageService,className) {
+model.controller("userCtrl", function ($scope, $state,$http,applicationService,pageService,arcService,className) {
     var userId = pageService.getPathVariable("user",$state.params.path);
 
     if (userId) {
@@ -44,11 +44,40 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
     $scope.statusText = {};
 
 
+    //основной контент
+    //данные для диаграмм
+    $scope.dataForArcs = [{
+        id : 1,
+        title : "Java",
+        percent : 80,
+        colour : "#FF2B2B"
+    }, {
+        id : 2,
+        title : "Photoshop",
+        percent : 70,
+        colour : "#8000FF"
+    },{
+        id : 3,
+        title : "JavaScript",
+        percent : 90,
+        colour : "#FFCC00"
+    } ];
+    $scope.arcOptions = arcService;
+    //scroll для диаграмм курсов
+    $scope.arcScrollConfig = angular.merge({axis:"x"}, $scope.modalScrollConfig);
+
+    //статистика
+    $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+    $scope.series = ['A'];
+    $scope.data = [
+        [65, 59, 80, 81, 56, 55, 40]
+    ];
+    $scope.dataCircle = [65, 59, 80, 81, 56, 55, 40];
 
 
 
 
-
+    //modal
     //данные для select
     var isCountryValid = false;
     var isRegionValid = false;
@@ -156,3 +185,13 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
     }
 
 });
+
+//model.directive("containerScrollablle", function(){
+//    return {
+//        link:function(scope,element){
+//            scope.$watch(function(){return element.width()}, function (newValue, oldValue) {
+//                element.find("a").width(newValue / 3);
+//            });
+//        }
+//    }
+//});
