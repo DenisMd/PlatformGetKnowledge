@@ -780,5 +780,42 @@ function DialogController($scope, $mdDialog , theScope) {
     };
 }
 
+//Настройки для arc
+model.service('arcService', function(){
+    var colours = {};
+    this.getColours = function(element){
+        if (!element && !element.id) return;
+
+        if (!colours[element.id])  colours[element.id] = [];
+
+        if (element.colour && !colours[element.id].length){
+            if (element.defaultColour){
+                colours[element.id] = [element.colour,element.defaultColour];
+            } else {
+                colours[element.id] = [element.colour,"#FFFFFF"];
+            }
+
+        }
+
+        return colours[element.id];
+    };
+
+    this.labels = ["percent","none"];
+    this.arcOptions = {
+        responsive: true,
+        maintainAspectRatio:false,
+        segmentShowStroke : false,
+        showTooltips : false,
+        percentageInnerCutout : 80
+    };
+
+    this.mainOption = {
+        responsive: true,
+        maintainAspectRatio:false,
+        segmentShowStroke : false,
+        showTooltips : false
+    }
+
+});
 
 
