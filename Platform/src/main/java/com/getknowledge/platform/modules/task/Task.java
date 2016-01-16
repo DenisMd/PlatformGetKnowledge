@@ -84,4 +84,9 @@ public class Task  extends AbstractEntity{
     public AuthorizationList getAuthorizationList() {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return serviceName + " : " + taskName;
+    }
 }

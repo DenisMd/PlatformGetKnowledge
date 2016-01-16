@@ -206,6 +206,11 @@ public class MenuService extends AbstractService implements BootstrapService {
                 return menu;
             }
 
+            if (user.getRole().getRoleName().equals(RoleName.ROLE_MODERATOR.name())){
+                Menu menu = menuRepository.getSingleEntityByFieldAndValue("name" ,MenuNames.Moderator.name());
+                return menu;
+            }
+
         }
         Menu menu = menuRepository.getSingleEntityByFieldAndValue("name" , MenuNames.General.name());
         return menu;

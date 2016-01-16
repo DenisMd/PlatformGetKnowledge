@@ -12,6 +12,7 @@ import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import com.getknowledge.platform.modules.user.UserRepository;
 import com.getknowledge.platform.utils.ModuleLocator;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.log4j.xml.SAXErrorHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,10 @@ import javax.persistence.TemporalType;
 import javax.persistence.criteria.*;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 @Service("TaskService")
 public class TaskService extends AbstractService {
@@ -59,10 +63,13 @@ public class TaskService extends AbstractService {
                             .getResultList();
 
                     //Выполняем задачи
+
                     if (!tasks.isEmpty()) {
+                        ExecutorService executorService = Executors.newCachedThreadPool();
                         for (Task task : tasks) {
-                            new Thread(() -> {
+                            executorService.execute(() -> {
                                 try {
+                                    traceService.log("Start task " + task.toString() , TraceLevel.Event);
                                     AbstractService abstractService = moduleLocator.findService(task.getServiceName());
                                     for (Method method : abstractService.getClass().getMethods()) {
                                         com.getknowledge.platform.annotations.Task taskAnnotation = AnnotationUtils.findAnnotation(method, com.getknowledge.platform.annotations.Task.class);
@@ -78,16 +85,22 @@ public class TaskService extends AbstractService {
                                             method.invoke(abstractService, data);
                                             task.setTaskStatus(TaskStatus.Complete);
                                             taskRepository.update(task);
+                                            traceService.log("Task " + task.toString() + " complete", TraceLevel.Event);
+                                            return;
                                         }
                                     }
                                 } catch (Exception e) {
-                                    traceService.logException("Exception for task : " + task.getTaskName(), e, TraceLevel.Warning);
+                                    traceService.logException("Exception for task : " + task.toString(), e, TraceLevel.Warning);
                                     task.setTaskStatus(TaskStatus.Failed);
                                     task.setStackTrace(ExceptionUtils.getStackTrace(e));
                                     taskRepository.update(task);
+                                    return;
                                 }
-                            }).start();
+
+                                traceService.log("Task " + task.toString() + " not found", TraceLevel.Error);
+                            });
                         }
+                        executorService.awaitTermination(2, TimeUnit.MINUTES);
                     }
 
                     List<Calendar> calendars = entityManager.createQuery("select min(task.startDate) from Task task where task.taskStatus = :status")
