@@ -44,9 +44,13 @@ public class Role extends AbstractEntity {
         return permissions;
     }
 
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
+    }
+
     /*
-     * Изменять роли могут только администраторы
-     * */
+         * Изменять роли могут только администраторы
+         * */
     @Override
     public AuthorizationList getAuthorizationList() {
         return null;

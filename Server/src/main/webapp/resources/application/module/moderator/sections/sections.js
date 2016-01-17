@@ -30,10 +30,16 @@ model.controller("sectionsCtrl", function ($scope, $state,$http,applicationServi
         return applicationService.imageHref(className.section,id);
     };
 
+    var coverImage = null;
+
     $scope.croppedImg = {
         isSquare: true,
         save: function(file){
-            applicationService.actionWithFile($scope,"cover",className.section,"updateCover",{id:$scope.currentSection.id},file)
+            coverImage = file;
         }
+    }
+
+    $scope.updateImage = function() {
+        applicationService.actionWithFile($scope,"cover",className.section,"updateCover",{id:$scope.currentSection.id},coverImage);
     }
 });
