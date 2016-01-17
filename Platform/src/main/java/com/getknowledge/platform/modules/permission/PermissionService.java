@@ -35,6 +35,7 @@ public class PermissionService extends AbstractService implements BootstrapServi
 
     @Override
     public void bootstrap(HashMap<String, Object> map) throws ParseException {
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditSections.getName()));
     }
 
 

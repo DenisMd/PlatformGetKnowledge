@@ -1,0 +1,8 @@
+<div>
+    <label for="descriptionArea">{{getData().label}}</label>
+    <uib-tabset>
+        <uib-tab ng-repeat="(key,l) in getData().languages" heading="{{key}}">
+            <textarea class="form-control" rows="5" id="descriptionArea" ng-model="getData().languages[key]"></textarea>
+        </uib-tab>
+    </uib-tabset>
+</div>

@@ -2,6 +2,7 @@ package com.getknowledge.platform.modules.permission;
 
 import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.exceptions.PlatformException;
+import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.role.RoleRepository;
 import com.getknowledge.platform.modules.user.User;
@@ -28,6 +29,11 @@ public class PermissionRepository extends BaseRepository<Permission> {
     public Permission ifNotExistCreate(Permission permission) {
         Permission finedPermission = getSingleEntityByFieldAndValue("permissionName", permission.getPermissionName());
         if (finedPermission == null) create(permission);
+        return permission;
+    }
+
+    public Permission getPermissionByName (PermissionNames permissionNames) {
+        Permission permission = getSingleEntityByFieldAndValue("permissionName" , permissionNames.getName());
         return permission;
     }
 
