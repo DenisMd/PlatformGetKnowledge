@@ -52,12 +52,14 @@ public abstract class BaseRepository<T extends AbstractEntity> {
                 if (pd.getReadMethod() != null && !"class".equals(pd.getName())) {
                     Object result = pd.getReadMethod().invoke(object);
                     if (result != null) {
-                        pd.getWriteMethod().invoke(classicObject,result);
+                        if (pd.getWriteMethod() != null)
+                            pd.getWriteMethod().invoke(classicObject,result);
                     }
                 }
             }
         } catch (Exception e) {
-           logger.error(e.getMessage(),e);
+            logger.error(e.getMessage(),e);
+            return;
         }
 
         entityManager.merge(classicObject);

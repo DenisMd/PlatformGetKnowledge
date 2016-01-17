@@ -13,4 +13,8 @@ model.controller("sectionCtrl", function ($scope, $state,$http,applicationServic
         };
     });
 
+    $scope.sectionImg = function(id){
+        return applicationService.imageHref(className.section,id);
+    };
+
 });

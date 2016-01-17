@@ -37,7 +37,7 @@ model.controller("sectionsCtrl", function ($scope, $state,$http,applicationServi
         save: function(file){
             coverImage = file;
         }
-    }
+    };
 
     $scope.updateImage = function() {
         applicationService.actionWithFile($scope,"cover",className.section,"updateCover",{id:$scope.currentSection.id},coverImage);
