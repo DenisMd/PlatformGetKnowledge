@@ -508,7 +508,7 @@ public class DataController {
             return true;
         }
 
-        return al != null &&al.isAccessEdit(user);
+        return al != null && al.isAccessEdit(user);
 
     }
 

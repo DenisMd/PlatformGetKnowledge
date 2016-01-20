@@ -10,6 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 
@@ -38,7 +42,27 @@ public abstract class BaseRepository<T extends AbstractEntity> {
             throw new NullPointerException();
         }
 
-        entityManager.merge(object);
+        T classicObject = read(object.getId());
+
+        if (classicObject == null)
+            return;
+
+        try {
+            for (PropertyDescriptor pd : Introspector.getBeanInfo(object.getClass()).getPropertyDescriptors()) {
+                if (pd.getReadMethod() != null && !"class".equals(pd.getName())) {
+                    Object result = pd.getReadMethod().invoke(object);
+                    if (result != null) {
+                        if (pd.getWriteMethod() != null)
+                            pd.getWriteMethod().invoke(classicObject,result);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(),e);
+            return;
+        }
+
+        entityManager.merge(classicObject);
         entityManager.flush();
     }
 

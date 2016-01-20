@@ -266,29 +266,6 @@ model.controller("videoCtrl",function($scope){
     });
 });
 
-model.controller("textPlainCtrl" , function($scope,$uibModal) {
-    $scope.open = function (size , item) {
-
-        var modalInstance = $uibModal.open({
-            animation: true,
-            templateUrl: 'textPlaneContent.html',
-            controller: 'panelModalCtrl',
-            size: size,
-            resolve: {
-                item: function () {
-                    return item;
-                },
-                parentScope : function () {
-                    return $scope;
-                },
-                callbackForClose: function(){
-                    return;
-                }
-            }
-        });
-    }
-});
-
 //select value
 model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
     $scope.choose = false;

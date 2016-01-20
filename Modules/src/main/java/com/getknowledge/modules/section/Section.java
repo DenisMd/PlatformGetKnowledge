@@ -1,10 +1,15 @@
 package com.getknowledge.modules.section;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.menu.item.MenuItem;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
+import com.getknowledge.platform.modules.permission.Permission;
+import com.getknowledge.platform.modules.permission.PermissionRepository;
+import com.getknowledge.platform.modules.permission.names.PermissionNames;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 
@@ -29,6 +34,7 @@ public class Section extends AbstractEntity {
 
     @Basic(fetch=FetchType.LAZY)
     @Lob @Column(name="cover")
+    @JsonIgnore
     private byte[] cover;
 
     public byte[] getCover() {
@@ -75,6 +81,7 @@ public class Section extends AbstractEntity {
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
         authorizationList.allowReadEveryOne = true;
+        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditSections.getName()));
         return authorizationList;
     }
 }
