@@ -149,3 +149,27 @@
 .completion-percentage p{
     margin: 0;
 }
+
+.statistic-card{
+    border: 2px solid #000000;
+}
+
+.statistic-card-title{
+    background-color: #000000;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    margin:0;
+    color:#ffffff;
+     padding: 0 16px;
+}
+
+.statistic-card-content{
+    padding: 5px;
+}

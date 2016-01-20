@@ -41,7 +41,7 @@
         </div>
     </div>
     <div class="col-sm-7  col-md-8 col-lg-9">
-                <div class="col-md-7" >
+                <div class="col-md-7">
                         <div class="completion-desk" ng-scrollbars ng-scrollbars-config="arcScrollConfig">
                             <a  class="completion-percentage" ng-repeat="item in dataForArcs">
                                 <canvas class="chart chart-doughnut"
@@ -63,34 +63,39 @@
                     </md-content>
                 </div>
                 <div class="col-md-5">
-                    <div layout="row" layout-align="center center">
-                        <div flex>
-                            Some text
-                        </div>
-                        <div flex>
-                            <canvas class="chart chart-line" chart-data="data"
-                                    chart-labels="labels" chart-series="series" chart-options="arcOptions.arcOptions">
-                            </canvas>
-                        </div>
-                    </div>
-                    <div layout="row" layout-align="center center">
-                        <div flex>
-                        Some text
-                        </div>
-                        <div flex>
-                            <canvas class="chart chart-bar" chart-data="data"
-                                    chart-labels="labels" chart-series="series" chart-options="arcOptions.arcOptions">
-                            </canvas>
-                        </div>
-                    </div>
-                    <div layout="row" layout-align="center center">
-                        <div flex>
-                        Some text
-                        </div>
-                        <div flex>
-                            <canvas class="chart chart-pie" chart-data="dataCircle"
-                                    chart-labels="labels" chart-options="arcOptions.mainOption">
-                            </canvas>
+                    <div class="statistic-card">
+                        <h2 class="statistic-card-title">{{translate("statistic")}}</h2>
+                        <div class="statistic-card-content">
+                            <div layout="row" layout-align="center center">
+                                <div flex>
+                                    Some text
+                                </div>
+                                <div flex>
+                                    <canvas class="chart chart-line" chart-data="data"
+                                            chart-labels="labels" chart-series="series" chart-options="arcOptions.arcOptions">
+                                    </canvas>
+                                </div>
+                            </div>
+                            <div layout="row" layout-align="center center">
+                                <div flex>
+                                Some text
+                                </div>
+                                <div flex>
+                                    <canvas class="chart chart-bar" chart-data="data"
+                                            chart-labels="labels" chart-series="series" chart-options="arcOptions.arcOptions">
+                                    </canvas>
+                                </div>
+                            </div>
+                            <div layout="row" layout-align="center center">
+                                <div flex>
+                                Some text
+                                </div>
+                                <div flex>
+                                    <canvas class="chart chart-pie" chart-data="dataCircle"
+                                            chart-labels="labels" chart-options="arcOptions.mainOption">
+                                    </canvas>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
