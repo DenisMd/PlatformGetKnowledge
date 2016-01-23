@@ -533,7 +533,7 @@ model.controller("selectImgCtrl", function($scope,$uibModal){
         });
     };
 
-    $scope.isInModal = $scope.getData().isInModal? $scope.getData().isInModal : false;
+
     $scope.originalImg='';
     $scope.croppedImg='';
 
@@ -562,10 +562,14 @@ model.controller("selectImgCtrl", function($scope,$uibModal){
 
 
     $scope.getAreaType = function(){
-        if ($scope.getData().isSquare){
-            return "square";
+        if ($scope.getData().areaType && angular.isString($scope.getData().areaType)) {
+            switch ($scope.getData().areaType.toLowerCase()) {
+                case "square":
+                case "circle":
+                    return $scope.getData().areaType;
+            }
         }
-        return "circle";
+        return "";
     };
 
     $scope.onChange = function (element) {
@@ -587,6 +591,24 @@ model.controller("selectImgCtrl", function($scope,$uibModal){
             open('lg',item,save);
         });
     }
+
+    $scope.showModal = function(){
+        if ($scope.getData()) {
+            return $scope.getData().isInModal ? $scope.getData().isInModal : false;
+        }
+        return false;
+    };
+
+    $scope.getImage = function(){
+        var image = $scope.getData().src;
+        if (image){
+            $scope.originalImg = image;
+            return $scope.originalImg;
+        } else {
+            $scope.originalImg = ""
+        }
+        return "/resources/image/template/camera.png";
+    };
 
     function base64ToBlob(base64Data, contentType) {
         contentType = contentType || '';

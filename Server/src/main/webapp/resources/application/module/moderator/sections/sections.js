@@ -33,10 +33,13 @@ model.controller("sectionsCtrl", function ($scope, $state,$http,applicationServi
     var coverImage = null;
 
     $scope.croppedImg = {
-        isSquare: true,
         save: function(file){
             coverImage = file;
         }
+    };
+    $scope.getCropImageData  = function(currentSection){
+        $scope.croppedImg.src = $scope.sectionImg(currentSection.id);
+        return $scope.croppedImg;
     };
 
     $scope.updateImage = function() {
