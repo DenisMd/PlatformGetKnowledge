@@ -2,6 +2,8 @@ package com.getknowledge.platform.modules.task;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.getknowledge.platform.annotations.Action;
+import com.getknowledge.platform.base.repositories.FilterQuery;
+import com.getknowledge.platform.base.repositories.enumerations.OrderRoute;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.exceptions.ModuleNotFound;
 import com.getknowledge.platform.exceptions.NotAuthorized;
@@ -135,37 +137,21 @@ public class TaskService extends AbstractService {
             throw new NotAuthorized("access denied for read tasks",traceService,TraceLevel.Warning);
         }
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Task> q = cb.createQuery(Task.class);
-        Root<Task> taskRoot = q.from(Task.class);
-        q.select(taskRoot);
+        FilterQuery<Task> filter = taskRepository.initFilter();
 
-        Order order = null;
-        if (data.containsKey("order")) {
-            Path path = null;
-            String orderColumn = (String) data.get("order");
-            if (orderColumn.equals("id"))
-                path = taskRoot.get("id");
-            if (orderColumn.equals("taskStatus"))
-                path = taskRoot.get("taskStatus");
-            if (orderColumn.equals("calendar"))
-                path = taskRoot.get("calendar");
-
-            if (path != null) {
-                if (data.containsKey("desc")) {
-                    order = cb.desc(path);
-                } else {
-                    order = cb.asc(path);
-                }
-                q.orderBy(order);
+        if (data.containsKey("order") && !((String)data.get("order")).isEmpty()) {
+            OrderRoute orderRoute = OrderRoute.Asc;
+            if (data.containsKey("desc")) {
+                orderRoute = OrderRoute.Desc;
             }
+
+            filter.setOrder((String) data.get("order") , orderRoute);
         }
 
         Predicate equalPredicate = null;
         if (data.containsKey("filter")){
-            String filter = (String) data.get("filter");
-            TaskStatus taskStatus = TaskStatus.valueOf(filter);
-            equalPredicate = cb.equal(taskRoot.get("taskStatus"),taskStatus);
+            String filterValue = (String) data.get("filter");
+            filter.equal("taskStatus" , TaskStatus.valueOf(filterValue));
         }
 
         Predicate betweenPredicate = null;
@@ -174,23 +160,14 @@ public class TaskService extends AbstractService {
             Date startDate = new Date((Integer)data.get("startDate"));
             Date endDate = new Date((Integer)data.get("endDate"));
 
-            betweenPredicate = cb.between(taskRoot.get("calendar"),startDate,endDate);
-        }
-
-        if (betweenPredicate != null || equalPredicate != null) {
-            if (betweenPredicate != null && equalPredicate != null)
-                q.where(cb.and(betweenPredicate,equalPredicate));
-            else if (betweenPredicate == null)
-                q.where(equalPredicate);
-            else
-                q.where(betweenPredicate);
+            filter.betweenDates("calendar" , startDate, endDate);
         }
 
 
         int first = (int) data.get("first");
         int max   = (int) data.get("max");
 
-        Query query = entityManager.createQuery(q);
+        Query query = filter.getQuery(first , max);
         query.setFirstResult(first);
         query.setMaxResults(max);
 
