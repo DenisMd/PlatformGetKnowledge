@@ -1,6 +1,12 @@
 <div ng-controller="selectImgCtrl">
-    <div class="well well-dotted cropArea" ng-if="!isInModal">
-        <img-crop image="originalImg" result-image="croppedImg"
+    <div class="main-image-container">
+        <div class="image-container">
+            <img ng-src="{{getImage()}}" class="original-image">
+        </div>
+        <button class="btn original-image-btn">{{translate("change_image")}}</button>
+    </div>
+    <div class="image-container" ng-if="!showModal()">
+        <img-crop image="getImage()" result-image="croppedImg"
                   on-change="onChange($dataURI)"
                   on-load-begin="onLoadBegin()"
                   on-load-done="onLoadDone()"
@@ -31,14 +37,4 @@
             <button type="button" class="btn btn-primary" ng-click="cancel()">{{parentScope.translate('save')}}</button>
         </div>
     </script>
-    <!--<div class="modal fade" ng-attr-id="{{id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">-->
-        <!--<div class="modal-dialog" role="document">-->
-            <!--<div class="modal-content modal-center">-->
-                    <!---->
-                <!--<div class="modal-footer">-->
-                    <!---->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
 </div>

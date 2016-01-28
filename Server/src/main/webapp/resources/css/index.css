@@ -809,6 +809,26 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     padding-top: 20px;
 }
 
+.original-image{
+    width: 100%;
+    height: 100%;
+}
+
+.main-image-container{
+    width:300px;
+}
+
+.image-container{
+    width:inherit;
+    height:300px;
+}
+
+.original-image-btn{
+    width:100%;
+    background: #404753;
+    color:#ffffff;
+    border-radius: 0 0 4px 4px;
+}
 /*validation*/
 .on-error.ng-invalid.ng-dirty {
     border-color: red;
@@ -868,3 +888,4 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     border: 1px solid #ddd;
     border-radius: 3px;
 }
+

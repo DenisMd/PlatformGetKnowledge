@@ -60,6 +60,9 @@ import java.util.List;
 @RequestMapping("/data")
 public class DataController {
 
+    //??????????? ?? ???????? ?????????
+    private final int ENTITY_LIMIT = 500;
+
     @Autowired
     ServletContext servletContext;
 
@@ -217,6 +220,11 @@ public class DataController {
                 ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
                 protectedRepository.setCurrentUser(getCurrentUser(principal));
             }
+
+            if (repository.count() > ENTITY_LIMIT) {
+                throw new EntityLimitException("Violated limit entity " + ENTITY_LIMIT);
+            }
+
             List<AbstractEntity> list = repository.list();
 
             if (list == null) {
@@ -260,6 +268,11 @@ public class DataController {
                 ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
                 protectedRepository.setCurrentUser(getCurrentUser(principal));
             }
+
+            if (max > ENTITY_LIMIT) {
+                throw new EntityLimitException("Violated limit entity " + ENTITY_LIMIT);
+            }
+
             List<AbstractEntity> list = repository.listPartial(first, max);
 
             if (list == null) {

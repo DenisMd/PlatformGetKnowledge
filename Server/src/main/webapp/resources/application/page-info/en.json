@@ -66,6 +66,7 @@
     "doIt" : "Do it",
     "ofRecords" : "records",
     "search" : "Search",
-    "version" : "Version"
+    "version" : "Version",
+    "change_image" : "Изменить"
   }
 }

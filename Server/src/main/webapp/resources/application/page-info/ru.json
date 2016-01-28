@@ -66,6 +66,7 @@
     "doIt" : "Выполнить",
     "ofRecords" : "записей",
     "search" : "Поиск",
-    "version" : "Версия"
+    "version" : "Версия",
+    "change_image" : "Изменить"
   }
 }

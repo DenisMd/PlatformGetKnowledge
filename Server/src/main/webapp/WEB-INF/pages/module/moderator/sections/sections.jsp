@@ -38,8 +38,7 @@
         </md-tab>
         <md-tab label="{{translate('section_info')}}" ng-if="currentSection != null">
             <md-content class="md-padding">
-                <img ng-src="{{sectionImg(currentSection.id)}}" class="main-image img-thumbnail" />
-                <module-template name="inputs/selectImage" data="croppedImg"></module-template>
+                <module-template name="inputs/selectImage" data="getCropImageData(currentSection)"></module-template>
                 <md-button class="md-raised md-primary" ng-click="updateImage()" ng-disabled="!currentSection">{{translate("update")}}</md-button>
             </md-content>
         </md-tab>
