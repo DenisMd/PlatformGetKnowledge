@@ -5,48 +5,47 @@ model.controller("usersCtrl", function ($scope, applicationService, className,$m
     $scope.showDeleteColumn = false;
     $scope.users = [];
 
-    var filter = applicationService.createFilter(className.userInfo,0,10);
+    applicationService.count($scope,"countUsers",className.userInfo);
+    applicationService.list($scope,"listRoles",className.roles);
 
-    var order = "";
-    var reverse = false;
-    var searchText = "";
+    var filter = applicationService.createFilter(className.userInfo,0,10);
 
     var addUsers = function(user){
         $scope.users.push(user);
     };
 
     var doAction = function(){
-        var request = {
-            "first" : first,
-            "max" : max,
-            "order" : order
-        };
-
-        if (reverse){
-            request.desc = "desc";
-        }
-
-        if (searchText){
-            request.searchText = searchText;
-        }
-
-        applicationService.filterRequest($scope,"",filter);
+        applicationService.filterRequest($scope,"",filter,addUsers);
     };
 
     doAction();
 
+    var reverse = false;
     $scope.setUserOrder = function(orderName) {
         reverse = !reverse;
-        order = orderName;
-        first = 0;
+
+        filter.clearOrder();
+        filter.setOrder(orderName,reverse);
+
+
+        filter.first = 0;
         $scope.users = [];
         doAction();
     };
 
     $scope.searchUsers = function(text) {
-        searchText = text;
+        if (text) {
+            var splitArray = text.split(".");
+            if (splitArray.length > 1) {
+                var searchFields = {fields: [{"firstName": splitArray[0]}, {"lastName": splitArray[1]}]};
+                filter.searchText(searchFields);
+            } else {
+                var searchFields = {fields: [{"firstName": text}, {"lastName": text},{"user.login" : text}], or: true};
+                filter.searchText(searchFields);
+            }
+        }
         $scope.users = [];
-        first = 0;
+        filter.first = 0;
         doAction();
     };
 
@@ -74,14 +73,10 @@ model.controller("usersCtrl", function ($scope, applicationService, className,$m
         $scope.showDeleteColumn = false;
     };
 
-    applicationService.count($scope,"countUsers",className.userInfo);
-
     $scope.loadMore = function () {
-        first += 10;
+        filter.increase(10);
         doAction();
     };
-
-    applicationService.list($scope,"listRoles",className.roles);
 
     $scope.roleData = {
         "id" : "roles",

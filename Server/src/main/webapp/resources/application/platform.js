@@ -151,18 +151,28 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
 
         function filter(className,first,max) {
             this.className = className;
-            this.result = {first : first, max : max};
+            this.first = first;
+            this.max = max;
+            this.result = {first : this.first, max : this.max};
+
+            this.increase = function (value) {
+                this.first += value;
+            };
 
             this.setOrder = function(order,desc) {
-                if (!("order" in result)) {
-                    result.order = [];
+                if (!("order" in this.result)) {
+                    this.result.order = [];
                 }
 
-                result.order.push({"field" : order , "route" : desc ? "Desc" : "Asc"});
+                this.result.order.push({"field" : order , "route" : desc ? "Desc" : "Asc"});
+            };
+
+            this.searchText = function(fields) {
+                this.result.searchText = fields;
             };
 
             this.clearOrder = function () {
-                result.order = [];
+                this.result.order = [];
             };
         }
 

@@ -105,7 +105,6 @@ public class TraceService extends AbstractService {
             filter.in("traceLevel", traceLevels);
         }
 
-        Predicate betweenPredicate = null;
         if (data.containsKey("startDate") && data.containsKey("endDate")) {
 
             Date startDate = new Date((Integer)data.get("startDate"));

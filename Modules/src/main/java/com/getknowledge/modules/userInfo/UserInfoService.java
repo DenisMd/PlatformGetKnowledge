@@ -422,53 +422,6 @@ public class UserInfoService extends AbstractService implements BootstrapService
         return result;
     }
 
-    @Action(name = "findUsers" , mandatoryFields = {"first" , "max"})
-    @Transactional
-    public List<UserInfo> findUsers(HashMap<String,Object> data) throws NotAuthorized {
-
-        FilterQuery<UserInfo> filter = userInfoRepository.initFilter();
-
-        if (data.containsKey("order") && !((String)data.get("order")).isEmpty()) {
-            OrderRoute orderRoute = OrderRoute.Asc;
-            if (data.containsKey("desc")) {
-                orderRoute = OrderRoute.Desc;
-            }
-
-            filter.setOrder((String) data.get("order") , orderRoute);
-        }
-
-        if (data.containsKey("searchText")) {
-            String search = (String) data.get("searchText");
-            if (search.contains(" ")) {
-                String [] split = search.split(" ");
-                String lastName = split[0];
-                String firstName = split[1];
-
-                filter.searchText(new String[]{"firstName","lastName"} ,
-                                              new String[]{firstName,lastName},false);
-
-            } else {
-                filter.searchText(new String[]{"firstName","lastName","user.login"} ,
-                        new String[]{search,search,search},true);
-            }
-        }
-
-        int first = (int) data.get("first");
-        int max   = (int) data.get("max");
-
-        Query query = filter.getQuery(first,max);
-
-        List<UserInfo> userInfos = query.getResultList();
-        userInfos.forEach(u -> {
-            try {
-                AbstractEntity.prepare(u,userInfoRepository,getAuthorizedUser(data).getUser(),moduleLocator);
-            } catch (Exception e) {
-                trace.logException("error prepare user : " + e.getMessage(),e,TraceLevel.Error);
-            }
-        });
-        return userInfos;
-    }
-
     @Override
     public byte[] getImageById(long id) {
         UserInfo userInfo = userInfoRepository.read(id);

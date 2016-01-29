@@ -361,8 +361,8 @@ public class DataController {
                         fieldNames[i] = field;
                         fieldValues[i] = (String) search.get(field);
                     }
+                    i++;
                 }
-                i++;
                 filterQuery.searchText(fieldNames,fieldValues, searchText.containsKey("or"));
             }
 
