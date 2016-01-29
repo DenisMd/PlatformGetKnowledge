@@ -3,21 +3,11 @@
         <div class="image-container">
             <img ng-src="{{getImage()}}" class="original-image">
         </div>
-        <button class="btn original-image-btn">{{translate("change_image")}}</button>
-    </div>
-    <div class="image-container" ng-if="!showModal()">
-        <img-crop image="getImage()" result-image="croppedImg"
-                  on-change="onChange($dataURI)"
-                  on-load-begin="onLoadBegin()"
-                  on-load-done="onLoadDone()"
-                  on-load-error="onLoadError()"
-                  area-type="{{getAreaType()}}">
-        </img-crop>
-    </div>
-
-    <div class="fileUpload btn btn-default">
-        <span>{{translate("uploadAvatar")}}</span>
-        <input type="file" id="fileInput" class="upload"onchange="angular.element(this).scope().uploadFile(this.files[0]);"/>
+        <button class="btn original-image-btn" ng-show="showModal()">{{translate("change_image")}}</button>
+        <div class="fileUpload btn original-image-btn" ng-hide="showModal()">
+            <span>{{translate("uploadAvatar")}}</span>
+            <input type="file" id="fileInput" class="upload" onchange="angular.element(this).scope().uploadFile(this.files[0]);"/>
+        </div>
     </div>
 
 

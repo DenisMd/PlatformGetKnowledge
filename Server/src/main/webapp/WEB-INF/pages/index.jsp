@@ -15,10 +15,10 @@
     <link rel="stylesheet" href="/resources/bower_components/angular-material/angular-material.min.css">
     <link rel="stylesheet" href="/resources/bower_components/angular-chart.js/dist/angular-chart.css">
     <link rel="stylesheet" href="/resources/bower_components/highlightjs/styles/railscasts.css">
+    <link rel="stylesheet" href="/resources/bower_components/ng-img-crop/compile/minified/ng-img-crop.css" type="text/css">
 
     <%--Наши css--%>
     <link rel="stylesheet" type="text/css" href="/resources/css/index.css">
-    <link rel="stylesheet" type="text/css" href="/resources/bower_components/ng-img-crop/compile/minified/ng-img-crop.css">
 
     <meta charset="utf-8">
 </head>

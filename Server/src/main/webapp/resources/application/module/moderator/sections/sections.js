@@ -34,15 +34,16 @@ model.controller("sectionsCtrl", function ($scope, $state,$http,applicationServi
 
     $scope.croppedImg = {
         save: function(file){
-            coverImage = file;
+            $scope.updateImage(file);
         }
     };
+
     $scope.getCropImageData  = function(currentSection){
         $scope.croppedImg.src = $scope.sectionImg(currentSection.id);
         return $scope.croppedImg;
     };
 
-    $scope.updateImage = function() {
-        applicationService.actionWithFile($scope,"cover",className.section,"updateCover",{id:$scope.currentSection.id},coverImage);
+    $scope.updateImage = function(file) {
+        applicationService.actionWithFile($scope,"cover",className.section,"updateCover",{id:$scope.currentSection.id},file);
     }
 });

@@ -828,6 +828,11 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     background: #404753;
     color:#ffffff;
     border-radius: 0 0 4px 4px;
+    margin:0;
+}
+
+.original-image-btn:hover{
+    color: #fff;
 }
 /*validation*/
 .on-error.ng-invalid.ng-dirty {
