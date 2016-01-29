@@ -1,4 +1,4 @@
-new Clipboard('.btn');
+new Clipboard('.clipboard');
 
 var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap", "ngImgCrop" , "ngMaterial","chart.js", "hljs"]);
 
