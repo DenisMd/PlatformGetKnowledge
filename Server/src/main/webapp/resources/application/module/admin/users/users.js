@@ -5,8 +5,8 @@ model.controller("usersCtrl", function ($scope, applicationService, className,$m
     $scope.showDeleteColumn = false;
     $scope.users = [];
 
-    var first = 0;
-    var max  = 10;
+    var filter = applicationService.createFilter(className.userInfo,0,10);
+
     var order = "";
     var reverse = false;
     var searchText = "";
@@ -30,7 +30,7 @@ model.controller("usersCtrl", function ($scope, applicationService, className,$m
             request.searchText = searchText;
         }
 
-        applicationService.action($scope,"",className.userInfo,"findUsers",request,addUsers);
+        applicationService.filterRequest($scope,"",filter);
     };
 
     doAction();

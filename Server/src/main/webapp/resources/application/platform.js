@@ -149,6 +149,50 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             });
         };
 
+        function filter(className,first,max) {
+            this.className = className;
+            this.result = {first : first, max : max};
+
+            this.setOrder = function(order,desc) {
+                if (!("order" in result)) {
+                    result.order = [];
+                }
+
+                result.order.push({"field" : order , "route" : desc ? "Desc" : "Asc"});
+            };
+
+            this.clearOrder = function () {
+                result.order = [];
+            };
+        }
+
+        this.createFilter = function(className,first,max) {
+              return new filter(className,first,max);
+        };
+
+        this.filterRequest = function ($scope,name,filter,callback) {
+            var isCallbackFunction = isFunction(callback);
+            $http({
+                method: 'POST',
+                url: platformDataUrl+'filter',
+                data: $.param({className: filter.className,
+                    properties : JSON.stringify(filter.result)}),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).success(function (data){
+                if (name)
+                    $scope[name] = data;
+                if (isCallbackFunction){
+                    if (angular.isArray(data)){
+                        data.forEach(function(item,i,array){
+                            callback(item,i,array);
+                        });
+                    }
+                }
+            }).error(function(error, status, headers, config){
+                errorService.showError(error,status);
+            });
+        };
+
         this.read = function($scope, name, className, id, callback) {
             var isCallbackFunction = isFunction(callback);
             $http.get(platformDataUrl+"read?className="+className+"&id="+id)

@@ -2,6 +2,7 @@ package com.getknowledge.platform.base.repositories;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.getknowledge.platform.base.entities.AbstractEntity;
+import com.getknowledge.platform.base.repositories.enumerations.*;
 import com.getknowledge.platform.exceptions.PlatformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,11 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.beans.IntrospectionException;
+import javax.persistence.criteria.*;
+import javax.persistence.criteria.Order;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Transactional
@@ -110,5 +114,11 @@ public abstract class BaseRepository<T extends AbstractEntity> {
     public T getSingleEntityByFieldAndValue(String field, Object value) {
         List<T> list = getEntitiesByFieldAndValue(field,value);
         return list.isEmpty() ? null : list.get(0);
+    }
+
+
+    public FilterQuery<T> initFilter() {
+        FilterQuery<T> filterQuery = new FilterQuery<>(entityManager,getClassEntity());
+        return filterQuery;
     }
 }

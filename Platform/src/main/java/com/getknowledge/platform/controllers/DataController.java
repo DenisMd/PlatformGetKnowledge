@@ -13,12 +13,15 @@ import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.base.repositories.FilterQuery;
 import com.getknowledge.platform.base.repositories.PrepareEntity;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
+import com.getknowledge.platform.base.repositories.enumerations.OrderRoute;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.FileLinkService;
 import com.getknowledge.platform.base.services.ImageService;
 import com.getknowledge.platform.exceptions.*;
+import com.getknowledge.platform.modules.filter.FilterService;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.role.names.RoleName;
 import com.getknowledge.platform.modules.trace.TraceService;
@@ -34,12 +37,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.Query;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -59,6 +64,9 @@ import java.util.List;
 @Controller
 @RequestMapping("/data")
 public class DataController {
+
+    //??????????? ?? ???????? ?????????
+    private final int ENTITY_LIMIT = 500;
 
     @Autowired
     ServletContext servletContext;
@@ -217,6 +225,11 @@ public class DataController {
                 ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
                 protectedRepository.setCurrentUser(getCurrentUser(principal));
             }
+
+            if (repository.count() > ENTITY_LIMIT) {
+                throw new EntityLimitException("Violated limit entity " + ENTITY_LIMIT);
+            }
+
             List<AbstractEntity> list = repository.list();
 
             if (list == null) {
@@ -260,6 +273,11 @@ public class DataController {
                 ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
                 protectedRepository.setCurrentUser(getCurrentUser(principal));
             }
+
+            if (max > ENTITY_LIMIT) {
+                throw new EntityLimitException("Violated limit entity " + ENTITY_LIMIT);
+            }
+
             List<AbstractEntity> list = repository.listPartial(first, max);
 
             if (list == null) {
@@ -292,6 +310,99 @@ public class DataController {
             return null;
         }
     }
+
+    @Autowired
+    private FilterService filterService;
+
+    @RequestMapping(value = "/filter" , method = RequestMethod.POST)
+    public @ResponseBody String filterMethod(@RequestParam("properties") String properties, @RequestParam("className") String className, Principal principal) throws PlatformException {
+        try {
+            if (className == null || className.isEmpty()) return null;
+            Class classEntity = Class.forName(className);
+            BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
+            if (repository instanceof ProtectedRepository) {
+                ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
+                protectedRepository.setCurrentUser(getCurrentUser(principal));
+            }
+
+            TypeReference<HashMap<String, Object>> typeRef
+                    = new TypeReference<HashMap<String, Object>>() {
+            };
+
+            HashMap<String, Object> data = objectMapper.readValue(properties, typeRef);
+
+            FilterQuery filterQuery = repository.initFilter();
+
+
+//            order : [{route : Asc , field : name1} , {route : Desc , field : name2}]
+            if (data.containsKey("order")) {
+                List<HashMap<String, Object>> order = (List<HashMap<String, Object>>) data.get("order");
+                for (HashMap<String, Object> orderField : order) {
+                    OrderRoute orderRoute = OrderRoute.Asc;
+                    if (orderField.containsKey("route")) {
+                        orderRoute = OrderRoute.valueOf((String) orderField.get("route"));
+                    }
+
+                    if (orderField.containsKey("field")) {
+                        filterQuery.setOrder((String) orderField.get("field"), orderRoute);
+                    }
+                }
+            }
+
+//            searchText : {fields : [{fieldName1 : value1} , {fieldName2 : value2}] , or : true}
+            if (data.containsKey("searchText")) {
+                HashMap<String, Object> searchText = (HashMap<String, Object>) data.get("searchText");
+                List<HashMap<String, Object>> fields = (List<HashMap<String, Object>>) searchText.get("fields");
+                String [] fieldNames = new String[fields.size()];
+                String [] fieldValues = new String[fields.size()];
+                int i = 0;
+                for (HashMap<String, Object> search : fields) {
+                    for (String field : search.keySet()) {
+                        fieldNames[i] = field;
+                        fieldValues[i] = (String) search.get(field);
+                    }
+                }
+                i++;
+                filterQuery.searchText(fieldNames,fieldValues, searchText.containsKey("or"));
+            }
+
+            int first = (int) data.get("first");
+            int max   = (int) data.get("max");
+
+            List<AbstractEntity> list = filterService.getList(filterQuery,first,max);
+
+            if (list == null) {
+                return "";
+            }
+
+            String jsonResult = "[";
+            for (AbstractEntity abstractEntity : list) {
+                if (!isAccessRead(principal, abstractEntity) ) {
+                    // TODO: question may continue?
+                    throw new NotAuthorized("access denied for read entity from filter" , trace, TraceLevel.Warning);
+                }
+                abstractEntity = AbstractEntity.prepare(abstractEntity,repository,getCurrentUser(principal),moduleLocator);
+                ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
+                objectNode.put("editable" , isAccessEdit(principal,abstractEntity));
+                objectNode.put("creatable" , isAccessCreate(principal,abstractEntity));
+                jsonResult += objectNode.toString();
+                jsonResult += ",";
+            }
+            if (jsonResult.length() > 1)
+                jsonResult = jsonResult.substring(0,jsonResult.length()-1);
+
+            jsonResult += "]";
+
+            return jsonResult;
+        } catch (ClassNotFoundException e) {
+            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+        } catch (Exception e) {
+            trace.logException("Prepare exception : " + e.getMessage(),e, TraceLevel.Error);
+            return null;
+        }
+    }
+
+
 
 //    methods for change -----------------------------------------------------------------------------------
 

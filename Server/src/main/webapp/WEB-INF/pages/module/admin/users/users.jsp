@@ -44,8 +44,8 @@
         <tr ng-repeat="userInfo in users" ng-click="setCurrentItem(userInfo)">
             <td>{{userInfo.id}}</td>
             <td>{{userInfo.user.role.roleName}}</td>
-            <td>{{userInfo.lastName + ' ' + userInfo.firstName}}</td>
             <td>{{userInfo.user.login}}</td>
+            <td>{{userInfo.lastName + ' ' + userInfo.firstName}}</td>
             <td>{{userInfo.user.createDate | date:'medium'}}</td>
             <td>{{userInfo.user.enabled}}</td>
         </tr>

@@ -2,6 +2,8 @@ package com.getknowledge.platform.modules.trace;
 
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.base.entities.AbstractEntity;
+import com.getknowledge.platform.base.repositories.FilterQuery;
+import com.getknowledge.platform.base.repositories.enumerations.OrderRoute;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
@@ -77,35 +79,22 @@ public class TraceService extends AbstractService {
             throw new NotAuthorized("access denied for read trace",this,TraceLevel.Warning);
         }
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Trace> q = cb.createQuery(Trace.class);
-        Root<Trace> traceRoot = q.from(Trace.class);
-        q.select(traceRoot);
+        FilterQuery<Trace> filter = traceRepository.initFilter();
 
-        Order order = null;
-        if (data.containsKey("order")) {
-            Path path = null;
-            String orderColumn = (String) data.get("order");
-            if (orderColumn.equals("calendar"))
-                path = traceRoot.get("calendar");
-            if (orderColumn.equals("traceLevel"))
-                path = traceRoot.get("traceLevel");
-
-            if (path != null) {
-                if (data.containsKey("desc")) {
-                    order = cb.desc(path);
-                } else {
-                    order = cb.asc(path);
-                }
-                q.orderBy(order);
+        if (data.containsKey("order") && !((String)data.get("order")).isEmpty()) {
+            OrderRoute orderRoute = OrderRoute.Asc;
+            if (data.containsKey("desc")) {
+                orderRoute = OrderRoute.Desc;
             }
+
+            filter.setOrder((String) data.get("order") , orderRoute);
         }
 
-        Predicate inPredicate = null;
+
         if (data.containsKey("filter")){
-            String filter = (String) data.get("filter");
+            String filterValue = (String) data.get("filter");
             List<TraceLevel> traceLevels = new LinkedList<TraceLevel>(Arrays.asList(new TraceLevel[]{TraceLevel.Debug,TraceLevel.Event,TraceLevel.Warning,TraceLevel.Error,TraceLevel.Critical}));
-            TraceLevel traceLevel = TraceLevel.valueOf(filter);
+            TraceLevel traceLevel = TraceLevel.valueOf(filterValue);
             switch (traceLevel) {
                 case Critical:  traceLevels.remove(traceLevels.indexOf(TraceLevel.Error));
                 case Error:     traceLevels.remove(traceLevels.indexOf(TraceLevel.Warning));
@@ -113,7 +102,7 @@ public class TraceService extends AbstractService {
                 case Event:     traceLevels.remove(traceLevels.indexOf(TraceLevel.Debug));
                 case Debug: break;
             }
-            inPredicate = traceRoot.get("traceLevel").in(traceLevels);
+            filter.in("traceLevel", traceLevels);
         }
 
         Predicate betweenPredicate = null;
@@ -122,27 +111,15 @@ public class TraceService extends AbstractService {
             Date startDate = new Date((Integer)data.get("startDate"));
             Date endDate = new Date((Integer)data.get("endDate"));
 
-            betweenPredicate = cb.between(traceRoot.get("calendar"),startDate,endDate);
+            filter.betweenDates("calendar" , startDate, endDate);
         }
-
-        if (betweenPredicate != null || inPredicate != null) {
-            if (betweenPredicate != null && inPredicate != null)
-                q.where(cb.and(betweenPredicate,inPredicate));
-            else if (betweenPredicate == null)
-                q.where(inPredicate);
-            else
-                q.where(betweenPredicate);
-        }
-
 
         int first = (int) data.get("first");
         int max   = (int) data.get("max");
 
-        Query query = entityManager.createQuery(q);
+        Query query = filter.getQuery(first,max);
         query.setFirstResult(first);
         query.setMaxResults(max);
-
-
 
         List<Trace> traces = query.getResultList();
         return traces;

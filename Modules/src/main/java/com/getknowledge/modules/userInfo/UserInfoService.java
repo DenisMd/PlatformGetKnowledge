@@ -18,6 +18,8 @@ import com.getknowledge.modules.userInfo.socialLink.UserSocialLink;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.entities.AbstractEntity;
+import com.getknowledge.platform.base.repositories.FilterQuery;
+import com.getknowledge.platform.base.repositories.enumerations.OrderRoute;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.BootstrapService;
 import com.getknowledge.platform.base.services.ImageService;
@@ -36,9 +38,6 @@ import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import com.getknowledge.platform.utils.ModuleLocator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.session.SessionInformation;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -427,33 +426,15 @@ public class UserInfoService extends AbstractService implements BootstrapService
     @Transactional
     public List<UserInfo> findUsers(HashMap<String,Object> data) throws NotAuthorized {
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<UserInfo> q = cb.createQuery(UserInfo.class);
-        Root<UserInfo> userInfoRoot = q.from(UserInfo.class);
-        Join<UserInfo,User> userJoin = userInfoRoot.join("user",JoinType.INNER);
-        q.select(userInfoRoot);
+        FilterQuery<UserInfo> filter = userInfoRepository.initFilter();
 
-        Order order = null;
-        if (data.containsKey("order")) {
-            Path path = null;
-            String orderColumn = (String) data.get("order");
-            if (orderColumn.equals("id"))
-                path = userInfoRoot.get("id");
-            if (orderColumn.equals("user.login"))
-                path = userJoin.get("login");
-            if (orderColumn.equals("user.createDate"))
-                path = userJoin.get("createDate");
-            if (orderColumn.equals("user.enabled"))
-                path = userJoin.get("enabled");
-
-            if (path != null) {
-                if (data.containsKey("desc")) {
-                   order = cb.desc(path);
-                } else {
-                    order = cb.asc(path);
-                }
-                q.orderBy(order);
+        if (data.containsKey("order") && !((String)data.get("order")).isEmpty()) {
+            OrderRoute orderRoute = OrderRoute.Asc;
+            if (data.containsKey("desc")) {
+                orderRoute = OrderRoute.Desc;
             }
+
+            filter.setOrder((String) data.get("order") , orderRoute);
         }
 
         if (data.containsKey("searchText")) {
@@ -463,26 +444,19 @@ public class UserInfoService extends AbstractService implements BootstrapService
                 String lastName = split[0];
                 String firstName = split[1];
 
-                Predicate p1 = cb.like(userInfoRoot.get("firstName"),"%"+firstName+"%");
-                Predicate p2 = cb.like(userInfoRoot.get("lastName"),"%"+lastName+"%");
-
-                q.where(cb.or(p1,p2));
+                filter.searchText(new String[]{"firstName","lastName"} ,
+                                              new String[]{firstName,lastName},false);
 
             } else {
-                Predicate p1 = cb.like(userInfoRoot.get("firstName"),"%"+search+"%");
-                Predicate p2 = cb.like(userInfoRoot.get("lastName"),"%"+search+"%");
-                Predicate p3 = cb.like(userJoin.get("login"),"%"+search+"%");
-
-                q.where(cb.or(p1,cb.or(p2,p3)));
+                filter.searchText(new String[]{"firstName","lastName","user.login"} ,
+                        new String[]{search,search,search},true);
             }
         }
 
         int first = (int) data.get("first");
         int max   = (int) data.get("max");
 
-        Query query = entityManager.createQuery(q);
-        query.setFirstResult(first);
-        query.setMaxResults(max);
+        Query query = filter.getQuery(first,max);
 
         List<UserInfo> userInfos = query.getResultList();
         userInfos.forEach(u -> {
