@@ -18,7 +18,7 @@ public class FilterQuery<T> {
     private CriteriaBuilder cb = null;
     private List<Order> orders = null;
     private Predicate previous = null;
-    private EntityManager entityManager;
+    public EntityManager entityManager;
 
     public FilterQuery(EntityManager entityManager , Class<T> classEntity) {
         cb = entityManager.getCriteriaBuilder();
