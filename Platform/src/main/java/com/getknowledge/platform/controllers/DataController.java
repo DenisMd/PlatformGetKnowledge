@@ -120,6 +120,12 @@ public class DataController {
             ObjectNode objectNode = objectMapper.valueToTree(entity);
             objectNode.put("editable" , isAccessEdit(principal,entity));
             objectNode.put("creatable" , isAccessCreate(principal, entity));
+            if (entity instanceof ImageService) {
+                ImageService imageService = (ImageService) entity;
+                if (imageService.getImageById(entity.getId()) != null) {
+                    objectNode.put("imageViewExist" , true);
+                }
+            }
             return objectNode.toString();
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
@@ -245,6 +251,12 @@ public class DataController {
                 ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
                 objectNode.put("editable" , isAccessEdit(principal,abstractEntity));
                 objectNode.put("creatable" , isAccessCreate(principal,abstractEntity));
+                if (abstractEntity instanceof ImageService) {
+                    ImageService imageService = (ImageService) abstractEntity;
+                    if (imageService.getImageById(abstractEntity.getId()) != null) {
+                        objectNode.put("imageViewExist" , true);
+                    }
+                }
                 jsonResult += objectNode.toString();
                 jsonResult += ",";
             }
@@ -294,6 +306,12 @@ public class DataController {
                 ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
                 objectNode.put("editable" , isAccessEdit(principal,abstractEntity));
                 objectNode.put("creatable" , isAccessCreate(principal,abstractEntity));
+                if (abstractEntity instanceof ImageService) {
+                    ImageService imageService = (ImageService) abstractEntity;
+                    if (imageService.getImageById(abstractEntity.getId()) != null) {
+                        objectNode.put("imageViewExist" , true);
+                    }
+                }
                 jsonResult += objectNode.toString();
                 jsonResult += ",";
             }
