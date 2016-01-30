@@ -36,7 +36,7 @@
                 </p>
             </md-content>
         </md-tab>
-        <md-tab label="{{translate('section_info')}}" ng-if="currentSection != null">
+        <md-tab label="{{translate('section_image')}}" ng-if="currentSection != null">
             <md-content class="md-padding">
                 <module-template name="inputs/selectImage" data="getCropImageData(currentSection)"></module-template>
             </md-content>

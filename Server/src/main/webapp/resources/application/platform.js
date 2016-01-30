@@ -156,7 +156,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             this.result = {first : this.first, max : this.max};
 
             this.increase = function (value) {
-                this.first += value;
+                this.result.first = this.first + value;
             };
 
             this.setOrder = function(order,desc) {
@@ -196,6 +196,10 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             this.clearOrder = function () {
                 this.result.order = [];
             };
+
+            this.reload = function () {
+                this.result.first = 0;
+            }
         }
 
         this.createFilter = function(className,first,max) {

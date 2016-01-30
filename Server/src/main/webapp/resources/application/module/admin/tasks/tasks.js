@@ -18,7 +18,7 @@ model.controller("tasksCtrl", function ($scope, $state,$http,applicationService,
     };
 
     $scope.searchTasks = function(taskStatus) {
-        filter.first = 0;
+        filter.reload();
         $scope.tasks = [];
         filter.equal("taskStatus",taskStatus);
         doAction();
@@ -29,7 +29,7 @@ model.controller("tasksCtrl", function ($scope, $state,$http,applicationService,
         reverse = !reverse;
         filter.clearOrder();
         filter.setOrder(orderName,reverse);
-        filter.first = 0;
+        filter.reload();
         $scope.tasks = [];
         doAction();
     };

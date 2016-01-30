@@ -28,7 +28,7 @@ model.controller("logsCtrl", function ($scope, $state,$http,applicationService,p
         filter.setOrder(orderName,reverse);
 
 
-        filter.first = 0;
+        filter.reload();
         $scope.logs = [];
         doAction();
     };
@@ -39,7 +39,7 @@ model.controller("logsCtrl", function ($scope, $state,$http,applicationService,p
         } else {
             filter.in("traceLevel" , [traceLevel]);
         }
-        filter.first = 0;
+        filter.reload();
         $scope.logs = [];
         doAction();
     };
