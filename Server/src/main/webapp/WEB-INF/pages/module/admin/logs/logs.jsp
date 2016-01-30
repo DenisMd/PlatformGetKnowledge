@@ -56,7 +56,7 @@
     <md-tabs md-dynamic-height md-border-bottom>
         <md-tab label="{{translate('log_stackTrace')}}" ng-if="currentLog != null && currentLog.stackTrace != null">
             <md-content flex layout-padding>
-                <md-button class="btn md-raised md-warn"  data-clipboard-text="{{currentLog.stackTrace}}">
+                <md-button class="btn md-raised md-warn clipboard"  data-clipboard-text="{{currentLog.stackTrace}}">
                     {{translate("copyToClipBoard")}}
                 </md-button>
                 <p id="bar">

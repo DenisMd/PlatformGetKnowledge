@@ -66,7 +66,7 @@
                 </div>
             </md-toolbar>
             <md-content flex layout-padding>
-                <md-button class="btn md-raised md-warn"  data-clipboard-text="{{currentService.stackTrace}}">
+                <md-button class="btn md-raised md-warn clipboard"  data-clipboard-text="{{currentService.stackTrace}}">
                     {{translate("copyToClipBoard")}}
                 </md-button>
                 <p id="bar">
