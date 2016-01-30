@@ -348,7 +348,6 @@ public class DataController {
             };
 
             HashMap<String, Object> data = objectMapper.readValue(properties, typeRef);
-
             FilterQuery filterQuery = repository.initFilter();
 
 
@@ -382,6 +381,22 @@ public class DataController {
                     i++;
                 }
                 filterQuery.searchText(fieldNames,fieldValues, searchText.containsKey("or"));
+            }
+
+            //in : {fieldName : "name" , values : ["value1" , "value2"]}
+            if (data.containsKey("in")) {
+                HashMap<String , Object> in = (HashMap<String, Object>) data.get("in");
+                String fieldName = (String) in.get("fieldName");
+                List<String> list = (List<String>) in.get("values");
+                filterQuery.in(fieldName , list);
+            }
+
+            //equal : {fieldName : "name" , value : "value"}
+            if (data.containsKey("equal")) {
+                HashMap<String , Object> equal = (HashMap<String, Object>) data.get("equal");
+                String fieldName = (String) equal.get("fieldName");
+                String value = (String) equal.get("value");
+                filterQuery.equal(fieldName,value);
             }
 
             int first = (int) data.get("first");

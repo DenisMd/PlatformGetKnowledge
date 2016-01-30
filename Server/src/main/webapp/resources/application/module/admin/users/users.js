@@ -26,8 +26,6 @@ model.controller("usersCtrl", function ($scope, applicationService, className,$m
 
         filter.clearOrder();
         filter.setOrder(orderName,reverse);
-
-
         filter.first = 0;
         $scope.users = [];
         doAction();

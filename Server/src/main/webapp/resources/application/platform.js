@@ -171,6 +171,28 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 this.result.searchText = fields;
             };
 
+            this.in = function (fieldName, values) {
+                this.result.in = {
+                    fieldName : fieldName,
+                    values : values
+                }
+            };
+
+            this.equal = function (fieldName, value) {
+              this.result.equal = {
+                  fieldName : fieldName,
+                  value : value
+              }
+            };
+
+            this.clearEqual = function() {
+                delete this.result.equal;
+            };
+
+            this.clearIn = function (fieldName, values) {
+                delete this.result.in;
+            };
+
             this.clearOrder = function () {
                 this.result.order = [];
             };

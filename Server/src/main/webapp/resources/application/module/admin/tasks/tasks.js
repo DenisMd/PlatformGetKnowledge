@@ -1,12 +1,6 @@
 model.controller("tasksCtrl", function ($scope, $state,$http,applicationService,pageService,className) {
 
-    var first = 0;
-    var max  = 10;
-    var order = "";
-    var reverse = false;
-    var filter = "";
-    var startDate = null;
-    var endDate = null;
+    var filter = applicationService.createFilter(className.tasks,0,10);
     $scope.tasks = [];
 
     var addTask = function(task){
@@ -14,26 +8,7 @@ model.controller("tasksCtrl", function ($scope, $state,$http,applicationService,
     };
 
     var doAction = function(){
-        var request = {
-            "first" : first,
-            "max" : max,
-            "order" : order
-        };
-
-        if (reverse){
-            request.desc = "desc";
-        }
-
-        if (filter){
-            request.filter = filter;
-        }
-
-        if (startDate != null && endDate != null) {
-            request.startDate = startDate;
-            request.endDate = endDate;
-        }
-
-        applicationService.action($scope,"",className.tasks,"taskFilter",request,addTask);
+        applicationService.filterRequest($scope,"",filter,addTask);
     };
 
     doAction();
@@ -43,17 +18,18 @@ model.controller("tasksCtrl", function ($scope, $state,$http,applicationService,
     };
 
     $scope.searchTasks = function(taskStatus) {
-        console.log("dasdasda " + taskStatus);
-        first = 0;
+        filter.first = 0;
         $scope.tasks = [];
-        filter = taskStatus;
+        filter.equal("taskStatus",taskStatus);
         doAction();
     };
 
+    var reverse = false;
     $scope.setTaskOrder = function(orderName) {
         reverse = !reverse;
-        order = orderName;
-        first = 0;
+        filter.clearOrder();
+        filter.setOrder(orderName,reverse);
+        filter.first = 0;
         $scope.tasks = [];
         doAction();
     };
