@@ -92,6 +92,20 @@ public class DataController {
 
 //    Methods for read ----------------------------------------------------------------------------
 
+    private String prepareJson (AbstractEntity abstractEntity,Class classEntity,Principal principal) throws NotAuthorized, ModuleNotFound {
+        ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
+        objectNode.put("editable" , isAccessEdit(principal,abstractEntity));
+        objectNode.put("creatable" , isAccessCreate(principal, abstractEntity));
+        AbstractService abstractService = moduleLocator.findService(classEntity);
+        if (abstractService instanceof ImageService) {
+            ImageService imageService = (ImageService) abstractService;
+            if (imageService.getImageById(abstractEntity.getId()) != null) {
+                objectNode.put("imageViewExist" , true);
+            }
+        }
+        return objectNode.toString();
+    }
+
     @RequestMapping(value = "/read", method = RequestMethod.GET)
     public @ResponseBody String read(@RequestParam(value = "id" ,required = true) Long id,
                                      @RequestParam(value ="className" , required = true) String className, Principal principal) throws PlatformException {
@@ -117,17 +131,7 @@ public class DataController {
 
             entity = AbstractEntity.prepare(entity,repository,getCurrentUser(principal),moduleLocator);
 
-            ObjectNode objectNode = objectMapper.valueToTree(entity);
-            objectNode.put("editable" , isAccessEdit(principal,entity));
-            objectNode.put("creatable" , isAccessCreate(principal, entity));
-            AbstractService abstractService = moduleLocator.findService(classEntity);
-            if (abstractService instanceof ImageService) {
-                ImageService imageService = (ImageService) abstractService;
-                if (imageService.getImageById(entity.getId()) != null) {
-                    objectNode.put("imageViewExist" , true);
-                }
-            }
-            return objectNode.toString();
+            return prepareJson(entity,classEntity,principal);
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
         } catch (Exception e) {
@@ -135,6 +139,8 @@ public class DataController {
             return null;
         }
     }
+
+
 
     @RequestMapping(value = "/readVideo", method = RequestMethod.GET)
     public void readVideoFile(@RequestParam(value = "id" ,required = true) Long id,
@@ -249,17 +255,7 @@ public class DataController {
                     throw new NotAuthorized("access denied for read entity from list" , trace, TraceLevel.Warning);
                 }
                 abstractEntity = AbstractEntity.prepare(abstractEntity,repository,getCurrentUser(principal),moduleLocator);
-                ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
-                objectNode.put("editable" , isAccessEdit(principal,abstractEntity));
-                objectNode.put("creatable" , isAccessCreate(principal,abstractEntity));
-                AbstractService abstractService = moduleLocator.findService(classEntity);
-                if (abstractService instanceof ImageService) {
-                    ImageService imageService = (ImageService) abstractService;
-                    if (imageService.getImageById(abstractEntity.getId()) != null) {
-                        objectNode.put("imageViewExist" , true);
-                    }
-                }
-                jsonResult += objectNode.toString();
+                jsonResult +=  prepareJson(abstractEntity,classEntity,principal);
                 jsonResult += ",";
             }
             if (jsonResult.length() > 1)
@@ -304,18 +300,7 @@ public class DataController {
                     // TODO: question may continue?
                     throw new NotAuthorized("access denied for read entity from list partial" , trace, TraceLevel.Warning);
                 }
-                abstractEntity = AbstractEntity.prepare(abstractEntity,repository,getCurrentUser(principal),moduleLocator);
-                ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
-                objectNode.put("editable" , isAccessEdit(principal,abstractEntity));
-                objectNode.put("creatable" , isAccessCreate(principal,abstractEntity));
-                AbstractService abstractService = moduleLocator.findService(classEntity);
-                if (abstractService instanceof ImageService) {
-                    ImageService imageService = (ImageService) abstractService;
-                    if (imageService.getImageById(abstractEntity.getId()) != null) {
-                        objectNode.put("imageViewExist" , true);
-                    }
-                }
-                jsonResult += objectNode.toString();
+                jsonResult += prepareJson(abstractEntity,classEntity,principal);
                 jsonResult += ",";
             }
             if (jsonResult.length() > 1)
