@@ -70,6 +70,15 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         entityManager.flush();
     }
 
+    public void merge(T object) {
+        if(object == null) {
+            throw new NullPointerException();
+        }
+
+        entityManager.merge(object);
+        entityManager.flush();
+    }
+
     public void remove(Long id) throws PlatformException {
         if(id == null) {
             throw new NullPointerException();

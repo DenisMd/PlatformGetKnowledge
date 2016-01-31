@@ -35,7 +35,7 @@ public class UserRepository extends BaseRepository<User> {
             throw new NullPointerException();
         }
         if (object.getHashPwd() == null) {
-            object.setHashPwd(object.getPwdTransient());
+            object.hashRawPassword(object.getPwdTransient());
         }
         super.create(object);
     }

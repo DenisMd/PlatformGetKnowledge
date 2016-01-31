@@ -9,7 +9,6 @@
 
     <http pattern="/resources/**" security="none"></http>
     <http auto-config="true">
-        <intercept-url pattern="/admin**" access="ROLE_USER" />
         <form-login
                 login-page="/login"
                 default-target-url="/successLogin"
@@ -19,7 +18,7 @@
 
         <session-management>
             <concurrency-control
-                    session-registry-ref="sessionRegistry" max-sessions="1" expired-url="/login?expire" />
+                    session-registry-ref="sessionRegistry" max-sessions="1" expired-url="/" />
         </session-management>
     </http>
 

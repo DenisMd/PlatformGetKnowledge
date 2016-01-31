@@ -3,6 +3,8 @@ package com.getknowledge.modules.menu.item;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
+import com.getknowledge.platform.modules.permission.Permission;
+import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -70,6 +72,8 @@ public class MenuItem extends AbstractEntity {
     @Override
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
+        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditSections.getName()));
+        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.EditSections.getName()));
         return authorizationList;
     }
 }
