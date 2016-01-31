@@ -6,6 +6,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +21,7 @@ public class FilterQuery<T> {
     private List<Order> orders = null;
     private Predicate previous = null;
     public EntityManager entityManager;
+    private Class<T>  pClassEntity = null;
 
     public FilterQuery(EntityManager entityManager , Class<T> classEntity) {
         cb = entityManager.getCriteriaBuilder();
@@ -27,6 +30,7 @@ public class FilterQuery<T> {
         orders = new ArrayList<>();
         previous = null;
         this.entityManager = entityManager;
+        pClassEntity = classEntity;
     }
 
     private Path parseField(String field) {
@@ -88,9 +92,52 @@ public class FilterQuery<T> {
         previous = result;
     }
 
+    private Enum covertStringToEnum(String fieldName , String value) {
+        try {
+            if (fieldName.contains(".")) {
+                String [] split = fieldName.split("\\.");
+                Class type = pClassEntity.getDeclaredField(split[0]).getType();
+                for (int i=1; i < split.length;i++) {
+                    type = type.getClass().getDeclaredField(split[i]).getType();
+                }
+                return Enum.valueOf((Class<Enum>) type, value);
+            }
+            Enum result = Enum.valueOf((Class<Enum>) pClassEntity.getDeclaredField(fieldName).getType(), value);
+            return result;
+        } catch (NoSuchFieldException e) {
+            return null;
+        }
+    }
+
+    private boolean isEnum(String fieldName) {
+
+        try {
+            if (fieldName.contains(".")) {
+                String [] split = fieldName.split("\\.");
+                Class type = pClassEntity.getDeclaredField(split[0]).getType();
+                for (int i=1; i < split.length;i++) {
+                    type = type.getClass().getDeclaredField(split[i]).getType();
+                }
+                return type.isEnum();
+            }
+            Field result = pClassEntity.getDeclaredField(fieldName);
+            return result.getType().isEnum();
+        } catch (NoSuchFieldException e) {
+            return false;
+        }
+    }
+
     public void in (String  field, List values) {
 
         Path path = parseField(field);
+
+        if (isEnum(field)) {
+            List enumList = new ArrayList<>();
+            for (Object value : values) {
+                enumList.add(covertStringToEnum(field, (String) value));
+            }
+            values = enumList;
+        }
 
         Predicate inP = path.in(values);
 
@@ -114,6 +161,10 @@ public class FilterQuery<T> {
 
     public void equal(String field, Object value) {
         Path path = parseField(field);
+
+        if (isEnum(field)) {
+            value = covertStringToEnum(field, (String) value);
+        }
 
         Predicate result = cb.equal(path,value);
 

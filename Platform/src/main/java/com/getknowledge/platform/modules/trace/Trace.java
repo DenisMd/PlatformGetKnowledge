@@ -23,7 +23,7 @@ public class Trace extends AbstractEntity {
     @Column(columnDefinition = "Text" , name = "stack_trace")
     private String stackTrace;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Calendar calendar = Calendar.getInstance();
 
     public void setCalendar(Calendar calendar) {

@@ -1,12 +1,7 @@
 model.controller("logsCtrl", function ($scope, $state,$http,applicationService,pageService,className) {
 
-    var first = 0;
-    var max  = 10;
-    var order = "";
-    var reverse = false;
-    var filter = "";
-    var startDate = null;
-    var endDate = null;
+
+    var filter = applicationService.createFilter(className.trace,0,10);
     $scope.logs = [];
 
     var addLog = function(log){
@@ -21,42 +16,31 @@ model.controller("logsCtrl", function ($scope, $state,$http,applicationService,p
     };
 
     var doAction = function(){
-        var request = {
-            "first" : first,
-            "max" : max,
-            "order" : order
-        };
-
-        if (reverse){
-            request.desc = "desc";
-        }
-
-        if (filter){
-            request.filter = filter;
-        }
-
-        if (startDate != null && endDate != null) {
-            request.startDate = startDate;
-            request.endDate = endDate;
-        }
-
-        applicationService.action($scope,"",className.trace,"traceFilter",request,addLog);
+        applicationService.filterRequest($scope,"",filter,addLog);
     };
 
     doAction();
 
+    var reverse = false;
     $scope.setLogOrder = function(orderName) {
         reverse = !reverse;
-        order = orderName;
-        first = 0;
+        filter.clearOrder();
+        filter.setOrder(orderName,reverse);
+
+
+        filter.reload();
         $scope.logs = [];
         doAction();
     };
 
     $scope.searchLogs = function(traceLevel) {
-        first = 0;
+        if (!traceLevel) {
+            filter.clearIn();
+        } else {
+            filter.in("traceLevel" , [traceLevel]);
+        }
+        filter.reload();
         $scope.logs = [];
-        filter = traceLevel;
         doAction();
     };
 
@@ -66,7 +50,7 @@ model.controller("logsCtrl", function ($scope, $state,$http,applicationService,p
     };
 
     $scope.loadMore = function () {
-        first += 10;
+        filter.increase(10);
         doAction();
     };
 
