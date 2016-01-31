@@ -1,7 +1,7 @@
 package com.getknowledge.platform.modules.permission.names;
 
 public enum PermissionNames {
-    EditSections("Edit sections");
+    EditSections("Edit sections") , EditMenu("Edit menu");
 
     private String name;
 

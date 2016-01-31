@@ -67,9 +67,13 @@ public class User extends AbstractEntity {
         return hashPwd;
     }
 
-    public void setHashPwd(String password) {
+    public void hashRawPassword (String rawPassword) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        this.hashPwd = bCryptPasswordEncoder.encode(password);
+        this.hashPwd = bCryptPasswordEncoder.encode(rawPassword);
+    }
+
+    public void setHashPwd(String hashPwd) {
+        this.hashPwd = hashPwd;
     }
 
     public boolean isEnabled() {

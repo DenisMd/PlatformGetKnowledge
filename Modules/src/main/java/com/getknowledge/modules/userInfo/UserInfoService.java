@@ -117,7 +117,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
             User user = new User();
             user.setLogin(login);
-            user.setHashPwd(password);
+            user.hashRawPassword(password);
             user.setRole(role);
             user.setEnabled(true);
             user.setPwdTransient(password);
@@ -193,7 +193,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
         User user = new User();
         user.setLogin(login);
-        user.setPwdTransient(password);
+        user.hashRawPassword(password);
         user.setEnabled(false);
         user.setRole(roleRepository.getSingleEntityByFieldAndValue("roleName", RoleName.ROLE_USER.name()));
         userRepository.create(user);

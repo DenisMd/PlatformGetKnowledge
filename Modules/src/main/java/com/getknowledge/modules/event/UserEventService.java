@@ -32,7 +32,7 @@ public class UserEventService extends AbstractService {
         String uuid = (String) data.get("uuid");
         UserEvent registerInfo = userEventRepository.getSingleEntityByFieldAndValue("uuid", uuid);
         if (registerInfo == null || registerInfo.getUserEventType() != UserEventType.Register) return RegisterResult.NotFound;
-        User user = registerInfo.getUserInfo().getUser();
+        User user = userRepository.read(registerInfo.getUserInfo().getUser().getId());
         if (!user.isEnabled()) {
             user.setEnabled(true);
             userRepository.update(user);
@@ -60,8 +60,9 @@ public class UserEventService extends AbstractService {
         String uuid = (String) data.get("uuid");
         UserEvent restorePasswordInfo = userEventRepository.getSingleEntityByFieldAndValue("uuid", uuid);
         if (restorePasswordInfo == null || restorePasswordInfo.getUserEventType() != UserEventType.RestorePassword) return Result.Failed;
-        User user = restorePasswordInfo.getUserInfo().getUser();
-        user.setHashPwd((String) data.get("password"));
+        User user = userRepository.read(restorePasswordInfo.getUserInfo().getUser().getId());
+        String password = (String) data.get("password");
+        user.hashRawPassword(password);
         userRepository.update(user);
         userEventRepository.remove(restorePasswordInfo.getId());
         return Result.Complete;

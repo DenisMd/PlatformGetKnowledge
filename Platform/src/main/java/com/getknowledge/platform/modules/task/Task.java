@@ -24,6 +24,7 @@ public class Task  extends AbstractEntity{
     private TaskStatus taskStatus = TaskStatus.NotStarted;
 
     @Column(name = "start_date")
+    @Temporal(value = TemporalType.TIMESTAMP)
     private Calendar startDate;
 
     @Column(name = "service_name")
