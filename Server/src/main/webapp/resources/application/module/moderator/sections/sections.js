@@ -42,6 +42,7 @@ model.controller("sectionsCtrl", function ($scope, $state,$http,applicationServi
 
     $scope.getCropImageData  = function(currentSection){
         $scope.croppedImg.src = $scope.sectionImg(currentSection.id);
+        $scope.croppedImg.notUseDefault = currentSection.imageViewExist;
         return $scope.croppedImg;
     };
 

@@ -3,7 +3,7 @@
         <div class="image-container">
             <img ng-src="{{getImage()}}" class="original-image">
         </div>
-        <div class="fileUpload btn original-image-btn">
+        <div class="fileUpload btn btn-img original-image-btn">
             <span ng-show="showModal()">{{translate("uploadAvatar")}}</span>
             <span ng-hide="showModal()">{{translate("change_image")}}</span>
             <input type="file" id="fileInput" class="upload" onchange="angular.element(this).scope().uploadFile(this.files[0],event);"/>
@@ -13,19 +13,67 @@
 
     <script type="text/ng-template" id="cropModal.html">
         <md-dialog aria-label="Crop dialog" ng-cloak>
-            <md-dialog-content>
-                <div class="crop-body">
-                    <div class="crop-modal cropArea">
+            <md-dialog-content >
+                <div layout="row" class="crop-content">
+                    <div class="cropArea"  flex="66">
                         <img-crop image="parentScope.item.original" result-image="parentScope.item.cropImage"
                                   on-change="parentScope.onChange($dataURI)"
                                   area-type="{{parentScope.getAreaType()}}">
                         </img-crop>
                     </div>
+                    <div class="crop-body text-center" flex>
+                        <img ng-src="{{parentScope.item.cropImage}}" class="original-image" layout-margin>
+                        <div class="fileUpload btn btn-img btn-reload-img" layout-margin>
+                            <span>{{parentScope.translate("change_image")}}</span>
+                            <input type="file" class="upload" onchange="angular.element(this).scope().parentScope.uploadFile(this.files[0],event);"/>
+                        </div>
+                        <div layout="row">
+                            <button type="button" class="btn btn-success" ng-click="cancel()" flex layout-margin>{{parentScope.translate('save')}}</button>
+                            <button type="button" class="btn btn-default" ng-click="cancel()" flex layout-margin>{{parentScope.translate('cancel')}}</button>
+                        </div>
+                    </div>
                 </div>
             </md-dialog-content>
-            <md-dialog-actions>
-                <button type="button" class="btn btn-primary" ng-click="cancel()">{{parentScope.translate('save')}}</button>
-            </md-dialog-actions>
+        </md-dialog>
+    </script>
+</div>
+
+<div ng-controller="AppCtrl" class="md-padding" id="popupContainer" ng-cloak>
+    <p class="inset">
+        Open a dialog over the app's content. Press escape or click outside to close the dialog and
+        send focus back to the triggering button.
+    </p>
+    <div class="dialog-demo-content" layout="row" layout-wrap layout-margin>
+
+        <md-button class="md-primary md-raised" ng-click="showAdvanced($event)" flex="100" flex-gt-md="auto">
+            Custom Dialog
+        </md-button>
+        <div hide-gt-sm layout="row" layout-align="center center" flex="100">
+            <md-checkbox ng-model="customFullscreen" aria-label="Fullscreen Custom Dialog">Custom Dialog Fullscreen</md-checkbox>
+        </div>
+
+    </div>
+    <p class="footer">Note: The <b>Confirm</b> dialog does not use <code>$mdDialog.clickOutsideToClose(true)</code>.</p>
+    <div ng-if="status">
+        <br/>
+        <b layout="row" layout-align="center center" class="md-padding">
+            {{status}}
+        </b>
+    </div>
+    <script type="text/ng-template" id="dialog1.tmpl.html">
+        <md-dialog aria-label="Mango (Fruit)" flex="30" ng-cloak>
+            <form>
+                <md-dialog-content>
+                    <div class="md-dialog-content">
+                        <p><img style="margin: auto; width: 100%;" alt="Lush mango tree" src="/resources/image/default/camera.png"></p>
+                        </div>
+                </md-dialog-content>
+                <md-dialog-actions layout="row">
+                    <md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" md-autofocus>
+                        More on Wikipedia
+                    </md-button>
+                </md-dialog-actions>
+            </form>
         </md-dialog>
     </script>
 </div>

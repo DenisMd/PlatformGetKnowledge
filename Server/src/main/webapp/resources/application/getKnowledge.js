@@ -559,7 +559,7 @@ model.controller("selectImgCtrl", function($scope){
 
         if (angular.isFunction($scope.getData().save)) {
             var file = base64ToBlob(element);
-            $scope.getData().save(file);
+            //$scope.getData().save(file);
         }
     };
 
@@ -582,16 +582,19 @@ model.controller("selectImgCtrl", function($scope){
     };
 
     $scope.getImage = function(){
-        var image = $scope.getData().src;
-        if (image){
-            if (!useNewImage){
-                $scope.originalImg = image;
+        var notUseDefault = $scope.getData().notUseDefault;
+        if (notUseDefault) {
+            var image = $scope.getData().src;
+            if (image) {
+                if (!useNewImage) {
+                    $scope.originalImg = image;
+                }
+                return $scope.originalImg;
+            } else {
+                $scope.originalImg = ""
             }
-            return $scope.originalImg;
-        } else {
-            $scope.originalImg = ""
         }
-        return "/resources/image/template/camera.png";
+        return "/resources/image/default/camera.png";
     };
 
     function base64ToBlob(base64Data) {
@@ -798,3 +801,40 @@ model.service('arcService', function(){
 });
 
 
+model.controller('AppCtrl', function($scope, $mdDialog, $mdMedia) {
+        $scope.status = '  ';
+        $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
+
+        $scope.showAdvanced = function(ev) {
+            var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+            $mdDialog.show({
+                controller: function ($scope, $mdDialog) {
+                    $scope.hide = function() {
+                        $mdDialog.hide();
+                    };
+                    $scope.cancel = function() {
+                        $mdDialog.cancel();
+                    };
+                    $scope.answer = function(answer) {
+                        $mdDialog.hide(answer);
+                    };
+                },
+                templateUrl: 'dialog1.tmpl.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose:false,
+                fullscreen: useFullScreen
+            })
+                .then(function(answer) {
+                    $scope.status = 'You said the information was "' + answer + '".';
+                }, function() {
+                    $scope.status = 'You cancelled the dialog.';
+                });
+            $scope.$watch(function() {
+                return $mdMedia('xs') || $mdMedia('sm');
+            }, function(wantsFullScreen) {
+                $scope.customFullscreen = (wantsFullScreen === true);
+            });
+        };
+
+    });
