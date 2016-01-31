@@ -36,7 +36,8 @@ model.controller("sectionsCtrl", function ($scope, $state,$http,applicationServi
         save: function(file){
             $scope.updateImage(file);
         },
-        isInModal:true
+        isInModal:true,
+        areaType:"square"
     };
 
     $scope.getCropImageData  = function(currentSection){

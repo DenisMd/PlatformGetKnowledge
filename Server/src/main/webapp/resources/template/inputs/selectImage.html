@@ -12,21 +12,20 @@
 
 
     <script type="text/ng-template" id="cropModal.html">
-        <md-dialog ng-cloak>
-        <div class="modal-body">
-            <div class="crop-modal cropArea">
-                <img-crop image="item.original" result-image="item.cropImage"
-                          on-change="onChange($dataURI)"
-                          on-load-begin="onLoadBegin()"
-                          on-load-done="onLoadDone()"
-                          on-load-error="onLoadError()"
-                          area-type="{{getAreaType()}}">
-                </img-crop>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-primary" ng-click="cancel()">{{parentScope.translate('save')}}</button>
-        </div>
+        <md-dialog aria-label="Crop dialog" ng-cloak>
+            <md-dialog-content>
+                <div class="crop-body">
+                    <div class="crop-modal cropArea">
+                        <img-crop image="parentScope.item.original" result-image="parentScope.item.cropImage"
+                                  on-change="parentScope.onChange($dataURI)"
+                                  area-type="{{parentScope.getAreaType()}}">
+                        </img-crop>
+                    </div>
+                </div>
+            </md-dialog-content>
+            <md-dialog-actions>
+                <button type="button" class="btn btn-primary" ng-click="cancel()">{{parentScope.translate('save')}}</button>
+            </md-dialog-actions>
         </md-dialog>
     </script>
 </div>
