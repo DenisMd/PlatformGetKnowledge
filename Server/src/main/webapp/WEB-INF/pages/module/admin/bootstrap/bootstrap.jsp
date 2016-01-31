@@ -78,7 +78,7 @@
 </md-content>
 
 <script type="text/ng-template" id="doBootstrapModal.html">
-    <md-dialog  ng-cloak>
+    <md-dialog ng-cloak>
         <form>
             <md-toolbar>
                 <div class="md-toolbar-tools">

@@ -35,7 +35,8 @@ model.controller("sectionsCtrl", function ($scope, $state,$http,applicationServi
     $scope.croppedImg = {
         save: function(file){
             $scope.updateImage(file);
-        }
+        },
+        isInModal:true
     };
 
     $scope.getCropImageData  = function(currentSection){

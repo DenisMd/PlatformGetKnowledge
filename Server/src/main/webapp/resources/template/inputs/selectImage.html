@@ -3,15 +3,16 @@
         <div class="image-container">
             <img ng-src="{{getImage()}}" class="original-image">
         </div>
-        <button class="btn original-image-btn" ng-show="showModal()">{{translate("change_image")}}</button>
-        <div class="fileUpload btn original-image-btn" ng-hide="showModal()">
-            <span>{{translate("uploadAvatar")}}</span>
-            <input type="file" id="fileInput" class="upload" onchange="angular.element(this).scope().uploadFile(this.files[0]);"/>
+        <div class="fileUpload btn original-image-btn">
+            <span ng-show="showModal()">{{translate("uploadAvatar")}}</span>
+            <span ng-hide="showModal()">{{translate("change_image")}}</span>
+            <input type="file" id="fileInput" class="upload" onchange="angular.element(this).scope().uploadFile(this.files[0],event);"/>
         </div>
     </div>
 
 
     <script type="text/ng-template" id="cropModal.html">
+        <md-dialog ng-cloak>
         <div class="modal-body">
             <div class="crop-modal cropArea">
                 <img-crop image="item.original" result-image="item.cropImage"
@@ -26,5 +27,6 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" ng-click="cancel()">{{parentScope.translate('save')}}</button>
         </div>
+        </md-dialog>
     </script>
 </div>

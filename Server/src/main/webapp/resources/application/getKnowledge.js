@@ -510,28 +510,8 @@ model.directive("hideOptions",function($document){
 });
 
 //crop image
-model.controller("selectImgCtrl", function($scope,$uibModal){
+model.controller("selectImgCtrl", function($scope){
 
-    var open = function (size , item , callBackForClose) {
-        var modalInstance = $uibModal.open({
-            animation: true,
-            templateUrl: 'cropModal.html',
-            controller: 'panelModalCtrl',
-            size: size,
-            resolve: {
-                item: function () {
-                    return item;
-                },
-                callbackForClose: function() {
-                    return callBackForClose;
-                }
-                ,
-                parentScope : function () {
-                    return $scope;
-                }
-            }
-        });
-    };
 
 
     $scope.originalImg='';
@@ -542,13 +522,13 @@ model.controller("selectImgCtrl", function($scope,$uibModal){
     //    keyboard: false
     //});
 
-    $scope.uploadFile = function(file) {
+    $scope.uploadFile = function(file,$event) {
         if (file) {
             // ng-img-crop
             var imageReader = new FileReader();
             imageReader.onload = function(image) {
-                if ($scope.isInModal) {
-                    initModalImage(image);
+                if ($scope.showModal()) {
+                    initModalImage(image,$event);
                 } else {
                     $scope.$apply(function($scope) {
                         useNewImage = true;
@@ -583,14 +563,14 @@ model.controller("selectImgCtrl", function($scope,$uibModal){
         }
     };
 
-    function initModalImage(image){
+    function initModalImage(image,event){
         $scope.$apply(function($scope) {
             $scope.originalImg = image.target.result;
-            var item = {
+            $scope.item = {
                 original : $scope.originalImg,
                 cropImage:  $scope.croppedImg
             };
-            open('lg',item,save);
+            $scope.showDialog(event,$scope,"cropModal.html",$scope.onChange);
         });
     }
 
