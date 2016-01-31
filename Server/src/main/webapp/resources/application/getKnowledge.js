@@ -512,8 +512,6 @@ model.directive("hideOptions",function($document){
 //crop image
 model.controller("selectImgCtrl", function($scope){
 
-
-
     $scope.originalImg='';
     $scope.croppedImg='';
 
@@ -744,6 +742,23 @@ model.controller("textareaCtrl",function($scope,$element){
 
 });
 
+model.controller("sectionCard",function($scope,applicationService,className){
+    applicationService.action($scope, "section" , className.section,"getSectionByNameAndLanguage" , {
+        language : $scope.application.language.capitalizeFirstLetter(),
+        name :  $scope.getData().sectionName,
+    } , function(section){
+        $scope.sectionCards = {
+            title : "categories",
+            cardsInRow : 3,
+            cards : section.menuItem.subItems,
+            prefix : section.menuItem.url
+        };
+    });
+
+    $scope.sectionImg = function(id){
+        return applicationService.imageHref(className.section,id);
+    };
+});
 
 //dialogs
 function DialogController($scope, $mdDialog , theScope) {
