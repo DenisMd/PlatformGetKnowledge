@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.dictionaries.city.City;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.menu.Menu;
-import com.getknowledge.modules.userInfo.post.Post;
 import com.getknowledge.modules.userInfo.socialLink.UserSocialLink;
 import com.getknowledge.platform.annotations.Access;
 import com.getknowledge.platform.annotations.ModuleInfo;
@@ -51,9 +50,6 @@ public class UserInfo  extends CloneableEntity<UserInfo> implements IUser{
 
     @Column(name = "man")
     private Boolean man;
-
-    @OneToOne
-    private Post post;
 
     @Access(myself = true)
     private Boolean firstLogin;
@@ -192,14 +188,6 @@ public class UserInfo  extends CloneableEntity<UserInfo> implements IUser{
 
     public void setCity(City city) {
         this.city = city;
-    }
-
-    public Post getPost() {
-        return post;
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
     }
 
     @Override

@@ -109,6 +109,13 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         return '#/' + $scope.application.language + url;
     };
 
+    $scope.openInNewTab = function(url) {
+        window.open(
+            url,
+            '_blank' // <- This is what makes it open in a new window.
+        );
+    }
+
     //смена языка
     $scope.changeLanguage = function (language) {
         if (!$scope.application.language || $scope.application.language === language) {
@@ -234,9 +241,18 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         };
     });
 
+    $scope.openSocialLink = function(name){
+        var object = $.grep($scope.mainLinks, function(e){ return e.name == name; });
+        if (object[0].link) {
+            $scope.openInNewTab(object[0].link);
+        }
+    };
+
+
+    applicationService.list($scope,"mainLinks" , className.socialLinks);
     applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {});
 
-    applicationService.action($scope , "countries" , "com.getknowledge.modules.dictionaries.country.Country" , "getCountries",{
+    applicationService.action($scope , "countries" ,className.country , "getCountries",{
         language : "Ru"
     });
 });

@@ -4,9 +4,11 @@ html, body{
     font-size: 14px;
     line-height: 1.5;
 }
+
 .full-window{
     height:100%;
 }
+
 p {
     font-size: 1em;
     line-height: 1.5em;
@@ -78,7 +80,6 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
 /*same height*/
 
 /* content styles */
-
 .inside {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -87,6 +88,7 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     background: -moz-linear-gradient(top, #f4f4f4 0%, #ededed 100%);
     background: -ms-linear-gradient(top, #f4f4f4 0%, #ededed 100%);
 }
+
 .inside-full-height {
     /*
     // if you want to give content full height give him height: 100%;
@@ -308,182 +310,6 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
 }
 
 /*--------------------------------------*/
-/*Menu*/
-
-.nav-menu {
-    width: 250px;
-    position: fixed;
-    background-color: #11171c;
-    bottom:0;
-    left: 0;
-    top: 44px;
-    color: #ffffff;
-    border-top:1px solid #000;
-    opacity: 1;
-    z-index: 500;
-}
-
-/*Top information*/
-.main-menu-info{
-    margin: 10px 0;
-    width: 100%;
-    border-bottom: 1px solid black;
-}
-
-/*User information*/
-.user-content{
-    position: relative;
-    height: 100%;
-}
-
-.user-info-card {
-    width: 100%;
-    margin-top: 20px;
-    text-align: center;
-    color: #ffffff;
-}
-
-.main-image {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    position: relative;
-    cursor: pointer;
-}
-
-.login-image{
-    background: none;
-}
-
-.logout{
-    color: inherit;
-    font-size: 14px;
-    display: inline-block;
-    margin-bottom: 10px;
-    cursor: pointer;
-}
-
-.logout:hover{
-    color: inherit;
-}
-
-.main-label {
-    font: 400 22px Corbel;
-    margin-top: 2px;
-    margin-bottom: 0;
-}
-
-.info-about-user{
-    font: 400 16px / 12px Corbel;
-}
-
-/*Link*/
-.link-card{
-    text-align: center;
-    display: inline-block;
-    width:100%;
-    margin: 15px 0;
-}
-
-.link{
-    text-align: center;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    border:0;
-    padding: 0;
-    background: url("../image/menu/social.png") no-repeat;
-    background-color: inherit;
-}
-.link:hover{
-    background-image: url("../image/menu/social-hover.png");
-}
-
-.link:focus,.link:hover{
-    border:0;
-    outline: 0;
-}
-
-
-.link-with-vk{
-    background-position: 2px -2px;
-}
-
-.link-with-facebook{
-    background-position: -53px -2px;
-}
-
-.link-with-twitter{
-    background-position: -106px -2px;
-}
-
-
-.link-with-github{
-    background-position: -158px -2px;
-}
-
-
-/*menu items*/
-.first-menu-items{
-    list-style: none;
-    font: 400 20px Corbel;
-    padding-left: 0;
-}
-
-.first-menu-item{
-    vertical-align: middle;
-    line-height: 45px;
-}
-
-.first-menu-item>a{
-    display: block;
-    text-decoration: none;
-    padding-left: 10px;
-}
-
-.first-menu-item a>img{
-    vertical-align: middle;
-    margin-right: 15px;
-    height: 25px;
-    width: 25px;
-}
-
-.first-menu-item a:hover>img{
-    transform: scale(1.1,1.1);
-}
-
-.second-menu-items{
-    font: 400 18px Corbel;
-    list-style: none;
-    padding: 5px 0;
-    margin: 0;
-}
-
-.second-menu-item{
-    vertical-align: middle;
-    line-height: 20px;
-}
-
-.second-menu-item>a{
-    display: block;
-    text-decoration: none;
-    padding-left: 60px;
-    color: #3f474e;
-}
-.second-menu-item a:hover{
-    color:#ffffff;
-}
-
-/*animation for menu*/
-.nav-menu.ng-hide-add, .animate-show.ng-hide-remove {
-    transition: all linear 0.5s;
-}
-
-.animate-show.ng-hide {
-    opacity: 0;
-    left:-250px;
-}
-/*--------------------------------------*/
 /*wrapper*/
 .wrapper{
     padding-top:60px;
@@ -498,146 +324,6 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     padding-left: 270px;
 }
 
-/*carousel*/
-.carousel-container{
-    margin-bottom: 20px;
-}
-
-.carousel-caption {
-    width: 100%;
-    background: rgba(52, 52, 52, 0.85);
-    left:0;
-    right: 0;
-    bottom: 0;
-}
-
-.carousel-indicators {
-    bottom : 0;
-}
-
-.carousel-slide{
-    max-height: 400px;
-}
-
-.carousel-slide img{
-    width:100%;
-}
-
-.site-information,.site-info-card{
-    width:100%;
-    position: relative;
-}
-
-.site-information a{
-    text-decoration: none;
-    display: inline-block;
-}
-
-.site-information .right-text{
-    margin-bottom: 20px;
-}
-
-.site-information .left-text{
-    margin-bottom: 20px;
-}
-
-.site-information:after,.site-info-card:after{
-    content:'';
-    display:table;
-    clear:both;
-}
-
-/*Index page video*/
-.video-content {
-    border-top: 2px solid #d8dfe5;
-    border-bottom: 2px solid #d8dfe5;
-    margin: 0 -20px;
-    padding-left: 10px;
-    padding-top: 10px;
-    background-color: #F6F8F8;
-}
-
-.video-text {
-    font-size: 22px;
-}
-
-.video-text-title {
-    color : #899b9f;
-    font-weight: 300;
-    font-size: 150%;
-}
-
-.video-image {
-    position: relative;
-    left: 0; top: 0;
-}
-.video-poster{
-    position: relative; top: 0; left: 0;
-}
-.video-play {
-    cursor: pointer;
-    position: absolute;
-    left:50%;
-    top: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    text-align: center;
-}
-.video-play span{
-    font-size: 70px;
-    color: #000000;
-}
-.video-play span:hover{
-    color: #17789D;
-}
-
-/*cards*/
-.thumbnail-height-300 {
-    height: 300px;
-}
-
-.col-info{
-    padding: 0 20px;
-    min-width: 300px;
-}
-
-.thumbnail-card{
-    margin-top: 25px;
-}
-
-.card{
-    position: relative;
-    height: 320px;
-}
-
-.card-image{
-    position: absolute;
-    top: -25px;
-    background: #fff;
-    border-radius: 50%;
-    padding: 5px;
-    margin: 0 0 0 -20px;
-    display: inline-block;
-}
-
-.card-image img{
-    padding: 3px;
-    width: 35px;
-    height: 35px;
-}
-
-.card-title{
-    color: #3AA0EC;
-}
-
-
-.card-footer{
-    position: absolute;
-    bottom: 15px;
-    width: 100%;
-    height: 38px;
-}
 
 /*--------------------------------------*/
 /*dictionary select*/
@@ -780,94 +466,7 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     padding: 0 1px;
 }
 
-/*select image*/
-.fileUpload {
-    position: relative;
-    overflow: hidden;
-    margin: 10px;
-    margin-left: 2px;
-}
-.fileUpload input.upload {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 0;
-    padding: 0;
-    font-size: 20px;
-    cursor: pointer;
-    opacity: 0;
-    filter: alpha(opacity=0);
-}
-.cropArea {
-    margin: 0 auto;
-    height: 300px;
-    width: 300px;
-}
 
-.well-dotted{
-    border: dotted 3px lightgray;
-    background: inherit;
-}
-
-.crop-modal {
-    padding-top: 20px;
-}
-
-.crop-body{
-    background: #404753;
-    color: #ffffff;
-    position: relative;
-}
-
-.crop-body img{
-    width: 90%;
-}
-
-.crop-content{
-    width:600px;
-}
-
-.original-image{
-    width: 100%;
-    height: 100%;
-}
-
-.main-image-container{
-    width:300px;
-}
-
-.image-container{
-    width:inherit;
-    height:300px;
-}
-
-.btn-img{
-    width:100%;
-    background: #50617c;
-    color:#ffffff;
-    margin:0;
-}
-.original-image-btn{
-    border-radius: 0 0 4px 4px;
-}
-
-.btn-reload-img{
-    width:90%;
-}
-
-.btn-img:hover{
-    color: #fff;
-}
-/*validation*/
-.on-error.ng-invalid.ng-dirty {
-    border-color: red;
-    outline-color: red;
-}
-
-.on-success.ng-valid.ng-dirty {
-    border-color: green;
-    outline-color: green;
-}
 
 /*datepicker*/
 .datepicker table{
@@ -883,7 +482,6 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
 .result-panel {
     padding: 5px;
 }
-
 
 /*editable textarea*/
 .editable-text-focus{

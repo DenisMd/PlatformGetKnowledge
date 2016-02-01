@@ -104,6 +104,7 @@ Moderator : ROLE_MODERATOR
         sections : /sections
         menu : /menu
         groupCourses : /groupCourses
+        socialLinks : /socialLinks
     programming : /section/programming : /resources/image/menu/icons/programming.png : d35136
         courses : /courses : /resources/image/menu/icons/courses.png
         books : /books : /resources/image/menu/icons/books.png

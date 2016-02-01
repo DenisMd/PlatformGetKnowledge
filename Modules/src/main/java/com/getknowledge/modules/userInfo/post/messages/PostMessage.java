@@ -1,4 +1,4 @@
-package com.getknowledge.modules.userInfo.post.message;
+package com.getknowledge.modules.userInfo.post.messages;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.userInfo.UserInfo;
@@ -7,6 +7,7 @@ import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 
 import javax.persistence.*;
+import java.util.Calendar;
 
 @Entity
 @Table(name = "post_message")
@@ -21,8 +22,23 @@ public class PostMessage extends AbstractEntity {
     @JsonIgnore
     private byte[] image;
 
+    @Column(name = "createTime")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar createTime;
+
     @OneToOne
     private UserInfo sender;
+
+    @OneToOne
+    private UserInfo recipient;
+
+    public UserInfo getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(UserInfo recipient) {
+        this.recipient = recipient;
+    }
 
     public byte[] getImage() {
         return image;
@@ -46,6 +62,14 @@ public class PostMessage extends AbstractEntity {
 
     public void setSender(UserInfo sender) {
         this.sender = sender;
+    }
+
+    public Calendar getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Calendar createTime) {
+        this.createTime = createTime;
     }
 
     @Override
