@@ -53,19 +53,22 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
     };
 
     //Dialog
-    $scope.showDialog = function (ev,$scope,htmlName,callbackForOk) {
+    $scope.showDialog = function (ev,$scope,htmlName,callbackForOk,outsideToClose,onRemoving) {
         var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+        var clickOutsideToClose = angular.isDefined(outsideToClose)? outsideToClose : true;
+
         $mdDialog.show({
                 controller: DialogController,
                 templateUrl: htmlName,
                 parent: angular.element(document.body),
                 targetEvent: ev,
-                clickOutsideToClose:true,
+                clickOutsideToClose:clickOutsideToClose,
                 fullscreen: useFullScreen,
                 locals: {
                     theScope: $scope
-                }
-            })
+                },
+                onRemoving:  onRemoving
+        })
             .then(function(answer) {
                 callbackForOk(answer);
             });
@@ -568,7 +571,10 @@ model.controller("selectImgCtrl", function($scope){
                 original : $scope.originalImg,
                 cropImage:  $scope.croppedImg
             };
-            $scope.showDialog(event,$scope,"cropModal.html",$scope.onChange);
+            if (!dialogShown) {
+                $scope.showDialog(event, $scope, "cropModal.html", $scope.onChange);
+                dialogShown = true;
+            }
         });
     }
 
@@ -611,6 +617,7 @@ model.controller("selectImgCtrl", function($scope){
         return new Blob(byteArrays, { type: mimeString });
     };
     var useNewImage = false;
+    var dialogShown = false;
 });
 
 //datapicker
@@ -816,40 +823,3 @@ model.service('arcService', function(){
 });
 
 
-model.controller('AppCtrl', function($scope, $mdDialog, $mdMedia) {
-        $scope.status = '  ';
-        $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
-
-        $scope.showAdvanced = function(ev) {
-            var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
-            $mdDialog.show({
-                controller: function ($scope, $mdDialog) {
-                    $scope.hide = function() {
-                        $mdDialog.hide();
-                    };
-                    $scope.cancel = function() {
-                        $mdDialog.cancel();
-                    };
-                    $scope.answer = function(answer) {
-                        $mdDialog.hide(answer);
-                    };
-                },
-                templateUrl: 'dialog1.tmpl.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose:false,
-                fullscreen: useFullScreen
-            })
-                .then(function(answer) {
-                    $scope.status = 'You said the information was "' + answer + '".';
-                }, function() {
-                    $scope.status = 'You cancelled the dialog.';
-                });
-            $scope.$watch(function() {
-                return $mdMedia('xs') || $mdMedia('sm');
-            }, function(wantsFullScreen) {
-                $scope.customFullscreen = (wantsFullScreen === true);
-            });
-        };
-
-    });

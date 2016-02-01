@@ -23,7 +23,6 @@
         </tbody>
     </table>
 </div>
-{{translate('section_image')}}
 <md-content>
     <md-tabs md-dynamic-height md-border-bottom>
         <md-tab ng-if="currentSection != null">
