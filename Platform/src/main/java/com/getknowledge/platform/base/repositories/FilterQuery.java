@@ -134,8 +134,13 @@ public class FilterQuery<T> {
         if (isEnum(field)) {
             List enumList = new ArrayList<>();
             for (Object value : values) {
+                if (value == null || ((String)value).isEmpty()) {
+                    continue;
+                }
                 enumList.add(covertStringToEnum(field, (String) value));
             }
+            if (enumList.isEmpty())
+                return;
             values = enumList;
         }
 
@@ -163,6 +168,9 @@ public class FilterQuery<T> {
         Path path = parseField(field);
 
         if (isEnum(field)) {
+            if (value == null || ((String)value).isEmpty()) {
+                return;
+            }
             value = covertStringToEnum(field, (String) value);
         }
 

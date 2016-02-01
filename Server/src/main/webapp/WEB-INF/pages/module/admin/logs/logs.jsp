@@ -31,7 +31,7 @@
             <th ng-click="setLogOrder('traceLevel')">
                 {{translate("log_traceLevel")}}
             </th>
-            <th g-click="setLogOrder('calendar')">
+            <th ng-click="setLogOrder('calendar')">
                 {{translate("log_date")}}
             </th>
         </tr>
