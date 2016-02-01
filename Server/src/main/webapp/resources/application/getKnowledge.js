@@ -231,9 +231,11 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         };
     });
 
+
+    applicationService.list($scope,"mainLinks" , className.socialLinks);
     applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {});
 
-    applicationService.action($scope , "countries" , "com.getknowledge.modules.dictionaries.country.Country" , "getCountries",{
+    applicationService.action($scope , "countries" ,className.country , "getCountries",{
         language : "Ru"
     });
 });

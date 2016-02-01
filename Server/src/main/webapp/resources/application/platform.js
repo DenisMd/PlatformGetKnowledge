@@ -22,7 +22,8 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "tasks" : "com.getknowledge.platform.modules.task.Task",
             "trace" : "com.getknowledge.platform.modules.trace.Trace",
             "settings" : "com.getknowledge.modules.settings.Settings",
-            "systemServices" : "com.getknowledge.platform.modules.service.Service"
+            "systemServices" : "com.getknowledge.platform.modules.service.Service",
+            "socialLinks" : "com.getknowledge.modules.socialLinks.SocialLink"
          };
     })
     .factory('modules',function(){

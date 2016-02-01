@@ -3,6 +3,8 @@ package com.getknowledge.modules.socialLinks;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
+import com.getknowledge.platform.modules.permission.Permission;
+import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
@@ -14,10 +16,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "social_link")
-@ModuleInfo(repositoryName = "SocialLinkRepository")
+@ModuleInfo(repositoryName = "SocialLinkRepository" , serviceName = "SocialLinksService")
 public class SocialLink extends AbstractEntity {
 
-    @Field(index= Index.YES, analyze= Analyze.YES, store= Store.NO)
     private String name;
 
     @Column(length = 500)
@@ -44,6 +45,9 @@ public class SocialLink extends AbstractEntity {
         AuthorizationList authorizationList = new AuthorizationList();
         authorizationList.allowCreateEveryOne = false;
         authorizationList.allowReadEveryOne = true;
+
+        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditSocialLinks.getName()));
+
         return authorizationList;
     }
 }
