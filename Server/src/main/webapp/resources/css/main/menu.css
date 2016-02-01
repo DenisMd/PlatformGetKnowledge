@@ -1,0 +1,176 @@
+/*--------------------------------------*/
+/*Menu*/
+
+.nav-menu {
+    width: 250px;
+    position: fixed;
+    background-color: #11171c;
+    bottom:0;
+    left: 0;
+    top: 44px;
+    color: #ffffff;
+    border-top:1px solid #000;
+    opacity: 1;
+    z-index: 500;
+}
+
+/*Top information*/
+.main-menu-info{
+    margin: 10px 0;
+    width: 100%;
+    border-bottom: 1px solid black;
+}
+
+/*User information*/
+.user-content{
+    position: relative;
+    height: 100%;
+}
+
+.user-info-card {
+    width: 100%;
+    margin-top: 20px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.main-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    position: relative;
+    cursor: pointer;
+}
+
+.login-image{
+    background: none;
+}
+
+.logout{
+    color: inherit;
+    font-size: 14px;
+    display: inline-block;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.logout:hover{
+    color: inherit;
+}
+
+.main-label {
+    font: 400 22px Corbel;
+    margin-top: 2px;
+    margin-bottom: 0;
+}
+
+.info-about-user{
+    font: 400 16px / 12px Corbel;
+}
+
+/*Link*/
+.link-card{
+    text-align: center;
+    display: inline-block;
+    width:100%;
+    margin: 15px 0;
+}
+
+.link{
+    text-align: center;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border:0;
+    padding: 0;
+    background: url("../../image/menu/social.png") no-repeat;
+    background-color: inherit;
+}
+.link:hover{
+    background-image: url("../../image/menu/social-hover.png");
+}
+
+.link:focus,.link:hover{
+    border:0;
+    outline: 0;
+}
+
+
+.link-with-vk{
+    background-position: 2px -2px;
+}
+
+.link-with-facebook{
+    background-position: -53px -2px;
+}
+
+.link-with-twitter{
+    background-position: -106px -2px;
+}
+
+
+.link-with-github{
+    background-position: -158px -2px;
+}
+
+
+/*menu items*/
+.first-menu-items{
+    list-style: none;
+    font: 400 20px Corbel;
+    padding-left: 0;
+}
+
+.first-menu-item{
+    vertical-align: middle;
+    line-height: 45px;
+}
+
+.first-menu-item>a{
+    display: block;
+    text-decoration: none;
+    padding-left: 10px;
+}
+
+.first-menu-item a>img{
+    vertical-align: middle;
+    margin-right: 15px;
+    height: 25px;
+    width: 25px;
+}
+
+.first-menu-item a:hover>img{
+    transform: scale(1.1,1.1);
+}
+
+.second-menu-items{
+    font: 400 18px Corbel;
+    list-style: none;
+    padding: 5px 0;
+    margin: 0;
+}
+
+.second-menu-item{
+    vertical-align: middle;
+    line-height: 20px;
+}
+
+.second-menu-item>a{
+    display: block;
+    text-decoration: none;
+    padding-left: 60px;
+    color: #3f474e;
+}
+.second-menu-item a:hover{
+    color:#ffffff;
+}
+
+/*animation for menu*/
+.nav-menu.ng-hide-add, .animate-show.ng-hide-remove {
+    transition: all linear 0.5s;
+}
+
+.animate-show.ng-hide {
+    opacity: 0;
+    left:-250px;
+}

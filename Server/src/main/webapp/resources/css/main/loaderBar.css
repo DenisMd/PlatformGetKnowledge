@@ -1,0 +1,18 @@
+/*for loader bar*/
+#loading-bar-spinner{
+    top:60px;
+}
+#loading-bar .bar {
+    background: #000;
+    top: 45px;
+}
+#loading-bar-spinner .spinner-icon {
+    border-top-color:  #000;
+    border-left-color: #000;
+}
+#loading-bar .peg {
+    -moz-box-shadow: #000 1px 0 6px 1px;
+    -ms-box-shadow: #000 1px 0 6px 1px;
+    -webkit-box-shadow: #000 1px 0 6px 1px;
+    box-shadow: #000 1px 0 6px 1px;
+}

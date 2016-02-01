@@ -1,0 +1,9 @@
+/*for scroll*/
+.mCSB_container_wrapper{
+    margin-bottom: 0;
+    margin-right: 0;
+}
+
+.mCSB_container_wrapper>.mCSB_container{
+    padding-right: 15px;
+}
