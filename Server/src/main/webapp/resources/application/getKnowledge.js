@@ -53,9 +53,9 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
     };
 
     //Dialog
-    $scope.showDialog = function (ev,$scope,htmlName,callbackForOk,outsideToClose,onRemoving) {
+    $scope.showDialog = function (ev,$scope,htmlName,callbackForOk,onRemoving,outsideToClose) {
         var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
-        var clickOutsideToClose = angular.isDefined(outsideToClose)? outsideToClose : true;
+        var clickOutsideToClose = angular.isDefined(outsideToClose)? outsideToClose : false;
 
         $mdDialog.show({
                 controller: DialogController,
@@ -531,9 +531,13 @@ model.directive("hideOptions",function($document){
 //crop image
 model.controller("selectImgCtrl", function($scope){
 
-    $scope.originalImg='';
-    $scope.croppedImg='';
+    $scope.image = {
+        originalImg:''
+    };
 
+    var defaultImage = {
+        originalImg:"/resources/image/default/camera.png"
+    }
     //$($scope.id).modal({
     //    backdrop: 'static',
     //    keyboard: false
@@ -549,8 +553,8 @@ model.controller("selectImgCtrl", function($scope){
                 } else {
                     $scope.$apply(function($scope) {
                         useNewImage = true;
-                        $scope.originalImg = image.target.result;
-                        $scope.onChange($scope.originalImg);
+                        $scope.image.originalImg = image.target.result;
+                        $scope.onChange($scope.image.originalImg);
                     });
 
                 }
@@ -576,19 +580,22 @@ model.controller("selectImgCtrl", function($scope){
 
         if (angular.isFunction($scope.getData().save)) {
             var file = base64ToBlob(element);
-            //$scope.getData().save(file);
+            $scope.getData().save(file);
         }
     };
 
     function initModalImage(image,event){
         $scope.$apply(function($scope) {
-            $scope.originalImg = image.target.result;
+            $scope.image.originalImg = image.target.result;
             $scope.item = {
-                original : $scope.originalImg,
+                original : $scope.image.originalImg,
                 cropImage:  $scope.croppedImg
             };
             if (!dialogShown) {
-                $scope.showDialog(event, $scope, "cropModal.html", $scope.onChange);
+                $scope.showDialog(event, $scope, "cropModal.html",$scope.onChange,function(){
+                    dialogShown = false;
+                    $scope.image.originalImg = "";
+                });
                 dialogShown = true;
             }
         });
@@ -607,14 +614,14 @@ model.controller("selectImgCtrl", function($scope){
             var image = $scope.getData().src;
             if (image) {
                 if (!useNewImage) {
-                    $scope.originalImg = image;
+                    $scope.image.originalImg = image;
                 }
-                return $scope.originalImg;
+                return $scope.image;
             } else {
-                $scope.originalImg = ""
+                $scope.image.originalImg = ""
             }
         }
-        return "/resources/image/default/camera.png";
+        return defaultImage;
     };
 
     function base64ToBlob(base64Data) {
@@ -771,7 +778,7 @@ model.controller("textareaCtrl",function($scope,$element){
 model.controller("sectionCard",function($scope,applicationService,className){
     applicationService.action($scope, "section" , className.section,"getSectionByNameAndLanguage" , {
         language : $scope.application.language.capitalizeFirstLetter(),
-        name :  $scope.getData().sectionName,
+        name :  $scope.getData().sectionName
     } , function(section){
         $scope.sectionCards = {
             title : "categories",
