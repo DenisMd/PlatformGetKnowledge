@@ -530,18 +530,13 @@ model.directive("hideOptions",function($document){
 
 //crop image
 model.controller("selectImgCtrl", function($scope){
-
-    $scope.image = {
-        originalImg:''
+    var getDataSrc = function(){
+        return $scope.getData().src;
     };
 
-    var defaultImage = {
-        originalImg:"/resources/image/default/camera.png"
-    }
-    //$($scope.id).modal({
-    //    backdrop: 'static',
-    //    keyboard: false
-    //});
+    $scope.originalImg = "";
+
+    var defaultImage = "/resources/image/default/camera.png";
 
     $scope.uploadFile = function(file,$event) {
         if (file) {
@@ -552,9 +547,9 @@ model.controller("selectImgCtrl", function($scope){
                     initModalImage(image,$event);
                 } else {
                     $scope.$apply(function($scope) {
-                        useNewImage = true;
-                        $scope.image.originalImg = image.target.result;
-                        $scope.onChange($scope.image.originalImg);
+                        oldImageSrc = getDataSrc();
+                        $scope.originalImg = image.target.result;
+                        $scope.onChange($scope.originalImg);
                     });
 
                 }
@@ -566,13 +561,14 @@ model.controller("selectImgCtrl", function($scope){
 
     $scope.getAreaType = function(){
         if ($scope.getData().areaType && angular.isString($scope.getData().areaType)) {
-            switch ($scope.getData().areaType.toLowerCase()) {
+            var type = $scope.getData().areaType.toLowerCase();
+            switch (type) {
                 case "square":
                 case "circle":
-                    return $scope.getData().areaType;
+                    return type;
             }
         }
-        return "";
+        return "circle";
     };
 
     $scope.onChange = function (element) {
@@ -586,15 +582,16 @@ model.controller("selectImgCtrl", function($scope){
 
     function initModalImage(image,event){
         $scope.$apply(function($scope) {
-            $scope.image.originalImg = image.target.result;
+            $scope.originalImg = image.target.result;
             $scope.item = {
-                original : $scope.image.originalImg,
+                original : $scope.originalImg,
                 cropImage:  $scope.croppedImg
             };
             if (!dialogShown) {
                 $scope.showDialog(event, $scope, "cropModal.html",$scope.onChange,function(){
                     dialogShown = false;
-                    $scope.image.originalImg = "";
+                    oldImageSrc = getDataSrc();
+                    $scope.originalImg = $scope.item.cropImage;
                 });
                 dialogShown = true;
             }
@@ -608,20 +605,37 @@ model.controller("selectImgCtrl", function($scope){
         return false;
     };
 
+    $scope.getClass = function(){
+        return $scope.getAreaType() === "circle" ? "img-circle" : "";
+    };
+
     $scope.getImage = function(){
         var notUseDefault = $scope.getData().notUseDefault;
         if (notUseDefault) {
-            var image = $scope.getData().src;
+            var image = getDataSrc();
             if (image) {
-                if (!useNewImage) {
-                    $scope.image.originalImg = image;
+                if (!oldImageSrc) {
+                    $scope.originalImg = image;
+                } else {
+                    if (oldImageSrc !== image){
+                        $scope.originalImg =  image;
+                        oldImageSrc = "";
+                    }
                 }
-                return $scope.image;
+                return $scope.originalImg;
             } else {
-                $scope.image.originalImg = ""
+                $scope.originalImg = ""
             }
         }
         return defaultImage;
+    };
+
+    $scope.getResultSize = function(){
+      return $scope.getData().resultSize;
+    };
+
+    $scope.getResultQuality = function(){
+      return $scope.getData().resultQuality;
     };
 
     function base64ToBlob(base64Data) {
@@ -639,7 +653,7 @@ model.controller("selectImgCtrl", function($scope){
         var  byteArrays = [new Uint8Array(array)];
         return new Blob(byteArrays, { type: mimeString });
     };
-    var useNewImage = false;
+    var oldImageSrc = "";
     var dialogShown = false;
 });
 

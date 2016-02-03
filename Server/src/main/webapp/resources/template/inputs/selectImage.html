@@ -1,7 +1,7 @@
 <div ng-controller="selectImgCtrl">
     <div class="main-image-container">
         <div class="image-container">
-            <img ng-src="{{getImage().originalImg}}" class="original-image">
+            <img ng-src="{{getImage()}}" ng-class="getClass()" class="original-image">
         </div>
         <div class="fileUpload btn btn-img original-image-btn">
             <span ng-show="showModal()">{{translate("uploadAvatar")}}</span>
@@ -17,11 +17,13 @@
                 <div layout="row" class="crop-content">
                     <div class="cropArea"  flex="66">
                         <img-crop image="parentScope.item.original" result-image="parentScope.item.cropImage"
+                                  result-image-size="parentScope.getResultSize()"
+                                  result-image-quality="parentScope.getResultQuality()"
                                   area-type="{{parentScope.getAreaType()}}">
                         </img-crop>
                     </div>
                     <div class="crop-body text-center" flex>
-                        <img ng-src="{{parentScope.item.cropImage}}" class="original-image" layout-margin>
+                        <img ng-src="{{parentScope.item.cropImage}}" class="original-image" ng-class="parentScope.getClass()" layout-margin>
                         <div class="fileUpload btn btn-img btn-reload-img" layout-margin>
                             <span>{{parentScope.translate("change_image")}}</span>
                             <input type="file" class="upload" onchange="angular.element(this).scope().parentScope.uploadFile(this.files[0],event);"/>

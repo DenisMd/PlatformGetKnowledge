@@ -36,7 +36,6 @@ model.controller("sectionsCtrl", function ($scope, $state,$http,applicationServi
         save: function(file){
             $scope.updateImage(file);
         },
-        isInModal:true,
         areaType:"square"
     };
 
