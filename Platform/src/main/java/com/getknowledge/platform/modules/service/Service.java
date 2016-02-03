@@ -4,7 +4,7 @@ import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 
-@ModuleInfo(repositoryName = "ServiceRepository")
+@ModuleInfo(repositoryName = "ServiceRepository", serviceName = "ServiceService")
 public class Service extends AbstractEntity {
     private String name;
 
