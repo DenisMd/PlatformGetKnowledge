@@ -124,6 +124,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
             userInfo.setLanguage(languageRepository.getSingleEntityByFieldAndValue("name", Languages.Ru.name()));
             userInfo.setSpecialty("main admin");
             userInfo.setMan(true);
+            userInfo.setFirstLogin(true);
             InputStream is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/image/photo.png");
             try {
                 userInfo.setProfileImage(org.apache.commons.io.IOUtils.toByteArray(is));
