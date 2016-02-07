@@ -1,5 +1,7 @@
 {
   "text" : {
-
+      "url" : "URL",
+      "icon_url" : "Icon url",
+      "color" : "Color"
   }
 }
