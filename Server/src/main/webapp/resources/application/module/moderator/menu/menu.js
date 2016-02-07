@@ -11,4 +11,14 @@ model.controller("menuCtrl", function ($scope,applicationService,className) {
             $scope.currentMenuItem.level = level;
         }
     }
+
+    $scope.updateMenu = function () {
+      var  tempClassName = className.menu;
+      if ("url" in $scope.currentMenuItem) {
+          tempClassName = className.menuItem;
+      }
+      applicationService.update($scope,"",tempClassName,$scope.currentMenuItem,function(result){
+          $scope.showToast(result);
+      });
+    };
 });

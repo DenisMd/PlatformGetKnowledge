@@ -19,7 +19,7 @@
             </li>
         </ul>
     </div>
-    <div class="col-lg-8 col-md-8">
+    <div class="col-lg-8 col-md-8" ng-if="currentMenuItem">
         <div ng-if="currentMenuItem.level == 1">
             <md-input-container>
                 <label>{{translate("name")}}</label>
@@ -28,22 +28,33 @@
         </div>
 
         <div ng-if="!currentMenuItem.level">
-            <md-input-container>
-                <label>{{translate("name")}}</label>
-                <input ng-model="currentMenuItem.title">
-            </md-input-container>
-            <md-input-container>
-                <label>{{translate("url")}}</label>
-                <input ng-model="currentMenuItem.url">
-            </md-input-container>
-            <md-input-container>
-                <label>{{translate("icon_url")}}</label>
-                <input ng-model="currentMenuItem.iconUrl">
-            </md-input-container>
-            <md-input-container>
-                <label>{{translate("color")}}</label>
-                <input ng-model="currentMenuItem.color">
-            </md-input-container>
+            <div>
+                <md-input-container>
+                    <label>{{translate("name")}}</label>
+                    <input ng-model="currentMenuItem.title">
+                </md-input-container>
+            </div>
+            <div>
+                <md-input-container>
+                    <label>{{translate("url")}}</label>
+                    <input ng-model="currentMenuItem.url">
+                </md-input-container>
+            </div>
+            <div>
+                <md-input-container>
+                    <label>{{translate("icon_url")}}</label>
+                    <input ng-model="currentMenuItem.iconUrl">
+                </md-input-container>
+            </div>
+            <div>
+                <md-input-container>
+                    <label>{{translate("color")}}</label>
+                    <input ng-model="currentMenuItem.color">
+                </md-input-container>
+            </div>
         </div>
+        <md-button class="md-raised md-primary" ng-click="updateMenu()">
+            {{translate("update")}}
+        </md-button>
     </div>
 </div>

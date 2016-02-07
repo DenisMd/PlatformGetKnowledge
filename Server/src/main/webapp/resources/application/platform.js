@@ -8,6 +8,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         return {
             "userInfo" : "com.getknowledge.modules.userInfo.UserInfo",
             "menu" : "com.getknowledge.modules.menu.Menu",
+            "menuItem" : "com.getknowledge.modules.menu.item.MenuItem",
             "video" : "com.getknowledge.modules.video.Video",
             "language" : "com.getknowledge.modules.dictionaries.language.Language",
             "country" : "com.getknowledge.modules.dictionaries.country.Country",
