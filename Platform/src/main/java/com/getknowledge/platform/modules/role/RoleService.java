@@ -33,6 +33,7 @@ public class RoleService extends AbstractService implements BootstrapService {
 
             Role roleHelpDesk = new Role();
             roleHelpDesk.setRoleName(RoleName.ROLE_HELPDESK.name());
+            roleHelpDesk.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.ReadHpMessage));
             roleRepository.create(roleHelpDesk);
 
             Role author = new Role();
