@@ -1,6 +1,7 @@
 package com.getknowledge.modules.help.desc;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.modules.help.desc.attachements.FileAttachment;
 import com.getknowledge.modules.help.desc.type.HpMessageType;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
@@ -8,8 +9,11 @@ import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import com.getknowledge.platform.modules.user.User;
+import org.hibernate.annotations.CollectionId;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,16 +30,29 @@ public class HpMessage extends AbstractEntity{
     @Column(columnDefinition = "Text" , name = "message")
     private String message;
 
-    @JsonIgnore
-    @ElementCollection
-    @Basic(fetch=FetchType.LAZY)
-    @Column(name = "attach_files")
-    @Lob
-    private List<byte []> attachFiles;
-
     @ManyToOne
     @JoinColumn(nullable = true)
     private User user;
+
+    private boolean reply = false;
+
+    private boolean checked = false;
+
+    public boolean isReply() {
+        return reply;
+    }
+
+    public void setReply(boolean reply) {
+        this.reply = reply;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
 
     public User getUser() {
         return user;
@@ -67,14 +84,6 @@ public class HpMessage extends AbstractEntity{
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public List<byte[]> getAttachFiles() {
-        return attachFiles;
-    }
-
-    public void setAttachFiles(List<byte[]> attachFiles) {
-        this.attachFiles = attachFiles;
     }
 
     @Override

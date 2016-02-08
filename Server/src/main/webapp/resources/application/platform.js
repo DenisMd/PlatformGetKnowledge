@@ -422,6 +422,11 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             return "/data/image?className="+className+"&id="+id;
         };
 
+        this.fileByKeyHref = function(className,id,key){
+            if (!className || !id) return "";
+            return "/data/readFile?className="+className+"&id="+id+"&key="+key;
+        };
+
         function isFunction(func){
             if (func && angular.isFunction(func)){
                 return true;

@@ -1,12 +1,11 @@
 package com.getknowledge.modules.section;
 
-import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.menu.Menu;
 import com.getknowledge.modules.menu.MenuNames;
 import com.getknowledge.modules.menu.MenuRepository;
 import com.getknowledge.modules.menu.item.MenuItem;
-import com.getknowledge.modules.userInfo.results.Result;
+import com.getknowledge.modules.Result;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.services.AbstractService;

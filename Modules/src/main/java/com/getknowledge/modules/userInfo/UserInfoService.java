@@ -13,7 +13,7 @@ import com.getknowledge.modules.event.UserEventType;
 import com.getknowledge.modules.settings.Settings;
 import com.getknowledge.modules.settings.SettingsRepository;
 import com.getknowledge.modules.userInfo.results.RegisterResult;
-import com.getknowledge.modules.userInfo.results.Result;
+import com.getknowledge.modules.Result;
 import com.getknowledge.modules.userInfo.socialLink.UserSocialLink;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
