@@ -552,7 +552,7 @@ public class DataController {
 
     @RequestMapping(value = "/actionWithFile", method = RequestMethod.POST, headers=("content-type=multipart/*"))
     public @ResponseBody String actionWithFile(@RequestParam("className") String className, @RequestParam("actionName") String actionName,
-                                               @RequestParam("data") String jsonData, @RequestParam("file") MultipartFile file,
+                                               @RequestParam("data") String jsonData, @RequestParam("file") List<MultipartFile> files,
                                                Principal principal) throws PlatformException {
         try {
             Class classEntity = Class.forName(className);
@@ -567,7 +567,7 @@ public class DataController {
                 HashMap<String,Object> data = getDataForAction(actionName, action.name(), action.mandatoryFields(), jsonData, principal);
 
                 if (data != null) {
-                    Object result = method.invoke(abstractService, data, file);
+                    Object result = method.invoke(abstractService, data, files);
                     return objectMapper.writeValueAsString(result);
                 }
             }

@@ -247,14 +247,14 @@ public class UserInfoService extends AbstractService implements BootstrapService
     }
 
     @ActionWithFile(name = "updateImage")
-    public Result updateImage (HashMap<String,Object> data,MultipartFile file) throws PlatformException {
+    public Result updateImage (HashMap<String,Object> data,List<MultipartFile> files) throws PlatformException {
         UserInfo userInfo = getAuthorizedUser(data);
 
         if (userInfo == null) return Result.SessionFailed;
 
-        if (file != null) {
+        if (files != null) {
             try {
-                userInfo.setProfileImage(file.getBytes());
+                userInfo.setProfileImage(files.get(0).getBytes());
             } catch (IOException e) {
                 trace.logException("Error get bytes for image", e, TraceLevel.Error);
             }
