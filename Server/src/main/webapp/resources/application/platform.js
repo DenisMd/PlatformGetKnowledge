@@ -158,7 +158,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             this.result = {first : this.first, max : this.max};
 
             this.increase = function (value) {
-                this.result.first = this.first + value;
+                this.result.first = this.result.first + value;
             };
 
             this.setOrder = function(order,desc) {
