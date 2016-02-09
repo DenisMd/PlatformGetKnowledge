@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Service("HPMessageService")
 public class HPMessageService extends AbstractService implements FileService {
@@ -91,6 +92,10 @@ public class HPMessageService extends AbstractService implements FileService {
         if (message == null)
             return null;
 
-        return null;
+        long fileId = Long.parseLong(String.valueOf(key));
+
+        Optional<FileAttachment> result = message.getFiles().stream().filter((file) -> file.getId() == fileId).findFirst();
+
+        return result.isPresent() ? result.get().getData() : null;
     }
 }
