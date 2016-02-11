@@ -70,6 +70,9 @@
     "ofRecords" : "записей",
     "search" : "Поиск",
     "version" : "Версия",
-    "change_image" : "Изменить"
+    "change_image" : "Изменить изображение",
+    "title" : "Заголовок",
+    "message" : "Сообщение",
+    "type" : "Тип"
   }
 }
