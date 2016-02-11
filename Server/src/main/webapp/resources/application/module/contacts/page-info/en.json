@@ -1,0 +1,11 @@
+{
+  "text" : {
+    "contacts_isReply" : "Respond to request",
+    "contacts_send" : "Send message",
+    "contacts_Bug" : "Bug",
+    "contacts_Question" : "Question",
+    "contacts_Task" : "Task",
+    "contacts_Review" : "Review",
+    "contacts_Claim" : "Claim"
+  }
+}

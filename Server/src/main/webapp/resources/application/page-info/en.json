@@ -70,6 +70,8 @@
     "ofRecords" : "records",
     "search" : "Search",
     "version" : "Version",
-    "change_image" : "Изменить"
+    "change_image" : "Change image",
+    "message" : "Message",
+    "type" : "Type"
   }
 }

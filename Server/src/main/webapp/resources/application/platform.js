@@ -24,7 +24,8 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "trace" : "com.getknowledge.platform.modules.trace.Trace",
             "settings" : "com.getknowledge.modules.settings.Settings",
             "systemServices" : "com.getknowledge.platform.modules.service.Service",
-            "socialLinks" : "com.getknowledge.modules.socialLinks.SocialLink"
+            "socialLinks" : "com.getknowledge.modules.socialLinks.SocialLink",
+            "hpMessage" : "com.getknowledge.modules.help.desc.HpMessage"
          };
     })
     .factory('modules',function(){
@@ -158,7 +159,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             this.result = {first : this.first, max : this.max};
 
             this.increase = function (value) {
-                this.result.first = this.first + value;
+                this.result.first = this.result.first + value;
             };
 
             this.setOrder = function(order,desc) {
@@ -310,35 +311,35 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             });
         };
 
-        this.actionWithFile = function ($scope,name,className,actionName,data,file,callback){
+        this.actionWithFile = function ($scope,name,className,actionName,data,files,callback){
             "use strict";
             var formData = {
                 className: className,
                 actionName: actionName,
                 data: JSON.stringify(data)
             };
-            if (file) {
-                var uploader = $scope.uploader = new FileUploader({
+            if (files) {
+                var uploader = new FileUploader({
                     url: platformDataUrl+'actionWithFile',
                     autoUpload: false,
                     onBeforeUploadItem: function(item) {
                         item.formData.push(formData);
-                        console.log(item);
                     }
                 });
-                var isCallbackFunction = isFunction(callback);
 
                 uploader.onSuccessItem = function(fileItem, response, status, headers) {
                     var data = response;
-                    success(data);
+                    callback(data);
                 };
                 uploader.onErrorItem = function(fileItem, response, status, headers) {
                     errorService.showError(response,status);
                 };
 
-                    uploader.addToQueue(file);
-
-
+                if (Array.isArray(files)){
+                    uploader.queue = files;
+                } else {
+                    uploader.addToQueue(files);
+                }
                 uploader.uploadAll();
             } else {
                 $http({

@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Service("HPMessageService")
 public class HPMessageService extends AbstractService implements FileService {
@@ -62,11 +63,11 @@ public class HPMessageService extends AbstractService implements FileService {
         return Result.Complete;
     }
 
-    @ActionWithFile(name = "sendHpMessage" , mandatoryFields = {"title" , "message", "type"})
+    @ActionWithFile(name = "sendHpMessage" , mandatoryFields = {"hpMessageId"})
     public Result sendHpMessageWithAttachFiles(HashMap<String,Object> data , List<MultipartFile> list) {
 
-        Result result = sendHpMessage(data);
-        HpMessage hpMessage = (HpMessage) result.getObject();
+        long id = new Long((int) data.get("hpMessageId"));
+        HpMessage hpMessage = hpRepository.read(id);
 
         //save attach files
         for (MultipartFile file : list) {
@@ -78,11 +79,12 @@ public class HPMessageService extends AbstractService implements FileService {
                 entityManager.flush();
             } catch (IOException e) {
                 trace.logException("Error get attach file",e,TraceLevel.Warning);
+                return Result.Failed;
             }
         }
 
         hpRepository.merge(hpMessage);
-        return result;
+        return Result.Complete;
     }
 
     @Override
@@ -91,6 +93,10 @@ public class HPMessageService extends AbstractService implements FileService {
         if (message == null)
             return null;
 
-        return null;
+        long fileId = Long.parseLong(String.valueOf(key));
+
+        Optional<FileAttachment> result = message.getFiles().stream().filter((file) -> file.getId() == fileId).findFirst();
+
+        return result.isPresent() ? result.get().getData() : null;
     }
 }
