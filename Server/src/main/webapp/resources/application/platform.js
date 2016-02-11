@@ -324,7 +324,6 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     autoUpload: false,
                     onBeforeUploadItem: function(item) {
                         item.formData.push(formData);
-                        console.log(item);
                     }
                 });
                 var isCallbackFunction = isFunction(callback);
