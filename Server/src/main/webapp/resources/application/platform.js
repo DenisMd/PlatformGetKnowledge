@@ -311,34 +311,35 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             });
         };
 
-        this.actionWithFile = function ($scope,name,className,actionName,data,file,callback){
+        this.actionWithFile = function ($scope,name,className,actionName,data,files,callback){
             "use strict";
             var formData = {
                 className: className,
                 actionName: actionName,
                 data: JSON.stringify(data)
             };
-            if (file) {
-                var uploader = $scope.uploader = new FileUploader({
+            if (files) {
+                var uploader = new FileUploader({
                     url: platformDataUrl+'actionWithFile',
                     autoUpload: false,
                     onBeforeUploadItem: function(item) {
                         item.formData.push(formData);
                     }
                 });
-                var isCallbackFunction = isFunction(callback);
 
                 uploader.onSuccessItem = function(fileItem, response, status, headers) {
                     var data = response;
-                    success(data);
+                    callback(data);
                 };
                 uploader.onErrorItem = function(fileItem, response, status, headers) {
                     errorService.showError(response,status);
                 };
 
-                    uploader.addToQueue(file);
-
-
+                if (Array.isArray(files)){
+                    uploader.queue = files;
+                } else {
+                    uploader.addToQueue(files);
+                }
                 uploader.uploadAll();
             } else {
                 $http({

@@ -63,11 +63,11 @@ public class HPMessageService extends AbstractService implements FileService {
         return Result.Complete;
     }
 
-    @ActionWithFile(name = "sendHpMessage" , mandatoryFields = {"title" , "message", "type"})
+    @ActionWithFile(name = "sendHpMessage" , mandatoryFields = {"hpMessageId"})
     public Result sendHpMessageWithAttachFiles(HashMap<String,Object> data , List<MultipartFile> list) {
 
-        Result result = sendHpMessage(data);
-        HpMessage hpMessage = (HpMessage) result.getObject();
+        long id = new Long((int) data.get("hpMessageId"));
+        HpMessage hpMessage = hpRepository.read(id);
 
         //save attach files
         for (MultipartFile file : list) {
@@ -79,11 +79,12 @@ public class HPMessageService extends AbstractService implements FileService {
                 entityManager.flush();
             } catch (IOException e) {
                 trace.logException("Error get attach file",e,TraceLevel.Warning);
+                return Result.Failed;
             }
         }
 
         hpRepository.merge(hpMessage);
-        return result;
+        return Result.Complete;
     }
 
     @Override
