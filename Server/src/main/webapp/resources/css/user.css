@@ -127,15 +127,30 @@
 .completion-percentage{
     color: inherit;
     text-align: center;
-    min-width: 140px;
     display: inline-block;
     position: relative;
-    width:33%;
 }
 
 
 .completion-percentage canvas{
+    width: 100% !important;
+    max-width: 140px;
+    min-width: 140px;
+    height: auto !important;
+}
 
+@media all and (min-width: 1920px) {
+    .completion-percentage canvas{
+        max-width: 400px;
+        min-width: 400px;
+    }
+}
+
+@media all and (min-width: 3840px) {
+    .completion-percentage canvas{
+        max-width: 500px;
+        min-width: 500px;
+    }
 }
 
 .completion-percentage:hover{
@@ -155,7 +170,7 @@
 }
 
 .statistic-card-title{
-    background-color: #000000;
+    background-color: #000000 !important;
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
@@ -167,7 +182,6 @@
     flex-direction: row;
     margin:0;
     color:#ffffff;
-    padding: 0 16px;
 }
 
 .statistic-card-content{

@@ -45,52 +45,54 @@
                         <div class="completion-desk" ng-scrollbars ng-scrollbars-config="arcScrollConfig">
                             <a  class="completion-percentage" ng-repeat="item in dataForArcs">
                                 <canvas class="chart chart-doughnut"
-                                        chart-data="[item.percent,100-item.percent]" chart-labels="arcOptions.labels" chart-colours="arcOptions.getColours(item)" chart-options="arcOptions.arcOptions">
+                                        chart-data="[item.percent,100-item.percent]"
+                                        chart-labels="arcOptions.labels"
+                                        chart-colours="arcOptions.getColours(item)"
+                                        chart-options="arcOptions.arcOptions">
                                 </canvas>
                                 <h1>{{item.title}}</h1>
                                 <p>{{item.percent + "%"}}</p>
                             </a>
                         </div>
-                    <md-content layout="row" layout-align="start center" >
-                        <a ng-repeat="item in dataForArcs" class="completion-percentage" flex="33">
-                            <canvas class="chart chart-doughnut"
-                                    chart-data="[item.percent,100-item.percent]" chart-labels="arcOptions.labels" chart-colours="arcOptions.getColours(item)" chart-options="arcOptions.arcOptions">
-                            </canvas>
-                            <h1>{{item.title}}</h1>
-                            <p>{{item.percent + "%"}}</p>
-                        </a>
-
-                    </md-content>
                 </div>
                 <div class="col-md-5">
                     <div class="statistic-card">
-                        <h2 class="statistic-card-title">{{translate("statistic")}}</h2>
-                        <div class="statistic-card-content">
+                        <md-toolbar class="statistic-card-title">
+                            <div class="md-toolbar-tools">
+                                <h2>{{translate("statistic")}}</h2>
+                                <span flex></span>
+                                <md-button class="md-icon-button" ng-click="toggelStatistic()">
+                                    <span class="hamburger">&#9776;</span>
+                                </md-button>
+                            </div>
+                        </md-toolbar>
+
+                        <div class="statistic-card-content" ng-show="showStatistic">
                             <div layout="row" layout-align="center center">
-                                <div flex>
+                                <div flex="33">
                                     Some text
                                 </div>
-                                <div flex>
+                                <div flex="66">
                                     <canvas class="chart chart-line" chart-data="data"
-                                            chart-labels="labels" chart-series="series" chart-options="arcOptions.arcOptions">
+                                            chart-labels="labels" chart-series="series" chart-options="arcOptions.mainOption">
                                     </canvas>
                                 </div>
                             </div>
                             <div layout="row" layout-align="center center">
-                                <div flex>
+                                <div flex="33">
                                 Some text
                                 </div>
-                                <div flex>
+                                <div flex="66">
                                     <canvas class="chart chart-bar" chart-data="data"
-                                            chart-labels="labels" chart-series="series" chart-options="arcOptions.arcOptions">
+                                            chart-labels="labels" chart-series="series" chart-options="arcOptions.mainOption">
                                     </canvas>
                                 </div>
                             </div>
                             <div layout="row" layout-align="center center">
-                                <div flex>
+                                <div flex="33">
                                 Some text
                                 </div>
-                                <div flex>
+                                <div flex="66">
                                     <canvas class="chart chart-pie" chart-data="dataCircle"
                                             chart-labels="labels" chart-options="arcOptions.mainOption">
                                     </canvas>

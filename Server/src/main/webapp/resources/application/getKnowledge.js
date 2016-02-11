@@ -843,8 +843,8 @@ model.service('arcService', function(){
 
     this.labels = ["percent","none"];
     this.arcOptions = {
+        maintainAspectRatio: false,
         responsive: true,
-        maintainAspectRatio:false,
         segmentShowStroke : false,
         showTooltips : false,
         percentageInnerCutout : 80

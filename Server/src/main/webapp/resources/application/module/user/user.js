@@ -63,8 +63,9 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         colour : "#FFCC00"
     } ];
     $scope.arcOptions = arcService;
+
     //scroll для диаграмм курсов
-    $scope.arcScrollConfig = angular.merge({axis:"x"}, $scope.modalScrollConfig);
+    $scope.arcScrollConfig = angular.merge({axis:"x", advanced:{ autoExpandHorizontalScroll: true }}, $scope.modalScrollConfig);
 
     //статистика
     $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
@@ -74,6 +75,11 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
     ];
     $scope.dataCircle = [65, 59, 80, 81, 56, 55, 40];
 
+
+    $scope.showStatistic = true;
+    $scope.toggelStatistic = function(){
+        $scope.showStatistic = !$scope.showStatistic;
+    }
 
 
 
