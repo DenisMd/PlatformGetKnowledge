@@ -1,5 +1,7 @@
 {
   "text" : {
-
+    "url" : "URL",
+    "icon_url" : "Url изображения",
+    "color" : "Цвет"
   }
 }

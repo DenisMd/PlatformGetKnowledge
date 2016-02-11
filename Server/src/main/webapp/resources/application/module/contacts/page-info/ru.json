@@ -1,0 +1,11 @@
+{
+  "text" : {
+    "contacts_isReply" : "Ответить на запрос",
+    "contacts_send" : "Отправить сообщение",
+    "contacts_Bug" : "Ошибка в системе",
+    "contacts_Question" : "Вопрос",
+    "contacts_Task" : "Задача",
+    "contacts_Review" : "Отзыв",
+    "contacts_Claim" : "Жалоба"
+  }
+}

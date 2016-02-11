@@ -1,7 +1,7 @@
 package com.getknowledge.modules.event;
 
 import com.getknowledge.modules.userInfo.results.RegisterResult;
-import com.getknowledge.modules.userInfo.results.Result;
+import com.getknowledge.modules.Result;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.Task;
 import com.getknowledge.platform.base.services.AbstractService;

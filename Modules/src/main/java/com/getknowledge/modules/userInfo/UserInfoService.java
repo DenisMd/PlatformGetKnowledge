@@ -13,7 +13,7 @@ import com.getknowledge.modules.event.UserEventType;
 import com.getknowledge.modules.settings.Settings;
 import com.getknowledge.modules.settings.SettingsRepository;
 import com.getknowledge.modules.userInfo.results.RegisterResult;
-import com.getknowledge.modules.userInfo.results.Result;
+import com.getknowledge.modules.Result;
 import com.getknowledge.modules.userInfo.socialLink.UserSocialLink;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
@@ -124,6 +124,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
             userInfo.setLanguage(languageRepository.getSingleEntityByFieldAndValue("name", Languages.Ru.name()));
             userInfo.setSpecialty("main admin");
             userInfo.setMan(true);
+            userInfo.setFirstLogin(true);
             InputStream is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/image/photo.png");
             try {
                 userInfo.setProfileImage(org.apache.commons.io.IOUtils.toByteArray(is));
@@ -246,14 +247,14 @@ public class UserInfoService extends AbstractService implements BootstrapService
     }
 
     @ActionWithFile(name = "updateImage")
-    public Result updateImage (HashMap<String,Object> data,MultipartFile file) throws PlatformException {
+    public Result updateImage (HashMap<String,Object> data,List<MultipartFile> files) throws PlatformException {
         UserInfo userInfo = getAuthorizedUser(data);
 
         if (userInfo == null) return Result.SessionFailed;
 
-        if (file != null) {
+        if (files != null) {
             try {
-                userInfo.setProfileImage(file.getBytes());
+                userInfo.setProfileImage(files.get(0).getBytes());
             } catch (IOException e) {
                 trace.logException("Error get bytes for image", e, TraceLevel.Error);
             }

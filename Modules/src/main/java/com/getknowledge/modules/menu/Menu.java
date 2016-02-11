@@ -25,6 +25,7 @@ public class Menu extends AbstractEntity{
     private Role role;
 
     @OneToMany
+    @OrderBy("id")
     private List<MenuItem> items = new ArrayList<>();
 
     public List<MenuItem> getItems() {

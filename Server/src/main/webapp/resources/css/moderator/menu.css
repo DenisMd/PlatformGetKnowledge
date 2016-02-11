@@ -1,0 +1,18 @@
+.menu-name {
+    list-style-type: none;
+    font-size: 24px;
+    color : #53c2fb;
+    font-weight: bold;
+}
+
+.menu-item  {
+    font-size: 18px;
+    color : #3493fb;
+    font-weight: bold;
+}
+
+.menu-subItem {
+    font-size: 16px;
+    color : #2844fb;
+    font-weight: bold;
+}

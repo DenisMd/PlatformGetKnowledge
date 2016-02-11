@@ -1,12 +1,11 @@
 package com.getknowledge.modules.section;
 
-import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.menu.Menu;
 import com.getknowledge.modules.menu.MenuNames;
 import com.getknowledge.modules.menu.MenuRepository;
 import com.getknowledge.modules.menu.item.MenuItem;
-import com.getknowledge.modules.userInfo.results.Result;
+import com.getknowledge.modules.Result;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.services.AbstractService;
@@ -26,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 @Service("SectionService")
 @Transactional
@@ -89,7 +89,7 @@ public class SectionService extends AbstractService implements BootstrapService,
     }
 
     @ActionWithFile(name = "updateCover" , mandatoryFields = {"id"})
-    public Result updateCover (HashMap<String,Object> data, MultipartFile file) throws PlatformException {
+    public Result updateCover (HashMap<String,Object> data, List<MultipartFile> files) throws PlatformException {
 
         Section section = sectionRepository.read(new Long((Integer)data.get("id")));
 
@@ -97,7 +97,7 @@ public class SectionService extends AbstractService implements BootstrapService,
             throw new NotAuthorized("access denied");
 
         try {
-            section.setCover(file.getBytes());
+            section.setCover(files.get(0).getBytes());
         } catch (IOException e) {
             trace.logException("Error set cover for section" , e , TraceLevel.Error);
             return Result.Failed;

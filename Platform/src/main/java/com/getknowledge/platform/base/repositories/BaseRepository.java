@@ -97,12 +97,12 @@ public abstract class BaseRepository<T extends AbstractEntity> {
     }
 
     public List<T> list() {
-        List<T> list = (List<T>)entityManager.createQuery("Select t from " + getClassEntity().getSimpleName() + " t").getResultList();
+        List<T> list = (List<T>)entityManager.createQuery("Select t from " + getClassEntity().getSimpleName() + " t order by t.id").getResultList();
         return list;
     }
 
     public List<T> listPartial(int first, int max) {
-        Query query = entityManager.createQuery("Select t from " + getClassEntity().getSimpleName() + " t");
+        Query query = entityManager.createQuery("Select t from " + getClassEntity().getSimpleName() + " t order by t.id");
         query.setFirstResult(first);
         query.setMaxResults(max);
         List<T> list = (List<T>)query.getResultList();

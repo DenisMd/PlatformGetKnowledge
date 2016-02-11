@@ -19,6 +19,7 @@ import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.base.repositories.enumerations.OrderRoute;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.FileLinkService;
+import com.getknowledge.platform.base.services.FileService;
 import com.getknowledge.platform.base.services.ImageService;
 import com.getknowledge.platform.exceptions.*;
 import com.getknowledge.platform.modules.filter.FilterService;
@@ -208,6 +209,40 @@ public class DataController {
                 return new ResponseEntity<>(imageService.getImageById(id), headers, HttpStatus.OK);
             }
 
+
+        } catch (ClassNotFoundException e) {
+            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+        } catch (Exception e) {
+            trace.logException("read image exception: " + e.getMessage(), e, TraceLevel.Warning);
+        }
+        return null;
+    }
+
+    @RequestMapping(value = "/readFile", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> readFile(@RequestParam(value = "id" ,required = true) Long id,
+                                           @RequestParam(value ="className" , required = true) String className,@RequestParam(value = "key") String key, Principal principal, HttpServletRequest request, HttpServletResponse response) throws PlatformException {
+        try {
+            if (id == null || className == null || className.isEmpty()) return null;
+            Class classEntity = Class.forName(className);
+            BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
+            if (repository instanceof ProtectedRepository) {
+                ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
+                protectedRepository.setCurrentUser(getCurrentUser(principal));
+            }
+            AbstractEntity entity = repository.read(id);
+            if (entity == null) {
+                return null;
+            }
+
+            if (!isAccessRead(principal, entity)) {
+                throw new NotAuthorized("access denied for read image" , trace, TraceLevel.Warning);
+            }
+            AbstractService abstractService = moduleLocator.findService(classEntity);
+            if (abstractService instanceof FileService) {
+                FileService fileService = ((FileService)abstractService);
+                final HttpHeaders headers = new HttpHeaders();
+                return new ResponseEntity<>(fileService.getFile(id,key), headers, HttpStatus.OK);
+            }
 
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
@@ -552,9 +587,14 @@ public class DataController {
 
     @RequestMapping(value = "/actionWithFile", method = RequestMethod.POST, headers=("content-type=multipart/*"))
     public @ResponseBody String actionWithFile(@RequestParam("className") String className, @RequestParam("actionName") String actionName,
-                                               @RequestParam("data") String jsonData, @RequestParam("file") MultipartFile file,
+                                               @RequestParam("data") String jsonData, @RequestParam("file") List<MultipartFile> files,
                                                Principal principal) throws PlatformException {
         try {
+
+            if (files.size() > 20) {
+                throw new LimitException("Files limit for one request is 20");
+            }
+
             Class classEntity = Class.forName(className);
             AbstractService abstractService = moduleLocator.findService(classEntity);
 
@@ -567,7 +607,7 @@ public class DataController {
                 HashMap<String,Object> data = getDataForAction(actionName, action.name(), action.mandatoryFields(), jsonData, principal);
 
                 if (data != null) {
-                    Object result = method.invoke(abstractService, data, file);
+                    Object result = method.invoke(abstractService, data, files);
                     return objectMapper.writeValueAsString(result);
                 }
             }

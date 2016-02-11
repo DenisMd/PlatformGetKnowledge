@@ -33,6 +33,7 @@ public class RoleService extends AbstractService implements BootstrapService {
 
             Role roleHelpDesk = new Role();
             roleHelpDesk.setRoleName(RoleName.ROLE_HELPDESK.name());
+            roleHelpDesk.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.ReadHpMessage));
             roleRepository.create(roleHelpDesk);
 
             Role author = new Role();
@@ -44,6 +45,7 @@ public class RoleService extends AbstractService implements BootstrapService {
             moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.EditSections));
             moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.EditMenu));
             moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.EditSocialLinks));
+            moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.EditGroupCourses));
             roleRepository.create(moderator);
         }
     }

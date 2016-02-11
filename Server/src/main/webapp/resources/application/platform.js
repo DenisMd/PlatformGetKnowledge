@@ -8,6 +8,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         return {
             "userInfo" : "com.getknowledge.modules.userInfo.UserInfo",
             "menu" : "com.getknowledge.modules.menu.Menu",
+            "menuItem" : "com.getknowledge.modules.menu.item.MenuItem",
             "video" : "com.getknowledge.modules.video.Video",
             "language" : "com.getknowledge.modules.dictionaries.language.Language",
             "country" : "com.getknowledge.modules.dictionaries.country.Country",
@@ -23,7 +24,8 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "trace" : "com.getknowledge.platform.modules.trace.Trace",
             "settings" : "com.getknowledge.modules.settings.Settings",
             "systemServices" : "com.getknowledge.platform.modules.service.Service",
-            "socialLinks" : "com.getknowledge.modules.socialLinks.SocialLink"
+            "socialLinks" : "com.getknowledge.modules.socialLinks.SocialLink",
+            "hpMessage" : "com.getknowledge.modules.help.desc.HpMessage"
          };
     })
     .factory('modules',function(){
@@ -157,7 +159,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             this.result = {first : this.first, max : this.max};
 
             this.increase = function (value) {
-                this.result.first = this.first + value;
+                this.result.first = this.result.first + value;
             };
 
             this.setOrder = function(order,desc) {
@@ -309,35 +311,35 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             });
         };
 
-        this.actionWithFile = function ($scope,name,className,actionName,data,file,callback){
+        this.actionWithFile = function ($scope,name,className,actionName,data,files,callback){
             "use strict";
             var formData = {
                 className: className,
                 actionName: actionName,
                 data: JSON.stringify(data)
             };
-            if (file) {
-                var uploader = $scope.uploader = new FileUploader({
+            if (files) {
+                var uploader = new FileUploader({
                     url: platformDataUrl+'actionWithFile',
                     autoUpload: false,
                     onBeforeUploadItem: function(item) {
                         item.formData.push(formData);
-                        console.log(item);
                     }
                 });
-                var isCallbackFunction = isFunction(callback);
 
                 uploader.onSuccessItem = function(fileItem, response, status, headers) {
                     var data = response;
-                    success(data);
+                    callback(data);
                 };
                 uploader.onErrorItem = function(fileItem, response, status, headers) {
                     errorService.showError(response,status);
                 };
 
-                    uploader.addToQueue(file);
-
-
+                if (Array.isArray(files)){
+                    uploader.queue = files;
+                } else {
+                    uploader.addToQueue(files);
+                }
                 uploader.uploadAll();
             } else {
                 $http({
@@ -419,6 +421,11 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         this.imageHref = function(className,id){
             if (!className || !id) return "";
             return "/data/image?className="+className+"&id="+id;
+        };
+
+        this.fileByKeyHref = function(className,id,key){
+            if (!className || !id) return "";
+            return "/data/readFile?className="+className+"&id="+id+"&key="+key;
         };
 
         function isFunction(func){
