@@ -3,7 +3,7 @@ model.controller("groupCoursesCtrl", function ($scope,applicationService,classNa
     applicationService.list($scope,"sections",className.section);
 
     $scope.multiLanguageData = {
-        label : $scope.translate("section_description")
+        label : $scope.translate("groupCourses_description")
     };
 
     var filter = applicationService.createFilter(className.groupCourses,0,10);
@@ -54,9 +54,28 @@ model.controller("groupCoursesCtrl", function ($scope,applicationService,classNa
     };
 
     $scope.updateGroup = function() {
-        $scope.groupCourses.descriptionRu = $scope.multiLanguageData.languages.ru;
-        $scope.groupCourses.descriptionEn = $scope.multiLanguageData.languages.en;
-        applicationService.update($scope,"",className.groupCourses,$scope.currentGroup);
+        $scope.currentGroup.descriptionRu = $scope.multiLanguageData.languages.ru;
+        $scope.currentGroup.descriptionEn = $scope.multiLanguageData.languages.en;
+        applicationService.update($scope,"",className.groupCourses,$scope.currentGroup,function(result){
+            $scope.showToast(result);
+        });
+    };
+
+    var croppedImg = {
+        save: function(file){
+            updateImage(file);
+        },
+        areaType:"square"
+    };
+
+    $scope.getCropImageData  = function(){
+        croppedImg.src = applicationService.imageHref(className.groupCourses,$scope.currentGroup.id);
+        croppedImg.notUseDefault = $scope.currentGroup.imageViewExist;
+        return croppedImg;
+    };
+
+    var updateImage = function(file) {
+        applicationService.actionWithFile($scope,"cover",className.groupCourses,"updateCover",{id:$scope.currentGroup.id},file);
     };
 
     applicationService.count($scope,"countGroupCourses",className.groupCourses);

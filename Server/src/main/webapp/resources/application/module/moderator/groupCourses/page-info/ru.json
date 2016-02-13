@@ -1,6 +1,8 @@
 {
   "text" : {
     "groupCourses_loadMore" : "Загрузить больше групп курсов",
-    "groupCourses_info" : "Инофрмация о группе"
+    "groupCourses_info" : "Инофрмация о группе",
+    "groupCourses_image" : "Изображение группы",
+    "groupCourses_description" : "Описание"
   }
 }

@@ -51,22 +51,27 @@
             <md-tab-body>
                 <p>
                     {{translate('id')}} : {{currentGroup.id}} <br/>
-                    {{translate('name')}} : {{currentGroup.title}}<br/>
+                    <div>
+                        <md-input-container>
+                            <label>{{translate("name")}}</label>
+                            <input ng-model="currentGroup.title">
+                        </md-input-container>
+                    </div>
                     <module-template name="inputs/multilanguage" data="multiLanguageData"></module-template>
-                    <md-button class="md-raised md-primary" ng-click="updateSections()" ng-disabled="!currentGroup">{{translate("update")}}</md-button>
+                    <md-button class="md-raised md-primary" ng-click="updateGroup()" ng-disabled="!currentGroup">{{translate("update")}}</md-button>
                 </p>
             </md-tab-body>
         </md-tab>
         <md-tab ng-if="currentGroup != null">
             <md-tab-label>
-                {{translate('section_image')}}
+                {{translate('groupCourses_image')}}
             </md-tab-label>
             <md-tab-body>
                 <md-content class="md-padding">
-                    <module-template name="inputs/selectImage" data="getCropImageData(currentSection)"></module-template>
+                    <module-template name="inputs/selectImage" data="getCropImageData()"></module-template>
                 </md-content>
             </md-tab-body>
-        </md-tab>
+        </md-tab>n
     </md-tabs>
 </md-content>
 
