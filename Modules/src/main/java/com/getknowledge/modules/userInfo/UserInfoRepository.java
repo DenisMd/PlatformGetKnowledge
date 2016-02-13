@@ -34,7 +34,7 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
         UserInfo userInfo = super.read(id);
         if (userInfo == null)
             return null;
-        if (currentUser != null && currentUser.getId().equals(userInfo.getId())) {
+        if (currentUser != null && currentUser.getId().equals(userInfo.getUser().getId())) {
             userInfo.setUserMenu(menuRepository.getSingleEntityByFieldAndValue("name", MenuNames.AuthorizedUser.name()));
         } else {
             userInfo.setUserMenu(menuRepository.getSingleEntityByFieldAndValue("name", MenuNames.NotAuthorizedUser.name()));

@@ -257,6 +257,17 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
     });
 });
 
+model.controller("treeListCtrl" , function ($scope) {
+    $scope.setCurrentItem = function(item , level){
+        item.isOpen = !item.isOpen;
+        $scope.getData().callback(item);
+
+        if (level) {
+            $scope.currentMenuItem.level = level;
+        }
+    };
+});
+
 model.controller("videoCtrl",function($scope){
     initVideoPlayer();
 

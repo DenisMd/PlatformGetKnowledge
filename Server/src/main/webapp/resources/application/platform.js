@@ -25,7 +25,8 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "settings" : "com.getknowledge.modules.settings.Settings",
             "systemServices" : "com.getknowledge.platform.modules.service.Service",
             "socialLinks" : "com.getknowledge.modules.socialLinks.SocialLink",
-            "hpMessage" : "com.getknowledge.modules.help.desc.HpMessage"
+            "hpMessage" : "com.getknowledge.modules.help.desc.HpMessage",
+            "groupCourses" : "com.getknowledge.modules.courses.group.GroupCourses"
          };
     })
     .factory('modules',function(){
@@ -258,7 +259,8 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             var isCallbackFunction = isFunction(callback);
 
             $http.get(platformDataUrl+"list?className="+className).success(function(data){
-                $scope[name] = data;
+                if (name)
+                    $scope[name] = data;
                 if (isCallbackFunction){
                     data.forEach(function(item,i,array){
                         callback(item,i,array);

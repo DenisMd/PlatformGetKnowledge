@@ -1,48 +1,24 @@
 package com.getknowledge.modules.courses.group;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.section.Section;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
+import com.getknowledge.platform.base.entities.Folder;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "courses_group")
 @ModuleInfo(repositoryName = "GroupCoursesRepository" , serviceName = "GroupCoursesService")
-public class GroupCourses extends AbstractEntity {
-
-    private String title;
-
-    @Column(name = "description_en")
-    private String descriptionEn;
-
-    @Column(name = "description_ru")
-    private String descriptionRu;
+public class GroupCourses extends Folder {
 
     @ManyToOne
+    @JsonIgnore
     private Section section;
-
-    public String getDescriptionEn() {
-        return descriptionEn;
-    }
-
-    public void setDescriptionEn(String descriptionEn) {
-        this.descriptionEn = descriptionEn;
-    }
-
-    public String getDescriptionRu() {
-        return descriptionRu;
-    }
-
-    public void setDescriptionRu(String descriptionRu) {
-        this.descriptionRu = descriptionRu;
-    }
 
     public Section getSection() {
         return section;
@@ -50,14 +26,6 @@ public class GroupCourses extends AbstractEntity {
 
     public void setSection(Section section) {
         this.section = section;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     @Override
