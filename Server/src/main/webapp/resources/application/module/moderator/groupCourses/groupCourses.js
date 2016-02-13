@@ -1,4 +1,4 @@
-model.controller("groupCoursesCtrl", function ($scope,applicationService,className) {
+model.controller("groupCoursesCtrl", function ($scope,applicationService,className,$mdDialog) {
 
     applicationService.list($scope,"sections",className.section);
 
@@ -79,4 +79,32 @@ model.controller("groupCoursesCtrl", function ($scope,applicationService,classNa
     };
 
     applicationService.count($scope,"countGroupCourses",className.groupCourses);
+
+
+    $scope.showDeleteDialog = function(ev) {
+        var confirm = $mdDialog.confirm()
+            .title($scope.translate("groupCourses_delete") + " " + $scope.currentGroup.title)
+            .textContent($scope.translate("groupCourses_delete_confirmation"))
+            .targetEvent(ev)
+            .ariaLabel('Delete role')
+            .ok($scope.translate("delete"))
+            .cancel($scope.translate("cancel"));
+        $mdDialog.show(confirm).then(function() {
+            applicationService.remove($scope,"",className.groupCourses,$scope.currentGroup.id,function (result) {
+                $scope.showToast(result);
+                $scope.coursesGroup = [];
+                doAction();
+            });
+        });
+    };
+
+    $scope.showAdvanced = function(ev) {
+        $scope.showDialog(ev,$scope,"createGroupCourses.html",function(answer){
+            applicationService.action($scope,"", className.groupCourses,"createGroupCourses",answer,function(result){
+                $scope.showToast(result);
+                $scope.coursesGroup = [];
+                doAction();
+            });
+        });
+    };
 });

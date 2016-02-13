@@ -2,6 +2,7 @@ package com.getknowledge.modules.courses.group;
 
 import com.getknowledge.modules.Result;
 import com.getknowledge.modules.section.Section;
+import com.getknowledge.modules.section.SectionRepository;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.services.AbstractService;
@@ -26,6 +27,9 @@ public class GroupCoursesService extends AbstractService implements ImageService
     private GroupCoursesRepository repository;
 
     @Autowired
+    private SectionRepository sectionRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -36,6 +40,23 @@ public class GroupCoursesService extends AbstractService implements ImageService
         long sectionId = new Long((Integer)data.get("sectionId"));
 
         return repository.getEntitiesByFieldAndValue("section.id" , sectionId);
+    }
+
+    @Action(name = "createGroupCourses" , mandatoryFields = {"sectionId", "title"})
+    public Result createGroupCourses (HashMap<String,Object> data) {
+
+        long sectionId = Long.parseLong((String) data.get("sectionId"));
+        Section section = sectionRepository.read(sectionId);
+        if (section == null) {
+            return Result.Failed;
+        }
+
+        GroupCourses groupCourses = new GroupCourses();
+        groupCourses.setTitle((String) data.get("title"));
+        groupCourses.setSection(section);
+        repository.create(groupCourses);
+
+        return Result.Complete;
     }
 
     @ActionWithFile(name = "updateCover" , mandatoryFields = {"id"})

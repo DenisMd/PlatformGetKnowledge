@@ -3,6 +3,10 @@
     "groupCourses_loadMore" : "Загрузить больше групп курсов",
     "groupCourses_info" : "Инофрмация о группе",
     "groupCourses_image" : "Изображение группы",
-    "groupCourses_description" : "Описание"
+    "groupCourses_description" : "Описание",
+    "groupCourses_create" : "Создать группу курсов",
+    "groupCourses_delete" : "Удалить группу курсов",
+    "groupCourses_delete_confirmation" : "Если группа содержит курсы удаление будет не возможно",
+    "section" : "Секция"
   }
 }

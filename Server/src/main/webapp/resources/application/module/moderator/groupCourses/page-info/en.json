@@ -3,6 +3,10 @@
     "groupCourses_loadMore" : "Load more group of courses",
     "groupCourses_info" : "Information about group",
     "groupCourses_image" : "Group cover",
-    "groupCourses_description" : "Description"
+    "groupCourses_description" : "Description",
+    "groupCourses_create" : "Create group of courses",
+    "groupCourses_delete" : "Delete group of courses",
+    "groupCourses_delete_confirmation" : "If group contain courses delete impossible",
+    "section" : "Section"
   }
 }
