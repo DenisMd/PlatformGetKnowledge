@@ -1,6 +1,5 @@
 model.controller("logsCtrl", function ($scope, $state,$http,applicationService,pageService,className) {
 
-
     var filter = applicationService.createFilter(className.trace,0,10);
     $scope.logs = [];
 

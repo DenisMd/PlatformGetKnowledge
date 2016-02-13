@@ -1,30 +1,63 @@
 model.controller("groupCoursesCtrl", function ($scope,applicationService,className) {
 
-    $scope.treeViewListData = {
-        dataList : [],
-        fieldTitle : "name",
-        fieldSubItems : "courses",
-        subItemFieldTitle : "title",
-        subItemFieldSubItems : "none",
-        callback : function(item) {
-            $scope.currentMenuItem = item;
+    applicationService.list($scope,"sections",className.section);
+
+    $scope.multiLanguageData = {
+        label : $scope.translate("section_description")
+    };
+
+    var filter = applicationService.createFilter(className.groupCourses,0,10);
+    $scope.coursesGroup= [];
+
+    var addGroupCourses = function(courses){
+        $scope.coursesGroup.push(courses);
+    };
+
+    var doAction = function(){
+        applicationService.filterRequest($scope,"",filter,addGroupCourses);
+    };
+
+    doAction();
+
+    var reverse = false;
+    $scope.setGroupOrder = function(orderName) {
+        reverse = !reverse;
+        filter.clearOrder();
+        filter.setOrder(orderName,reverse);
+
+
+        filter.reload();
+        $scope.coursesGroup = [];
+        doAction();
+    };
+
+    $scope.setSection = function(sectionId) {
+        if (!sectionId) {
+            filter.clearEqual();
+        } else {
+            filter.equal("section.id" , sectionId);
         }
+        filter.reload();
+        $scope.coursesGroup = [];
+        doAction();
     };
 
-    applicationService.list($scope,"sections", className.section,function(item){
-
-        item.courses = [];
-        item.name = item.name.capitalizeFirstLetter();
-        $scope.treeViewListData.dataList.push(item);
-        applicationService.action($scope,"",className.groupCourses,"getGroupCoursesFromSection",{
-            "sectionId" : item.id
-        },function(groupCourses){
-            item.courses.push(groupCourses);
-        });
-    });
-
+    $scope.currentGroup = null;
     $scope.setCurrentItem = function(item){
-        $scope.currentMenuItem = item;
-        item.isOpen = !item.isOpen;
+        $scope.currentGroup = item;
+        $scope.multiLanguageData.languages = {"ru":  item.descriptionRu, "en":  item.descriptionEn};
     };
+
+    $scope.loadMore = function () {
+        filter.increase(10);
+        doAction();
+    };
+
+    $scope.updateGroup = function() {
+        $scope.groupCourses.descriptionRu = $scope.multiLanguageData.languages.ru;
+        $scope.groupCourses.descriptionEn = $scope.multiLanguageData.languages.en;
+        applicationService.update($scope,"",className.groupCourses,$scope.currentGroup);
+    };
+
+    applicationService.count($scope,"countGroupCourses",className.groupCourses);
 });
