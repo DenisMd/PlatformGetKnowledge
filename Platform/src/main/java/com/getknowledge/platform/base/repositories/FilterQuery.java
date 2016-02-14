@@ -202,9 +202,10 @@ public class FilterQuery<T> {
 
     public Long count() {
         CriteriaQuery<Long> countCb = cb.createQuery(Long.class);
-        countCb.select(cb.count(countCb.from(pClassEntity)));
         if (previous != null)
-            countCb.where(previous);
+            countCb.select(cb.count(countCb.from(pClassEntity))).where(previous);
+        else
+            countCb.select(cb.count(countCb.from(pClassEntity)));
         return entityManager.createQuery(countCb).getSingleResult();
     }
 
