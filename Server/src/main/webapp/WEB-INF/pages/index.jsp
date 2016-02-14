@@ -29,6 +29,8 @@
     <link rel="stylesheet" type="text/css" href="/resources/css/main/selectImage.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/main/video.css">
 
+    <link rel="shortcut icon" type="image/x-icon" href="/resources/image/favicon.ico" />
+
     <meta charset="utf-8">
 </head>
 <body>

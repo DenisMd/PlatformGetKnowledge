@@ -24,6 +24,7 @@
     </bean>
 
     <mvc:resources mapping="/resources/**" location="/resources/"/>
+    <mvc:resources mapping="/favicon.ico" location="/resources/image/favicon.ico" />
 
     <!--<bean id="echo" class="ru.sw.modules.websoket.GameWebSocketHandler"></bean>-->
 

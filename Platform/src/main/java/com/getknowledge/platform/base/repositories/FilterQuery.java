@@ -200,6 +200,14 @@ public class FilterQuery<T> {
         return query;
     }
 
+    public Long count() {
+        CriteriaQuery<Long> countCb = cb.createQuery(Long.class);
+        countCb.select(cb.count(countCb.from(pClassEntity)));
+        if (previous != null)
+            countCb.where(previous);
+        return entityManager.createQuery(countCb).getSingleResult();
+    }
+
     public Root<T> getRoot() {
         return root;
     }

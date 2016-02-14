@@ -19,4 +19,9 @@ public class FilterService extends AbstractService {
         return abstractEntities;
     }
 
+    @Transactional
+    public Long getCount(FilterQuery filterQuery){
+        return filterQuery.count();
+    }
+
 }

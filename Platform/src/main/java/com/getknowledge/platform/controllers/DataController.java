@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.getknowledge.platform.annotations.Action;
@@ -93,7 +94,7 @@ public class DataController {
 
 //    Methods for read ----------------------------------------------------------------------------
 
-    private String prepareJson (AbstractEntity abstractEntity,Class classEntity,Principal principal) throws NotAuthorized, ModuleNotFound {
+    private ObjectNode prepareJson (AbstractEntity abstractEntity,Class classEntity,Principal principal) throws NotAuthorized, ModuleNotFound {
         ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
         objectNode.put("editable" , isAccessEdit(principal,abstractEntity));
         objectNode.put("creatable" , isAccessCreate(principal, abstractEntity));
@@ -104,7 +105,21 @@ public class DataController {
                 objectNode.put("imageViewExist" , true);
             }
         }
-        return objectNode.toString();
+        return objectNode;
+    }
+
+    private ArrayNode listToJsonString(List<AbstractEntity> list,Principal principal,BaseRepository repository,Class<?> classEntity) throws Exception {
+        ArrayNode nodes = objectMapper.createArrayNode();
+        for (AbstractEntity abstractEntity : list) {
+            if (!isAccessRead(principal, abstractEntity) ) {
+                // TODO: question may continue?
+                throw new NotAuthorized("access denied for read entity from list" , trace, TraceLevel.Warning);
+            }
+            abstractEntity = AbstractEntity.prepare(abstractEntity,repository,getCurrentUser(principal),moduleLocator);
+            nodes.add(prepareJson(abstractEntity,classEntity,principal));
+        }
+
+        return nodes;
     }
 
     @RequestMapping(value = "/read", method = RequestMethod.GET)
@@ -132,7 +147,7 @@ public class DataController {
 
             entity = AbstractEntity.prepare(entity,repository,getCurrentUser(principal),moduleLocator);
 
-            return prepareJson(entity,classEntity,principal);
+            return prepareJson(entity,classEntity,principal).toString();
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
         } catch (Exception e) {
@@ -283,22 +298,8 @@ public class DataController {
             if (list == null) {
                 return "";
             }
-            String jsonResult = "[";
-            for (AbstractEntity abstractEntity : list) {
-                if (!isAccessRead(principal, abstractEntity) ) {
-                    // TODO: question may continue?
-                    throw new NotAuthorized("access denied for read entity from list" , trace, TraceLevel.Warning);
-                }
-                abstractEntity = AbstractEntity.prepare(abstractEntity,repository,getCurrentUser(principal),moduleLocator);
-                jsonResult +=  prepareJson(abstractEntity,classEntity,principal);
-                jsonResult += ",";
-            }
-            if (jsonResult.length() > 1)
-                jsonResult = jsonResult.substring(0,jsonResult.length()-1);
 
-            jsonResult += "]";
-
-            return jsonResult;
+            return listToJsonString(list,principal,repository,classEntity).toString();
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
         } catch (Exception e) {
@@ -329,21 +330,7 @@ public class DataController {
                 return "";
             }
 
-            String jsonResult = "[";
-            for (AbstractEntity abstractEntity : list) {
-                if (!isAccessRead(principal, abstractEntity) ) {
-                    // TODO: question may continue?
-                    throw new NotAuthorized("access denied for read entity from list partial" , trace, TraceLevel.Warning);
-                }
-                jsonResult += prepareJson(abstractEntity,classEntity,principal);
-                jsonResult += ",";
-            }
-            if (jsonResult.length() > 1)
-                jsonResult = jsonResult.substring(0,jsonResult.length()-1);
-
-            jsonResult += "]";
-
-            return jsonResult;
+            return listToJsonString(list,principal,repository,classEntity).toString();
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
         } catch (Exception e) {
@@ -431,32 +418,11 @@ public class DataController {
                 return "";
             }
 
-            String jsonResult = "[";
-            for (AbstractEntity abstractEntity : list) {
-                if (!isAccessRead(principal, abstractEntity) ) {
-                    // TODO: question may continue?
-                    throw new NotAuthorized("access denied for read entity from filter" , trace, TraceLevel.Warning);
-                }
-                abstractEntity = AbstractEntity.prepare(abstractEntity,repository,getCurrentUser(principal),moduleLocator);
-                ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
-                objectNode.put("editable" , isAccessEdit(principal,abstractEntity));
-                objectNode.put("creatable" , isAccessCreate(principal,abstractEntity));
-                AbstractService abstractService = moduleLocator.findService(classEntity);
-                if (abstractService instanceof ImageService) {
-                    ImageService imageService = (ImageService) abstractService;
-                    if (imageService.getImageById(abstractEntity.getId()) != null) {
-                        objectNode.put("imageViewExist" , true);
-                    }
-                }
-                jsonResult += objectNode.toString();
-                jsonResult += ",";
-            }
-            if (jsonResult.length() > 1)
-                jsonResult = jsonResult.substring(0,jsonResult.length()-1);
+            ObjectNode objectNode = objectMapper.createObjectNode();
+            objectNode.put("totalEntitiesCount" , filterService.getCount(filterQuery));
+            objectNode.putArray("list").addAll(listToJsonString(list,principal,repository,classEntity));
 
-            jsonResult += "]";
-
-            return jsonResult;
+            return objectNode.toString();
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
         } catch (Exception e) {
