@@ -28,6 +28,7 @@
     <link rel="stylesheet" type="text/css" href="/resources/css/main/scroll.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/main/selectImage.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/main/video.css">
+    <link rel="stylesheet" type="text/css" href="/resources/css/main/graphics.css">
 
     <meta charset="utf-8">
 </head>

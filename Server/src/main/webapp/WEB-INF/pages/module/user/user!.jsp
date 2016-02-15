@@ -46,9 +46,9 @@
                             <a  class="completion-percentage" ng-repeat="item in dataForArcs">
                                 <canvas class="chart chart-doughnut"
                                         chart-data="[item.percent,100-item.percent]"
-                                        chart-labels="arcOptions.labels"
-                                        chart-colours="arcOptions.getColours(item)"
-                                        chart-options="arcOptions.arcOptions">
+                                        chart-labels="diagramOptions.labels"
+                                        chart-colours="diagramOptions.getColours(item)"
+                                        chart-options="diagramOptions.arcOptions">
                                 </canvas>
                                 <h1>{{item.title}}</h1>
                                 <p>{{item.percent + "%"}}</p>
@@ -68,34 +68,28 @@
                         </md-toolbar>
 
                         <div class="statistic-card-content" ng-show="showStatistic">
-                            <div layout="row" layout-align="center center">
-                                <div flex="33">
+                            <div>
+                                <div class="text-center">
                                     Some text
                                 </div>
-                                <div flex="66">
-                                    <canvas class="chart chart-line" chart-data="data"
-                                            chart-labels="labels" chart-series="series" chart-options="arcOptions.mainOption">
-                                    </canvas>
+                                <div class="statistic-graphic">
+                                    <canvas id="stastistic1"></canvas>
                                 </div>
                             </div>
-                            <div layout="row" layout-align="center center">
-                                <div flex="33">
+                            <div>
+                                <div class="text-center">
                                 Some text
                                 </div>
-                                <div flex="66">
-                                    <canvas class="chart chart-bar" chart-data="data"
-                                            chart-labels="labels" chart-series="series" chart-options="arcOptions.mainOption">
-                                    </canvas>
+                                <div class="statistic-graphic">
+                                    <canvas id="stastistic2"></canvas>
                                 </div>
                             </div>
-                            <div layout="row" layout-align="center center">
-                                <div flex="33">
+                            <div>
+                                <div class="text-center">
                                 Some text
                                 </div>
-                                <div flex="66">
-                                    <canvas class="chart chart-pie" chart-data="dataCircle"
-                                            chart-labels="labels" chart-options="arcOptions.mainOption">
-                                    </canvas>
+                                <div class="statistic-graphic">
+                                    <canvas id="stastistic3"></canvas>
                                 </div>
                             </div>
                         </div>

@@ -132,12 +132,12 @@
 }
 
 
-.completion-percentage canvas{
-    width: 100% !important;
-    max-width: 140px;
-    min-width: 140px;
-    height: auto !important;
-}
+/*.completion-percentage canvas{*/
+    /*width: 100% !important;*/
+    /*max-width: 140px;*/
+    /*min-width: 140px;*/
+    /*height: auto !important;*/
+/*}*/
 
 @media all and (min-width: 1920px) {
     .completion-percentage canvas{
@@ -165,25 +165,12 @@
     margin: 0;
 }
 
-.statistic-card{
-    border: 2px solid #000000;
+/*animation for statistic*/
+.statistic-card-content.ng-hide-add, .statistic-card-content.ng-hide-remove {
+    transition: all linear 0.5s;
 }
 
-.statistic-card-title{
-    background-color: #000000 !important;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-align-items: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-flex-direction: row;
-    -ms-flex-direction: row;
-    flex-direction: row;
-    margin:0;
-    color:#ffffff;
-}
-
-.statistic-card-content{
-    padding: 5px;
+.statistic-card-content.ng-hide {
+    opacity: 0;
+    margin-top:-500px;
 }

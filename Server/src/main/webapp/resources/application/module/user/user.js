@@ -62,7 +62,7 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         percent : 90,
         colour : "#FFCC00"
     } ];
-    $scope.arcOptions = arcService;
+    $scope.diagramOptions = arcService;
 
     //scroll для диаграмм курсов
     $scope.arcScrollConfig = angular.merge({axis:"x", advanced:{ autoExpandHorizontalScroll: true }}, $scope.modalScrollConfig);
@@ -79,9 +79,49 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
     $scope.showStatistic = true;
     $scope.toggelStatistic = function(){
         $scope.showStatistic = !$scope.showStatistic;
-    }
+    };
 
+    var grapic = {
+        labels : ["January", "February", "March", "April", "May", "June", "July"],
+        datasets: [
+                {
+                    fillColor: "rgba(220,220,220,0.2)",
+                    pointColor: "rgba(220,220,220,1)",
+                    data: [65, 59, 80, 81, 56, 55, 40]
+            }
+        ]
+    };
 
+    var dataCircle = [
+        {
+            value: 65,
+            color:"#F7464A",
+            label: "Red"
+        },
+        {
+            value: 50,
+            color: "#46BFBD",
+            label: "Green"
+        },
+        {
+            value: 100,
+            color: "#FDB45C",
+            label: "Yellow"
+        }
+    ];
+
+    var statisticGraphics = [];
+    var statisticGraphic = $("#stastistic1").get(0).getContext("2d");
+    var graphic = new Chart(statisticGraphic).Line(grapic, arcService.mainOption);
+    statisticGraphics.push(graphic);
+
+    statisticGraphic = $("#stastistic2").get(0).getContext("2d");
+    graphic = new Chart(statisticGraphic).Bar(grapic, arcService.mainOption);
+    statisticGraphics.push(graphic);
+
+    statisticGraphic = $("#stastistic3").get(0).getContext("2d");
+    graphic = new Chart(statisticGraphic).Pie(dataCircle, arcService.mainOption);
+    statisticGraphics.push(graphic);
 
     //modal
     //данные для select
