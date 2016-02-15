@@ -43,7 +43,8 @@ public class GroupCoursesService extends AbstractService implements ImageService
     }
 
     @Action(name = "createGroupCourses" , mandatoryFields = {"sectionId", "title"})
-    public Result createGroupCourses (HashMap<String,Object> data) {
+    public Result createGroupCourses (HashMap<String,Object> data) throws NotAuthorized {
+
 
         long sectionId = Long.parseLong((String) data.get("sectionId"));
         Section section = sectionRepository.read(sectionId);
@@ -52,6 +53,9 @@ public class GroupCoursesService extends AbstractService implements ImageService
         }
 
         GroupCourses groupCourses = new GroupCourses();
+        if (!groupCourses.getAuthorizationList().isAccessCreate(userRepository.getSingleEntityByFieldAndValue("login",data.get("principalName")))) {
+            throw new NotAuthorized("access denied to create group courses");
+        }
         groupCourses.setTitle((String) data.get("title"));
         groupCourses.setSection(section);
         repository.create(groupCourses);
