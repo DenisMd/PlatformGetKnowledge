@@ -24,4 +24,17 @@ model.controller("coursesCtrl", function ($scope,applicationService,className,pa
     $scope.coursesImg = function(id){
         return applicationService.imageHref(className.groupCourses,id);
     };
+
+    $scope.splitArray = function(array,even) {
+        var tempArr = [];
+        for (var i = 0; i < array.length; i++) {
+            if(i % 2 === 0 && even) { // index is even
+                tempArr.push(array[i]);
+            }
+            if(i % 2 === 1 && !even) { // index is onn
+                tempArr.push(array[i]);
+            }
+        }
+        return tempArr;
+    }
 });

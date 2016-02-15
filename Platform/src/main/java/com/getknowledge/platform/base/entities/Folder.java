@@ -9,10 +9,10 @@ public abstract class Folder extends AbstractEntity {
 
     private String title;
 
-    @Column(name = "description_en")
+    @Column(name = "description_en" , columnDefinition = "Text")
     private String descriptionEn;
 
-    @Column(name = "description_ru")
+    @Column(name = "description_ru" ,columnDefinition = "Text")
     private String descriptionRu;
 
     @Basic(fetch= FetchType.LAZY)

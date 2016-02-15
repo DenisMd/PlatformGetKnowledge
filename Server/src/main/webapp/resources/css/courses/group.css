@@ -1,0 +1,15 @@
+.title {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.md-card-image {
+    height: 300px;
+}
+
+
+.loadMore {
+    text-align: center;
+    cursor: pointer;
+    color: #00b3ee;
+}
