@@ -419,7 +419,7 @@ public class DataController {
             }
 
             ObjectNode objectNode = objectMapper.createObjectNode();
-            objectNode.put("totalEntitiesCount" , filterService.getCount(filterQuery));
+           // objectNode.put("totalEntitiesCount" , );
             objectNode.putArray("list").addAll(listToJsonString(list,principal,repository,classEntity));
 
             return objectNode.toString();

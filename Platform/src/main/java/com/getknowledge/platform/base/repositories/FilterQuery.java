@@ -28,7 +28,7 @@ public class FilterQuery<T> {
         q = cb.createQuery(classEntity);
         root = q.from(classEntity);
         orders = new ArrayList<>();
-        previous = null;
+        previous = cb.conjunction();
         this.entityManager = entityManager;
         pClassEntity = classEntity;
     }
@@ -198,15 +198,6 @@ public class FilterQuery<T> {
         }
 
         return query;
-    }
-
-    public Long count() {
-        CriteriaQuery<Long> countCb = cb.createQuery(Long.class);
-        if (previous != null)
-            countCb.select(cb.count(countCb.from(pClassEntity))).where(previous);
-        else
-            countCb.select(cb.count(countCb.from(pClassEntity)));
-        return entityManager.createQuery(countCb).getSingleResult();
     }
 
     public Root<T> getRoot() {

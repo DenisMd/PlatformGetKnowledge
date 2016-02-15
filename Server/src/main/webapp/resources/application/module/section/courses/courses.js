@@ -20,4 +20,8 @@ model.controller("coursesCtrl", function ($scope,applicationService,className,pa
         filter.increase(10);
         doAction();
     };
+
+    $scope.coursesImg = function(id){
+        return applicationService.imageHref(className.groupCourses,id);
+    };
 });
