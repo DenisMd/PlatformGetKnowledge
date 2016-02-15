@@ -28,7 +28,7 @@ public class FilterQuery<T> {
         q = cb.createQuery(classEntity);
         root = q.from(classEntity);
         orders = new ArrayList<>();
-        previous = null;
+        previous = cb.conjunction();
         this.entityManager = entityManager;
         pClassEntity = classEntity;
     }

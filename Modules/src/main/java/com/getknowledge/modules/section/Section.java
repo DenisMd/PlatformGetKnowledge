@@ -1,6 +1,7 @@
 package com.getknowledge.modules.section;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.modules.courses.group.GroupCourses;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.menu.item.MenuItem;
 import com.getknowledge.platform.annotations.ModuleInfo;
@@ -12,6 +13,7 @@ import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "section" , indexes =
@@ -36,6 +38,18 @@ public class Section extends AbstractEntity {
     @Lob @Column(name="cover")
     @JsonIgnore
     private byte[] cover;
+
+    @OneToMany(mappedBy = "section")
+    @JsonIgnore
+    private List<GroupCourses> groupCoursesList;
+
+    public List<GroupCourses> getGroupCoursesList() {
+        return groupCoursesList;
+    }
+
+    public void setGroupCoursesList(List<GroupCourses> groupCoursesList) {
+        this.groupCoursesList = groupCoursesList;
+    }
 
     public byte[] getCover() {
         return cover;

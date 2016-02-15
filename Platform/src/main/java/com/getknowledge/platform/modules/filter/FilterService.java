@@ -18,5 +18,4 @@ public class FilterService extends AbstractService {
         List<AbstractEntity> abstractEntities = filterQuery.getQuery(first,max).getResultList();
         return abstractEntities;
     }
-
 }

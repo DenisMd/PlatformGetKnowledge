@@ -26,27 +26,20 @@ model.controller("sectionsCtrl", function ($scope, $state,$http,applicationServi
         $scope.multiLanguageData.languages = {"ru":  item.descriptionRu, "en":  item.descriptionEn};
     };
 
-    $scope.sectionImg = function(id){
-        return applicationService.imageHref(className.section,id);
-    };
-
-    var coverImage = null;
-
-    $scope.croppedImg = {
+    var croppedImg = {
         save: function(file){
-            $scope.updateImage(file);
+            updateImage(file);
         },
         areaType:"square"
     };
 
-    $scope.getCropImageData  = function(currentSection){
-        $scope.croppedImg.src = $scope.sectionImg(currentSection.id);
-        $scope.croppedImg.notUseDefault = currentSection.imageViewExist;
-        return $scope.croppedImg;
+    $scope.getCropImageData  = function(){
+        croppedImg.src = applicationService.imageHref(className.section,$scope.currentSection.id);
+        croppedImg.notUseDefault = $scope.currentSection.imageViewExist;
+        return croppedImg;
     };
 
-    $scope.updateImage = function(file) {
-        applicationService.actionWithFile($scope,"cover",className.section,"updateCover",{id:$scope.currentSection.id},file,function(){
-        });
+    var updateImage = function(file) {
+        applicationService.actionWithFile($scope,"cover",className.section,"updateCover",{id:$scope.currentSection.id},file);
     }
 });

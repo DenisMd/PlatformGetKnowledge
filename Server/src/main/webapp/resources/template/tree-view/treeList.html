@@ -1,0 +1,16 @@
+<link rel="stylesheet" href="/resources/css/moderator/menu.css">
+<ul ng-controller="treeListCtrl">
+    <li ng-repeat="item in getData().dataList" class="menu-name">
+        <span ng-click="setCurrentItem(item, 1)">{{item[getData().fieldTitle]}}</span>
+        <ul>
+            <li ng-repeat="subItem in item[getData().fieldSubItems]" ng-include="'menuTree'" ng-show="item.isOpen" class="menu-item"></li>
+        </ul>
+        <script type="text/ng-template" id="menuTree">
+            <span ng-click="setCurrentItem(subItem)">{{ subItem[getData().subItemFieldTitle] }}</span>
+            <ul ng-if="subItem[getData().subItemFieldSubItems]" ng-show="subItem.isOpen">
+                <li ng-repeat="subItem in subItem[getData().subItemFieldSubItems]" ng-include="'menuTree'" class="menu-subItem">
+                </li>
+            </ul>
+        </script>
+    </li>
+</ul>

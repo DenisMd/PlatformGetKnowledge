@@ -9,6 +9,10 @@ html, body{
     height:100%;
 }
 
+.md-select-menu-container {
+    z-index: 1005;
+}
+
 p {
     font-size: 1em;
     line-height: 1.5em;

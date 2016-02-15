@@ -1,16 +1,21 @@
 model.controller("menuCtrl", function ($scope,applicationService,className) {
 
-    applicationService.list($scope,"listMenu",className.menu);
-
     $scope.currentMenuItem = null;
-    $scope.setCurrentItem = function(item , level){
-        $scope.currentMenuItem = item;
-        item.isOpen = !item.isOpen;
 
-        if (level) {
-            $scope.currentMenuItem.level = level;
+    $scope.treeViewListData = {
+        dataList : [],
+        fieldTitle : "name",
+        fieldSubItems : "items",
+        subItemFieldTitle : "title",
+        subItemFieldSubItems : "subItems",
+        callback : function(item) {
+            $scope.currentMenuItem = item;
         }
-    }
+    };
+
+    applicationService.list($scope,"listMenu",className.menu, function (item) {
+        $scope.treeViewListData.dataList.push(item);
+    });
 
     $scope.updateMenu = function () {
       var  tempClassName = className.menu;
