@@ -1,4 +1,4 @@
-model.controller("coursesCtrl", function ($scope,applicationService,className,pageService,$state) {
+model.controller("groupCoursesCtrl", function ($scope,applicationService,className,pageService,$state) {
 
     var sectionName = pageService.getPathVariable("section",$state.params.path);
 
