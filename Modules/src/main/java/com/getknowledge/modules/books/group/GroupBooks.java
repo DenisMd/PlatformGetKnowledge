@@ -1,4 +1,4 @@
-package com.getknowledge.modules.courses.group;
+package com.getknowledge.modules.books.group;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.section.Section;
@@ -8,12 +8,15 @@ import com.getknowledge.platform.base.entities.Folder;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Index;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
-@Table(name = "courses_group",indexes = {@Index(name = "index_by_title",  columnList="title", unique = true)})
-@ModuleInfo(repositoryName = "GroupCoursesRepository" , serviceName = "GroupCoursesService")
-public class GroupCourses extends Folder {
+@Table(name = "books_group",indexes = {@Index(name = "index_by_title",  columnList="title", unique = true)})
+@ModuleInfo(repositoryName = "GroupBooksRepository" , serviceName = "GroupBooksService")
+public class GroupBooks extends Folder {
 
     @ManyToOne
     @JsonIgnore

@@ -1,6 +1,7 @@
-package com.getknowledge.modules.courses.group;
+package com.getknowledge.modules.books.group;
 
 import com.getknowledge.modules.Result;
+import com.getknowledge.modules.courses.group.GroupCourses;
 import com.getknowledge.modules.section.Section;
 import com.getknowledge.modules.section.SectionRepository;
 import com.getknowledge.platform.annotations.Action;
@@ -20,11 +21,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-@Service("GroupCoursesService")
+@Service("GroupBooksService")
 public class GroupCoursesService extends AbstractService implements ImageService{
 
     @Autowired
-    private GroupCoursesRepository repository;
+    private GroupBooksRepository repository;
 
     @Autowired
     private SectionRepository sectionRepository;
@@ -35,14 +36,14 @@ public class GroupCoursesService extends AbstractService implements ImageService
     @Autowired
     private TraceService trace;
 
-    @Action(name = "getGroupCoursesFromSection" , mandatoryFields = {"sectionId"})
-    public List<GroupCourses> getCourses(HashMap<String,Object> data) {
+    @Action(name = "getGroupBooksFromSection" , mandatoryFields = {"sectionId"})
+    public List<GroupBooks> getCourses(HashMap<String,Object> data) {
         long sectionId = new Long((Integer)data.get("sectionId"));
 
         return repository.getEntitiesByFieldAndValue("section.id" , sectionId);
     }
 
-    @Action(name = "createGroupCourses" , mandatoryFields = {"sectionId", "title"})
+    @Action(name = "createGroupBooks" , mandatoryFields = {"sectionId", "title"})
     public Result createGroupCourses (HashMap<String,Object> data) throws NotAuthorized {
 
 
@@ -52,13 +53,13 @@ public class GroupCoursesService extends AbstractService implements ImageService
             return Result.Failed;
         }
 
-        GroupCourses groupCourses = new GroupCourses();
-        if (!groupCourses.getAuthorizationList().isAccessCreate(userRepository.getSingleEntityByFieldAndValue("login",data.get("principalName")))) {
-            throw new NotAuthorized("access denied to create group courses");
+        GroupBooks groupBooks = new GroupBooks();
+        if (!groupBooks.getAuthorizationList().isAccessCreate(userRepository.getSingleEntityByFieldAndValue("login",data.get("principalName")))) {
+            throw new NotAuthorized("access denied to create group books");
         }
-        groupCourses.setTitle((String) data.get("title"));
-        groupCourses.setSection(section);
-        repository.create(groupCourses);
+        groupBooks.setTitle((String) data.get("title"));
+        groupBooks.setSection(section);
+        repository.create(groupBooks);
 
         return Result.Complete;
     }
@@ -66,26 +67,26 @@ public class GroupCoursesService extends AbstractService implements ImageService
     @ActionWithFile(name = "updateCover" , mandatoryFields = {"id"})
     public Result updateCover (HashMap<String,Object> data, List<MultipartFile> files) throws PlatformException {
 
-        GroupCourses section = repository.read(new Long((Integer)data.get("id")));
+        GroupBooks books = repository.read(new Long((Integer)data.get("id")));
 
-        if (!isAccessToEdit(data,section,userRepository))
+        if (!isAccessToEdit(data,books,userRepository))
             throw new NotAuthorized("access denied");
 
         try {
-            section.setCover(files.get(0).getBytes());
+            books.setCover(files.get(0).getBytes());
         } catch (IOException e) {
-            trace.logException("Error set cover for group section" , e , TraceLevel.Error);
+            trace.logException("Error set cover for group book" , e , TraceLevel.Error);
             return Result.Failed;
         }
-        repository.update(section);
+        repository.update(books);
         return Result.Complete;
     }
 
     @Override
     public byte[] getImageById(long id) {
-        GroupCourses groupCourses = repository.read(id);
-        if (groupCourses != null)
-            return groupCourses.getCover();
+        GroupBooks books = repository.read(id);
+        if (books != null)
+            return books.getCover();
         return null;
     }
 }

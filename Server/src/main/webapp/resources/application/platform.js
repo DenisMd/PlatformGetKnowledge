@@ -315,6 +315,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
 
         this.actionWithFile = function ($scope,name,className,actionName,data,files,callback){
             "use strict";
+            var isCallbackFunction = isFunction(callback);
             var formData = {
                 className: className,
                 actionName: actionName,
@@ -331,7 +332,8 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
 
                 uploader.onSuccessItem = function(fileItem, response, status, headers) {
                     var data = response;
-                    callback(data);
+                    if (isCallbackFunction)
+                        callback(data);
                 };
                 uploader.onErrorItem = function(fileItem, response, status, headers) {
                     errorService.showError(response,status);

@@ -9,12 +9,10 @@ import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
 import com.getknowledge.platform.modules.bootstrapInfo.states.BootstrapState;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import com.getknowledge.platform.modules.role.Role;
-import com.getknowledge.platform.modules.role.names.RoleName;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +36,7 @@ public class PermissionService extends AbstractService implements BootstrapServi
         permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditSections.getName()));
         permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditMenu.getName()));
         permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditSocialLinks.getName()));
-        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditGroupCourses.getName()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditFolders.getName()));
         permissionRepository.ifNotExistCreate(new Permission(PermissionNames.ReadHpMessage.getName()));
     }
 

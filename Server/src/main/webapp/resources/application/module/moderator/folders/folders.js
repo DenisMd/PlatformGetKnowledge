@@ -1,4 +1,4 @@
-model.controller("groupCoursesCtrl", function ($scope,applicationService,className,$mdDialog) {
+model.controller("foldersCtrl", function ($scope,applicationService,className,$mdDialog) {
 
     applicationService.list($scope,"sections",className.section);
 

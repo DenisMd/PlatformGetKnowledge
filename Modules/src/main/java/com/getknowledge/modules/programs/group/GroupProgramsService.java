@@ -1,4 +1,4 @@
-package com.getknowledge.modules.courses.group;
+package com.getknowledge.modules.programs.group;
 
 import com.getknowledge.modules.Result;
 import com.getknowledge.modules.section.Section;
@@ -20,11 +20,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-@Service("GroupCoursesService")
-public class GroupCoursesService extends AbstractService implements ImageService{
+@Service("GroupProgramsService")
+public class GroupProgramsService extends AbstractService implements ImageService{
 
     @Autowired
-    private GroupCoursesRepository repository;
+    private GroupProgramsRepository repository;
 
     @Autowired
     private SectionRepository sectionRepository;
@@ -35,14 +35,14 @@ public class GroupCoursesService extends AbstractService implements ImageService
     @Autowired
     private TraceService trace;
 
-    @Action(name = "getGroupCoursesFromSection" , mandatoryFields = {"sectionId"})
-    public List<GroupCourses> getCourses(HashMap<String,Object> data) {
+    @Action(name = "getGroupProgramsFromSection" , mandatoryFields = {"sectionId"})
+    public List<GroupPrograms> getCourses(HashMap<String,Object> data) {
         long sectionId = new Long((Integer)data.get("sectionId"));
 
         return repository.getEntitiesByFieldAndValue("section.id" , sectionId);
     }
 
-    @Action(name = "createGroupCourses" , mandatoryFields = {"sectionId", "title"})
+    @Action(name = "createGroupPrograms" , mandatoryFields = {"sectionId", "title"})
     public Result createGroupCourses (HashMap<String,Object> data) throws NotAuthorized {
 
 
@@ -52,13 +52,13 @@ public class GroupCoursesService extends AbstractService implements ImageService
             return Result.Failed;
         }
 
-        GroupCourses groupCourses = new GroupCourses();
-        if (!groupCourses.getAuthorizationList().isAccessCreate(userRepository.getSingleEntityByFieldAndValue("login",data.get("principalName")))) {
-            throw new NotAuthorized("access denied to create group courses");
+        GroupPrograms programs = new GroupPrograms();
+        if (!programs.getAuthorizationList().isAccessCreate(userRepository.getSingleEntityByFieldAndValue("login",data.get("principalName")))) {
+            throw new NotAuthorized("access denied to create group of programs");
         }
-        groupCourses.setTitle((String) data.get("title"));
-        groupCourses.setSection(section);
-        repository.create(groupCourses);
+        programs.setTitle((String) data.get("title"));
+        programs.setSection(section);
+        repository.create(programs);
 
         return Result.Complete;
     }
@@ -66,26 +66,26 @@ public class GroupCoursesService extends AbstractService implements ImageService
     @ActionWithFile(name = "updateCover" , mandatoryFields = {"id"})
     public Result updateCover (HashMap<String,Object> data, List<MultipartFile> files) throws PlatformException {
 
-        GroupCourses section = repository.read(new Long((Integer)data.get("id")));
+        GroupPrograms programs = repository.read(new Long((Integer)data.get("id")));
 
-        if (!isAccessToEdit(data,section,userRepository))
+        if (!isAccessToEdit(data,programs,userRepository))
             throw new NotAuthorized("access denied");
 
         try {
-            section.setCover(files.get(0).getBytes());
+            programs.setCover(files.get(0).getBytes());
         } catch (IOException e) {
-            trace.logException("Error set cover for group section" , e , TraceLevel.Error);
+            trace.logException("Error set cover for group of programs" , e , TraceLevel.Error);
             return Result.Failed;
         }
-        repository.update(section);
+        repository.update(programs);
         return Result.Complete;
     }
 
     @Override
     public byte[] getImageById(long id) {
-        GroupCourses groupCourses = repository.read(id);
-        if (groupCourses != null)
-            return groupCourses.getCover();
+        GroupPrograms programs = repository.read(id);
+        if (programs != null)
+            return programs.getCover();
         return null;
     }
 }
