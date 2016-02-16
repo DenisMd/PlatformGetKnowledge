@@ -6,8 +6,38 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
         label : $scope.translate("groupCourses_description")
     };
 
-    var filter = applicationService.createFilter(className.groupCourses,0,10);
+    $scope.typesFolder = [{
+        name : "groupCourses",
+        className : className.groupCourses,
+        createActionName : "createGroupCourses",
+        updateCover : "updateCover"
+    },{
+        name : "groupBooks",
+        className : className.groupBooks,
+        createActionName : "createGroupBooks",
+        updateCover : "updateCover"
+    },{
+        name : "groupPrograms",
+        className : className.groupPrograms,
+        createActionName : "createGroupPrograms",
+        updateCover : "updateCover"
+    }];
+
+    var currentFolder =  $scope.typesFolder[0];
+
+
+    var filter = applicationService.createFilter(currentFolder.className,0,10);
     $scope.coursesGroup= [];
+
+    $scope.$watch('folderType', function(folder) {
+        if(folder) {
+            $scope.coursesGroup = [];
+            currentFolder = folder;
+            filter = applicationService.createFilter(currentFolder.className,0,10);
+            doAction();
+        }
+    });
+
 
     var addGroupCourses = function(courses){
         $scope.coursesGroup.push(courses);
@@ -56,7 +86,7 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
     $scope.updateGroup = function() {
         $scope.currentGroup.descriptionRu = $scope.multiLanguageData.languages.ru;
         $scope.currentGroup.descriptionEn = $scope.multiLanguageData.languages.en;
-        applicationService.update($scope,"",className.groupCourses,$scope.currentGroup,function(result){
+        applicationService.update($scope,"",currentFolder.className,$scope.currentGroup,function(result){
             $scope.showToast(result);
         });
     };
@@ -69,28 +99,26 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
     };
 
     $scope.getCropImageData  = function(){
-        croppedImg.src = applicationService.imageHref(className.groupCourses,$scope.currentGroup.id);
+        croppedImg.src = applicationService.imageHref(currentFolder.className,$scope.currentGroup.id);
         croppedImg.notUseDefault = $scope.currentGroup.imageViewExist;
         return croppedImg;
     };
 
     var updateImage = function(file) {
-        applicationService.actionWithFile($scope,"cover",className.groupCourses,"updateCover",{id:$scope.currentGroup.id},file);
+        applicationService.actionWithFile($scope,"cover",currentFolder.className,currentFolder.updateCover,{id:$scope.currentGroup.id},file);
     };
-
-    applicationService.count($scope,"countGroupCourses",className.groupCourses);
 
 
     $scope.showDeleteDialog = function(ev) {
         var confirm = $mdDialog.confirm()
-            .title($scope.translate("groupCourses_delete") + " " + $scope.currentGroup.title)
-            .textContent($scope.translate("groupCourses_delete_confirmation"))
+            .title($scope.translate("folder_delete") + " " + $scope.currentGroup.title)
+            .textContent($scope.translate("folder_delete_confirmation"))
             .targetEvent(ev)
             .ariaLabel('Delete role')
             .ok($scope.translate("delete"))
             .cancel($scope.translate("cancel"));
         $mdDialog.show(confirm).then(function() {
-            applicationService.remove($scope,"",className.groupCourses,$scope.currentGroup.id,function (result) {
+            applicationService.remove($scope,"",currentFolder.className,$scope.currentGroup.id,function (result) {
                 $scope.showToast(result);
                 $scope.coursesGroup = [];
                 doAction();
@@ -100,7 +128,7 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
 
     $scope.showAdvanced = function(ev) {
         $scope.showDialog(ev,$scope,"createGroupCourses.html",function(answer){
-            applicationService.action($scope,"", className.groupCourses,"createGroupCourses",answer,function(result){
+            applicationService.action($scope,"", currentFolder.className,currentFolder.createActionName,answer,function(result){
                 $scope.showToast(result);
                 $scope.coursesGroup = [];
                 doAction();

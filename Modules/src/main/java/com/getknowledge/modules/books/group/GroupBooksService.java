@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service("GroupBooksService")
-public class GroupCoursesService extends AbstractService implements ImageService{
+public class GroupBooksService extends AbstractService implements ImageService{
 
     @Autowired
     private GroupBooksRepository repository;

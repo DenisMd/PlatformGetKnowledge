@@ -1,12 +1,15 @@
 {
   "text" : {
-    "groupCourses_loadMore" : "Load more group of courses",
-    "groupCourses_info" : "Information about group",
-    "groupCourses_image" : "Group cover",
-    "groupCourses_description" : "Description",
-    "groupCourses_create" : "Create group of courses",
-    "groupCourses_delete" : "Delete group of courses",
-    "groupCourses_delete_confirmation" : "If group contain courses delete impossible",
-    "section" : "Section"
+    "folder_loadMore" : "Load more group of courses",
+    "folder_info" : "Information about group",
+    "folder__image" : "Group cover",
+    "folder_description" : "Description",
+    "folder_create" : "Create folder",
+    "folder_delete" : "Delete folder",
+    "folder_delete_confirmation" : "If folder contain entities delete impossible",
+    "section" : "Section",
+    "folder_type" : "Group type",
+    "groupBooks" : "Group books",
+    "groupPrograms" : "Group programs"
   }
 }
