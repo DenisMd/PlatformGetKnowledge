@@ -3,11 +3,19 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
+        <md-input-container>
+            <label>{{translate("folder_type")}}</label>
+            <md-select ng-model="folderType">
+                <md-option ng-repeat="folder in typesFolder"  ng-value="folder">
+                    {{translate(folder.name)}}
+                </md-option>
+            </md-select>
+        </md-input-container>
         <span class="panel-item fa fa-3x fa-plus create" tooltip-placement="bottom"
-              uib-tooltip="{{translate('groupCourses_create')}}" ng-click="showAdvanced($event)">
+              uib-tooltip="{{translate('folder_create')}}" ng-click="showAdvanced($event)">
         </span>
         <span class="panel-item fa fa-3x fa-minus delete" tooltip-placement="bottom"
-              uib-tooltip="{{translate('groupCourses_delete')}}" ng-click="showDeleteDialog($event)" ng-if="currentGroup != null">
+              uib-tooltip="{{translate('folder_delete')}}" ng-click="showDeleteDialog($event)" ng-if="currentGroup != null">
         </span>
         <md-input-container>
             <label>{{translate("section")}}</label>
@@ -23,7 +31,6 @@
 
 <div class="table-selector">
     <table class="table table-hover ">
-        <caption>{{translate("courses")}} : {{countGroupCourses + ' ' + translate("ofRecords")}}</caption>
         <thead>
         <tr>
             <th ng-click="setGroupOrder('id')">
@@ -41,7 +48,7 @@
         </tr>
         <tr>
             <td colspan="4" ng-click="loadMore()" class="loadMore">
-                {{translate("groupCourses_loadMore")}}
+                {{translate("folder_loadMore")}}
             </td>
         </tr>
         </tbody>
@@ -52,7 +59,7 @@
     <md-tabs md-dynamic-height md-border-bottom>
         <md-tab ng-if="currentGroup != null">
             <md-tab-label>
-                {{translate('groupCourses_info')}}
+                {{translate('folder_info')}}
             </md-tab-label>
             <md-tab-body>
                 <p>
@@ -70,7 +77,7 @@
         </md-tab>
         <md-tab ng-if="currentGroup != null">
             <md-tab-label>
-                {{translate('groupCourses_image')}}
+                {{translate('folder_image')}}
             </md-tab-label>
             <md-tab-body>
                 <md-content class="md-padding">
@@ -86,7 +93,7 @@
     <md-dialog  ng-cloak aria-label="options dialog">
             <md-toolbar>
                 <div class="md-toolbar-tools" >
-                    <h2>{{parentScope.translate("groupCourses_create")}}</h2>
+                    <h2>{{parentScope.translate("folder_create")}}</h2>
                     <span flex></span>
                     <md-button class="md-icon-button" ng-click="cancel()">
                         <md-icon md-svg-src="resources/image/svg/close.svg" aria-label="Close dialog"></md-icon>

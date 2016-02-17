@@ -1,12 +1,15 @@
 {
   "text" : {
-    "groupCourses_loadMore" : "Загрузить больше групп курсов",
-    "groupCourses_info" : "Инофрмация о группе",
-    "groupCourses_image" : "Изображение группы",
-    "groupCourses_description" : "Описание",
-    "groupCourses_create" : "Создать группу курсов",
-    "groupCourses_delete" : "Удалить группу курсов",
-    "groupCourses_delete_confirmation" : "Если группа содержит курсы удаление будет не возможно",
-    "section" : "Секция"
+    "folder_loadMore" : "Загрузить больше групп курсов",
+    "folder_info" : "Инофрмация о группе",
+    "folder_image" : "Изображение группы",
+    "folder_description" : "Описание",
+    "folder_create" : "Создать каталог",
+    "folder_delete" : "Удалить каталог",
+    "folder_delete_confirmation" : "Если каталог содержит сущности удаление будет не возможно",
+    "section" : "Секция",
+    "folder_type" : "Тип группы",
+    "groupBooks" : "Группа книг",
+    "groupPrograms" : "Грппа программ"
   }
 }

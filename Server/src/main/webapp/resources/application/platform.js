@@ -26,7 +26,9 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "systemServices" : "com.getknowledge.platform.modules.service.Service",
             "socialLinks" : "com.getknowledge.modules.socialLinks.SocialLink",
             "hpMessage" : "com.getknowledge.modules.help.desc.HpMessage",
-            "groupCourses" : "com.getknowledge.modules.courses.group.GroupCourses"
+            "groupCourses" : "com.getknowledge.modules.courses.group.GroupCourses",
+            "groupBooks" : "com.getknowledge.modules.books.group.GroupBooks",
+            "groupPrograms" : "com.getknowledge.modules.programs.group.GroupPrograms"
          };
     })
     .factory('modules',function(){
