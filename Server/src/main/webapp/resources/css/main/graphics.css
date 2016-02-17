@@ -1,7 +1,12 @@
+/*---------------------------user page--------------------------------------------*/
+
+/*statistic panel*/
 .statistic-card{
     border: 2px solid #000000;
     position: relative;
     overflow: hidden;
+    font: 800 18px 'PT Sans', sans-serif;
+
 }
 
 .statistic-card-title{
@@ -36,4 +41,49 @@
 
 .statistic-card-title > .md-toolbar-tools{
     height: 20px;
+}
+
+/*statistic panel*/
+.completion-desk{
+    position: relative;
+}
+
+.completion-percentage{
+    color: inherit;
+    text-align: center;
+    display: inline-block;
+    position: relative;
+    width:130px;
+    height: 200px;
+    margin: 0 5px;
+}
+
+@media all and (min-width: 1600px) {
+    .completion-percentage{
+        width: 200px;
+    }
+}
+
+@media all and (min-width: 1920px) {
+    .completion-percentage{
+        width: 400px;
+    }
+}
+
+@media all and (min-width: 3840px) {
+    .completion-percentage{
+        width: 500px;
+    }
+}
+
+.completion-percentage:hover{
+    color: inherit;
+    text-decoration: none;
+}
+.completion-percentage h1{
+    margin:0;
+}
+
+.completion-percentage p{
+    margin: 0;
 }
