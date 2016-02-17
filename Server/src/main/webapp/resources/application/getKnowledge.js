@@ -821,10 +821,10 @@ model.controller("sectionCard",function($scope,applicationService,className){
 model.controller("folderCardsCtrl" , function ($scope,applicationService) {
     var filter = applicationService.createFilter($scope.getData().className,0,10);
     filter.equal("section.name",$scope.getData().sectionName);
-    $scope.groupCourses = [];
+    $scope.folders = [];
 
-    var addLog = function(groupCourses){
-        $scope.groupCourses.push(groupCourses);
+    var addLog = function(folder){
+        $scope.folders.push(folder);
     };
 
     var doAction = function(){
@@ -838,7 +838,7 @@ model.controller("folderCardsCtrl" , function ($scope,applicationService) {
         doAction();
     };
 
-    $scope.coursesImg = function(id){
+    $scope.folderImg = function(id){
         return applicationService.imageHref($scope.getData().className,id);
     };
 

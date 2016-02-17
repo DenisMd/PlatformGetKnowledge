@@ -2,7 +2,7 @@
     <md-content class="md-padding" layout-xs="column" layout="row">
         <div flex-xs flex-gt-xs="50" layout="column">
             <md-card ng-repeat="gc in splitArray(groupCourses,true)">
-                <img ng-src="{{coursesImg(gc.id)}}" class="md-card-image" alt="Washed Out">
+                <img ng-src="{{folderImg(gc.id)}}" class="md-card-image" alt="Washed Out">
                 <md-card-title>
                     <md-card-title-text>
                         <span class="md-headline">{{gc.title}}</span>
