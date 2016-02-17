@@ -2,7 +2,7 @@ package com.getknowledge.platform.modules.permission.names;
 
 public enum PermissionNames {
     EditSections("Edit sections") , EditMenu("Edit menu"), EditSocialLinks("Social Links"),
-    EditFolders("Edit folders"), ReadHpMessage("Read help desc message");
+    EditFolders("Edit folders"), ReadHpMessage("Read help desc message"),EditBooks("Edit book"),CreateBooks("Create books");
 
     private String name;
 

@@ -1,7 +1,7 @@
 package com.getknowledge.modules;
 
 public enum Result {
-    Complete, Failed, SessionFailed,EmailNotSend;
+    Complete, Failed, SessionFailed,EmailNotSend,NotAuthorized,AccessDenied;
 
     private Object object = new Object();
 
