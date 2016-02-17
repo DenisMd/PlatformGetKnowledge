@@ -818,6 +818,44 @@ model.controller("sectionCard",function($scope,applicationService,className){
     };
 });
 
+model.controller("folderCardsCtrl" , function ($scope,applicationService) {
+    var filter = applicationService.createFilter($scope.getData().className,0,10);
+    filter.equal("section.name",$scope.getData().sectionName);
+    $scope.groupCourses = [];
+
+    var addLog = function(groupCourses){
+        $scope.groupCourses.push(groupCourses);
+    };
+
+    var doAction = function(){
+        applicationService.filterRequest($scope,"",filter,addLog);
+    };
+
+    doAction();
+
+    $scope.loadMore = function () {
+        filter.increase(10);
+        doAction();
+    };
+
+    $scope.coursesImg = function(id){
+        return applicationService.imageHref($scope.getData().className,id);
+    };
+
+    $scope.splitArray = function(array,even) {
+        var tempArr = [];
+        for (var i = 0; i < array.length; i++) {
+            if(i % 2 === 0 && even) { // index is even
+                tempArr.push(array[i]);
+            }
+            if(i % 2 === 1 && !even) { // index is onn
+                tempArr.push(array[i]);
+            }
+        }
+        return tempArr;
+    }
+});
+
 //dialogs
 function DialogController($scope, $mdDialog , theScope) {
     $scope.parentScope = theScope;

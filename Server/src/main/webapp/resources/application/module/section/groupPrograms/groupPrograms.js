@@ -1,9 +1,9 @@
-model.controller("groupCoursesCtrl", function ($scope,applicationService,className,pageService,$state) {
+model.controller("groupProgramsCtrl", function ($scope,applicationService,className,pageService,$state) {
 
     var sectionName = pageService.getPathVariable("section",$state.params.path);
 
     $scope.folderData = {
         sectionName : sectionName,
-        className : className.groupCourses
+        className : className.groupPrograms
     };
 });

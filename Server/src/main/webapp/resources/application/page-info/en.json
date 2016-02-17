@@ -74,6 +74,7 @@
     "version" : "Version",
     "change_image" : "Change image",
     "message" : "Message",
-    "type" : "Type"
+    "type" : "Type",
+    "load_more" : "Load more"
   }
 }
