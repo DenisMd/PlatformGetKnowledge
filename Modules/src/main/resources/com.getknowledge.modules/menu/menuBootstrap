@@ -103,7 +103,7 @@ Moderator : ROLE_MODERATOR
     moderator : /moderator : /resources/image/menu/icons/panel.png : 999999
         sections : /sections
         menu : /menu
-        groupCourses : /groupCourses
+        folders : /folders
         socialLinks : /socialLinks
     programming : /section/programming : /resources/image/menu/icons/programming.png : d35136
         courses : /groupCourses : /resources/image/menu/icons/courses.png
