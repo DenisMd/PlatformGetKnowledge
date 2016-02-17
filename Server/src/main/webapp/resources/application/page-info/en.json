@@ -75,6 +75,7 @@
     "change_image" : "Change image",
     "message" : "Message",
     "type" : "Type",
-    "load_more" : "Load more"
+    "load_more" : "Load more",
+    "move" : "Move"
   }
 }
