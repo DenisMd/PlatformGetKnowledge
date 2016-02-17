@@ -41,15 +41,10 @@
         </div>
     </div>
     <div class="col-sm-7  col-md-8 col-lg-9">
-                <div class="col-md-7">
+                <div class="row col-md-7">
                         <div class="completion-desk" ng-scrollbars ng-scrollbars-config="arcScrollConfig">
                             <a  class="completion-percentage" ng-repeat="item in dataForArcs">
-                                <canvas class="chart chart-doughnut"
-                                        chart-data="[item.percent,100-item.percent]"
-                                        chart-labels="diagramOptions.labels"
-                                        chart-colours="diagramOptions.getColours(item)"
-                                        chart-options="diagramOptions.arcOptions">
-                                </canvas>
+                                <canvas ng-attr-id="arc{{$index}}"></canvas>
                                 <h1>{{item.title}}</h1>
                                 <p>{{item.percent + "%"}}</p>
                             </a>

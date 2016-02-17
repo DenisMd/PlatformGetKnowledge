@@ -1,4 +1,4 @@
-model.controller("userCtrl", function ($scope, $state,$http,applicationService,pageService,arcService,className) {
+model.controller("userCtrl", function ($scope, $state,$timeout,$http,applicationService,pageService,arcService,className) {
     var userId = pageService.getPathVariable("user",$state.params.path);
 
     if (userId) {
@@ -50,38 +50,29 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         id : 1,
         title : "Java",
         percent : 80,
-        colour : "#FF2B2B"
+        color : "#FF2B2B"
     }, {
         id : 2,
         title : "Photoshop",
         percent : 70,
-        colour : "#8000FF"
+        color : "#8000FF"
     },{
         id : 3,
         title : "JavaScript",
         percent : 90,
-        colour : "#FFCC00"
+        color : "#FFCC00"
     } ];
-    $scope.diagramOptions = arcService;
 
     //scroll для диаграмм курсов
     $scope.arcScrollConfig = angular.merge({axis:"x", advanced:{ autoExpandHorizontalScroll: true }}, $scope.modalScrollConfig);
 
     //статистика
-    $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
-    $scope.series = ['A'];
-    $scope.data = [
-        [65, 59, 80, 81, 56, 55, 40]
-    ];
-    $scope.dataCircle = [65, 59, 80, 81, 56, 55, 40];
-
-
     $scope.showStatistic = true;
     $scope.toggelStatistic = function(){
         $scope.showStatistic = !$scope.showStatistic;
     };
 
-    var grapic = {
+    var graphicData = {
         labels : ["January", "February", "March", "April", "May", "June", "July"],
         datasets: [
                 {
@@ -111,17 +102,55 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
     ];
 
     var statisticGraphics = [];
-    var statisticGraphic = $("#stastistic1").get(0).getContext("2d");
-    var graphic = new Chart(statisticGraphic).Line(grapic, arcService.mainOption);
-    statisticGraphics.push(graphic);
+    var arcGraphics = [];
 
-    statisticGraphic = $("#stastistic2").get(0).getContext("2d");
-    graphic = new Chart(statisticGraphic).Bar(grapic, arcService.mainOption);
-    statisticGraphics.push(graphic);
+    var test = [
+        {
+            value: 300,
+            color:"#F7464A",
+            highlight: "#FF5A5E",
+            label: "Red"
+        },
+        {
+            value: 50,
+            color: "#46BFBD",
+            highlight: "#5AD3D1",
+            label: "Green"
+        },
+        {
+            value: 100,
+            color: "#FDB45C",
+            highlight: "#FFC870",
+            label: "Yellow"
+        }
+    ];
+    $timeout(function(){
+        $scope.dataForArcs.forEach(
+        function(item,i){
+        var ctx = document.getElementById("arc"+i).getContext("2d");
+        var myDoughnutChart = new Chart(ctx).Doughnut(arcService.getDataForArc(item.percent,item.color),arcService.arcOptions);
+        arcGraphics[i] = myDoughnutChart;
+    })
+    },0);
+    var initGraphics = function(firstData,secondData,thirdData){
+        var statisticGraphic = angular.element("#stastistic1")[0].getContext("2d");
+        var graphic = new Chart(statisticGraphic).Line(graphicData, arcService.mainOption);
+        statisticGraphics.push(graphic);
 
-    statisticGraphic = $("#stastistic3").get(0).getContext("2d");
-    graphic = new Chart(statisticGraphic).Pie(dataCircle, arcService.mainOption);
-    statisticGraphics.push(graphic);
+        statisticGraphic = $("#stastistic2").get(0).getContext("2d");
+        graphic = new Chart(statisticGraphic).Bar(graphicData, arcService.mainOption);
+        statisticGraphics.push(graphic);
+
+        statisticGraphic = $("#stastistic3").get(0).getContext("2d");
+        graphic = new Chart(statisticGraphic).Pie(dataCircle, arcService.mainOption);
+        statisticGraphics.push(graphic);
+
+
+    };
+    initGraphics();
+
+
+
 
     //modal
     //данные для select
@@ -230,14 +259,5 @@ model.controller("userCtrl", function ($scope, $state,$http,applicationService,p
         }
     }
 
-});
 
-//model.directive("containerScrollablle", function(){
-//    return {
-//        link:function(scope,element){
-//            scope.$watch(function(){return element.width()}, function (newValue, oldValue) {
-//                element.find("a").width(newValue / 3);
-//            });
-//        }
-//    }
-//});
+});
