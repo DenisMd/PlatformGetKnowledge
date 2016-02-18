@@ -813,6 +813,10 @@ model.controller("textareaCtrl",function($scope,$element){
 
     $scope.getTextClass = function(){
         return defaultText.default? "default-text" : "";
+    };
+
+    $scope.getMaxLength = function(){
+        return $scope.getData().maxLength;
     }
 });
 

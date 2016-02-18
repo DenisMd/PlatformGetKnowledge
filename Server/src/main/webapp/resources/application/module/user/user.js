@@ -41,7 +41,9 @@ model.controller("userCtrl", function ($scope, $state,$timeout,$http,application
     };
 
     //данные для status
-    $scope.statusText = {};
+    $scope.statusText = {
+        maxLength:140
+    };
 
 
     //основной контент
