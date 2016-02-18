@@ -3,6 +3,8 @@ package com.getknowledge.modules.section;
 import com.getknowledge.platform.base.repositories.BaseRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository("SectionRepository")
 public class SectionRepository extends BaseRepository<Section> {
 
@@ -12,8 +14,8 @@ public class SectionRepository extends BaseRepository<Section> {
     }
 
     public Section getSectionByNameAndLanguage(String name , String language) {
-        Section section = (Section) entityManager.createQuery("select sec from Section sec where sec.name = :name")
-                .setParameter("name" , name).getSingleResult();
-        return section;
+        List<Section> section = (List<Section>) entityManager.createQuery("select sec from Section sec where sec.name = :name")
+                .setParameter("name" , name).getResultList();
+        return section.isEmpty() ? null : section.get(0);
     }
 }

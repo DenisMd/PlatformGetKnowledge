@@ -820,11 +820,15 @@ model.controller("textareaCtrl",function($scope,$element){
     }
 });
 
-model.controller("sectionCard",function($scope,applicationService,className){
+model.controller("sectionCard",function($scope,$state,applicationService,className){
     applicationService.action($scope, "section" , className.section,"getSectionByNameAndLanguage" , {
         language : $scope.application.language.capitalizeFirstLetter(),
         name :  $scope.getData().sectionName
     } , function(section){
+        //Нету секции
+        if (!section){
+            $state.go("404");
+        }
         $scope.sectionCards = {
             title : "categories",
             cardsInRow : 3,
