@@ -6,6 +6,6 @@
             <button class="btn btn-sm btn-danger" ng-click="showTextarea($event)" ng-show="showingTextarea"><i class="fa fa-ban"></i></button>
     </p>
 
-    <p class="editable-text" ng-if="!showingTextarea">{{getData().text}}</p>
+    <p class="editable-text" ng-if="!showingTextarea" ng-class="getTextClass()">{{getText().text}}</p>
     <textarea class="editable-textarea form-control" ng-model="model.text" ng-if="showingTextarea && !isReadonly()" ng-class="showingTextarea?'editable-text-focus':''"></textarea>
 </div>

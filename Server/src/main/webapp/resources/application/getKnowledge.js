@@ -746,6 +746,10 @@ model.controller("textareaCtrl",function($scope,$element){
     $scope.showingTextarea = false;
     $scope.showEditButton = false;
     $scope.model = {};
+    var defaultText = {
+        text: $scope.translate("module_change_text"),
+        use: false
+    };
 
     $scope.toggelEditButton = function(event){
         if ($scope.isReadonly()) return;
@@ -795,9 +799,21 @@ model.controller("textareaCtrl",function($scope,$element){
         if(angular.isFunction($scope.getData().readonly)){
             return $scope.getData().readonly();
         }
-        return $scope.getData().readonly;
-    }
+        return $scope.getData().readonly?$scope.getData().readonly:false;
+    };
 
+    $scope.getText = function(){
+        if (!$scope.getData().text && !$scope.isReadonly()){
+                defaultText.default = true;
+                return defaultText;
+        }
+        defaultText.default = false;
+        return $scope.getData();
+    };
+
+    $scope.getTextClass = function(){
+        return defaultText.default? "default-text" : "";
+    }
 });
 
 model.controller("sectionCard",function($scope,applicationService,className){
