@@ -747,7 +747,7 @@ model.controller("textareaCtrl",function($scope,$element){
     $scope.showEditButton = false;
     $scope.model = {};
     var defaultText = {
-        text: $scope.translate("module_change_text"),
+        text: $scope.translate("textarea_change_text"),
         use: false
     };
 
