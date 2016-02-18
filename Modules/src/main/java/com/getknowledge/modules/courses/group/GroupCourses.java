@@ -11,7 +11,7 @@ import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "courses_group",indexes = {@Index(name = "index_by_title",  columnList="title", unique = true)})
+@Table(name = "courses_group")
 @ModuleInfo(repositoryName = "GroupCoursesRepository" , serviceName = "GroupCoursesService")
 public class GroupCourses extends Folder {
 
