@@ -70,6 +70,12 @@
                             <input ng-model="currentGroup.title">
                         </md-input-container>
                     </div>
+                <div>
+                    <md-input-container>
+                        <label>{{translate("url")}}</label>
+                        <input ng-model="currentGroup.url">
+                    </md-input-container>
+                </div>
                     <module-template name="inputs/multilanguage" data="multiLanguageData"></module-template>
                     <md-button class="md-raised md-primary" ng-click="updateGroup()" ng-disabled="!currentGroup">{{translate("update")}}</md-button>
                 </p>
@@ -106,6 +112,12 @@
                         <md-input-container>
                             <label>{{parentScope.translate("name")}}</label>
                             <input ng-model="group.title">
+                        </md-input-container>
+                    </div>
+                    <div>
+                        <md-input-container>
+                            <label>{{parentScope.translate("Url")}}</label>
+                            <input ng-model="group.url">
                         </md-input-container>
                     </div>
                     <md-input-container>

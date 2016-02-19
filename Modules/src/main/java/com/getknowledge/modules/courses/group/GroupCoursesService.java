@@ -42,7 +42,7 @@ public class GroupCoursesService extends AbstractService implements ImageService
         return repository.getEntitiesByFieldAndValue("section.id" , sectionId);
     }
 
-    @Action(name = "createGroupCourses" , mandatoryFields = {"sectionId", "title"})
+    @Action(name = "createGroupCourses" , mandatoryFields = {"sectionId", "title","url"})
     public Result createGroupCourses (HashMap<String,Object> data) throws NotAuthorized {
 
 
@@ -58,6 +58,7 @@ public class GroupCoursesService extends AbstractService implements ImageService
         }
         groupCourses.setTitle((String) data.get("title"));
         groupCourses.setSection(section);
+        groupCourses.setUrl((String) data.get("url"));
         repository.create(groupCourses);
 
         return Result.Complete;

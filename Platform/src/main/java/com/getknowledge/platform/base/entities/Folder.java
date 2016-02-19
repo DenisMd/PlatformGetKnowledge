@@ -9,6 +9,9 @@ public abstract class Folder extends AbstractEntity {
 
     private String title;
 
+    @Column(name = "url" , unique = true)
+    private String url;
+
     @Column(name = "description_en" , columnDefinition = "Text")
     private String descriptionEn;
 
@@ -21,6 +24,13 @@ public abstract class Folder extends AbstractEntity {
     @JsonIgnore
     private byte[] cover;
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public byte[] getCover() {
         return cover;

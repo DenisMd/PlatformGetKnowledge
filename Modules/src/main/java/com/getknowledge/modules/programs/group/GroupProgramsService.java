@@ -42,7 +42,7 @@ public class GroupProgramsService extends AbstractService implements ImageServic
         return repository.getEntitiesByFieldAndValue("section.id" , sectionId);
     }
 
-    @Action(name = "createGroupPrograms" , mandatoryFields = {"sectionId", "title"})
+    @Action(name = "createGroupPrograms" , mandatoryFields = {"sectionId", "title","url"})
     public Result createGroupCourses (HashMap<String,Object> data) throws NotAuthorized {
 
 
@@ -58,6 +58,7 @@ public class GroupProgramsService extends AbstractService implements ImageServic
         }
         programs.setTitle((String) data.get("title"));
         programs.setSection(section);
+        programs.setUrl((String) data.get("url"));
         repository.create(programs);
 
         return Result.Complete;
