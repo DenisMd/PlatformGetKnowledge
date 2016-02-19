@@ -39,9 +39,7 @@
     text-decoration: none;
     background: #36C1DE;
 }
-.btn[disabled], fieldset[disabled] .btn{
-    cursor: default;
-}
+
 .login-btn[disabled]{
     color: #31708f;
 }

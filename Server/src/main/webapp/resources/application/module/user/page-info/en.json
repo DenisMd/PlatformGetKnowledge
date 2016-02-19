@@ -6,6 +6,7 @@
     "city_select" : "Choose city",
     "specialty_select" : "Choose specialization",
     "birthday_select" : "Enter your birthday",
-    "avatar_load" :  "Upload your avatar"
+    "avatar_load" :  "Upload your avatar",
+    "textarea_change_text" : "Change your status"
   }
 }

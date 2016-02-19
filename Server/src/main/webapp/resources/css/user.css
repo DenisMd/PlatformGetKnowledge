@@ -131,3 +131,12 @@
     opacity: 0;
     margin-top:-500px;
 }
+
+
+.disabled-padding-left{
+    padding-left:0;
+}
+
+.disabled-padding-right{
+    padding-right: 0;
+}

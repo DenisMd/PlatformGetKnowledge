@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet" href="/resources/css/user.css">
 <div class="user-content">
-    <div class="col-sm-5 col-md-4 col-lg-3 user-menu-content">
+    <div class="col-sm-5 col-md-4 col-lg-3 disabled-padding-left user-menu-content">
         <div class="user-menu">
             <div class="user-info-card">
                 <img ng-src="{{userImg(user_info.id)}}" class="img-circle" />
@@ -40,8 +40,8 @@
             </ul>
         </div>
     </div>
-    <div class="col-sm-7  col-md-8 col-lg-9">
-                <div class="row col-md-7">
+    <div class="col-sm-7 col-md-8 col-lg-9 disabled-padding-left disabled-padding-right">
+                <div class="col-md-7 disabled-padding-left disabled-padding-right">
                         <div class="completion-desk" ng-scrollbars ng-scrollbars-config="arcScrollConfig">
                             <a  class="completion-percentage" ng-repeat="item in dataForArcs">
                                 <canvas ng-attr-id="arc{{$index}}"></canvas>
@@ -50,7 +50,7 @@
                             </a>
                         </div>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-5 disabled-padding-right">
                     <div class="statistic-card">
                         <md-toolbar class="statistic-card-title">
                             <div class="md-toolbar-tools">
@@ -90,7 +90,6 @@
                         </div>
                     </div>
                 </div>
-
     </div>
 
 

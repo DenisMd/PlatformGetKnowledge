@@ -8,6 +8,12 @@ model.controller("userCtrl", function ($scope, $state,$timeout,$http,application
         init();
         function init() {
             applicationService.read($scope, "user_info", className.userInfo, userId, function (item) {
+
+                //Если пользователя не существует бросаем 404
+                if (!item) {
+                    $state.go("404");
+                }
+
                 $scope.statusText.text = item.status;
                 if ($scope.user && $scope.user.id === parseInt(userId, 10)) {
                     $scope.statusText.onSave = function (text) {
@@ -41,7 +47,9 @@ model.controller("userCtrl", function ($scope, $state,$timeout,$http,application
     };
 
     //данные для status
-    $scope.statusText = {};
+    $scope.statusText = {
+        maxLength:140
+    };
 
 
     //основной контент

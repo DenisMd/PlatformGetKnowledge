@@ -9,6 +9,11 @@ html, body{
     height:100%;
 }
 
+.btn[disabled], fieldset[disabled] .btn{
+    cursor: default;
+}
+
+
 .md-select-menu-container {
     z-index: 1005;
 }
@@ -506,6 +511,8 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
 .editable-text{
     display: block;
     margin: 0;
+    word-break: break-all;
+    font-style: italic;
 }
 
 .editable-textarea-buttons button.btn{
@@ -518,5 +525,19 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
 .edit-text{
     border: 1px solid #ddd;
     border-radius: 3px;
+}
+
+.default-text{
+    color: #337ab7;
+}
+
+.btn-textarea-save[disabled]{
+    background-color: #eee !important;
+    border-color: #ddd !important;
+}
+
+.btn-textarea-save[disabled]:hover{
+    background-color: #eee !important;
+    border-color: #ddd !important;
 }
 
