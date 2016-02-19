@@ -542,7 +542,7 @@ model.directive("hideOptions",function($document){
 //crop image
 model.controller("selectImgCtrl", function($scope){
     var getDataSrc = function(){
-        return $scope.getData().src;
+        return $scope.getData().src+"&" + new Date();
     };
 
     $scope.originalImg = "";
@@ -622,7 +622,7 @@ model.controller("selectImgCtrl", function($scope){
 
     $scope.getImage = function(){
         var notUseDefault = $scope.getData().notUseDefault;
-        if (notUseDefault) {
+        if (notUseDefault || oldImageSrc) {
             var image = getDataSrc();
             if (image) {
                 if (!oldImageSrc) {
