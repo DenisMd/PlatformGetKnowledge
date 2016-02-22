@@ -109,6 +109,10 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         return '#/' + $scope.application.language + url;
     };
 
+    $scope.addUrlToPath = function (url) {
+        return window.location + url;
+    };
+
     $scope.openInNewTab = function(url) {
         window.open(
             url,
@@ -853,6 +857,10 @@ model.controller("folderCardsCtrl" , function ($scope,applicationService) {
 
     var doAction = function(){
         applicationService.filterRequest($scope,"",filter,addLog);
+    };
+
+    $scope.goTo = function(url) {
+        window.location.href = $scope.addUrlToPath("/"+url);
     };
 
     doAction();

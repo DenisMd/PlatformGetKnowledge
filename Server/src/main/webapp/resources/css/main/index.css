@@ -512,7 +512,7 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     display: block;
     margin: 0;
     word-break: break-all;
-    white-space : pre-line;
+    /*white-space : pre-line;*/
     font-style: italic;
 }
 

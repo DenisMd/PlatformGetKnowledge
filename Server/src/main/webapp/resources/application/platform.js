@@ -32,7 +32,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
          };
     })
     .factory('modules',function(){
-        return ["user" , "accept" , "section" , "restorePassword"];
+        return ["user" , "accept" , "section" , "restorePassword" , "groupCourses"];
     })
     .constant("resourceUrl", "/resources/application/")
     .constant("resourceTemplate","/resources/template/")

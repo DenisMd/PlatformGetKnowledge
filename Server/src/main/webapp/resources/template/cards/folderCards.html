@@ -14,7 +14,7 @@
                     </p>
                 </md-card-content>
                 <md-card-actions layout="row" layout-align="end center">
-                    <md-button>{{translate("move")}}</md-button>
+                    <md-button ng-disabled="!folder.url" ng-click="goTo(folder.url)">{{translate("move")}}</md-button>
                 </md-card-actions>
             </md-card>
         </div>
@@ -32,7 +32,7 @@
                     </p>
                 </md-card-content>
                 <md-card-actions layout="row" layout-align="end center">
-                    <md-button>{{translate("move")}}</md-button>
+                    <md-button><a ng-href="{{folder.url}}">{{translate("move")}}</a></md-button>
                 </md-card-actions>
             </md-card>
         </div>

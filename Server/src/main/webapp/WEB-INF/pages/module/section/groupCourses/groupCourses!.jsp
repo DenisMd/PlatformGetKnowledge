@@ -3,4 +3,4 @@
 
 <h1 class="title">{{translate("courses_title")}}</h1>
 
-<module-template name="cards/folderCards" data="folderData"></module-template>
+<module-template name="cards/folderCards" data="folderData" ng-if="!groupCoursesName"></module-template>
