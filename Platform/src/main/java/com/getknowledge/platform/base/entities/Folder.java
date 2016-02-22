@@ -29,7 +29,8 @@ public abstract class Folder extends AbstractEntity {
     }
 
     public void setUrl(String url) {
-        this.url = url;
+
+        this.url = url.replace(" " , "");
     }
 
     public byte[] getCover() {
