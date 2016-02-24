@@ -1,6 +1,6 @@
 new Clipboard('.clipboard');
 
-var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap", "ngImgCrop" , "ngMaterial","chart.js", "hljs"]);
+var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap", "ngImgCrop" , "ngMaterial", "hljs"]);
 
 var player;
 
