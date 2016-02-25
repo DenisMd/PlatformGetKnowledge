@@ -1,6 +1,6 @@
 new Clipboard('.clipboard');
 
-var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap", "ngImgCrop" , "ngMaterial","chart.js", "hljs"]);
+var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap", "ngImgCrop" , "ngMaterial","ui.codemirror", "hljs"]);
 
 var player;
 
@@ -843,6 +843,13 @@ model.controller("sectionCard",function($scope,$state,applicationService,classNa
 
     $scope.sectionImg = function(id){
         return applicationService.imageHref(className.section,id);
+    };
+});
+
+model.controller("postController",function($scope){
+    $scope.pasteCode = function() {
+        $scope.showDialog(event, $scope, "pasteCode.html", function () {
+        });
     };
 });
 

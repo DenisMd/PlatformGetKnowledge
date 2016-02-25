@@ -92,6 +92,7 @@
                 </div>
     </div>
 
+    <module-template data="statusText" name="comments/modal"></module-template>
 
 
 </div>

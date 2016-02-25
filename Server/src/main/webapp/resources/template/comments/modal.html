@@ -1,0 +1,25 @@
+<div ng-controller="postController">
+    <button ng-click="pasteCode()">Paste</button>
+
+    <script type="text/ng-template" id="pasteCode.html">
+        <md-dialog aria-label="Paste code" ng-cloak>
+            <md-toolbar class="statistic-card-title">
+                <div class="md-toolbar-tools">
+                    <h2>Mango (Fruit)</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="cancel()">
+                        <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+
+            </md-dialog-content>
+            <md-dialog-actions layout="row">
+                <md-button class="md-raised md-primary" ng-click="answer(bootstrap)">
+                    {{parentScope.translate("doIt")}}
+                </md-button>
+            </md-dialog-actions>
+        </md-dialog>
+    </script>
+</div>
