@@ -3,7 +3,7 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
     applicationService.list($scope,"sections",className.section);
 
     $scope.multiLanguageData = {
-        label : $scope.translate("groupCourses_description")
+        label : $scope.translate("folder_description")
     };
 
     $scope.typesFolder = [{

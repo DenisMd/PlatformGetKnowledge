@@ -846,13 +846,6 @@ model.controller("sectionCard",function($scope,$state,applicationService,classNa
     };
 });
 
-model.controller("postController",function($scope){
-    $scope.pasteCode = function() {
-        $scope.showDialog(event, $scope, "pasteCode.html", function () {
-        });
-    };
-});
-
 model.controller("folderCardsCtrl" , function ($scope,applicationService) {
     var filter = applicationService.createFilter($scope.getData().className,0,10);
     filter.equal("section.name",$scope.getData().sectionName);
