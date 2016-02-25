@@ -18,6 +18,8 @@
     "folders" : "Catalogs",
     "books" : "Books",
     "programs" : "Programs",
+    "programmingLanguages" : "Languages",
+    "programmingStyles" : "Editor styles",
     "math" : "Math",
     "physic" : "Physic",
     "design" : "Design",

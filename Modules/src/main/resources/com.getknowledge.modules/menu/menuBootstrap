@@ -105,6 +105,8 @@ Moderator : ROLE_MODERATOR
         menu : /menu
         folders : /folders
         socialLinks : /socialLinks
+        programmingLanguages : /programmingLanguages
+        programmingStyles : /editorStyles
     programming : /section/programming : /resources/image/menu/icons/programming.png : d35136
         courses : /groupCourses : /resources/image/menu/icons/courses.png
         books : /groupBooks : /resources/image/menu/icons/books.png
