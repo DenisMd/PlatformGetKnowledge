@@ -542,3 +542,7 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     border-color: #ddd !important;
 }
 
+/*paste code*/
+/*.code-textarea + .CodeMirror{*/
+    /*width:100%;*/
+/*}*/

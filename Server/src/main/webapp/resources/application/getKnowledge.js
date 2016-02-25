@@ -53,7 +53,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
     };
 
     //Dialog
-    $scope.showDialog = function (ev,$scope,htmlName,callbackForOk,onRemoving,outsideToClose) {
+    $scope.showDialog = function (ev,$scope,htmlName,callbackForOk,onRemoving,onComplete,outsideToClose) {
         var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
         var clickOutsideToClose = angular.isDefined(outsideToClose)? outsideToClose : false;
 
@@ -67,6 +67,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
                 locals: {
                     theScope: $scope
                 },
+                onComplete: onComplete,
                 onRemoving:  onRemoving
         })
             .then(function(answer) {
@@ -843,6 +844,41 @@ model.controller("sectionCard",function($scope,$state,applicationService,classNa
 
     $scope.sectionImg = function(id){
         return applicationService.imageHref(className.section,id);
+    };
+});
+
+model.controller("postController",function($scope){
+    $scope.pasteCode = function() {
+        $scope.showDialog(event, $scope, "pasteCode.html", function () {
+        },null,refresh);
+    };
+
+    $scope.code = "hello world";
+    $scope.modes = ['Scheme', 'XML', 'Javascript'];
+    $scope.mode = $scope.modes[0];
+    $scope.themes = ['Scheme', 'XML', 'Javascript'];
+    $scope.theme = $scope.themes[0];
+
+    $scope.refreshCode = false;
+    var refresh = function(){
+        $scope.refreshCode = !$scope.refreshCode;
+    };
+
+    // The ui-codemirror option
+    $scope.cmOption = {
+        lineNumbers: true,
+        indentWithTabs: true,
+        onLoad : function(_cm){
+            //$scope.modeChanged = function(){
+            //    _cm.setOption("mode", $scope.mode.toLowerCase());
+            //};
+            //
+            //$scope.themeChanged = function(){
+            //    _cm.setOption("theme", $scope.theme.toLowerCase());
+            //};
+
+
+        }
     };
 });
 

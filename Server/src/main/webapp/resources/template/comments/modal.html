@@ -1,19 +1,34 @@
 <div ng-controller="postController">
     <button ng-click="pasteCode()">Paste</button>
-
     <script type="text/ng-template" id="pasteCode.html">
-        <md-dialog aria-label="Paste code" ng-cloak>
+        <md-dialog aria-label="Paste code" ng-cloak flex="80">
             <md-toolbar class="statistic-card-title">
                 <div class="md-toolbar-tools">
                     <h2>Mango (Fruit)</h2>
-                    <span flex></span>
-                    <md-button class="md-icon-button" ng-click="cancel()">
-                        <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
-                    </md-button>
                 </div>
             </md-toolbar>
-            <md-dialog-content>
-
+            <md-dialog-content layout-padding>
+                <form>
+                    <div class="form-group">
+                        <label for="codeTitle">{{parentScope.translate("code_title")}}</label>
+                        <input type="text" class="form-control" id="codeTitle" ng-model="title">
+                    </div>
+                    <div class="form-group" layout="row" layout-padding>
+                        <div layout="column">
+                            <label for="codeTitle" flex>{{parentScope.translate("code_mode")}}</label>
+                            <select class="form-control" ng-model="mode"
+                                    ng-options="m for m in parentScope.modes" ng-change="parentScope.modeChanged()" flex></select>
+                        </div>
+                        <div layout="column">
+                            <label for="codeTitle" flex>{{parentScope.translate("code_theme")}}</label>
+                            <select class="form-control" ng-model="theme"
+                                    ng-options="m for m in parentScope.themes" ng-change="parentScope.modeChanged()" flex></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="code-textarea" ui-codemirror="parentScope.cmOption" ng-model="parentScope.code" ui-refresh="parentScope.refreshCode"></textarea>
+                    </div>
+                </form>
             </md-dialog-content>
             <md-dialog-actions layout="row">
                 <md-button class="md-raised md-primary" ng-click="answer(bootstrap)">
