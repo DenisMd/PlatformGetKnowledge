@@ -23,7 +23,7 @@ model.controller("editorStylesCtrl", function ($scope,applicationService,classNa
 
     $scope.showDeleteDialog = function(ev) {
         var confirm = $mdDialog.confirm()
-            .title($scope.translate("es_delete") + " " + $scope.currentEStyle.roleName)
+            .title($scope.translate("es_delete") + " " + $scope.currentEStyle.name)
             .textContent("")
             .targetEvent(ev)
             .ariaLabel('Delete pl')

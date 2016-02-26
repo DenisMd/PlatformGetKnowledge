@@ -23,7 +23,7 @@ model.controller("programmingLanguagesCtrl", function ($scope,applicationService
 
     $scope.showDeleteDialog = function(ev) {
         var confirm = $mdDialog.confirm()
-            .title($scope.translate("pl_delete") + " " + $scope.currentPLanguage.roleName)
+            .title($scope.translate("pl_delete") + " " + $scope.currentPLanguage.name)
             .textContent("")
             .targetEvent(ev)
             .ariaLabel('Delete pl')
