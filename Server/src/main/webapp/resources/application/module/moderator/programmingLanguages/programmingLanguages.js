@@ -1,26 +1,41 @@
 model.controller("programmingLanguagesCtrl", function ($scope,applicationService,className,$mdDialog,$mdMedia) {
 
-    $scope.updateService = function() {
-
-      applicationService.update($scope,"updateResult",className.bootstrap_services,$scope.currentService,function(result){
-         $scope.showToast(result);
-      });
-    };
-
-    applicationService.list($scope , "bootstrap_services",className.bootstrap_services);
+    applicationService.list($scope , "planguages",className.programmingLanguages);
 
     $scope.setCurrentItem = function (item) {
-        $scope.currentService = item;
+        $scope.currentPLanguage = item;
     };
 
+    $scope.updatePLanguage = function() {
+        applicationService.update($scope,"",className.programmingLanguages,$scope.currentPLanguage,function(result){
+            $scope.showToast(result);
+        });
+    };
 
     $scope.showAdvanced = function(ev) {
-        $scope.showDialog(ev,$scope,"doBootstrapModal.html",function(answer){
-            applicationService.action($scope,"bootstrapResult" , className.bootstrap_services,"do",answer,function(result){
+        $scope.showDialog(ev,$scope,"createPl.html",function(answer){
+            applicationService.create($scope,"", className.programmingLanguages,answer,function(result){
                 $scope.showToast(result);
-                applicationService.list($scope , "bootstrap_services",className.bootstrap_services);
+                applicationService.list($scope , "planguages", className.programmingLanguages);
             });
         });
     };
+
+    $scope.showDeleteDialog = function(ev) {
+        var confirm = $mdDialog.confirm()
+            .title($scope.translate("pl_delete") + " " + $scope.currentPLanguage.roleName)
+            .textContent("")
+            .targetEvent(ev)
+            .ariaLabel('Delete pl')
+            .ok($scope.translate("delete"))
+            .cancel($scope.translate("cancel"));
+        $mdDialog.show(confirm).then(function() {
+            applicationService.remove($scope,"",className.programmingLanguages,$scope.currentPLanguage.id,function (result) {
+                $scope.showToast(result);
+                applicationService.list($scope , "planguages", className.programmingLanguages);
+            });
+        });
+    };
+
 
 });

@@ -1,5 +1,7 @@
 {
   "text" : {
-
+    "pl_title" : "Programming languages for editor",
+    "pl_create" : "Add new programming language",
+    "pl_delete" : "Delete programming language"
   }
 }

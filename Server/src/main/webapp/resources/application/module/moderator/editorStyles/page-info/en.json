@@ -1,5 +1,7 @@
 {
   "text" : {
-
+    "es_title" : "Editor styles",
+    "es_create" : "Add new editor style",
+    "es_delete" : "Delete editor style"
   }
 }

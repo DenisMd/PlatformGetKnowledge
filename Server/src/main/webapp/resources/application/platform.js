@@ -28,7 +28,9 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "hpMessage" : "com.getknowledge.modules.help.desc.HpMessage",
             "groupCourses" : "com.getknowledge.modules.courses.group.GroupCourses",
             "groupBooks" : "com.getknowledge.modules.books.group.GroupBooks",
-            "groupPrograms" : "com.getknowledge.modules.programs.group.GroupPrograms"
+            "groupPrograms" : "com.getknowledge.modules.programs.group.GroupPrograms",
+            "programmingLanguages" :  "com.getknowledge.modules.dictionaries.programming.languages.ProgrammingLanguage",
+            "programmingStyles" : "com.getknowledge.modules.dictionaries.programming.styles.ProgrammingStyles"
          };
     })
     .factory('modules',function(){
