@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 public class Test {
 
+    @org.junit.Test
     public void getProgrammingLanguage(){
         File file = new File("C:\\Users\\Alena\\Desktop\\project\\different\\den\\PlatformGetKnowledge\\Server\\src\\main\\webapp\\resources\\bower_components\\codemirror\\mode");
         String[] directories = file.list(new FilenameFilter() {
@@ -19,7 +20,7 @@ public class Test {
         }
     }
 
-    @org.junit.Test
+
     public void getThemes(){
         File file = new File("C:\\Users\\Alena\\Desktop\\project\\different\\den\\PlatformGetKnowledge\\Server\\src\\main\\webapp\\resources\\bower_components\\codemirror\\theme");
         String[] files = file.list(new FilenameFilter() {

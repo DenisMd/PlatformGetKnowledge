@@ -1,6 +1,7 @@
 new Clipboard('.clipboard');
 
 var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap", "ngImgCrop" , "ngMaterial","ui.codemirror", "hljs"]);
+model.constant("codemirrorURL", "/resources/bower_components/codemirror/")
 
 var player;
 
@@ -18,12 +19,12 @@ function initVideoPlayer() {
 
 }
 
-model.config(function (hljsServiceProvider) {
+model.config(function (hljsServiceProvider,codemirrorURL) {
     hljsServiceProvider.setOptions({
         // replace tab with 4 spaces
         tabReplace: '    '
     });
-    CodeMirror.modeURL = "/resources/bower_components/codemirror/mode/%N/%N.js";
+    CodeMirror.modeURL = codemirrorURL+ "mode/%N/%N.js";
 });
 
 model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService,pageService, className,$mdToast,$mdDialog, $mdMedia,$parse) {
@@ -259,6 +260,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
     applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {});
 
     applicationService.list($scope , "programmingLanguages",className.programmingLanguages);
+    applicationService.list($scope , "programmingStyles",className.programmingStyles);
 
     applicationService.action($scope , "countries" ,className.country , "getCountries",{
         language : "Ru"
@@ -850,16 +852,14 @@ model.controller("sectionCard",function($scope,$state,applicationService,classNa
     };
 });
 
-model.controller("postController",function($scope){
+model.controller("postController",function($scope,codemirrorURL){
     $scope.pasteCode = function() {
         $scope.showDialog(event, $scope, "pasteCode.html", function () {
         },null,refresh);
     };
 
     $scope.code = "var i = \"hello world\"";
-    $scope.mode = $scope.programmingLanguages[0];
-    //$scope.themes = ['Scheme', 'XML', 'Javascript'];
-    //$scope.theme = $scope.themes[0];
+    $scope.theme = $scope.programmingStyles[0];
 
     $scope.refreshCode = false;
     var refresh = function(){
@@ -872,15 +872,63 @@ model.controller("postController",function($scope){
         indentWithTabs: true,
         onLoad : function(_editor){
             $scope.modeChanged = function(){
-                var mode = $scope.mode.name.toLowerCase();
-                _editor.setOption("mode", mode);
-                CodeMirror.autoLoadMode(_editor, mode);
+                var mode = $scope.mode.jsFile;
+                loadMode(mode,_editor);
             };
 
-            //$scope.themeChanged = function(){
-            //    _editor.setOption("theme", $scope.theme.toLowerCase());
-            //};
+            $scope.themeChanged = function(){
+                var css = $scope.theme.name.toLowerCase();
+                if (css !== "default"){
+                    if(!loadTheme(css,_editor)){
+                        _editor.setOption("theme", css);
+                    }
+                } else {
+                    _editor.setOption("theme", css);
+                }
+            };
+
+            $scope.mode = $scope.programmingLanguages[0];
             $scope.modeChanged();
+        }
+    };
+
+    var loadTheme = function(theme,editor){
+        var href = codemirrorURL +"theme/"+theme+".css";
+
+        if  ($("link[href='"+ href+"']").length) return false;
+
+        var link = document.createElement('link');
+        link.onload = function(){
+            editor.setOption("theme", theme);
+        };
+        link.rel = "stylesheet";
+        link.type = "text/css";
+        link.href = href;
+
+        document.getElementsByTagName('head')[0].appendChild(link);
+        return true;
+    };
+
+    var loadMode = function (val,editor) {
+        var  m, mode, spec;
+        if (m = /.+\.([^.]+)$/.exec(val)) {
+            var info = CodeMirror.findModeByExtension(m[1]);
+            if (info) {
+                mode = info.mode;
+                spec = info.mime;
+            }
+        } else if (/\//.test(val)) {
+            var info = CodeMirror.findModeByMIME(val);
+            if (info) {
+                mode = info.mode;
+                spec = val;
+            }
+        } else {
+            mode = spec = val;
+        }
+        if (mode) {
+            editor.setOption("mode", spec);
+            CodeMirror.autoLoadMode(editor, mode);
         }
     };
 

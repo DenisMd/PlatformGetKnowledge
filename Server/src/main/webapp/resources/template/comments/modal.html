@@ -17,12 +17,14 @@
                         <div layout="column" flex>
                             <label for="codeTitle" flex>{{parentScope.translate("code_mode")}}</label>
                             <select class="form-control" ng-model="parentScope.mode"
-                                    ng-options="m as m.name for m in parentScope.programmingLanguages" ng-change="parentScope.modeChanged()" flex></select>
+                                    ng-options="m as m.name for m in parentScope.programmingLanguages"
+                                    ng-change="parentScope.modeChanged()" flex></select>
                         </div>
                         <div layout="column" flex>
                             <label for="codeTitle" flex>{{parentScope.translate("code_theme")}}</label>
-                            <select class="form-control" ng-model="theme"
-                                    ng-options="m for m in parentScope.themes" flex></select>
+                            <select class="form-control" ng-model="parentScope.theme"
+                                    ng-options="m as m.name for m in parentScope.programmingStyles"
+                                    ng-change="parentScope.themeChanged()" flex></select>
                         </div>
                     </div>
                     <div class="form-group">
