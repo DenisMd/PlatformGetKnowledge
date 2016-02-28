@@ -23,6 +23,7 @@ model.config(function (hljsServiceProvider) {
         // replace tab with 4 spaces
         tabReplace: '    '
     });
+    CodeMirror.modeURL = "/resources/bower_components/codemirror/mode/%N/%N.js";
 });
 
 model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService,pageService, className,$mdToast,$mdDialog, $mdMedia,$parse) {
@@ -119,7 +120,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
             url,
             '_blank' // <- This is what makes it open in a new window.
         );
-    }
+    };
 
     //смена языка
     $scope.changeLanguage = function (language) {
@@ -256,6 +257,8 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
 
     applicationService.list($scope,"mainLinks" , className.socialLinks);
     applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {});
+
+    applicationService.list($scope , "programmingLanguages",className.programmingLanguages);
 
     applicationService.action($scope , "countries" ,className.country , "getCountries",{
         language : "Ru"
@@ -853,11 +856,10 @@ model.controller("postController",function($scope){
         },null,refresh);
     };
 
-    $scope.code = "hello world";
-    $scope.modes = ['Scheme', 'XML', 'Javascript'];
-    $scope.mode = $scope.modes[0];
-    $scope.themes = ['Scheme', 'XML', 'Javascript'];
-    $scope.theme = $scope.themes[0];
+    $scope.code = "var i = \"hello world\"";
+    $scope.mode = $scope.programmingLanguages[0];
+    //$scope.themes = ['Scheme', 'XML', 'Javascript'];
+    //$scope.theme = $scope.themes[0];
 
     $scope.refreshCode = false;
     var refresh = function(){
@@ -868,18 +870,20 @@ model.controller("postController",function($scope){
     $scope.cmOption = {
         lineNumbers: true,
         indentWithTabs: true,
-        onLoad : function(_cm){
-            //$scope.modeChanged = function(){
-            //    _cm.setOption("mode", $scope.mode.toLowerCase());
-            //};
-            //
+        onLoad : function(_editor){
+            $scope.modeChanged = function(){
+                var mode = $scope.mode.name.toLowerCase();
+                _editor.setOption("mode", mode);
+                CodeMirror.autoLoadMode(_editor, mode);
+            };
+
             //$scope.themeChanged = function(){
-            //    _cm.setOption("theme", $scope.theme.toLowerCase());
+            //    _editor.setOption("theme", $scope.theme.toLowerCase());
             //};
-
-
+            $scope.modeChanged();
         }
     };
+
 });
 
 model.controller("folderCardsCtrl" , function ($scope,applicationService) {
