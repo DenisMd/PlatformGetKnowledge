@@ -6,6 +6,7 @@ import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -16,12 +17,23 @@ public class ProgrammingLanguage extends AbstractEntity {
 
     private String name;
 
+    @Column(name = "js_file")
+    private String jsFile;
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getJsFile() {
+        return jsFile;
+    }
+
+    public void setJsFile(String jsFile) {
+        this.jsFile = jsFile;
     }
 
     @Override
