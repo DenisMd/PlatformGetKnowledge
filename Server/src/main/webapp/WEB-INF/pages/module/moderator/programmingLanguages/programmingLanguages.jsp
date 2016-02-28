@@ -23,8 +23,8 @@
             <th ng-click="setOrder('name')">
                 {{translate("name")}}
             </th>
-            <th ng-click="setOrder('jsFile')">
-                {{translate("pl_jsFile")}}
+            <th ng-click="setOrder('mode')">
+                {{translate("pl_mode")}}
             </th>
         </tr>
         </thead>
@@ -33,7 +33,7 @@
             ng-click="setCurrentItem(planguage)">
             <td>{{planguage.id}}</td>
             <td>{{planguage.name}}</td>
-            <td>{{planguage.jsFile}}</td>
+            <td>{{planguage.mode}}</td>
         </tr>
         </tbody>
     </table>
@@ -53,8 +53,8 @@
                     </div>
                     <div>
                         <md-input-container>
-                            <label>{{translate("pl_jsFile")}}</label>
-                            <input ng-model="currentPLanguage.jsFile">
+                            <label>{{translate("pl_mode")}}</label>
+                            <input ng-model="currentPLanguage.mode">
                         </md-input-container>
                     </div>
                     <md-button class="md-raised md-primary" ng-click="updatePLanguage()" ng-disabled="!currentPLanguage">{{translate("update")}}</md-button>
@@ -86,8 +86,8 @@
                     </div>
                     <div>
                         <md-input-container>
-                            <label>{{parentScope.translate("pl_jsFile")}}</label>
-                            <input ng-model="pl.jsFile">
+                            <label>{{parentScope.translate("pl_mode")}}</label>
+                            <input ng-model="pl.mode">
                         </md-input-container>
                     </div>
                 </div>

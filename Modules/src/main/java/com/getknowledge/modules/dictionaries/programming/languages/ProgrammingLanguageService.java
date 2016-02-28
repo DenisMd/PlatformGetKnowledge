@@ -28,7 +28,7 @@ public class ProgrammingLanguageService extends AbstractService implements Boots
                 line = line.replaceAll("\\s+","");
                 String [] split = line.split(":");
                 programmingLanguage.setName(split[0]);
-                programmingLanguage.setJsFile(split[1]);
+                programmingLanguage.setMode(split[1]);
                 programmingLanguageRepository.create(programmingLanguage);
             }
         }

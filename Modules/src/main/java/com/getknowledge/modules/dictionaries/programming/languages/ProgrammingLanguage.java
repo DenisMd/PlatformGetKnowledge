@@ -17,8 +17,8 @@ public class ProgrammingLanguage extends AbstractEntity {
 
     private String name;
 
-    @Column(name = "js_file")
-    private String jsFile;
+    @Column(name = "mode")
+    private String mode;
 
     public String getName() {
         return name;
@@ -28,12 +28,12 @@ public class ProgrammingLanguage extends AbstractEntity {
         this.name = name;
     }
 
-    public String getJsFile() {
-        return jsFile;
+    public String getMode() {
+        return mode;
     }
 
-    public void setJsFile(String jsFile) {
-        this.jsFile = jsFile;
+    public void setMode(String jsFile) {
+        this.mode = jsFile;
     }
 
     @Override
