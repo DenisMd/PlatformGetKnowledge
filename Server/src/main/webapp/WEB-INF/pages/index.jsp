@@ -83,6 +83,7 @@
     <script src="/resources/bower_components/highlightjs/highlight.pack.min.js"></script>
     <script src="/resources/bower_components/angular-highlightjs/build/angular-highlightjs.min.js"></script>
     <script src="/resources/bower_components/codemirror/lib/codemirror.js"></script>
+    <script src="/resources/bower_components/codemirror/addon/mode/loadmode.js"></script>
     <script src="/resources/bower_components/angular-ui-codemirror/ui-codemirror.js"></script>
 
     <%--Utils--%>
