@@ -976,7 +976,7 @@ model.controller("folderCardsCtrl" , function ($scope,applicationService) {
     }
 });
 
-model.controller("booksCardCtrl" , function($scope,applicationService){
+model.controller("booksCardCtrl" , function($scope,applicationService,className){
     var filter = applicationService.createFilter($scope.getData().className,0,10);
     filter.equal("groupBooks.url",$scope.getData().groupBooks);
     filter.equal("groupBooks.section.name",$scope.getData().sectionName);
@@ -1026,6 +1026,22 @@ model.controller("booksCardCtrl" , function($scope,applicationService){
         }
         return tempArr;
     }
+
+    $scope.languageData = {
+        "id" : "languages",
+        "count" : 3,
+        "filter":"title",
+        "class" : "input-group-sm",
+        "listName" : "lang",
+        "required" : true,
+        "callback" : function (value){
+            $scope.info.language = value.name;
+        }
+    };
+
+    applicationService.list($scope,"lang",className.language, function (item) {
+        item.title = $scope.translate(item.name.toLowerCase())
+    });
 });
 
 //dialogs
