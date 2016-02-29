@@ -307,7 +307,7 @@ model.controller("videoCtrl",function($scope){
 });
 
 //select value
-model.controller("inputCtrl",function($scope,$sce,$filter,$document) {
+model.controller("selectCtrl",function($scope,$sce,$filter,$document) {
     $scope.choose = false;
     var isModelOpen = false;
     $scope.model =  $scope.getData().defaultValue in $scope ? $scope[$scope.getData().defaultValue] : "";
