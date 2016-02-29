@@ -62,14 +62,22 @@
                     <div>
                         <md-input-container>
                             <label>{{parentScope.translate("name")}}</label>
-                            <input ng-model="role.roleName">
+                            <input ng-model="book.name">
                         </md-input-container>
                     </div>
                     <div>
                         <md-input-container>
-                            <label>{{parentScope.translate("role_note")}}</label>
-                            <input ng-model="role.note">
+                            <label>{{parentScope.translate("url")}}</label>
+                            <input ng-model="book.url">
                         </md-input-container>
+                    </div>
+                    <div>
+                        <label class="control-label">Выберите язык</label><br/>
+                        <module-template data="parentScope.languageData" name="inputs/select"></module-template>
+                    </div>
+                    <div>
+                        <label for="description">{{parentScope.translate("description")}}</label>
+                        <textarea class="form-control" rows="5" id="description" ng-model="book.description"></textarea>
                     </div>
                 </div>
             </md-dialog-content>

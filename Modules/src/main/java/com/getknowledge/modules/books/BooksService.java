@@ -34,7 +34,7 @@ public class BooksService extends AbstractService implements ImageService,FileSe
     @Autowired
     private BooksRepository booksRepository = new BooksRepository();
 
-    @Action(name = "createBooks" , mandatoryFields = {"name","description","language"})
+    @Action(name = "createBooks" , mandatoryFields = {"name","description","url","language"})
     private Result createBook(HashMap<String,Object> data) throws NotAuthorized {
         if (!data.containsKey("principalName"))
             return Result.NotAuthorized;
@@ -50,7 +50,7 @@ public class BooksService extends AbstractService implements ImageService,FileSe
 
         book.setName((String) data.get("name"));
         book.setDescription((String) data.get("description"));
-
+        book.setUrl((String) data.get("url"));
 
         try {
             Language language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
