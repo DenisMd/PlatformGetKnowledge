@@ -1,6 +1,6 @@
 Javascript:javascript
 Java:text/x-java
-C/C++/C#:clike
+C/C++:text/x-c++src
 Objective-C:clike
 Kotlin:clike
 Ceylon:clike
