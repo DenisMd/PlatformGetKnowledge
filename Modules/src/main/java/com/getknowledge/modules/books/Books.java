@@ -1,6 +1,7 @@
 package com.getknowledge.modules.books;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.modules.books.group.GroupBooks;
 import com.getknowledge.modules.books.tags.BooksTag;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.userInfo.UserInfo;
@@ -22,13 +23,20 @@ public class Books extends AbstractEntity{
 
     private String name;
 
+    @Column(length = 1000)
     private String description;
+
+    @ManyToOne
+    private GroupBooks groupBooks;
 
     @ManyToOne
     private Language language;
 
     @ManyToOne
     private UserInfo user;
+
+    @Column(length = 500)
+    private String url;
 
     @ManyToMany(mappedBy = "books")
     private List<BooksTag> tags;
@@ -40,9 +48,38 @@ public class Books extends AbstractEntity{
 
 
     @Basic(fetch=FetchType.LAZY)
+    @Lob @Column(name="cover")
+    @JsonIgnore
+    private byte[] cover;
+
+    @Basic(fetch=FetchType.LAZY)
     @Lob @Column(name="data")
     @JsonIgnore
     private byte[] bookData;
+
+    public GroupBooks getGroupBooks() {
+        return groupBooks;
+    }
+
+    public void setGroupBooks(GroupBooks groupBooks) {
+        this.groupBooks = groupBooks;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public byte[] getCover() {
+        return cover;
+    }
+
+    public void setCover(byte[] cover) {
+        this.cover = cover;
+    }
 
     public byte[] getBookData() {
         return bookData;

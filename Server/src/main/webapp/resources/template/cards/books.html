@@ -1,0 +1,83 @@
+<div ng-controller="booksCardCtrl">
+    <div>
+        <md-button class="md-raised md-primary" ng-click="showAdvanced($event)">{{translate("create")}}</md-button>
+    </div>
+    <md-content class="md-padding" layout-xs="column" layout="row">
+        <div flex-xs flex-gt-xs="50" layout="column">
+            <md-card ng-repeat="book in splitArray(books,true)">
+                <img ng-src="{{folderImg(book.id)}}" class="md-card-image" alt="Washed Out">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">{{book.name}}</span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content>
+                    <p>
+                        {{book.description}}
+                    </p>
+                </md-card-content>
+                <md-card-actions layout="row" layout-align="end center">
+                    <md-button ng-disabled="!book.url" ng-click="goTo(book.url)">{{translate("move")}}</md-button>
+                </md-card-actions>
+            </md-card>
+        </div>
+        <div flex-xs flex-gt-xs="50" layout="column">
+            <md-card ng-repeat="book in splitArray(books,false)">
+                <img ng-src="{{folderImg(book.id)}}" class="md-card-image" alt="Washed Out">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">{{book.name}}</span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content>
+                    <p>
+                        {{book.description}}
+                    </p>
+                </md-card-content>
+                <md-card-actions layout="row" layout-align="end center">
+                    <md-button><a ng-href="{{book.url}}">{{translate("move")}}</a></md-button>
+                </md-card-actions>
+            </md-card>
+        </div>
+    </md-content>
+    <md-content layout="row" layout-align="center center">
+        <span ng-click="loadMore()" class="loadMore">{{translate("load_more")}}</span>
+    </md-content>
+</div>
+
+<script type="text/ng-template" id="createBook.html">
+    <md-dialog  ng-cloak>
+        <form>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>{{parentScope.translate("create")}}</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="cancel()">
+                        <md-icon md-svg-src="resources/image/svg/close.svg" aria-label="Close dialog"></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <div class="md-dialog-content">
+                    <div>
+                        <md-input-container>
+                            <label>{{parentScope.translate("name")}}</label>
+                            <input ng-model="role.roleName">
+                        </md-input-container>
+                    </div>
+                    <div>
+                        <md-input-container>
+                            <label>{{parentScope.translate("role_note")}}</label>
+                            <input ng-model="role.note">
+                        </md-input-container>
+                    </div>
+                </div>
+            </md-dialog-content>
+            <md-dialog-actions layout="row">
+                <md-button class="md-raised md-primary" ng-click="answer(role)">
+                    {{parentScope.translate("create")}}
+                </md-button>
+            </md-dialog-actions>
+        </form>
+    </md-dialog>
+</script>

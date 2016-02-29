@@ -78,6 +78,7 @@
     "message" : "Message",
     "type" : "Type",
     "load_more" : "Load more",
-    "move" : "Move"
+    "move" : "Move",
+    "No_Item" : "Not found"
   }
 }

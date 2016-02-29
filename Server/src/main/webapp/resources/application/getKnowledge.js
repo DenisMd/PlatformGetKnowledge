@@ -678,7 +678,7 @@ model.controller("selectImgCtrl", function($scope){
     var dialogShown = false;
 });
 
-//datapicker
+//date picker
 model.controller("datepickerCtrl", function($scope){
     init();
     var defaultFormat = "dd.MM.yyyy";
@@ -960,6 +960,58 @@ model.controller("folderCardsCtrl" , function ($scope,applicationService) {
 
     $scope.folderImg = function(id){
         return applicationService.imageHref($scope.getData().className,id);
+    };
+
+    $scope.splitArray = function(array,even) {
+        var tempArr = [];
+        for (var i = 0; i < array.length; i++) {
+            if(i % 2 === 0 && even) { // index is even
+                tempArr.push(array[i]);
+            }
+            if(i % 2 === 1 && !even) { // index is onn
+                tempArr.push(array[i]);
+            }
+        }
+        return tempArr;
+    }
+});
+
+model.controller("booksCardCtrl" , function($scope,applicationService){
+    var filter = applicationService.createFilter($scope.getData().className,0,10);
+    filter.equal("groupBooks.url",$scope.getData().groupBooks);
+    filter.equal("groupBooks.section.name",$scope.getData().sectionName);
+    $scope.books = [];
+
+    var addBook = function(book){
+        $scope.books.push(book);
+    };
+
+    var doAction = function(){
+        applicationService.filterRequest($scope,"",filter,addBook);
+    };
+
+    $scope.goTo = function(url) {
+        window.location.href = $scope.addUrlToPath("/"+url);
+    };
+
+    doAction();
+
+    $scope.loadMore = function () {
+        filter.increase(10);
+        doAction();
+    };
+
+    $scope.folderImg = function(id){
+        return applicationService.imageHref($scope.getData().className,id);
+    };
+
+    $scope.showAdvanced = function(ev) {
+        $scope.showDialog(ev,$scope,"createBook.html",function(answer){
+            applicationService.action($scope,"bootstrapResult" , className.bootstrap_services,"do",answer,function(result){
+                $scope.showToast(result);
+                applicationService.list($scope , "bootstrap_services",className.bootstrap_services);
+            });
+        });
     };
 
     $scope.splitArray = function(array,even) {

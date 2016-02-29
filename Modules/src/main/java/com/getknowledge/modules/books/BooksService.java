@@ -10,6 +10,8 @@ import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoService;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.base.services.AbstractService;
+import com.getknowledge.platform.base.services.FileService;
+import com.getknowledge.platform.base.services.ImageService;
 import com.getknowledge.platform.exceptions.NotAuthorized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service("BooksService")
-public class BooksService extends AbstractService {
+public class BooksService extends AbstractService implements ImageService,FileService {
 
     @Autowired
     private UserInfoService userInfoService;
@@ -74,5 +76,17 @@ public class BooksService extends AbstractService {
 
         booksRepository.create(book);
         return Result.Complete;
+    }
+
+    @Override
+    public byte[] getImageById(long id) {
+        Books books = booksRepository.read(id);
+        return books == null ? null : books.getCover();
+    }
+
+    @Override
+    public byte[] getFile(long id, Object key) {
+        Books books = booksRepository.read(id);
+        return books == null ? null : books.getBookData();
     }
 }
