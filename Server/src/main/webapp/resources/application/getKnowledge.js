@@ -340,11 +340,7 @@ model.controller("selectCtrl",function($scope,$sce,$filter,$document) {
     };
 
     $scope.getList = function(){
-        if ($scope.getData().parentScope) {
-            $scope.list =  $scope.getData().listName in  $scope.getData().parentScope ? $scope.getData().parentScope[$scope.getData().listName] : []
-        } else {
-            $scope.list = $scope.getData().listName in $scope ? $scope[$scope.getData().listName] : [];
-        }
+        $scope.list = $scope.getData().listName in $scope ? $scope[$scope.getData().listName] : [];
         return $scope.list;
     };
 
@@ -985,13 +981,14 @@ model.controller("booksCardCtrl" , function($scope,applicationService,className)
     filter.equal("groupBooks.url",$scope.getData().groupBooks);
     filter.equal("groupBooks.section.name",$scope.getData().sectionName);
     $scope.books = [];
-
     var addBook = function(book){
+        if ($scope.creatable == null)
+            $scope.creatable = creatable;
         $scope.books.push(book);
     };
 
     var doAction = function(){
-        applicationService.filterRequest($scope,"",filter,addBook);
+        applicationService.filterRequest($scope,"booksData",filter,addBook);
     };
 
     $scope.goTo = function(url) {
@@ -1011,9 +1008,8 @@ model.controller("booksCardCtrl" , function($scope,applicationService,className)
 
     $scope.showAdvanced = function(ev) {
         $scope.showDialog(ev,$scope,"createBook.html",function(answer){
-            applicationService.action($scope,"bootstrapResult" , className.bootstrap_services,"do",answer,function(result){
+            applicationService.action($scope,"" , className.books,"createBooks",answer,function(result){
                 $scope.showToast(result);
-                applicationService.list($scope , "bootstrap_services",className.bootstrap_services);
             });
         });
     };
@@ -1031,20 +1027,7 @@ model.controller("booksCardCtrl" , function($scope,applicationService,className)
         return tempArr;
     };
 
-    $scope.languageData = {
-        "id" : "languages",
-        "count" : 3,
-        "filter":"title",
-        "class" : "input-group-sm",
-        "listName" : "lang",
-        "required" : true,
-        "parentScope" : $scope,
-        "callback" : function (value){
-            $scope.info.language = value.name;
-        }
-    };
-
-    applicationService.list($scope,"lang",className.language, function (item) {
+    applicationService.list($scope,"langs",className.language, function (item) {
         item.title = $scope.translate(item.name.toLowerCase())
     });
 });

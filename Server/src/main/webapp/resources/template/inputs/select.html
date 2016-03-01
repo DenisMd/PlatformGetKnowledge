@@ -1,7 +1,7 @@
 <div style="position: relative" ng-controller="selectCtrl" ng-form name="selectForm">
     <div class="select-with-input" hide-options="hideSelect()">
         <div class="input-group"  ng-class="class">
-            <input name="main-select" type="text" ng-disabled="isDisabled()" ng-required="isRequired()" class="form-control select-input on-error" placeholder="{{parentScope ? parentScope.translate('searchFor') : translate('searchFor')}}" ng-keyup="setSelect(true)" ng-model="model">
+            <input name="main-select" type="text" ng-disabled="isDisabled()" ng-required="isRequired()" class="form-control select-input on-error" placeholder="{{translate('searchFor')}}" ng-keyup="setSelect(true)" ng-model="model">
             <div class="input-group-btn">
                 <button class="btn btn-default" ng-disabled="isDisabled()" type="button" ng-click="open()">
                     <span class="glyphicon glyphicon-list" aria-hidden="true"></span>

@@ -1,6 +1,8 @@
 package com.getknowledge.modules.books;
 
 import com.getknowledge.modules.Result;
+import com.getknowledge.modules.books.group.GroupBooks;
+import com.getknowledge.modules.books.group.GroupBooksRepository;
 import com.getknowledge.modules.books.tags.BooksTag;
 import com.getknowledge.modules.books.tags.BooksTagRepository;
 import com.getknowledge.modules.dictionaries.language.Language;
@@ -13,6 +15,8 @@ import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.FileService;
 import com.getknowledge.platform.base.services.ImageService;
 import com.getknowledge.platform.exceptions.NotAuthorized;
+import com.getknowledge.platform.modules.trace.TraceService;
+import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,10 +36,16 @@ public class BooksService extends AbstractService implements ImageService,FileSe
     private BooksTagRepository booksTagRepository;
 
     @Autowired
+    private GroupBooksRepository groupBooksRepository;
+
+    @Autowired
+    private TraceService trace;
+
+    @Autowired
     private BooksRepository booksRepository = new BooksRepository();
 
-    @Action(name = "createBooks" , mandatoryFields = {"name","description","url","language"})
-    private Result createBook(HashMap<String,Object> data) throws NotAuthorized {
+    @Action(name = "createBooks" , mandatoryFields = {"name","groupBookId","description","url","language"})
+    public Result createBook(HashMap<String,Object> data) throws NotAuthorized {
         if (!data.containsKey("principalName"))
             return Result.NotAuthorized;
 
@@ -47,6 +57,16 @@ public class BooksService extends AbstractService implements ImageService,FileSe
         if (!book.getAuthorizationList().isAccessCreate(userInfo.getUser())) {
             return Result.AccessDenied;
         }
+
+        Long groupBookId = new Long((Integer)data.get("groupBookId"));
+
+        GroupBooks groupBooks =  groupBooksRepository.read(groupBookId);
+        if (groupBookId == null) {
+            trace.log("Group book id is incorrect" , TraceLevel.Warning);
+            return Result.Failed;
+        }
+
+        book.setGroupBooks(groupBooks);
 
         book.setName((String) data.get("name"));
         book.setDescription((String) data.get("description"));

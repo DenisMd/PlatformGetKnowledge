@@ -1,6 +1,6 @@
 <div ng-controller="booksCardCtrl">
     <div>
-        <md-button class="md-raised md-primary" ng-click="showAdvanced($event)">{{translate("create")}}</md-button>
+        <md-button class="md-raised md-primary" ng-click="showAdvanced($event)" ng-show="booksData.creatable">{{translate("create")}}</md-button>
     </div>
     <md-content class="md-padding" layout-xs="column" layout="row">
         <div flex-xs flex-gt-xs="50" layout="column">
@@ -72,17 +72,25 @@
                         </md-input-container>
                     </div>
                     <div>
-                        <label class="control-label">Выберите язык</label><br/>
-                        <module-template data="parentScope.languageData" name="inputs/select"></module-template>
+                        <md-input-container>
+                            <md-select ng-model="book.language" placeholder="Выберите язык">
+                                <md-option ng-value="opt.name" ng-repeat="opt in parentScope.langs">{{ opt.title }}</md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <h2 class="md-title">Тэги</h2>
+                    <div ng-init="book.tags = []">
+                        <md-chips ng-model="book.tags" readonly="false"></md-chips>
                     </div>
                     <div>
                         <label for="description">{{parentScope.translate("description")}}</label>
                         <textarea class="form-control" rows="5" id="description" ng-model="book.description"></textarea>
                     </div>
                 </div>
+                {{book}}
             </md-dialog-content>
             <md-dialog-actions layout="row">
-                <md-button class="md-raised md-primary" ng-click="answer(role)">
+                <md-button class="md-raised md-primary" ng-click="answer(book)">
                     {{parentScope.translate("create")}}
                 </md-button>
             </md-dialog-actions>
