@@ -116,6 +116,10 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         return window.location + url;
     };
 
+    $scope.goTo = function(url) {
+        window.location.href = $scope.addUrlToPath("/"+url);
+    };
+
     $scope.openInNewTab = function(url) {
         window.open(
             url,
@@ -947,10 +951,6 @@ model.controller("folderCardsCtrl" , function ($scope,applicationService) {
         applicationService.filterRequest($scope,"",filter,addLog);
     };
 
-    $scope.goTo = function(url) {
-        window.location.href = $scope.addUrlToPath("/"+url);
-    };
-
     doAction();
 
     $scope.loadMore = function () {
@@ -981,18 +981,17 @@ model.controller("booksCardCtrl" , function($scope,applicationService,className)
     filter.equal("groupBooks.url",$scope.getData().groupBooks);
     filter.equal("groupBooks.section.name",$scope.getData().sectionName);
     $scope.books = [];
+
+    var filter2 = applicationService.createFilter(className.groupBooks,0,1);
+    filter2.equal("url" , $scope.getData().groupBooks);
+    applicationService.filterRequest($scope,"booksGroup",filter2);
+
     var addBook = function(book){
-        if ($scope.creatable == null)
-            $scope.creatable = creatable;
         $scope.books.push(book);
     };
 
     var doAction = function(){
         applicationService.filterRequest($scope,"booksData",filter,addBook);
-    };
-
-    $scope.goTo = function(url) {
-        window.location.href = $scope.addUrlToPath("/"+url);
     };
 
     doAction();
@@ -1008,8 +1007,10 @@ model.controller("booksCardCtrl" , function($scope,applicationService,className)
 
     $scope.showAdvanced = function(ev) {
         $scope.showDialog(ev,$scope,"createBook.html",function(answer){
+            answer.groupBookId = $scope.booksGroup.list[0].id;
             applicationService.action($scope,"" , className.books,"createBooks",answer,function(result){
                 $scope.showToast(result);
+                $scope.goTo("book/"+result.object);
             });
         });
     };
@@ -1076,7 +1077,6 @@ model.service('arcService', function(){
         segmentShowStroke : false,
         showTooltips : false
     }
-
 });
 
 

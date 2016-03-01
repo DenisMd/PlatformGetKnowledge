@@ -27,6 +27,7 @@ public class Books extends AbstractEntity{
     private String description;
 
     @ManyToOne(optional = false)
+    @JsonIgnore
     private GroupBooks groupBooks;
 
     @ManyToOne
@@ -35,10 +36,7 @@ public class Books extends AbstractEntity{
     @ManyToOne
     private UserInfo user;
 
-    @Column(length = 500)
-    private String url;
-
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany(mappedBy = "books", cascade = CascadeType.PERSIST)
     private List<BooksTag> tags = new ArrayList<>();
 
     @ElementCollection
@@ -63,14 +61,6 @@ public class Books extends AbstractEntity{
 
     public void setGroupBooks(GroupBooks groupBooks) {
         this.groupBooks = groupBooks;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public byte[] getCover() {

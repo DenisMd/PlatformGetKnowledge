@@ -12,7 +12,7 @@ model.controller("groupBooksCtrl", function ($scope,applicationService,className
     } else {
         $scope.booksData = {
             sectionName: sectionName,
-            groupBooks : $scope.groupBook,
+            groupBooks: $scope.groupBook,
             className: className.books
         }
     }

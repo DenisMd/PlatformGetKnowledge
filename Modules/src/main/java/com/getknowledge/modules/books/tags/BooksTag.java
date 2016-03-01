@@ -1,5 +1,6 @@
 package com.getknowledge.modules.books.tags;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.books.Books;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
@@ -19,6 +20,7 @@ public class BooksTag extends AbstractEntity {
 
     @ManyToMany
     @JoinTable(name = "tags_books")
+    @JsonIgnore
     private List<Books> books = new ArrayList<>();
 
 

@@ -17,7 +17,7 @@
                     </p>
                 </md-card-content>
                 <md-card-actions layout="row" layout-align="end center">
-                    <md-button ng-disabled="!book.url" ng-click="goTo(book.url)">{{translate("move")}}</md-button>
+                    <md-button ng-click="goTo('book/' + book.id)">{{translate("move")}}</md-button>
                 </md-card-actions>
             </md-card>
         </div>
@@ -35,7 +35,7 @@
                     </p>
                 </md-card-content>
                 <md-card-actions layout="row" layout-align="end center">
-                    <md-button><a ng-href="{{book.url}}">{{translate("move")}}</a></md-button>
+                    <md-button ng-click="goTo('book/' + book.id)">{{translate("move")}}</md-button>
                 </md-card-actions>
             </md-card>
         </div>
@@ -44,7 +44,6 @@
         <span ng-click="loadMore()" class="loadMore">{{translate("load_more")}}</span>
     </md-content>
 </div>
-
 <script type="text/ng-template" id="createBook.html">
     <md-dialog  ng-cloak>
         <form>
@@ -67,12 +66,6 @@
                     </div>
                     <div>
                         <md-input-container>
-                            <label>{{parentScope.translate("url")}}</label>
-                            <input ng-model="book.url">
-                        </md-input-container>
-                    </div>
-                    <div>
-                        <md-input-container>
                             <md-select ng-model="book.language" placeholder="Выберите язык">
                                 <md-option ng-value="opt.name" ng-repeat="opt in parentScope.langs">{{ opt.title }}</md-option>
                             </md-select>
@@ -87,7 +80,6 @@
                         <textarea class="form-control" rows="5" id="description" ng-model="book.description"></textarea>
                     </div>
                 </div>
-                {{book}}
             </md-dialog-content>
             <md-dialog-actions layout="row">
                 <md-button class="md-raised md-primary" ng-click="answer(book)">
