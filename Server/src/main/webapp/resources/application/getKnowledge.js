@@ -876,7 +876,7 @@ model.controller("postController",function($scope,codemirrorURL){
         indentWithTabs: true,
         onLoad : function(_editor){
             $scope.modeChanged = function(){
-                var mode = $scope.mode.jsFile;
+                var mode = $scope.mode.mode;
                 loadMode(mode,_editor);
             };
 

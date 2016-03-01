@@ -1,7 +1,39 @@
-Javascript:javascript
 Java:text/x-java
-C/C++/C#:clike
-Objective-C:clike
-Kotlin:clike
-Ceylon:clike
-Scala:clike
+Javascript:javascript
+CSS:text/css
+SCSS:text/x-scss
+LESS:text/x-less
+HTML:text/html
+PHP:text/x-php
+Python:text/x-python
+Scala:text/x-scala
+Go:text/x-go
+C/C++:text/x-c++src
+Haskell:text/x-haskell
+SQL:text/x-sql
+SQL - MySQL:text/x-mysql
+SQL - PL/SQL:text/x-plsql
+SQL - Microsoft SQL:text/x-mssql
+SQL - PostgreSQL:text/x-pgsql
+C#:text/x-csharp
+CoffeeScript:text/x-coffeescript
+Ruby:text/x-ruby
+Rust:text/x-rustsrc
+XML:application/xml
+HTTP:message/http
+Objective-C:text/x-objectivec
+Common Lisp:text/x-common-lisp
+F#:text/x-fsharp
+Groovy:text/x-groovy
+Perl:text/x-perl
+Swift:text/x-swift
+ASP.NET:application/x-aspx
+JavaServer Pages:application/x-jsp
+MATLAB:text/x-octave
+NGINX:text/nginx
+CMake:text/x-cmake
+Diff:text/x-diff
+Properties files:text/x-properties
+ini:text/x-ini
+Shell:text/x-sh
+RPM changes:text/x-rpm-changes
