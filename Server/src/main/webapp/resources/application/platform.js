@@ -188,10 +188,13 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             };
 
             this.equal = function (fieldName, value) {
-              this.result.equal = {
+              if (!this.result.equal) {
+                  this.result.equal = [];
+              }
+              this.result.equal.push({
                   fieldName : fieldName,
                   value : value
-              }
+              });
             };
 
             this.clearEqual = function() {

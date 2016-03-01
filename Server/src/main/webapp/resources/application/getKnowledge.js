@@ -1008,9 +1008,8 @@ model.controller("booksCardCtrl" , function($scope,applicationService,className)
 
     $scope.showAdvanced = function(ev) {
         $scope.showDialog(ev,$scope,"createBook.html",function(answer){
-            applicationService.action($scope,"bootstrapResult" , className.bootstrap_services,"do",answer,function(result){
+            applicationService.action($scope,"" , className.books,"createBooks",answer,function(result){
                 $scope.showToast(result);
-                applicationService.list($scope , "bootstrap_services",className.bootstrap_services);
             });
         });
     };

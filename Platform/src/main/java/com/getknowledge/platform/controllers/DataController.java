@@ -402,12 +402,14 @@ public class DataController {
                 filterQuery.in(fieldName , list);
             }
 
-            //equal : {fieldName : "name" , value : "value"}
+            //equal : [{fieldName : "name" , value : "value"}]
             if (data.containsKey("equal")) {
-                HashMap<String , Object> equal = (HashMap<String, Object>) data.get("equal");
-                String fieldName = (String) equal.get("fieldName");
-                String value = (String) equal.get("value");
-                filterQuery.equal(fieldName,value);
+                List<HashMap<String , Object>> equal = (List<HashMap<String, Object>>) data.get("equal");
+                for (HashMap<String , Object> equalElement : equal) {
+                    String fieldName = (String) equalElement.get("fieldName");
+                    String value = (String) equalElement.get("value");
+                    filterQuery.equal(fieldName, value);
+                }
             }
 
             int first = (int) data.get("first");
@@ -540,6 +542,8 @@ public class DataController {
                     return objectMapper.writeValueAsString(result);
                 }
             }
+
+            trace.log("Action : " + actionName + " not found" , TraceLevel.Warning);
 
             return null;
         } catch (ClassNotFoundException e) {
