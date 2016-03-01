@@ -981,13 +981,14 @@ model.controller("booksCardCtrl" , function($scope,applicationService,className)
     filter.equal("groupBooks.url",$scope.getData().groupBooks);
     filter.equal("groupBooks.section.name",$scope.getData().sectionName);
     $scope.books = [];
-
     var addBook = function(book){
+        if ($scope.creatable == null)
+            $scope.creatable = creatable;
         $scope.books.push(book);
     };
 
     var doAction = function(){
-        applicationService.filterRequest($scope,"",filter,addBook);
+        applicationService.filterRequest($scope,"booksData",filter,addBook);
     };
 
     $scope.goTo = function(url) {
@@ -1027,7 +1028,7 @@ model.controller("booksCardCtrl" , function($scope,applicationService,className)
         return tempArr;
     };
 
-    applicationService.list($scope,"lang",className.language, function (item) {
+    applicationService.list($scope,"langs",className.language, function (item) {
         item.title = $scope.translate(item.name.toLowerCase())
     });
 });

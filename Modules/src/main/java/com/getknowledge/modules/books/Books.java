@@ -142,7 +142,8 @@ public class Books extends AbstractEntity{
         AuthorizationList authorizationList = new AuthorizationList();
         authorizationList.allowReadEveryOne = true;
 
-        authorizationList.getUserList().add(user.getUser());
+        if (user != null)
+            authorizationList.getUserList().add(user.getUser());
         authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.CreateBooks.getName()));
         authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditBooks.getName()));
         authorizationList.getPermissionsForRemove().add(new Permission(PermissionNames.EditBooks.getName()));

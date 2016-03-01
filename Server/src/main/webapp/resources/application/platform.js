@@ -229,7 +229,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 if (isCallbackFunction && data){
                     if (angular.isArray(data.list)){
                         data.list.forEach(function(item,i,array){
-                            callback(item,i,array);
+                            callback(item,i,array,data.creatable);
                         });
                     }
                 }

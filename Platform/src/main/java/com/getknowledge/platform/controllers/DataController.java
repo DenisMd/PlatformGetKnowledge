@@ -55,6 +55,7 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Paths;
@@ -421,6 +422,9 @@ public class DataController {
             ObjectNode objectNode = objectMapper.createObjectNode();
            // objectNode.put("totalEntitiesCount" , );
             objectNode.putArray("list").addAll(listToJsonString(list,principal,repository,classEntity));
+            Constructor<?> cos = classEntity.getConstructor();
+            AbstractEntity abstractEntity = (AbstractEntity) cos.newInstance();
+            objectNode.put("creatable" , isAccessCreate(principal, abstractEntity));
 
             return objectNode.toString();
         } catch (ClassNotFoundException e) {
