@@ -340,11 +340,7 @@ model.controller("selectCtrl",function($scope,$sce,$filter,$document) {
     };
 
     $scope.getList = function(){
-        if ($scope.getData().parentScope) {
-            $scope.list =  $scope.getData().listName in  $scope.getData().parentScope ? $scope.getData().parentScope[$scope.getData().listName] : []
-        } else {
-            $scope.list = $scope.getData().listName in $scope ? $scope[$scope.getData().listName] : [];
-        }
+        $scope.list = $scope.getData().listName in $scope ? $scope[$scope.getData().listName] : [];
         return $scope.list;
     };
 
@@ -1029,19 +1025,6 @@ model.controller("booksCardCtrl" , function($scope,applicationService,className)
             }
         }
         return tempArr;
-    };
-
-    $scope.languageData = {
-        "id" : "languages",
-        "count" : 3,
-        "filter":"title",
-        "class" : "input-group-sm",
-        "listName" : "lang",
-        "required" : true,
-        "parentScope" : $scope,
-        "callback" : function (value){
-            $scope.info.language = value.name;
-        }
     };
 
     applicationService.list($scope,"lang",className.language, function (item) {
