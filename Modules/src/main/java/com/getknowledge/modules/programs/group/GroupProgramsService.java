@@ -1,6 +1,6 @@
 package com.getknowledge.modules.programs.group;
 
-import com.getknowledge.modules.Result;
+import com.getknowledge.platform.modules.Result;
 import com.getknowledge.modules.section.Section;
 import com.getknowledge.modules.section.SectionRepository;
 import com.getknowledge.platform.annotations.Action;
@@ -49,7 +49,7 @@ public class GroupProgramsService extends AbstractService implements ImageServic
         long sectionId = Long.parseLong((String) data.get("sectionId"));
         Section section = sectionRepository.read(sectionId);
         if (section == null) {
-            return Result.Failed;
+            return Result.Failed();
         }
 
         GroupPrograms programs = new GroupPrograms();
@@ -61,7 +61,7 @@ public class GroupProgramsService extends AbstractService implements ImageServic
         programs.setUrl((String) data.get("url"));
         repository.create(programs);
 
-        return Result.Complete;
+        return Result.Complete();
     }
 
     @ActionWithFile(name = "updateCover" , mandatoryFields = {"id"})
@@ -76,10 +76,10 @@ public class GroupProgramsService extends AbstractService implements ImageServic
             programs.setCover(files.get(0).getBytes());
         } catch (IOException e) {
             trace.logException("Error set cover for group of programs" , e , TraceLevel.Error);
-            return Result.Failed;
+            return Result.Failed();
         }
         repository.update(programs);
-        return Result.Complete;
+        return Result.Complete();
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.getknowledge.modules.event;
 
 import com.getknowledge.modules.userInfo.results.RegisterResult;
-import com.getknowledge.modules.Result;
+import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.Task;
 import com.getknowledge.platform.base.services.AbstractService;
@@ -59,13 +59,13 @@ public class UserEventService extends AbstractService {
     public Result restorePassword(HashMap<String , Object> data) throws PlatformException {
         String uuid = (String) data.get("uuid");
         UserEvent restorePasswordInfo = userEventRepository.getSingleEntityByFieldAndValue("uuid", uuid);
-        if (restorePasswordInfo == null || restorePasswordInfo.getUserEventType() != UserEventType.RestorePassword) return Result.Failed;
+        if (restorePasswordInfo == null || restorePasswordInfo.getUserEventType() != UserEventType.RestorePassword) return Result.Failed();
         User user = userRepository.read(restorePasswordInfo.getUserInfo().getUser().getId());
         String password = (String) data.get("password");
         user.hashRawPassword(password);
         userRepository.update(user);
         userEventRepository.remove(restorePasswordInfo.getId());
-        return Result.Complete;
+        return Result.Complete();
     }
 
     @Task(name = "removeRestorePasswordInfo")

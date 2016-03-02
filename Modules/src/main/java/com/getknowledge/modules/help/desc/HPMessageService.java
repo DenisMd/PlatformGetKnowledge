@@ -1,6 +1,6 @@
 package com.getknowledge.modules.help.desc;
 
-import com.getknowledge.modules.Result;
+import com.getknowledge.platform.modules.Result;
 import com.getknowledge.modules.help.desc.attachements.FileAttachment;
 import com.getknowledge.modules.help.desc.type.HpMessageType;
 import com.getknowledge.modules.userInfo.UserInfoService;
@@ -8,7 +8,6 @@ import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.FileService;
-import com.getknowledge.platform.modules.trace.Trace;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
@@ -58,9 +57,9 @@ public class HPMessageService extends AbstractService implements FileService {
 
         } catch (Exception e) {
             trace.logException("Exception for sendHpMessage" , e, TraceLevel.Warning);
-            return Result.Failed;
+            return Result.Failed();
         }
-        return Result.Complete;
+        return Result.Complete();
     }
 
     @ActionWithFile(name = "sendHpMessage" , mandatoryFields = {"hpMessageId"})
@@ -79,12 +78,12 @@ public class HPMessageService extends AbstractService implements FileService {
                 entityManager.flush();
             } catch (IOException e) {
                 trace.logException("Error get attach file",e,TraceLevel.Warning);
-                return Result.Failed;
+                return Result.Failed();
             }
         }
 
         hpRepository.merge(hpMessage);
-        return Result.Complete;
+        return Result.Complete();
     }
 
     @Override

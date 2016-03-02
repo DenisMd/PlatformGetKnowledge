@@ -5,7 +5,7 @@ import com.getknowledge.modules.menu.Menu;
 import com.getknowledge.modules.menu.MenuNames;
 import com.getknowledge.modules.menu.MenuRepository;
 import com.getknowledge.modules.menu.item.MenuItem;
-import com.getknowledge.modules.Result;
+import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.services.AbstractService;
@@ -100,9 +100,9 @@ public class SectionService extends AbstractService implements BootstrapService,
             section.setCover(files.get(0).getBytes());
         } catch (IOException e) {
             trace.logException("Error set cover for section" , e , TraceLevel.Error);
-            return Result.Failed;
+            return Result.Failed();
         }
         sectionRepository.update(section);
-        return Result.Complete;
+        return Result.Complete();
     }
 }

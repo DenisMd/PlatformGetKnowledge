@@ -1,7 +1,6 @@
 package com.getknowledge.modules.books.group;
 
-import com.getknowledge.modules.Result;
-import com.getknowledge.modules.courses.group.GroupCourses;
+import com.getknowledge.platform.modules.Result;
 import com.getknowledge.modules.section.Section;
 import com.getknowledge.modules.section.SectionRepository;
 import com.getknowledge.platform.annotations.Action;
@@ -50,7 +49,7 @@ public class GroupBooksService extends AbstractService implements ImageService{
         long sectionId = Long.parseLong((String) data.get("sectionId"));
         Section section = sectionRepository.read(sectionId);
         if (section == null) {
-            return Result.Failed;
+            return Result.Failed();
         }
 
         GroupBooks groupBooks = new GroupBooks();
@@ -62,7 +61,7 @@ public class GroupBooksService extends AbstractService implements ImageService{
         groupBooks.setUrl((String) data.get("url"));
         repository.create(groupBooks);
 
-        return Result.Complete;
+        return Result.Complete();
     }
 
     @ActionWithFile(name = "updateCover" , mandatoryFields = {"id"})
@@ -77,10 +76,10 @@ public class GroupBooksService extends AbstractService implements ImageService{
             books.setCover(files.get(0).getBytes());
         } catch (IOException e) {
             trace.logException("Error set cover for group book" , e , TraceLevel.Error);
-            return Result.Failed;
+            return Result.Failed();
         }
         repository.update(books);
-        return Result.Complete;
+        return Result.Complete();
     }
 
     @Override

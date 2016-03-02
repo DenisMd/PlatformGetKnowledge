@@ -13,7 +13,7 @@ import com.getknowledge.modules.event.UserEventType;
 import com.getknowledge.modules.settings.Settings;
 import com.getknowledge.modules.settings.SettingsRepository;
 import com.getknowledge.modules.userInfo.results.RegisterResult;
-import com.getknowledge.modules.Result;
+import com.getknowledge.platform.modules.Result;
 import com.getknowledge.modules.userInfo.socialLink.UserSocialLink;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
@@ -250,7 +250,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
     public Result updateImage (HashMap<String,Object> data,List<MultipartFile> files) throws PlatformException {
         UserInfo userInfo = getAuthorizedUser(data);
 
-        if (userInfo == null) return Result.SessionFailed;
+        if (userInfo == null) return Result.SessionFailed();
 
         if (files != null) {
             try {
@@ -262,7 +262,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
         userInfoRepository.update(userInfo);
 
-        return Result.Complete;
+        return Result.Complete();
     }
 
     @Action(name = "updateExtraInfo" , mandatoryFields = {"userId"})
@@ -309,25 +309,25 @@ public class UserInfoService extends AbstractService implements BootstrapService
     @Action(name = "skipExtraRegistration")
     public Result skipExtraRegistration(HashMap<String,Object> data) {
         UserInfo userInfo = getAuthorizedUser(data);
-        if (userInfo == null) return Result.SessionFailed;
+        if (userInfo == null) return Result.SessionFailed();
         userInfo.setFirstLogin(false);
         userInfoRepository.update(userInfo);
-        return Result.Complete;
+        return Result.Complete();
     }
 
     @Action(name = "updateStatus" , mandatoryFields = "status")
     public Result updateStatus (HashMap<String , Object> data) {
         UserInfo userInfo = getAuthorizedUser(data);
-        if (userInfo == null) return Result.SessionFailed;
+        if (userInfo == null) return Result.SessionFailed();
         userInfo.setStatus((String) data.get("status"));
         userInfoRepository.update(userInfo);
-        return Result.Complete;
+        return Result.Complete();
     }
 
     @Action(name = "setLinks")
     public Result setLinks(HashMap<String , Object> data) {
         UserInfo userInfo = getAuthorizedUser(data);
-        if (userInfo == null) return Result.SessionFailed;
+        if (userInfo == null) return Result.SessionFailed();
 
         if (data.containsKey("webSite")) {
             String webSite = (String) data.get("webSite");
@@ -365,14 +365,14 @@ public class UserInfoService extends AbstractService implements BootstrapService
         userInfo.setLinks(userSocialLink);
         userInfoRepository.update(userInfo);
 
-        return Result.Complete;
+        return Result.Complete();
     }
 
     @Action(name = "forgotPassword" , mandatoryFields = {"email"})
     public Result forgotPassword(HashMap<String , Object> data) {
         UserInfo userInfo = userInfoRepository.getSingleEntityByFieldAndValue("user.login" , data.get("email"));
         if (userInfo == null || !userInfo.getUser().isEnabled())
-            return Result.Failed;
+            return Result.Failed();
 
         String uuid = UUID.randomUUID().toString();
 
@@ -383,7 +383,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
                     "forgotPassword",new String[] {settingsRepository.getSettings().getDomain(),url});
         } catch (Exception e) {
             trace.logException("Error send register email to " + userInfo.getUser().getLogin() , e , TraceLevel.Error);
-            return Result.EmailNotSend;
+            return Result.EmailNotSend();
         }
 
         UserEvent restorePasswordInfo = new UserEvent();
@@ -408,7 +408,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
             trace.logException("Can't parse restore password info to json" , e , TraceLevel.Warning);
         }
 
-        return Result.Complete;
+        return Result.Complete();
     }
 
     public UserInfo getCurrentUser(Principal p) {

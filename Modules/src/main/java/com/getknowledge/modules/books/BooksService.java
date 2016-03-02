@@ -1,6 +1,5 @@
 package com.getknowledge.modules.books;
 
-import com.getknowledge.modules.Result;
 import com.getknowledge.modules.books.group.GroupBooks;
 import com.getknowledge.modules.books.group.GroupBooksRepository;
 import com.getknowledge.modules.books.tags.BooksTag;
@@ -15,6 +14,7 @@ import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.FileService;
 import com.getknowledge.platform.base.services.ImageService;
 import com.getknowledge.platform.exceptions.NotAuthorized;
+import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ public class BooksService extends AbstractService implements ImageService,FileSe
     @Action(name = "createBooks" , mandatoryFields = {"name","groupBookId","description","language"})
     public Result createBook(HashMap<String,Object> data) throws NotAuthorized {
         if (!data.containsKey("principalName"))
-            return Result.NotAuthorized;
+            return Result.NotAuthorized();
 
         UserInfo userInfo = userInfoService.getAuthorizedUser(data);
 
@@ -55,7 +55,7 @@ public class BooksService extends AbstractService implements ImageService,FileSe
         book.setUser(userInfo);
 
         if (!book.getAuthorizationList().isAccessCreate(userInfo.getUser())) {
-            return Result.AccessDenied;
+            return Result.AccessDenied();
         }
 
         Long groupBookId = new Long((Integer)data.get("groupBookId"));
@@ -63,7 +63,7 @@ public class BooksService extends AbstractService implements ImageService,FileSe
         GroupBooks groupBooks =  groupBooksRepository.read(groupBookId);
         if (groupBookId == null) {
             trace.log("Group book id is incorrect" , TraceLevel.Warning);
-            return Result.Failed;
+            return Result.Failed();
         }
 
         book.setGroupBooks(groupBooks);
@@ -75,7 +75,7 @@ public class BooksService extends AbstractService implements ImageService,FileSe
             Language language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
             book.setLanguage(language);
         } catch (Exception exception) {
-            Result result = Result.Failed;
+            Result result = Result.Failed();
             result.setObject("Language not found");
             return result;
         }
@@ -99,7 +99,7 @@ public class BooksService extends AbstractService implements ImageService,FileSe
             booksTag.getBooks().add(book);
             booksTagRepository.merge(booksTag);
         }
-        Result result = Result.Complete;
+        Result result = Result.Complete();
         result.setObject(book.getId());
         return result;
     }
