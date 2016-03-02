@@ -35,7 +35,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
          };
     })
     .factory('modules',function(){
-        return ["user" , "accept" , "section" , "restorePassword" , "groupCourses" , "groupBooks","groupPrograms"];
+        return ["user","accept","section","restorePassword","groupCourses","groupBooks","groupPrograms","book"];
     })
     .constant("resourceUrl", "/resources/application/")
     .constant("resourceTemplate","/resources/template/")
@@ -60,7 +60,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         };
         this.getLanguage = function(){
             return language;
-        }
+        };
 
         var onLogoutFun;
         this.onLogout = function(){

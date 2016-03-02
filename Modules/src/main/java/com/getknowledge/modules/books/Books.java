@@ -8,6 +8,7 @@ import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
+import com.getknowledge.platform.base.entities.CloneableEntity;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import com.getknowledge.platform.modules.user.User;
@@ -19,7 +20,7 @@ import java.util.List;
 @Entity
 @Table(name = "books")
 @ModuleInfo(repositoryName = "BooksRepository" , serviceName = "BooksService")
-public class Books extends AbstractEntity{
+public class Books extends CloneableEntity<Books> {
 
     private String name;
 
@@ -27,7 +28,6 @@ public class Books extends AbstractEntity{
     private String description;
 
     @ManyToOne(optional = false)
-    @JsonIgnore
     private GroupBooks groupBooks;
 
     @ManyToOne
@@ -138,5 +138,19 @@ public class Books extends AbstractEntity{
         authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditBooks.getName()));
         authorizationList.getPermissionsForRemove().add(new Permission(PermissionNames.EditBooks.getName()));
         return authorizationList;
+    }
+
+    @Override
+    public Books clone() {
+        Books cloneBook = new Books();
+        cloneBook.setGroupBooks(this.getGroupBooks());
+        cloneBook.setName(this.getName());
+        cloneBook.setBookData(this.getBookData());
+        cloneBook.setCover(this.getCover());
+        cloneBook.setDescription(this.getDescription());
+        cloneBook.setLanguage(this.getLanguage());
+        cloneBook.setLinks(this.getLinks());
+        cloneBook.setUser(this.getUser());
+        return cloneBook;
     }
 }
