@@ -52,7 +52,7 @@ public class BooksService extends AbstractService implements ImageService,FileSe
         UserInfo userInfo = userInfoService.getAuthorizedUser(data);
 
         Books book = new Books();
-        book.setUser(userInfo);
+        book.setOwner(userInfo);
 
         if (!book.getAuthorizationList().isAccessCreate(userInfo.getUser())) {
             return Result.AccessDenied();

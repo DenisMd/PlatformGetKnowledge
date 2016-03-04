@@ -96,10 +96,10 @@ public class DataController {
 
 //    Methods for read ----------------------------------------------------------------------------
 
-    private ObjectNode prepareJson (AbstractEntity abstractEntity,Class classEntity,Principal principal) throws NotAuthorized, ModuleNotFound {
+    private ObjectNode prepareJson (AbstractEntity abstractEntity,boolean editable, boolean creatable, Class classEntity) throws NotAuthorized, ModuleNotFound {
         ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
-        objectNode.put("editable" , isAccessEdit(principal,abstractEntity));
-        objectNode.put("creatable" , isAccessCreate(principal, abstractEntity));
+        objectNode.put("editable" , editable);
+        objectNode.put("creatable" , creatable);
         AbstractService abstractService = moduleLocator.findService(classEntity);
         if (abstractService instanceof ImageService) {
             ImageService imageService = (ImageService) abstractService;
@@ -117,8 +117,11 @@ public class DataController {
                 // TODO: question may continue?
                 throw new NotAuthorized("access denied for read entity from list" , trace, TraceLevel.Warning);
             }
+
+            boolean isEditable = isAccessEdit(principal,abstractEntity);
+            boolean isCreatable = isAccessCreate(principal,abstractEntity);
             abstractEntity = AbstractEntity.prepare(abstractEntity,repository,getCurrentUser(principal),moduleLocator);
-            nodes.add(prepareJson(abstractEntity,classEntity,principal));
+            nodes.add(prepareJson(abstractEntity,isEditable,isCreatable,classEntity));
         }
 
         return nodes;
@@ -147,9 +150,11 @@ public class DataController {
                 throw new NotAuthorized("access denied for read entity: " + className, trace , TraceLevel.Warning);
             }
 
+            boolean isEditable = isAccessEdit(principal,entity);
+            boolean isCreatable = isAccessCreate(principal,entity);
             entity = AbstractEntity.prepare(entity,repository,getCurrentUser(principal),moduleLocator);
 
-            return prepareJson(entity,classEntity,principal).toString();
+            return prepareJson(entity,isEditable,isCreatable,classEntity).toString();
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
         } catch (Exception e) {

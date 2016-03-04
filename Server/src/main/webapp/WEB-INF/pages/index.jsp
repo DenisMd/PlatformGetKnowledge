@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html ng-app="mainApp" ng-controller="mainController">
 <head>
-    <title>Index</title>
+    <title>GetKnwoledge</title>
 
     <%--Шрифт--%>
     <link href='https://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>

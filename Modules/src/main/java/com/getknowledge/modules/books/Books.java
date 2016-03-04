@@ -9,6 +9,7 @@ import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.entities.CloneableEntity;
+import com.getknowledge.platform.base.entities.IUser;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import com.getknowledge.platform.modules.user.User;
@@ -20,7 +21,7 @@ import java.util.List;
 @Entity
 @Table(name = "books")
 @ModuleInfo(repositoryName = "BooksRepository" , serviceName = "BooksService")
-public class Books extends CloneableEntity<Books> {
+public class Books extends CloneableEntity<Books> implements IUser{
 
     private String name;
 
@@ -30,11 +31,11 @@ public class Books extends CloneableEntity<Books> {
     @ManyToOne(optional = false)
     private GroupBooks groupBooks;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Language language;
 
-    @ManyToOne
-    private UserInfo user;
+    @ManyToOne(optional = false)
+    private UserInfo owner;
 
     @ManyToMany(mappedBy = "books", cascade = CascadeType.PERSIST)
     private List<BooksTag> tags = new ArrayList<>();
@@ -119,12 +120,17 @@ public class Books extends CloneableEntity<Books> {
         this.tags = tags;
     }
 
-    public UserInfo getUser() {
-        return user;
+    public UserInfo getOwner() {
+        return owner;
     }
 
-    public void setUser(UserInfo user) {
-        this.user = user;
+    public void setOwner(UserInfo owner) {
+        this.owner = owner;
+    }
+
+    @Override
+    public User getUser() {
+        return owner.getUser();
     }
 
     @Override
@@ -132,8 +138,8 @@ public class Books extends CloneableEntity<Books> {
         AuthorizationList authorizationList = new AuthorizationList();
         authorizationList.allowReadEveryOne = true;
 
-        if (user != null)
-            authorizationList.getUserList().add(user.getUser());
+        if (owner != null)
+            authorizationList.getUserList().add(owner.getUser());
         authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.CreateBooks.getName()));
         authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditBooks.getName()));
         authorizationList.getPermissionsForRemove().add(new Permission(PermissionNames.EditBooks.getName()));
@@ -143,6 +149,7 @@ public class Books extends CloneableEntity<Books> {
     @Override
     public Books clone() {
         Books cloneBook = new Books();
+        cloneBook.setId(this.getId());
         cloneBook.setGroupBooks(this.getGroupBooks());
         cloneBook.setName(this.getName());
         cloneBook.setBookData(this.getBookData());
@@ -150,7 +157,7 @@ public class Books extends CloneableEntity<Books> {
         cloneBook.setDescription(this.getDescription());
         cloneBook.setLanguage(this.getLanguage());
         cloneBook.setLinks(this.getLinks());
-        cloneBook.setUser(this.getUser());
+        cloneBook.setOwner(this.getOwner());
         return cloneBook;
     }
 }
