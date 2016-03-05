@@ -1,6 +1,7 @@
 package com.getknowledge.modules.help.desc.attachements;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.help.desc.HpMessage;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 
@@ -16,6 +17,18 @@ public class FileAttachment {
     @Column(name = "attach_files")
     @Lob
     byte [] data;
+
+    @Column(name = "file_name")
+    @JsonIgnore
+    private String fileName;
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
     public byte[] getData() {
         return data;

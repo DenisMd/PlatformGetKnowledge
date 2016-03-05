@@ -321,6 +321,35 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             });
         };
 
+        this.createUploader = function ($scope,name,className,actionName,data,callback){
+            "use strict";
+            var isCallbackFunction = isFunction(callback);
+            var formData = {
+                className: className,
+                actionName: actionName,
+                data: JSON.stringify(data)
+            };
+            var uploader = new FileUploader({
+                url: platformDataUrl+'actionWithFile',
+                autoUpload: false,
+                onBeforeUploadItem: function(item) {
+                    item.formData.push(formData);
+                }
+            });
+
+            uploader.onSuccessItem = function(fileItem, response, status, headers) {
+                var data = response;
+                if (isCallbackFunction)
+                    callback(data);
+            };
+            uploader.onErrorItem = function(fileItem, response, status, headers) {
+                errorService.showError(response,status);
+            };
+
+            return uploader;
+
+        };
+
         this.actionWithFile = function ($scope,name,className,actionName,data,files,callback){
             "use strict";
             var isCallbackFunction = isFunction(callback);
@@ -433,6 +462,11 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         this.imageHref = function(className,id){
             if (!className || !id) return "";
             return "/data/image?className="+className+"&id="+id;
+        };
+
+        this.fileHref = function(className,id,key){
+            if (!className || !id) return "";
+            return "/data/readFile?className="+className+"&id="+id+"&key="+key;
         };
 
         this.fileByKeyHref = function(className,id,key){

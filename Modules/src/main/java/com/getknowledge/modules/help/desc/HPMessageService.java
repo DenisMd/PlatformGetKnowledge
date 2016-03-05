@@ -1,5 +1,6 @@
 package com.getknowledge.modules.help.desc;
 
+import com.getknowledge.platform.base.serializers.FileResponse;
 import com.getknowledge.platform.modules.Result;
 import com.getknowledge.modules.help.desc.attachements.FileAttachment;
 import com.getknowledge.modules.help.desc.type.HpMessageType;
@@ -87,7 +88,7 @@ public class HPMessageService extends AbstractService implements FileService {
     }
 
     @Override
-    public byte[] getFile(long id, Object key) {
+    public FileResponse getFile(long id, Object key) {
         HpMessage message = hpRepository.read(id);
         if (message == null)
             return null;
@@ -96,6 +97,12 @@ public class HPMessageService extends AbstractService implements FileService {
 
         Optional<FileAttachment> result = message.getFiles().stream().filter((file) -> file.getId() == fileId).findFirst();
 
-        return result.isPresent() ? result.get().getData() : null;
+        FileResponse fileResponse = new FileResponse();
+        if (result.isPresent()) {
+            fileResponse.setData(result.get().getData());
+            fileResponse.setFileName(result.get().getFileName());
+        }
+
+        return fileResponse;
     }
 }

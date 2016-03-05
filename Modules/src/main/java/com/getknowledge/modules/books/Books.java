@@ -37,7 +37,7 @@ public class Books extends CloneableEntity<Books> implements IUser{
     @ManyToOne(optional = false)
     private UserInfo owner;
 
-    @ManyToMany(mappedBy = "books", cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "books", cascade = {CascadeType.ALL})
     private List<BooksTag> tags = new ArrayList<>();
 
     @ElementCollection
@@ -55,6 +55,18 @@ public class Books extends CloneableEntity<Books> implements IUser{
     @Lob @Column(name="data")
     @JsonIgnore
     private byte[] bookData;
+
+    @Column(name = "file_name")
+    @JsonIgnore
+    private String fileName;
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
     public GroupBooks getGroupBooks() {
         return groupBooks;
@@ -158,6 +170,7 @@ public class Books extends CloneableEntity<Books> implements IUser{
         cloneBook.setLanguage(this.getLanguage());
         cloneBook.setLinks(this.getLinks());
         cloneBook.setOwner(this.getOwner());
+        cloneBook.setTags(this.getTags());
         return cloneBook;
     }
 }

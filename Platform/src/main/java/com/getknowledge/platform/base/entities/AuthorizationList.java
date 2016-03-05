@@ -39,7 +39,7 @@ public class AuthorizationList {
         return permissionsForRemove;
     }
 
-    private boolean checkRights(User user , List<Permission> permissions) throws NotAuthorized {
+    private boolean checkRights(User user , List<Permission> permissions) {
 
         if (user == null || permissions == null || permissions.isEmpty()) return false;
 
@@ -58,8 +58,8 @@ public class AuthorizationList {
         return users != null && users.contains(user);
     }
 
-    public boolean isAccessRead (User currentUser) throws NotAuthorized {
-        if (currentUser == null) throw new NotAuthorized("User not found");
+    public boolean isAccessRead (User currentUser) {
+        if (currentUser == null) return false;
 
         if (currentUser.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
             return true;
@@ -68,8 +68,8 @@ public class AuthorizationList {
         return checkRights(currentUser, getPermissionsForRead()) || checkUserList(currentUser, getUserList());
     }
 
-    public boolean isAccessCreate (User currentUser) throws NotAuthorized {
-        if (currentUser == null) throw new NotAuthorized("User not found");
+    public boolean isAccessCreate (User currentUser) {
+        if (currentUser == null) return false;
 
         if (currentUser.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
             return true;
@@ -78,8 +78,8 @@ public class AuthorizationList {
         return checkRights(currentUser, getPermissionsForCreate()) || checkUserList(currentUser, getUserList());
     }
 
-    public boolean isAccessEdit (User currentUser) throws NotAuthorized {
-        if (currentUser == null) throw new NotAuthorized("User not found");
+    public boolean isAccessEdit (User currentUser) {
+        if (currentUser == null) return false;
 
         if (currentUser.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
             return true;
@@ -88,8 +88,8 @@ public class AuthorizationList {
         return checkRights(currentUser, getPermissionsForEdit()) || checkUserList(currentUser, getUserList());
     }
 
-    public boolean isAccessRemove (User currentUser) throws NotAuthorized {
-        if (currentUser == null) throw new NotAuthorized("User not found");
+    public boolean isAccessRemove (User currentUser) {
+        if (currentUser == null) return false;
 
         if (currentUser.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
             return true;

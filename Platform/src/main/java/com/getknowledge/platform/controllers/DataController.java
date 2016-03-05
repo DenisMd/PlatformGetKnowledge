@@ -18,6 +18,7 @@ import com.getknowledge.platform.base.repositories.FilterQuery;
 import com.getknowledge.platform.base.repositories.PrepareEntity;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.base.repositories.enumerations.OrderRoute;
+import com.getknowledge.platform.base.serializers.FileResponse;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.FileLinkService;
 import com.getknowledge.platform.base.services.FileService;
@@ -262,8 +263,10 @@ public class DataController {
             AbstractService abstractService = moduleLocator.findService(classEntity);
             if (abstractService instanceof FileService) {
                 FileService fileService = ((FileService)abstractService);
+                FileResponse fileResponse = fileService.getFile(id,key);
                 final HttpHeaders headers = new HttpHeaders();
-                return new ResponseEntity<>(fileService.getFile(id,key), headers, HttpStatus.OK);
+                headers.add("content-disposition", "attachment; filename=" + fileResponse.getFileName());
+                return new ResponseEntity<>(fileResponse.getData(), headers, HttpStatus.OK);
             }
 
         } catch (ClassNotFoundException e) {

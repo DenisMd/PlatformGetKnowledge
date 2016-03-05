@@ -38,6 +38,12 @@ public class Result {
         return result;
     }
 
+    public static Result NotFound(){
+        Result result = new Result();
+        result.setStatus("Not found");
+        return result;
+    }
+
     private String status;
 
     private Object object = null;
