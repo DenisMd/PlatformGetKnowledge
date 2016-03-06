@@ -445,9 +445,7 @@ public class DataController {
             return null;
         }
     }
-
-
-
+    
 //    methods for change -----------------------------------------------------------------------------------
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)

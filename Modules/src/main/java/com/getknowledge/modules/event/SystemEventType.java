@@ -1,5 +1,5 @@
 package com.getknowledge.modules.event;
 
-public enum UserEventType {
+public enum SystemEventType {
     Register,RestorePassword
 }

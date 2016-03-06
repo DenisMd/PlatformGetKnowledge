@@ -7,9 +7,9 @@ import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
 import com.getknowledge.modules.email.EmailService;
-import com.getknowledge.modules.event.UserEvent;
-import com.getknowledge.modules.event.UserEventRepository;
-import com.getknowledge.modules.event.UserEventType;
+import com.getknowledge.modules.event.SystemEvent;
+import com.getknowledge.modules.event.SystemEventRepository;
+import com.getknowledge.modules.event.SystemEventType;
 import com.getknowledge.modules.settings.Settings;
 import com.getknowledge.modules.settings.SettingsRepository;
 import com.getknowledge.modules.userInfo.results.RegisterResult;
@@ -61,7 +61,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
     private EmailService emailService;
 
     @Autowired
-    private UserEventRepository userEventRepository;
+    private SystemEventRepository systemEventRepository;
 
 
     @Autowired
@@ -215,12 +215,12 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
         userInfoRepository.create(userInfo);
 
-        UserEvent registerInfo = new UserEvent();
+        SystemEvent registerInfo = new SystemEvent();
         registerInfo.setUserInfo(userInfo);
         registerInfo.setCalendar(Calendar.getInstance());
         registerInfo.setUuid(uuid);
-        registerInfo.setUserEventType(UserEventType.Register);
-        userEventRepository.create(registerInfo);
+        registerInfo.setSystemEventType(SystemEventType.Register);
+        systemEventRepository.create(registerInfo);
 
         RegisterResult registerResult = RegisterResult.Complete;
         registerResult.setUserInfoId(userInfo.getId());
@@ -228,7 +228,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
         try {
             Task task = new Task();
-            task.setServiceName("UserEventService");
+            task.setServiceName("SystemEventService");
             task.setTaskName("cancelRegistration");
             task.setJsonData(objectMapper.writeValueAsString(registerInfo));
             task.setTaskStatus(TaskStatus.NotStarted);
@@ -386,16 +386,16 @@ public class UserInfoService extends AbstractService implements BootstrapService
             return Result.EmailNotSend();
         }
 
-        UserEvent restorePasswordInfo = new UserEvent();
+        SystemEvent restorePasswordInfo = new SystemEvent();
         restorePasswordInfo.setUserInfo(userInfo);
         restorePasswordInfo.setCalendar(Calendar.getInstance());
         restorePasswordInfo.setUuid(uuid);
-        restorePasswordInfo.setUserEventType(UserEventType.RestorePassword);
-        userEventRepository.create(restorePasswordInfo);
+        restorePasswordInfo.setSystemEventType(SystemEventType.RestorePassword);
+        systemEventRepository.create(restorePasswordInfo);
 
         try {
             Task task = new Task();
-            task.setServiceName("UserEventService");
+            task.setServiceName("SystemEventService");
             task.setTaskName("removeRestorePasswordInfo");
             task.setJsonData(objectMapper.writeValueAsString(restorePasswordInfo));
             task.setTaskStatus(TaskStatus.NotStarted);

@@ -75,9 +75,10 @@
 
 <div>
   {{translate("tags")}} :
-  <div ng-repeat="tag in  book.tags" style="display: in">
+  <div ng-repeat="tag in  book.tags" style="display:inline">
     {{tag.tagName}}
   </div>
+  <br>
   {{translate("links")}}
   <ul>
     <li ng-repeat="url in book.links">

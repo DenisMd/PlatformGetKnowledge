@@ -15,11 +15,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
-@Service("UserEventService")
-public class UserEventService extends AbstractService {
+@Service("SystemEventService")
+public class SystemEventService extends AbstractService {
 
     @Autowired
-    private UserEventRepository userEventRepository;
+    private SystemEventRepository systemEventRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -30,8 +30,8 @@ public class UserEventService extends AbstractService {
     @Action(name = "completeRegistration", mandatoryFields = {"uuid"})
     public RegisterResult completeRegistration(HashMap<String , Object> data) {
         String uuid = (String) data.get("uuid");
-        UserEvent registerInfo = userEventRepository.getSingleEntityByFieldAndValue("uuid", uuid);
-        if (registerInfo == null || registerInfo.getUserEventType() != UserEventType.Register) return RegisterResult.NotFound;
+        SystemEvent registerInfo = systemEventRepository.getSingleEntityByFieldAndValue("uuid", uuid);
+        if (registerInfo == null || registerInfo.getSystemEventType() != SystemEventType.Register) return RegisterResult.NotFound;
         User user = userRepository.read(registerInfo.getUserInfo().getUser().getId());
         if (!user.isEnabled()) {
             user.setEnabled(true);
@@ -46,34 +46,34 @@ public class UserEventService extends AbstractService {
 
     @Task(name = "cancelRegistration")
     public void cancelRegistration(HashMap<String , Object> data) throws PlatformException {
-        UserEvent registerInfo = userEventRepository.getSingleEntityByFieldAndValue("uuid", data.get("uuid").toString());
+        SystemEvent registerInfo = systemEventRepository.getSingleEntityByFieldAndValue("uuid", data.get("uuid").toString());
         if (!registerInfo.getUserInfo().getUser().isEnabled()) {
             trace.log("Cancel registration for user " + registerInfo.getUserInfo().getUser().getLogin() , TraceLevel.Event);
-            userEventRepository.removeWithUser(registerInfo.getId());
+            systemEventRepository.removeWithUser(registerInfo.getId());
         } else {
-            userEventRepository.remove(registerInfo.getId());
+            systemEventRepository.remove(registerInfo.getId());
         }
     }
 
     @Action(name = "restorePassword", mandatoryFields = {"uuid" , "password"})
     public Result restorePassword(HashMap<String , Object> data) throws PlatformException {
         String uuid = (String) data.get("uuid");
-        UserEvent restorePasswordInfo = userEventRepository.getSingleEntityByFieldAndValue("uuid", uuid);
-        if (restorePasswordInfo == null || restorePasswordInfo.getUserEventType() != UserEventType.RestorePassword) return Result.Failed();
+        SystemEvent restorePasswordInfo = systemEventRepository.getSingleEntityByFieldAndValue("uuid", uuid);
+        if (restorePasswordInfo == null || restorePasswordInfo.getSystemEventType() != SystemEventType.RestorePassword) return Result.Failed();
         User user = userRepository.read(restorePasswordInfo.getUserInfo().getUser().getId());
         String password = (String) data.get("password");
         user.hashRawPassword(password);
         userRepository.update(user);
-        userEventRepository.remove(restorePasswordInfo.getId());
+        systemEventRepository.remove(restorePasswordInfo.getId());
         return Result.Complete();
     }
 
     @Task(name = "removeRestorePasswordInfo")
     public void removeRestorePasswordInfo(HashMap<String , Object> data) throws PlatformException {
-        UserEvent restorePasswordInfo = userEventRepository.getSingleEntityByFieldAndValue("uuid", data.get("uuid").toString());
+        SystemEvent restorePasswordInfo = systemEventRepository.getSingleEntityByFieldAndValue("uuid", data.get("uuid").toString());
         if (restorePasswordInfo == null) return;
         trace.log("Remove old restore password" + restorePasswordInfo.getUuid() , TraceLevel.Event);
-        userEventRepository.remove(restorePasswordInfo.getId());
+        systemEventRepository.remove(restorePasswordInfo.getId());
     }
 
 }

@@ -1,12 +1,13 @@
-package com.getknowledge.modules.books;
+package com.getknowledge.modules.programs;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.books.group.GroupBooks;
 import com.getknowledge.modules.books.tags.BooksTag;
 import com.getknowledge.modules.dictionaries.language.Language;
+import com.getknowledge.modules.programs.group.GroupPrograms;
+import com.getknowledge.modules.programs.tags.ProgramTag;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.annotations.ModuleInfo;
-import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.entities.CloneableEntity;
 import com.getknowledge.platform.base.entities.IUser;
@@ -19,17 +20,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "books")
-@ModuleInfo(repositoryName = "BooksRepository" , serviceName = "BooksService")
-public class Books extends CloneableEntity<Books> implements IUser{
-
+@Table(name = "program")
+@ModuleInfo(repositoryName = "ProgramRepository" , serviceName = "ProgramService")
+public class Program extends CloneableEntity<Program> implements IUser {
     private String name;
 
     @Column(length = 1000)
     private String description;
 
     @ManyToOne(optional = false)
-    private GroupBooks groupBooks;
+    private GroupPrograms groupPrograms;
 
     @ManyToOne(optional = false)
     private Language language;
@@ -37,11 +37,11 @@ public class Books extends CloneableEntity<Books> implements IUser{
     @ManyToOne(optional = false)
     private UserInfo owner;
 
-    @ManyToMany(mappedBy = "books", cascade = {CascadeType.ALL})
-    private List<BooksTag> tags = new ArrayList<>();
+    @ManyToMany(mappedBy = "programs", cascade = {CascadeType.PERSIST})
+    private List<ProgramTag> tags = new ArrayList<>();
 
     @ElementCollection
-    @CollectionTable(name = "books_link")
+    @CollectionTable(name = "programs_link")
     @Column(name = "links")
     private List<String> links = new ArrayList<>();
 
@@ -68,13 +68,6 @@ public class Books extends CloneableEntity<Books> implements IUser{
         this.fileName = fileName;
     }
 
-    public GroupBooks getGroupBooks() {
-        return groupBooks;
-    }
-
-    public void setGroupBooks(GroupBooks groupBooks) {
-        this.groupBooks = groupBooks;
-    }
 
     public byte[] getCover() {
         return cover;
@@ -124,20 +117,29 @@ public class Books extends CloneableEntity<Books> implements IUser{
         this.name = name;
     }
 
-    public List<BooksTag> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<BooksTag> tags) {
-        this.tags = tags;
-    }
-
     public UserInfo getOwner() {
         return owner;
     }
 
     public void setOwner(UserInfo owner) {
         this.owner = owner;
+    }
+
+
+    public GroupPrograms getGroupPrograms() {
+        return groupPrograms;
+    }
+
+    public void setGroupPrograms(GroupPrograms groupPrograms) {
+        this.groupPrograms = groupPrograms;
+    }
+
+    public List<ProgramTag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<ProgramTag> tags) {
+        this.tags = tags;
     }
 
     @Override
@@ -152,25 +154,25 @@ public class Books extends CloneableEntity<Books> implements IUser{
 
         if (owner != null)
             authorizationList.getUserList().add(owner.getUser());
-        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.CreateBooks.getName()));
-        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditBooks.getName()));
-        authorizationList.getPermissionsForRemove().add(new Permission(PermissionNames.EditBooks.getName()));
+        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.CreatePrograms.getName()));
+        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditPrograms.getName()));
+        authorizationList.getPermissionsForRemove().add(new Permission(PermissionNames.EditPrograms.getName()));
         return authorizationList;
     }
 
     @Override
-    public Books clone() {
-        Books cloneBook = new Books();
-        cloneBook.setId(this.getId());
-        cloneBook.setGroupBooks(this.getGroupBooks());
-        cloneBook.setName(this.getName());
-        cloneBook.setBookData(this.getBookData());
-        cloneBook.setCover(this.getCover());
-        cloneBook.setDescription(this.getDescription());
-        cloneBook.setLanguage(this.getLanguage());
-        cloneBook.setLinks(this.getLinks());
-        cloneBook.setOwner(this.getOwner());
-        cloneBook.setTags(this.getTags());
-        return cloneBook;
+    public Program clone() {
+        Program cloneProgram = new Program();
+        cloneProgram.setId(this.getId());
+        cloneProgram.setGroupPrograms(this.getGroupPrograms());
+        cloneProgram.setName(this.getName());
+        cloneProgram.setBookData(this.getBookData());
+        cloneProgram.setCover(this.getCover());
+        cloneProgram.setDescription(this.getDescription());
+        cloneProgram.setLanguage(this.getLanguage());
+        cloneProgram.setLinks(this.getLinks());
+        cloneProgram.setOwner(this.getOwner());
+        cloneProgram.setTags(this.getTags());
+        return cloneProgram;
     }
 }

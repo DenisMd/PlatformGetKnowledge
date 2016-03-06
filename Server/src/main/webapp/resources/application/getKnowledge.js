@@ -1008,7 +1008,7 @@ model.controller("booksCardCtrl" , function($scope,applicationService,className)
     $scope.showAdvanced = function(ev) {
         $scope.showDialog(ev,$scope,"createBook.html",function(answer){
             answer.groupBookId = $scope.booksGroup.list[0].id;
-            applicationService.action($scope,"" , className.books,"createBooks",answer,function(result){
+            applicationService.action($scope,"" , className.book,"createBooks",answer,function(result){
                 $scope.showToast(result);
                 $scope.goTo("book/"+result.object);
             });
