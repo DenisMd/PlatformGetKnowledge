@@ -157,6 +157,19 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         return new Array(Math.ceil(n));
     };
 
+    $scope.splitArray = function(array,even) {
+        var tempArr = [];
+        for (var i = 0; i < array.length; i++) {
+            if(i % 2 === 0 && even) { // index is even
+                tempArr.push(array[i]);
+            }
+            if(i % 2 === 1 && !even) { // index is onn
+                tempArr.push(array[i]);
+            }
+        }
+        return tempArr;
+    }
+
     //создаем массив по диапозону
     $scope.getRow = function (index, length, array) {
         var result = [];
@@ -961,19 +974,6 @@ model.controller("folderCardsCtrl" , function ($scope,applicationService) {
     $scope.folderImg = function(id){
         return applicationService.imageHref($scope.getData().className,id);
     };
-
-    $scope.splitArray = function(array,even) {
-        var tempArr = [];
-        for (var i = 0; i < array.length; i++) {
-            if(i % 2 === 0 && even) { // index is even
-                tempArr.push(array[i]);
-            }
-            if(i % 2 === 1 && !even) { // index is onn
-                tempArr.push(array[i]);
-            }
-        }
-        return tempArr;
-    }
 });
 
 model.controller("booksCardCtrl" , function($scope,applicationService,className){
@@ -1015,17 +1015,48 @@ model.controller("booksCardCtrl" , function($scope,applicationService,className)
         });
     };
 
-    $scope.splitArray = function(array,even) {
-        var tempArr = [];
-        for (var i = 0; i < array.length; i++) {
-            if(i % 2 === 0 && even) { // index is even
-                tempArr.push(array[i]);
-            }
-            if(i % 2 === 1 && !even) { // index is onn
-                tempArr.push(array[i]);
-            }
-        }
-        return tempArr;
+    applicationService.list($scope,"langs",className.language, function (item) {
+        item.title = $scope.translate(item.name.toLowerCase())
+    });
+});
+
+model.controller("programCardCtrl" , function($scope,applicationService,className){
+    var filter = applicationService.createFilter($scope.getData().className,0,10);
+    filter.equal("groupPrograms.url",$scope.getData().groupProgram);
+    filter.equal("groupPrograms.section.name",$scope.getData().sectionName);
+    $scope.programs = [];
+
+    var filter2 = applicationService.createFilter(className.groupPrograms,0,1);
+    filter2.equal("url" , $scope.getData().groupProgram);
+    applicationService.filterRequest($scope,"groupPrograms",filter2);
+
+    var addProgram = function(program){
+        $scope.programs.push(program);
+    };
+
+    var doAction = function(){
+        applicationService.filterRequest($scope,"programData",filter,addProgram);
+    };
+
+    doAction();
+
+    $scope.loadMore = function () {
+        filter.increase(10);
+        doAction();
+    };
+
+    $scope.folderImg = function(id){
+        return applicationService.imageHref($scope.getData().className,id);
+    };
+
+    $scope.showAdvanced = function(ev) {
+        $scope.showDialog(ev,$scope,"createProgram.html",function(answer){
+            answer.groupProgramId = $scope.groupPrograms.list[0].id;
+            applicationService.action($scope,"" , className.program,"createProgram",answer,function(result){
+                $scope.showToast(result);
+                $scope.goTo("program/"+result.object);
+            });
+        });
     };
 
     applicationService.list($scope,"langs",className.language, function (item) {

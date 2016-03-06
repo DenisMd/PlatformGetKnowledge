@@ -109,7 +109,7 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
             return Result.AccessDenied();
         }
 
-        Long groupBookId = new Long((Integer)data.get("groupBookId"));
+        Long groupBookId = new Long((Integer)data.get("groupProgramId"));
 
         GroupPrograms groupPrograms =  groupProgramsRepository.read(groupBookId);
         if (groupPrograms == null) {

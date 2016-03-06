@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet" href="/resources/css/section.css">
 
-<h1 class="text-center">{{translate(book.name)}}</h1>
+<h1 class="text-center">{{book.name}}</h1>
 
 <div>
   <md-button class="md-raised md-primary" ng-click="showEditableContent = !showEditableContent" ng-show="book.editable">{{translate("change")}}</md-button>
