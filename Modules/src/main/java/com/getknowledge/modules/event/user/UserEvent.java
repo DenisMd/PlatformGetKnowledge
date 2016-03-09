@@ -30,7 +30,47 @@ public class UserEvent extends AbstractEntity{
     private Calendar createTime;
 
     @Column(name = "is_checked")
-    private boolean isChecked = false;
+    private Boolean checked = false;
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
+    public Calendar getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Calendar createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public UserInfo getOwner() {
+        return owner;
+    }
+
+    public void setOwner(UserInfo owner) {
+        this.owner = owner;
+    }
+
+    public UserEventType getUserEventType() {
+        return userEventType;
+    }
+
+    public void setUserEventType(UserEventType userEventType) {
+        this.userEventType = userEventType;
+    }
 
     @Override
     public AuthorizationList getAuthorizationList() {

@@ -104,6 +104,7 @@ Moderator : ROLE_MODERATOR
         sections : /sections
         menu : /menu
         folders : /folders
+        knowledge : /knowledge
         socialLinks : /socialLinks
         programmingLanguages : /programmingLanguages
         programmingStyles : /editorStyles

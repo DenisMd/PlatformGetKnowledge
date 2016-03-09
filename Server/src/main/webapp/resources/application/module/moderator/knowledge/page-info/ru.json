@@ -1,0 +1,11 @@
+{
+  "text" : {
+    "knowledge_type" : "Тип знания",
+    "knowledge_loadMore" : "Загрузить больше",
+    "knowledge_info" : "Инофрмация",
+    "knowledge_create" : "Создать знание",
+    "knowledge_delete" : "Удалить знание",
+    "knowledge_delete_confirmation" : "Удаление будет невозможным, если кто-то сылается на данное знание",
+    "knowledge_note" : "Пояснение"
+  }
+}

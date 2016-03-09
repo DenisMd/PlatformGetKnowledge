@@ -22,6 +22,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "system_event" : "com.getknowledge.modules.event.SystemEvent",
             "tasks" : "com.getknowledge.platform.modules.task.Task",
             "trace" : "com.getknowledge.platform.modules.trace.Trace",
+            "knolwedge" : "com.getknowledge.modules.dictionaries.knowledge.Knowledge",
             "settings" : "com.getknowledge.modules.settings.Settings",
             "systemServices" : "com.getknowledge.platform.modules.service.Service",
             "socialLinks" : "com.getknowledge.modules.socialLinks.SocialLink",

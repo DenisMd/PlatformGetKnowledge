@@ -43,6 +43,9 @@ public class PermissionService extends AbstractService implements BootstrapServi
         permissionRepository.ifNotExistCreate(new Permission(PermissionNames.CreatePrograms.getName()));
         permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditPrograms.getName()));
         permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditProgrammingDictionaries.getName()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.CreateCourse.getName()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditCourse.getName()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditKnowledge.getName()));
     }
 
 

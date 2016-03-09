@@ -1,0 +1,11 @@
+{
+  "text" : {
+    "knowledge_type" : "Knowledge type",
+    "knowledge_loadMore" : "Load more",
+    "knowledge_info" : "Knowledge info",
+    "knowledge_create" : "Create knowledge",
+    "knowledge_delete" : "Delete knowledge",
+    "knowledge_delete_confirmation" : "Delete can't be execute if knowledge use something",
+    "knowledge_note" : "Note"
+  }
+}

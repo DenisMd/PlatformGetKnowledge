@@ -3,6 +3,7 @@ package com.getknowledge.platform.modules.permission;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
+import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,6 +22,10 @@ public class Permission extends AbstractEntity{
 
     public Permission() {
         permissionName = "";
+    }
+
+    public Permission(PermissionNames permissionNames) {
+        this.permissionName = permissionNames.getName();
     }
 
     public Permission(String permissionName) {
