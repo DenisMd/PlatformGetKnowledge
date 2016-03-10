@@ -1,0 +1,14 @@
+.autoresize > .CodeMirror {
+    height: auto;
+}
+
+.tag{
+    margin: 10px 0;
+}
+
+.tag-title{
+    border:1px solid #ccc;
+    border-radius: 5px;
+    padding: 2px 5px;
+    width: 100%;
+}

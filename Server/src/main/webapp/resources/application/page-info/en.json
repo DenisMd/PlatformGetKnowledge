@@ -80,6 +80,7 @@
     "type" : "Type",
     "load_more" : "Load more",
     "move" : "Move",
-    "No_Item" : "Not found"
+    "No_Item" : "Not found",
+    "source_code" : "Source code"
   }
 }

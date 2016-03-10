@@ -1,45 +1,60 @@
 <div ng-controller="postController">
+    <!--<textarea insert-at-caret></textarea>-->
+    <div>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur eos fugiat illum inventore, ipsum labore laboriosam mollitia, natus nisi non nulla odit perferendis porro quas, quasi saepe sint veniam voluptates.
+    </div>
+    <div class="tag">
+        <div class="tag-title" ng-click="test.showCode()">
+            <i class="fa" ng-class="test.codeShown?'fa-caret-down':'fa-caret-right'"></i>
+            {{translate("source_code")+' ) '+test.title}}
+        </div>
+        <div class="autoresize" ui-codemirror="test" ng-model="test.text"  ui-refresh="test.text" ng-if="test.codeShown"></div>
+    </div>
+    <div>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur eos fugiat illum inventore, ipsum labore laboriosam mollitia, natus nisi non nulla odit perferendis porro quas, quasi saepe sint veniam voluptates.
+    </div>
     <button ng-click="pasteCode()">Paste</button>
     <script type="text/ng-template" id="pasteCode.html">
         <md-dialog aria-label="Paste code" ng-cloak flex="80">
-            <md-toolbar class="statistic-card-title">
-                <div class="md-toolbar-tools">
-                    <h2>{{parentScope.translate("code_header")}}</h2>
-                </div>
-            </md-toolbar>
-            <md-dialog-content layout-padding>
-                <form>
-                    <div class="form-group">
-                        <label for="codeTitle">{{parentScope.translate("code_title")}}</label>
-                        <input type="text" class="form-control" id="codeTitle" ng-model="title">
+            <form name="codeTag">
+                <md-toolbar class="statistic-card-title">
+                    <div class="md-toolbar-tools">
+                        <h2>{{parentScope.translate("code_header")}}</h2>
                     </div>
-                    <div class="form-group" layout="row" layout-padding>
-                        <div layout="column" flex>
-                            <label for="codeTitle" flex>{{parentScope.translate("code_mode")}}</label>
-                            <select class="form-control" ng-model="parentScope.mode"
-                                    ng-options="m as m.name for m in parentScope.programmingLanguages"
-                                    ng-change="parentScope.modeChanged()" flex></select>
+                </md-toolbar>
+                <md-dialog-content layout-padding>
+                        <div class="form-group">
+                            <label for="codeTitle">{{parentScope.translate("code_title")}}</label>
+                            <input type="text" class="form-control" id="codeTitle" ng-model="parentScope.code.title" required maxlength="50">
                         </div>
-                        <div layout="column" flex>
-                            <label for="codeTitle" flex>{{parentScope.translate("code_theme")}}</label>
-                            <select class="form-control" ng-model="parentScope.theme"
-                                    ng-options="m as m.name for m in parentScope.programmingStyles"
-                                    ng-change="parentScope.themeChanged()" flex></select>
+                        <div class="form-group" layout="row" layout-padding>
+                            <div layout="column" flex>
+                                <label for="codeTitle" flex>{{parentScope.translate("code_mode")}}</label>
+                                <select class="form-control" ng-model="parentScope.code.mode"
+                                        ng-options="m as m.name for m in parentScope.programmingLanguages"
+                                        ng-change="parentScope.modeChanged()" flex></select>
+                            </div>
+                            <div layout="column" flex>
+                                <label for="codeTitle" flex>{{parentScope.translate("code_theme")}}</label>
+                                <select class="form-control" ng-model="parentScope.code.theme"
+                                        ng-options="m as m.name for m in parentScope.programmingStyles"
+                                        ng-change="parentScope.themeChanged()" flex></select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <textarea class="code-textarea" ui-codemirror="parentScope.cmOption" ng-model="parentScope.code" ui-refresh="parentScope.refreshCode"></textarea>
-                    </div>
-                </form>
-            </md-dialog-content>
-            <md-dialog-actions layout="row">
-                <md-button class="md-raised md-primary" ng-click="answer(bootstrap)">
-                    {{parentScope.translate("doIt")}}
-                </md-button>
-                <md-button class="md-raised md-warn" ng-click="cancel()">
-                    {{parentScope.translate("close")}}
-                </md-button>
-            </md-dialog-actions>
+                        <div class="form-group">
+                            <textarea class="code-textarea" ui-codemirror="parentScope.cmOption" ng-model="parentScope.code.text" ui-refresh="parentScope.refreshCode"></textarea>
+                        </div>
+
+                </md-dialog-content>
+                <md-dialog-actions layout="row">
+                    <md-button class="md-raised md-primary" ng-disabled="codeTag.$invalid" ng-click="answer(parentScope.code)">
+                        {{parentScope.translate("doIt")}}
+                    </md-button>
+                    <md-button class="md-raised md-warn" ng-click="cancel()">
+                        {{parentScope.translate("close")}}
+                    </md-button>
+                </md-dialog-actions>
+            </form>
         </md-dialog>
     </script>
 </div>

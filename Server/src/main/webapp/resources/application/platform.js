@@ -768,4 +768,81 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 }
             }
         };
-    });
+    })
+
+    .directive('insertAtCaret', ['$rootScope', function($rootScope) {
+    return {
+        link: function(scope, element, attrs) {
+            $rootScope.$on('add', function(e, val) {
+                console.log('on add');
+                console.log(val);
+                var domElement = element[0];
+                if (document.selection) {
+                    domElement.focus();
+                    var sel = document.selection.createRange();
+                    sel.text = val;
+                    domElement.focus();
+                } else if (element.selectionStart || element.selectionStart === 0) {
+                    var startPos = element.selectionStart;
+                    var endPos = element.selectionEnd;
+                    var scrollTop = element.scrollTop;
+                    domElement.value = element.value.substring(0, startPos) + val + element.value.substring(endPos, element.value.length);
+                    domElement.focus();
+                    domElement.selectionStart = startPos + val.length;
+                    domElement.selectionEnd = startPos + val.length;
+                    domElement.scrollTop = scrollTop;
+                } else {
+                    domElement.value += val;
+                    domElement.focus();
+                }
+
+            });
+        }
+    }
+}]);
+
+function Tag() {
+    this.Type = Object.freeze({Program: 1, Math: 2, Image: 3});
+
+    var name = "tag";
+    var type = this.Type.Program;
+    var data = {};
+
+    this.getName = function() {
+        return name;
+    };
+
+    this.setName = function(n){
+        if (!name || typeof name !== 'string') {
+            console.error("Tag name is not a valid");
+            return;
+        }
+        name = n;
+    };
+
+    this.getType = function() {
+        return type;
+    };
+
+    this.setType = function(t){
+        if (!t) {
+            console.error("Tag type is not a valid");
+            return;
+        }
+        type = t;
+    };
+
+    this.getData = function() {
+        return data;
+    };
+
+    this.setData = function(d) {
+        if (!d || d === null || !(typeof d === 'object')) {
+            console.error("Tag data is not a valid");
+            return;
+        }
+        data = d;
+    };
+}
+
+var TagPool = [];

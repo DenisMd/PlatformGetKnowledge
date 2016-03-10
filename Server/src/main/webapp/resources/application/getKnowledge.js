@@ -866,13 +866,44 @@ model.controller("sectionCard",function($scope,$state,applicationService,classNa
 });
 
 model.controller("postController",function($scope,codemirrorURL){
+    $scope.test = {
+        readOnly: 'nocursor',
+        codeShown:false,
+        showCode : function(){
+            this.codeShown = !this.codeShown;
+        }
+    };
+
+    //paste code
+    var defaultOptions = {
+        lineNumbers: true,
+        indentWithTabs: true
+    };
+
     $scope.pasteCode = function() {
-        $scope.showDialog(event, $scope, "pasteCode.html", function () {
+        $scope.showDialog(event, $scope, "pasteCode.html", function (newTagInfo) {
+            var newTag = new Tag();
+            newTag.setName(newTagInfo.title);
+            newTag.setType(newTag.Type.Program);
+            var options = angular.extend({
+                text: newTagInfo.text,
+                mode: newTagInfo.mode.mode,
+                theme: newTagInfo.theme.name
+            }, defaultOptions);
+            newTag.setData(options);
+            TagPool.push(newTag);
+            var tag = TagPool[TagPool.length - 1];
+            if (tag) {
+                angular.extend($scope.test,tag.getData());
+                $scope.test.title = tag.getName();
+            }
         },null,refresh);
     };
 
-    $scope.code = "var i = \"hello world\"";
-    $scope.theme = $scope.programmingStyles[0];
+    $scope.code = {
+        text:"var i = \"hello world\"",
+        theme:$scope.programmingStyles[0]
+    };
 
     $scope.refreshCode = false;
     var refresh = function(){
@@ -880,17 +911,16 @@ model.controller("postController",function($scope,codemirrorURL){
     };
 
     // The ui-codemirror option
-    $scope.cmOption = {
-        lineNumbers: true,
-        indentWithTabs: true,
+    $scope.cmOption = angular.extend({
+
         onLoad : function(_editor){
             $scope.modeChanged = function(){
-                var mode = $scope.mode.mode;
+                var mode = $scope.code.mode.mode;
                 loadMode(mode,_editor);
             };
 
             $scope.themeChanged = function(){
-                var css = $scope.theme.name.toLowerCase();
+                var css = $scope.code.theme.name.toLowerCase();
                 if (css !== "default"){
                     if(!loadTheme(css,_editor)){
                         _editor.setOption("theme", css);
@@ -900,10 +930,10 @@ model.controller("postController",function($scope,codemirrorURL){
                 }
             };
 
-            $scope.mode = $scope.programmingLanguages[0];
+            $scope.code.mode = $scope.programmingLanguages[0];
             $scope.modeChanged();
         }
-    };
+    },defaultOptions);
 
     var loadTheme = function(theme,editor){
         var href = codemirrorURL +"theme/"+theme+".css";

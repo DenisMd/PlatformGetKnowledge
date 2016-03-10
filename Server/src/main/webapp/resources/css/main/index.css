@@ -4,7 +4,9 @@ html, body{
     font-size: 14px;
     line-height: 1.5;
 }
-
+:focus {
+    outline: 0;
+}
 .full-window{
     height:100%;
 }
