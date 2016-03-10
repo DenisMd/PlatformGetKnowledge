@@ -8,9 +8,11 @@ import com.getknowledge.modules.courses.version.Version;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
+import com.getknowledge.modules.programs.Program;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoService;
 import com.getknowledge.platform.annotations.Action;
+import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.ImageService;
 import com.getknowledge.platform.modules.Result;
@@ -18,7 +20,9 @@ import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -51,6 +55,24 @@ public class CourseService extends AbstractService implements ImageService {
                 course.getTags().add(coursesTag);
             }
         }
+    }
+
+    private Result checkCourseRight(HashMap<String,Object> data) {
+        Long courseId = new Long((Integer)data.get("courseId"));
+        Course course = courseRepository.read(courseId);
+        if (course == null) {
+            return Result.NotFound();
+        }
+
+        UserInfo userInfo = userInfoService.getAuthorizedUser(data);
+
+        if (!course.getAuthorizationList().isAccessEdit(userInfo.getUser())) {
+            return Result.AccessDenied();
+        }
+
+        Result result = Result.Complete();
+        result.setObject(course);
+        return result;
     }
 
     @Action(name = "createCourse" , mandatoryFields = {"name","groupCourseId","description","language"})
@@ -103,6 +125,27 @@ public class CourseService extends AbstractService implements ImageService {
         Result result = Result.Complete();
         result.setObject(course.getId());
         return result;
+    }
+
+    @ActionWithFile(name = "uploadCover" , mandatoryFields = "courseId")
+    public Result updataCover(HashMap<String,Object> data, List<MultipartFile> files) {
+        Result result = checkCourseRight(data);
+        Course course;
+        if (result.getObject() != null)  {
+            course = (Course) result.getObject();
+        } else {
+            return result;
+        }
+
+        try {
+            course.setCover(files.get(0).getBytes());
+        } catch (IOException e) {
+            trace.logException("Error read cover for program" , e, TraceLevel.Warning);
+            return Result.Failed();
+        }
+
+        courseRepository.merge(course);
+        return Result.Complete();
     }
 
     public boolean isUserHasAccessToCourse(UserInfo userInfo , Course course) {

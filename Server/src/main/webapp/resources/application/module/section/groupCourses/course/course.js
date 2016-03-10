@@ -55,7 +55,7 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
     };
 
     var updateImage = function(file) {
-        applicationService.actionWithFile($scope,"",className.course,"uploadCover",{programId:$scope.program.id},file);
+        applicationService.actionWithFile($scope,"",className.course,"uploadCover",{courseId:$scope.course.id},file);
     };
 
 });

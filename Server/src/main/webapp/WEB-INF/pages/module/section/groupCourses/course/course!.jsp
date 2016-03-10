@@ -4,10 +4,10 @@
 <h1 class="text-center">{{course.name}}</h1>
 
 <div>
-    <md-button class="md-raised md-primary" ng-click="showEditableContent = !showEditableContent" ng-if="course.editable">{{translate("change")}}</md-button>
+    <md-button class="md-raised md-primary" ng-click="showEditableContent = !showEditableContent" ng-show="course.editable">{{translate("change")}}</md-button>
 </div>
 
-<div ng-if="showEditableContent">
+<div ng-show="showEditableContent">
     <md-content>
         <md-tabs md-dynamic-height md-border-bottom>
             <md-tab label="{{translate('course_info')}}">
@@ -15,30 +15,19 @@
                     <div>
                         <md-input-container>
                             <label>{{translate("name")}}</label>
-                            <input ng-model="program.name">
+                            <input ng-model="course.name">
                         </md-input-container>
                     </div>
                     <h2 class="md-title">Тэги</h2>
                     <div>
-                        <md-chips ng-model="program.tagsName" readonly="false"></md-chips>
+                        <md-chips ng-model="course.tagsName" readonly="false"></md-chips>
                     </div>
                     <div>
                         <label for="description">{{translate("description")}}</label>
-                        <textarea class="form-control" rows="5" id="description" ng-model="program.description"></textarea>
+                        <textarea class="form-control" rows="5" id="description" ng-model="course.description"></textarea>
                     </div>
                     <div>
-                        <a href="" ng-click="addUrl()">{{translate("program_add_url")}}</a>
-                        <div>
-                            <div ng-repeat="url in program.urls">
-                                <md-input-container>
-                                    <label>{{translate("url") + ($index+1)}}</label>
-                                    <input ng-model="url.name"> (<a href="" ng-click="removeUrl($index)">X</a>)
-                                </md-input-container>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <md-button class="md-raised md-primary" ng-click="updateProgram(program)">{{translate("update")}}</md-button>
+                        <md-button class="md-raised md-primary" ng-click="updateProgram(course)">{{translate("update")}}</md-button>
                     </div>
                 </md-content>
             </md-tab>
