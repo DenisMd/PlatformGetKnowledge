@@ -33,11 +33,12 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "programmingLanguages" :  "com.getknowledge.modules.dictionaries.programming.languages.ProgrammingLanguage",
             "programmingStyles" : "com.getknowledge.modules.dictionaries.programming.styles.ProgrammingStyles",
             "book" : "com.getknowledge.modules.books.Book",
-            "program" : "com.getknowledge.modules.programs.Program"
+            "program" : "com.getknowledge.modules.programs.Program",
+            "course" : "com.getknowledge.modules.courses.Course"
          };
     })
     .factory('modules',function(){
-        return ["user","accept","section","restorePassword","groupCourses","groupBooks","groupPrograms","book","program"];
+        return ["user","accept","section","restorePassword","groupCourses","groupBooks","groupPrograms","book","program","course"];
     })
     .constant("resourceUrl", "/resources/application/")
     .constant("resourceTemplate","/resources/template/")

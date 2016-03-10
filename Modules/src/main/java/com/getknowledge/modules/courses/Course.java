@@ -1,13 +1,16 @@
 package com.getknowledge.modules.courses;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.modules.courses.group.GroupCourses;
 import com.getknowledge.modules.courses.raiting.Rating;
 import com.getknowledge.modules.courses.tags.CoursesTag;
+import com.getknowledge.modules.courses.tutorial.Tutorial;
+import com.getknowledge.modules.courses.version.Version;
 import com.getknowledge.modules.dictionaries.knowledge.Knowledge;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.video.Video;
-import com.getknowledge.platform.annotations.ModuleInfo;
-import com.getknowledge.platform.base.entities.AbstractEntity;
+import com.getknowledge.platform.annotations.*;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.entities.CloneableEntity;
 import com.getknowledge.platform.base.entities.IUser;
@@ -29,16 +32,16 @@ public class Course extends CloneableEntity<Course> implements IUser{
     private String description;
 
     @ManyToOne(optional = false)
+    private GroupCourses groupCourses;
+
+    @ManyToOne(optional = false)
     private Language language;
 
     @ManyToOne(optional = false)
     private UserInfo author;
 
-    @ManyToMany(mappedBy = "courseList" , cascade = {CascadeType.PERSIST})
-    private List<CoursesTag> coursesTagList;
-
-    @Column(name = "is_base")
-    private Boolean base = true;
+    @ManyToMany(mappedBy = "courses", cascade = {CascadeType.PERSIST})
+    private List<CoursesTag> tags = new ArrayList<>();
 
     @OneToMany
     private List<Knowledge> sourceKnowledge = new ArrayList<>();
@@ -46,11 +49,72 @@ public class Course extends CloneableEntity<Course> implements IUser{
     @OneToMany
     private List<Knowledge> requiredKnowledge = new ArrayList<>();
 
+    private Boolean release = false;
+
+    @OneToOne
+    @com.getknowledge.platform.annotations.Access(myself = true)
+    private Course baseCourse;
+
     @OneToOne
     private Video intro;
 
+    @Embedded
+    private Version version;
+
     @Transient
     private Rating rating;
+
+    @OneToMany
+    @JsonIgnore
+    private List<Tutorial> tutorials = new ArrayList<>();
+
+    @Basic(fetch= FetchType.LAZY)
+    @Lob @Column(name="cover")
+    @JsonIgnore
+    private byte [] cover;
+
+    @Column(name = "is_base")
+    private Boolean base;
+
+    public Version getVersion() {
+        return version;
+    }
+
+    public void setVersion(Version version) {
+        this.version = version;
+    }
+
+    public Course getBaseCourse() {
+        return baseCourse;
+    }
+
+    public void setBaseCourse(Course baseCourse) {
+        this.baseCourse = baseCourse;
+    }
+
+    public Boolean getRelease() {
+        return release;
+    }
+
+    public void setRelease(Boolean release) {
+        this.release = release;
+    }
+
+    public byte[] getCover() {
+        return cover;
+    }
+
+    public void setCover(byte[] cover) {
+        this.cover = cover;
+    }
+
+    public GroupCourses getGroupCourses() {
+        return groupCourses;
+    }
+
+    public void setGroupCourses(GroupCourses groupCourses) {
+        this.groupCourses = groupCourses;
+    }
 
     public UserInfo getAuthor() {
         return author;
@@ -60,20 +124,12 @@ public class Course extends CloneableEntity<Course> implements IUser{
         this.author = author;
     }
 
-    public Boolean getBase() {
-        return base;
+    public List<CoursesTag> getTags() {
+        return tags;
     }
 
-    public void setBase(Boolean base) {
-        this.base = base;
-    }
-
-    public List<CoursesTag> getCoursesTagList() {
-        return coursesTagList;
-    }
-
-    public void setCoursesTagList(List<CoursesTag> coursesTagList) {
-        this.coursesTagList = coursesTagList;
+    public void setTags(List<CoursesTag> coursesTagList) {
+        this.tags = coursesTagList;
     }
 
     public String getDescription() {
@@ -109,8 +165,41 @@ public class Course extends CloneableEntity<Course> implements IUser{
     }
 
     public Rating getRating() {
-        //TODO: вычислить средний рейтинг исходя из туториалов
+        rating = new Rating();
+        int qualityExercises = 0;
+        int qualityInformation = 0;
+        int qualityTest = 0;
+        int relevanceInformation = 0;
+
+        for (Tutorial tutorial : tutorials) {
+            qualityExercises += tutorial.getAvgTutorialRating().getQualityExercises();
+            qualityInformation += tutorial.getAvgTutorialRating().getQualityInformation();
+            qualityTest += tutorial.getAvgTutorialRating().getQualityTest();
+            relevanceInformation += tutorial.getAvgTutorialRating().getRelevanceInformation();
+        }
+
+        if (tutorials.size() != 0) {
+            rating.setQualityExercises(qualityExercises / tutorials.size());
+            rating.setQualityInformation(qualityInformation / tutorials.size());
+            rating.setQualityTest(qualityTest / tutorials.size());
+            rating.setRelevanceInformation(relevanceInformation / tutorials.size());
+        }
+
         return rating;
+    }
+
+
+    public Boolean getBase() {
+        return base;
+    }
+
+    public void setBase(Boolean base) {
+        this.base = base;
+    }
+
+    @Override
+    public boolean isContinueIfNotEnoughRights() {
+        return true;
     }
 
     public List<Knowledge> getRequiredKnowledge() {
@@ -129,26 +218,54 @@ public class Course extends CloneableEntity<Course> implements IUser{
         this.sourceKnowledge = sourceKnowledge;
     }
 
+    public List<Tutorial> getTutorials() {
+        return tutorials;
+    }
+
+    public void setTutorials(List<Tutorial> tutorials) {
+        this.tutorials = tutorials;
+    }
+
     @Override
     public Course clone() {
         Course course = new Course();
         course.setId(this.getId());
+        course.setAuthor(this.getAuthor());
+        course.setBaseCourse(this.getBaseCourse());
+        course.setTags(this.getTags());
+        course.setCover(this.getCover());
+        course.setDescription(this.getDescription());
+        course.setGroupCourses(this.getGroupCourses());
+        course.setIntro(this.getIntro());
+        course.setLanguage(this.getLanguage());
+        course.setName(this.getName());
+        course.setRelease(this.getRelease());
+        course.setRequiredKnowledge(this.getRequiredKnowledge());
+        course.setSourceKnowledge(this.getSourceKnowledge());
+        course.setVersion(this.getVersion());
+        course.setTutorials(this.getTutorials());
+        course.setBase(this.getBase());
         return course;
     }
 
     @Override
     public User getUser() {
-        return author.getUser();
+        return author == null ? null : author.getUser();
     }
 
     @Override
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
-        authorizationList.allowReadEveryOne = true;
+        if (release)
+            authorizationList.allowReadEveryOne = true;
         authorizationList.allowCreateEveryOne = false;
         authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.CreateCourse));
         authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditCourse));
         authorizationList.getPermissionsForRemove().add(new Permission(PermissionNames.EditCourse));
+
+        if (author != null)
+            authorizationList.getUserList().add(author.getUser());
+
         return authorizationList;
     }
 }

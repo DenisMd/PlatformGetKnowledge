@@ -1,6 +1,7 @@
 package com.getknowledge.modules.userInfo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.modules.courses.Course;
 import com.getknowledge.modules.dictionaries.city.City;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.menu.Menu;
@@ -13,7 +14,9 @@ import com.getknowledge.platform.base.entities.CloneableEntity;
 import com.getknowledge.platform.modules.user.User;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 @Entity
 @Table(name = "user_info")
@@ -66,8 +69,21 @@ public class UserInfo  extends CloneableEntity<UserInfo> implements IUser{
     @Transient
     private Menu userMenu;
 
+    //Список курсов, которые изучает данный пользователь
+    @ManyToMany
+    @JsonIgnore
+    private List<Course> courses = new ArrayList<>();
+
     @Transient
     private boolean online = false;
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
 
     public boolean isOnline() {
         return online;

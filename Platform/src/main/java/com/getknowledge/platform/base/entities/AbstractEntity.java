@@ -36,6 +36,14 @@ public abstract class AbstractEntity {
     @JsonIgnore
     public abstract AuthorizationList getAuthorizationList();
 
+    @JsonIgnore
+    public boolean isContinueIfNotEnoughRights() {
+        //Данное значение учитывается при формировании списка
+        //Сущность может решать пропустить ли ее при формировании списка
+        //или кинуть исключение access denied
+        return false;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -68,7 +76,8 @@ public abstract class AbstractEntity {
 
                         AbstractEntity abstractEntity = (AbstractEntity) result;
                         BaseRepository<AbstractEntity> repository2 = (BaseRepository<AbstractEntity>)moduleLocator.findRepository(abstractEntity.getClass());
-                        pd.getWriteMethod().invoke(entity, prepare(abstractEntity,repository2,currentUser,moduleLocator));
+                        if(pd.getWriteMethod() != null)
+                            pd.getWriteMethod().invoke(entity, prepare(abstractEntity,repository2,currentUser,moduleLocator));
                     }
                 }
             }

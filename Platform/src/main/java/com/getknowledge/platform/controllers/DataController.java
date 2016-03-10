@@ -1,6 +1,5 @@
 package com.getknowledge.platform.controllers;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -15,7 +14,6 @@ import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.base.repositories.FilterQuery;
-import com.getknowledge.platform.base.repositories.PrepareEntity;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.base.repositories.enumerations.OrderRoute;
 import com.getknowledge.platform.base.serializers.FileResponse;
@@ -24,9 +22,7 @@ import com.getknowledge.platform.base.services.FileLinkService;
 import com.getknowledge.platform.base.services.FileService;
 import com.getknowledge.platform.base.services.ImageService;
 import com.getknowledge.platform.exceptions.*;
-import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.modules.filter.FilterService;
-import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.role.names.RoleName;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
@@ -41,28 +37,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.Query;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Paths;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -115,7 +104,9 @@ public class DataController {
         ArrayNode nodes = objectMapper.createArrayNode();
         for (AbstractEntity abstractEntity : list) {
             if (!isAccessRead(principal, abstractEntity) ) {
-                // TODO: question may continue?
+                if (abstractEntity.isContinueIfNotEnoughRights()) {
+                    continue;
+                }
                 throw new NotAuthorized("access denied for read entity from list" , trace, TraceLevel.Warning);
             }
 

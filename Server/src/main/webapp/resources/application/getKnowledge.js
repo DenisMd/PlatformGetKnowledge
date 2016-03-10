@@ -278,10 +278,6 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
 
     applicationService.list($scope , "programmingLanguages",className.programmingLanguages);
     applicationService.list($scope , "programmingStyles",className.programmingStyles);
-
-    applicationService.action($scope , "countries" ,className.country , "getCountries",{
-        language : "Ru"
-    });
 });
 
 model.controller("treeListCtrl" , function ($scope) {
@@ -1064,6 +1060,50 @@ model.controller("programCardCtrl" , function($scope,applicationService,classNam
     });
 });
 
+model.controller("coursesCtrl", function($scope,applicationService,className){
+    var filter = applicationService.createFilter(className.course,0,10);
+    filter.equal("groupCourses.url",$scope.getData().groupName);
+    filter.equal("groupCourses.section.name",$scope.getData().sectionName);
+    $scope.courses = [];
+
+    var filter2 = applicationService.createFilter(className.groupCourses,0,1);
+    filter2.equal("url" , $scope.getData().groupName);
+    applicationService.filterRequest($scope,"groupCourses",filter2);
+
+    var addCourse = function(course){
+        $scope.courses.push(course);
+    };
+
+    var doAction = function() {
+        applicationService.filterRequest($scope,"courseData",filter,addCourse);
+    };
+
+    doAction();
+
+    $scope.loadMore = function () {
+        filter.increase(10);
+        doAction();
+    };
+
+    $scope.courseCover = function(id){
+        return applicationService.imageHref(className.course,id);
+    };
+
+    $scope.showAdvanced = function(ev) {
+        $scope.showDialog(ev,$scope,"createCourse.html",function(answer){
+            answer.groupCourseId = $scope.groupCourses.list[0].id;
+            applicationService.action($scope,"" , className.course,"createCourse",answer,function(result){
+                $scope.showToast(result);
+                $scope.goTo("course/"+result.object);
+            });
+        });
+    };
+
+    applicationService.list($scope,"langs",className.language, function (item) {
+        item.title = $scope.translate(item.name.toLowerCase())
+    });
+});
+
 //dialogs
 function DialogController($scope, $mdDialog , theScope) {
     $scope.parentScope = theScope;
@@ -1109,5 +1149,3 @@ model.service('arcService', function(){
         showTooltips : false
     }
 });
-
-
