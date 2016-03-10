@@ -26,6 +26,7 @@
     "news" : "News",
     "users" : "Users",
     "roles" : "Roles",
+    "knowledge" : "Knowledge",
     "permissions" : "Permissions",
     "logs" : "Logs",
     "tasks" : "Tasks",

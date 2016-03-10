@@ -5,7 +5,7 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
     };
 
     function readBook(){
-        applicationService.read($scope,"book",className.books,bookId,function(book){
+        applicationService.read($scope,"book",className.book,bookId,function(book){
             if (!("tags" in book)) {
                 book.tagsName = [];
             } else {
@@ -26,7 +26,7 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
 
     readBook();
     $scope.bookImg = function(){
-        return applicationService.imageHref(className.books,bookId);
+        return applicationService.imageHref(className.book,bookId);
     };
 
     $scope.addUrl = function() {
@@ -52,7 +52,7 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
         });
 
         result.tags = book.tagsName;
-        applicationService.action($scope,"",className.books,"updateBookInformation",result,function(result){
+        applicationService.action($scope,"",className.book,"updateBookInformation",result,function(result){
             $scope.showToast(result);
             readBook();
         });
@@ -66,19 +66,19 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
     };
 
     $scope.getCropImageData  = function(){
-        croppedImg.src = applicationService.imageHref(className.books,$scope.book.id);
+        croppedImg.src = applicationService.imageHref(className.book,$scope.book.id);
         croppedImg.notUseDefault = $scope.book.imageViewExist;
         return croppedImg;
     };
 
     var updateImage = function(file) {
-        applicationService.actionWithFile($scope,"",className.books,"uploadCover",{bookId:$scope.book.id},file);
+        applicationService.actionWithFile($scope,"",className.book,"uploadCover",{bookId:$scope.book.id},file);
     };
 
-    $scope.uploader = applicationService.createUploader($scope,"",className.books,"uploadData",{bookId:+bookId});
+    $scope.uploader = applicationService.createUploader($scope,"",className.book,"uploadData",{bookId:+bookId});
 
     $scope.bookData = function(){
-        return applicationService.fileByKeyHref(className.books,bookId,"key");
+        return applicationService.fileByKeyHref(className.book,bookId,"key");
     };
 
 

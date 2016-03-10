@@ -1,14 +1,13 @@
 package com.getknowledge.modules.video;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "video")
@@ -21,8 +20,21 @@ public class Video extends AbstractEntity{
     @Column(length = 2000)
     private String link;
 
+    @Basic(fetch= FetchType.LAZY)
+    @Lob @Column(name="cover")
+    @JsonIgnore
+    private byte[] cover;
+
     @Column(name = "allow_every_one")
     private boolean allowEveryOne = false;
+
+    public byte[] getCover() {
+        return cover;
+    }
+
+    public void setCover(byte[] cover) {
+        this.cover = cover;
+    }
 
     public boolean isAllowEveryOne() {
         return allowEveryOne;

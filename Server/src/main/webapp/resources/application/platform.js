@@ -19,9 +19,10 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "permissions" : "com.getknowledge.platform.modules.permission.Permission",
             "roles" : "com.getknowledge.platform.modules.role.Role",
             "users" : "com.getknowledge.platform.modules.user.User",
-            "user_event" : "com.getknowledge.modules.event.UserEvent",
+            "system_event" : "com.getknowledge.modules.event.SystemEvent",
             "tasks" : "com.getknowledge.platform.modules.task.Task",
             "trace" : "com.getknowledge.platform.modules.trace.Trace",
+            "knolwedge" : "com.getknowledge.modules.dictionaries.knowledge.Knowledge",
             "settings" : "com.getknowledge.modules.settings.Settings",
             "systemServices" : "com.getknowledge.platform.modules.service.Service",
             "socialLinks" : "com.getknowledge.modules.socialLinks.SocialLink",
@@ -31,11 +32,12 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "groupPrograms" : "com.getknowledge.modules.programs.group.GroupPrograms",
             "programmingLanguages" :  "com.getknowledge.modules.dictionaries.programming.languages.ProgrammingLanguage",
             "programmingStyles" : "com.getknowledge.modules.dictionaries.programming.styles.ProgrammingStyles",
-            "books" : "com.getknowledge.modules.books.Books"
+            "book" : "com.getknowledge.modules.books.Book",
+            "program" : "com.getknowledge.modules.programs.Program"
          };
     })
     .factory('modules',function(){
-        return ["user","accept","section","restorePassword","groupCourses","groupBooks","groupPrograms","book"];
+        return ["user","accept","section","restorePassword","groupCourses","groupBooks","groupPrograms","book","program"];
     })
     .constant("resourceUrl", "/resources/application/")
     .constant("resourceTemplate","/resources/template/")

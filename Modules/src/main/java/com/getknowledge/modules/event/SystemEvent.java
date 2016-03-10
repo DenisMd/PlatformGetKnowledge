@@ -9,12 +9,12 @@ import javax.persistence.*;
 import java.util.Calendar;
 
 @Entity
-@Table(name = "user_event")
-@ModuleInfo(repositoryName = "UserEventRepository" , serviceName = "UserEventService")
-public class UserEvent extends AbstractEntity {
+@Table(name = "system_event")
+@ModuleInfo(repositoryName = "SystemEventRepository" , serviceName = "SystemEventService")
+public class SystemEvent extends AbstractEntity {
 
     @Enumerated(EnumType.STRING)
-    UserEventType userEventType;
+    SystemEventType systemEventType;
 
     @OneToOne
     private UserInfo userInfo;
@@ -23,12 +23,12 @@ public class UserEvent extends AbstractEntity {
 
     private Calendar calendar;
 
-    public UserEventType getUserEventType() {
-        return userEventType;
+    public SystemEventType getSystemEventType() {
+        return systemEventType;
     }
 
-    public void setUserEventType(UserEventType userEventType) {
-        this.userEventType = userEventType;
+    public void setSystemEventType(SystemEventType systemEventType) {
+        this.systemEventType = systemEventType;
     }
 
     public Calendar getCalendar() {
