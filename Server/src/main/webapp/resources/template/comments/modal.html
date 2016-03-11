@@ -17,6 +17,30 @@
 
     <div class="bubble">
         <div contenteditable ng-model="content" class="post-editarea">Change me!</div>
+        <span class="tool-button tool-button-1">
+            <i class="fa fa-camera"></i>
+            <md-tooltip md-direction="bottom">
+                {{translate("tooltip_image")}}
+            </md-tooltip>
+        </span>
+        <span class="tool-button tool-button-2">
+            fx
+            <md-tooltip md-direction="bottom">
+                {{translate("tooltip_formula")}}
+            </md-tooltip>
+        </span>
+        <span class="tool-button tool-button-3">
+            { }
+            <md-tooltip md-direction="bottom">
+                {{translate("tooltip_code")}}
+            </md-tooltip>
+        </span>
+        <span class="tool-button tool-button-4">
+            <i class="fa fa-code"></i>
+            <md-tooltip md-direction="bottom">
+                {{translate("tooltip_code_pool")}}
+            </md-tooltip>
+        </span>
     </div>
 
     <button ng-click="pasteCode()">Paste</button>
