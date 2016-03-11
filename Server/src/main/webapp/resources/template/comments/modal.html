@@ -1,19 +1,27 @@
 <div ng-controller="postController">
     <!--<textarea insert-at-caret></textarea>-->
-    <div>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur eos fugiat illum inventore, ipsum labore laboriosam mollitia, natus nisi non nulla odit perferendis porro quas, quasi saepe sint veniam voluptates.
+    <!--<div>-->
+        <!--Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur eos fugiat illum inventore, ipsum labore laboriosam mollitia, natus nisi non nulla odit perferendis porro quas, quasi saepe sint veniam voluptates.-->
+    <!--</div>-->
+    <!--<div class="tag">-->
+        <!--<div class="tag-title" ng-click="test.showCode()">-->
+            <!--<i class="fa" ng-class="test.codeShown?'fa-caret-down':'fa-caret-right'"></i>-->
+            <!--{{translate("source_code")+' ) '+test.title}}-->
+        <!--</div>-->
+        <!--<div class="autoresize" ui-codemirror="test" ng-model="test.text"  ui-refresh="test.text" ng-if="test.codeShown"></div>-->
+    <!--</div>-->
+    <!--<div>-->
+        <!--Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur eos fugiat illum inventore, ipsum labore laboriosam mollitia, natus nisi non nulla odit perferendis porro quas, quasi saepe sint veniam voluptates.-->
+    <!--</div>-->
+    <!---->
+
+    <div class="bubble">
+        <div contenteditable ng-model="content" class="post-editarea">Change me!</div>
     </div>
-    <div class="tag">
-        <div class="tag-title" ng-click="test.showCode()">
-            <i class="fa" ng-class="test.codeShown?'fa-caret-down':'fa-caret-right'"></i>
-            {{translate("source_code")+' ) '+test.title}}
-        </div>
-        <div class="autoresize" ui-codemirror="test" ng-model="test.text"  ui-refresh="test.text" ng-if="test.codeShown"></div>
-    </div>
-    <div>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur eos fugiat illum inventore, ipsum labore laboriosam mollitia, natus nisi non nulla odit perferendis porro quas, quasi saepe sint veniam voluptates.
-    </div>
+
     <button ng-click="pasteCode()">Paste</button>
+
+    {{content}}
     <script type="text/ng-template" id="pasteCode.html">
         <md-dialog aria-label="Paste code" ng-cloak flex="80">
             <form name="codeTag">

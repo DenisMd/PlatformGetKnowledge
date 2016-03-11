@@ -2,6 +2,47 @@
     height: auto;
 }
 
+[contenteditable] {
+    border: 1px solid black;
+}
+
+
+.post-editarea{
+    display: inline-block;
+    width: 100%;
+}
+
+.bubble
+{
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+.bubble:after
+{
+    content: '';
+    position: absolute;
+    border: 1px solid #ccc;
+    border-width: 0 0 1px 1px;
+    display: block;
+    width: 15px;
+    height: 15px;
+    z-index: 1;
+    left: -8px;
+    top: 30%;
+    background: #fff;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+}
+/*------------*/
 .tag{
     margin: 10px 0;
 }
