@@ -10,7 +10,8 @@ public enum PermissionNames {
     EditProgrammingDictionaries("Edit programming dictionaries"),
     CreatePrograms("Create programs"),EditPrograms("Edit programs"),
     CreateCourse("Create course"),EditCourse("EditCourse")
-    ,EditKnowledge("Edit knowledge");
+    ,EditKnowledge("Edit knowledge"),
+    UploadVideos("Upload videos");
 
     private String name;
 

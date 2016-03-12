@@ -14,6 +14,14 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
                     course.tagsName.push(element.tagName);
                 })
             }
+
+            course.sourceKnowledge.forEach(function(knowledge) {
+                knowledge.image = applicationService.imageHref(className.knowledge,knowledge.id);
+            });
+
+            course.requiredKnowledge.forEach(function(knowledge) {
+                knowledge.image = applicationService.imageHref(className.knowledge,knowledge.id);
+            });
         });
     };
 
@@ -24,20 +32,27 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
 
     $scope.showEditableContent = false;
 
-    $scope.updateProgram = function(program) {
+    $scope.updateCourse = function(course) {
         var result = {};
-        result.programId = program.id;
-        result.name = program.name;
-        result.description = program.description;
-        result.links = [];
-        program.urls.forEach(function(element){
-            result.links.push(element.name);
+        result.courseId = course.id;
+        result.name = course.name;
+        result.description = course.description;
+
+        result.tags = course.tagsName;
+        result.sourceKnowledge = [];
+        result.requiredKnowledge = [];
+
+        course.sourceKnowledge.forEach(function(knowledge){
+            result.sourceKnowledge.push(knowledge.id);
         });
 
-        result.tags = program.tagsName;
-        applicationService.action($scope,"",className.program,"updateProgramInformation",result,function(result){
+        course.requiredKnowledge.forEach(function(knowledge){
+            result.requiredKnowledge.push(knowledge.id);
+        });
+
+        applicationService.action($scope,"",className.course,"updateCourseInformation",result,function(result){
             $scope.showToast(result);
-            readProgram();
+            readCourse();
         });
     };
 
@@ -57,5 +72,47 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
     var updateImage = function(file) {
         applicationService.actionWithFile($scope,"",className.course,"uploadCover",{courseId:$scope.course.id},file);
     };
+
+
+    var videoImg = {
+        save: function(file){
+            updateVideoImage(file);
+        },
+        areaType:"square"
+    };
+
+    $scope.getVideoImage  = function(){
+        if ($scope.course.intro) {
+            videoImg.src = applicationService.imageHref(className.video, $scope.course.intro.id);
+            videoImg.notUseDefault = true;
+        }
+        return videoImg;
+    };
+
+    var updateVideoImage = function(file) {
+        applicationService.actionWithFile($scope,"",className.course,"uploadVideoIntro",{
+            courseId : $scope.course.id,
+            videoName : $scope.course.intro.videoName
+        },file);
+    };
+
+
+    applicationService.list($scope,"knowledges",className.knowledge , function(knowledge) {
+        knowledge.image = applicationService.imageHref(className.knowledge,knowledge.id);
+    });
+
+    $scope.knowledgesResult = [];
+
+    function createFilterFor(query) {
+        return function filterFn(contact) {
+            return (contact.name.indexOf(query) != -1);
+        };
+    }
+
+    $scope.querySearch = function(criteria) {
+       return $scope.knowledges.filter(createFilterFor(criteria));
+    }
+
+    $scope.uploader = applicationService.createUploader($scope,"",className.video,"uploadVideo",{videoId:9});
 
 });

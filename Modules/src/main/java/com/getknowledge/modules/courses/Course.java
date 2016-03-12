@@ -43,10 +43,12 @@ public class Course extends CloneableEntity<Course> implements IUser{
     @ManyToMany(mappedBy = "courses", cascade = {CascadeType.PERSIST})
     private List<CoursesTag> tags = new ArrayList<>();
 
-    @OneToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "course_source_knowledges")
     private List<Knowledge> sourceKnowledge = new ArrayList<>();
 
-    @OneToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "course_required_knowledges")
     private List<Knowledge> requiredKnowledge = new ArrayList<>();
 
     private Boolean release = false;
@@ -73,8 +75,8 @@ public class Course extends CloneableEntity<Course> implements IUser{
     @JsonIgnore
     private byte [] cover;
 
-    @Column(name = "is_base")
-    private Boolean base;
+    @Column(name = "is_base" , columnDefinition = "boolean default true")
+    private Boolean base = false;
 
     public Version getVersion() {
         return version;
@@ -92,7 +94,7 @@ public class Course extends CloneableEntity<Course> implements IUser{
         this.baseCourse = baseCourse;
     }
 
-    public Boolean getRelease() {
+    public Boolean isRelease() {
         return release;
     }
 
@@ -189,7 +191,7 @@ public class Course extends CloneableEntity<Course> implements IUser{
     }
 
 
-    public Boolean getBase() {
+    public Boolean isBase() {
         return base;
     }
 
@@ -239,12 +241,12 @@ public class Course extends CloneableEntity<Course> implements IUser{
         course.setIntro(this.getIntro());
         course.setLanguage(this.getLanguage());
         course.setName(this.getName());
-        course.setRelease(this.getRelease());
+        course.setRelease(this.isRelease());
         course.setRequiredKnowledge(this.getRequiredKnowledge());
         course.setSourceKnowledge(this.getSourceKnowledge());
         course.setVersion(this.getVersion());
         course.setTutorials(this.getTutorials());
-        course.setBase(this.getBase());
+        course.setBase(this.isBase());
         return course;
     }
 

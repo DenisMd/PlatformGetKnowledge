@@ -61,4 +61,25 @@ public class Version {
         checkVersion(minorVersion);
         this.minorVersion = minorVersion;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Version version = (Version) o;
+
+        if (getMajorVersion() != version.getMajorVersion()) return false;
+        if (getMiddleVersion() != version.getMiddleVersion()) return false;
+        return getMinorVersion() == version.getMinorVersion();
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getMajorVersion();
+        result = 31 * result + getMiddleVersion();
+        result = 31 * result + getMinorVersion();
+        return result;
+    }
 }

@@ -18,7 +18,7 @@ import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.base.repositories.enumerations.OrderRoute;
 import com.getknowledge.platform.base.serializers.FileResponse;
 import com.getknowledge.platform.base.services.AbstractService;
-import com.getknowledge.platform.base.services.FileLinkService;
+import com.getknowledge.platform.base.services.VideoLinkService;
 import com.getknowledge.platform.base.services.FileService;
 import com.getknowledge.platform.base.services.ImageService;
 import com.getknowledge.platform.exceptions.*;
@@ -58,10 +58,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/data")
 public class DataController {
-
-    //??????????? ?? ???????? ?????????
-    private final int ENTITY_LIMIT = 500;
-
     @Autowired
     ServletContext servletContext;
 
@@ -85,7 +81,6 @@ public class DataController {
     }
 
 //    Methods for read ----------------------------------------------------------------------------
-
     private ObjectNode prepareJson (AbstractEntity abstractEntity,boolean editable, boolean creatable, Class classEntity) throws NotAuthorized, ModuleNotFound {
         ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
         objectNode.put("editable" , editable);
@@ -178,14 +173,16 @@ public class DataController {
             }
 
             AbstractService abstractService = moduleLocator.findService(classEntity);
-            if (abstractService instanceof FileLinkService) {
-                FileLinkService fileLinkService = (FileLinkService) abstractService;
+            if (abstractService instanceof VideoLinkService) {
+                VideoLinkService videoLinkService = (VideoLinkService) abstractService;
 
-                String videoUrl = servletContext.getRealPath(fileLinkService.getFileLink(id));
-                MultipartFileSender.fromPath(Paths.get(videoUrl))
-                        .with(request)
-                        .with(response)
-                        .serveResource();
+                String videoUrl = videoLinkService.getFileLink(id);
+                if(videoUrl != null) {
+                    MultipartFileSender.fromPath(Paths.get(videoUrl))
+                            .with(request)
+                            .with(response)
+                            .serveResource();
+                }
             }
 
 
@@ -290,8 +287,8 @@ public class DataController {
                 protectedRepository.setCurrentUser(getCurrentUser(principal));
             }
 
-            if (repository.count() > ENTITY_LIMIT) {
-                throw new EntityLimitException("Violated limit entity " + ENTITY_LIMIT);
+            if (repository.count() > repository.getMaxCountsEntities()) {
+                throw new EntityLimitException("Violated limit entity " + repository.getMaxCountsEntities());
             }
 
             List<AbstractEntity> list = repository.list();
@@ -321,8 +318,8 @@ public class DataController {
                 protectedRepository.setCurrentUser(getCurrentUser(principal));
             }
 
-            if (max > ENTITY_LIMIT) {
-                throw new EntityLimitException("Violated limit entity " + ENTITY_LIMIT);
+            if (max > repository.getMaxCountsEntities()) {
+                throw new EntityLimitException("Violated limit entity " + repository.getMaxCountsEntities());
             }
 
             List<AbstractEntity> list = repository.listPartial(first, max);

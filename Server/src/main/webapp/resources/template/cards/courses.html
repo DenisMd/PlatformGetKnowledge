@@ -71,6 +71,11 @@
                             </md-select>
                         </md-input-container>
                     </div>
+                    <div ng-init="course.base = false">
+                        <md-checkbox ng-model="course.base">
+                            Базовый курс
+                        </md-checkbox>
+                    </div>
                     <h2 class="md-title">Тэги</h2>
                     <div ng-init="course.tags = []">
                         <md-chips ng-model="course.tags" readonly="false"></md-chips>

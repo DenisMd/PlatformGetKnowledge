@@ -6,6 +6,7 @@
     "knowledge_create" : "Создать знание",
     "knowledge_delete" : "Удалить знание",
     "knowledge_delete_confirmation" : "Удаление будет невозможным, если кто-то сылается на данное знание",
-    "knowledge_note" : "Пояснение"
+    "knowledge_note" : "Пояснение",
+    "knowledge_image" : "Изображение"
   }
 }

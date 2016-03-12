@@ -31,6 +31,12 @@ public abstract class BaseRepository<T extends AbstractEntity> {
     @PersistenceContext
     public EntityManager entityManager;
 
+    private final int ENTITY_LIMIT = 500;
+
+    public long getMaxCountsEntities() {
+        return ENTITY_LIMIT;
+    }
+
     public void create(T object) {
         ObjectMapper objectMapper = new ObjectMapper();
         if(object == null) {

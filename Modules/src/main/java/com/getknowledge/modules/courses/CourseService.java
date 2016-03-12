@@ -5,12 +5,17 @@ import com.getknowledge.modules.courses.group.GroupCoursesRepository;
 import com.getknowledge.modules.courses.tags.CoursesTag;
 import com.getknowledge.modules.courses.tags.CoursesTagRepository;
 import com.getknowledge.modules.courses.version.Version;
+import com.getknowledge.modules.dictionaries.knowledge.Knowledge;
+import com.getknowledge.modules.dictionaries.knowledge.KnowledgeRepository;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
 import com.getknowledge.modules.programs.Program;
+import com.getknowledge.modules.programs.tags.ProgramTag;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoService;
+import com.getknowledge.modules.video.Video;
+import com.getknowledge.modules.video.VideoRepository;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.services.AbstractService;
@@ -42,10 +47,16 @@ public class CourseService extends AbstractService implements ImageService {
     private TraceService trace;
 
     @Autowired
+    private KnowledgeRepository knowledgeRepository;
+
+    @Autowired
     private LanguageRepository languageRepository;
 
     @Autowired
     private CoursesTagRepository coursesTagRepository;
+
+    @Autowired
+    private VideoRepository videoRepository;
 
     private void prepareTag(HashMap<String,Object> data , Course course) {
         if (data.containsKey("tags")) {
@@ -55,6 +66,16 @@ public class CourseService extends AbstractService implements ImageService {
                 course.getTags().add(coursesTag);
             }
         }
+    }
+
+    private void removeTagsFromCourse(Course course) {
+
+        for (CoursesTag coursesTag : course.getTags()) {
+            coursesTag.getCourses().remove(course);
+            coursesTagRepository.merge(coursesTag);
+        }
+
+        course.getTags().clear();
     }
 
     private Result checkCourseRight(HashMap<String,Object> data) {
@@ -70,12 +91,19 @@ public class CourseService extends AbstractService implements ImageService {
             return Result.AccessDenied();
         }
 
+        //Для выпущенных курсов информацию менять нельзя
+        if (course.isRelease()) {
+            Result result = Result.Failed();
+            result.setObject("Course is release");
+            return result;
+        }
+
         Result result = Result.Complete();
         result.setObject(course);
         return result;
     }
 
-    @Action(name = "createCourse" , mandatoryFields = {"name","groupCourseId","description","language"})
+    @Action(name = "createCourse" , mandatoryFields = {"name","groupCourseId","description","language","base"})
     public Result createProgram(HashMap<String,Object> data) {
         if (!data.containsKey("principalName"))
             return Result.NotAuthorized();
@@ -116,6 +144,9 @@ public class CourseService extends AbstractService implements ImageService {
         course.setRelease(false);
         course.setVersion(new Version(1,0,0));
 
+
+        course.setBase((Boolean) data.get("base"));
+
         courseRepository.create(course);
 
         for (CoursesTag coursesTag : course.getTags()) {
@@ -125,6 +156,65 @@ public class CourseService extends AbstractService implements ImageService {
         Result result = Result.Complete();
         result.setObject(course.getId());
         return result;
+    }
+
+    @Action(name = "updateCourseInformation" , mandatoryFields = {"courseId"})
+    public Result updateProgramInformation(HashMap<String,Object> data) {
+
+        Result result = checkCourseRight(data);
+        Course course;
+        if (result.getObject() != null)  {
+            course = (Course) result.getObject();
+        } else {
+            return result;
+        }
+
+        if (data.containsKey("name")) {
+            String name = (String) data.get("name");
+            course.setName(name);
+        }
+
+        if (data.containsKey("description")) {
+            String description = (String) data.get("description");
+            course.setDescription(description);
+        }
+
+        removeTagsFromCourse(course);
+        prepareTag(data,course);
+
+        if (data.containsKey("sourceKnowledge")) {
+            //Source knowledge задаются только при первой версии
+            if (course.getVersion().equals(new Version(1,0,0))) {
+                course.getSourceKnowledge().clear();
+                List<Integer> ids = (List<Integer>) data.get("sourceKnowledge");
+                for (Integer id : ids) {
+                    Knowledge knowledge = knowledgeRepository.read(new Long(id));
+                    course.getSourceKnowledge().add(knowledge);
+                }
+            }
+        }
+
+        if (data.containsKey("requiredKnowledge")) {
+            //Source knowledge задаются только при первой версии и для курсов которые не являются базовыми
+            if (course.getVersion().equals(new Version(1,0,0)) && !course.isBase()) {
+                course.getRequiredKnowledge().clear();
+                List<Integer> ids = (List<Integer>) data.get("requiredKnowledge");
+                for (Integer id : ids) {
+                    Knowledge knowledge = knowledgeRepository.read(new Long(id));
+                    course.getRequiredKnowledge().add(knowledge);
+                }
+            }
+        }
+
+        courseRepository.merge(course);
+        for (CoursesTag coursesTag : course.getTags()) {
+            coursesTag.getCourses().add(course);
+            coursesTagRepository.merge(coursesTag);
+        }
+
+        coursesTagRepository.removeUnusedTags();
+
+        return Result.Complete();
     }
 
     @ActionWithFile(name = "uploadCover" , mandatoryFields = "courseId")
@@ -148,8 +238,43 @@ public class CourseService extends AbstractService implements ImageService {
         return Result.Complete();
     }
 
+    @ActionWithFile(name = "uploadVideoIntro" , mandatoryFields = "courseId")
+    public Result uploadVideoIntro(HashMap<String,Object> data, List<MultipartFile> files) {
+        Result result = checkCourseRight(data);
+        Course course;
+        if (result.getObject() != null)  {
+            course = (Course) result.getObject();
+        } else {
+            return result;
+        }
+
+        try {
+            if (course.getIntro() == null) {
+                Video intro = new Video();
+                intro.setAllowEveryOne(true);
+                intro.setVideoName((String) data.get("videoName"));
+                intro.setCover(files.get(0).getBytes());
+                videoRepository.create(intro);
+                course.setIntro(intro);
+                courseRepository.merge(course);
+            } else {
+                Video intro = course.getIntro();
+                intro.setVideoName((String) data.get("videoName"));
+                intro.setCover(files.get(0).getBytes());
+                videoRepository.merge(intro);
+            }
+
+        } catch (IOException e) {
+            trace.logException("Error read cover for program" , e, TraceLevel.Warning);
+            return Result.Failed();
+        }
+
+        courseRepository.merge(course);
+        return Result.Complete();
+    }
+
     public boolean isUserHasAccessToCourse(UserInfo userInfo , Course course) {
-        if (course.getBase()) {
+        if (course.isBase()) {
             return true;
         }
 

@@ -619,7 +619,7 @@ model.controller("selectImgCtrl", function($scope){
             $scope.originalImg = image.target.result;
             $scope.item = {
                 original : $scope.originalImg,
-                cropImage:  $scope.croppedImg
+                cropImage:  ""
             };
             if (!dialogShown) {
                 $scope.showDialog(event, $scope, "cropModal.html",$scope.onChange,function(){
@@ -634,7 +634,7 @@ model.controller("selectImgCtrl", function($scope){
 
     $scope.showModal = function(){
         if ($scope.getData()) {
-            return $scope.getData().isInModal ? $scope.getData().isInModal : false;
+            return $scope.getData().isCrop ? $scope.getData().isCrop : false;
         }
         return false;
     };
@@ -1116,6 +1116,10 @@ model.controller("coursesCtrl", function($scope,applicationService,className){
     };
 
     $scope.courseCover = function(id){
+        return applicationService.imageHref(className.course,id);
+    };
+
+    $scope.folderImg = function(id){
         return applicationService.imageHref(className.course,id);
     };
 
