@@ -769,6 +769,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         };
     })
 
+    //for textarea
     .directive('insertAtCaret', ['$rootScope', function($rootScope) {
     return {
         link: function(scope, element, attrs) {
@@ -799,6 +800,83 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         }
     }
 }])
+
+    //for div
+    .directive('insertContenteditable', ['$rootScope', function($rootScope) {
+        return {
+            link: function(scope, element, attrs) {
+
+                function elementContainsSelection(el) {
+                    var sel;
+                    if (window.getSelection) {
+                        sel = window.getSelection();
+                        if (sel.rangeCount > 0) {
+                            for (var i = 0; i < sel.rangeCount; ++i) {
+                                if (!isOrContains(sel.getRangeAt(i).commonAncestorContainer, el)) {
+                                    return false;
+                                }
+                            }
+                            return true;
+                        }
+                    } else if ((sel = document.selection) && sel.type != "Control") {
+                        return isOrContains(sel.createRange().parentElement(), el);
+                    }
+                    return false;
+                };
+
+                function isOrContains(node, container) {
+                    while (node) {
+                        if (node === container) {
+                            return true;
+                        }
+                        node = node.parentNode;
+                    }
+                    return false;
+                };
+
+                $rootScope.$on('add', function(e, val) {
+                    console.log('on add');
+                    console.log(val);
+                    var domElement = element[0];
+                    var sel, range;
+                    if (window.getSelection) {
+                        // IE9 and non-IE
+                        sel = window.getSelection();
+                        if (elementContainsSelection(domElement)) {
+                            if (sel.getRangeAt && sel.rangeCount) {
+                                range = sel.getRangeAt(0);
+                                range.deleteContents();
+
+                                // Range.createContextualFragment() would be useful here but is
+                                // non-standard and not supported in all browsers (IE9, for one)
+                                var el = document.createElement("div");
+                                el.innerHTML = val;
+                                var frag = document.createDocumentFragment(),
+                                    node, lastNode;
+                                while ((node = el.firstChild)) {
+                                    lastNode = frag.appendChild(node);
+                                }
+                                range.insertNode(frag);
+
+                                // Preserve the selection
+                                if (lastNode) {
+                                    range = range.cloneRange();
+                                    range.setStartAfter(lastNode);
+                                    range.collapse(true);
+                                    sel.removeAllRanges();
+                                    sel.addRange(range);
+                                }
+                            } else if (document.selection && document.selection.type != "Control") {
+                                // IE < 9
+                                document.selection.createRange().pasteHTML(val);
+                            }
+                        }
+                    }
+
+                });
+            }
+        }
+    }])
 
 .directive('contenteditable', ['$sce', function($sce) {
     return {

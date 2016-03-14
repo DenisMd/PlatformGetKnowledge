@@ -16,7 +16,7 @@
     <!---->
 
     <div class="bubble">
-        <div contenteditable ng-model="content" class="post-editarea">Change me!</div>
+        <div contenteditable ng-model="content" class="post-editarea" insert-contenteditable>Change me!</div>
         <span class="tool-button tool-button-1">
             <i class="fa fa-camera"></i>
             <md-tooltip md-direction="bottom">
@@ -43,7 +43,7 @@
         </span>
     </div>
 
-    <button>Paste</button>
+    <button ng-click="insert()">Paste</button>
 
     {{content}}
     <script type="text/ng-template" id="pasteCode.html">

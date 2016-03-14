@@ -869,7 +869,7 @@ model.controller("sectionCard",function($scope,$state,applicationService,classNa
     };
 });
 
-model.controller("postController",function($scope,codemirrorURL){
+model.controller("postController",function($scope,$rootScope,codemirrorURL){
     $scope.test = {
         readOnly: 'nocursor',
         codeShown:false,
@@ -900,9 +900,14 @@ model.controller("postController",function($scope,codemirrorURL){
             if (tag) {
                 angular.extend($scope.test,tag.getData());
                 $scope.test.title = tag.getName();
+                $rootScope.$broadcast('add', tag.getName());
             }
         },null,refresh);
     };
+
+    $scope.insert = function(){
+        $rootScope.$broadcast('add', "hello world!");
+    }
 
     $scope.code = {
         text:"var i = \"hello world\"",
