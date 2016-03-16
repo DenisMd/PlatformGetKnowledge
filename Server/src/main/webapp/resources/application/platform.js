@@ -802,10 +802,10 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
 }])
 
     //for div
-    .directive('insertContenteditable', ['$rootScope', function($rootScope) {
+    .directive('contenteditableKeyListener', ['$rootScope', function($rootScope) {
         return {
             link: function(scope, element, attrs) {
-
+                var domElement = element[0];
                 function elementContainsSelection(el) {
                     var sel;
                     if (window.getSelection) {
@@ -818,8 +818,6 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                             }
                             return true;
                         }
-                    } else if ((sel = document.selection) && sel.type != "Control") {
-                        return isOrContains(sel.createRange().parentElement(), el);
                     }
                     return false;
                 };
@@ -837,7 +835,6 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 $rootScope.$on('add', function(e, val) {
                     console.log('on add');
                     console.log(val);
-                    var domElement = element[0];
                     var sel, range;
                     if (window.getSelection) {
                         // IE9 and non-IE
@@ -866,25 +863,59 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                                     sel.removeAllRanges();
                                     sel.addRange(range);
                                 }
-                            } else if (document.selection && document.selection.type != "Control") {
-                                // IE < 9
-                                document.selection.createRange().pasteHTML(val);
                             }
                         }
                     }
 
                 });
+
+                var range;
+                element.on("mousedown mouseup keydown keyup", function(){
+                    var doc = domElement.ownerDocument || domElement.document;
+                    var win = doc.defaultView || doc.parentWindow;
+                    var sel,r;
+                    if (win.getSelection) {
+                        sel = win.getSelection();
+                        if (sel.rangeCount > 0) {
+                            var selection = win.getSelection();
+                            r = selection.getRangeAt(0);
+                            if (domElement.contains(r.startContainer) && domElement.contains(r.endContainer)){
+                                range = r;
+                            }
+                        }
+                    }
+                });
+
+                $rootScope.$on('setCaret', function(e) {
+                    domElement.focus();
+                        var sel = window.getSelection();
+                        if (sel) {
+                            if (sel.rangeCount > 0) {
+                                sel.removeAllRanges();
+                            }
+                            var r = document.createRange();
+                            if (range){
+                                r.setStart(range.startContainer, range.startOffset);
+                                r.setEnd(range.endContainer, range.endOffset);
+                                r.collapse(true);
+                            } else {
+                                r.selectNodeContents(domElement);
+                                r.collapse(false);
+                            }
+                            sel.addRange(r);
+                        }
+
+                });
             }
         }
     }])
-
 .directive('contenteditable', ['$sce', function($sce) {
     return {
         restrict: 'A', // only activate on element attribute
         require: '?ngModel', // get a hold of NgModelController
         link: function(scope, element, attrs, ngModel) {
             if (!ngModel) return; // do nothing if no ng-model
-
+            var el = element[0];
             // Specify how UI should be updated
             ngModel.$render = function() {
                 element.html($sce.getTrustedHtml(ngModel.$viewValue || ''));
@@ -894,15 +925,27 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             element.on('blur keyup change', function() {
                 scope.$evalAsync(read);
             });
+
             read();
 
             function read() {
                 var html = element.html();
                 ngModel.$setViewValue(html);
             }
+
+            //ngModel.$parsers.push(function(viewValue) {
+            //    return TagPool[viewValue.index];
+            //});
+            //
+            //ngModel.$formatters.push(function(modelValue) {
+            //    var value = modelValue.slice(1,modelValue.indexOf("("));
+            //    var index = parseInt(value);
+            //    return index;
+            //});
         }
     }
 }]);
+
 
 function Tag() {
     this.Type = Object.freeze({Program: 1, Math: 2, Image: 3});

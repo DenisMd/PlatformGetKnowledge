@@ -55,7 +55,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
     };
 
     //Dialog
-    $scope.showDialog = function (ev,$scope,htmlName,callbackForOk,onRemoving,onComplete,outsideToClose) {
+    $scope.showDialog = function (ev,$scope,htmlName,callbackForOk,onRemoving,onComplete,onShowing,outsideToClose) {
         var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
         var clickOutsideToClose = angular.isDefined(outsideToClose)? outsideToClose : false;
 
@@ -69,6 +69,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
                 locals: {
                     theScope: $scope
                 },
+                onShowing : onShowing,
                 onComplete: onComplete,
                 onRemoving:  onRemoving
         })
@@ -902,11 +903,14 @@ model.controller("postController",function($scope,$rootScope,codemirrorURL){
                 $scope.test.title = tag.getName();
                 $rootScope.$broadcast('add', tag.getName());
             }
-        },null,refresh);
+        },null,refresh,function(){
+
+        });
     };
 
     $scope.insert = function(){
-        $rootScope.$broadcast('add', "hello world!");
+        //$rootScope.$broadcast('add', "<span>hello world!</span>");
+        $rootScope.$broadcast('setCaret');
     }
 
     $scope.code = {
