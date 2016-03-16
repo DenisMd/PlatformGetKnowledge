@@ -901,7 +901,8 @@ model.controller("postController",function($scope,$rootScope,codemirrorURL){
             if (tag) {
                 angular.extend($scope.test,tag.getData());
                 $scope.test.title = tag.getName();
-                $rootScope.$broadcast('add', tag.getName());
+                $rootScope.$broadcast('setCaret');
+                $rootScope.$broadcast('add', tag);
             }
         },null,refresh,function(){
 
@@ -910,8 +911,8 @@ model.controller("postController",function($scope,$rootScope,codemirrorURL){
 
     $scope.insert = function(){
         //$rootScope.$broadcast('add', "<span>hello world!</span>");
-        $rootScope.$broadcast('setCaret');
-    }
+
+    };
 
     $scope.code = {
         text:"var i = \"hello world\"",

@@ -870,7 +870,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 });
 
                 var range;
-                element.on("mousedown mouseup keydown keyup", function(){
+                element.on("mouseup keyup blur", function(){
                     var doc = domElement.ownerDocument || domElement.document;
                     var win = doc.defaultView || doc.parentWindow;
                     var sel,r;
@@ -879,8 +879,8 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                         if (sel.rangeCount > 0) {
                             var selection = win.getSelection();
                             r = selection.getRangeAt(0);
-                            if (domElement.contains(r.startContainer) && domElement.contains(r.endContainer)){
-                                range = r;
+                            if (isOrContains(r.commonAncestorContainer, domElement)){
+                                range = r.cloneRange();
                             }
                         }
                     }
