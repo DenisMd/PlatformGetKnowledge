@@ -4,6 +4,8 @@ import com.getknowledge.modules.courses.group.GroupCourses;
 import com.getknowledge.modules.courses.group.GroupCoursesRepository;
 import com.getknowledge.modules.courses.tags.CoursesTag;
 import com.getknowledge.modules.courses.tags.CoursesTagRepository;
+import com.getknowledge.modules.courses.tutorial.Tutorial;
+import com.getknowledge.modules.courses.tutorial.TutorialRepository;
 import com.getknowledge.modules.courses.version.Version;
 import com.getknowledge.modules.dictionaries.knowledge.Knowledge;
 import com.getknowledge.modules.dictionaries.knowledge.KnowledgeRepository;
@@ -25,9 +27,11 @@ import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -57,6 +61,9 @@ public class CourseService extends AbstractService implements ImageService {
 
     @Autowired
     private VideoRepository videoRepository;
+
+    @Autowired
+    private TutorialRepository tutorialRepository;
 
     private void prepareTag(HashMap<String,Object> data , Course course) {
         if (data.containsKey("tags")) {
@@ -112,6 +119,7 @@ public class CourseService extends AbstractService implements ImageService {
 
         Course course = new Course();
         course.setAuthor(userInfo);
+        course.setCreateDate(Calendar.getInstance());
 
         if (!course.getAuthorizationList().isAccessCreate(userInfo.getUser())) {
             return Result.AccessDenied();
@@ -273,15 +281,65 @@ public class CourseService extends AbstractService implements ImageService {
         return Result.Complete();
     }
 
+    @Action(name = "createTutorial" , mandatoryFields = {"courseId","name"})
+    public Result createTutorial(HashMap<String , Object> data) {
+        Result result = checkCourseRight(data);
+        Course course;
+        if (result.getObject() != null)  {
+            course = (Course) result.getObject();
+        } else {
+            return result;
+        }
+
+        Tutorial tutorial = new Tutorial();
+        tutorial.setName((String) data.get("name"));
+        tutorial.setCourse(course);
+        Object maxOrder = entityManager.createQuery("select max(t.orderNumber) from Tutorial t where t.course.id = :id")
+                .setParameter("id" , course.getId()).getSingleResult();
+
+        tutorial.setOrderNumber(maxOrder == null ? 1 : ((Integer) maxOrder) + 1);
+        tutorialRepository.create(tutorial);
+
+        Result result1 = Result.Complete();
+        result1.setObject(tutorial.getId());
+        return result1;
+    }
+
+    @Action(name = "getTutorialsForCourse" , mandatoryFields = {"courseId"})
+    @Transactional
+    public HashMap<Integer,String> getTutorialsForCourse(HashMap<String , Object> data) {
+        Long courseId = new Long((Integer)(data.get("courseId")));
+        Course course = courseRepository.read(courseId);
+        if (course == null) {
+            return null;
+        }
+        UserInfo currentUser = userInfoService.getAuthorizedUser(data);
+        if (!isUserHasAccessToCourse(currentUser , course)) {
+            return null;
+        }
+        List<Tutorial> tutorials = course.getTutorials();
+        HashMap<Integer,String> result = new HashMap<>();
+        for (Tutorial tutorial : tutorials) {
+            result.put(tutorial.getOrderNumber(),tutorial.getName());
+        }
+        return result;
+    }
+
     public boolean isUserHasAccessToCourse(UserInfo userInfo , Course course) {
         if (course.isBase()) {
             return true;
         }
 
-        for (Course userCourse : userInfo.getCourses()) {
-            if (userCourse != null && userCourse.equals(course)) {
-             return true;
-            }
+        if (userInfo == null) {
+            return false;
+        }
+
+        if (userInfo.getStudiedCourses().contains(course)){
+            return true;
+        }
+
+        if (userInfo.getPurchasedCourses().contains(course)){
+            return true;
         }
 
         return false;

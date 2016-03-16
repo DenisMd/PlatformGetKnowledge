@@ -38,7 +38,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
          };
     })
     .factory('modules',function(){
-        return ["user","accept","section","restorePassword","groupCourses","groupBooks","groupPrograms","book","program","course"];
+        return ["user","accept","section","restorePassword","groupCourses","groupBooks","groupPrograms","book","program","course","tutorial"];
     })
     .constant("resourceUrl", "/resources/application/")
     .constant("resourceTemplate","/resources/template/")
@@ -324,7 +324,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             });
         };
 
-        this.createUploader = function ($scope,name,className,actionName,data,callback){
+        this.createUploader = function ($scope,name,className,actionName,data,callback,prepareItem){
             "use strict";
             var isCallbackFunction = isFunction(callback);
             var formData = {
@@ -336,6 +336,10 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 url: platformDataUrl+'actionWithFile',
                 autoUpload: false,
                 onBeforeUploadItem: function(item) {
+                    if (isFunction(prepareItem)) {
+                        prepareItem(formData);
+                    }
+                    console.log(formData);
                     item.formData.push(formData);
                 }
             });

@@ -54,4 +54,13 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
         super.remove(id);
         userRepository.remove(userId);
     }
+
+    public UserInfo getUserInfoByUser(com.getknowledge.platform.modules.user.User user) {
+        if (user == null) return null;
+
+        List<UserInfo> userInfo = entityManager.createQuery("select ui from UserInfo  ui where ui.user.id = :id")
+                .setParameter("id" , user.getId()).getResultList();
+
+        return userInfo.isEmpty() ? null : userInfo.get(0);
+    }
 }

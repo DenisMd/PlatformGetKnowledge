@@ -70,6 +70,9 @@ public class VideoService extends AbstractService implements BootstrapService , 
     public Result uploadVideo(HashMap<String,Object> data, List<MultipartFile> fileList) {
         Long videoId = new Long((Integer)data.get("videoId"));
         Video video = videoRepository.read(videoId);
+        if (video == null){
+            return Result.Failed();
+        }
         UserInfo userInfo = userInfoService.getAuthorizedUser(data);
         if (userInfo == null || !video.getAuthorizationList().isAccessCreate(userInfo.getUser())) {
             return Result.AccessDenied();
@@ -84,6 +87,12 @@ public class VideoService extends AbstractService implements BootstrapService , 
         }
 
         MultipartFile multipartFile = fileList.get(0);
+
+        if (video.getLink() != null) {
+            File oldVideo = new File(pathToVideo + File.separator + video.getLink());
+            oldVideo.delete();
+        }
+
         File videoFile = new File(pathToVideo + separator + userInfo.getId() + separator + videoId + "_" + multipartFile.getOriginalFilename());
         if (!videoFile.exists()) {
             try {

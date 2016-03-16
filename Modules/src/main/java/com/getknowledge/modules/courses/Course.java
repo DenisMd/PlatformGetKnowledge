@@ -20,6 +20,7 @@ import com.getknowledge.platform.modules.user.User;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Entity
@@ -51,6 +52,10 @@ public class Course extends CloneableEntity<Course> implements IUser{
     @JoinTable(name = "course_required_knowledges")
     private List<Knowledge> requiredKnowledge = new ArrayList<>();
 
+    @Column(name = "create_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar createDate;
+
     private Boolean release = false;
 
     @OneToOne
@@ -66,7 +71,7 @@ public class Course extends CloneableEntity<Course> implements IUser{
     @Transient
     private Rating rating;
 
-    @OneToMany
+    @OneToMany(mappedBy = "course")
     @JsonIgnore
     private List<Tutorial> tutorials = new ArrayList<>();
 
@@ -77,6 +82,14 @@ public class Course extends CloneableEntity<Course> implements IUser{
 
     @Column(name = "is_base" , columnDefinition = "boolean default true")
     private Boolean base = false;
+
+    public Calendar getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Calendar createDate) {
+        this.createDate = createDate;
+    }
 
     public Version getVersion() {
         return version;
@@ -180,7 +193,7 @@ public class Course extends CloneableEntity<Course> implements IUser{
             relevanceInformation += tutorial.getAvgTutorialRating().getRelevanceInformation();
         }
 
-        if (tutorials.size() != 0) {
+        if (tutorials.size() != 0 && qualityExercises != 0) {
             rating.setQualityExercises(qualityExercises / tutorials.size());
             rating.setQualityInformation(qualityInformation / tutorials.size());
             rating.setQualityTest(qualityTest / tutorials.size());
@@ -247,6 +260,7 @@ public class Course extends CloneableEntity<Course> implements IUser{
         course.setVersion(this.getVersion());
         course.setTutorials(this.getTutorials());
         course.setBase(this.isBase());
+        course.setCreateDate(this.getCreateDate());
         return course;
     }
 

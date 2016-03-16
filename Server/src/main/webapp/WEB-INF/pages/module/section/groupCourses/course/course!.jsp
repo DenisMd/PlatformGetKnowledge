@@ -106,6 +106,69 @@
     </div>
     <br>
 </div>
+<div ng-controller="videoCtrl">
+<div class="video-image" ng-if="course.intro">
+    <img ng-src="{{videoImg(course.intro.id)}}"
+         class="img-thumbnail video-poster">
+    <a ng-click="open(course.intro.id)" class="video-play"><span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span></a>
+</div>
+    <!-- Modal -->
+    <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal-center">
+                <!--<div class="modal-body">-->
+                <video id="main-video" class="video-js vjs-default-skin vjs-big-play-centered">
+                    <!--poster="/resources/image/index/slider/programming.jpg" data-setup="{{videoSetup}}">-->
+                </video>
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-if="course.editable">
+    <md-button class="md-raised md-primary" ng-click="showAdvanced($event)">
+        Create tutorial
+    </md-button>
+</div>
+
+
+<script type="text/ng-template" id="createTutorial.html">
+    <md-dialog  ng-cloak>
+        <form>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>{{parentScope.translate("course_create_tutorial")}}</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="cancel()">
+                        <md-icon md-svg-src="resources/image/svg/close.svg" aria-label="Close dialog"></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <div class="md-dialog-content">
+                    <div>
+                        <md-input-container>
+                            <label>{{parentScope.translate("name")}}</label>
+                            <input ng-model="tutorial.name">
+                        </md-input-container>
+                    </div>
+                </div>
+            </md-dialog-content>
+            <md-dialog-actions layout="row">
+                <md-button class="md-raised md-primary" ng-click="answer(tutorial)">
+                    {{parentScope.translate("create")}}
+                </md-button>
+            </md-dialog-actions>
+        </form>
+    </md-dialog>
+</script>
+
+<ul>
+    <li ng-repeat="(key,name) in tutorials">
+        <a ng-href="{{addUrlToPath('/tutorial/'+key)}}">Урок {{key + ') ' + name}}</a>
+    </li>
+</ul>
 
 
 {{course}}

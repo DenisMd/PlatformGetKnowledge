@@ -3,22 +3,23 @@ package com.getknowledge.modules.courses.tutorial;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.courses.Course;
 import com.getknowledge.modules.courses.raiting.Rating;
+import com.getknowledge.modules.userInfo.UserInfo;
+import com.getknowledge.modules.userInfo.UserInfoRepository;
 import com.getknowledge.modules.video.Video;
-import com.getknowledge.platform.annotations.ModuleInfo;
-import com.getknowledge.platform.base.entities.AbstractEntity;
-import com.getknowledge.platform.base.entities.AuthorizationList;
+import com.getknowledge.platform.annotations.*;
+import com.getknowledge.platform.base.entities.*;
+import com.getknowledge.platform.modules.user.User;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "tutorial")
 @ModuleInfo(repositoryName = "TutorialRepository" , serviceName = "TutorialService")
-public class Tutorial extends AbstractEntity {
+public class Tutorial  extends CloneableEntity<Tutorial> implements IOwner{
 
     private String name;
-
-    @Column(length = 500)
-    private String description;
 
     //Порядковый номер
     @Column(name = "order_number")
@@ -29,14 +30,11 @@ public class Tutorial extends AbstractEntity {
     private Course course;
 
     @Column(columnDefinition = "Text" , name = "data")
+    @com.getknowledge.platform.annotations.Access(forOwners = true)
     private String data;
 
-    @Basic(fetch= FetchType.LAZY)
-    @Lob @Column(name="cover")
-    @JsonIgnore
-    private byte [] cover;
-
     @OneToOne
+    @com.getknowledge.platform.annotations.Access(forOwners = true)
     private Video video;
 
     @Transient
@@ -58,28 +56,12 @@ public class Tutorial extends AbstractEntity {
         this.course = course;
     }
 
-    public byte[] getCover() {
-        return cover;
-    }
-
-    public void setCover(byte[] cover) {
-        this.cover = cover;
-    }
-
     public String getData() {
         return data;
     }
 
     public void setData(String data) {
         this.data = data;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Rating getAvgTutorialRating() {
@@ -106,6 +88,48 @@ public class Tutorial extends AbstractEntity {
 
     @Override
     public AuthorizationList getAuthorizationList() {
+        if (course != null)
+            return course.getAuthorizationList();
         return null;
+    }
+
+    @Override
+    public Tutorial clone() {
+        Tutorial tutorial = new Tutorial();
+        tutorial.setId(this.getId());
+        tutorial.setCourse(this.getCourse());
+        tutorial.setData(this.getData());
+        tutorial.setOrderNumber(this.getOrderNumber());
+        tutorial.setVideo(this.getVideo());
+        return tutorial;
+    }
+
+    @Autowired
+    @Transient
+    @JsonIgnore
+    private UserInfoRepository userInfoRepository;
+
+    @Override
+    public boolean isOwner(User user) {
+
+        if (user != null && Objects.equals(course.getAuthor().getUser().getId(), user.getId()))
+            return true;
+
+        if (course.isBase())
+            return true;
+
+
+        UserInfo userInfo = userInfoRepository.getUserInfoByUser(user);
+        if (userInfo != null) {
+            if (userInfo.getStudiedCourses().contains(course)) {
+                return true;
+            }
+
+            if (userInfo.getPurchasedCourses().contains(course)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

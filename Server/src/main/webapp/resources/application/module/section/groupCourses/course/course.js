@@ -111,8 +111,31 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
 
     $scope.querySearch = function(criteria) {
        return $scope.knowledges.filter(createFilterFor(criteria));
-    }
+    };
 
-    $scope.uploader = applicationService.createUploader($scope,"",className.video,"uploadVideo",{videoId:9});
+    $scope.uploader = applicationService.createUploader($scope,"",className.video,"uploadVideo",null,null,function(formData){
+        formData.data = JSON.stringify({videoId:$scope.course.intro.id});
+    });
+
+    function readTutorials() {
+        applicationService.action($scope,"tutorials",className.course,"getTutorialsForCourse",{
+            courseId : +courseId
+        });
+    };
+
+    readTutorials();
+
+    $scope.showAdvanced = function(ev) {
+        $scope.showDialog(ev,$scope,"createTutorial.html",function(answer){
+            var request = {};
+            request.courseId = $scope.course.id;
+            request.name = answer.name;
+            applicationService.action($scope,"", className.course,"createTutorial",request,function(result){
+                $scope.showToast(result);
+                readTutorials
+            });
+        });
+    };
+
 
 });

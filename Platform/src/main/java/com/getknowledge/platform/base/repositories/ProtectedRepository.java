@@ -2,6 +2,7 @@ package com.getknowledge.platform.base.repositories;
 
 import com.getknowledge.platform.annotations.Access;
 import com.getknowledge.platform.base.entities.CloneableEntity;
+import com.getknowledge.platform.base.entities.IOwner;
 import com.getknowledge.platform.base.entities.IUser;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.role.Role;
@@ -25,6 +26,13 @@ public abstract class ProtectedRepository <T extends CloneableEntity<T>> extends
         if (entity instanceof IUser) {
             owner = ((IUser)entity).getUser();
         }
+
+        boolean isOwner = false;
+
+        if (entity instanceof IOwner) {
+            isOwner = ((IOwner)entity).isOwner(currentUser);
+        }
+
         entity = entity.clone();
         for (Field field : entity.getClass().getDeclaredFields()) {
             field.setAccessible(true);
@@ -36,6 +44,12 @@ public abstract class ProtectedRepository <T extends CloneableEntity<T>> extends
                             if (owner.getLogin().equals(currentUser.getLogin())) {
                                 break;
                             }
+                        }
+                    }
+
+                    if (access.forOwners()) {
+                        if (isOwner) {
+                            break;
                         }
                     }
 

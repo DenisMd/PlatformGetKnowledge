@@ -50,6 +50,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.SocketException;
 import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.HashMap;
@@ -188,6 +189,8 @@ public class DataController {
 
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+        } catch (SocketException socket) {
+            //Ничего не даелаем так пользователь просто выключил видео
         } catch (Exception e) {
             trace.logException("read video exception: " + e.getMessage(), e, TraceLevel.Warning);
         }

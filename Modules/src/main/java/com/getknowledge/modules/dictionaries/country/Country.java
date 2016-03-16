@@ -1,15 +1,12 @@
 package com.getknowledge.modules.dictionaries.country;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
-import org.hibernate.search.annotations.Field;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity

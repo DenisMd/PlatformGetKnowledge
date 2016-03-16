@@ -72,17 +72,31 @@ public class UserInfo  extends CloneableEntity<UserInfo> implements IUser{
     //Список курсов, которые изучает данный пользователь
     @ManyToMany
     @JsonIgnore
-    private List<Course> courses = new ArrayList<>();
+    @JoinTable(name = "users_studied_course")
+    private List<Course> studiedCourses = new ArrayList<>();
 
     @Transient
     private boolean online = false;
 
-    public List<Course> getCourses() {
-        return courses;
+    @ManyToMany
+    @JsonIgnore
+    @JoinTable(name = "users_purchased_course")
+    private List<Course> purchasedCourses = new ArrayList<>();
+
+    public List<Course> getPurchasedCourses() {
+        return purchasedCourses;
     }
 
-    public void setCourses(List<Course> courses) {
-        this.courses = courses;
+    public void setPurchasedCourses(List<Course> purchasedCourses) {
+        this.purchasedCourses = purchasedCourses;
+    }
+
+    public List<Course> getStudiedCourses() {
+        return studiedCourses;
+    }
+
+    public void setStudiedCourses(List<Course> studiedCourses) {
+        this.studiedCourses = studiedCourses;
     }
 
     public boolean isOnline() {
@@ -233,6 +247,8 @@ public class UserInfo  extends CloneableEntity<UserInfo> implements IUser{
         userInfo.setLinks(this.links);
         userInfo.setUserMenu(this.userMenu);
         userInfo.setOnline(this.online);
+        userInfo.setStudiedCourses(this.getStudiedCourses());
+        userInfo.setPurchasedCourses(this.getPurchasedCourses());
         return userInfo;
     }
 }

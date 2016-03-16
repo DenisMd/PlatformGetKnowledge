@@ -2,13 +2,14 @@ package com.getknowledge.modules.dictionaries.region;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.dictionaries.country.Country;
-import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
-import org.hibernate.search.annotations.Field;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "region")
@@ -20,7 +21,6 @@ public class Region extends AbstractEntity {
 
     @JsonIgnore
     @Column(name = "external_id")
-    @Field
     private Long xmlId;
 
     @ManyToOne

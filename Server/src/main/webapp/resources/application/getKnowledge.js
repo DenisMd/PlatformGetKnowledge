@@ -272,6 +272,10 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         }
     };
 
+    $scope.videoImg = function(id){
+        return applicationService.imageHref(className.video,id);
+    };
+
 
     applicationService.list($scope,"mainLinks" , className.socialLinks);
     applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {});
@@ -294,12 +298,10 @@ model.controller("treeListCtrl" , function ($scope) {
 model.controller("videoCtrl",function($scope){
     initVideoPlayer();
 
-    var videoUrl = $scope.getVideoUrl(1);
-    $scope.url = {type: "video/mp4", src: videoUrl};
-
-    $scope.open = function() {
-        if (!player ||player.currentSrc() != $scope.url.src) {
-            player.src($scope.url);
+    $scope.open = function(id) {
+        var videoUrl = $scope.getVideoUrl(id != undefined ? id : 1);
+        if (!player ||player.currentSrc() != videoUrl) {
+            player.src({type: "video/mp4", src: videoUrl});
             player.play();
         } else {
             player.play();

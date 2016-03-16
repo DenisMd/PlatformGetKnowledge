@@ -5,9 +5,9 @@ import com.getknowledge.platform.base.repositories.BaseRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository("TutorialRepository")
-public class TutorialRepository extends BaseRepository<Course> {
+public class TutorialRepository extends BaseRepository<Tutorial> {
     @Override
-    protected Class<Course> getClassEntity() {
-        return Course.class;
+    protected Class<Tutorial> getClassEntity() {
+        return Tutorial.class;
     }
 }
