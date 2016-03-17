@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 
-@Transactional(readOnly = true)
 public abstract class ProtectedRepository <T extends CloneableEntity<T>> extends PrepareRepository<T> {
     protected User currentUser = null;
 

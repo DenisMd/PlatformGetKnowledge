@@ -17,7 +17,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "tutorial")
 @ModuleInfo(repositoryName = "TutorialRepository" , serviceName = "TutorialService")
-public class Tutorial  extends CloneableEntity<Tutorial> implements IOwner{
+public class Tutorial  extends CloneableEntity<Tutorial> {
 
     private String name;
 
@@ -31,10 +31,12 @@ public class Tutorial  extends CloneableEntity<Tutorial> implements IOwner{
 
     @Column(columnDefinition = "Text" , name = "data")
     @com.getknowledge.platform.annotations.Access(forOwners = true)
+    @JsonIgnore
     private String data;
 
     @OneToOne
     @com.getknowledge.platform.annotations.Access(forOwners = true)
+    @JsonIgnore
     private Video video;
 
     @Transient
@@ -102,34 +104,5 @@ public class Tutorial  extends CloneableEntity<Tutorial> implements IOwner{
         tutorial.setOrderNumber(this.getOrderNumber());
         tutorial.setVideo(this.getVideo());
         return tutorial;
-    }
-
-    @Autowired
-    @Transient
-    @JsonIgnore
-    private UserInfoRepository userInfoRepository;
-
-    @Override
-    public boolean isOwner(User user) {
-
-        if (user != null && Objects.equals(course.getAuthor().getUser().getId(), user.getId()))
-            return true;
-
-        if (course.isBase())
-            return true;
-
-
-        UserInfo userInfo = userInfoRepository.getUserInfoByUser(user);
-        if (userInfo != null) {
-            if (userInfo.getStudiedCourses().contains(course)) {
-                return true;
-            }
-
-            if (userInfo.getPurchasedCourses().contains(course)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

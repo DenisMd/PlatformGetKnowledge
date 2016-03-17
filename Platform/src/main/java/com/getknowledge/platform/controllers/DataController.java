@@ -37,6 +37,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -108,7 +109,7 @@ public class DataController {
 
             boolean isEditable = isAccessEdit(principal,abstractEntity);
             boolean isCreatable = isAccessCreate(principal,abstractEntity);
-            abstractEntity = AbstractEntity.prepare(abstractEntity,repository,getCurrentUser(principal),moduleLocator);
+            abstractEntity = repository.prepare(abstractEntity,repository,getCurrentUser(principal),moduleLocator);
             nodes.add(prepareJson(abstractEntity,isEditable,isCreatable,classEntity));
         }
 
@@ -140,7 +141,7 @@ public class DataController {
 
             boolean isEditable = isAccessEdit(principal,entity);
             boolean isCreatable = isAccessCreate(principal,entity);
-            entity = AbstractEntity.prepare(entity,repository,getCurrentUser(principal),moduleLocator);
+            entity = repository.prepare(entity,repository,getCurrentUser(principal),moduleLocator);
 
             return prepareJson(entity,isEditable,isCreatable,classEntity).toString();
         } catch (ClassNotFoundException e) {
@@ -189,10 +190,12 @@ public class DataController {
 
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
-        } catch (SocketException socket) {
-            //Ничего не даелаем так пользователь просто выключил видео
         } catch (Exception e) {
-            trace.logException("read video exception: " + e.getMessage(), e, TraceLevel.Warning);
+            if (!(e.getCause() instanceof SocketException)) {
+                //Ничего не даелаем так пользователь просто выключил видео
+                trace.logException("read video exception: " + e.getMessage(), e, TraceLevel.Warning);
+            }
+
         }
     }
 
@@ -537,6 +540,17 @@ public class DataController {
                 HashMap<String,Object> data = getDataForAction(actionName, action.name() , action.mandatoryFields(), jsonData,principal);
                 if (data != null) {
                     Object result = method.invoke(abstractService, data);
+                    if (action.prepareEntity()) {
+                        if (result instanceof  AbstractEntity) {
+                            AbstractEntity entity = (AbstractEntity) result;
+                            boolean isEditable = isAccessEdit(principal,entity);
+                            boolean isCreatable = isAccessCreate(principal,entity);
+
+                            return prepareJson(entity,isEditable,isCreatable,classEntity).toString();
+                        } else if(result instanceof List) {
+                            return listToJsonString((List<AbstractEntity>) result,principal,moduleLocator.findRepository(classEntity),classEntity).toString();
+                        }
+                    }
                     return objectMapper.writeValueAsString(result);
                 }
             }
@@ -554,6 +568,9 @@ public class DataController {
         } catch (IllegalAccessException e) {
             trace.logException("IllegalAccessException", e, TraceLevel.Warning);
             throw new InvokeException("IllegalAccessException");
+        } catch (Exception e) {
+            trace.logException("Unhandled exception", e, TraceLevel.Warning);
+            throw new PlatformException("exception");
         }
     }
 

@@ -277,7 +277,6 @@ public class CourseService extends AbstractService implements ImageService {
             return Result.Failed();
         }
 
-        courseRepository.merge(course);
         return Result.Complete();
     }
 

@@ -34,7 +34,8 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "programmingStyles" : "com.getknowledge.modules.dictionaries.programming.styles.ProgrammingStyles",
             "book" : "com.getknowledge.modules.books.Book",
             "program" : "com.getknowledge.modules.programs.Program",
-            "course" : "com.getknowledge.modules.courses.Course"
+            "course" : "com.getknowledge.modules.courses.Course",
+            "tutorial" : "com.getknowledge.modules.courses.tutorial.Tutorial"
          };
     })
     .factory('modules',function(){

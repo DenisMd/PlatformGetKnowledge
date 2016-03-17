@@ -11,4 +11,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface Action {
     String name() default "";
     String[] mandatoryFields() default "";
+    boolean prepareEntity() default  false;
 }

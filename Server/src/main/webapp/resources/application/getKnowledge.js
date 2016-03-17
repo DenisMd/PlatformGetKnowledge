@@ -116,8 +116,12 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         return window.location + url;
     };
 
-    $scope.goTo = function(url) {
-        window.location.href = $scope.addUrlToPath("/"+url);
+    $scope.goTo = function(url,isAbsolutePath) {
+        if (isAbsolutePath) {
+            window.location.href = url;
+        } else {
+            window.location.href = $scope.addUrlToPath("/"+url);
+        }
     };
 
     $scope.openInNewTab = function(url) {

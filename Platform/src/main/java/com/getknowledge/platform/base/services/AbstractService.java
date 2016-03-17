@@ -17,7 +17,7 @@ public abstract class AbstractService {
     public EntityManager entityManager;
     public ObjectMapper objectMapper = new ObjectMapper();
 
-    public boolean isAccessToRead(HashMap<String,Object> data, AbstractEntity abstractEntity, UserRepository userRepository) throws NotAuthorized {
+    public boolean isAccessToRead(HashMap<String,Object> data, AbstractEntity abstractEntity, UserRepository userRepository) {
         String principalName = (String) data.get("principalName");
         if (principalName == null || principalName.isEmpty()) {
             return  false;
@@ -33,8 +33,7 @@ public abstract class AbstractService {
 
     }
 
-
-    public boolean isAccessToEdit(HashMap<String,Object> data, AbstractEntity abstractEntity, UserRepository userRepository) throws NotAuthorized {
+    public boolean isAccessToEdit(HashMap<String,Object> data, AbstractEntity abstractEntity, UserRepository userRepository) {
         String principalName = (String) data.get("principalName");
         if (principalName == null || principalName.isEmpty()) {
             return  false;
@@ -49,4 +48,9 @@ public abstract class AbstractService {
         return abstractEntity.getAuthorizationList() != null && abstractEntity.getAuthorizationList().isAccessEdit(currentUser);
 
     }
+
+    public Long getLongFromMap(String key, HashMap<String,Object> data) {
+        return new Long((Integer)data.get(key));
+    }
+
 }

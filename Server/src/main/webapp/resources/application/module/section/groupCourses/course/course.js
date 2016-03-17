@@ -132,7 +132,7 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
             request.name = answer.name;
             applicationService.action($scope,"", className.course,"createTutorial",request,function(result){
                 $scope.showToast(result);
-                readTutorials
+                readTutorials();
             });
         });
     };

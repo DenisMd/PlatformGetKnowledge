@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
     private SessionRegistry sessionRegistry;
 
     @Override
+    @Transactional
     public UserInfo read(Long id) {
         UserInfo userInfo = super.read(id);
         if (userInfo == null)
@@ -48,6 +50,7 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
     }
 
     @Override
+    @Transactional
     public void remove(Long id) throws PlatformException {
         UserInfo userInfo = entityManager.find(getClassEntity() , id);
         long userId = userInfo.getUser().getId();
