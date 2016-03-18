@@ -51,7 +51,7 @@ model.controller("tutorialCtrl", function ($scope,applicationService,className,p
     };
 
     $scope.getVideoImage  = function(){
-        if ($scope.tutorial.video) {
+        if ($scope.tutorial && $scope.tutorial.video) {
             videoImg.src = applicationService.imageHref(className.video, $scope.tutorial.video.id);
             videoImg.notUseDefault = true;
         }
@@ -64,5 +64,9 @@ model.controller("tutorialCtrl", function ($scope,applicationService,className,p
             videoName : $scope.tutorial.video.videoName
         },file);
     };
+
+    $scope.uploader = applicationService.createUploader($scope,"",className.video,"uploadVideo",null,null,function(formData){
+        formData.data = JSON.stringify({videoId:$scope.tutorial.video.id});
+    });
 
 });

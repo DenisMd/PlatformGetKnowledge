@@ -63,5 +63,27 @@
 <p class="description">
     {{tutorial.data}}
 </p>
+
+<div ng-controller="videoCtrl">
+    <div class="video-image" ng-if="tutorial.video">
+        <img ng-src="{{videoImg(tutorial.video.id)}}"
+             class="img-thumbnail video-poster">
+        <a ng-click="open(tutorial.video.id)" class="video-play"><span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span></a>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal-center">
+                <!--<div class="modal-body">-->
+                <video id="main-video" class="video-js vjs-default-skin vjs-big-play-centered">
+                    <!--poster="/resources/image/index/slider/programming.jpg" data-setup="{{videoSetup}}">-->
+                </video>
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
 {{tutorial}}
 
