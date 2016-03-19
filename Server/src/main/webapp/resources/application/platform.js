@@ -909,7 +909,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             }
         }
     }])
-.directive('contenteditable', ['$sce', function($sce) {
+.directive('contenteditable', ['$sce','TagService', function($sce,TagService) {
     return {
         restrict: 'A', // only activate on element attribute
         require: '?ngModel', // get a hold of NgModelController
@@ -925,6 +925,14 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             element.on('blur keyup change', function() {
                 scope.$evalAsync(read);
             });
+            element.on("keypress", function (event) {
+                if (event.which === 13) {
+                    scope.$apply(function () {
+
+                    });
+
+                }
+            });
 
             read();
 
@@ -933,18 +941,69 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 ngModel.$setViewValue(html);
             }
 
-            //ngModel.$parsers.push(function(viewValue) {
-            //    return TagPool[viewValue.index];
-            //});
-            //
+            ngModel.$parsers.push(function(viewValue) {
+                var s = viewValue, result = "";
+                var startPos = -1,start = 0,stopPos = -1, j = -1;
+                var startText = "";
+                while ((startPos = s.indexOf(TagService.startEditable, stopPos + 1)) !== -1
+                && (j = s.indexOf(TagService.middleEditable, startPos)) !== -1
+                && (stopPos = s.indexOf(TagService.stopEditable, startPos + 1)) !== -1) {
+                    var value = s.substring(startPos + TagService.startEditable.length, j);
+                    var index = parseInt(value);
+                    if (isNaN(index)) continue;
+
+                    var tag = TagPool[index];
+                    if (!tag)  continue;
+
+                    var string = angular.toJson(tag.toJson());
+                    result += s.substring(start, startPos) + startText + TagService.groupSeparator + string + TagService.groupSeparator;
+                    startText = "";
+                    start = stopPos + TagService.stopEditable.length;
+                }
+                if (result){
+                    result += s.substring(stopPos + TagService.stopEditable.length);
+                    return result;
+                }
+                return s;
+            });
+
             //ngModel.$formatters.push(function(modelValue) {
             //    var value = modelValue.slice(1,modelValue.indexOf("("));
             //    var index = parseInt(value);
             //    return index;
             //});
         }
+
+
     }
-}]);
+}])
+    .factory("TagService",function(){
+        var groupSeparator = String.fromCharCode(29);
+        var nonBreakingSpace = "&nbsp;";
+
+        var startEditable = '<span contenteditable="false">';
+        var middleEditable = ')_';
+        var stopEditable = '</span>';
+
+        var getEditableTag = function(model,tag,index){
+            var before = '&#8203;', after = "";
+            if (!model){
+                after = "</br>";
+            }
+            return startEditable + (index) + middleEditable + tag.getName() + stopEditable + after;
+        };
+
+        return{
+            groupSeparator:groupSeparator,
+            nonBreakingSpace:nonBreakingSpace,
+
+            getEditableTag:getEditableTag,
+            startEditable: startEditable,
+            middleEditable: middleEditable,
+            stopEditable: stopEditable
+
+        }
+    });
 
 
 function Tag() {
@@ -989,6 +1048,14 @@ function Tag() {
         }
         data = d;
     };
+
+    this.toJson = function(){
+        var json = {name:this.getName()};
+        angular.merge(json,data);
+        return json;
+    }
 }
 
 var TagPool = [];
+
+

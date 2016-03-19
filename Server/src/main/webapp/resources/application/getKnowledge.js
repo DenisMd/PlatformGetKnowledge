@@ -870,7 +870,7 @@ model.controller("sectionCard",function($scope,$state,applicationService,classNa
     };
 });
 
-model.controller("postController",function($scope,$rootScope,codemirrorURL){
+model.controller("postController",function($scope,$rootScope,codemirrorURL,TagService){
     $scope.test = {
         readOnly: 'nocursor',
         codeShown:false,
@@ -878,6 +878,7 @@ model.controller("postController",function($scope,$rootScope,codemirrorURL){
             this.codeShown = !this.codeShown;
         }
     };
+    $scope.content = "";
 
     //paste code
     var defaultOptions = {
@@ -902,7 +903,7 @@ model.controller("postController",function($scope,$rootScope,codemirrorURL){
                 angular.extend($scope.test,tag.getData());
                 $scope.test.title = tag.getName();
                 $rootScope.$broadcast('setCaret');
-                $rootScope.$broadcast('add', tag);
+                $rootScope.$broadcast('add', TagService.getEditableTag($scope.content,tag,TagPool.length - 1));
             }
         },null,refresh,function(){
 
