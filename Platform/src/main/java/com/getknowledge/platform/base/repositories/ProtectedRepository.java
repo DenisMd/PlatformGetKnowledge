@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 
-public abstract class ProtectedRepository <T extends CloneableEntity<T>> extends PrepareRepository<T> {
+public abstract class ProtectedRepository <T extends CloneableEntity<T>> extends BaseRepository<T> implements PrepareEntity<T>  {
     protected User currentUser = null;
 
     public void setCurrentUser(User user) {

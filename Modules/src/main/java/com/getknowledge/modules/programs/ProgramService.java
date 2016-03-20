@@ -48,27 +48,6 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
     @Autowired
     private ProgramRepository programRepository;
 
-    private void prepareTag(HashMap<String,Object> data , Program program) {
-        if (data.containsKey("tags")) {
-            List<String> tags = (List<String>) data.get("tags");
-            for (String tag : tags) {
-                ProgramTag programTag = programTagRepository.createIfNotExist(tag);
-                program.getTags().add(programTag);
-            }
-        }
-    }
-
-
-    private void removeTagsFromProgram(Program program) {
-
-        for (ProgramTag programTag : program.getTags()) {
-            programTag.getPrograms().remove(program);
-            programTagRepository.merge(programTag);
-        }
-
-        program.getTags().clear();
-    }
-
     private void prepareLinks(HashMap<String,Object> data , Program program) {
         if (data.containsKey("links")) {
             List<String> list = (List<String>) data.get("links");
@@ -133,7 +112,11 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
 
         prepareLinks(data,program);
 
-        prepareTag(data,program);
+        if (data.containsKey("tags")) {
+            List<String> tags = (List<String>) data.get("tags");
+            programTagRepository.createTags(tags,program);
+        }
+
 
         programRepository.create(program);
 
@@ -170,8 +153,12 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
 
         prepareLinks(data,program);
 
-        removeTagsFromProgram(program);
-        prepareTag(data,program);
+        if (data.containsKey("tags")) {
+            List<String> tags = (List<String>) data.get("tags");
+            programTagRepository.removeTagsFromEntity(program);
+            programTagRepository.createTags(tags,program);
+        }
+
 
         programRepository.merge(program);
         for (ProgramTag programTag : program.getTags()) {

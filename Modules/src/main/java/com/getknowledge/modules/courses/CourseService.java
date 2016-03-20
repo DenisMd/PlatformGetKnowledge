@@ -1,5 +1,7 @@
 package com.getknowledge.modules.courses;
 
+import com.getknowledge.modules.courses.changelist.ChangeList;
+import com.getknowledge.modules.courses.changelist.ChangeListRepository;
 import com.getknowledge.modules.courses.group.GroupCourses;
 import com.getknowledge.modules.courses.group.GroupCoursesRepository;
 import com.getknowledge.modules.courses.tags.CoursesTag;
@@ -22,6 +24,7 @@ import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.ImageService;
+import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
@@ -34,6 +37,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service("CourseService")
 public class CourseService extends AbstractService implements ImageService {
@@ -65,25 +69,8 @@ public class CourseService extends AbstractService implements ImageService {
     @Autowired
     private TutorialRepository tutorialRepository;
 
-    private void prepareTag(HashMap<String,Object> data , Course course) {
-        if (data.containsKey("tags")) {
-            List<String> tags = (List<String>) data.get("tags");
-            for (String tag : tags) {
-                CoursesTag coursesTag = coursesTagRepository.createIfNotExist(tag);
-                course.getTags().add(coursesTag);
-            }
-        }
-    }
-
-    private void removeTagsFromCourse(Course course) {
-
-        for (CoursesTag coursesTag : course.getTags()) {
-            coursesTag.getCourses().remove(course);
-            coursesTagRepository.merge(coursesTag);
-        }
-
-        course.getTags().clear();
-    }
+    @Autowired
+    private ChangeListRepository changeListRepository;
 
     private Result checkCourseRight(HashMap<String,Object> data) {
         Long courseId = new Long((Integer)data.get("courseId"));
@@ -108,6 +95,57 @@ public class CourseService extends AbstractService implements ImageService {
         Result result = Result.Complete();
         result.setObject(course);
         return result;
+    }
+
+    public void mergeVideo (Video base, Video draft) {
+        base.setCover(draft.getCover());
+        base.setLink(draft.getLink());
+        base.setVideoName(draft.getVideoName());
+        videoRepository.merge(base);
+    }
+
+    public void mergeTutorial (Tutorial base, Tutorial draft) {
+        base.setData(draft.getData());
+        base.setName(draft.getName());
+        base.setOrderNumber(draft.getOrderNumber());
+        base.setLastChangeTime(draft.getLastChangeTime());
+        mergeVideo(base.getVideo(), draft.getVideo());
+    }
+
+    public void mergeCourse (Course base, Course draft) {
+
+        base.setName(draft.getName());
+        base.setCover(draft.getCover());
+        base.setDescription(draft.getDescription());
+
+        mergeVideo(base.getIntro() , draft.getIntro());
+
+        coursesTagRepository.removeTagsFromEntity(base);
+        coursesTagRepository.createTags(draft.getTags().stream().map(tag -> tag.getTagName()).collect(Collectors.toList()),base);
+
+        for (Tutorial draftTutorial : draft.getTutorials()) {
+            if (draftTutorial.getOriginalTutorial() != null) {
+                if (!draftTutorial.isDeleting()) {
+                    mergeTutorial(draftTutorial.getOriginalTutorial(), draftTutorial);
+                    tutorialRepository.merge(draftTutorial.getOriginalTutorial());
+                } else {
+                    //delete tutorial
+                    try {
+                        tutorialRepository.remove(draftTutorial.getOriginalTutorial().getId());
+                    } catch (PlatformException e) {
+                        //Нечего делать - сдаемся
+                    }
+                }
+            } else {
+                Tutorial newTutorial = new Tutorial();
+                newTutorial.setCourse(base);
+                mergeTutorial(newTutorial,draftTutorial);
+                //create Tutorial
+                tutorialRepository.create(newTutorial);
+            }
+        }
+
+        courseRepository.merge(base);
     }
 
     @Action(name = "createCourse" , mandatoryFields = {"name","groupCourseId","description","language","base"})
@@ -147,11 +185,14 @@ public class CourseService extends AbstractService implements ImageService {
         }
 
 
-        prepareTag(data,course);
+        if (data.containsKey("tags")) {
+            List<String> tags = (List<String>) data.get("tags");
+            coursesTagRepository.createTags(tags,course);
+        }
+
 
         course.setRelease(false);
         course.setVersion(new Version(1,0,0));
-
 
         course.setBase((Boolean) data.get("base"));
 
@@ -167,6 +208,7 @@ public class CourseService extends AbstractService implements ImageService {
     }
 
     @Action(name = "updateCourseInformation" , mandatoryFields = {"courseId"})
+    @Transactional
     public Result updateProgramInformation(HashMap<String,Object> data) {
 
         Result result = checkCourseRight(data);
@@ -187,8 +229,12 @@ public class CourseService extends AbstractService implements ImageService {
             course.setDescription(description);
         }
 
-        removeTagsFromCourse(course);
-        prepareTag(data,course);
+        if (data.containsKey("tags")) {
+            List<String> tags = (List<String>) data.get("tags");
+            coursesTagRepository.removeTagsFromEntity(course);
+            coursesTagRepository.createTags(tags,course);
+        }
+
 
         if (data.containsKey("sourceKnowledge")) {
             //Source knowledge задаются только при первой версии
@@ -297,11 +343,74 @@ public class CourseService extends AbstractService implements ImageService {
                 .setParameter("id" , course.getId()).getSingleResult();
 
         tutorial.setOrderNumber(maxOrder == null ? 1 : ((Integer) maxOrder) + 1);
+        tutorial.setLastChangeTime(Calendar.getInstance());
         tutorialRepository.create(tutorial);
 
         Result result1 = Result.Complete();
         result1.setObject(tutorial.getId());
         return result1;
+    }
+
+    @Action(name = "release" , mandatoryFields = {"courseId", "version"})
+    @Transactional
+    public Result release(HashMap<String,Object> data) {
+        Result result = checkCourseRight(data);
+        Course course;
+        if (result.getObject() != null)  {
+            course = (Course) result.getObject();
+        } else {
+            return result;
+        }
+
+        if (course.getBaseCourse() == null) {
+            if (!course.isRelease()) {
+                course.setRelease(true);
+                ChangeList changeList = new ChangeList();
+                changeList.setCourse(course);
+                changeList.setVersion(course.getVersion());
+                if (course.getLanguage().getName().equals(Languages.Ru.name())) {
+                    changeList.getChangeList().add("Инициализация курса");
+                } else {
+                    changeList.getChangeList().add("Initialize course");
+                }
+                changeListRepository.create(changeList);
+                course.getChangeLists().add(changeList);
+                courseRepository.merge(course);
+            }
+        } else {
+            //Значит мы пытаемся выпустить черновик
+            Integer version = (Integer) data.get("version");
+            Course baseCourse = course.getBaseCourse();
+            switch (version) {
+                case 1 :
+                    baseCourse.getVersion().setMajorVersion(baseCourse.getVersion().getMajorVersion() + 1);
+                    break;
+                case 2 :
+                    baseCourse.getVersion().setMiddleVersion(baseCourse.getVersion().getMiddleVersion() + 1);
+                    break;
+                case 3 :
+                    baseCourse.getVersion().setMinorVersion(baseCourse.getVersion().getMinorVersion() + 1);
+                    break;
+                default: return Result.Failed();
+            }
+
+
+            if (data.containsKey("changes")) {
+                List<String> changes = (List<String>) data.get("changes");
+                ChangeList changeList = new ChangeList();
+                changeList.setVersion(baseCourse.getVersion());
+                changeList.setCourse(baseCourse);
+                changeList.setChangeList(changes);
+                changeListRepository.create(changeList);
+                baseCourse.getChangeLists().add(changeList);
+            }
+
+            mergeCourse(baseCourse,course);
+
+            courseRepository.merge(baseCourse);
+        }
+
+        return Result.Complete();
     }
 
     @Action(name = "getTutorialsForCourse" , mandatoryFields = {"courseId"})

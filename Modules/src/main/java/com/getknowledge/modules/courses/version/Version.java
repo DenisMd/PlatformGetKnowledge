@@ -42,6 +42,8 @@ public class Version {
     public void setMajorVersion(int majorVersion) {
         checkVersion(majorVersion);
         this.majorVersion = majorVersion;
+        this.middleVersion = 0;
+        this.minorVersion = 0;
     }
 
     public int getMiddleVersion() {
@@ -51,6 +53,7 @@ public class Version {
     public void setMiddleVersion(int middleVersion) {
         checkVersion(middleVersion);
         this.middleVersion = middleVersion;
+        this.minorVersion = 0;
     }
 
     public int getMinorVersion() {

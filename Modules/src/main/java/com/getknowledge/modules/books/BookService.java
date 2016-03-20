@@ -48,26 +48,6 @@ public class BookService extends AbstractService implements ImageService,FileSer
     @Autowired
     private BookRepository bookRepository;
 
-    private void prepareTag(HashMap<String,Object> data , Book book) {
-        if (data.containsKey("tags")) {
-            List<String> tags = (List<String>) data.get("tags");
-            for (String tag : tags) {
-                BooksTag booksTag = booksTagRepository.createIfNotExist(tag);
-                book.getTags().add(booksTag);
-            }
-        }
-    }
-
-    private void removeTagsFromBook(Book book) {
-
-        for (BooksTag booksTag : book.getTags()) {
-            booksTag.getBooks().remove(book);
-            booksTagRepository.merge(booksTag);
-        }
-
-        book.getTags().clear();
-    }
-
     private void prepareLinks(HashMap<String,Object> data , Book book) {
         if (data.containsKey("links")) {
             List<String> list = (List<String>) data.get("links");
@@ -132,7 +112,10 @@ public class BookService extends AbstractService implements ImageService,FileSer
 
         prepareLinks(data,book);
 
-        prepareTag(data,book);
+        if (data.containsKey("tags")) {
+            List<String> tags = (List<String>) data.get("tags");
+            booksTagRepository.createTags(tags,book);
+        }
 
         bookRepository.create(book);
 
@@ -169,8 +152,11 @@ public class BookService extends AbstractService implements ImageService,FileSer
 
         prepareLinks(data,book);
 
-        removeTagsFromBook(book);
-        prepareTag(data,book);
+        if (data.containsKey("tags")) {
+            List<String> tags = (List<String>) data.get("tags");
+            booksTagRepository.removeTagsFromEntity(book);
+            booksTagRepository.createTags(tags,book);
+        }
 
         bookRepository.merge(book);
         for (BooksTag booksTag : book.getTags()) {

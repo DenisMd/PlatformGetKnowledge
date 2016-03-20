@@ -7,11 +7,13 @@ import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoRepository;
 import com.getknowledge.modules.video.Video;
 import com.getknowledge.platform.annotations.*;
+import com.getknowledge.platform.annotations.Access;
 import com.getknowledge.platform.base.entities.*;
 import com.getknowledge.platform.modules.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Objects;
 
 @Entity
@@ -41,6 +43,42 @@ public class Tutorial  extends CloneableEntity<Tutorial> {
 
     @Transient
     private Rating avgTutorialRating;
+
+    @Column(name = "last_change_time")
+    @Temporal(value = TemporalType.TIMESTAMP)
+    private Calendar lastChangeTime;
+
+    @OneToOne
+    @Access(myself = true)
+    private Tutorial originalTutorial;
+
+    @JsonIgnore
+    @Column(name = "deleting")
+    private Boolean deleting = false;
+
+    public Boolean isDeleting() {
+        return deleting;
+    }
+
+    public void setDeleting(Boolean deleting) {
+        this.deleting = deleting;
+    }
+
+    public Tutorial getOriginalTutorial() {
+        return originalTutorial;
+    }
+
+    public void setOriginalTutorial(Tutorial originalTutorial) {
+        this.originalTutorial = originalTutorial;
+    }
+
+    public Calendar getLastChangeTime() {
+        return lastChangeTime;
+    }
+
+    public void setLastChangeTime(Calendar lastChangeTime) {
+        this.lastChangeTime = lastChangeTime;
+    }
 
     public int getOrderNumber() {
         return orderNumber;
@@ -103,6 +141,8 @@ public class Tutorial  extends CloneableEntity<Tutorial> {
         tutorial.setData(this.getData());
         tutorial.setOrderNumber(this.getOrderNumber());
         tutorial.setVideo(this.getVideo());
+        tutorial.setLastChangeTime(this.getLastChangeTime());
+        tutorial.setOrderNumber(this.getOrderNumber());
         return tutorial;
     }
 }

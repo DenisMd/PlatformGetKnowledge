@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.courses.Course;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
+import com.getknowledge.platform.base.entities.ITag;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "courses_tag")
-public class CoursesTag extends AbstractEntity {
+public class CoursesTag extends AbstractEntity implements ITag {
 
     @Column(name = "tag_name")
     private String tagName;

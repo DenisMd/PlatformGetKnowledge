@@ -1,7 +1,9 @@
 package com.getknowledge.modules.courses.tags;
 
 import com.getknowledge.modules.programs.tags.ProgramTag;
+import com.getknowledge.platform.base.entities.EntityWithTags;
 import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.base.repositories.ITagRepository;
 import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
@@ -11,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository("CoursesTagRepository")
-public class CoursesTagRepository extends BaseRepository<CoursesTag> {
+public class CoursesTagRepository extends BaseRepository<CoursesTag> implements ITagRepository<CoursesTag> {
     @Override
     protected Class<CoursesTag> getClassEntity() {
         return CoursesTag.class;
@@ -19,6 +21,24 @@ public class CoursesTagRepository extends BaseRepository<CoursesTag> {
 
     @Autowired
     private TraceService trace;
+
+    @Override
+    public void removeTagsFromEntity(EntityWithTags<CoursesTag> entity) {
+        for (CoursesTag coursesTag : entity.getTags()) {
+            coursesTag.getCourses().remove(entity);
+            merge(coursesTag);
+        }
+
+        entity.getTags().clear();
+    }
+
+    @Override
+    public void createTags(List<String> tags, EntityWithTags<CoursesTag> entity) {
+        for (String tag : tags) {
+            CoursesTag coursesTag = createIfNotExist(tag);
+            entity.getTags().add(coursesTag);
+        }
+    }
 
     public CoursesTag createIfNotExist(String tag) {
         CoursesTag result = getSingleEntityByFieldAndValue("tagName" , tag);

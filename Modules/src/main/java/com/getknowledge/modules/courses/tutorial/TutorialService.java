@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.NoResultException;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -129,9 +130,10 @@ public class TutorialService extends AbstractService {
             Integer orderNumber = (Integer) data.get("orderNumber");
             if (tutorial.getOrderNumber() != orderNumber) {
                 if (tutorial.getOrderNumber() < orderNumber) {
-                    entityManager.createQuery("update Tutorial t set t.orderNumber = t.orderNumber-1 where t.orderNumber > :orderParam and t.orderNumber <= :orderParam2")
+                    entityManager.createQuery("update Tutorial t set t.orderNumber = t.orderNumber-1, t.lastChangeTime = :current_date where t.orderNumber > :orderParam and t.orderNumber <= :orderParam2")
                             .setParameter("orderParam" , tutorial.getOrderNumber())
-                            .setParameter("orderParam2" , orderNumber).executeUpdate();
+                            .setParameter("orderParam2" , orderNumber)
+                            .setParameter("current_date", Calendar.getInstance()).executeUpdate();
 
                     Integer min = (Integer) entityManager.createQuery("select min(t.orderNumber) from Tutorial  t where t.orderNumber > :orderParam")
                             .setParameter("orderParam" , orderNumber).getSingleResult();
@@ -142,9 +144,10 @@ public class TutorialService extends AbstractService {
 
 
                 } else {
-                    entityManager.createQuery("update Tutorial t set t.orderNumber = t.orderNumber+1 where t.orderNumber < :orderParam and t.orderNumber >= :orderParam2")
+                    entityManager.createQuery("update Tutorial t set t.orderNumber = t.orderNumber+1,t.lastChangeTime = :current_date where t.orderNumber < :orderParam and t.orderNumber >= :orderParam2")
                             .setParameter("orderParam", tutorial.getOrderNumber())
-                            .setParameter("orderParam2", orderNumber).executeUpdate();
+                            .setParameter("orderParam2", orderNumber)
+                            .setParameter("current_date" , Calendar.getInstance()).executeUpdate();
 
                     Integer max = (Integer) entityManager.createQuery("select max(t.orderNumber) from Tutorial  t where t.orderNumber < :orderParam")
                             .setParameter("orderParam" , orderNumber).getSingleResult();
@@ -156,6 +159,7 @@ public class TutorialService extends AbstractService {
             }
         }
 
+        tutorial.setLastChangeTime(Calendar.getInstance());
         tutorialRepository.merge(tutorial);
         Result result = Result.Complete();
         result.setObject(tutorial.getOrderNumber());
@@ -181,13 +185,15 @@ public class TutorialService extends AbstractService {
                 videoTut.setCover(files.get(0).getBytes());
                 videoRepository.create(videoTut);
                 tutorial.setVideo(videoTut);
-                tutorialRepository.merge(tutorial);
             } else {
                 Video intro = tutorial.getVideo();
                 intro.setVideoName((String) data.get("videoName"));
                 intro.setCover(files.get(0).getBytes());
                 videoRepository.merge(intro);
             }
+
+            tutorial.setLastChangeTime(Calendar.getInstance());
+            tutorialRepository.merge(tutorial);
 
         } catch (IOException e) {
             trace.logException("Error read cover for program" , e, TraceLevel.Warning);

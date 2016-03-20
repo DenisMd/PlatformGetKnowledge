@@ -1,6 +1,7 @@
 package com.getknowledge.modules.courses;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.modules.courses.changelist.ChangeList;
 import com.getknowledge.modules.courses.group.GroupCourses;
 import com.getknowledge.modules.courses.raiting.Rating;
 import com.getknowledge.modules.courses.tags.CoursesTag;
@@ -13,6 +14,7 @@ import com.getknowledge.modules.video.Video;
 import com.getknowledge.platform.annotations.*;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.entities.CloneableEntity;
+import com.getknowledge.platform.base.entities.EntityWithTags;
 import com.getknowledge.platform.base.entities.IUser;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
@@ -27,7 +29,7 @@ import java.util.List;
 @Entity
 @Table(name = "course")
 @ModuleInfo(repositoryName = "CourseRepository" ,serviceName = "CourseService")
-public class Course extends CloneableEntity<Course> implements IUser{
+public class Course extends CloneableEntity<Course> implements IUser,EntityWithTags<CoursesTag>{
 
     private String name;
 
@@ -64,6 +66,10 @@ public class Course extends CloneableEntity<Course> implements IUser{
     private Course baseCourse;
 
     @OneToOne
+    @com.getknowledge.platform.annotations.Access(myself = true)
+    private Course draftCourse;
+
+    @OneToOne
     private Video intro;
 
     @Embedded
@@ -83,6 +89,25 @@ public class Course extends CloneableEntity<Course> implements IUser{
 
     @Column(name = "is_base" , columnDefinition = "boolean default true")
     private Boolean base = false;
+
+    @OneToMany(mappedBy = "course" , cascade = {CascadeType.REMOVE})
+    private List<ChangeList> changeLists = new ArrayList<>();
+
+    public List<ChangeList> getChangeLists() {
+        return changeLists;
+    }
+
+    public void setChangeLists(List<ChangeList> changeLists) {
+        this.changeLists = changeLists;
+    }
+
+    public Course getDraftCourse() {
+        return draftCourse;
+    }
+
+    public void setDraftCourse(Course draftCourse) {
+        this.draftCourse = draftCourse;
+    }
 
     public Calendar getCreateDate() {
         return createDate;
@@ -262,6 +287,7 @@ public class Course extends CloneableEntity<Course> implements IUser{
         course.setTutorials(this.getTutorials());
         course.setBase(this.isBase());
         course.setCreateDate(this.getCreateDate());
+        course.setChangeLists(this.getChangeLists());
         return course;
     }
 
