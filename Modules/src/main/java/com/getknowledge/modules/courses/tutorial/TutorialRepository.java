@@ -1,7 +1,11 @@
 package com.getknowledge.modules.courses.tutorial;
 
 import com.getknowledge.modules.courses.Course;
+import com.getknowledge.modules.video.VideoRepository;
 import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.exceptions.DeleteException;
+import com.getknowledge.platform.exceptions.PlatformException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.Calendar;
@@ -13,8 +17,19 @@ public class TutorialRepository extends BaseRepository<Tutorial> {
         return Tutorial.class;
     }
 
+    @Autowired
+    private VideoRepository videoRepository;
+
     @Override
-    public void create(Tutorial object) {
-        super.create(object);
+    public void remove(Long id) throws PlatformException {
+
+        Tutorial tutorial = read(id);
+        if (tutorial == null) throw new DeleteException("Can't find tutorial by id : " + id);
+
+        if (tutorial.getVideo() != null) {
+            videoRepository.remove(tutorial.getVideo().getId());
+        }
+
+        super.remove(id);
     }
 }

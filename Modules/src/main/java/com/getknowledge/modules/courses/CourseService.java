@@ -14,8 +14,6 @@ import com.getknowledge.modules.dictionaries.knowledge.KnowledgeRepository;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
-import com.getknowledge.modules.programs.Program;
-import com.getknowledge.modules.programs.tags.ProgramTag;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoService;
 import com.getknowledge.modules.video.Video;
@@ -97,22 +95,22 @@ public class CourseService extends AbstractService implements ImageService {
         return result;
     }
 
-    public void mergeVideo (Video base, Video draft) {
-        base.setCover(draft.getCover());
-        base.setLink(draft.getLink());
-        base.setVideoName(draft.getVideoName());
-        videoRepository.merge(base);
+    public void mergeVideo (Video from, Video to) {
+        from.setCover(to.getCover());
+        from.setLink(to.getLink());
+        from.setVideoName(to.getVideoName());
+        videoRepository.merge(from);
     }
 
-    public void mergeTutorial (Tutorial base, Tutorial draft) {
-        base.setData(draft.getData());
-        base.setName(draft.getName());
-        base.setOrderNumber(draft.getOrderNumber());
-        base.setLastChangeTime(draft.getLastChangeTime());
-        mergeVideo(base.getVideo(), draft.getVideo());
+    public void mergeTutorial (Tutorial from, Tutorial to) {
+        from.setData(to.getData());
+        from.setName(to.getName());
+        from.setOrderNumber(to.getOrderNumber());
+        from.setLastChangeTime(to.getLastChangeTime());
+        mergeVideo(from.getVideo(), to.getVideo());
     }
 
-    public void mergeCourse (Course base, Course draft) {
+    public void mergeDraft(Course base, Course draft) {
 
         base.setName(draft.getName());
         base.setCover(draft.getCover());
@@ -144,8 +142,10 @@ public class CourseService extends AbstractService implements ImageService {
                 tutorialRepository.create(newTutorial);
             }
         }
+    }
 
-        courseRepository.merge(base);
+    public void createDraft(Course base, Course draft) {
+
     }
 
     @Action(name = "createCourse" , mandatoryFields = {"name","groupCourseId","description","language","base"})
@@ -353,7 +353,7 @@ public class CourseService extends AbstractService implements ImageService {
 
     @Action(name = "release" , mandatoryFields = {"courseId", "version"})
     @Transactional
-    public Result release(HashMap<String,Object> data) {
+    public Result release(HashMap<String,Object> data) throws PlatformException {
         Result result = checkCourseRight(data);
         Course course;
         if (result.getObject() != null)  {
@@ -405,12 +405,39 @@ public class CourseService extends AbstractService implements ImageService {
                 baseCourse.getChangeLists().add(changeList);
             }
 
-            mergeCourse(baseCourse,course);
+            mergeDraft(baseCourse,course);
 
             courseRepository.merge(baseCourse);
+            //удаляем черновик
+            courseRepository.remove(course.getId());
         }
 
         return Result.Complete();
+    }
+
+    @Action(name = "makeDraft" , mandatoryFields = {"courseId"})
+    @Transactional
+    public Result makeDraft(HashMap<String,Object> data) {
+        Result result = checkCourseRight(data);
+        Course course;
+        if (result.getObject() != null)  {
+            course = (Course) result.getObject();
+        } else {
+            return result;
+        }
+
+        if (!course.isRelease() && course.getDraftCourse() != null) {
+            return Result.Failed();
+        }
+
+        Course draft = course.clone();
+        createDraft(course,draft);
+
+        courseRepository.create(draft);
+
+        result = Result.Complete();
+        result.setObject(draft.getId());
+        return result;
     }
 
     @Action(name = "getTutorialsForCourse" , mandatoryFields = {"courseId"})

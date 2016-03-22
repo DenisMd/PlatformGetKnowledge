@@ -137,5 +137,15 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
         });
     };
 
+    $scope.makeRelease = function () {
+        applicationService.action($scope,"",className.course,"release", {
+            courseId : $scope.course.id,
+            version : 0
+        },function(result){
+            $scope.showToast(result);
+            readCourse();
+        });
+    }
+
 
 });

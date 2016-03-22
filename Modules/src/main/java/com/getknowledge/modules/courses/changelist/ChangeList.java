@@ -1,5 +1,6 @@
 package com.getknowledge.modules.courses.changelist;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.courses.Course;
 import com.getknowledge.modules.courses.version.Version;
 import com.getknowledge.platform.base.entities.AbstractEntity;
@@ -22,6 +23,7 @@ public class ChangeList extends AbstractEntity {
     private List<String> changeList = new ArrayList<>();
 
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Course course;
 
     public Version getVersion() {

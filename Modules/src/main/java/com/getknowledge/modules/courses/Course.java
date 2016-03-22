@@ -299,14 +299,19 @@ public class Course extends CloneableEntity<Course> implements IUser,EntityWithT
     @Override
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
-        if (release)
+
+        if (base)
             authorizationList.allowReadEveryOne = true;
+
         authorizationList.allowCreateEveryOne = false;
         authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.CreateCourse));
-        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditCourse));
         authorizationList.getPermissionsForRemove().add(new Permission(PermissionNames.EditCourse));
 
-        if (author != null)
+        //Если курс имеет состояние release даже автор его не может редоктировать
+        if (!release)
+            authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditCourse));
+
+        if (author != null && !release)
             authorizationList.getUserList().add(author.getUser());
 
         return authorizationList;

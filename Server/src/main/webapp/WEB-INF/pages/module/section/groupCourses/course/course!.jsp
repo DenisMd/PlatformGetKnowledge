@@ -126,12 +126,25 @@
     </div>
 </div>
 
+<div ng-if="course.editable && !course.release">
+    <md-button class="md-raised md-primary" ng-click="makeRelease()">
+        Make release
+    </md-button>
+</div>
+
 <div ng-if="course.editable">
     <md-button class="md-raised md-primary" ng-click="showAdvanced($event)">
         Create tutorial
     </md-button>
 </div>
 
+<ul>
+    <li ng-repeat="(key,name) in tutorials">
+        <a ng-href="{{addUrlToPath('/tutorial/'+key)}}">Урок {{key + ') ' + name}}</a>
+    </li>
+</ul>
+
+{{course}}
 
 <script type="text/ng-template" id="createTutorial.html">
     <md-dialog  ng-cloak>
@@ -163,12 +176,3 @@
         </form>
     </md-dialog>
 </script>
-
-<ul>
-    <li ng-repeat="(key,name) in tutorials">
-        <a ng-href="{{addUrlToPath('/tutorial/'+key)}}">Урок {{key + ') ' + name}}</a>
-    </li>
-</ul>
-
-
-{{course}}
