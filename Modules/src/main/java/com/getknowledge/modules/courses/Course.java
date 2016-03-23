@@ -63,6 +63,7 @@ public class Course extends CloneableEntity<Course> implements IUser,EntityWithT
 
     @OneToOne
     @com.getknowledge.platform.annotations.Access(myself = true)
+    @JsonIgnore
     private Course baseCourse;
 
     @OneToOne
