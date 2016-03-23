@@ -95,19 +95,35 @@ public class CourseService extends AbstractService implements ImageService {
         return result;
     }
 
-    public void mergeVideo (Video from, Video to) {
-        from.setCover(to.getCover());
-        from.setLink(to.getLink());
-        from.setVideoName(to.getVideoName());
-        videoRepository.merge(from);
+    public void mergeVideo (Video to, Video from) {
+        to.setCover(from.getCover());
+        to.setLink(from.getLink());
+        to.setVideoName(from.getVideoName());
+        videoRepository.merge(to);
     }
 
-    public void mergeTutorial (Tutorial from, Tutorial to) {
-        from.setData(to.getData());
-        from.setName(to.getName());
-        from.setOrderNumber(to.getOrderNumber());
-        from.setLastChangeTime(to.getLastChangeTime());
-        mergeVideo(from.getVideo(), to.getVideo());
+    public void createVideo (Video to, Video from) {
+        to.setCover(from.getCover());
+        to.setLink(from.getLink());
+        to.setVideoName(from.getVideoName());
+        videoRepository.create(to);
+    }
+
+    public void mergeTutorial (Tutorial to, Tutorial from) {
+        to.setData(from.getData());
+        to.setName(from.getName());
+        to.setOrderNumber(from.getOrderNumber());
+        to.setLastChangeTime(from.getLastChangeTime());
+        mergeVideo(to.getVideo(), from.getVideo());
+    }
+
+    public void createTutorial (Tutorial to, Tutorial from) {
+        to.setData(from.getData());
+        to.setName(from.getName());
+        to.setOrderNumber(from.getOrderNumber());
+        to.setLastChangeTime(from.getLastChangeTime());
+        createVideo(to.getVideo(), from.getVideo());
+        tutorialRepository.create(to);
     }
 
     public void mergeDraft(Course base, Course draft) {
@@ -145,6 +161,22 @@ public class CourseService extends AbstractService implements ImageService {
     }
 
     public void createDraft(Course base, Course draft) {
+        draft.setName(base.getName());
+        draft.setCover(base.getCover());
+        draft.setDescription(base.getDescription());
+
+        Video video = new Video();
+        createVideo(video,base.getIntro());
+        draft.setIntro(video);
+
+        coursesTagRepository.createTags(base.getTags().stream().map(tag -> tag.getTagName()).collect(Collectors.toList()),base);
+
+        for (Tutorial baseTutorial : base.getTutorials()) {
+            Tutorial tutorial = new Tutorial();
+            tutorial.setVideo(new Video());
+            tutorial.setOriginalTutorial(baseTutorial);
+            createTutorial(tutorial,baseTutorial);
+        }
 
     }
 
