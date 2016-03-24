@@ -50,7 +50,7 @@ public class CurrencyService extends AbstractService implements BootstrapService
             defaultCur.setValue(new BigDecimal(1.0));
             currencyRepository.create(defaultCur);
 
-            InputStream is = getClass().getClassLoader().getResourceAsStream("currency/currency.txt");
+            InputStream is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/currency/currency.txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String currencyName = "";
             while ( (currencyName = reader.readLine()) != null) {
