@@ -5,10 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.repositories.enumerations.*;
 import com.getknowledge.platform.exceptions.PlatformException;
+import com.getknowledge.platform.modules.trace.TraceService;
+import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.utils.ModuleLocator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -26,9 +29,10 @@ import java.util.Map;
 
 public abstract class BaseRepository<T extends AbstractEntity> {
 
-    protected abstract Class<T> getClassEntity();
+    @Autowired
+    protected TraceService trace;
 
-    protected Logger logger = LoggerFactory.getLogger(BaseRepository.class);
+    protected abstract Class<T> getClassEntity();
 
     @PersistenceContext
     public EntityManager entityManager;
@@ -72,7 +76,7 @@ public abstract class BaseRepository<T extends AbstractEntity> {
                 }
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(),e);
+            trace.logException("Error update entity : " + e.getMessage(), e, TraceLevel.Error);
             return;
         }
 

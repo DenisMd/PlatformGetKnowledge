@@ -6,6 +6,7 @@ import com.getknowledge.platform.base.entities.IOwner;
 import com.getknowledge.platform.base.entities.IUser;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.role.Role;
+import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,7 +76,7 @@ public abstract class ProtectedRepository <T extends CloneableEntity<T>> extends
                     field.setAccessible(true);
                     field.set(entity, null);
                 } catch (IllegalAccessException e) {
-                    logger.error(e.getMessage(), e);
+                    trace.logException(e.getMessage(), e, TraceLevel.Error);
                 }
             }
         }

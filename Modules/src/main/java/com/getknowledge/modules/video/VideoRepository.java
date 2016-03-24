@@ -13,6 +13,7 @@ import java.io.File;
 
 @Repository("VideoRepository")
 public class VideoRepository extends BaseRepository<Video> {
+
     @Override
     protected Class<Video> getClassEntity() {
         return Video.class;
@@ -20,9 +21,6 @@ public class VideoRepository extends BaseRepository<Video> {
 
     @Value("${video.path}")
     private String pathToVideo;
-
-    @Autowired
-    private TraceService trace;
 
     @Override
     public void remove(Long id) throws PlatformException {
@@ -36,5 +34,13 @@ public class VideoRepository extends BaseRepository<Video> {
         }
 
         super.remove(id);
+    }
+
+    public void create(String name,String link) {
+        Video video = new Video();
+        video.setLink(link);
+        video.setVideoName(name);
+        video.setAllowEveryOne(true);
+        create(video);
     }
 }

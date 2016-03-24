@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.modules.role.names.RoleName;
+import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ import javax.persistence.PersistenceContext;
 import java.util.HashMap;
 
 public abstract class AbstractService {
+
+    @Autowired
+    protected TraceService trace;
 
     @Autowired
     protected UserRepository userRepository;

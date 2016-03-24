@@ -12,6 +12,8 @@ import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
+import org.ini4j.Ini;
+import org.ini4j.Profile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.query.Param;
@@ -34,37 +36,31 @@ public class VideoService extends AbstractService implements BootstrapService , 
     private VideoRepository videoRepository;
 
     @Autowired
-    private TraceService trace;
-
-    @Autowired
     private UserInfoService userInfoService;
+
+    @Value("${video.path}")
+    private String pathToVideo;
 
     @Override
     public void bootstrap(HashMap<String, Object> map) throws Exception {
         if (videoRepository.count() == 0) {
-            Video video = new Video();
-            video.setAllowEveryOne(true);
-            video.setVideoName("IndexVideo1");
-            video.setLink("index/video1.mp4");
-            videoRepository.create(video);
-            Video video2 = new Video();
-            video2.setAllowEveryOne(true);
-            video2.setVideoName("IndexVideo2.mp4");
-            video2.setLink("index/video2");
-            videoRepository.create(video2);
+            Ini ini = new Ini(getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/mainVideos/videoLocation"));
+            for (String sectionName : ini.keySet()) {
+                Profile.Section section = ini.get(sectionName);
+                String name = section.get("name",String.class);
+                String link = section.get("link",String.class);
+                videoRepository.create(name, link);
+            }
         }
     }
 
     @Override
     public BootstrapInfo getBootstrapInfo() {
         BootstrapInfo bootstrapInfo = new BootstrapInfo();
-        bootstrapInfo.setName("VideoBootstrap");
+        bootstrapInfo.setName("Video service");
         bootstrapInfo.setOrder(1);
         return bootstrapInfo;
     }
-
-    @Value("${video.path}")
-    private String pathToVideo;
 
     @ActionWithFile(name = "uploadVideo" , mandatoryFields = {"videoId"})
     public Result uploadVideo(HashMap<String,Object> data, List<MultipartFile> fileList) {
