@@ -41,7 +41,7 @@ public class CountryService extends AbstractService implements BootstrapService 
 
     @Override
     public void bootstrap(HashMap<String, Object> map) throws Exception {
-        if (countryRepository.count() == 45) {
+        if (countryRepository.count() == 0) {
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/dictionaries/countries/rocid.xml");
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
