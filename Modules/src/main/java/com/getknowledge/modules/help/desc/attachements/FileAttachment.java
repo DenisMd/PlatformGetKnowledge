@@ -11,15 +11,16 @@ import javax.persistence.*;
 public class FileAttachment {
 
     @ManyToOne
+    @JsonIgnore
     private HpMessage message;
 
     @Basic(fetch= FetchType.LAZY)
     @Column(name = "attach_files")
     @Lob
+    @JsonIgnore
     byte [] data;
 
     @Column(name = "file_name")
-    @JsonIgnore
     private String fileName;
 
     public String getFileName() {
