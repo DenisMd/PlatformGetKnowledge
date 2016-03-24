@@ -30,9 +30,6 @@ public class GroupProgramsService extends AbstractService implements ImageServic
     private SectionRepository sectionRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private TraceService trace;
 
     @Action(name = "getGroupProgramsFromSection" , mandatoryFields = {"sectionId"})
@@ -69,7 +66,7 @@ public class GroupProgramsService extends AbstractService implements ImageServic
 
         GroupPrograms programs = repository.read(new Long((Integer)data.get("id")));
 
-        if (!isAccessToEdit(data,programs,userRepository))
+        if (!isAccessToEdit(data,programs))
             throw new NotAuthorized("access denied");
 
         try {

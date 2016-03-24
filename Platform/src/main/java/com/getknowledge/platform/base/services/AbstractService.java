@@ -6,6 +6,7 @@ import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.modules.role.names.RoleName;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,11 +14,14 @@ import java.util.HashMap;
 
 public abstract class AbstractService {
 
+    @Autowired
+    protected UserRepository userRepository;
+
     @PersistenceContext
     public EntityManager entityManager;
     public ObjectMapper objectMapper = new ObjectMapper();
 
-    public boolean isAccessToRead(HashMap<String,Object> data, AbstractEntity abstractEntity, UserRepository userRepository) {
+    public boolean isAccessToRead(HashMap<String,Object> data, AbstractEntity abstractEntity) {
         String principalName = (String) data.get("principalName");
         if (principalName == null || principalName.isEmpty()) {
             return  false;
@@ -33,7 +37,7 @@ public abstract class AbstractService {
 
     }
 
-    public boolean isAccessToEdit(HashMap<String,Object> data, AbstractEntity abstractEntity, UserRepository userRepository) {
+    public boolean isAccessToEdit(HashMap<String,Object> data, AbstractEntity abstractEntity) {
         String principalName = (String) data.get("principalName");
         if (principalName == null || principalName.isEmpty()) {
             return  false;
@@ -49,7 +53,7 @@ public abstract class AbstractService {
 
     }
 
-    public Long getLongFromMap(String key, HashMap<String,Object> data) {
+    public Long longFromField(String key, HashMap<String, Object> data) {
         return new Long((Integer)data.get(key));
     }
 

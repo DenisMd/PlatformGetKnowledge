@@ -325,7 +325,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
     @Action(name = "getFriends" , mandatoryFields = {"userId"})
     @Transactional
     public List<UserInfo> getFriends(HashMap<String,Object> data) {
-        Long userId = this.getLongFromMap("userId",data);
+        Long userId = this.longFromField("userId", data);
         UserInfo userInfo = userInfoRepository.read(userId);
         if (userInfo == null) return null;
         return userInfo.getFriends();
@@ -334,7 +334,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
     @Action(name = "addFriend" , mandatoryFields = {"friendId"})
     @Transactional
     public Result addFriend(HashMap<String,Object> data) {
-        UserInfo friend = userInfoRepository.read(getLongFromMap("friendId",data));
+        UserInfo friend = userInfoRepository.read(longFromField("friendId", data));
         if (friend == null) {
             return Result.NotFound();
         }
@@ -358,7 +358,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
         UserInfo i = getAuthorizedUser(data);
         if (i == null) return Result.AccessDenied();
 
-        UserInfo friend = userInfoRepository.read(getLongFromMap("friendId",data));
+        UserInfo friend = userInfoRepository.read(longFromField("friendId", data));
         if (friend == null) {
             return Result.NotFound();
         }
@@ -385,7 +385,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
         UserInfo i = getAuthorizedUser(data);
         if (i == null) return Result.AccessDenied();
 
-        UserEvent userEvent = userEventRepository.read(getLongFromMap("eventId",data));
+        UserEvent userEvent = userEventRepository.read(longFromField("eventId", data));
         if (userEvent == null || userEvent.getOwner().getId() != i.getId()) return Result.AccessDenied();
 
         boolean accept = (boolean) data.get("accept");

@@ -43,12 +43,6 @@ public class SectionService extends AbstractService implements BootstrapService,
     @Autowired
     private TraceService trace;
 
-    @Autowired
-    private LanguageRepository languageRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
     @Override
     public void bootstrap(HashMap<String, Object> map) throws Exception {
         if (sectionRepository.count() == 0) {
@@ -93,7 +87,7 @@ public class SectionService extends AbstractService implements BootstrapService,
 
         Section section = sectionRepository.read(new Long((Integer)data.get("id")));
 
-        if (!isAccessToEdit(data,section,userRepository))
+        if (!isAccessToEdit(data,section))
             throw new NotAuthorized("access denied");
 
         try {

@@ -26,9 +26,6 @@ public class PermissionService extends AbstractService implements BootstrapServi
     private PermissionRepository permissionRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private TraceService traceService;
 
     @Override
@@ -59,7 +56,7 @@ public class PermissionService extends AbstractService implements BootstrapServi
         if (permission == null)
             return null;
 
-        if (!isAccessToRead(data,permission,userRepository)) {
+        if (!isAccessToRead(data,permission)) {
             throw new NotAuthorized("not authorized for read users for permission" , traceService , TraceLevel.Warning);
         }
 
@@ -77,7 +74,7 @@ public class PermissionService extends AbstractService implements BootstrapServi
         if (permission == null)
             return null;
 
-        if (!isAccessToRead(data,permission,userRepository)) {
+        if (!isAccessToRead(data,permission)) {
             throw new NotAuthorized("not authorized for read users for permission" , traceService , TraceLevel.Warning);
         }
 

@@ -1,7 +1,5 @@
 package com.getknowledge.modules.courses.tutorial;
 
-import com.getknowledge.modules.courses.Course;
-import com.getknowledge.modules.courses.CourseRepository;
 import com.getknowledge.modules.courses.CourseService;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoService;
@@ -15,7 +13,6 @@ import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
-import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,9 +35,6 @@ public class TutorialService extends AbstractService {
 
     @Autowired
     private UserInfoService userInfoService;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private TraceService trace;
@@ -77,7 +71,7 @@ public class TutorialService extends AbstractService {
     @Action(name = "getVideo" , mandatoryFields = {"tutorialId"})
     @Transactional
     public Video getVideo(HashMap<String,Object> data) {
-        Tutorial tutorial = tutorialRepository.read(getLongFromMap("tutorialId" , data));
+        Tutorial tutorial = tutorialRepository.read(longFromField("tutorialId", data));
         if (tutorial == null) {
             return null;
         }
@@ -92,7 +86,7 @@ public class TutorialService extends AbstractService {
     @Action(name = "getTutorialText" , mandatoryFields = {"tutorialId"})
     @Transactional
     public String getTutorialText(HashMap<String,Object> data) {
-        Tutorial tutorial = tutorialRepository.read(getLongFromMap("tutorialId" , data));
+        Tutorial tutorial = tutorialRepository.read(longFromField("tutorialId", data));
         if (tutorial == null) {
             return null;
         }
@@ -107,12 +101,12 @@ public class TutorialService extends AbstractService {
     @Action(name = "updateTutorial" , mandatoryFields = {"tutorialId"})
     @Transactional
     public Result updateTutorial(HashMap<String,Object> data) {
-        Tutorial tutorial = tutorialRepository.read(getLongFromMap("tutorialId" , data));
+        Tutorial tutorial = tutorialRepository.read(longFromField("tutorialId", data));
         if (tutorial == null) {
             return Result.NotFound();
         }
 
-        if (!isAccessToEdit(data,tutorial,userRepository)) {
+        if (!isAccessToEdit(data,tutorial)) {
             return Result.NotAuthorized();
         }
 
@@ -168,12 +162,12 @@ public class TutorialService extends AbstractService {
 
     @ActionWithFile(name = "uploadVideoTutorial" , mandatoryFields = "tutorialId")
     public Result uploadVideoIntro(HashMap<String,Object> data, List<MultipartFile> files) {
-        Tutorial tutorial = tutorialRepository.read(getLongFromMap("tutorialId" , data));
+        Tutorial tutorial = tutorialRepository.read(longFromField("tutorialId", data));
         if (tutorial == null) {
             return Result.NotFound();
         }
 
-        if (!isAccessToEdit(data,tutorial,userRepository)) {
+        if (!isAccessToEdit(data,tutorial)) {
             return Result.NotAuthorized();
         }
 

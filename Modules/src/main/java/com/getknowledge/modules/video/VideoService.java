@@ -129,7 +129,7 @@ public class VideoService extends AbstractService implements BootstrapService , 
     }
 
     @Override
-    public String getFileLink(long id) {
+    public String getVideoLink(long id) {
         Video video = videoRepository.read(id);
         return video == null ? null : pathToVideo + File.separator + video.getLink();
     }

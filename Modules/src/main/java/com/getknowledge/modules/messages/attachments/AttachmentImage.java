@@ -10,8 +10,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "post_image")
-@ModuleInfo(repositoryName = "PostImageRepository")
-public class PostImage extends AbstractEntity {
+@ModuleInfo(repositoryName = "AttachmentImageRepository")
+public class AttachmentImage extends AbstractEntity {
 
     @Basic(fetch= FetchType.LAZY)
     @Lob
@@ -19,24 +19,12 @@ public class PostImage extends AbstractEntity {
     @JsonIgnore
     private byte[] image;
 
-    @ManyToOne
-    @JsonIgnore
-    private PostMessage postMessage;
-
     public byte[] getImage() {
         return image;
     }
 
     public void setImage(byte[] image) {
         this.image = image;
-    }
-
-    public PostMessage getPostMessage() {
-        return postMessage;
-    }
-
-    public void setPostMessage(PostMessage postMessage) {
-        this.postMessage = postMessage;
     }
 
     @Override

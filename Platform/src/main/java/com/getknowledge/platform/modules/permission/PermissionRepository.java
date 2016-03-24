@@ -9,6 +9,7 @@ import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class PermissionRepository extends BaseRepository<Permission> {
     }
 
     @Override
+    @Transactional
     public void remove(Long id) throws PlatformException {
         Permission permission = read(id);
         if (permission != null) {

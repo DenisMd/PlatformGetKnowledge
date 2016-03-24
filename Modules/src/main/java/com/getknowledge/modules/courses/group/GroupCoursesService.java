@@ -28,10 +28,7 @@ public class GroupCoursesService extends AbstractService implements ImageService
 
     @Autowired
     private SectionRepository sectionRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
+    
     @Autowired
     private TraceService trace;
 
@@ -69,7 +66,7 @@ public class GroupCoursesService extends AbstractService implements ImageService
 
         GroupCourses section = repository.read(new Long((Integer)data.get("id")));
 
-        if (!isAccessToEdit(data,section,userRepository))
+        if (!isAccessToEdit(data,section))
             throw new NotAuthorized("access denied");
 
         try {

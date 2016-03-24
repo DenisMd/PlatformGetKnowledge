@@ -7,8 +7,7 @@ import javax.persistence.*;
 import java.util.Calendar;
 
 @MappedSuperclass
-public abstract class Message extends AbstractEntity {
-
+public abstract class Comment extends AbstractEntity {
     @Column(columnDefinition = "Text" , name = "message")
     private String message;
 
@@ -18,17 +17,6 @@ public abstract class Message extends AbstractEntity {
 
     @OneToOne
     private UserInfo sender;
-
-    @OneToOne
-    private UserInfo recipient;
-
-    public UserInfo getRecipient() {
-        return recipient;
-    }
-
-    public void setRecipient(UserInfo recipient) {
-        this.recipient = recipient;
-    }
 
     public String getMessage() {
         return message;

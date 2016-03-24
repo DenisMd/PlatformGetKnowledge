@@ -33,14 +33,11 @@ public class CurrencyService extends AbstractService implements BootstrapService
     @Autowired
     private TraceService trace;
 
-    @Autowired
-    private UserInfoService userInfoService;
-
-    @Autowired
-    private UserRepository userRepository;
-
     @Value(value = "${currency.default}")
     private String defaultCurrency;
+
+    @Autowired
+    private UserInfoService userInfoService;
 
     @Override
     public void bootstrap(HashMap<String, Object> map) throws Exception {
@@ -77,7 +74,7 @@ public class CurrencyService extends AbstractService implements BootstrapService
         UserInfo userInfo = userInfoService.getAuthorizedUser(data);
 
         if (userInfo == null) return Result.AccessDenied();
-        if (!isAccessToEdit(data,new Currency(),userRepository)) return Result.AccessDenied();
+        if (!isAccessToEdit(data,new Currency())) return Result.AccessDenied();
 
         updateCurrency();
 

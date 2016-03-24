@@ -37,7 +37,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -178,7 +177,7 @@ public class DataController {
             if (abstractService instanceof VideoLinkService) {
                 VideoLinkService videoLinkService = (VideoLinkService) abstractService;
 
-                String videoUrl = videoLinkService.getFileLink(id);
+                String videoUrl = videoLinkService.getVideoLink(id);
                 if(videoUrl != null) {
                     MultipartFileSender.fromPath(Paths.get(videoUrl))
                             .with(request)

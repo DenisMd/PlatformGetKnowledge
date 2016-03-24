@@ -30,9 +30,6 @@ public class GroupBooksService extends AbstractService implements ImageService{
     private SectionRepository sectionRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private TraceService trace;
 
     @Action(name = "getGroupBooksFromSection" , mandatoryFields = {"sectionId"})
@@ -69,7 +66,7 @@ public class GroupBooksService extends AbstractService implements ImageService{
 
         GroupBooks books = repository.read(new Long((Integer)data.get("id")));
 
-        if (!isAccessToEdit(data,books,userRepository))
+        if (!isAccessToEdit(data,books))
             throw new NotAuthorized("access denied");
 
         try {
