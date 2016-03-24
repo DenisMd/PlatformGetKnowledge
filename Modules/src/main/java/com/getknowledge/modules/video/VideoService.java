@@ -42,7 +42,7 @@ public class VideoService extends AbstractService implements BootstrapService , 
     @Override
     public void bootstrap(HashMap<String, Object> map) throws Exception {
         if (videoRepository.count() == 0) {
-            Ini ini = new Ini(getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/mainVideos/videoLocation"));
+            Ini ini = new Ini(getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/mainVideos/videoBootstrap"));
             for (String sectionName : ini.keySet()) {
                 Profile.Section section = ini.get(sectionName);
                 String name = section.get("name",String.class);
