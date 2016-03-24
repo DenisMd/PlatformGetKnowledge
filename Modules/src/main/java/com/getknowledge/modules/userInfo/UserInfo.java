@@ -66,6 +66,11 @@ public class UserInfo  extends CloneableEntity<UserInfo> implements IUser{
     @Embedded
     private UserSocialLink links;
 
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "user_frieds")
+    private List<UserInfo> friends = new ArrayList<>();
+
     @Transient
     private Menu userMenu;
 
@@ -193,6 +198,14 @@ public class UserInfo  extends CloneableEntity<UserInfo> implements IUser{
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public List<UserInfo> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<UserInfo> friends) {
+        this.friends = friends;
     }
 
     @Override
