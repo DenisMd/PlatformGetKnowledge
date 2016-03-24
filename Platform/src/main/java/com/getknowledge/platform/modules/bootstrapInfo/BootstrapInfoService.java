@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -40,6 +41,7 @@ public class BootstrapInfoService extends AbstractService {
     private UserRepository userRepository;
 
     @Action(name = "do")
+    @Transactional
     public BootstrapResult doBootstrap(HashMap<String, Object> data) throws ParseException {
 
         boolean isAuthorized = false;
