@@ -1,9 +1,11 @@
 package com.getknowledge.modules.menu;
 
 import com.getknowledge.modules.menu.item.MenuItem;
-import com.getknowledge.platform.annotations.ModuleInfo;
+import com.getknowledge.platform.annotations.*;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
+import com.getknowledge.platform.base.entities.CloneableEntity;
+import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import com.getknowledge.platform.modules.role.Role;
@@ -15,7 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "menu")
 @ModuleInfo(repositoryName = "MenuRepository" , serviceName = "MenuService")
-public class Menu extends AbstractEntity{
+public class Menu extends CloneableEntity<Menu>{
 
     @Column(name = "name" , unique = true)
     private String name;
@@ -53,12 +55,22 @@ public class Menu extends AbstractEntity{
     }
 
     @Override
+    public Menu clone() {
+        Menu menu = new Menu();
+        menu.setId(getId());
+        menu.setName(getName());
+        menu.setRole(getRole());
+        menu.setItems(getItems());
+        return menu;
+    }
+
+    @Override
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
         authorizationList.allowCreateEveryOne = false;
         authorizationList.allowReadEveryOne = true;
-        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditSections.getName()));
-        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.EditSections.getName()));
+        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditMenu.getName()));
+        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.EditMenu.getName()));
         return authorizationList;
     }
 }

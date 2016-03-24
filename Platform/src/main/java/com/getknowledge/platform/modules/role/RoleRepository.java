@@ -31,4 +31,8 @@ public class RoleRepository extends BaseRepository<Role> {
 
         super.remove(id);
     }
+
+    public Role getRoleByName(String roleName){
+        return getSingleEntityByFieldAndValue("roleName",roleName);
+    }
 }

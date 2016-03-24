@@ -16,9 +16,6 @@ import java.util.HashMap;
 public abstract class AbstractService {
 
     @Autowired
-    protected TraceService trace;
-
-    @Autowired
     protected UserRepository userRepository;
 
     @PersistenceContext

@@ -19,6 +19,9 @@ import java.io.IOException;
 @Repository("VideoRepository")
 public class VideoRepository extends BaseRepository<Video> {
 
+    @Autowired
+    private TraceService trace;
+
     @Override
     protected Class<Video> getClassEntity() {
         return Video.class;

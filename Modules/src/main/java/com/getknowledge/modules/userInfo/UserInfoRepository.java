@@ -1,6 +1,6 @@
 package com.getknowledge.modules.userInfo;
 
-import com.getknowledge.modules.menu.MenuNames;
+import com.getknowledge.modules.menu.enumerations.MenuNames;
 import com.getknowledge.modules.menu.MenuRepository;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.exceptions.PlatformException;

@@ -1,8 +1,7 @@
 package com.getknowledge.modules.section;
 
-import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.menu.Menu;
-import com.getknowledge.modules.menu.MenuNames;
+import com.getknowledge.modules.menu.enumerations.MenuNames;
 import com.getknowledge.modules.menu.MenuRepository;
 import com.getknowledge.modules.menu.item.MenuItem;
 import com.getknowledge.platform.modules.Result;
@@ -16,7 +15,6 @@ import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
-import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

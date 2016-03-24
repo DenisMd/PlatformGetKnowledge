@@ -76,7 +76,7 @@ public abstract class ProtectedRepository <T extends CloneableEntity<T>> extends
                     field.setAccessible(true);
                     field.set(entity, null);
                 } catch (IllegalAccessException e) {
-                    trace.logException(e.getMessage(), e, TraceLevel.Error);
+                    logger.error(e.getMessage(), e);
                 }
             }
         }

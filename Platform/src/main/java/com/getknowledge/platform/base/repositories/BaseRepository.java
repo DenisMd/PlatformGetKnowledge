@@ -29,8 +29,9 @@ import java.util.Map;
 
 public abstract class BaseRepository<T extends AbstractEntity> {
 
-    @Autowired
-    protected TraceService trace;
+    protected ObjectMapper objectMapper = new ObjectMapper();
+
+    protected Logger logger = LoggerFactory.getLogger(BaseRepository.class);
 
     protected abstract Class<T> getClassEntity();
 
@@ -76,7 +77,7 @@ public abstract class BaseRepository<T extends AbstractEntity> {
                 }
             }
         } catch (Exception e) {
-            trace.logException("Error update entity : " + e.getMessage(), e, TraceLevel.Error);
+            logger.error("Error update entity : " + e.getMessage(), e);
             return;
         }
 

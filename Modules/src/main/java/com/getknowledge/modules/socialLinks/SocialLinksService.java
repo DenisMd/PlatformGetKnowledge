@@ -40,7 +40,7 @@ public class SocialLinksService extends AbstractService implements BootstrapServ
     @Override
     public BootstrapInfo getBootstrapInfo() {
         BootstrapInfo bootstrapInfo = new BootstrapInfo();
-        bootstrapInfo.setName("SocialLinksService");
+        bootstrapInfo.setName("Social links service");
         bootstrapInfo.setOrder(1);
         bootstrapInfo.setRepeat(false);
         return bootstrapInfo;
