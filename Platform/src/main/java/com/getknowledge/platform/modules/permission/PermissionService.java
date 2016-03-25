@@ -15,6 +15,7 @@ import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,49 +47,45 @@ public class PermissionService extends AbstractService implements BootstrapServi
         permissionRepository.ifNotExistCreate(new Permission(PermissionNames.UploadVideos.getName()));
     }
 
-
-    @Action(name = "getUsersByPermission" , mandatoryFields = {"permissionId"})
-    public List<User> getUsersByPermission(HashMap<String,Object> data) throws NotAuthorized {
-
-        Long id = new Long((Integer)data.get("permissionId"));
-        Permission permission = permissionRepository.read(id);
-
-        if (permission == null)
-            return null;
-
-        if (!isAccessToRead(data,permission)) {
-            throw new NotAuthorized("not authorized for read users for permission" , traceService , TraceLevel.Warning);
-        }
-
-        List<User> users = entityManager.createQuery("select u from User u join u.permissions as p where p.id = :id").setParameter("id" ,id).getResultList();
-        users.forEach(u -> {u.getPermissions().clear(); u.setRole(null);});
-        return users;
-    }
-
-    @Action(name ="getRolesByPermission" , mandatoryFields = {"permissionId"})
-    public List<Role> getRolesByPermission(HashMap<String,Object> data) throws NotAuthorized {
-
-        Long id = new Long((Integer)data.get("permissionId"));
-        Permission permission = permissionRepository.read(id);
-
-        if (permission == null)
-            return null;
-
-        if (!isAccessToRead(data,permission)) {
-            throw new NotAuthorized("not authorized for read users for permission" , traceService , TraceLevel.Warning);
-        }
-
-        List<Role> roles = entityManager.createQuery("select r from Role r join r.permissions as p where p.id = :id").setParameter("id" , id).getResultList();
-        roles.forEach(r -> r.getPermissions().clear());
-        return roles;
-    }
-
     @Override
     public BootstrapInfo getBootstrapInfo() {
         BootstrapInfo bootstrapInfo = new BootstrapInfo();
-        bootstrapInfo.setName("PermissionService");
-        bootstrapInfo.setBootstrapState(BootstrapState.NotComplete);
+        bootstrapInfo.setName("Permission service");
         bootstrapInfo.setRepeat(true);
         return bootstrapInfo;
+    }
+
+    @Action(name = "getUsersByPermission" , mandatoryFields = {"permissionId"})
+    @Transactional
+    public List<User> getUsersByPermission(HashMap<String,Object> data) throws NotAuthorized {
+
+        Long id = longFromField("permissionId",data);
+        Permission permission = permissionRepository.read(id);
+
+        if (permission == null)
+            return null;
+
+        if (!isAccessToRead(data,permission)) {
+            throw new NotAuthorized("not authorized for read users for permission" , traceService , TraceLevel.Warning);
+        }
+
+        return permission.getUsers();
+    }
+
+    @Action(name ="getRolesByPermission" , mandatoryFields = {"permissionId"})
+    @Transactional
+    public List<Role> getRolesByPermission(HashMap<String,Object> data) throws NotAuthorized {
+
+        Long id = longFromField("permissionId",data);
+        Permission permission = permissionRepository.read(id);
+
+        if (permission == null)
+            return null;
+
+        if (!isAccessToRead(data,permission)) {
+            throw new NotAuthorized("not authorized for read users for permission" , traceService , TraceLevel.Warning);
+        }
+
+        return permission.getRoles();
     }
 }

@@ -1,13 +1,19 @@
 package com.getknowledge.platform.modules.permission;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
+import com.getknowledge.platform.modules.role.Role;
+import com.getknowledge.platform.modules.user.User;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "sys_permission")
@@ -19,6 +25,30 @@ public class Permission extends AbstractEntity{
 
     @Column
     private String note;
+
+    @ManyToMany(mappedBy = "permissions")
+    @JsonIgnore
+    private List<User> users = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "permissions")
+    @JsonIgnore
+    private List<Role> roles = new ArrayList<>();
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
 
     public Permission() {
         permissionName = "";
