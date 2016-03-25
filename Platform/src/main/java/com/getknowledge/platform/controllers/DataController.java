@@ -144,7 +144,7 @@ public class DataController {
 
             return prepareJson(entity,isEditable,isCreatable,classEntity).toString();
         } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+            throw new ClassNameNotFound(className,trace);
         } catch (Exception e) {
             trace.logException("Prepare exception : " + e.getMessage(),e, TraceLevel.Error);
             return null;
@@ -159,12 +159,6 @@ public class DataController {
         try {
             if (id == null || className == null || className.isEmpty()) return;
             Class classEntity = Class.forName(className);
-            BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
-            AbstractEntity entity = repository.read(id);
-            if (entity == null) {
-                return;
-            }
-
             AbstractService abstractService = moduleLocator.findService(classEntity);
             if (abstractService instanceof VideoLinkService) {
                 VideoLinkService videoLinkService = (VideoLinkService) abstractService;
@@ -184,7 +178,7 @@ public class DataController {
 
 
         } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+            throw new ClassNameNotFound(className,trace);
         } catch (Exception e) {
             if (!(e.getCause() instanceof SocketException)) {
                 //Ничего не даелаем так пользователь просто выключил видео
@@ -223,7 +217,7 @@ public class DataController {
 
 
         } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+            throw new ClassNameNotFound(className,trace);
         } catch (Exception e) {
             trace.logException("read image exception: " + e.getMessage(), e, TraceLevel.Warning);
         }
@@ -259,7 +253,7 @@ public class DataController {
             }
 
         } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+            throw new ClassNameNotFound(className,trace);
         } catch (Exception e) {
             trace.logException("read image exception: " + e.getMessage(), e, TraceLevel.Warning);
         }
@@ -273,7 +267,7 @@ public class DataController {
             Class classEntity = Class.forName(className);
             return moduleLocator.findRepository(classEntity).count().toString();
         } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+            throw new ClassNameNotFound(className,trace);
         }
     }
 
@@ -300,7 +294,7 @@ public class DataController {
 
             return listToJsonString(list,principal,repository,classEntity).toString();
         } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+            throw new ClassNameNotFound(className,trace);
         } catch (Exception e) {
             trace.logException("Prepare exception : " + e.getMessage(),e, TraceLevel.Error);
             return null;
@@ -331,7 +325,7 @@ public class DataController {
 
             return listToJsonString(list,principal,repository,classEntity).toString();
         } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+            throw new ClassNameNotFound(className,trace);
         } catch (Exception e) {
             trace.logException("Prepare exception : " + e.getMessage(),e, TraceLevel.Error);
             return null;
@@ -428,7 +422,7 @@ public class DataController {
 
             return objectNode.toString();
         } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+            throw new ClassNameNotFound(className,trace);
         } catch (Exception e) {
             trace.logException("Prepare exception : " + e.getMessage(),e, TraceLevel.Error);
             return null;
@@ -449,7 +443,7 @@ public class DataController {
             moduleLocator.findRepository(classEntity).create(abstractEntity);
             return objectMapper.writeValueAsString("create success");
         } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found" , trace , TraceLevel.Warning);
+            throw new ClassNameNotFound(className,trace);
         } catch (IOException e) {
             throw new ParseException("can't parse entities for create " + className , trace, TraceLevel.Warning, e);
         }
@@ -469,7 +463,7 @@ public class DataController {
         } catch (IOException e) {
             throw new ParseException("can't parse entities for update " + className,trace,TraceLevel.Warning,e);
         } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+            throw new ClassNameNotFound(className,trace);
         }
     }
 
@@ -487,7 +481,7 @@ public class DataController {
 
             return objectMapper.writeValueAsString("remove success");
         } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+            throw new ClassNameNotFound(className,trace);
         } catch (JsonProcessingException e) {
             throw new ParseException("can't parse entities for remove " + className,trace,TraceLevel.Warning,e);
         }
@@ -554,7 +548,7 @@ public class DataController {
 
             return null;
         } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+            throw new ClassNameNotFound(className,trace);
         } catch (IOException e) {
             throw new ParseException("can't parse result for action " + className,trace,TraceLevel.Warning,e);
         } catch (InvocationTargetException e) {
@@ -598,7 +592,7 @@ public class DataController {
 
             return null;
         } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound("classname : " + className + " not found", trace , TraceLevel.Warning);
+            throw new ClassNameNotFound(className,trace);
         } catch (IOException e) {
             trace.logException("parse result exception ", e, TraceLevel.Warning);
             throw new ParseException("parse result exception");

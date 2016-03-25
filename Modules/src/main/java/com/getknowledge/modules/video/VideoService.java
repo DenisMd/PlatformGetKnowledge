@@ -34,7 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service("VideoService")
-public class VideoService extends AbstractService implements BootstrapService , VideoLinkService,ImageService {
+public class VideoService extends AbstractService implements BootstrapService,VideoLinkService,ImageService {
 
     @Autowired
     private VideoRepository videoRepository;
