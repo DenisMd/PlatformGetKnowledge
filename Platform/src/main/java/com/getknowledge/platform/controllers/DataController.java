@@ -160,22 +160,18 @@ public class DataController {
             if (id == null || className == null || className.isEmpty()) return;
             Class classEntity = Class.forName(className);
             BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
-            if (repository instanceof ProtectedRepository) {
-                ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
-                protectedRepository.setCurrentUser(getCurrentUser(principal));
-            }
             AbstractEntity entity = repository.read(id);
             if (entity == null) {
                 return;
             }
 
-            if (!isAccessRead(principal, entity)) {
-                throw new NotAuthorized("access denied for read video" , trace, TraceLevel.Warning);
-            }
-
             AbstractService abstractService = moduleLocator.findService(classEntity);
             if (abstractService instanceof VideoLinkService) {
                 VideoLinkService videoLinkService = (VideoLinkService) abstractService;
+
+                if (!videoLinkService.isAccessToWatchVideo(id, getCurrentUser(principal))) {
+                    throw new NotAuthorized("access denied for read video" , trace, TraceLevel.Warning);
+                }
 
                 String videoUrl = videoLinkService.getVideoLink(id);
                 if(videoUrl != null) {

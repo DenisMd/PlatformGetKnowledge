@@ -1,6 +1,9 @@
 package com.getknowledge.modules.video;
 
+import com.getknowledge.modules.courses.Course;
+import com.getknowledge.modules.courses.CourseService;
 import com.getknowledge.modules.userInfo.UserInfo;
+import com.getknowledge.modules.userInfo.UserInfoRepository;
 import com.getknowledge.modules.userInfo.UserInfoService;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.services.AbstractService;
@@ -38,6 +41,12 @@ public class VideoService extends AbstractService implements BootstrapService , 
 
     @Autowired
     private UserInfoService userInfoService;
+
+    @Autowired
+    private UserInfoRepository userInfoRepository;
+
+    @Autowired
+    private CourseService courseService;
 
     @Override
     public void bootstrap(HashMap<String, Object> map) throws Exception {
@@ -87,5 +96,20 @@ public class VideoService extends AbstractService implements BootstrapService , 
     public byte[] getImageById(long id) {
         Video video = videoRepository.read(id);
         return video == null ? null : video.getCover();
+    }
+
+    @Override
+    public boolean isAccessToWatchVideo(long id,User currentUser) {
+        Video video = videoRepository.read(id);
+        if (video == null) return false;
+        if (video.isAllowEveryOne()) return true;
+
+        UserInfo userInfo = userInfoRepository.getUserInfoByUser(currentUser);
+        Course course = videoRepository.findCourseByVideo(video);
+
+        if(!courseService.isUserHasAccessToCourse(userInfo,course))
+            return false;
+
+        return true;
     }
 }

@@ -62,14 +62,8 @@ public class Video extends AbstractEntity{
 
     @Override
     public AuthorizationList getAuthorizationList() {
+        //Доступ к видео контролирует videoService
         AuthorizationList authorizationList = new AuthorizationList();
-        authorizationList.allowCreateEveryOne = false;
-        if (!allowEveryOne) {
-            authorizationList.allowReadEveryOne = false;
-        } else {
-            authorizationList.allowReadEveryOne = true;
-        }
-
         authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.UploadVideos));
         return authorizationList;
     }

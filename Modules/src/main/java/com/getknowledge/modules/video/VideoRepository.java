@@ -1,5 +1,6 @@
 package com.getknowledge.modules.video;
 
+import com.getknowledge.modules.courses.Course;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.exceptions.DeleteException;
@@ -15,6 +16,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 @Repository("VideoRepository")
 public class VideoRepository extends BaseRepository<Video> {
@@ -42,6 +44,14 @@ public class VideoRepository extends BaseRepository<Video> {
         }
 
         super.remove(id);
+    }
+
+    public Course findCourseByVideo(Video video) {
+        List<Course> courseList = entityManager.createQuery(
+                "select c from Course c where exists(select t from Tutorial t where t.video.id = :videoId and t.course.id = c.id)")
+                .setParameter("videoId",video.getId())
+                .getResultList();
+        return courseList.isEmpty() ? null : courseList.get(0);
     }
 
     public void create(String name,String link) {
