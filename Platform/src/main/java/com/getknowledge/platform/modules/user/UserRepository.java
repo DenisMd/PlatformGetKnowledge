@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+
 @Repository("UserRepository")
 public class UserRepository extends BaseRepository<User> {
 
@@ -38,5 +40,11 @@ public class UserRepository extends BaseRepository<User> {
             object.hashRawPassword(object.getPwdTransient());
         }
         super.create(object);
+    }
+
+    public User getCurrentUser(HashMap<String,Object> data){
+        String login = (String) data.get("principalName");
+        User user = getSingleEntityByFieldAndValue("login", login);
+        return user;
     }
 }

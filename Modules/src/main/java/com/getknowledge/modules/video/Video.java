@@ -8,6 +8,7 @@ import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
 import javax.persistence.*;
+import java.util.Calendar;
 
 @Entity
 @Table(name = "video")
@@ -27,6 +28,18 @@ public class Video extends AbstractEntity{
 
     @Column(name = "allow_every_one")
     private boolean allowEveryOne = false;
+
+    @Column(name = "upload_time")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar uploadTime;
+
+    public Calendar getUploadTime() {
+        return uploadTime;
+    }
+
+    public void setUploadTime(Calendar uploadTime) {
+        this.uploadTime = uploadTime;
+    }
 
     public byte[] getCover() {
         return cover;

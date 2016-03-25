@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 
 @Repository("VideoRepository")
@@ -59,6 +60,7 @@ public class VideoRepository extends BaseRepository<Video> {
         video.setLink(link);
         video.setVideoName(name);
         video.setAllowEveryOne(true);
+        video.setUploadTime(Calendar.getInstance());
         create(video);
     }
 
@@ -115,6 +117,7 @@ public class VideoRepository extends BaseRepository<Video> {
         }
 
         video.setLink(link);
+        video.setUploadTime(Calendar.getInstance());
         merge(video);
         trace.log("Video file successfully upload + " + videoFile.getAbsolutePath() , TraceLevel.Event);
     }
