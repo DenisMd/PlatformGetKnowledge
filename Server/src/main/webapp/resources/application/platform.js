@@ -25,7 +25,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "knowledge" : "com.getknowledge.modules.dictionaries.knowledge.Knowledge",
             "settings" : "com.getknowledge.modules.settings.Settings",
             "systemServices" : "com.getknowledge.platform.modules.service.Service",
-            "socialLinks" : "com.getknowledge.modules.socialLinks.SocialLink",
+            "socialLinks" : "com.getknowledge.modules.dictionaries.socialLinks.SocialLink",
             "hpMessage" : "com.getknowledge.modules.help.desc.HpMessage",
             "groupCourses" : "com.getknowledge.modules.courses.group.GroupCourses",
             "groupBooks" : "com.getknowledge.modules.books.group.GroupBooks",

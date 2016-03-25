@@ -1,4 +1,4 @@
-package com.getknowledge.modules.socialLinks;
+package com.getknowledge.modules.dictionaries.socialLinks;
 
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
