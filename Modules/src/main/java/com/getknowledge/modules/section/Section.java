@@ -16,8 +16,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "section" , indexes =
-        {@Index(name="index_by_name" , columnList = "name",unique = true)})
+@Table(name = "section")
 @ModuleInfo(repositoryName = "SectionRepository" , serviceName = "SectionService")
 public class Section extends AbstractEntity {
 
@@ -38,18 +37,6 @@ public class Section extends AbstractEntity {
     @Lob @Column(name="cover")
     @JsonIgnore
     private byte[] cover;
-
-    @OneToMany(mappedBy = "section")
-    @JsonIgnore
-    private List<GroupCourses> groupCoursesList;
-
-    public List<GroupCourses> getGroupCoursesList() {
-        return groupCoursesList;
-    }
-
-    public void setGroupCoursesList(List<GroupCourses> groupCoursesList) {
-        this.groupCoursesList = groupCoursesList;
-    }
 
     public byte[] getCover() {
         return cover;

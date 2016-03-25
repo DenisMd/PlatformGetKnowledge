@@ -62,18 +62,20 @@ public class SectionService extends AbstractService implements BootstrapService,
     @Override
     public BootstrapInfo getBootstrapInfo() {
         BootstrapInfo bootstrapInfo = new BootstrapInfo();
-        bootstrapInfo.setName("SectionService");
+        bootstrapInfo.setName("Section service");
         bootstrapInfo.setOrder(2);
         return bootstrapInfo;
     }
 
     @Action(name = "getSectionByNameAndLanguage" , mandatoryFields = {"name" , "language"})
+    @Transactional
     public Section getSectionByNameAndLangugae(HashMap<String, Object> data) {
         return sectionRepository.getSectionByNameAndLanguage((String)data.get("name") , (String)data.get("language"));
     }
 
 
     @Override
+    @Transactional
     public byte[] getImageById(long id) {
         Section section = sectionRepository.read(id);
         byte [] cover = section.getCover();
@@ -82,19 +84,18 @@ public class SectionService extends AbstractService implements BootstrapService,
 
     @ActionWithFile(name = "updateCover" , mandatoryFields = {"id"})
     public Result updateCover (HashMap<String,Object> data, List<MultipartFile> files) throws PlatformException {
-
-        Section section = sectionRepository.read(new Long((Integer)data.get("id")));
+        Section section = sectionRepository.read(longFromField("id",data));
 
         if (!isAccessToEdit(data,section))
-            throw new NotAuthorized("access denied");
+            throw new NotAuthorized("Access denied");
 
         try {
             section.setCover(files.get(0).getBytes());
         } catch (IOException e) {
-            trace.logException("Error set cover for section" , e , TraceLevel.Error);
+            trace.logException("Error set cover for section",e,TraceLevel.Error);
             return Result.Failed();
         }
-        sectionRepository.update(section);
+        sectionRepository.merge(section);
         return Result.Complete();
     }
 }
