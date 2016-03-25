@@ -88,17 +88,20 @@ public class VideoService extends AbstractService implements BootstrapService,Vi
     }
 
     @Override
+    @Transactional
     public String getVideoLink(long id) {
         return videoRepository.getVideoPath(id);
     }
 
     @Override
+    @Transactional
     public byte[] getImageById(long id) {
         Video video = videoRepository.read(id);
         return video == null ? null : video.getCover();
     }
 
     @Override
+    @Transactional
     public boolean isAccessToWatchVideo(long id,User currentUser) {
         Video video = videoRepository.read(id);
         if (video == null) return false;

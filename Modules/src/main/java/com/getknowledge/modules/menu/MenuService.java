@@ -17,6 +17,7 @@ import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.ServletContext;
 import java.io.BufferedReader;
@@ -54,11 +55,13 @@ public class MenuService extends AbstractService implements BootstrapService {
 
 
     @Action(name = "getMenuByName" , mandatoryFields = {"name"})
+    @Transactional
     public Menu getMenuByName(HashMap<String, Object> data) {
         return menuRepository.getSingleEntityByFieldAndValue("name" , data.get("name"));
     }
 
     @Action(name = "getMenu")
+    @Transactional
     public Menu getMenu(HashMap<String, Object> data) {
         UserInfo user = userInfoService.getAuthorizedUser(data);
         Menu menu = menuRepository.getSingleEntityByFieldAndValue("name" , MenuNames.General.name());
