@@ -33,7 +33,7 @@ import com.getknowledge.platform.modules.task.Task;
 import com.getknowledge.platform.modules.task.TaskRepository;
 import com.getknowledge.platform.modules.task.enumerations.TaskStatus;
 import com.getknowledge.platform.modules.trace.TraceService;
-import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
+import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import com.getknowledge.platform.utils.ModuleLocator;

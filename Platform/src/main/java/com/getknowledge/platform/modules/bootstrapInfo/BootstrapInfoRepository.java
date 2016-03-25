@@ -4,15 +4,13 @@ import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.base.services.BootstrapService;
 import com.getknowledge.platform.modules.bootstrapInfo.states.BootstrapState;
 import com.getknowledge.platform.modules.trace.TraceService;
-import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
+import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import com.getknowledge.platform.utils.ModuleLocator;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository("BootstrapInfoRepository")
 public class BootstrapInfoRepository extends BaseRepository<BootstrapInfo> {

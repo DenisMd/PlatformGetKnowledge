@@ -12,24 +12,14 @@ import com.getknowledge.platform.base.services.ImageService;
 import com.getknowledge.platform.base.services.VideoLinkService;
 import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
-import com.getknowledge.platform.modules.trace.TraceService;
-import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
 import org.ini4j.Ini;
 import org.ini4j.Profile;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 

@@ -8,15 +8,13 @@ import com.getknowledge.platform.base.services.BootstrapService;
 import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
 import com.getknowledge.platform.modules.trace.TraceService;
-import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
-import com.getknowledge.platform.modules.user.UserRepository;
+import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;

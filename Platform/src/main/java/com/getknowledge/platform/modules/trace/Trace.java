@@ -3,7 +3,7 @@ package com.getknowledge.platform.modules.trace;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
-import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
+import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 
 import javax.persistence.*;
 import java.util.Calendar;

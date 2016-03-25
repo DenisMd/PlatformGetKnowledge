@@ -5,7 +5,7 @@ import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.base.repositories.ITagRepository;
 import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.trace.TraceService;
-import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
+import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

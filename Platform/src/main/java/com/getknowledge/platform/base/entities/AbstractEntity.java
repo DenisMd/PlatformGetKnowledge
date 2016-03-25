@@ -1,23 +1,8 @@
 package com.getknowledge.platform.base.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.getknowledge.platform.base.repositories.BaseRepository;
-import com.getknowledge.platform.base.repositories.PrepareEntity;
-import com.getknowledge.platform.base.repositories.ProtectedRepository;
-import com.getknowledge.platform.exceptions.ModuleNotFound;
-import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
-import com.getknowledge.platform.modules.user.User;
-import com.getknowledge.platform.utils.ModuleLocator;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.security.Principal;
-import java.util.List;
 
 @MappedSuperclass
 public abstract class AbstractEntity {

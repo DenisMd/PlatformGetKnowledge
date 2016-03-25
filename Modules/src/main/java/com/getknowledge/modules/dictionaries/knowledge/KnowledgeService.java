@@ -1,6 +1,5 @@
 package com.getknowledge.modules.dictionaries.knowledge;
 
-import com.getknowledge.modules.courses.Course;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoService;
 import com.getknowledge.platform.annotations.ActionWithFile;
@@ -8,7 +7,7 @@ import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.ImageService;
 import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.modules.trace.TraceService;
-import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
+import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

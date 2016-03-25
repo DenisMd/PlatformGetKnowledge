@@ -3,12 +3,11 @@ package com.getknowledge.modules.menu;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.getknowledge.modules.menu.item.MenuItem;
 import com.getknowledge.modules.menu.item.MenuItemsRepository;
-import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.role.RoleRepository;
 import com.getknowledge.platform.modules.trace.TraceService;
-import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
+import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

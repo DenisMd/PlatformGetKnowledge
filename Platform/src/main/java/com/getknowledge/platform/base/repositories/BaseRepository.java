@@ -3,29 +3,20 @@ package com.getknowledge.platform.base.repositories;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.getknowledge.platform.base.entities.AbstractEntity;
-import com.getknowledge.platform.base.repositories.enumerations.*;
 import com.getknowledge.platform.exceptions.PlatformException;
-import com.getknowledge.platform.modules.trace.TraceService;
-import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.utils.ModuleLocator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.criteria.*;
-import javax.persistence.criteria.Order;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public abstract class BaseRepository<T extends AbstractEntity> {
 
