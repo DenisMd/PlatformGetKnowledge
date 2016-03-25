@@ -37,21 +37,11 @@ public abstract class BaseRepository<T extends AbstractEntity> {
 
     @Transactional
     public void create(T object) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        if(object == null) {
-            throw new NullPointerException();
-        }
-
         entityManager.persist(object);
-        entityManager.flush();
     }
 
     @Transactional
     public void update(T object) {
-        if(object == null) {
-            throw new NullPointerException();
-        }
-
         T classicObject = read(object.getId());
 
         if (classicObject == null)
@@ -73,34 +63,20 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         }
 
         entityManager.merge(classicObject);
-        entityManager.flush();
     }
 
     @Transactional
     public void merge(T object) {
-        if(object == null) {
-            throw new NullPointerException();
-        }
-
         entityManager.merge(object);
-        entityManager.flush();
     }
 
     @Transactional
     public void remove(Long id) throws PlatformException {
-        if(id == null) {
-            throw new NullPointerException();
-        }
-
         entityManager.remove(entityManager.find(getClassEntity(), id));
-        entityManager.flush();
     }
 
     @Transactional
     public T read(Long id) {
-        if(id == null) {
-            throw new NullPointerException();
-        }
         T result = entityManager.find(getClassEntity() , id);
         return result;
     }
