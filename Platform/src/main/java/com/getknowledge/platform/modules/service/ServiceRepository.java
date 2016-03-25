@@ -21,7 +21,6 @@ public class ServiceRepository extends TransientRepository<Service> {
 
     @PostConstruct
     public void ServiceRepository(){
-
         for (String serviceName : application.getServices().keySet()) {
             Service service = new Service();
             service.setName(serviceName);
