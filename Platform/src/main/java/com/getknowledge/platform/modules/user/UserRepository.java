@@ -20,6 +20,7 @@ public class UserRepository extends BaseRepository<User> {
     RoleRepository roleRepository;
 
     @Override
+    @Transactional
     public void update(User object) {
         User user = read(object.getId());
         if (user != null){

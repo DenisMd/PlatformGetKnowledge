@@ -31,6 +31,7 @@ public class User extends AbstractEntity {
     private boolean enabled=true;
 
     @ManyToOne
+    @JoinTable(name = "roles_user")
     private Role role;
 
     @ManyToMany

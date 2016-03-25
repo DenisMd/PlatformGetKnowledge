@@ -1,9 +1,11 @@
 package com.getknowledge.platform.modules.role;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.modules.permission.Permission;
+import com.getknowledge.platform.modules.user.User;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -23,6 +25,18 @@ public class Role extends AbstractEntity {
 
     @Column
     private String note;
+
+    @OneToMany(mappedBy = "role")
+    @JsonIgnore
+    private List<User> users = new ArrayList<>();
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
 
     public String getNote() {
         return note;
