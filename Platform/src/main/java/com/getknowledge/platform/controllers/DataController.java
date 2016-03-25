@@ -59,18 +59,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/data")
 public class DataController {
-    @Autowired
-    ServletContext servletContext;
 
-    @Autowired
-    private ModuleLocator moduleLocator;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private TraceService trace;
-
+    //Статическая инициализация -------------------------------------------------------
     static ObjectMapper objectMapper = new ObjectMapper();
     static {
         Hibernate4Module hbm = new Hibernate4Module();
@@ -81,11 +71,27 @@ public class DataController {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-//    Methods for read ----------------------------------------------------------------------------
+    @Autowired
+    private ServletContext servletContext;
+
+    @Autowired
+    private ModuleLocator moduleLocator;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private TraceService trace;
+
+    @Autowired
+    private FilterService filterService;
+
+    //Методы для подготовки объектов -------------------------------------------------------------
     private ObjectNode prepareJson (AbstractEntity abstractEntity,boolean editable, boolean creatable, Class classEntity) throws NotAuthorized, ModuleNotFound {
         ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
         objectNode.put("editable" , editable);
         objectNode.put("creatable" , creatable);
+        objectNode.put("imageViewExist" , false);
         AbstractService abstractService = moduleLocator.findService(classEntity);
         if (abstractService instanceof ImageService) {
             ImageService imageService = (ImageService) abstractService;
@@ -103,7 +109,7 @@ public class DataController {
                 if (abstractEntity.isContinueIfNotEnoughRights()) {
                     continue;
                 }
-                throw new NotAuthorized("access denied for read entity from list" , trace, TraceLevel.Warning);
+                throw new NotAuthorized("Access denied for read entity from list" , trace, TraceLevel.Warning);
             }
 
             boolean isEditable = isAccessEdit(principal,abstractEntity);
@@ -115,6 +121,121 @@ public class DataController {
         return nodes;
     }
 
+    private HashMap<String, Object> getDataForAction(String name, String actionName , String [] mandatoryFields, String jsonData, Principal principal) throws MandatoryFieldNotContainException, IOException, InvocationTargetException, IllegalAccessException {
+        if (name.equals(actionName)) {
+            TypeReference<HashMap<String, Object>> typeRef
+                    = new TypeReference<HashMap<String, Object>>() {
+            };
+
+            HashMap<String, Object> data = objectMapper.readValue(jsonData, typeRef);
+
+            if (!mandatoryFields[0].isEmpty()) {
+                for (String mandatoryField : mandatoryFields) {
+                    if (!data.containsKey(mandatoryField)) {
+                        throw new MandatoryFieldNotContainException("mandatory field not contain " + mandatoryField);
+                    }
+                }
+            }
+
+            if(principal != null) {
+                data.put("principalName", principal.getName());
+            } else {
+                data.put("principalName" , null);
+            }
+            return data;
+        }
+        return null;
+    }
+
+    //Авторизационные проверки -----------------------------------------------------------
+
+    private User getCurrentUser(Principal p) {
+        return p == null ? null : userRepository.getSingleEntityByFieldAndValue("login",p.getName());
+    }
+
+    private boolean isAccessRead(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {
+        AuthorizationList al = abstractEntity.getAuthorizationList();
+        if (al != null && al.allowReadEveryOne) {
+            return true;
+        }
+
+        if (principal == null) {
+            return false;
+        }
+
+        User user = getCurrentUser(principal);
+        if (user == null) throw new NotAuthorized("User not found");
+
+        if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+            return true;
+        }
+
+
+        return al != null && al.isAccessRead(user);
+
+    }
+
+    private boolean isAccessCreate(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {
+        AuthorizationList al = abstractEntity.getAuthorizationList();
+        if (al != null && al.allowCreateEveryOne) return true;
+
+        if (principal == null) {
+            return false;
+        }
+
+        User user = getCurrentUser(principal);
+        if (user == null) return false;
+
+        if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+            return true;
+        }
+
+        return al != null && al.isAccessCreate(user);
+
+    }
+
+    private boolean isAccessEdit(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {
+        AuthorizationList al = abstractEntity.getAuthorizationList();
+
+        if (principal == null) {
+            return false;
+        }
+
+        User user = getCurrentUser(principal);
+        if (user == null) return false;
+
+        if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+            return true;
+        }
+
+        return al != null && al.isAccessEdit(user);
+
+    }
+
+    private boolean isAccessRemove(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {
+        AuthorizationList al = abstractEntity.getAuthorizationList();
+
+        if (principal == null) {
+            return false;
+        }
+
+        User user = getCurrentUser(principal);
+        if (user == null) return false;
+
+        if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+            return true;
+        }
+
+        return al != null && al.isAccessRemove(user);
+
+    }
+
+    private boolean checkUserList(User user, List<User> users) {
+        return users != null && users.contains(user);
+    }
+
+
+    //Методы для четния ----------------------------------------------------------------------------
     @RequestMapping(value = "/read", method = RequestMethod.GET)
     public @ResponseBody String read(@RequestParam(value = "id" ,required = true) Long id,
                                      @RequestParam(value ="className" , required = true) String className, Principal principal) throws PlatformException {
@@ -151,7 +272,66 @@ public class DataController {
         }
     }
 
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public @ResponseBody String list(@RequestParam("className") String className, Principal principal) throws PlatformException {
+        try {
+            if (className == null || className.isEmpty()) return null;
+            Class classEntity = Class.forName(className);
+            BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
+            if (repository instanceof ProtectedRepository) {
+                ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
+                protectedRepository.setCurrentUser(getCurrentUser(principal));
+            }
 
+            if (repository.count() > repository.getMaxCountsEntities()) {
+                throw new EntityLimitException("Violated limit entity " + repository.getMaxCountsEntities());
+            }
+
+            List<AbstractEntity> list = repository.list();
+
+            if (list == null) {
+                return "";
+            }
+
+            return listToJsonString(list,principal,repository,classEntity).toString();
+        } catch (ClassNotFoundException e) {
+            throw new ClassNameNotFound(className,trace);
+        } catch (Exception e) {
+            trace.logException("Prepare exception : " + e.getMessage(),e, TraceLevel.Error);
+            return null;
+        }
+    }
+
+    @RequestMapping(value = "/listPartial", method = RequestMethod.GET)
+    public @ResponseBody String listPartial(@RequestParam("className") String className,
+                                            @RequestParam("first") Integer first, @RequestParam("max") Integer max, Principal principal) throws PlatformException {
+        try {
+            if (className == null || className.isEmpty() || first < 0 || max < 0) return null;
+            Class classEntity = Class.forName(className);
+            BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
+            if (repository instanceof ProtectedRepository) {
+                ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
+                protectedRepository.setCurrentUser(getCurrentUser(principal));
+            }
+
+            if (max > repository.getMaxCountsEntities()) {
+                throw new EntityLimitException("Violated limit entity " + repository.getMaxCountsEntities());
+            }
+
+            List<AbstractEntity> list = repository.listPartial(first, max);
+
+            if (list == null) {
+                return "";
+            }
+
+            return listToJsonString(list,principal,repository,classEntity).toString();
+        } catch (ClassNotFoundException e) {
+            throw new ClassNameNotFound(className,trace);
+        } catch (Exception e) {
+            trace.logException("Prepare exception : " + e.getMessage(),e, TraceLevel.Error);
+            return null;
+        }
+    }
 
     @RequestMapping(value = "/readVideo", method = RequestMethod.GET)
     public void readVideoFile(@RequestParam(value = "id" ,required = true) Long id,
@@ -271,69 +451,6 @@ public class DataController {
         }
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public @ResponseBody String list(@RequestParam("className") String className, Principal principal) throws PlatformException {
-        try {
-            if (className == null || className.isEmpty()) return null;
-            Class classEntity = Class.forName(className);
-            BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
-            if (repository instanceof ProtectedRepository) {
-                ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
-                protectedRepository.setCurrentUser(getCurrentUser(principal));
-            }
-
-            if (repository.count() > repository.getMaxCountsEntities()) {
-                throw new EntityLimitException("Violated limit entity " + repository.getMaxCountsEntities());
-            }
-
-            List<AbstractEntity> list = repository.list();
-
-            if (list == null) {
-                return "";
-            }
-
-            return listToJsonString(list,principal,repository,classEntity).toString();
-        } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound(className,trace);
-        } catch (Exception e) {
-            trace.logException("Prepare exception : " + e.getMessage(),e, TraceLevel.Error);
-            return null;
-        }
-    }
-
-    @RequestMapping(value = "/listPartial", method = RequestMethod.GET)
-    public @ResponseBody String listPartial(@RequestParam("className") String className,
-                       @RequestParam("first") Integer first, @RequestParam("max") Integer max, Principal principal) throws PlatformException {
-        try {
-            if (className == null || className.isEmpty() || first < 0 || max < 0) return null;
-            Class classEntity = Class.forName(className);
-            BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
-            if (repository instanceof ProtectedRepository) {
-                ProtectedRepository<?> protectedRepository = (ProtectedRepository<?>) repository;
-                protectedRepository.setCurrentUser(getCurrentUser(principal));
-            }
-
-            if (max > repository.getMaxCountsEntities()) {
-                throw new EntityLimitException("Violated limit entity " + repository.getMaxCountsEntities());
-            }
-
-            List<AbstractEntity> list = repository.listPartial(first, max);
-
-            if (list == null) {
-                return "";
-            }
-
-            return listToJsonString(list,principal,repository,classEntity).toString();
-        } catch (ClassNotFoundException e) {
-            throw new ClassNameNotFound(className,trace);
-        } catch (Exception e) {
-            trace.logException("Prepare exception : " + e.getMessage(),e, TraceLevel.Error);
-            return null;
-        }
-    }
-
-    @Autowired
-    private FilterService filterService;
 
     @RequestMapping(value = "/filter" , method = RequestMethod.POST)
     public @ResponseBody String filterMethod(@RequestParam("properties") String properties, @RequestParam("className") String className, Principal principal) throws PlatformException {
@@ -429,8 +546,7 @@ public class DataController {
         }
     }
     
-//    methods for change -----------------------------------------------------------------------------------
-
+    //Методы на изменение -----------------------------------------------------------------------------------
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public @ResponseBody String create(@RequestParam("object") String jsonObject, @RequestParam("className") String className, Principal principal) throws PlatformException {
         try {
@@ -485,32 +601,6 @@ public class DataController {
         } catch (JsonProcessingException e) {
             throw new ParseException("can't parse entities for remove " + className,trace,TraceLevel.Warning,e);
         }
-    }
-
-    private HashMap<String, Object> getDataForAction(String name, String actionName , String [] mandatoryFields, String jsonData, Principal principal) throws MandatoryFieldNotContainException, IOException, InvocationTargetException, IllegalAccessException {
-        if (name.equals(actionName)) {
-            TypeReference<HashMap<String, Object>> typeRef
-                    = new TypeReference<HashMap<String, Object>>() {
-            };
-
-            HashMap<String, Object> data = objectMapper.readValue(jsonData, typeRef);
-
-            if (!mandatoryFields[0].isEmpty()) {
-                for (String mandatoryField : mandatoryFields) {
-                    if (!data.containsKey(mandatoryField)) {
-                        throw new MandatoryFieldNotContainException("mandatory field not contain " + mandatoryField);
-                    }
-                }
-            }
-
-            if(principal != null) {
-                data.put("principalName", principal.getName());
-            } else {
-                data.put("principalName" , null);
-            }
-            return data;
-        }
-        return null;
     }
 
     @RequestMapping(value = "/action", method = RequestMethod.POST)
@@ -603,91 +693,4 @@ public class DataController {
         }
     }
 
-
-    // Authorization -----------------------------------------------------------
-
-    private User getCurrentUser(Principal p) {
-        return p == null ? null : userRepository.getSingleEntityByFieldAndValue("login",p.getName());
-    }
-
-    private boolean isAccessRead(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {
-        AuthorizationList al = abstractEntity.getAuthorizationList();
-        if (al != null && al.allowReadEveryOne) {
-            return true;
-        }
-
-        if (principal == null) {
-            return false;
-        }
-
-        User user = getCurrentUser(principal);
-        if (user == null) throw new NotAuthorized("User not found");
-
-        if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
-            return true;
-        }
-
-
-        return al != null && al.isAccessRead(user);
-
-    }
-
-    private boolean isAccessCreate(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {
-        AuthorizationList al = abstractEntity.getAuthorizationList();
-        if (al != null && al.allowCreateEveryOne) return true;
-
-        if (principal == null) {
-            return false;
-        }
-
-        User user = getCurrentUser(principal);
-        if (user == null) return false;
-
-        if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
-            return true;
-        }
-
-        return al != null && al.isAccessCreate(user);
-
-    }
-
-    private boolean isAccessEdit(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {
-        AuthorizationList al = abstractEntity.getAuthorizationList();
-
-        if (principal == null) {
-            return false;
-        }
-
-        User user = getCurrentUser(principal);
-        if (user == null) return false;
-
-        if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
-            return true;
-        }
-
-        return al != null && al.isAccessEdit(user);
-
-    }
-
-    private boolean isAccessRemove(Principal principal, AbstractEntity abstractEntity) throws NotAuthorized {
-        AuthorizationList al = abstractEntity.getAuthorizationList();
-
-        if (principal == null) {
-            return false;
-        }
-
-        User user = getCurrentUser(principal);
-        if (user == null) return false;
-
-        if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
-            return true;
-        }
-
-        return al != null && al.isAccessRemove(user);
-
-    }
-
-    private boolean checkUserList(User user, List<User> users) {
-        return users != null && users.contains(user);
-    }
 }
