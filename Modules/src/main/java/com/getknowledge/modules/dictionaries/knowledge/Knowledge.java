@@ -1,7 +1,7 @@
 package com.getknowledge.modules.dictionaries.knowledge;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.getknowledge.modules.courses.Course;
+import com.getknowledge.modules.dictionaries.knowledge.enumeration.KnowledgeType;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
@@ -9,8 +9,6 @@ import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "knowledge")

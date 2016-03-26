@@ -21,7 +21,7 @@ public class RegionService extends AbstractService {
 
     @Action(name = "getRegionsByCountry" ,mandatoryFields = {"countryId" })
     @Transactional
-    public List<Region> chooseRegionsByCountry(HashMap<String,Object> data) {
+    public List<Region> getRegionsByCountry(HashMap<String,Object> data) {
         Long countryLong = longFromField("countryId",data);
         Country country = countryRepository.read(countryLong);
         return country == null ? null : country.getRegions();

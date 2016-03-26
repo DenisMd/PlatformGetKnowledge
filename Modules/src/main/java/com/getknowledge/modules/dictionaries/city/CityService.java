@@ -7,6 +7,7 @@ import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.base.services.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ public class CityService extends AbstractService {
     private RegionRepository regionRepository;
 
     @Action(name = "getCitiesByRegion" , mandatoryFields = {"regionId"})
+    @Transactional
     public List<City> getCities(HashMap<String,Object> data) {
         Long regionId = longFromField("regionId" ,data);
         Region region = regionRepository.read(regionId);

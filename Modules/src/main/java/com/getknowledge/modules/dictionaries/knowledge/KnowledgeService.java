@@ -10,6 +10,7 @@ import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -29,8 +30,9 @@ public class KnowledgeService extends AbstractService implements ImageService {
     private TraceService trace;
 
     @ActionWithFile(name = "uploadImage" , mandatoryFields = "knowledgeId")
+    @Transactional
     public Result uploadImage(HashMap<String,Object> data, List<MultipartFile> files) {
-        Long knowledgeId = new Long((Integer)data.get("knowledgeId"));
+        Long knowledgeId = longFromField("knowledgeId",data);
         Knowledge knowledge = knowledgeRepository.read(knowledgeId);
         if (knowledge == null) {
             return Result.NotFound();
@@ -38,7 +40,7 @@ public class KnowledgeService extends AbstractService implements ImageService {
 
         UserInfo userInfo = userInfoService.getAuthorizedUser(data);
 
-        if (!knowledge.getAuthorizationList().isAccessEdit(userInfo.getUser())) {
+        if (!isAccessToEdit(data,knowledge)) {
             return Result.AccessDenied();
         }
 
@@ -46,6 +48,7 @@ public class KnowledgeService extends AbstractService implements ImageService {
             knowledge.setImage(files.get(0).getBytes());
         } catch (IOException e) {
             trace.logException("Error upload image for knowledge" , e, TraceLevel.Error);
+            return Result.Failed();
         }
 
         knowledgeRepository.merge(knowledge);
@@ -56,10 +59,6 @@ public class KnowledgeService extends AbstractService implements ImageService {
     @Override
     public byte[] getImageById(long id) {
         Knowledge knowledge = knowledgeRepository.read(id);
-        if (knowledge != null) {
-            return knowledge.getImage();
-        }
-
-        return null;
+        return knowledge == null ? null : knowledge.getImage();
     }
 }
