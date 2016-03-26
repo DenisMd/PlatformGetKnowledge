@@ -31,11 +31,10 @@ public class User extends AbstractEntity {
     private boolean enabled=true;
 
     @ManyToOne
-    @JoinTable(name = "roles_user")
     private Role role;
 
     @ManyToMany
-    @JoinTable(name = "permissions_of_user")
+    @JoinTable(name = "sys_permissions_of_user")
     private List<Permission> permissions = new ArrayList<>();
 
     @Column(name = "create_date")

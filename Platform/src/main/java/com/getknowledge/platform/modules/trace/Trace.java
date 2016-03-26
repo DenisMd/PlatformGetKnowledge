@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.Calendar;
 
 @Entity
-@Table(name = "trace")
+@Table(name = "sys_trace")
 @ModuleInfo(repositoryName = "TraceRepository" , serviceName = "TraceService")
 public class Trace extends AbstractEntity {
 

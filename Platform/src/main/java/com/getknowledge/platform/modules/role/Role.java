@@ -20,7 +20,7 @@ public class Role extends AbstractEntity {
     private String roleName;
 
     @ManyToMany
-    @JoinTable(name = "permissions_of_roles")
+    @JoinTable(name = "sys_permissions_of_roles")
     private List<Permission> permissions = new ArrayList<>();
 
     @Column
