@@ -9,8 +9,9 @@ public enum PermissionNames {
     EditBooks("Edit book"),CreateBooks("Create books"),
     EditProgrammingDictionaries("Edit programming dictionaries"),
     CreatePrograms("Create programs"),EditPrograms("Edit programs"),
-    CreateCourse("Create course"),EditCourse("EditCourse")
-    ,EditKnowledge("Edit knowledge"),
+    CreateCourse("Create course"),EditCourse("EditCourse"),
+    EditKnowledge("Edit knowledge"),
+    BlockComments("Block comments"),
     UploadVideos("Upload videos");
 
     private String name;

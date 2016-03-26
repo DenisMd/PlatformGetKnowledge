@@ -1,7 +1,10 @@
 package com.getknowledge.modules.video;
 
 import com.getknowledge.modules.courses.Course;
+import com.getknowledge.modules.messages.MessageStatus;
 import com.getknowledge.modules.userInfo.UserInfo;
+import com.getknowledge.modules.video.comment.VideoComment;
+import com.getknowledge.modules.video.comment.VideoCommentRepository;
 import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.exceptions.DeleteException;
 import com.getknowledge.platform.exceptions.PlatformException;
@@ -124,5 +127,14 @@ public class VideoRepository extends BaseRepository<Video> {
     public String getVideoPath(Long id){
         Video video = read(id);
         return video == null ? null : pathToVideo + File.separator + video.getLink();
+    }
+
+    public List<VideoComment> comments(Video video,int first,int max){
+        List<VideoComment> list = entityManager.createQuery("select comments from VideoComment comments " +
+                "where comments.video.id = :videoId order by comments.createTime desc")
+                .setParameter("videoId" , video.getId())
+                .setFirstResult(first)
+                .setMaxResults(max).getResultList();
+        return list;
     }
 }

@@ -601,6 +601,8 @@ public class DataController {
         } catch (IllegalAccessException e) {
             trace.logException("IllegalAccessException", e, TraceLevel.Warning);
             throw new InvokeException("IllegalAccessException");
+        } catch (PlatformException pl){
+          throw pl;
         } catch (Exception e) {
             throw new SystemError("Unhandled exception : " + e.getMessage(),trace,TraceLevel.Error,e);
         }
@@ -644,7 +646,9 @@ public class DataController {
             throw new InvokeException("InvocationTargetException", trace , TraceLevel.Warning , e);
         } catch (IllegalAccessException e) {
             throw new InvokeException("IllegalAccessException", trace , TraceLevel.Warning , e);
-        }  catch (Exception e) {
+        } catch (PlatformException pl) {
+            throw pl;
+        } catch (Exception e) {
             throw new SystemError("Unhandled exception : " + e.getMessage(),trace,TraceLevel.Error,e);
         }
     }

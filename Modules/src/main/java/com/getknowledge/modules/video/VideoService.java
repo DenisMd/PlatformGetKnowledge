@@ -5,11 +5,15 @@ import com.getknowledge.modules.courses.CourseService;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoRepository;
 import com.getknowledge.modules.userInfo.UserInfoService;
+import com.getknowledge.modules.video.comment.VideoComment;
+import com.getknowledge.modules.video.comment.VideoCommentRepository;
+import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.BootstrapService;
 import com.getknowledge.platform.base.services.ImageService;
 import com.getknowledge.platform.base.services.VideoLinkService;
+import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
 import com.getknowledge.platform.modules.user.User;
@@ -37,6 +41,9 @@ public class VideoService extends AbstractService implements BootstrapService,Vi
 
     @Autowired
     private CourseService courseService;
+
+    @Autowired
+    private VideoCommentRepository videoCommentRepository;
 
     @Override
     public void bootstrap(HashMap<String, Object> map) throws Exception {
@@ -74,6 +81,42 @@ public class VideoService extends AbstractService implements BootstrapService,Vi
 
         videoRepository.uploadVideo(video,userInfo,fileList.get(0));
 
+        return Result.Complete();
+    }
+
+    @Action(name = "getComments" , mandatoryFields = {"videoId","first","max"})
+    @Transactional
+    public List<VideoComment> getComments(HashMap<String,Object> data) {
+        Long videoId = longFromField("videoId",data);
+        Integer first = (Integer) data.get("first");
+        Integer max = (Integer) data.get("max");
+        Video video = videoRepository.read(videoId);
+        if (video != null)
+            return videoRepository.comments(video,first,max);
+        return null;
+    }
+
+    @Action(name = "addComment" , mandatoryFields = {"videoId","text"})
+    @Transactional
+    public Result addComment(HashMap<String,Object> data) throws NotAuthorized {
+        UserInfo userInfo = userInfoService.getAuthorizedUser(data);
+        if (userInfo == null) {
+            Result.NotAuthorized();
+        }
+
+        Long videoId = longFromField("videoId",data);
+        Video video = videoRepository.read(videoId);
+
+        if (video == null){
+            Result.NotFound();
+        }
+
+        String text = (String) data.get("text");
+        if (text.length() > 250) {
+            Result.Failed();
+        }
+
+        videoCommentRepository.createComment(text,video,userInfo);
         return Result.Complete();
     }
 

@@ -1,6 +1,7 @@
 package com.getknowledge.platform.modules.user;
 
 import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.role.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -18,6 +19,12 @@ public class UserRepository extends BaseRepository<User> {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Override
+    public void remove(Long id) throws PlatformException {
+        //Пользователей не возможно удалить из системы
+        //Можно только блокировать
+    }
 
     @Override
     @Transactional

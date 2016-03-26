@@ -52,10 +52,7 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
     @Override
     @Transactional
     public void remove(Long id) throws PlatformException {
-        UserInfo userInfo = entityManager.find(getClassEntity() , id);
-        long userId = userInfo.getUser().getId();
-        super.remove(id);
-        userRepository.remove(userId);
+        //Пользователей не возможно удалить
     }
 
     public UserInfo getUserInfoByUser(com.getknowledge.platform.modules.user.User user) {

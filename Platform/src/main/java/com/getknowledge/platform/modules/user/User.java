@@ -33,6 +33,9 @@ public class User extends AbstractEntity {
     @ManyToOne
     private Role role;
 
+    @Column(name = "block_message",length = 500)
+    private String blockMessage;
+
     @ManyToMany
     @JoinTable(name = "sys_permissions_of_user")
     private List<Permission> permissions = new ArrayList<>();

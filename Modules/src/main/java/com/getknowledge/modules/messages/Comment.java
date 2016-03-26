@@ -18,6 +18,18 @@ public abstract class Comment extends AbstractEntity {
     @OneToOne
     private UserInfo sender;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private MessageStatus messageStatus;
+
+    public MessageStatus getMessageStatus() {
+        return messageStatus;
+    }
+
+    public void setMessageStatus(MessageStatus messageStatus) {
+        this.messageStatus = messageStatus;
+    }
+
     public String getMessage() {
         return message;
     }
