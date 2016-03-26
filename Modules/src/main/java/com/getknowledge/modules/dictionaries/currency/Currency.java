@@ -17,11 +17,22 @@ public class Currency extends AbstractEntity {
     @Column
     private String name;
 
+    @Column(length = 3)
+    private String charCode;
+
     @Column(name = "value")
     private BigDecimal value;
 
     @Column(name = "base_currency")
     private Boolean baseCurrency = false;
+
+    public String getCharCode() {
+        return charCode;
+    }
+
+    public void setCharCode(String charCode) {
+        this.charCode = charCode;
+    }
 
     public Boolean isBaseCurrency() {
         return baseCurrency;

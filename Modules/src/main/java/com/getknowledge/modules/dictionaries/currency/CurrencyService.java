@@ -13,20 +13,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.net.URL;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class CurrencyService extends AbstractService implements BootstrapService {
 
+    private final String cbrUrl = "http://www.cbr.ru/scripts/XML_daily.asp";
+
     @Autowired
     private CurrencyRepository currencyRepository;
-
 
     @Autowired
     private TraceService trace;
@@ -37,24 +47,38 @@ public class CurrencyService extends AbstractService implements BootstrapService
     @Autowired
     private UserInfoService userInfoService;
 
+    private void parseXmlFromCbr(boolean create) throws Exception {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document doc = db.parse(new URL(cbrUrl).openStream());
+        doc.normalizeDocument();
+        NodeList valutes = doc.getElementsByTagName("Valute");
+        for (int i = 0; i < valutes.getLength(); i++) {
+            Node valute = valutes.item(i);
+            if (valute.getNodeType() == Node.ELEMENT_NODE) {
+                Element valuteElement = (Element)valute;
+                String name = valuteElement.getElementsByTagName("Name").item(0).getTextContent();
+                String charCode = valuteElement.getElementsByTagName("CharCode").item(0).getTextContent();
+                String value = valuteElement.getElementsByTagName("Value").item(0).getTextContent();
+                NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
+                Number number = format.parse(value);
+                double valueDouble = number.doubleValue();
+                if (create) {
+                    currencyRepository.createCurrency(charCode,name,valueDouble,false);
+                } else {
+                    currencyRepository.updateCurrency(charCode,valueDouble);
+                }
+            }
+        }
+    }
+
     @Override
     public void bootstrap(HashMap<String, Object> map) throws Exception {
         if (currencyRepository.count() == 0) {
-            Currency defaultCur = new Currency();
-            defaultCur.setName(defaultCurrency);
-            defaultCur.setValue(new BigDecimal(1.0));
-            currencyRepository.create(defaultCur);
-
-            InputStream is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/currency/currency.txt");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            String currencyName = "";
-            while ( (currencyName = reader.readLine()) != null) {
-                Currency currency = new Currency();
-                currency.setName(currencyName);
-                currency.setValue(new BigDecimal(Math.random()));
-                currencyRepository.create(currency);
-            }
+            currencyRepository.createCurrency(defaultCurrency,"Российски рубль",1.0,true);
         }
+
+        parseXmlFromCbr(true);
     }
 
     @Override
@@ -82,11 +106,10 @@ public class CurrencyService extends AbstractService implements BootstrapService
     //every day - обновлять курсы валют
     @Scheduled(cron = "0 1 1 * * ?")
     public void updateCurrency(){
-        List<Currency> currencyList =  entityManager.createQuery("select  cur from Currency  cur where cur.baseCurrency = false").getResultList();
-        trace.log("Start update currency" , TraceLevel.Event);
-        for (Currency currency : currencyList) {
-            currency.setValue(new BigDecimal(Math.random() * 100));
-            currencyRepository.merge(currency);
+        try {
+            parseXmlFromCbr(false);
+        } catch (Exception e) {
+            trace.logException("Error update currency : " + e.getMessage(),e,TraceLevel.Error);
         }
     }
 }
