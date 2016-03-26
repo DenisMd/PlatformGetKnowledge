@@ -1,6 +1,7 @@
 package com.getknowledge.platform.base.services;
 
 import com.getknowledge.platform.base.entities.AbstractEntity;
+import com.getknowledge.platform.base.repositories.FilterCountQuery;
 import com.getknowledge.platform.base.repositories.FilterQuery;
 import com.getknowledge.platform.base.services.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,5 +18,10 @@ public class FilterService extends AbstractService {
     public List<AbstractEntity> getList(FilterQuery filterQuery , int first , int max) {
         List<AbstractEntity> abstractEntities = filterQuery.getQuery(first,max).getResultList();
         return abstractEntities;
+    }
+
+    @Transactional
+    public Long getCount(FilterCountQuery filterQuery ) {
+        return filterQuery.getCount();
     }
 }

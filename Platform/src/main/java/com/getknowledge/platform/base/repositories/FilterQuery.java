@@ -12,13 +12,17 @@ import java.util.List;
 
 public class FilterQuery<T> {
     //Задание свойст для фильтров
-    private Root<T> root = null;
-    private CriteriaQuery<T> criteriaQuery = null;
-    private CriteriaBuilder criteriaBuilder = null;
+    protected Root<T> root = null;
+    protected CriteriaQuery criteriaQuery = null;
+    protected CriteriaBuilder criteriaBuilder = null;
     private List<Order> orders = null;
-    private Predicate previousPredicate = null;
-    public EntityManager entityManager;
-    private Class<T>  pClassEntity = null;
+    protected Predicate previousPredicate = null;
+    protected EntityManager entityManager;
+    protected Class<T>  pClassEntity = null;
+
+    public FilterQuery(){
+
+    }
 
     public FilterQuery(EntityManager entityManager , Class<T> classEntity) {
         criteriaBuilder = entityManager.getCriteriaBuilder();

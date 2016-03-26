@@ -13,6 +13,7 @@ import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.base.repositories.FilterCountQuery;
 import com.getknowledge.platform.base.repositories.FilterQuery;
 import com.getknowledge.platform.base.repositories.enumerations.OrderRoute;
 import com.getknowledge.platform.base.serializers.FileResponse;
@@ -414,6 +415,7 @@ public class DataController {
 
             HashMap<String, Object> data = objectMapper.readValue(properties, typeRef);
             FilterQuery filterQuery = repository.initFilter();
+            FilterCountQuery filterCountQuery = repository.initCountFilter();
 
 
 //            order : [{route : Asc , field : name1} , {route : Desc , field : name2}]
@@ -446,6 +448,7 @@ public class DataController {
                     i++;
                 }
                 filterQuery.searchText(fieldNames,fieldValues, searchText.containsKey("or"));
+                filterCountQuery.searchText(fieldNames,fieldValues, searchText.containsKey("or"));
             }
 
             //in : {fieldName : "name" , values : ["value1" , "value2"]}
@@ -454,6 +457,7 @@ public class DataController {
                 String fieldName = (String) in.get("fieldName");
                 List<String> list = (List<String>) in.get("values");
                 filterQuery.in(fieldName , list);
+                filterCountQuery.in(fieldName , list);
             }
 
             //equal : [{fieldName : "name" , value : "value"}]
@@ -463,6 +467,7 @@ public class DataController {
                     String fieldName = (String) equalElement.get("fieldName");
                     String value = (String) equalElement.get("value");
                     filterQuery.equal(fieldName, value);
+                    filterCountQuery.equal(fieldName, value);
                 }
             }
 
@@ -477,7 +482,7 @@ public class DataController {
 
             ObjectNode objectNode = objectMapper.createObjectNode();
             User user = getCurrentUser(principal);
-           // objectNode.put("totalEntitiesCount" , filterQuery.getCountEntities());
+            objectNode.put("totalEntitiesCount" , filterService.getCount(filterCountQuery));
             objectNode.putArray("list").addAll(listToJsonString(list,user,repository,classEntity));
             Constructor<?> cos = classEntity.getConstructor();
             AbstractEntity abstractEntity = (AbstractEntity) cos.newInstance();

@@ -125,6 +125,11 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         return filterQuery;
     }
 
+    public FilterCountQuery<T> initCountFilter() {
+        FilterCountQuery<T> filterQuery = new FilterCountQuery<>(entityManager,getClassEntity());
+        return filterQuery;
+    }
+
     @Transactional
     public AbstractEntity prepare(AbstractEntity entity, BaseRepository repository, User currentUser) throws Exception {
         if (repository instanceof PrepareEntity) {
