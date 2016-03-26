@@ -10,4 +10,11 @@ public class ProgrammingLanguageRepository extends BaseRepository<ProgrammingLan
     protected Class<ProgrammingLanguage> getClassEntity() {
         return ProgrammingLanguage.class;
     }
+
+    public void create(String name,String mode){
+        ProgrammingLanguage programmingLanguage = new ProgrammingLanguage();
+        programmingLanguage.setName(name);
+        programmingLanguage.setMode(name);
+        create(programmingLanguage);
+    }
 }

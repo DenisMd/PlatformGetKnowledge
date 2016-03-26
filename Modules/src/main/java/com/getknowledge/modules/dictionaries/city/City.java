@@ -1,5 +1,6 @@
 package com.getknowledge.modules.dictionaries.city;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.region.Region;
 import com.getknowledge.platform.annotations.ModuleInfo;
@@ -17,6 +18,7 @@ public class City extends AbstractEntity {
     private String cityName;
 
     @ManyToOne
+    @JsonIgnore
     private Region region;
 
     public Region getRegion() {

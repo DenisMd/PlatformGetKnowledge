@@ -182,7 +182,7 @@ model.controller("userCtrl", function ($scope, $state,$timeout,$http,application
             $scope.country = value;
             $scope.$broadcast('reset' + $scope.cityData.id.capitalizeFirstLetter() + 'Event');
             $scope.$broadcast('reset' + $scope.regionData.id.capitalizeFirstLetter() + 'Event');
-            applicationService.action($scope, "regionsList", className.region, "chooseRegionsByCountry", {countryId:value.id});
+            applicationService.action($scope, "regionsList", className.region, "getRegionsByCountry", {countryId:value.id});
             isRegionDisable = false;
             isCityDisable = true;
         }

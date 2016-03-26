@@ -20,16 +20,13 @@ public class ProgrammingLanguageService extends AbstractService implements Boots
     @Override
     public void bootstrap(HashMap<String, Object> map) throws Exception {
         if (programmingLanguageRepository.count() == 0) {
-            InputStream is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/dictionaries.programming/languagesBootstrap");
+            InputStream is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/editor/languagesBootstrap");
             try(BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
                 String line = null;
                 while ((line = reader.readLine()) != null) {
-                    ProgrammingLanguage programmingLanguage = new ProgrammingLanguage();
                     line = line.replaceAll("\\s+", "");
                     String[] split = line.split(":");
-                    programmingLanguage.setName(split[0]);
-                    programmingLanguage.setMode(split[1]);
-                    programmingLanguageRepository.create(programmingLanguage);
+                    programmingLanguageRepository.create(split[0],split[1]);
                 }
             }
         }

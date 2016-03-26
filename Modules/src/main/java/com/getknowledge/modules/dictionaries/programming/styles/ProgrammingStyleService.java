@@ -20,13 +20,11 @@ public class ProgrammingStyleService extends AbstractService implements Bootstra
     @Override
     public void bootstrap(HashMap<String, Object> map) throws Exception {
         if (programmingStyleRepository.count() == 0) {
-            InputStream is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/dictionaries.programming/stylesBootstrap");
+            InputStream is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/editor/stylesBootstrap");
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
                 String line = null;
                 while ((line = reader.readLine()) != null) {
-                    ProgrammingStyle programmingStyle = new ProgrammingStyle();
-                    programmingStyle.setName(line);
-                    programmingStyleRepository.create(programmingStyle);
+                   programmingStyleRepository.create(line);
                 }
             }
         }

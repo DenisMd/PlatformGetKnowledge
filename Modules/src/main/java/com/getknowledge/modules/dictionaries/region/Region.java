@@ -1,15 +1,14 @@
 package com.getknowledge.modules.dictionaries.region;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.modules.dictionaries.city.City;
 import com.getknowledge.modules.dictionaries.country.Country;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "region")
@@ -19,19 +18,20 @@ public class Region extends AbstractEntity {
     @Column(name = "region_name")
     private String regionName;
 
-    @JsonIgnore
-    @Column(name = "external_id")
-    private Long xmlId;
-
     @ManyToOne
+    @JsonIgnore
     private Country country;
 
-    public Long getXmlId() {
-        return xmlId;
+    @OneToMany(mappedBy = "region")
+    @JsonIgnore
+    private List<City> cities;
+
+    public List<City> getCities() {
+        return cities;
     }
 
-    public void setXmlId(Long xmlId) {
-        this.xmlId = xmlId;
+    public void setCities(List<City> cities) {
+        this.cities = cities;
     }
 
     public String getRegionName() {
