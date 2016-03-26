@@ -880,13 +880,28 @@ model.controller("postController",function($scope,$rootScope,codemirrorURL,TagSe
     };
     $scope.content = "";
 
+    //open Tags Pool
+    $scope.openPool = function(event){
+        $scope.showDialog(event, $scope, "tagPool.html", function(){});
+    };
+
+    $scope.currentTag = {};
+
+    $scope.setCurrentTag = function(tag){
+        $scope.currentTag = tag;
+    };
+
+    $scope.getOptions = function (tag) {
+        //return angular.copy(tag.getData(),);
+    }
+
     //paste code
     var defaultOptions = {
         lineNumbers: true,
         indentWithTabs: true
     };
 
-    $scope.pasteCode = function() {
+    $scope.pasteCode = function(event) {
         $scope.showDialog(event, $scope, "pasteCode.html", function (newTagInfo) {
             var newTag = new Tag();
             newTag.setName(newTagInfo.title);
@@ -897,23 +912,19 @@ model.controller("postController",function($scope,$rootScope,codemirrorURL,TagSe
                 theme: newTagInfo.theme.name
             }, defaultOptions);
             newTag.setData(options);
-            TagPool.push(newTag);
-            var tag = TagPool[TagPool.length - 1];
+            $rootScope.tagPool.push(newTag);
+            var tag = $rootScope.tagPool[$rootScope.tagPool.length - 1];
             if (tag) {
                 angular.extend($scope.test,tag.getData());
                 $scope.test.title = tag.getName();
                 $rootScope.$broadcast('setCaret');
-                $rootScope.$broadcast('add', TagService.getEditableTag($scope.content,tag,TagPool.length - 1));
+                $rootScope.$broadcast('add', TagService.getEditableTag($scope.content,tag,$rootScope.tagPool.length - 1));
             }
         },null,refresh,function(){
 
         });
     };
 
-    $scope.insert = function(){
-        //$rootScope.$broadcast('add', "<span>hello world!</span>");
-
-    };
 
     $scope.code = {
         text:"var i = \"hello world\"",

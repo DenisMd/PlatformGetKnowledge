@@ -29,13 +29,13 @@
                 {{translate("tooltip_formula")}}
             </md-tooltip>
         </span>
-        <span class="tool-button tool-button-3"  ng-click="pasteCode()">
+        <span class="tool-button tool-button-3"  ng-click="pasteCode($event)">
             { }
             <md-tooltip md-direction="bottom">
                 {{translate("tooltip_code")}}
             </md-tooltip>
         </span>
-        <span class="tool-button tool-button-4">
+        <span class="tool-button tool-button-4"   ng-click="openPool($event)">
             <i class="fa fa-code"></i>
             <md-tooltip md-direction="bottom">
                 {{translate("tooltip_code_pool")}}
@@ -87,6 +87,56 @@
                     </md-button>
                 </md-dialog-actions>
             </form>
+        </md-dialog>
+    </script>
+    {{tagPool}}
+    <script type="text/ng-template" id="tagPool.html">
+        <md-dialog aria-label="Tags Pool" ng-cloak flex="80">
+                <md-toolbar class="statistic-card-title">
+                    <div class="md-toolbar-tools">
+                        <h2>{{parentScope.translate("tags_pool_header")}}</h2>
+                    </div>
+                </md-toolbar>
+                <md-dialog-content layout-padding>
+                    <div class="form-group" layout="row" layout-padding>
+                        <div layout="column" flex>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            №
+                                        </th>
+                                        <th>
+                                            {{parentScope.translate("tags_pool_name")}}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="tag in parentScope.tagPool" ng-click="parentScope.setCurrentTag(tag)">
+                                        <td>
+                                            {{$index}}
+                                        </td>
+                                        <td>
+                                            {{tag.getName()}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div layout="column" flex>
+                            <div ui-codemirror="parentScope.currentTag.getData()" ng-model="parentScope.currentTag.getData().text"></div>
+                        </div>
+                    </div>
+
+                </md-dialog-content>
+                <md-dialog-actions layout="row">
+                    <md-button class="md-raised md-primary" ng-disabled="codeTag.$invalid" ng-click="answer(parentScope.code)">
+                        {{parentScope.translate("doIt")}}
+                    </md-button>
+                    <md-button class="md-raised md-warn" ng-click="cancel()">
+                        {{parentScope.translate("close")}}
+                    </md-button>
+                </md-dialog-actions>
         </md-dialog>
     </script>
 </div>

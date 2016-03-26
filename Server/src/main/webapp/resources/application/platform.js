@@ -695,6 +695,8 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 });
             }
         });
+
+        $rootScope.tagPool = [];
     })
 
     .directive("errorModalTemplate",function(resourceTemplate){
@@ -909,7 +911,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             }
         }
     }])
-.directive('contenteditable', ['$sce','TagService', function($sce,TagService) {
+.directive('contenteditable', ['$rootScope','$sce','TagService', function($rootScope,$sce,TagService) {
     return {
         restrict: 'A', // only activate on element attribute
         require: '?ngModel', // get a hold of NgModelController
@@ -952,7 +954,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     var index = parseInt(value);
                     if (isNaN(index)) continue;
 
-                    var tag = TagPool[index];
+                    var tag = $rootScope.tagPool[index];
                     if (!tag)  continue;
 
                     var string = angular.toJson(tag.toJson());
@@ -1056,6 +1058,46 @@ function Tag() {
     }
 }
 
-var TagPool = [];
+function ProgramTag() {
+    Tag.call(this);
 
+    var options = {
+        lineNumbers: true,
+        indentWithTabs: true
+    };
+
+    var code = "";
+
+    this.getCode = function() {
+        return code;
+    };
+
+    this.setCode = function(t) {
+        if (!t || !angular.isString(t)) {
+            console.error("Tag data is not a valid");
+            return;
+        }
+        code = d;
+    };
+
+    this.setMode = function(m){
+        options.mode = m;
+    };
+
+    this.setTheme = function(t){
+        options.theme = t;
+    };
+
+    this.getOptions = function(){
+
+    }
+
+    var parentJson = this.toJson;
+
+    this.toJson = function(){
+        var json = parentJson.call(this);
+        angular.merge(json,{code:code, options:getOptions()});
+        return json;
+    }
+}
 
