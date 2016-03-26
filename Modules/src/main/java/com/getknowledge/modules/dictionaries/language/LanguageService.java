@@ -18,20 +18,15 @@ public class LanguageService extends AbstractService implements BootstrapService
     @Override
     public void bootstrap(HashMap<String, Object> map) throws Exception {
         if (languageRepository.count() == 0) {
-            Language ru = new Language();
-            ru.setName(Languages.Ru.name());
-            languageRepository.create(ru);
-
-            Language en = new Language();
-            en.setName(Languages.En.name());
-            languageRepository.create(en);
+            languageRepository.createLanguage(Languages.Ru);
+            languageRepository.createLanguage(Languages.En);
         }
     }
 
     @Override
     public BootstrapInfo getBootstrapInfo() {
         BootstrapInfo bootstrapInfo = new BootstrapInfo();
-        bootstrapInfo.setName("LanguageService");
+        bootstrapInfo.setName("Language service");
         bootstrapInfo.setOrder(0);
         return bootstrapInfo;
     }
