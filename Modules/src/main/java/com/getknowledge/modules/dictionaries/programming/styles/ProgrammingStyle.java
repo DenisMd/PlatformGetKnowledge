@@ -12,8 +12,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "programming_styles")
-@ModuleInfo(repositoryName = "ProgrammingStylesRepository" , serviceName = "ProgrammingStyleService")
-public class ProgrammingStyles  extends AbstractEntity{
+@ModuleInfo(repositoryName = "ProgrammingStyleRepository" , serviceName = "ProgrammingStyleService")
+public class ProgrammingStyle extends AbstractEntity{
 
     @Column
     private String name;

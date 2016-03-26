@@ -4,10 +4,10 @@ import com.getknowledge.platform.base.repositories.BaseRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository("ProgrammingStylesRepository")
-public class ProgrammingStylesRepository extends BaseRepository<ProgrammingStyles> {
+public class ProgrammingStyleRepository extends BaseRepository<ProgrammingStyle> {
 
     @Override
-    protected Class<ProgrammingStyles> getClassEntity() {
-        return ProgrammingStyles.class;
+    protected Class<ProgrammingStyle> getClassEntity() {
+        return ProgrammingStyle.class;
     }
 }

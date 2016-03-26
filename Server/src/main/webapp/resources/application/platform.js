@@ -31,7 +31,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "groupBooks" : "com.getknowledge.modules.books.group.GroupBooks",
             "groupPrograms" : "com.getknowledge.modules.programs.group.GroupPrograms",
             "programmingLanguages" :  "com.getknowledge.modules.dictionaries.programming.languages.ProgrammingLanguage",
-            "programmingStyles" : "com.getknowledge.modules.dictionaries.programming.styles.ProgrammingStyles",
+            "programmingStyles" : "com.getknowledge.modules.dictionaries.programming.styles.ProgrammingStyle",
             "book" : "com.getknowledge.modules.books.Book",
             "program" : "com.getknowledge.modules.programs.Program",
             "course" : "com.getknowledge.modules.courses.Course",
