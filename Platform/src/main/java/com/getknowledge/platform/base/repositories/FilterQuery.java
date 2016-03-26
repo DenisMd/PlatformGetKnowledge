@@ -191,6 +191,10 @@ public class FilterQuery<T> {
         if (previous != null)
             q.where(previous);
 
+        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+        countQuery.select(cb.count(countQuery.from(pClassEntity)));
+        System.err.println("Count : " + entityManager.createQuery(countQuery).getSingleResult());
+
         Query query = entityManager.createQuery(q);
         if (max > 0) {
             query.setFirstResult(first);

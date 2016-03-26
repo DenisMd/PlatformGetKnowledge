@@ -8,6 +8,7 @@ import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.utils.ModuleLocator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -25,6 +26,9 @@ public abstract class BaseRepository<T extends AbstractEntity> {
     protected Logger logger = LoggerFactory.getLogger(BaseRepository.class);
 
     protected abstract Class<T> getClassEntity();
+
+    @Autowired
+    private ModuleLocator moduleLocator;
 
     @PersistenceContext
     public EntityManager entityManager;
@@ -122,7 +126,7 @@ public abstract class BaseRepository<T extends AbstractEntity> {
     }
 
     @Transactional
-    public AbstractEntity prepare(AbstractEntity entity, BaseRepository repository, User currentUser, ModuleLocator moduleLocator) throws Exception {
+    public AbstractEntity prepare(AbstractEntity entity, BaseRepository repository, User currentUser) throws Exception {
         if (repository instanceof PrepareEntity) {
 
             if (repository instanceof ProtectedRepository) {
@@ -144,7 +148,7 @@ public abstract class BaseRepository<T extends AbstractEntity> {
                         AbstractEntity abstractEntity = (AbstractEntity) result;
                         BaseRepository<AbstractEntity> repository2 = (BaseRepository<AbstractEntity>)moduleLocator.findRepository(abstractEntity.getClass());
                         if(pd.getWriteMethod() != null)
-                            pd.getWriteMethod().invoke(entity, prepare(abstractEntity,repository2,currentUser,moduleLocator));
+                            pd.getWriteMethod().invoke(entity, prepare(abstractEntity,repository2,currentUser));
                     }
                 }
             }

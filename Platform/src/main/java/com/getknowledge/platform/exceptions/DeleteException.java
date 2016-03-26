@@ -5,15 +5,15 @@ import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+@ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
 public class DeleteException extends PlatformException{
     public DeleteException(String message) {
         super(message);
-        super.errorResource.setStatus(HttpStatus.BAD_REQUEST);
+        super.errorResource.setStatus(HttpStatus.NOT_ACCEPTABLE);
     }
 
     public DeleteException(String message, TraceService traceService, TraceLevel traceLevel) {
         super(message, traceService, traceLevel);
-        super.errorResource.setStatus(HttpStatus.BAD_REQUEST);
+        super.errorResource.setStatus(HttpStatus.NOT_ACCEPTABLE);
     }
 }
