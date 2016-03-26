@@ -478,7 +478,7 @@ public class DataController {
 
             ObjectNode objectNode = objectMapper.createObjectNode();
             User user = getCurrentUser(principal);
-            objectNode.put("totalEntitiesCount" , filterQuery.getCountEntities());
+           // objectNode.put("totalEntitiesCount" , filterQuery.getCountEntities());
             objectNode.putArray("list").addAll(listToJsonString(list,user,repository,classEntity));
             Constructor<?> cos = classEntity.getConstructor();
             AbstractEntity abstractEntity = (AbstractEntity) cos.newInstance();

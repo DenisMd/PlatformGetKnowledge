@@ -22,7 +22,6 @@ public class FilterQuery<T> {
     private Predicate previous = null;
     public EntityManager entityManager;
     private Class<T>  pClassEntity = null;
-    private Long countEntities=null;
 
     public FilterQuery(EntityManager entityManager , Class<T> classEntity) {
         cb = entityManager.getCriteriaBuilder();
@@ -192,11 +191,6 @@ public class FilterQuery<T> {
         if (previous != null)
             q.where(previous);
 
-        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
-        countQuery.select(cb.count(countQuery.from(pClassEntity)));
-        countQuery.where(previous);
-        countEntities = entityManager.createQuery(countQuery).getSingleResult();
-
         Query query = entityManager.createQuery(q);
         if (max > 0) {
             query.setFirstResult(first);
@@ -204,10 +198,6 @@ public class FilterQuery<T> {
         }
 
         return query;
-    }
-
-    public Long getCountEntities() {
-        return countEntities;
     }
 
     public Root<T> getRoot() {
