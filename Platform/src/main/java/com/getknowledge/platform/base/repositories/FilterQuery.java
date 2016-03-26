@@ -5,30 +5,27 @@ import com.getknowledge.platform.base.repositories.enumerations.OrderRoute;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.*;
-import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 public class FilterQuery<T> {
     //Задание свойст для фильтров
     private Root<T> root = null;
-    private CriteriaQuery<T> q = null;
-    private CriteriaBuilder cb = null;
+    private CriteriaQuery<T> criteriaQuery = null;
+    private CriteriaBuilder criteriaBuilder = null;
     private List<Order> orders = null;
-    private Predicate previous = null;
+    private Predicate previousPredicate = null;
     public EntityManager entityManager;
     private Class<T>  pClassEntity = null;
 
     public FilterQuery(EntityManager entityManager , Class<T> classEntity) {
-        cb = entityManager.getCriteriaBuilder();
-        q = cb.createQuery(classEntity);
-        root = q.from(classEntity);
+        criteriaBuilder = entityManager.getCriteriaBuilder();
+        criteriaQuery = criteriaBuilder.createQuery(classEntity);
+        root = criteriaQuery.from(classEntity);
         orders = new ArrayList<>();
-        previous = cb.conjunction();
+        previousPredicate = criteriaBuilder.conjunction();
         this.entityManager = entityManager;
         pClassEntity = classEntity;
     }
@@ -57,8 +54,8 @@ public class FilterQuery<T> {
         Path path = parseField(orderField);
 
         switch (order) {
-            case Asc: orders.add(cb.asc(path)); break;
-            case Desc: orders.add(cb.desc(path)); break;
+            case Asc: orders.add(criteriaBuilder.asc(path)); break;
+            case Desc: orders.add(criteriaBuilder.desc(path)); break;
         }
     }
 
@@ -68,7 +65,7 @@ public class FilterQuery<T> {
 
         for (int i =0; i < field.length; i++) {
             Path path = parseField(field[i]);
-            likes.add(cb.like(path,"%"+values[i]+"%"));
+            likes.add(criteriaBuilder.like(path,"%"+values[i]+"%"));
         }
 
         Predicate result = null;
@@ -79,17 +76,17 @@ public class FilterQuery<T> {
             result = likes.get(0);
             for (int i = 1; i < likes.size(); i++) {
                 if (or)
-                    result = cb.or(likes.get(i) , result);
+                    result = criteriaBuilder.or(likes.get(i) , result);
                 else
-                    result = cb.and(likes.get(i) , result);
+                    result = criteriaBuilder.and(likes.get(i) , result);
             }
         }
 
-        if (previous != null) {
-            result = cb.and(previous , result);
+        if (previousPredicate != null) {
+            result = criteriaBuilder.and(previousPredicate, result);
         }
 
-        previous = result;
+        previousPredicate = result;
     }
 
     private Enum covertStringToEnum(String fieldName , String value) {
@@ -146,22 +143,22 @@ public class FilterQuery<T> {
 
         Predicate inP = path.in(values);
 
-        if (previous != null) {
-            inP = cb.and(previous , inP);
+        if (previousPredicate != null) {
+            inP = criteriaBuilder.and(previousPredicate, inP);
         }
 
-        previous = inP;
+        previousPredicate = inP;
     }
 
     public void betweenDates(String field, Date start, Date end) {
         Path path = parseField(field);
 
-        Predicate result = cb.between(path,start,end);
+        Predicate result = criteriaBuilder.between(path,start,end);
 
-        if (previous != null)
-            result = cb.and(previous,result);
+        if (previousPredicate != null)
+            result = criteriaBuilder.and(previousPredicate,result);
 
-        previous = result;
+        previousPredicate = result;
     }
 
     public void equal(String field, Object value) {
@@ -174,24 +171,24 @@ public class FilterQuery<T> {
             value = covertStringToEnum(field, (String) value);
         }
 
-        Predicate result = cb.equal(path,value);
+        Predicate result = criteriaBuilder.equal(path,value);
 
-        if (previous != null)
-            result = cb.and(previous,result);
+        if (previousPredicate != null)
+            result = criteriaBuilder.and(previousPredicate,result);
 
-        previous = result;
+        previousPredicate = result;
     }
 
     public Query getQuery(int first , int max) {
 
         if (!orders.isEmpty()) {
-            q.orderBy(orders);
+            criteriaQuery.orderBy(orders);
         }
 
-        if (previous != null)
-            q.where(previous);
+        if (previousPredicate != null)
+            criteriaQuery.where(previousPredicate);
 
-        Query query = entityManager.createQuery(q);
+        Query query = entityManager.createQuery(criteriaQuery);
         if (max > 0) {
             query.setFirstResult(first);
             query.setMaxResults(max);

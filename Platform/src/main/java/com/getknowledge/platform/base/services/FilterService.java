@@ -1,4 +1,4 @@
-package com.getknowledge.platform.modules.filter;
+package com.getknowledge.platform.base.services;
 
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.repositories.FilterQuery;
