@@ -5,4 +5,4 @@
 <h1 class="title" ng-if="groupProgram">{{groupProgram}}</h1>
 
 <module-template name="cards/folderCards" data="folderData" ng-if="!groupProgram"></module-template>
-<module-template name="cards/program" data="programData"  ng-if="groupProgram"></module-template>
+<module-template name="cards/programs" data="programData"  ng-if="groupProgram"></module-template>

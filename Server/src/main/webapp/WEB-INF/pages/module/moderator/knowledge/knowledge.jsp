@@ -81,6 +81,16 @@
                 <md-button class="md-raised md-primary" ng-click="updateKnowledge()" ng-disabled="!currentKnowledge">{{translate("update")}}</md-button>
             </md-content>
         </md-tab>
+        <md-tab ng-if="currentKnowledge != null">
+            <md-tab-label>
+                {{translate('knowledge_image')}}
+            </md-tab-label>
+            <md-tab-body>
+                <md-content class="md-padding">
+                    <module-template name="inputs/selectImage" data="getCropImageData()"></module-template>
+                </md-content>
+            </md-tab-body>
+        </md-tab>
     </md-tabs>
 </md-content>
 

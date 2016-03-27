@@ -2,16 +2,15 @@ package com.getknowledge.platform.base.repositories;
 
 import com.getknowledge.platform.annotations.Access;
 import com.getknowledge.platform.base.entities.CloneableEntity;
+import com.getknowledge.platform.base.entities.IOwner;
 import com.getknowledge.platform.base.entities.IUser;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.user.User;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 
-@Transactional(readOnly = true)
-public abstract class ProtectedRepository <T extends CloneableEntity<T>> extends PrepareRepository<T> {
+public abstract class ProtectedRepository <T extends CloneableEntity<T>> extends BaseRepository<T> implements PrepareEntity<T>  {
     protected User currentUser = null;
 
     public void setCurrentUser(User user) {
@@ -25,6 +24,13 @@ public abstract class ProtectedRepository <T extends CloneableEntity<T>> extends
         if (entity instanceof IUser) {
             owner = ((IUser)entity).getUser();
         }
+
+        boolean isOwner = false;
+
+        if (entity instanceof IOwner) {
+            isOwner = ((IOwner)entity).isOwner(currentUser);
+        }
+
         entity = entity.clone();
         for (Field field : entity.getClass().getDeclaredFields()) {
             field.setAccessible(true);
@@ -36,6 +42,12 @@ public abstract class ProtectedRepository <T extends CloneableEntity<T>> extends
                             if (owner.getLogin().equals(currentUser.getLogin())) {
                                 break;
                             }
+                        }
+                    }
+
+                    if (access.forOwners()) {
+                        if (isOwner) {
+                            break;
                         }
                     }
 

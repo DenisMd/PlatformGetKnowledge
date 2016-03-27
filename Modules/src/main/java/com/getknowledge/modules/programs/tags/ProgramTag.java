@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.programs.Program;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
+import com.getknowledge.platform.base.entities.ITag;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinTable;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "program_tag")
-public class ProgramTag extends AbstractEntity {
+public class ProgramTag extends AbstractEntity implements ITag {
 
     private String tagName;
 
@@ -31,10 +32,12 @@ public class ProgramTag extends AbstractEntity {
         this.programs = programs;
     }
 
+    @Override
     public String getTagName() {
         return tagName;
     }
 
+    @Override
     public void setTagName(String tagName) {
         this.tagName = tagName;
     }

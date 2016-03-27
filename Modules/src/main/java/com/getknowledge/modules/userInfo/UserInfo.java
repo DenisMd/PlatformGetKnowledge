@@ -1,6 +1,7 @@
 package com.getknowledge.modules.userInfo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.modules.courses.Course;
 import com.getknowledge.modules.dictionaries.city.City;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.menu.Menu;
@@ -13,7 +14,9 @@ import com.getknowledge.platform.base.entities.CloneableEntity;
 import com.getknowledge.platform.modules.user.User;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 @Entity
 @Table(name = "user_info")
@@ -63,11 +66,43 @@ public class UserInfo  extends CloneableEntity<UserInfo> implements IUser{
     @Embedded
     private UserSocialLink links;
 
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "user_frieds")
+    private List<UserInfo> friends = new ArrayList<>();
+
     @Transient
     private Menu userMenu;
 
+    //Список курсов, которые изучает данный пользователь
+    @ManyToMany
+    @JsonIgnore
+    @JoinTable(name = "users_studied_course")
+    private List<Course> studiedCourses = new ArrayList<>();
+
     @Transient
     private boolean online = false;
+
+    @ManyToMany
+    @JsonIgnore
+    @JoinTable(name = "users_purchased_course")
+    private List<Course> purchasedCourses = new ArrayList<>();
+
+    public List<Course> getPurchasedCourses() {
+        return purchasedCourses;
+    }
+
+    public void setPurchasedCourses(List<Course> purchasedCourses) {
+        this.purchasedCourses = purchasedCourses;
+    }
+
+    public List<Course> getStudiedCourses() {
+        return studiedCourses;
+    }
+
+    public void setStudiedCourses(List<Course> studiedCourses) {
+        this.studiedCourses = studiedCourses;
+    }
 
     public boolean isOnline() {
         return online;
@@ -165,6 +200,14 @@ public class UserInfo  extends CloneableEntity<UserInfo> implements IUser{
         this.lastName = lastName;
     }
 
+    public List<UserInfo> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<UserInfo> friends) {
+        this.friends = friends;
+    }
+
     @Override
     public User getUser() {
         return user;
@@ -217,6 +260,8 @@ public class UserInfo  extends CloneableEntity<UserInfo> implements IUser{
         userInfo.setLinks(this.links);
         userInfo.setUserMenu(this.userMenu);
         userInfo.setOnline(this.online);
+        userInfo.setStudiedCourses(this.getStudiedCourses());
+        userInfo.setPurchasedCourses(this.getPurchasedCourses());
         return userInfo;
     }
 }

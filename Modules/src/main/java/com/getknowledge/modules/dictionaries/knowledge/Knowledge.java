@@ -1,14 +1,14 @@
 package com.getknowledge.modules.dictionaries.knowledge;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.modules.dictionaries.knowledge.enumeration.KnowledgeType;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "knowledge")
@@ -16,12 +16,18 @@ import javax.persistence.Table;
 public class Knowledge extends AbstractEntity {
 
     @Column(name = "type")
+    @Enumerated(EnumType.STRING)
     private KnowledgeType knowledgeType;
 
     private String name;
 
     @Column(length = 750)
     private String note;
+
+    @Basic(fetch= FetchType.LAZY)
+    @Lob @Column(name="image")
+    @JsonIgnore
+    private byte[] image;
 
     public String getNote() {
         return note;
@@ -45,6 +51,14 @@ public class Knowledge extends AbstractEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     @Override

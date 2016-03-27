@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "menu_items")
-@ModuleInfo(repositoryName = "MenuItemsRepository" , serviceName = "MenuItemsService")
+@ModuleInfo(repositoryName = "MenuItemsRepository")
 public class MenuItem extends AbstractEntity {
 
     private String title;
@@ -72,8 +72,8 @@ public class MenuItem extends AbstractEntity {
     @Override
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
-        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditSections.getName()));
-        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.EditSections.getName()));
+        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditMenu.getName()));
+        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.EditMenu.getName()));
         return authorizationList;
     }
 }

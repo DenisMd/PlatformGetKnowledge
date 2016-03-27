@@ -41,6 +41,7 @@ public class RoleService extends AbstractService implements BootstrapService {
             author.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.CreateBooks));
             author.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.CreatePrograms));
             author.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.CreateCourse));
+            author.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.UploadVideos));
             roleRepository.create(author);
 
             Role moderator = new Role();
@@ -54,6 +55,7 @@ public class RoleService extends AbstractService implements BootstrapService {
             moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.EditPrograms));
             moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.EditCourse));
             moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.EditKnowledge));
+            moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.BlockComments));
             roleRepository.create(moderator);
         }
     }

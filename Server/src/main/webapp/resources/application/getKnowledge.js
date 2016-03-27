@@ -117,8 +117,12 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         return window.location + url;
     };
 
-    $scope.goTo = function(url) {
-        window.location.href = $scope.addUrlToPath("/"+url);
+    $scope.goTo = function(url,isAbsolutePath) {
+        if (isAbsolutePath) {
+            window.location.href = url;
+        } else {
+            window.location.href = $scope.addUrlToPath("/"+url);
+        }
     };
 
     $scope.openInNewTab = function(url) {
@@ -273,16 +277,16 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         }
     };
 
+    $scope.videoImg = function(id){
+        return applicationService.imageHref(className.video,id);
+    };
+
 
     applicationService.list($scope,"mainLinks" , className.socialLinks);
     applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {});
 
     applicationService.list($scope , "programmingLanguages",className.programmingLanguages);
     applicationService.list($scope , "programmingStyles",className.programmingStyles);
-
-    applicationService.action($scope , "countries" ,className.country , "getCountries",{
-        language : "Ru"
-    });
 });
 
 model.controller("treeListCtrl" , function ($scope) {
@@ -299,12 +303,10 @@ model.controller("treeListCtrl" , function ($scope) {
 model.controller("videoCtrl",function($scope){
     initVideoPlayer();
 
-    var videoUrl = $scope.getVideoUrl(1);
-    $scope.url = {type: "video/mp4", src: videoUrl};
-
-    $scope.open = function() {
-        if (!player ||player.currentSrc() != $scope.url.src) {
-            player.src($scope.url);
+    $scope.open = function(id) {
+        var videoUrl = $scope.getVideoUrl(id != undefined ? id : 1);
+        if (!player ||player.currentSrc() != videoUrl) {
+            player.src({type: "video/mp4", src: videoUrl});
             player.play();
         } else {
             player.play();
@@ -624,7 +626,7 @@ model.controller("selectImgCtrl", function($scope){
             $scope.originalImg = image.target.result;
             $scope.item = {
                 original : $scope.originalImg,
-                cropImage:  $scope.croppedImg
+                cropImage:  ""
             };
             if (!dialogShown) {
                 $scope.showDialog(event, $scope, "cropModal.html",$scope.onChange,function(){
@@ -639,7 +641,7 @@ model.controller("selectImgCtrl", function($scope){
 
     $scope.showModal = function(){
         if ($scope.getData()) {
-            return $scope.getData().isInModal ? $scope.getData().isInModal : false;
+            return $scope.getData().isCrop ? $scope.getData().isCrop : false;
         }
         return false;
     };
@@ -1120,6 +1122,54 @@ model.controller("programCardCtrl" , function($scope,applicationService,classNam
     });
 });
 
+model.controller("coursesCtrl", function($scope,applicationService,className){
+    var filter = applicationService.createFilter(className.course,0,10);
+    filter.equal("groupCourses.url",$scope.getData().groupName);
+    filter.equal("groupCourses.section.name",$scope.getData().sectionName);
+    $scope.courses = [];
+
+    var filter2 = applicationService.createFilter(className.groupCourses,0,1);
+    filter2.equal("url" , $scope.getData().groupName);
+    applicationService.filterRequest($scope,"groupCourses",filter2);
+
+    var addCourse = function(course){
+        $scope.courses.push(course);
+    };
+
+    var doAction = function() {
+        applicationService.filterRequest($scope,"courseData",filter,addCourse);
+    };
+
+    doAction();
+
+    $scope.loadMore = function () {
+        filter.increase(10);
+        doAction();
+    };
+
+    $scope.courseCover = function(id){
+        return applicationService.imageHref(className.course,id);
+    };
+
+    $scope.folderImg = function(id){
+        return applicationService.imageHref(className.course,id);
+    };
+
+    $scope.showAdvanced = function(ev) {
+        $scope.showDialog(ev,$scope,"createCourse.html",function(answer){
+            answer.groupCourseId = $scope.groupCourses.list[0].id;
+            applicationService.action($scope,"" , className.course,"createCourse",answer,function(result){
+                $scope.showToast(result);
+                $scope.goTo("course/"+result.object);
+            });
+        });
+    };
+
+    applicationService.list($scope,"langs",className.language, function (item) {
+        item.title = $scope.translate(item.name.toLowerCase())
+    });
+});
+
 //dialogs
 function DialogController($scope, $mdDialog , theScope) {
     $scope.parentScope = theScope;
@@ -1165,5 +1215,3 @@ model.service('arcService', function(){
         showTooltips : false
     }
 });
-
-

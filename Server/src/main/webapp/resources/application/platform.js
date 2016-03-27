@@ -22,22 +22,24 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "system_event" : "com.getknowledge.modules.event.SystemEvent",
             "tasks" : "com.getknowledge.platform.modules.task.Task",
             "trace" : "com.getknowledge.platform.modules.trace.Trace",
-            "knolwedge" : "com.getknowledge.modules.dictionaries.knowledge.Knowledge",
+            "knowledge" : "com.getknowledge.modules.dictionaries.knowledge.Knowledge",
             "settings" : "com.getknowledge.modules.settings.Settings",
             "systemServices" : "com.getknowledge.platform.modules.service.Service",
-            "socialLinks" : "com.getknowledge.modules.socialLinks.SocialLink",
+            "socialLinks" : "com.getknowledge.modules.dictionaries.socialLinks.SocialLink",
             "hpMessage" : "com.getknowledge.modules.help.desc.HpMessage",
             "groupCourses" : "com.getknowledge.modules.courses.group.GroupCourses",
             "groupBooks" : "com.getknowledge.modules.books.group.GroupBooks",
             "groupPrograms" : "com.getknowledge.modules.programs.group.GroupPrograms",
             "programmingLanguages" :  "com.getknowledge.modules.dictionaries.programming.languages.ProgrammingLanguage",
-            "programmingStyles" : "com.getknowledge.modules.dictionaries.programming.styles.ProgrammingStyles",
+            "programmingStyles" : "com.getknowledge.modules.dictionaries.programming.styles.ProgrammingStyle",
             "book" : "com.getknowledge.modules.books.Book",
-            "program" : "com.getknowledge.modules.programs.Program"
+            "program" : "com.getknowledge.modules.programs.Program",
+            "course" : "com.getknowledge.modules.courses.Course",
+            "tutorial" : "com.getknowledge.modules.courses.tutorial.Tutorial"
          };
     })
     .factory('modules',function(){
-        return ["user","accept","section","restorePassword","groupCourses","groupBooks","groupPrograms","book","program"];
+        return ["user","accept","section","restorePassword","groupCourses","groupBooks","groupPrograms","book","program","course","tutorial"];
     })
     .constant("resourceUrl", "/resources/application/")
     .constant("resourceTemplate","/resources/template/")
@@ -323,7 +325,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             });
         };
 
-        this.createUploader = function ($scope,name,className,actionName,data,callback){
+        this.createUploader = function ($scope,name,className,actionName,data,callback,prepareItem){
             "use strict";
             var isCallbackFunction = isFunction(callback);
             var formData = {
@@ -335,6 +337,10 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 url: platformDataUrl+'actionWithFile',
                 autoUpload: false,
                 onBeforeUploadItem: function(item) {
+                    if (isFunction(prepareItem)) {
+                        prepareItem(formData);
+                    }
+                    console.log(formData);
                     item.formData.push(formData);
                 }
             });

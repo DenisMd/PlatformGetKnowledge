@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.Calendar;
 
 @Entity
-@Table(name = "task")
+@Table(name = "sys_task")
 @ModuleInfo(repositoryName = "TaskRepository" , serviceName = "TaskService")
 public class Task  extends AbstractEntity{
 

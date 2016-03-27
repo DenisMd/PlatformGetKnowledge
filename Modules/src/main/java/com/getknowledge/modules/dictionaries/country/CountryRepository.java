@@ -9,4 +9,12 @@ public class CountryRepository extends BaseRepository<Country> {
     protected Class<Country> getClassEntity() {
         return Country.class;
     }
+
+
+    public Country createCountry(String name){
+        Country country = new Country();
+        country.setCountryName(name);
+        create(country);
+        return country;
+    }
 }

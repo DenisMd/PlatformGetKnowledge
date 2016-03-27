@@ -17,10 +17,9 @@ import com.getknowledge.platform.base.services.FileService;
 import com.getknowledge.platform.base.services.ImageService;
 import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.modules.trace.TraceService;
-import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
+import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -47,26 +46,6 @@ public class BookService extends AbstractService implements ImageService,FileSer
 
     @Autowired
     private BookRepository bookRepository;
-
-    private void prepareTag(HashMap<String,Object> data , Book book) {
-        if (data.containsKey("tags")) {
-            List<String> tags = (List<String>) data.get("tags");
-            for (String tag : tags) {
-                BooksTag booksTag = booksTagRepository.createIfNotExist(tag);
-                book.getTags().add(booksTag);
-            }
-        }
-    }
-
-    private void removeTagsFromBook(Book book) {
-
-        for (BooksTag booksTag : book.getTags()) {
-            booksTag.getBooks().remove(book);
-            booksTagRepository.merge(booksTag);
-        }
-
-        book.getTags().clear();
-    }
 
     private void prepareLinks(HashMap<String,Object> data , Book book) {
         if (data.containsKey("links")) {
@@ -132,7 +111,10 @@ public class BookService extends AbstractService implements ImageService,FileSer
 
         prepareLinks(data,book);
 
-        prepareTag(data,book);
+        if (data.containsKey("tags")) {
+            List<String> tags = (List<String>) data.get("tags");
+            booksTagRepository.createTags(tags,book);
+        }
 
         bookRepository.create(book);
 
@@ -169,8 +151,11 @@ public class BookService extends AbstractService implements ImageService,FileSer
 
         prepareLinks(data,book);
 
-        removeTagsFromBook(book);
-        prepareTag(data,book);
+        if (data.containsKey("tags")) {
+            List<String> tags = (List<String>) data.get("tags");
+            booksTagRepository.removeTagsFromEntity(book);
+            booksTagRepository.createTags(tags,book);
+        }
 
         bookRepository.merge(book);
         for (BooksTag booksTag : book.getTags()) {

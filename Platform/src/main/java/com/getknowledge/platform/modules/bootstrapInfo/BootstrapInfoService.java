@@ -4,20 +4,16 @@ import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.BootstrapService;
 import com.getknowledge.platform.exceptions.ParseException;
-import com.getknowledge.platform.modules.bootstrapInfo.states.BootstrapResult;
-import com.getknowledge.platform.modules.bootstrapInfo.states.BootstrapState;
-import com.getknowledge.platform.modules.trace.TraceService;
-import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
+import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import com.getknowledge.platform.utils.ModuleLocator;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,9 +26,6 @@ public class BootstrapInfoService extends AbstractService {
     @Autowired
     private BootstrapInfoRepository repository;
 
-    @Autowired
-    private TraceService log;
-
     @Value("${bootstrap.password}")
     private String hashPassword;
 
@@ -40,12 +33,12 @@ public class BootstrapInfoService extends AbstractService {
     private UserRepository userRepository;
 
     @Action(name = "do")
-    public BootstrapResult doBootstrap(HashMap<String, Object> data) throws ParseException {
+    @Transactional
+    public Result doBootstrap(HashMap<String, Object> data) throws ParseException {
 
         boolean isAuthorized = false;
 
-        String login = (String) data.get("principalName");
-        User user = userRepository.getSingleEntityByFieldAndValue("login", login);
+        User user = userRepository.getCurrentUser(data);
 
         if (user != null) {
             isAuthorized = true;
@@ -58,10 +51,10 @@ public class BootstrapInfoService extends AbstractService {
         }
 
         if (!isAuthorized) {
-            return BootstrapResult.NotAuthorized;
+            return Result.AccessDenied();
         }
 
-        repository.list();
+        repository.createFromServices();
 
         List<BootstrapService> bootstrapServices = moduleLocator.findAllBootstrapServices();
         bootstrapServices.sort(
@@ -77,27 +70,9 @@ public class BootstrapInfoService extends AbstractService {
                 }
         );
         for (BootstrapService bootstrapService : bootstrapServices) {
-            BootstrapInfo bootstrapInfo = null;
-            try {
-                bootstrapInfo = repository.getSingleEntityByFieldAndValue("name", bootstrapService.getBootstrapInfo().getName());
-                if (!(bootstrapInfo != null && bootstrapInfo.getBootstrapState() == BootstrapState.Completed && !bootstrapInfo.isRepeat())) {
-                    bootstrapService.bootstrap(data);
-                    bootstrapInfo.setErrorMessage(null);
-                    bootstrapInfo.setStackTrace(null);
-                    bootstrapInfo.setBootstrapState(BootstrapState.Completed);
-                    repository.update(bootstrapInfo);
-                }
-            } catch (Exception e) {
-                if (bootstrapInfo != null) {
-                    bootstrapInfo.setBootstrapState(BootstrapState.Failed);
-                    bootstrapInfo.setErrorMessage(e.getMessage());
-                    bootstrapInfo.setStackTrace(ExceptionUtils.getStackTrace(e));
-                    log.logException("Bootstrap service : " + bootstrapInfo.getName(), e , TraceLevel.Warning);
-                    repository.update(bootstrapInfo);
-                }
-            }
+            repository.doBootstrap(bootstrapService,data);
         }
 
-        return BootstrapResult.Complete;
+        return Result.Complete();
     }
 }

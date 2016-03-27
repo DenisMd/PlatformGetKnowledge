@@ -10,8 +10,7 @@ import com.getknowledge.platform.base.services.ImageService;
 import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.trace.TraceService;
-import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
-import com.getknowledge.platform.modules.user.UserRepository;
+import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,9 +27,6 @@ public class GroupProgramsService extends AbstractService implements ImageServic
 
     @Autowired
     private SectionRepository sectionRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private TraceService trace;
@@ -69,7 +65,7 @@ public class GroupProgramsService extends AbstractService implements ImageServic
 
         GroupPrograms programs = repository.read(new Long((Integer)data.get("id")));
 
-        if (!isAccessToEdit(data,programs,userRepository))
+        if (!isAccessToEdit(data,programs))
             throw new NotAuthorized("access denied");
 
         try {

@@ -1,28 +1,18 @@
 package com.getknowledge.platform.modules.task;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.getknowledge.platform.annotations.Action;
-import com.getknowledge.platform.base.repositories.FilterQuery;
-import com.getknowledge.platform.base.repositories.enumerations.OrderRoute;
 import com.getknowledge.platform.base.services.AbstractService;
-import com.getknowledge.platform.exceptions.ModuleNotFound;
-import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.modules.task.enumerations.TaskStatus;
-import com.getknowledge.platform.modules.trace.Trace;
 import com.getknowledge.platform.modules.trace.TraceService;
-import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
+import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import com.getknowledge.platform.modules.user.UserRepository;
 import com.getknowledge.platform.utils.ModuleLocator;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.log4j.xml.SAXErrorHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Query;
 import javax.persistence.TemporalType;
-import javax.persistence.criteria.*;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -36,14 +26,8 @@ public class TaskService extends AbstractService {
     @Autowired
     private UserRepository userRepository;
 
-    public static Semaphore semaphore;
-
     public static Thread thread;
     public static boolean isStart = true;
-
-    static {
-        semaphore = new Semaphore(1);
-    }
 
     @Autowired
     TaskRepository taskRepository;
@@ -65,7 +49,6 @@ public class TaskService extends AbstractService {
                             .getResultList();
 
                     //Выполняем задачи
-
                     if (!tasks.isEmpty()) {
                         ExecutorService executorService = Executors.newCachedThreadPool();
                         for (Task task : tasks) {
@@ -86,7 +69,7 @@ public class TaskService extends AbstractService {
                                             HashMap<String, Object> data = objectMapper.readValue(task.getJsonData(), typeRef);
                                             method.invoke(abstractService, data);
                                             task.setTaskStatus(TaskStatus.Complete);
-                                            taskRepository.update(task);
+                                            taskRepository.merge(task);
                                             traceService.log("Task " + task.toString() + " complete", TraceLevel.Event);
                                             return;
                                         }
@@ -95,7 +78,7 @@ public class TaskService extends AbstractService {
                                     traceService.logException("Exception for task : " + task.toString(), e, TraceLevel.Warning);
                                     task.setTaskStatus(TaskStatus.Failed);
                                     task.setStackTrace(ExceptionUtils.getStackTrace(e));
-                                    taskRepository.update(task);
+                                    taskRepository.merge(task);
                                     return;
                                 }
 
@@ -108,6 +91,7 @@ public class TaskService extends AbstractService {
                     List<Calendar> calendars = entityManager.createQuery("select min(task.startDate) from Task task where task.taskStatus = :status")
                             .setParameter("status", TaskStatus.NotStarted).getResultList();
 
+                    //Засыпаем на определенное время или ждем сигнала прирывания(вызывается при создание таски)
                     if (!calendars.isEmpty()) {
                         if (calendars.get(0) != null) {
                             long delta = calendars.get(0).getTimeInMillis() - Calendar.getInstance().getTimeInMillis();

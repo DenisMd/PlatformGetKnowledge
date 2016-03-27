@@ -1,24 +1,13 @@
 package com.getknowledge.platform.modules.trace;
 
-import com.getknowledge.platform.annotations.Action;
-import com.getknowledge.platform.base.entities.AbstractEntity;
-import com.getknowledge.platform.base.repositories.FilterQuery;
-import com.getknowledge.platform.base.repositories.enumerations.OrderRoute;
 import com.getknowledge.platform.base.services.AbstractService;
-import com.getknowledge.platform.exceptions.NotAuthorized;
-import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
+import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.Query;
-import javax.persistence.TemporalType;
-import javax.persistence.criteria.*;
-import java.util.*;
 
 @Service("TraceService")
 public class TraceService extends AbstractService {

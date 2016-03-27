@@ -10,6 +10,7 @@ import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.entities.CloneableEntity;
+import com.getknowledge.platform.base.entities.EntityWithTags;
 import com.getknowledge.platform.base.entities.IUser;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
@@ -22,7 +23,7 @@ import java.util.List;
 @Entity
 @Table(name = "program")
 @ModuleInfo(repositoryName = "ProgramRepository" , serviceName = "ProgramService")
-public class Program extends CloneableEntity<Program> implements IUser {
+public class Program extends CloneableEntity<Program> implements IUser,EntityWithTags<ProgramTag> {
     private String name;
 
     @Column(length = 1000)
@@ -134,10 +135,12 @@ public class Program extends CloneableEntity<Program> implements IUser {
         this.groupPrograms = groupPrograms;
     }
 
+    @Override
     public List<ProgramTag> getTags() {
         return tags;
     }
 
+    @Override
     public void setTags(List<ProgramTag> tags) {
         this.tags = tags;
     }

@@ -1,8 +1,7 @@
 package com.getknowledge.modules.section;
 
-import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.menu.Menu;
-import com.getknowledge.modules.menu.MenuNames;
+import com.getknowledge.modules.menu.enumerations.MenuNames;
 import com.getknowledge.modules.menu.MenuRepository;
 import com.getknowledge.modules.menu.item.MenuItem;
 import com.getknowledge.platform.modules.Result;
@@ -15,8 +14,7 @@ import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
 import com.getknowledge.platform.modules.trace.TraceService;
-import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
-import com.getknowledge.platform.modules.user.UserRepository;
+import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -43,12 +41,6 @@ public class SectionService extends AbstractService implements BootstrapService,
     @Autowired
     private TraceService trace;
 
-    @Autowired
-    private LanguageRepository languageRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
     @Override
     public void bootstrap(HashMap<String, Object> map) throws Exception {
         if (sectionRepository.count() == 0) {
@@ -70,18 +62,20 @@ public class SectionService extends AbstractService implements BootstrapService,
     @Override
     public BootstrapInfo getBootstrapInfo() {
         BootstrapInfo bootstrapInfo = new BootstrapInfo();
-        bootstrapInfo.setName("SectionService");
+        bootstrapInfo.setName("Section service");
         bootstrapInfo.setOrder(2);
         return bootstrapInfo;
     }
 
     @Action(name = "getSectionByNameAndLanguage" , mandatoryFields = {"name" , "language"})
+    @Transactional
     public Section getSectionByNameAndLangugae(HashMap<String, Object> data) {
         return sectionRepository.getSectionByNameAndLanguage((String)data.get("name") , (String)data.get("language"));
     }
 
 
     @Override
+    @Transactional
     public byte[] getImageById(long id) {
         Section section = sectionRepository.read(id);
         byte [] cover = section.getCover();
@@ -90,19 +84,18 @@ public class SectionService extends AbstractService implements BootstrapService,
 
     @ActionWithFile(name = "updateCover" , mandatoryFields = {"id"})
     public Result updateCover (HashMap<String,Object> data, List<MultipartFile> files) throws PlatformException {
+        Section section = sectionRepository.read(longFromField("id",data));
 
-        Section section = sectionRepository.read(new Long((Integer)data.get("id")));
-
-        if (!isAccessToEdit(data,section,userRepository))
-            throw new NotAuthorized("access denied");
+        if (!isAccessToEdit(data,section))
+            throw new NotAuthorized("Access denied");
 
         try {
             section.setCover(files.get(0).getBytes());
         } catch (IOException e) {
-            trace.logException("Error set cover for section" , e , TraceLevel.Error);
+            trace.logException("Error set cover for section",e,TraceLevel.Error);
             return Result.Failed();
         }
-        sectionRepository.update(section);
+        sectionRepository.merge(section);
         return Result.Complete();
     }
 }

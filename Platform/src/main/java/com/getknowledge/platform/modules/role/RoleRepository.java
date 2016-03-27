@@ -6,6 +6,7 @@ import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -19,16 +20,20 @@ public class RoleRepository extends BaseRepository<Role> {
     }
 
     @Override
+    @Transactional
     public void remove(Long id) throws PlatformException {
         Role role = read(id);
 
         if (role == null) return;
 
-        long countUsers = entityManager.createQuery("select count(u) from User u where u.role.id = :id" , Long.class).setParameter("id", id).getSingleResult();
-        if (countUsers > 0) {
+        if (!role.getUsers().isEmpty()) {
             throw new DeleteException("Error remove role : " + role.getRoleName() + " constrain by user");
         }
 
         super.remove(id);
+    }
+
+    public Role getRoleByName(String roleName){
+        return getSingleEntityByFieldAndValue("roleName",roleName);
     }
 }

@@ -9,6 +9,7 @@ import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -38,21 +39,18 @@ public class PermissionRepository extends BaseRepository<Permission> {
     }
 
     @Override
+    @Transactional
     public void remove(Long id) throws PlatformException {
         Permission permission = read(id);
         if (permission != null) {
-            List<User> users = entityManager.createQuery("select u from User u join u.permissions as p where p.id = :id").
-                setParameter("id" , permission.getId()).getResultList();
-            if (!users.isEmpty()) {
-                users.forEach(u -> {
+            if (!permission.getUsers().isEmpty()) {
+                permission.getUsers().forEach(u -> {
                     u.getPermissions().remove(permission);
                     userRepository.update(u);
                 });
             }
-            List<Role> roles = entityManager.createQuery("select r from Role r join r.permissions as p where p.id = :id")
-                    .setParameter("id" , permission.getId()).getResultList();
-            if (!roles.isEmpty()) {
-                roles.forEach(r -> {
+            if (!permission.getRoles().isEmpty()) {
+                permission.getRoles().forEach(r -> {
                     r.getPermissions().remove(permission);
                     roleRepository.update(r);
                 });

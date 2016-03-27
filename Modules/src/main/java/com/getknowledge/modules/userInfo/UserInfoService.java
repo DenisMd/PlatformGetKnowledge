@@ -10,6 +10,9 @@ import com.getknowledge.modules.email.EmailService;
 import com.getknowledge.modules.event.SystemEvent;
 import com.getknowledge.modules.event.SystemEventRepository;
 import com.getknowledge.modules.event.SystemEventType;
+import com.getknowledge.modules.event.user.UserEvent;
+import com.getknowledge.modules.event.user.UserEventRepository;
+import com.getknowledge.modules.event.user.UserEventType;
 import com.getknowledge.modules.settings.Settings;
 import com.getknowledge.modules.settings.SettingsRepository;
 import com.getknowledge.modules.userInfo.results.RegisterResult;
@@ -30,12 +33,13 @@ import com.getknowledge.platform.modules.task.Task;
 import com.getknowledge.platform.modules.task.TaskRepository;
 import com.getknowledge.platform.modules.task.enumerations.TaskStatus;
 import com.getknowledge.platform.modules.trace.TraceService;
-import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
+import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import com.getknowledge.platform.utils.ModuleLocator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -81,6 +85,9 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
     @Autowired
     private ModuleLocator moduleLocator;
+
+    @Autowired
+    private UserEventRepository userEventRepository;
 
     @Override
     public void bootstrap(HashMap<String, Object> map) {
@@ -315,6 +322,87 @@ public class UserInfoService extends AbstractService implements BootstrapService
         return Result.Complete();
     }
 
+    @Action(name = "getFriends" , mandatoryFields = {"userId"})
+    @Transactional
+    public List<UserInfo> getFriends(HashMap<String,Object> data) {
+        Long userId = this.longFromField("userId", data);
+        UserInfo userInfo = userInfoRepository.read(userId);
+        if (userInfo == null) return null;
+        return userInfo.getFriends();
+    }
+
+    @Action(name = "addFriend" , mandatoryFields = {"friendId"})
+    @Transactional
+    public Result addFriend(HashMap<String,Object> data) {
+        UserInfo friend = userInfoRepository.read(longFromField("friendId", data));
+        if (friend == null) {
+            return Result.NotFound();
+        }
+
+        UserInfo i = getAuthorizedUser(data);
+        if (i == null) return Result.AccessDenied();
+
+        UserEvent userEvent = new UserEvent();
+        userEvent.setCreateTime(Calendar.getInstance());
+        userEvent.setOwner(friend);
+        userEvent.setUserEventType(UserEventType.FriendRequest);
+        userEvent.setData(i.getId().toString());
+        userEventRepository.create(userEvent);
+
+        return Result.Complete();
+    }
+
+    @Action(name = "removeFriend" , mandatoryFields = {"friendId"})
+    @Transactional
+    public Result removeFriend(HashMap<String,Object> data) {
+        UserInfo i = getAuthorizedUser(data);
+        if (i == null) return Result.AccessDenied();
+
+        UserInfo friend = userInfoRepository.read(longFromField("friendId", data));
+        if (friend == null) {
+            return Result.NotFound();
+        }
+
+        i.getFriends().remove(friend);
+        userInfoRepository.merge(i);
+
+        friend.getFriends().remove(i);
+
+        UserEvent userEvent = new UserEvent();
+        userEvent.setCreateTime(Calendar.getInstance());
+        userEvent.setOwner(friend);
+        userEvent.setUserEventType(UserEventType.FriendRemove);
+        userEvent.setData(i.getId().toString());
+        userEventRepository.create(userEvent);
+
+        return Result.Complete();
+    }
+
+
+    @Action(name = "acceptFriend" , mandatoryFields = {"eventId","accept"})
+    @Transactional
+    public Result acceptFriend(HashMap<String,Object> data){
+        UserInfo i = getAuthorizedUser(data);
+        if (i == null) return Result.AccessDenied();
+
+        UserEvent userEvent = userEventRepository.read(longFromField("eventId", data));
+        if (userEvent == null || userEvent.getOwner().getId() != i.getId()) return Result.AccessDenied();
+
+        boolean accept = (boolean) data.get("accept");
+
+        if (accept) {
+            UserInfo friend = userInfoRepository.read(Long.parseLong(userEvent.getData()));
+            i.getFriends().add(friend);
+            userInfoRepository.merge(i);
+            friend.getFriends().add(i);
+            userInfoRepository.merge(friend);
+        }
+
+        userEvent.setChecked(true);
+        userEventRepository.merge(userEvent);
+        return Result.Complete();
+    }
+
     @Action(name = "updateStatus" , mandatoryFields = "status")
     public Result updateStatus (HashMap<String , Object> data) {
         UserInfo userInfo = getAuthorizedUser(data);
@@ -370,7 +458,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
     @Action(name = "forgotPassword" , mandatoryFields = {"email"})
     public Result forgotPassword(HashMap<String , Object> data) {
-        UserInfo userInfo = userInfoRepository.getSingleEntityByFieldAndValue("user.login" , data.get("email"));
+        UserInfo userInfo = userInfoRepository.getSingleEntityByFieldAndValue("user.login", data.get("email"));
         if (userInfo == null || !userInfo.getUser().isEnabled())
             return Result.Failed();
 

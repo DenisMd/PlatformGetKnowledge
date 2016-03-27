@@ -14,4 +14,10 @@ public class LanguageRepository extends BaseRepository<Language> {
     public Language getLanguage(Languages languages) {
         return getSingleEntityByFieldAndValue("name", languages.name());
     }
+
+    public void createLanguage(Languages languages) {
+        Language language = new Language();
+        language.setName(languages.name());
+        create(language);
+    }
 }

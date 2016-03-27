@@ -4,38 +4,38 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.courses.Course;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
+import com.getknowledge.platform.base.entities.ITag;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "courses_tag")
-public class CoursesTag extends AbstractEntity {
+public class CoursesTag extends AbstractEntity implements ITag {
 
-    private String name;
+    @Column(name = "tag_name")
+    private String tagName;
 
     @ManyToMany
     @JoinTable(name = "tags_course")
     @JsonIgnore
-    private List<Course> courseList;
+    private List<Course> courses = new ArrayList<>();
 
-    public List<Course> getCourseList() {
-        return courseList;
+    public List<Course> getCourses() {
+        return courses;
     }
 
-    public void setCourseList(List<Course> courseList) {
-        this.courseList = courseList;
+    public void setCourses(List<Course> courseList) {
+        this.courses = courseList;
     }
 
-    public String getName() {
-        return name;
+    public String getTagName() {
+        return tagName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
     }
 
     @Override

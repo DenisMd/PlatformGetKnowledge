@@ -8,6 +8,7 @@ import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.entities.CloneableEntity;
+import com.getknowledge.platform.base.entities.EntityWithTags;
 import com.getknowledge.platform.base.entities.IUser;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
@@ -20,7 +21,7 @@ import java.util.List;
 @Entity
 @Table(name = "book")
 @ModuleInfo(repositoryName = "BookRepository" , serviceName = "BookService")
-public class Book extends CloneableEntity<Book> implements IUser{
+public class Book extends CloneableEntity<Book> implements IUser, EntityWithTags<BooksTag>{
 
     private String name;
 
@@ -123,10 +124,12 @@ public class Book extends CloneableEntity<Book> implements IUser{
         this.name = name;
     }
 
+    @Override
     public List<BooksTag> getTags() {
         return tags;
     }
 
+    @Override
     public void setTags(List<BooksTag> tags) {
         this.tags = tags;
     }

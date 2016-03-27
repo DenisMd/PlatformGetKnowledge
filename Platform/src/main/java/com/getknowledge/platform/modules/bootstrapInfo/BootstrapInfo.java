@@ -7,6 +7,7 @@ import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.modules.bootstrapInfo.states.BootstrapState;
 
 import javax.persistence.*;
+import java.util.Calendar;
 
 @Entity
 @Table(name = "sys_bootstrap")
@@ -27,6 +28,18 @@ public class BootstrapInfo extends AbstractEntity {
 
     @Column(columnDefinition = "Text" , name = "stack_trace")
     private String stackTrace;
+
+    @Column(name = "start_time")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar startTime;
+
+    public Calendar getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Calendar startTime) {
+        this.startTime = startTime;
+    }
 
     public String getStackTrace() {
         return stackTrace;

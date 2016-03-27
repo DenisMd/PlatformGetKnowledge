@@ -1,6 +1,6 @@
 model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationService,pageService,className,$mdDialog) {
 
-    var filter = applicationService.createFilter(className.knolwedge,0,10);
+    var filter = applicationService.createFilter(className.knowledge,0,10);
     $scope.knowledges = [];
 
     $scope.knowledgeType = ['Programming' , 'Design' , 'Math' , 'Physic'];
@@ -49,7 +49,7 @@ model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationServ
     };
 
     $scope.updateKnowledge = function () {
-        applicationService.update($scope,"",className.knolwedge,$scope.currentKnowledge,function(result){
+        applicationService.update($scope,"",className.knowledge,$scope.currentKnowledge,function(result){
             $scope.showToast(result);
         });
     };
@@ -63,7 +63,7 @@ model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationServ
             .ok($scope.translate("delete"))
             .cancel($scope.translate("cancel"));
         $mdDialog.show(confirm).then(function() {
-            applicationService.remove($scope,"",className.knolwedge,$scope.currentKnowledge.id,function (result) {
+            applicationService.remove($scope,"",className.knowledge,$scope.currentKnowledge.id,function (result) {
                 $scope.showToast(result);
                 $scope.knowledges = [];
                 doAction();
@@ -73,11 +73,33 @@ model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationServ
 
     $scope.showAdvanced = function(ev) {
         $scope.showDialog(ev,$scope,"createKnowledge.html",function(answer){
-            applicationService.create($scope,"", className.knolwedge,answer,function(result){
+            applicationService.create($scope,"", className.knowledge,answer,function(result){
                 $scope.showToast(result);
                 $scope.knowledges = [];
                 doAction();
             });
         });
     };
+
+    var croppedImg = {
+        save: function(file){
+            updateImage(file);
+        },
+        areaType:"circle",
+        isCrop : true
+    };
+
+    $scope.getCropImageData  = function(){
+        croppedImg.src = applicationService.imageHref(className.knowledge,$scope.currentKnowledge.id);
+        croppedImg.notUseDefault = $scope.currentKnowledge.imageViewExist;
+        return croppedImg;
+    };
+
+    var updateImage = function(file) {
+        applicationService.actionWithFile($scope,"image",className.knowledge,"uploadImage",{knowledgeId:$scope.currentKnowledge.id},file,function(result){
+            $scope.showToast(result);
+            $scope.knowledges = [];
+            doAction();
+        });
+    }
 });

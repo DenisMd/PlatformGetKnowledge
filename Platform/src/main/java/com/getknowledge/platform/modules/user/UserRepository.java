@@ -1,10 +1,13 @@
 package com.getknowledge.platform.modules.user;
 
 import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.role.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
 
 @Repository("UserRepository")
 public class UserRepository extends BaseRepository<User> {
@@ -18,6 +21,13 @@ public class UserRepository extends BaseRepository<User> {
     RoleRepository roleRepository;
 
     @Override
+    public void remove(Long id) throws PlatformException {
+        //Пользователей не возможно удалить из системы
+        //Можно только блокировать
+    }
+
+    @Override
+    @Transactional
     public void update(User object) {
         User user = read(object.getId());
         if (user != null){
@@ -38,5 +48,11 @@ public class UserRepository extends BaseRepository<User> {
             object.hashRawPassword(object.getPwdTransient());
         }
         super.create(object);
+    }
+
+    public User getCurrentUser(HashMap<String,Object> data){
+        String login = (String) data.get("principalName");
+        User user = getSingleEntityByFieldAndValue("login", login);
+        return user;
     }
 }

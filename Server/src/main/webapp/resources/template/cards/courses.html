@@ -1,0 +1,96 @@
+<div ng-controller="coursesCtrl">
+    <div>
+        <md-button class="md-raised md-primary" ng-click="showAdvanced($event)" ng-show="courseData.creatable">{{translate("create")}}</md-button>
+    </div>
+    <md-content class="md-padding" layout-xs="column" layout="row">
+        <div flex-xs flex-gt-xs="50" layout="column">
+            <md-card ng-repeat="course in splitArray(courses,true)">
+                <img ng-src="{{folderImg(course.id)}}" class="md-card-image" alt="Washed Out">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">{{course.name}}</span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content>
+                    <p>
+                        {{course.description}}
+                    </p>
+                </md-card-content>
+                <md-card-actions layout="row" layout-align="end center">
+                    <md-button ng-click="goTo('course/' + course.id)">{{translate("move")}}</md-button>
+                </md-card-actions>
+            </md-card>
+        </div>
+        <div flex-xs flex-gt-xs="50" layout="column">
+            <md-card ng-repeat="course in splitArray(courses,false)">
+                <img ng-src="{{folderImg(course.id)}}" class="md-card-image" alt="Washed Out">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">{{course.name}}</span>
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content>
+                    <p>
+                        {{course.description}}
+                    </p>
+                </md-card-content>
+                <md-card-actions layout="row" layout-align="end center">
+                    <md-button ng-click="goTo('course/' + course.id)">{{translate("move")}}</md-button>
+                </md-card-actions>
+            </md-card>
+        </div>
+    </md-content>
+    <md-content layout="row" layout-align="center center">
+        <span ng-click="loadMore()" class="loadMore">{{translate("load_more")}}</span>
+    </md-content>
+</div>
+<script type="text/ng-template" id="createCourse.html">
+    <md-dialog  ng-cloak>
+        <form>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>{{parentScope.translate("create")}}</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="cancel()">
+                        <md-icon md-svg-src="resources/image/svg/close.svg" aria-label="Close dialog"></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <div class="md-dialog-content">
+                    <div>
+                        <md-input-container>
+                            <label>{{parentScope.translate("name")}}</label>
+                            <input ng-model="course.name">
+                        </md-input-container>
+                    </div>
+                    <div>
+                        <md-input-container>
+                            <md-select ng-model="course.language" placeholder="Выберите язык">
+                                <md-option ng-value="opt.name" ng-repeat="opt in parentScope.langs">{{ opt.title }}</md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div ng-init="course.base = false">
+                        <md-checkbox ng-model="course.base">
+                            Базовый курс
+                        </md-checkbox>
+                    </div>
+                    <h2 class="md-title">Тэги</h2>
+                    <div ng-init="course.tags = []">
+                        <md-chips ng-model="course.tags" readonly="false"></md-chips>
+                    </div>
+                    <div>
+                        <label for="description">{{parentScope.translate("description")}}</label>
+                        <textarea class="form-control" rows="5" id="description" ng-model="course.description"></textarea>
+                    </div>
+                </div>
+            </md-dialog-content>
+            <md-dialog-actions layout="row">
+                <md-button class="md-raised md-primary" ng-click="answer(course)">
+                    {{parentScope.translate("create")}}
+                </md-button>
+            </md-dialog-actions>
+        </form>
+    </md-dialog>
+</script>

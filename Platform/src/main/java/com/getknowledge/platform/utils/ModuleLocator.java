@@ -49,7 +49,7 @@ public class  ModuleLocator {
     }
 
     public List<BootstrapService> findAllBootstrapServices(){
-        List<BootstrapService> bootstraps = new ArrayList<>(50);
+        List<BootstrapService> bootstraps = new ArrayList<>();
         ac.getBeansWithAnnotation(Service.class).entrySet().stream().filter(b -> b.getValue() instanceof BootstrapService).forEach(b -> {
             BootstrapService info = ((BootstrapService) b.getValue());
             bootstraps.add(info);

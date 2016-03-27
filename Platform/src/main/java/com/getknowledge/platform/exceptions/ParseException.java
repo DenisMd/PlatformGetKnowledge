@@ -1,7 +1,7 @@
 package com.getknowledge.platform.exceptions;
 
 import com.getknowledge.platform.modules.trace.TraceService;
-import com.getknowledge.platform.modules.trace.trace.level.TraceLevel;
+import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import org.springframework.http.HttpStatus;
 
 public class ParseException extends PlatformException {

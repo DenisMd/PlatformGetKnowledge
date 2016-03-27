@@ -1,0 +1,297 @@
+{
+  "ref": [
+    {
+      "name": "courses",
+      "url": "/groupCourses",
+      "imageUrl": "/resources/image/menu/icons/courses.png"
+    },
+    {
+      "name": "books",
+      "url": "/groupBooks",
+      "imageUrl": "/resources/image/menu/icons/books.png"
+    },
+    {
+      "name": "books",
+      "url": "/groupBooks",
+      "imageUrl": "/resources/image/menu/icons/books.png"
+    },
+    {
+      "name": "programs",
+      "url": "/groupPrograms",
+      "imageUrl": "/resources/image/menu/icons/programs.png"
+    }
+  ],
+  "menu": [
+    {
+      "name": "General",
+      "items": [
+        {
+          "name": "programming",
+          "url": "/section/programming",
+          "imageUrl": "/resources/image/menu/icons/programming.png",
+          "color": "d35136",
+          "subItems": [
+            {
+              "ref": true
+            }
+          ]
+        },
+        {
+          "name": "math",
+          "url": "/section/math",
+          "imageUrl": "/resources/image/menu/icons/math.png",
+          "color": "27b599",
+          "subItems": [
+            {
+              "ref": true
+            }
+          ]
+        },
+        {
+          "name": "physic",
+          "url": "/section/physic",
+          "imageUrl": "/resources/image/menu/icons/physic.png",
+          "color": "088ecc",
+          "subItems": [
+            {
+              "ref": true
+            }
+          ]
+        },
+        {
+          "name": "design",
+          "url": "/section/design",
+          "imageUrl": "/resources/image/menu/icons/design.png",
+          "color": "c52a5e",
+          "subItems": [
+            {
+              "ref": true
+            }
+          ]
+        },
+        {
+          "name": "news",
+          "url": "/news",
+          "imageUrl": "/resources/image/menu/icons/news.png",
+          "color": "e5d525"
+        },
+        {
+          "name": "contactUs",
+          "url": "/contacts",
+          "imageUrl": "/resources/image/menu/icons/contacts.png",
+          "color": "29CE1F"
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "roleName": "ROLE_ADMIN",
+      "base": "General",
+      "items": [
+        {
+          "name": "admin",
+          "url": "/admin",
+          "imageUrl": "/resources/image/menu/icons/panel.png",
+          "color": "999999",
+          "subItems": [
+            {
+              "name": "bootstrap",
+              "url": "/bootstrap",
+              "imageUrl": "/resources/image/menu/icons/bootstrap.png"
+            },
+            {
+              "name": "users",
+              "url": "/users",
+              "imageUrl": "/resources/image/menu/icons/users.png"
+            },
+            {
+              "name": "roles",
+              "url": "/roles",
+              "imageUrl": "/resources/image/menu/icons/roles.png"
+            },
+            {
+              "name": "permissions",
+              "url": "/permissions",
+              "imageUrl": "/resources/image/menu/icons/lock.png"
+            },
+            {
+              "name": "logs",
+              "url": "/logs",
+              "imageUrl": "/resources/image/menu/icons/logs.png"
+            },
+            {
+              "name": "tasks",
+              "url": "/tasks",
+              "imageUrl": "/resources/image/menu/icons/tasks.png"
+            },
+            {
+              "name": "info",
+              "url": "/system_info",
+              "imageUrl": "/resources/image/menu/icons/systemInfo.png"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Author",
+      "roleName": "ROLE_AUTHOR",
+      "base": "General",
+      "items": [
+        {
+          "name": "author",
+          "url": "/author",
+          "imageUrl": "/resources/image/menu/icons/panel.png",
+          "color": "999999",
+          "subItems": [
+            {
+              "name": "courses",
+              "url": "/groupCourses",
+              "imageUrl": ""
+            },
+            {
+              "name": "statistic",
+              "url": "/statistic",
+              "imageUrl": ""
+            },
+            {
+              "name": "reviews",
+              "url": "/reviews",
+              "imageUrl": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HelpDesk",
+      "roleName": "ROLE_HELPDESK",
+      "base": "General",
+      "items": [
+        {
+          "name": "helpDesk",
+          "url": "/helpdesk",
+          "imageUrl": "/resources/image/menu/icons/panel.png",
+          "color": "999999",
+          "subItems": [
+            {
+              "name": "mailbox",
+              "url": "/mailbox",
+              "imageUrl": ""
+            },
+            {
+              "name": "logs",
+              "url": "/logs",
+              "imageUrl": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Moderator",
+      "roleName": "ROLE_MODERATOR",
+      "base": "General",
+      "items": [
+        {
+          "name": "moderator",
+          "url": "/moderator",
+          "imageUrl": "/resources/image/menu/icons/panel.png",
+          "color": "999999",
+          "subItems": [
+            {
+              "name": "sections",
+              "url": "/sections",
+              "imageUrl": ""
+            },
+            {
+              "name": "menu",
+              "url": "/menu",
+              "imageUrl": ""
+            },
+            {
+              "name": "folders",
+              "url": "/folders",
+              "imageUrl": ""
+            },
+            {
+              "name": "knowledge",
+              "url": "/knowledge",
+              "imageUrl": ""
+            },
+            {
+              "name": "socialLinks",
+              "url": "/socialLinks",
+              "imageUrl": ""
+            },
+            {
+              "name": "programmingLanguages",
+              "url": "/programmingLanguages",
+              "imageUrl": ""
+            },
+            {
+              "name": "programmingStyles",
+              "url": "/programmingStyles",
+              "imageUrl": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name" : "AuthorizedUser",
+      "items" : [
+        {
+          "name" : "mailBox",
+          "url" : "/mailBox",
+          "imageUrl" : "/resources/image/user-menu/mail.png"
+        },
+        {
+          "name" : "progress",
+          "url" : "/progress",
+          "imageUrl" : "/resources/image/user-menu/arrow.png"
+        },
+        {
+          "name" : "mailBox",
+          "url" : "/mailBox",
+          "imageUrl" : "/resources/image/user-menu/mail.png"
+        },
+        {
+          "name" : "friends",
+          "url" : "/friends",
+          "imageUrl" : "/resources/image/user-menu/globe.png"
+        },
+        {
+          "name" : "settings",
+          "url" : "/settings",
+          "imageUrl" : "/resources/image/user-menu/gear.png"
+        },
+        {
+          "name" : "courses",
+          "url" : "/courses",
+          "imageUrl" : ""
+        }
+      ]
+    },
+    {
+      "name" : "NotAuthorizedUser",
+      "items" : [
+        {
+          "name" : "progress",
+          "url" : "/progress",
+          "imageUrl" : "/resources/image/user-menu/arrow.png"
+        },
+        {
+          "name" : "friends",
+          "url" : "/friends",
+          "imageUrl" : "/resources/image/user-menu/globe.png"
+        },
+        {
+          "name" : "courses",
+          "url" : "/courses",
+          "imageUrl" : ""
+        }
+      ]
+    }
+  ]
+}
