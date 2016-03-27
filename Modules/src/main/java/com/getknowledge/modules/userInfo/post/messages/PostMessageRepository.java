@@ -28,8 +28,22 @@ public class PostMessageRepository extends BaseRepository<PostMessage> {
         postMessage.setMessage(text);
         postMessage.setSender(sender);
         postMessage.setRecipient(recipient);
+        postMessage.setComment(false);
         create(postMessage);
         return postMessage;
+    }
+
+    public PostMessage createComment(UserInfo sender,PostMessage basePost, String text) {
+        PostMessage comment = new PostMessage();
+        comment.setCreateTime(Calendar.getInstance());
+        comment.setMessage(text);
+        comment.setSender(sender);
+        comment.setBasePost(basePost);
+        comment.setComment(true);
+        create(comment);
+        basePost.getComments().add(comment);
+        merge(basePost);
+        return comment;
     }
 
     @Override

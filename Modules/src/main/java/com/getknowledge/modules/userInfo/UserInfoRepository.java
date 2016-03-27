@@ -4,6 +4,8 @@ import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
 import com.getknowledge.modules.menu.enumerations.MenuNames;
 import com.getknowledge.modules.menu.MenuRepository;
+import com.getknowledge.modules.userInfo.dialog.Dialog;
+import com.getknowledge.modules.userInfo.dialog.DialogRepository;
 import com.getknowledge.modules.userInfo.post.messages.PostMessage;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.exceptions.PlatformException;
@@ -34,6 +36,9 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private DialogRepository dialogRepository;
 
     @Override
     public UserInfo read(Long id) {
@@ -94,5 +99,19 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
                 .setMaxResults(max)
                 .getResultList();
         return messages;
+    }
+
+    public Dialog getDialog(UserInfo current,UserInfo companion){
+        for (Dialog dialog : current.getDialogs()) {
+            if (dialog.getCompanion().equals(companion)){
+                return dialog;
+            }
+        }
+
+        Dialog dialog = new Dialog();
+        dialog.setUser(current);
+        dialog.setCompanion(companion);
+        dialogRepository.create(dialog);
+        return dialog;
     }
 }

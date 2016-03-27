@@ -19,17 +19,6 @@ public abstract class Message extends AbstractEntity {
     @ManyToOne
     private UserInfo sender;
 
-    @ManyToOne
-    private UserInfo recipient;
-
-    public UserInfo getRecipient() {
-        return recipient;
-    }
-
-    public void setRecipient(UserInfo recipient) {
-        this.recipient = recipient;
-    }
-
     public String getMessage() {
         return message;
     }

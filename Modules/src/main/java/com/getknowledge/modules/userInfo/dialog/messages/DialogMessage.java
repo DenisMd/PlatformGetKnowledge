@@ -1,8 +1,11 @@
 package com.getknowledge.modules.userInfo.dialog.messages;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.modules.messages.Comment;
 import com.getknowledge.modules.messages.Message;
 import com.getknowledge.modules.messages.attachments.AttachmentImage;
+import com.getknowledge.modules.userInfo.dialog.Dialog;
+import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 
@@ -13,33 +16,23 @@ import java.util.List;
 
 @Entity
 @Table(name = "dialog_messages")
-public class DialogMessage extends AbstractEntity {
+@ModuleInfo(serviceName = "DialogMessageService")
+public class DialogMessage extends Message {
 
-    @Column(columnDefinition = "Text" , name = "message")
-    private String message;
-
-    @Column(name = "createTime")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Calendar createTime;
+    @ManyToMany(mappedBy = "messages")
+    @JsonIgnore
+    private List<Dialog> dialogs = new ArrayList<>();
 
     @OneToMany
     @JsonIgnore
     private List<AttachmentImage> images = new ArrayList<>();
 
-    public String getMessage() {
-        return message;
+    public List<Dialog> getDialogs() {
+        return dialogs;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Calendar getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Calendar createTime) {
-        this.createTime = createTime;
+    public void setDialogs(List<Dialog> dialogs) {
+        this.dialogs = dialogs;
     }
 
     public List<AttachmentImage> getImages() {

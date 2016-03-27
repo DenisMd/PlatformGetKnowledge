@@ -16,6 +16,10 @@ import com.getknowledge.modules.event.user.UserEventRepository;
 import com.getknowledge.modules.event.user.UserEventType;
 import com.getknowledge.modules.settings.Settings;
 import com.getknowledge.modules.settings.SettingsRepository;
+import com.getknowledge.modules.userInfo.dialog.Dialog;
+import com.getknowledge.modules.userInfo.dialog.DialogRepository;
+import com.getknowledge.modules.userInfo.dialog.messages.DialogMessage;
+import com.getknowledge.modules.userInfo.dialog.messages.DialogMessageRepository;
 import com.getknowledge.modules.userInfo.post.messages.PostMessage;
 import com.getknowledge.modules.userInfo.post.messages.PostMessageRepository;
 import com.getknowledge.modules.userInfo.results.RegisterResult;
@@ -91,6 +95,12 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
     @Autowired
     private PostMessageRepository postMessageRepository;
+
+    @Autowired
+    private DialogMessageRepository dialogMessageRepository;
+
+    @Autowired
+    private DialogRepository dialogRepository;
 
     @Override
     public void bootstrap(HashMap<String, Object> map) {
@@ -347,6 +357,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
     }
 
     @Action(name = "updateStatus" , mandatoryFields = "status")
+    @Transactional
     public Result updateStatus (HashMap<String , Object> data) {
         UserInfo userInfo = getAuthorizedUser(data);
         if (userInfo == null) return Result.NotAuthorized();
@@ -356,6 +367,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
     }
 
     @Action(name = "setLinks")
+    @Transactional
     public Result setLinks(HashMap<String , Object> data) {
         UserInfo userInfo = getAuthorizedUser(data);
         if (userInfo == null) return Result.NotAuthorized();
@@ -399,6 +411,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
     }
 
     @Action(name = "forgotPassword" , mandatoryFields = {"email"})
+    @Transactional
     public Result forgotPassword(HashMap<String , Object> data) {
         UserInfo userInfo = userInfoRepository.getSingleEntityByFieldAndValue("user.login", data.get("email"));
         if (userInfo == null || !userInfo.getUser().isEnabled())
@@ -432,6 +445,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
     }
 
     @Action(name = "getPosts" , mandatoryFields = {"userId","first","max"})
+    @Transactional
     public List<PostMessage> getPosts(HashMap<String,Object> data){
         UserInfo selectedUser = userInfoRepository.read(longFromField("userId",data));
         if (selectedUser == null)
@@ -443,6 +457,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
     }
 
     @Action(name = "addPost" , mandatoryFields = {"userId","text"})
+    @Transactional
     public Result addPost(HashMap<String,Object> data){
         UserInfo selectedUser = userInfoRepository.read(longFromField("userId",data));
         if (selectedUser == null)
@@ -459,7 +474,25 @@ public class UserInfoService extends AbstractService implements BootstrapService
         return Result.Complete();
     }
 
+    @Action(name = "addCommentToPost" , mandatoryFields = {"postId","text"})
+    @Transactional
+    public Result addCommentToPost(HashMap<String,Object> data){
+        UserInfo currentUser = userInfoRepository.getCurrentUser(data);
+        if (currentUser == null)
+            return  Result.NotAuthorized();
+
+        PostMessage basePost = postMessageRepository.read(longFromField("postId",data));
+        if (basePost == null) {
+            return Result.NotFound();
+        }
+        String textMessage = (String) data.get("text");
+        postMessageRepository.createComment(currentUser,basePost,textMessage);
+
+        return Result.Complete();
+    }
+
     @Action(name = "removePost" , mandatoryFields = {"postId"})
+    @Transactional
     public Result removePost(HashMap<String,Object> data) throws PlatformException {
         UserInfo userInfo = userInfoRepository.getCurrentUser(data);
         if (userInfo == null)
@@ -477,6 +510,65 @@ public class UserInfoService extends AbstractService implements BootstrapService
             return Result.NotAuthorized();
         }
 
+        return Result.Complete();
+    }
+
+    @Action(name = "getDialogs")
+    @Transactional
+    public List<Dialog> getDialogs(HashMap<String,Object> data) {
+        UserInfo currentUser = userInfoRepository.getCurrentUser(data);
+        if (currentUser == null){
+            return null;
+        }
+
+        return currentUser.getDialogs();
+    }
+
+    @Action(name = "addPrivacyMessage" , mandatoryFields = {"userId" , "text"})
+    @Transactional
+    public Result addPrivacyMessage(HashMap<String,Object> data){
+        UserInfo currentUser = userInfoRepository.getCurrentUser(data);
+        if (currentUser == null) {
+            return Result.NotAuthorized();
+        }
+        Long userId = longFromField("userId",data);
+        UserInfo companion = userInfoRepository.read(userId);
+        if (companion == null){
+            return Result.NotFound();
+        }
+
+        Dialog dialog = userInfoRepository.getDialog(currentUser,companion);
+        Dialog dialog2 = userInfoRepository.getDialog(companion,currentUser);
+
+        String text = (String) data.get("text");
+        DialogMessage dialogMessage = dialogMessageRepository.createDialogMessage(currentUser,text,dialog,dialog2);
+        dialog.getMessages().add(dialogMessage);
+        dialog2.getMessages().add(dialogMessage);
+        dialogRepository.merge(dialog);
+        dialogRepository.merge(dialog2);
+        Result result = Result.Complete();
+        result.setObject(dialogMessage.getId());
+        return result;
+    }
+
+    @Action(name = "removeDialog" , mandatoryFields = {"dialogId"})
+    @Transactional
+    public Result removeDialog(HashMap<String,Object> data){
+        UserInfo currentUser = userInfoRepository.getCurrentUser(data);
+        if (currentUser == null) {
+            return Result.NotAuthorized();
+        }
+
+        Dialog dialog = dialogRepository.read(longFromField("dialogId",data));
+        if (dialog == null){
+            return Result.NotFound();
+        }
+
+        if (!dialog.getUser().equals(currentUser)){
+            return Result.AccessDenied();
+        }
+
+        dialogRepository.remove(dialog);
         return Result.Complete();
     }
 
