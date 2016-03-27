@@ -71,8 +71,12 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         entityManager.merge(object);
     }
 
-    public void remove(Long id) throws PlatformException {
-        entityManager.remove(entityManager.find(getClassEntity(), id));
+    public void remove(Long id) {
+        remove(entityManager.find(getClassEntity(), id));
+    }
+
+    public void remove(T entity) {
+        entityManager.remove(entity);
     }
 
     public T read(Long id) {

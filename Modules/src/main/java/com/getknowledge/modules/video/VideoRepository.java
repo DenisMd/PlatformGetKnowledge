@@ -34,17 +34,14 @@ public class VideoRepository extends BaseRepository<Video> {
     public String pathToVideo;
 
     @Override
-    public void remove(Long id) throws PlatformException {
-        Video video = read(id);
-        if (video == null) throw new DeleteException("Video by id : " + id + " not found");
+    public void remove(Video video) {
         String separator = File.separator;
         File file = new File(pathToVideo + File.separator + video.getLink());
         if (file.exists()) {
             boolean result = file.delete();
-            if (!result) throw new DeleteException("Can't delete video file " + file.getAbsolutePath(),trace, TraceLevel.Error);
         }
 
-        super.remove(id);
+        super.remove(video);
     }
 
     public Course findCourseByVideo(Video video) {

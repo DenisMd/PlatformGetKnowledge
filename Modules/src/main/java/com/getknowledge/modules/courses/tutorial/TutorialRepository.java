@@ -21,15 +21,11 @@ public class TutorialRepository extends BaseRepository<Tutorial> {
     private VideoRepository videoRepository;
 
     @Override
-    public void remove(Long id) throws PlatformException {
-
-        Tutorial tutorial = read(id);
-        if (tutorial == null) throw new DeleteException("Can't find tutorial by id : " + id);
-
+    public void remove(Tutorial tutorial) {
         if (tutorial.getVideo() != null) {
             videoRepository.remove(tutorial.getVideo().getId());
         }
 
-        super.remove(id);
+        super.remove(tutorial);
     }
 }

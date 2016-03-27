@@ -32,7 +32,7 @@ public class CourseRepository extends ProtectedRepository<Course> {
     @Autowired
     private CoursesTagRepository coursesTagRepository;
 
-    private void removeCourseInfo(Course course) throws PlatformException {
+    private void removeCourseInfo(Course course) {
         if (course.getTutorials() != null) {
             for (Tutorial tutorial : course.getTutorials()) {
                 tutorialRepository.remove(tutorial.getId());
@@ -58,15 +58,11 @@ public class CourseRepository extends ProtectedRepository<Course> {
     }
 
     @Override
-    public void remove(Long id) throws PlatformException {
-        Course course = read(id);
-        if (course == null) throw new DeleteException("course not found : " +id);
-
+    public void remove(Course course) {
         //Удаляем черновик
         if (course.getBaseCourse() != null) {
-
             removeCourseInfo(course);
-            super.remove(id);
+            super.remove(course);
 
         } else {
             if (course.getDraftCourse() != null) {
@@ -74,7 +70,7 @@ public class CourseRepository extends ProtectedRepository<Course> {
             }
 
             removeCourseInfo(course);
-            super.remove(id);
+            super.remove(course);
         }
     }
 }

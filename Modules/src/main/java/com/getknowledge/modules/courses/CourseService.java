@@ -143,12 +143,7 @@ public class CourseService extends AbstractService implements ImageService {
                     mergeTutorial(draftTutorial.getOriginalTutorial(), draftTutorial);
                     tutorialRepository.merge(draftTutorial.getOriginalTutorial());
                 } else {
-                    //delete tutorial
-                    try {
-                        tutorialRepository.remove(draftTutorial.getOriginalTutorial().getId());
-                    } catch (PlatformException e) {
-                        //Нечего делать - сдаемся
-                    }
+                    tutorialRepository.remove(draftTutorial.getOriginalTutorial().getId());
                 }
             } else {
                 Tutorial newTutorial = new Tutorial();

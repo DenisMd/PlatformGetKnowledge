@@ -57,11 +57,7 @@ public class BooksTagRepository extends BaseRepository<BooksTag> implements ITag
     public void removeUnusedTags(){
        List<BooksTag> list = entityManager.createQuery("select t from BooksTag  t where t.books is empty").getResultList();
        list.forEach((tag -> {
-           try {
-               remove(tag.getId());
-           } catch (PlatformException e) {
-               trace.logException("Error remove book tag" , e, TraceLevel.Error);
-           }
+           remove(tag.getId());
        }));
     }
 }

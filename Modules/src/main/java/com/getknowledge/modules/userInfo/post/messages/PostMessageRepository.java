@@ -33,15 +33,10 @@ public class PostMessageRepository extends BaseRepository<PostMessage> {
     }
 
     @Override
-    public void remove(Long id) throws PlatformException {
-        PostMessage postMessage = read(id);
-        if (postMessage != null) {
-            for (AttachmentImage attachmentImage : postMessage.getImages()) {
-                attachmentImageRepository.remove(attachmentImage.getId());
-            }
-            super.remove(id);
-        } else {
-            throw new DeleteException("Post message with id " + id + "not found");
+    public void remove(PostMessage postMessage) {
+        for (AttachmentImage attachmentImage : postMessage.getImages()) {
+            attachmentImageRepository.remove(attachmentImage.getId());
         }
+        super.remove(postMessage);
     }
 }

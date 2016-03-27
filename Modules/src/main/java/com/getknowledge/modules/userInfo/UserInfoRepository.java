@@ -36,7 +36,6 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
     private UserRepository userRepository;
 
     @Override
-    @Transactional
     public UserInfo read(Long id) {
         UserInfo userInfo = super.read(id);
         if (userInfo == null)
@@ -55,8 +54,12 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
     }
 
     @Override
-    @Transactional
-    public void remove(Long id) throws PlatformException {
+    public void remove(Long id) {
+        //Пользователей не возможно удалить
+    }
+
+    @Override
+    public void remove(UserInfo userInfo) {
         //Пользователей не возможно удалить
     }
 

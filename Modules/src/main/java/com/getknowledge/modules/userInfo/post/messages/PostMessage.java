@@ -11,8 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "post_message")
-@ModuleInfo(repositoryName = "PostMessageRepository" , serviceName = "PostMessageService")
+@Table(name = "post_messages")
 public class PostMessage extends Message {
 
     @OneToMany

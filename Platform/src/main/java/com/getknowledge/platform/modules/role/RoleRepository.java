@@ -20,19 +20,6 @@ public class RoleRepository extends BaseRepository<Role> {
         return Role.class;
     }
 
-    @Override
-    public void remove(Long id) throws PlatformException {
-        Role role = read(id);
-
-        if (role == null) return;
-
-        if (!role.getUsers().isEmpty()) {
-            throw new DeleteException("Error remove role : " + role.getRoleName() + " constrain by user");
-        }
-
-        super.remove(id);
-    }
-
     public Role getRoleByName(String roleName){
         return getSingleEntityByFieldAndValue("roleName",roleName);
     }
