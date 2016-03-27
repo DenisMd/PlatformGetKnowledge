@@ -55,7 +55,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
     };
 
     //Dialog
-    $scope.showDialog = function (ev,$scope,htmlName,callbackForOk,onRemoving,onComplete,outsideToClose) {
+    $scope.showDialog = function (ev,$scope,htmlName,callbackForOk,onRemoving,onComplete,onShowing,outsideToClose) {
         var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
         var clickOutsideToClose = angular.isDefined(outsideToClose)? outsideToClose : false;
 
@@ -69,6 +69,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
                 locals: {
                     theScope: $scope
                 },
+                onShowing : onShowing,
                 onComplete: onComplete,
                 onRemoving:  onRemoving
         })
@@ -871,13 +872,33 @@ model.controller("sectionCard",function($scope,$state,applicationService,classNa
     };
 });
 
-model.controller("postController",function($scope,codemirrorURL){
+model.controller("postController",function($scope,$rootScope,codemirrorURL,TagService){
     $scope.test = {
         readOnly: 'nocursor',
         codeShown:false,
         showCode : function(){
             this.codeShown = !this.codeShown;
         }
+    };
+    $scope.content = "";
+
+    //open Tags Pool
+    $scope.openPool = function(event){
+        $scope.showDialog(event, $scope, "tagPool.html", function(){});
+    };
+
+    $scope.currentTag = {};
+
+    $scope.setCurrentTag = function(tag){
+        $scope.currentTag = tag;
+    };
+
+    $scope.getOptions = function (tag) {
+        if (tag) {
+            return angular.extend({
+                readOnly: 'nocursor'
+            }, tag.getData());
+        } else return {};
     };
 
     //paste code
@@ -886,7 +907,7 @@ model.controller("postController",function($scope,codemirrorURL){
         indentWithTabs: true
     };
 
-    $scope.pasteCode = function() {
+    $scope.pasteCode = function(event) {
         $scope.showDialog(event, $scope, "pasteCode.html", function (newTagInfo) {
             var newTag = new Tag();
             newTag.setName(newTagInfo.title);
@@ -897,14 +918,19 @@ model.controller("postController",function($scope,codemirrorURL){
                 theme: newTagInfo.theme.name
             }, defaultOptions);
             newTag.setData(options);
-            TagPool.push(newTag);
-            var tag = TagPool[TagPool.length - 1];
+            $rootScope.tagPool.push(newTag);
+            var tag = $rootScope.tagPool[$rootScope.tagPool.length - 1];
             if (tag) {
                 angular.extend($scope.test,tag.getData());
                 $scope.test.title = tag.getName();
+                $rootScope.$broadcast('setCaret');
+                $rootScope.$broadcast('add', TagService.getEditableTag($scope.content,tag,$rootScope.tagPool.length - 1));
             }
-        },null,refresh);
+        },null,refresh,function(){
+
+        });
     };
+
 
     $scope.code = {
         text:"var i = \"hello world\"",
