@@ -1,9 +1,13 @@
 package com.getknowledge.modules.userInfo;
 
+import com.getknowledge.modules.dictionaries.language.Language;
+import com.getknowledge.modules.dictionaries.language.names.Languages;
 import com.getknowledge.modules.menu.enumerations.MenuNames;
 import com.getknowledge.modules.menu.MenuRepository;
+import com.getknowledge.modules.userInfo.post.messages.PostMessage;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.exceptions.PlatformException;
+import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionRegistry;
@@ -11,6 +15,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Repository("UserInfoRepository")
@@ -22,13 +27,13 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
     }
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private MenuRepository menuRepository;
 
     @Autowired
     private SessionRegistry sessionRegistry;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     @Transactional
@@ -55,12 +60,36 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
         //Пользователей не возможно удалить
     }
 
+    public UserInfo getCurrentUser(HashMap<String,Object> data){
+        com.getknowledge.platform.modules.user.User user = userRepository.getCurrentUser(data);
+        return getUserInfoByUser(user);
+    }
+
+    public UserInfo createUserInfo(com.getknowledge.platform.modules.user.User user, String firstName, String lastName, Language language, boolean man, byte [] profileImage){
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUser(user);
+        userInfo.setFirstName(firstName);
+        userInfo.setLastName(lastName);
+        userInfo.setLanguage(language);
+        userInfo.setMan(man);
+        userInfo.setFirstLogin(true);
+        userInfo.setProfileImage(profileImage);
+        create(userInfo);
+        return userInfo;
+    }
+
     public UserInfo getUserInfoByUser(com.getknowledge.platform.modules.user.User user) {
         if (user == null) return null;
+        return getSingleEntityByFieldAndValue("user.id",user.getId());
+    }
 
-        List<UserInfo> userInfo = entityManager.createQuery("select ui from UserInfo  ui where ui.user.id = :id")
-                .setParameter("id" , user.getId()).getResultList();
-
-        return userInfo.isEmpty() ? null : userInfo.get(0);
+    public List<PostMessage> postMessages(UserInfo userInfo,int first,int max){
+        List<PostMessage> messages = entityManager.createQuery("select pm from PostMessage pm " +
+                "where pm.recipient.id = :userId order by pm.createTime desc")
+                .setParameter("userId", userInfo.getId())
+                .setFirstResult(first)
+                .setMaxResults(max)
+                .getResultList();
+        return messages;
     }
 }

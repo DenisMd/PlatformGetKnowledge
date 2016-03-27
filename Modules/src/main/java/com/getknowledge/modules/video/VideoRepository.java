@@ -1,10 +1,8 @@
 package com.getknowledge.modules.video;
 
 import com.getknowledge.modules.courses.Course;
-import com.getknowledge.modules.messages.MessageStatus;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.video.comment.VideoComment;
-import com.getknowledge.modules.video.comment.VideoCommentRepository;
 import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.exceptions.DeleteException;
 import com.getknowledge.platform.exceptions.PlatformException;

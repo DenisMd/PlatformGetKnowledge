@@ -39,7 +39,6 @@ public class PermissionRepository extends BaseRepository<Permission> {
     }
 
     @Override
-    @Transactional
     public void remove(Long id) throws PlatformException {
         Permission permission = read(id);
         if (permission != null) {

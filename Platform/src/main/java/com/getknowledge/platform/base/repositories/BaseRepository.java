@@ -39,12 +39,10 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         return ENTITY_LIMIT;
     }
 
-    @Transactional
     public void create(T object) {
         entityManager.persist(object);
     }
 
-    @Transactional
     public void update(T object) {
         T classicObject = read(object.getId());
 
@@ -69,29 +67,24 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         entityManager.merge(classicObject);
     }
 
-    @Transactional
     public void merge(T object) {
         entityManager.merge(object);
     }
 
-    @Transactional
     public void remove(Long id) throws PlatformException {
         entityManager.remove(entityManager.find(getClassEntity(), id));
     }
 
-    @Transactional
     public T read(Long id) {
         T result = entityManager.find(getClassEntity() , id);
         return result;
     }
 
-    @Transactional
     public List<T> list() {
         List<T> list = (List<T>)entityManager.createQuery("Select t from " + getClassEntity().getSimpleName() + " t order by t.id").getResultList();
         return list;
     }
 
-    @Transactional
     public List<T> listPartial(int first, int max) {
         Query query = entityManager.createQuery("Select t from " + getClassEntity().getSimpleName() + " t order by t.id");
         query.setFirstResult(first);
@@ -100,20 +93,17 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         return list;
     }
 
-    @Transactional
     public Long count() {
         long rowCnt= (Long) entityManager.createQuery("SELECT count(a) FROM " + getClassEntity().getSimpleName() + " a").getSingleResult();
         return rowCnt;
     }
 
-    @Transactional
     public List<T> getEntitiesByFieldAndValue(String field, Object value) {
         List<T> list = (List<T>)entityManager.createQuery("select ent from " + getClassEntity().getSimpleName() + " ent where ent."+field+"=:value")
                 .setParameter("value" , value).getResultList();
         return list;
     }
 
-    @Transactional
     public T getSingleEntityByFieldAndValue(String field, Object value) {
         List<T> list = getEntitiesByFieldAndValue(field,value);
         return list.isEmpty() ? null : list.get(0);
@@ -130,7 +120,6 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         return filterQuery;
     }
 
-    @Transactional
     public AbstractEntity prepare(AbstractEntity entity, BaseRepository repository, User currentUser) throws Exception {
         if (repository instanceof PrepareEntity) {
 

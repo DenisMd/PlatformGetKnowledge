@@ -20,14 +20,14 @@ public abstract class Comment extends AbstractEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private MessageStatus messageStatus;
+    private CommentStatus commentStatus;
 
-    public MessageStatus getMessageStatus() {
-        return messageStatus;
+    public CommentStatus getCommentStatus() {
+        return commentStatus;
     }
 
-    public void setMessageStatus(MessageStatus messageStatus) {
-        this.messageStatus = messageStatus;
+    public void setCommentStatus(CommentStatus commentStatus) {
+        this.commentStatus = commentStatus;
     }
 
     public String getMessage() {

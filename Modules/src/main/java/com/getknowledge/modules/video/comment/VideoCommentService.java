@@ -1,8 +1,6 @@
 package com.getknowledge.modules.video.comment;
 
-import com.getknowledge.modules.messages.MessageStatus;
-import com.getknowledge.modules.userInfo.UserInfo;
-import com.getknowledge.modules.userInfo.UserInfoService;
+import com.getknowledge.modules.messages.CommentStatus;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.modules.Result;
@@ -32,11 +30,11 @@ public class VideoCommentService extends AbstractService {
             return Result.AccessDenied();
         }
 
-        MessageStatus messageStatus = MessageStatus.valueOf((String) data.get("status"));
-        if (messageStatus == MessageStatus.Normal) {
+        CommentStatus commentStatus = CommentStatus.valueOf((String) data.get("status"));
+        if (commentStatus == CommentStatus.Normal) {
             return Result.Failed();
         }
-        videoCommentRepository.blockComment(videoComment,messageStatus);
+        videoCommentRepository.blockComment(videoComment, commentStatus);
 
         return Result.Complete();
     }

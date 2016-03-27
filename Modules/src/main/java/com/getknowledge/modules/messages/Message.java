@@ -16,10 +16,10 @@ public abstract class Message extends AbstractEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar createTime;
 
-    @OneToOne
+    @ManyToOne
     private UserInfo sender;
 
-    @OneToOne
+    @ManyToOne
     private UserInfo recipient;
 
     public UserInfo getRecipient() {

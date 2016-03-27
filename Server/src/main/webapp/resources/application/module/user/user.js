@@ -42,7 +42,7 @@ model.controller("userCtrl", function ($scope, $state,$timeout,$http,application
         }
     }
     $scope.closeModal = function(){
-        applicationService.action($scope,"skipResult",className.userInfo,"skipExtraRegistration",{});
+        applicationService.action($scope,"skipResult",className.userInfo,"updateExtraInfo",{});
         $("#userModal").modal('hide');
     };
 
@@ -251,9 +251,7 @@ model.controller("userCtrl", function ($scope, $state,$timeout,$http,application
     //сохранение
     $scope.save = function(){
         if ($scope.user) {
-            var data = {
-                userId: $scope.user.id
-            };
+            var data = {};
             if ($scope.city) data.cityId = $scope.city.id;
             if ($scope.speciality) data.speciality = $scope.speciality;
             if ($scope.date) data.date = $scope.date;

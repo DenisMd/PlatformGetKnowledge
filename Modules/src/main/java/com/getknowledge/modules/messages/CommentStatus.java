@@ -1,5 +1,5 @@
 package com.getknowledge.modules.messages;
 
-public enum MessageStatus {
+public enum CommentStatus {
     Normal,Advertising,Spam,Insult
 }

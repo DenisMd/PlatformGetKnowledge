@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +34,7 @@ public class InitApplication {
         return services;
     }
 
+    @Transactional
     public void init () {
         traceService.log("Application start", TraceLevel.Event);
 

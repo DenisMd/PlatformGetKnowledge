@@ -7,6 +7,7 @@ import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
 import com.getknowledge.modules.email.EmailService;
+import com.getknowledge.modules.email.EmailTemplates;
 import com.getknowledge.modules.event.SystemEvent;
 import com.getknowledge.modules.event.SystemEventRepository;
 import com.getknowledge.modules.event.SystemEventType;
@@ -15,6 +16,8 @@ import com.getknowledge.modules.event.user.UserEventRepository;
 import com.getknowledge.modules.event.user.UserEventType;
 import com.getknowledge.modules.settings.Settings;
 import com.getknowledge.modules.settings.SettingsRepository;
+import com.getknowledge.modules.userInfo.post.messages.PostMessage;
+import com.getknowledge.modules.userInfo.post.messages.PostMessageRepository;
 import com.getknowledge.modules.userInfo.results.RegisterResult;
 import com.getknowledge.platform.modules.Result;
 import com.getknowledge.modules.userInfo.socialLink.UserSocialLink;
@@ -84,10 +87,10 @@ public class UserInfoService extends AbstractService implements BootstrapService
     private CityRepository cityRepository;
 
     @Autowired
-    private ModuleLocator moduleLocator;
+    private UserEventRepository userEventRepository;
 
     @Autowired
-    private UserEventRepository userEventRepository;
+    private PostMessageRepository postMessageRepository;
 
     @Override
     public void bootstrap(HashMap<String, Object> map) {
@@ -111,57 +114,39 @@ public class UserInfoService extends AbstractService implements BootstrapService
                 firstName = (String) map.get("firstName");
             }
 
-            Role role = roleRepository.getSingleEntityByFieldAndValue("roleName" , RoleName.ROLE_ADMIN.name());
-            if (role == null) {
-                return;
-            }
+            Role role = roleRepository.getRole(RoleName.ROLE_ADMIN);
 
-            User user = new User();
-            user.setLogin(login);
-            user.hashRawPassword(password);
-            user.setRole(role);
-            user.setEnabled(true);
-            user.setPwdTransient(password);
-            userRepository.create(user);
+            User user = userRepository.createUser(login,password,role,true);
 
-            UserInfo userInfo = new UserInfo();
-            userInfo.setUser(user);
-            userInfo.setFirstName(firstName);
-            userInfo.setLastName(lastName);
-            userInfo.setLanguage(languageRepository.getSingleEntityByFieldAndValue("name", Languages.Ru.name()));
-            userInfo.setSpecialty("main admin");
-            userInfo.setMan(true);
-            userInfo.setFirstLogin(true);
-            InputStream is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/image/photo.png");
-            try {
-                userInfo.setProfileImage(org.apache.commons.io.IOUtils.toByteArray(is));
+
+            byte [] profileImage = null;
+            try (InputStream is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/image/adminAvatar.png");) {
+                profileImage = org.apache.commons.io.IOUtils.toByteArray(is);
             } catch (IOException e) {
                 trace.logException("Error load file: " + e.getMessage(), e, TraceLevel.Warning);
             }
-            userInfoRepository.create(userInfo);
+
+            userInfoRepository.createUserInfo(user,firstName,lastName,languageRepository.getLanguage(Languages.Ru),true,profileImage);
         }
     }
 
     @Override
     public BootstrapInfo getBootstrapInfo() {
         BootstrapInfo bootstrapInfo = new BootstrapInfo();
-        bootstrapInfo.setName("User Service");
+        bootstrapInfo.setName("User service");
         bootstrapInfo.setOrder(1);
         return bootstrapInfo;
     }
 
     @Action(name = "getAuthorizedUser")
-    public UserInfo getAuthorizedUser(HashMap<String,Object> data){
-        String login = (String) data.get("principalName");
-        if (login == null) {return  null;}
-
-        User user = userRepository.getSingleEntityByFieldAndValue("login", login);
-        UserInfo userInfo = userInfoRepository.getSingleEntityByFieldAndValue("user.login",login);
-        return userInfo;
+    @Transactional
+    public UserInfo getAuthorizedUser(HashMap<String,Object> data) {
+        return userInfoRepository.getCurrentUser(data);
     }
 
     @Action(name = "register" , mandatoryFields = {"email" , "password" , "firstName" , "lastName" , "sex" , "language"})
-    public RegisterResult register(HashMap<String,Object> data) {
+    @Transactional
+    public RegisterResult register(HashMap<String,Object> data) throws IOException {
         String login = (String) data.get("email");
         String password = (String) data.get("password");
         if (password.length() < 6) {
@@ -182,109 +167,89 @@ public class UserInfoService extends AbstractService implements BootstrapService
             return RegisterResult.UserAlreadyCreated;
         }
 
-        String uuid = UUID.randomUUID().toString();
-        Settings settings = settingsRepository.getSettings();
+        String uuid = null;
         try {
+            uuid = UUID.randomUUID().toString();
+            Settings settings = settingsRepository.getSettings();
             String url = settings.getDomain() + "/#/"+language.getName().toLowerCase()+"/accept/" + uuid;
             emailService.sendTemplate(login,settings.getEmail(), "Регистрация на getKnowledge();",
-                    "register",new String[] {settingsRepository.getSettings().getDomain(),url});
+                    EmailTemplates.Register,new String[] {settingsRepository.getSettings().getDomain(),url});
         } catch (Exception e) {
             trace.logException("Error send register email to " + login , e , TraceLevel.Error);
             return RegisterResult.EmailNotSend;
         }
 
-        User user = new User();
-        user.setLogin(login);
-        user.hashRawPassword(password);
-        user.setEnabled(false);
-        user.setRole(roleRepository.getSingleEntityByFieldAndValue("roleName", RoleName.ROLE_USER.name()));
-        userRepository.create(user);
-        UserInfo userInfo = new UserInfo();
-        userInfo.setUser(user);
-        userInfo.setLanguage(language);
-        userInfo.setFirstName(firstName);
-        userInfo.setLastName(lastName);
-        userInfo.setMan(sex);
-        userInfo.setFirstLogin(true);
+
+        User user = userRepository.createUser(login,password,roleRepository.getRole(RoleName.ROLE_USER),false);
+        byte [] profileImage = null;
 
         InputStream is = null;
-        if (sex) {
-            is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/image/male.png");
-        } else {
-            is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/image/female.png");
-        }
-
         try {
-            userInfo.setProfileImage(org.apache.commons.io.IOUtils.toByteArray(is));
+            if (sex) {
+                is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/image/male.png");
+            } else {
+                is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/image/female.png");
+            }
+            profileImage = org.apache.commons.io.IOUtils.toByteArray(is);
         } catch (IOException e) {
             trace.logException("Error load file: " + e.getMessage(), e, TraceLevel.Warning);
+        } finally {
+            if (is != null) {
+                is.close();
+            }
         }
 
-        userInfoRepository.create(userInfo);
+        UserInfo userInfo = userInfoRepository.createUserInfo(user,firstName,lastName,language,sex,profileImage);
 
-        SystemEvent registerInfo = new SystemEvent();
-        registerInfo.setUserInfo(userInfo);
-        registerInfo.setCalendar(Calendar.getInstance());
-        registerInfo.setUuid(uuid);
-        registerInfo.setSystemEventType(SystemEventType.Register);
-        systemEventRepository.create(registerInfo);
+
+        SystemEvent systemEvent = systemEventRepository.createSystemEvent(userInfo,uuid,SystemEventType.Register);
 
         RegisterResult registerResult = RegisterResult.Complete;
         registerResult.setUserInfoId(userInfo.getId());
         trace.log("Registration complete for user " + login, TraceLevel.Event);
 
         try {
-            Task task = new Task();
-            task.setServiceName("SystemEventService");
-            task.setTaskName("cancelRegistration");
-            task.setJsonData(objectMapper.writeValueAsString(registerInfo));
-            task.setTaskStatus(TaskStatus.NotStarted);
+            String jsonData = objectMapper.writeValueAsString(systemEvent);
             //next day
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DATE , 1);
-            task.setStartDate(calendar);
-            taskRepository.create(task);
+            taskRepository.createTask("SystemEventService","cancelRegistration",jsonData,calendar);
         } catch (JsonProcessingException e) {
             trace.logException("Can't parse register info to json" , e , TraceLevel.Warning);
         }
-
-
 
         return registerResult;
     }
 
     @ActionWithFile(name = "updateImage")
+    @Transactional
     public Result updateImage (HashMap<String,Object> data,List<MultipartFile> files) throws PlatformException {
-        UserInfo userInfo = getAuthorizedUser(data);
 
-        if (userInfo == null) return Result.SessionFailed();
+        UserInfo userInfo = userInfoRepository.getCurrentUser(data);
+        if (userInfo == null) return Result.NotAuthorized();
 
-        if (files != null) {
-            try {
-                userInfo.setProfileImage(files.get(0).getBytes());
-            } catch (IOException e) {
-                trace.logException("Error get bytes for image", e, TraceLevel.Error);
-            }
+        try {
+            userInfo.setProfileImage(files.get(0).getBytes());
+        } catch (IOException e) {
+            trace.logException("Error get bytes for image", e, TraceLevel.Error);
         }
 
-        userInfoRepository.update(userInfo);
-
+        userInfoRepository.merge(userInfo);
         return Result.Complete();
     }
 
-    @Action(name = "updateExtraInfo" , mandatoryFields = {"userId"})
-    public RegisterResult registerExtraInfo (HashMap<String,Object> data) throws PlatformException {
+    @Action(name = "updateExtraInfo")
+    @Transactional
+    public Result updateExtraInfo (HashMap<String,Object> data) throws PlatformException {
 
-        Long id = new Long((Integer)data.get("userId"));
+        UserInfo userInfo = userInfoRepository.getCurrentUser(data);
 
-        UserInfo userInfo = getAuthorizedUser(data);
-
-        if (!userInfo.getId().equals(id)) {
-            throw new NotAuthorized("User id is not correct" , trace, TraceLevel.Event);
+        if (userInfo == null) {
+            return Result.NotAuthorized();
         }
 
         if (data.containsKey("cityId")) {
-            Long cityId = new Long((Integer)data.get("cityId"));
+            Long cityId = longFromField("cityId",data);
             City city = cityRepository.read(cityId);
             if (city != null) {
                 userInfo.setCity(city);
@@ -307,18 +272,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
         }
 
         userInfo.setFirstLogin(false);
-
-        userInfoRepository.update(userInfo);
-
-        return RegisterResult.Complete;
-    }
-
-    @Action(name = "skipExtraRegistration")
-    public Result skipExtraRegistration(HashMap<String,Object> data) {
-        UserInfo userInfo = getAuthorizedUser(data);
-        if (userInfo == null) return Result.SessionFailed();
-        userInfo.setFirstLogin(false);
-        userInfoRepository.update(userInfo);
+        userInfoRepository.merge(userInfo);
         return Result.Complete();
     }
 
@@ -339,16 +293,10 @@ public class UserInfoService extends AbstractService implements BootstrapService
             return Result.NotFound();
         }
 
-        UserInfo i = getAuthorizedUser(data);
-        if (i == null) return Result.AccessDenied();
+        UserInfo i = userInfoRepository.getCurrentUser(data);
+        if (i == null) return Result.NotAuthorized();
 
-        UserEvent userEvent = new UserEvent();
-        userEvent.setCreateTime(Calendar.getInstance());
-        userEvent.setOwner(friend);
-        userEvent.setUserEventType(UserEventType.FriendRequest);
-        userEvent.setData(i.getId().toString());
-        userEventRepository.create(userEvent);
-
+        userEventRepository.createUserEvent(friend,i.getId().toString(),UserEventType.FriendRequest);
         return Result.Complete();
     }
 
@@ -356,7 +304,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
     @Transactional
     public Result removeFriend(HashMap<String,Object> data) {
         UserInfo i = getAuthorizedUser(data);
-        if (i == null) return Result.AccessDenied();
+        if (i == null) return Result.NotAuthorized();
 
         UserInfo friend = userInfoRepository.read(longFromField("friendId", data));
         if (friend == null) {
@@ -367,14 +315,9 @@ public class UserInfoService extends AbstractService implements BootstrapService
         userInfoRepository.merge(i);
 
         friend.getFriends().remove(i);
+        userInfoRepository.merge(friend);
 
-        UserEvent userEvent = new UserEvent();
-        userEvent.setCreateTime(Calendar.getInstance());
-        userEvent.setOwner(friend);
-        userEvent.setUserEventType(UserEventType.FriendRemove);
-        userEvent.setData(i.getId().toString());
-        userEventRepository.create(userEvent);
-
+        userEventRepository.createUserEvent(friend,i.getId().toString(),UserEventType.FriendRemove);
         return Result.Complete();
     }
 
@@ -383,7 +326,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
     @Transactional
     public Result acceptFriend(HashMap<String,Object> data){
         UserInfo i = getAuthorizedUser(data);
-        if (i == null) return Result.AccessDenied();
+        if (i == null) return Result.NotAuthorized();
 
         UserEvent userEvent = userEventRepository.read(longFromField("eventId", data));
         if (userEvent == null || userEvent.getOwner().getId() != i.getId()) return Result.AccessDenied();
@@ -406,16 +349,16 @@ public class UserInfoService extends AbstractService implements BootstrapService
     @Action(name = "updateStatus" , mandatoryFields = "status")
     public Result updateStatus (HashMap<String , Object> data) {
         UserInfo userInfo = getAuthorizedUser(data);
-        if (userInfo == null) return Result.SessionFailed();
+        if (userInfo == null) return Result.NotAuthorized();
         userInfo.setStatus((String) data.get("status"));
-        userInfoRepository.update(userInfo);
+        userInfoRepository.merge(userInfo);
         return Result.Complete();
     }
 
     @Action(name = "setLinks")
     public Result setLinks(HashMap<String , Object> data) {
         UserInfo userInfo = getAuthorizedUser(data);
-        if (userInfo == null) return Result.SessionFailed();
+        if (userInfo == null) return Result.NotAuthorized();
 
         if (data.containsKey("webSite")) {
             String webSite = (String) data.get("webSite");
@@ -451,8 +394,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
         }
 
         userInfo.setLinks(userSocialLink);
-        userInfoRepository.update(userInfo);
-
+        userInfoRepository.merge(userInfo);
         return Result.Complete();
     }
 
@@ -464,34 +406,24 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
         String uuid = UUID.randomUUID().toString();
 
-        Settings settings = settingsRepository.getSettings();
         try {
+            Settings settings = settingsRepository.getSettings();
             String url = settings.getDomain() + "/#/"+userInfo.getLanguage().getName().toLowerCase()+"/restorePassword/" + uuid;
             emailService.sendTemplate(userInfo.getUser().getLogin(),settings.getEmail(), "Востановление пароля на getKnowledge();",
-                    "forgotPassword",new String[] {settingsRepository.getSettings().getDomain(),url});
+                    EmailTemplates.ForgotPassword,new String[] {settingsRepository.getSettings().getDomain(),url});
         } catch (Exception e) {
             trace.logException("Error send register email to " + userInfo.getUser().getLogin() , e , TraceLevel.Error);
             return Result.EmailNotSend();
         }
 
-        SystemEvent restorePasswordInfo = new SystemEvent();
-        restorePasswordInfo.setUserInfo(userInfo);
-        restorePasswordInfo.setCalendar(Calendar.getInstance());
-        restorePasswordInfo.setUuid(uuid);
-        restorePasswordInfo.setSystemEventType(SystemEventType.RestorePassword);
-        systemEventRepository.create(restorePasswordInfo);
+        SystemEvent systemEvent = systemEventRepository.createSystemEvent(userInfo,uuid,SystemEventType.RestorePassword);
 
         try {
-            Task task = new Task();
-            task.setServiceName("SystemEventService");
-            task.setTaskName("removeRestorePasswordInfo");
-            task.setJsonData(objectMapper.writeValueAsString(restorePasswordInfo));
-            task.setTaskStatus(TaskStatus.NotStarted);
             //next day
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DATE , 2);
-            task.setStartDate(calendar);
-            taskRepository.create(task);
+            calendar.add(Calendar.DATE , 1);
+            String jsonData = objectMapper.writeValueAsString(systemEvent);
+            taskRepository.createTask("SystemEventService","removeRestorePasswordInfo",jsonData,calendar);
         } catch (JsonProcessingException e) {
             trace.logException("Can't parse restore password info to json" , e , TraceLevel.Warning);
         }
@@ -499,16 +431,58 @@ public class UserInfoService extends AbstractService implements BootstrapService
         return Result.Complete();
     }
 
-    public UserInfo getCurrentUser(Principal p) {
-        if (p == null) return null;
-        UserInfo result = userInfoRepository.getSingleEntityByFieldAndValue("user.login", p.getName());
-        return result;
+    @Action(name = "getPosts" , mandatoryFields = {"userId","first","max"})
+    public List<PostMessage> getPosts(HashMap<String,Object> data){
+        UserInfo selectedUser = userInfoRepository.read(longFromField("userId",data));
+        if (selectedUser == null)
+            return null;
+
+        int first = (int) data.get("first");
+        int max = (int) data.get("max");
+        return userInfoRepository.postMessages(selectedUser,first,max);
+    }
+
+    @Action(name = "addPost" , mandatoryFields = {"userId","text"})
+    public Result addPost(HashMap<String,Object> data){
+        UserInfo selectedUser = userInfoRepository.read(longFromField("userId",data));
+        if (selectedUser == null)
+            return Result.NotFound();
+
+        UserInfo currentUser = userInfoRepository.getCurrentUser(data);
+        if (currentUser == null)
+            return  Result.NotAuthorized();
+
+
+        String textMessage = (String) data.get("text");
+        postMessageRepository.createMessage(currentUser,selectedUser,textMessage);
+
+        return Result.Complete();
+    }
+
+    @Action(name = "removePost" , mandatoryFields = {"postId"})
+    public Result removePost(HashMap<String,Object> data) throws PlatformException {
+        UserInfo userInfo = userInfoRepository.getCurrentUser(data);
+        if (userInfo == null)
+            return Result.NotAuthorized();
+
+        Long postId = longFromField("postId",data);
+        PostMessage postMessage = postMessageRepository.read(postId);
+        if (postMessage == null) {
+            return Result.NotFound();
+        }
+
+        if (postMessage.getSender().equals(userInfo) || postMessage.getRecipient().equals(userInfo)) {
+            postMessageRepository.remove(postId);
+        } else {
+            return Result.NotAuthorized();
+        }
+
+        return Result.Complete();
     }
 
     @Override
     public byte[] getImageById(long id) {
         UserInfo userInfo = userInfoRepository.read(id);
-        byte [] bytes = userInfo.getProfileImage();
-        return bytes;
+        return userInfo == null ? null : userInfo.getProfileImage();
     }
 }

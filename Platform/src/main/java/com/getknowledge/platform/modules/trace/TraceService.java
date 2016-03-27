@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service("TraceService")
 public class TraceService extends AbstractService {
@@ -20,10 +21,12 @@ public class TraceService extends AbstractService {
     @Autowired
     private TraceRepository traceRepository;
 
+    @Transactional
     public void log(String message, TraceLevel traceLevel) {
         logException(message,null,traceLevel);
     }
 
+    @Transactional
     public void logException(String message, Exception e, TraceLevel traceLevel) {
         if (message == null) message = "";
         if (traceLevel == null) traceLevel = TraceLevel.Debug;
