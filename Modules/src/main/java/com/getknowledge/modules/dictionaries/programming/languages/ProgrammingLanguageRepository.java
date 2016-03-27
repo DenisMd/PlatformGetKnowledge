@@ -14,7 +14,7 @@ public class ProgrammingLanguageRepository extends BaseRepository<ProgrammingLan
     public void create(String name,String mode){
         ProgrammingLanguage programmingLanguage = new ProgrammingLanguage();
         programmingLanguage.setName(name);
-        programmingLanguage.setMode(name);
+        programmingLanguage.setMode(mode);
         create(programmingLanguage);
     }
 }
