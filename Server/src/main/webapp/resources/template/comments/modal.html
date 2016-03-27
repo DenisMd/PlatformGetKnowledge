@@ -124,7 +124,7 @@
                             </table>
                         </div>
                         <div layout="column" flex>
-                            <div ui-codemirror="parentScope.currentTag.getData()" ng-model="parentScope.currentTag.getData().text"></div>
+                            <div ui-codemirror="parentScope.getOptions(currentTag)" ng-model="parentScope.currentTag.getData().text"></div>
                         </div>
                     </div>
 

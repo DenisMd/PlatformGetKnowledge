@@ -892,8 +892,12 @@ model.controller("postController",function($scope,$rootScope,codemirrorURL,TagSe
     };
 
     $scope.getOptions = function (tag) {
-        //return angular.copy(tag.getData(),);
-    }
+        if (tag) {
+            return angular.extend({
+                readOnly: 'nocursor'
+            }, tag.getData());
+        } else return {};
+    };
 
     //paste code
     var defaultOptions = {
