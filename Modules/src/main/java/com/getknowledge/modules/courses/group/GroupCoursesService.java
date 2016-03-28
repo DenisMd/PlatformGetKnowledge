@@ -13,6 +13,7 @@ import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -31,18 +32,11 @@ public class GroupCoursesService extends AbstractService implements ImageService
     @Autowired
     private TraceService trace;
 
-    @Action(name = "getGroupCoursesFromSection" , mandatoryFields = {"sectionId"})
-    public List<GroupCourses> getCourses(HashMap<String,Object> data) {
-        long sectionId = new Long((Integer)data.get("sectionId"));
-
-        return repository.getEntitiesByFieldAndValue("section.id" , sectionId);
-    }
-
     @Action(name = "createGroupCourses" , mandatoryFields = {"sectionId", "title","url"})
+    @Transactional
     public Result createGroupCourses (HashMap<String,Object> data) throws NotAuthorized {
 
-
-        long sectionId = Long.parseLong((String) data.get("sectionId"));
+        long sectionId = longFromField("sectionId",data);
         Section section = sectionRepository.read(sectionId);
         if (section == null) {
             return Result.Failed();
@@ -50,17 +44,14 @@ public class GroupCoursesService extends AbstractService implements ImageService
 
         GroupCourses groupCourses = new GroupCourses();
         if (!groupCourses.getAuthorizationList().isAccessCreate(userRepository.getSingleEntityByFieldAndValue("login",data.get("principalName")))) {
-            throw new NotAuthorized("access denied to create group courses");
+            throw new NotAuthorized("Access denied to create group courses");
         }
-        groupCourses.setTitle((String) data.get("title"));
-        groupCourses.setSection(section);
-        groupCourses.setUrl((String) data.get("url"));
-        repository.create(groupCourses);
-
+        repository.createGroupCourses((String) data.get("title"),(String) data.get("url"),section);
         return Result.Complete();
     }
 
     @ActionWithFile(name = "updateCover" , mandatoryFields = {"id"})
+    @Transactional
     public Result updateCover (HashMap<String,Object> data, List<MultipartFile> files) throws PlatformException {
 
         GroupCourses section = repository.read(new Long((Integer)data.get("id")));
@@ -74,7 +65,7 @@ public class GroupCoursesService extends AbstractService implements ImageService
             trace.logException("Error set cover for group section" , e , TraceLevel.Error);
             return Result.Failed();
         }
-        repository.update(section);
+        repository.merge(section);
         return Result.Complete();
     }
 
