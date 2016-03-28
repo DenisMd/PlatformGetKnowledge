@@ -71,7 +71,7 @@ public class CourseService extends AbstractService implements ImageService {
     private ChangeListRepository changeListRepository;
 
     private Result checkCourseRight(HashMap<String,Object> data) {
-        Long courseId = new Long((Integer)data.get("courseId"));
+        Long courseId = longFromField("courseId",data);
         Course course = courseRepository.read(courseId);
         if (course == null) {
             return Result.NotFound();
