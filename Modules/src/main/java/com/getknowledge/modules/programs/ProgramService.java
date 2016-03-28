@@ -20,6 +20,7 @@ import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -35,9 +36,6 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
     private LanguageRepository languageRepository;
 
     @Autowired
-    private ProgramTagRepository programTagRepository;
-
-    @Autowired
     private GroupProgramsRepository groupProgramsRepository;
 
     @Autowired
@@ -46,15 +44,8 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
     @Autowired
     private ProgramRepository programRepository;
 
-    private void prepareLinks(HashMap<String,Object> data , Program program) {
-        if (data.containsKey("links")) {
-            List<String> list = (List<String>) data.get("links");
-            program.setLinks(list);
-        }
-    }
-
     private Result checkProgramRight(HashMap<String,Object> data) {
-        Long programId = new Long((Integer)data.get("programId"));
+        Long programId = new Long(longFromField("programId",data));
         Program program = programRepository.read(programId);
         if (program == null) {
             return Result.NotFound();
@@ -73,6 +64,7 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
 
 
     @Action(name = "createProgram" , mandatoryFields = {"name","groupProgramId","description","language"})
+    @Transactional
     public Result createProgram(HashMap<String,Object> data) {
         if (!data.containsKey("principalName"))
             return Result.NotAuthorized();
@@ -94,13 +86,10 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
             return Result.Failed();
         }
 
-        program.setGroupPrograms(groupPrograms);
-
-        program.setName((String) data.get("name"));
-        program.setDescription((String) data.get("description"));
+        Language language = null;
 
         try {
-            Language language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
+            language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
             program.setLanguage(language);
         } catch (Exception exception) {
             Result result = Result.Failed();
@@ -108,26 +97,29 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
             return result;
         }
 
-        prepareLinks(data,program);
+        String name = (String) data.get("name");
+        String description = (String) data.get("description");
+        List<String> links = null;
+        List<String> tags = null;
 
-        if (data.containsKey("tags")) {
-            List<String> tags = (List<String>) data.get("tags");
-            programTagRepository.createTags(tags,program);
+        if (data.containsKey("links")){
+            links = (List<String>) data.get("links");
+        }
+
+        if (data.containsKey("tags")){
+            links = (List<String>) data.get("tags");
         }
 
 
-        programRepository.create(program);
+        programRepository.createProgram(groupPrograms,name,description,language,links,tags);
 
-        for (ProgramTag programTag : program.getTags()) {
-            programTag.getPrograms().add(program);
-            programTagRepository.merge(programTag);
-        }
         Result result = Result.Complete();
         result.setObject(program.getId());
         return result;
     }
 
     @Action(name = "updateProgramInformation" , mandatoryFields = {"programId"})
+    @Transactional
     public Result updateProgramInformation(HashMap<String,Object> data) {
 
         Result result = checkProgramRight(data);
@@ -138,39 +130,27 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
             return result;
         }
 
+        String name = (String) data.get("name");
+        String description = (String) data.get("description");
+        List<String> links = null;
+        List<String> tags = null;
 
-        if (data.containsKey("name")) {
-            String name = (String) data.get("name");
-            program.setName(name);
+        if (data.containsKey("links")){
+            links = (List<String>) data.get("links");
         }
 
-        if (data.containsKey("description")) {
-            String description = (String) data.get("description");
-            program.setDescription(description);
+        if (data.containsKey("tags")){
+            links = (List<String>) data.get("tags");
         }
 
-        prepareLinks(data,program);
-
-        if (data.containsKey("tags")) {
-            List<String> tags = (List<String>) data.get("tags");
-            programTagRepository.removeTagsFromEntity(program);
-            programTagRepository.createTags(tags,program);
-        }
-
-
-        programRepository.merge(program);
-        for (ProgramTag programTag : program.getTags()) {
-            programTag.getPrograms().add(program);
-            programTagRepository.merge(programTag);
-        }
-
-        programTagRepository.removeUnusedTags();
+        programRepository.updateProgram(program, name, description, links, tags);
 
         return Result.Complete();
     }
 
     @ActionWithFile(name = "uploadCover" , mandatoryFields = {"programId"})
-    public Result updataCover(HashMap<String,Object> data, List<MultipartFile> files) {
+    @Transactional
+    public Result uploadCover(HashMap<String,Object> data, List<MultipartFile> files) {
         Result result = checkProgramRight(data);
         Program program;
         if (result.getObject() != null)  {
@@ -191,7 +171,8 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
     }
 
     @ActionWithFile(name = "uploadData" , mandatoryFields = {"programId"})
-    public Result updataData(HashMap<String,Object> data, List<MultipartFile> files) {
+    @Transactional
+    public Result uploadData(HashMap<String,Object> data, List<MultipartFile> files) {
         Result result = checkProgramRight(data);
         Program program;
         if (result.getObject() != null)  {
