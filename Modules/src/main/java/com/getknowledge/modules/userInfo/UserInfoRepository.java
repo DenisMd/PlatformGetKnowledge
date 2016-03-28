@@ -58,14 +58,14 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
         return userInfo;
     }
 
-    @Override
-    public void remove(Long id) {
-        //Пользователей не возможно удалить
-    }
 
     @Override
     public void remove(UserInfo userInfo) {
-        //Пользователей не возможно удалить
+        //Пользователей не возможно удалить если они активиравонны
+        if (!userInfo.getUser().isEnabled()){
+            userRepository.remove(userInfo.getUser());
+            super.remove(userInfo);
+        }
     }
 
     public UserInfo getCurrentUser(HashMap<String,Object> data){

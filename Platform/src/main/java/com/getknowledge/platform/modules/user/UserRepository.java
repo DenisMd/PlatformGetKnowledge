@@ -22,15 +22,11 @@ public class UserRepository extends BaseRepository<User> {
     RoleRepository roleRepository;
 
     @Override
-    public void remove(Long id) {
-        //Пользователей не возможно удалить из системы
-        //Можно только блокировать
-    }
-
-    @Override
     public void remove(User entity) {
-        //Пользователей не возможно удалить из системы
-        //Можно только блокировать
+        //Пользователей не возможно удалить если они активиравонны
+        if (!entity.isEnabled()) {
+            super.remove(entity);
+        }
     }
 
     @Override

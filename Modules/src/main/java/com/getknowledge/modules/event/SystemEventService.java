@@ -12,6 +12,7 @@ import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 
@@ -28,6 +29,7 @@ public class SystemEventService extends AbstractService {
     private TraceService trace;
 
     @Action(name = "completeRegistration", mandatoryFields = {"uuid"})
+    @Transactional
     public RegisterResult completeRegistration(HashMap<String , Object> data) {
         String uuid = (String) data.get("uuid");
         SystemEvent registerInfo = systemEventRepository.getSingleEntityByFieldAndValue("uuid", uuid);
@@ -35,7 +37,7 @@ public class SystemEventService extends AbstractService {
         User user = userRepository.read(registerInfo.getUserInfo().getUser().getId());
         if (!user.isEnabled()) {
             user.setEnabled(true);
-            userRepository.update(user);
+            userRepository.merge(user);
             RegisterResult registerResult = RegisterResult.Complete;
             registerResult.setUserInfoId(registerInfo.getUserInfo().getId());
             return registerResult;
@@ -63,7 +65,7 @@ public class SystemEventService extends AbstractService {
         User user = userRepository.read(restorePasswordInfo.getUserInfo().getUser().getId());
         String password = (String) data.get("password");
         user.hashRawPassword(password);
-        userRepository.update(user);
+        userRepository.merge(user);
         systemEventRepository.remove(restorePasswordInfo.getId());
         return Result.Complete();
     }

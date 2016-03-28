@@ -31,7 +31,7 @@
                                authorities-by-username-query="SELECT sys_user.login , sys_role.role_name from sys_user
                                                         JOIN sys_role ON sys_user.role_id = sys_role.id
                                                         WHERE sys_user.login = ?"
-                               users-by-username-query="SELECT login,hash_pwd,enabled FROM sys_user where login = ?"/>
+                               users-by-username-query="SELECT login,hash_pwd,(enabled or !blocked) FROM sys_user where login = ?"/>
         </authentication-provider>
     </authentication-manager>
 
