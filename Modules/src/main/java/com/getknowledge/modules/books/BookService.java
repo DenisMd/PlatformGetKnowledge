@@ -146,7 +146,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
 
     @ActionWithFile(name = "uploadCover" , mandatoryFields = {"bookId"})
     @Transactional
-    public Result updataCover(HashMap<String,Object> data, List<MultipartFile> files) {
+    public Result uploadCover(HashMap<String,Object> data, List<MultipartFile> files) {
         Result result = checkBookRight(data);
         Book book;
         if (result.getObject() != null)  {
@@ -168,7 +168,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
 
     @ActionWithFile(name = "uploadData" , mandatoryFields = {"bookId"})
     @Transactional
-    public Result updataData(HashMap<String,Object> data, List<MultipartFile> files) {
+    public Result uploadData(HashMap<String,Object> data, List<MultipartFile> files) {
         Result result = checkBookRight(data);
         Book book;
         if (result.getObject() != null)  {
