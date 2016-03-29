@@ -52,13 +52,33 @@ public class VideoRepository extends BaseRepository<Video> {
         return courseList.isEmpty() ? null : courseList.get(0);
     }
 
-    public void create(String name,String link) {
+    public Video create(String name,String link) {
         Video video = new Video();
         video.setLink(link);
         video.setVideoName(name);
         video.setAllowEveryOne(true);
         video.setUploadTime(Calendar.getInstance());
         create(video);
+        return video;
+    }
+
+
+    public Video create(String name, byte[] cover) {
+        Video video = new Video();
+        video.setVideoName(name);
+        video.setAllowEveryOne(true);
+        video.setCover(cover);
+        video.setUploadTime(Calendar.getInstance());
+        create(video);
+        return video;
+    }
+
+    public Video update(String name, byte[] cover) {
+        Video video = new Video();
+        video.setVideoName(name);
+        video.setCover(cover);
+        merge(video);
+        return video;
     }
 
     //Загрузка видео в каталог

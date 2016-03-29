@@ -111,7 +111,7 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
         }
 
 
-        programRepository.createProgram(groupPrograms,name,description,language,links,tags);
+        programRepository.createProgram(groupPrograms,userInfo,name,description,language,links,tags);
 
         Result result = Result.Complete();
         result.setObject(program.getId());

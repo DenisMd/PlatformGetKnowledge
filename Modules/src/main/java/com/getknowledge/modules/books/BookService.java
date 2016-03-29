@@ -108,7 +108,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
         }
 
 
-        bookRepository.createBook(groupBooks,name,description,language,links,tags);
+        bookRepository.createBook(groupBooks,userInfo,name,description,language,links,tags);
 
         Result result = Result.Complete();
         result.setObject(book.getId());

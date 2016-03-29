@@ -4,6 +4,7 @@ import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.programs.group.GroupPrograms;
 import com.getknowledge.modules.programs.tags.ProgramTag;
 import com.getknowledge.modules.programs.tags.ProgramTagRepository;
+import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.base.repositories.BaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -28,10 +29,11 @@ public class ProgramRepository extends BaseRepository<Program> {
         }
     }
 
-    public Program createProgram(GroupPrograms groupPrograms,String name,String description,Language language,List<String> links,List<String> tags) {
+    public Program createProgram(GroupPrograms groupPrograms,UserInfo owner,String name,String description,Language language,List<String> links,List<String> tags) {
         Program program = new Program();
         program.setGroupPrograms(groupPrograms);
         program.setName(name);
+        program.setOwner(owner);
         program.setDescription(description);
         program.setLanguage(language);
         if (links != null)

@@ -1,5 +1,6 @@
 package com.getknowledge.modules.courses.tutorial;
 
+import com.getknowledge.modules.courses.Course;
 import com.getknowledge.modules.courses.CourseService;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoService;
@@ -41,6 +42,32 @@ public class TutorialService extends AbstractService {
 
     @Autowired
     private VideoRepository videoRepository;
+
+    @Action(name = "createTutorial" , mandatoryFields = {"courseId","name"})
+    @Transactional
+    public Result createTutorial(HashMap<String , Object> data) {
+        Result result = courseService.checkCourseRight(data);
+        Course course;
+        if (result.getObject() != null)  {
+            course = (Course) result.getObject();
+        } else {
+            return result;
+        }
+
+        Tutorial tutorial = new Tutorial();
+        tutorial.setName((String) data.get("name"));
+        tutorial.setCourse(course);
+        Object maxOrder = entityManager.createQuery("select max(t.orderNumber) from Tutorial t where t.course.id = :id")
+                .setParameter("id" , course.getId()).getSingleResult();
+
+        tutorial.setOrderNumber(maxOrder == null ? 1 : ((Integer) maxOrder) + 1);
+        tutorial.setLastChangeTime(Calendar.getInstance());
+        tutorialRepository.create(tutorial);
+
+        Result result1 = Result.Complete();
+        result1.setObject(tutorial.getId());
+        return result1;
+    }
 
     @Action(name = "getTutorial" , mandatoryFields = {"courseId" , "orderNumber"})
     @Transactional

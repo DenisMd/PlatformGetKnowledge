@@ -4,6 +4,7 @@ import com.getknowledge.modules.books.group.GroupBooks;
 import com.getknowledge.modules.books.tags.BooksTag;
 import com.getknowledge.modules.books.tags.BooksTagRepository;
 import com.getknowledge.modules.dictionaries.language.Language;
+import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -29,12 +30,13 @@ public class BookRepository extends ProtectedRepository<Book> {
         }
     }
 
-    public Book createBook(GroupBooks groupBooks,String name,String description,Language language,List<String> links,List<String> tags) {
+    public Book createBook(GroupBooks groupBooks,UserInfo owner, String name,String description,Language language,List<String> links,List<String> tags) {
         Book book = new Book();
         book.setGroupBooks(groupBooks);
         book.setName(name);
         book.setDescription(description);
         book.setLanguage(language);
+        book.setOwner(owner);
         if (links != null)
             book.setLinks(links);
         if (tags != null)
