@@ -7,6 +7,7 @@ import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.post.messages.PostMessage;
 import com.getknowledge.modules.video.VideoRepository;
 import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.exceptions.DeleteException;
 import com.getknowledge.platform.exceptions.PlatformException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import java.util.Calendar;
 import java.util.List;
 
 @Repository("TutorialRepository")
-public class TutorialRepository extends BaseRepository<Tutorial> {
+public class TutorialRepository extends ProtectedRepository<Tutorial> {
     @Override
     protected Class<Tutorial> getClassEntity() {
         return Tutorial.class;
