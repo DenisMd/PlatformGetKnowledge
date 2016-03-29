@@ -1,9 +1,11 @@
 package com.getknowledge.modules.courses.tutorial.comments.question;
 
+import com.getknowledge.modules.messages.CommentStatus;
 import com.getknowledge.modules.messages.attachments.AttachmentImage;
 import com.getknowledge.modules.messages.attachments.AttachmentImageRepository;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoRepository;
+import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.modules.Result;
@@ -33,10 +35,10 @@ public class TutorialQuestionsService extends AbstractService {
     @Autowired
     private TraceService traceService;
 
-    @ActionWithFile(name = "addImageToPost" , mandatoryFields = {"messageId"})
+    @ActionWithFile(name = "addImageToQuestion" , mandatoryFields = {"questionId"})
     @Transactional
     public Result addImageToPost(HashMap<String,Object> data, List<MultipartFile> fileList){
-        Long messageId = longFromField("messageId" , data);
+        Long messageId = longFromField("questionId" , data);
         TutorialQuestion tutorialQuestion = tutorialQuestionRepository.read(messageId);
         if (tutorialQuestion == null) {
             return Result.NotFound();
@@ -59,6 +61,30 @@ public class TutorialQuestionsService extends AbstractService {
             traceService.logException("Error upload image for post : " + e.getMessage(),e,TraceLevel.Error);
             return Result.Failed();
         }
+        return Result.Complete();
+    }
+
+
+    @Action(name = "blockQuestion", mandatoryFields = {"questionId","status"})
+    @Transactional
+    public Result blockComment(HashMap<String,Object> data){
+
+        Long questionId = longFromField("questionId" , data);
+        TutorialQuestion tutorialQuestion = tutorialQuestionRepository.read(questionId);
+
+        if (tutorialQuestion == null)
+            return Result.NotFound();
+
+        if (!isAccessToEdit(data,tutorialQuestion)){
+            return Result.AccessDenied();
+        }
+
+        CommentStatus commentStatus = CommentStatus.valueOf((String) data.get("status"));
+        if (commentStatus == CommentStatus.Normal) {
+            return Result.Failed();
+        }
+        tutorialQuestionRepository.blockComment(tutorialQuestion, commentStatus);
+
         return Result.Complete();
     }
 }

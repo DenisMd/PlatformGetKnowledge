@@ -48,11 +48,11 @@ public class Course extends CloneableEntity<Course> implements IUser,EntityWithT
     private List<CoursesTag> tags = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "course_source_knowledges")
+    @JoinTable(name = "courses_source_knowledges")
     private List<Knowledge> sourceKnowledge = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "course_required_knowledges")
+    @JoinTable(name = "courses_required_knowledges")
     private List<Knowledge> requiredKnowledge = new ArrayList<>();
 
     @Column(name = "create_date")

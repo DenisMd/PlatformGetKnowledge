@@ -2,6 +2,7 @@ package com.getknowledge.modules.courses.tutorial.comments.question;
 
 
 import com.getknowledge.modules.courses.tutorial.Tutorial;
+import com.getknowledge.modules.messages.CommentStatus;
 import com.getknowledge.modules.messages.attachments.AttachmentImage;
 import com.getknowledge.modules.messages.attachments.AttachmentImageRepository;
 import com.getknowledge.modules.userInfo.UserInfo;
@@ -51,5 +52,11 @@ public class TutorialQuestionRepository extends BaseRepository<TutorialQuestion>
             attachmentImageRepository.remove(attachmentImage.getId());
         }
         super.remove(tutorialQuestion);
+    }
+
+    public void blockComment(TutorialQuestion tutorialQuestion, CommentStatus commentStatus) {
+        tutorialQuestion.setMessage(null);
+        tutorialQuestion.setCommentStatus(commentStatus);
+        merge(tutorialQuestion);
     }
 }

@@ -5,6 +5,7 @@ import com.getknowledge.modules.courses.Course;
 import com.getknowledge.modules.dictionaries.city.City;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.menu.Menu;
+import com.getknowledge.modules.userInfo.courseInfo.CourseInfo;
 import com.getknowledge.modules.userInfo.dialog.Dialog;
 import com.getknowledge.modules.userInfo.post.messages.PostMessage;
 import com.getknowledge.modules.userInfo.socialLink.UserSocialLink;
@@ -97,6 +98,18 @@ public class UserInfo  extends CloneableEntity<UserInfo> implements IUser{
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<Dialog> dialogs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "userInfo")
+    @JsonIgnore
+    private List<CourseInfo> courseInfos = new ArrayList<>();
+
+    public List<CourseInfo> getCourseInfos() {
+        return courseInfos;
+    }
+
+    public void setCourseInfos(List<CourseInfo> courseInfos) {
+        this.courseInfos = courseInfos;
+    }
 
     public List<Dialog> getDialogs() {
         return dialogs;

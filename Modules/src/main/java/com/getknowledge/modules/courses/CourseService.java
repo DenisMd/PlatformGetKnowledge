@@ -318,6 +318,21 @@ public class CourseService extends AbstractService implements ImageService {
         return result;
     }
 
+    @Action(name = "startCourse" , mandatoryFields = {"courseId"})
+    @Transactional
+    public Result startCourse(HashMap<String , Object> data) {
+        Long courseId = new Long(longFromField("courseId", data));
+        Course course = courseRepository.read(courseId);
+        if (course == null) return Result.NotFound();
+
+        UserInfo userInfo = userInfoRepository.getCurrentUser(data);
+        if (userInfo == null) return Result.NotAuthorized();
+        if (isUserHasAccessToCourse(userInfo,course)) return Result.AccessDenied();
+
+        userInfoRepository.startCourse(userInfo,course);
+        return Result.Complete();
+    }
+
     @Override
     public byte[] getImageById(long id) {
         Course course = courseRepository.read(id);

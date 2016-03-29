@@ -2,11 +2,14 @@ package com.getknowledge.modules.courses.tutorial.comments.question;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.courses.tutorial.Tutorial;
+import com.getknowledge.modules.messages.Comment;
 import com.getknowledge.modules.messages.Message;
 import com.getknowledge.modules.messages.attachments.AttachmentImage;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AuthorizationList;
+import com.getknowledge.platform.modules.permission.Permission;
+import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -18,7 +21,7 @@ import java.util.List;
 @Entity
 @Table(name = "tutorial_questions")
 @ModuleInfo(serviceName = "TutorialQuestionsService")
-public class TutorialQuestion extends Message {
+public class TutorialQuestion extends Comment {
 
     @OneToMany
     @JsonIgnore
@@ -31,9 +34,11 @@ public class TutorialQuestion extends Message {
     private List<TutorialQuestion> comments = new ArrayList<>();
 
     @ManyToOne
+    @JsonIgnore
     private TutorialQuestion base;
 
     @ManyToOne
+    @JsonIgnore
     public Tutorial tutorial;
 
     public List<TutorialQuestion> getComments() {
@@ -78,6 +83,8 @@ public class TutorialQuestion extends Message {
 
     @Override
     public AuthorizationList getAuthorizationList() {
-        return null;
+        AuthorizationList authorizationList = new AuthorizationList();
+        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.BlockComments));
+        return authorizationList;
     }
 }

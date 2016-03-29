@@ -52,25 +52,24 @@ public class VideoRepository extends BaseRepository<Video> {
         return courseList.isEmpty() ? null : courseList.get(0);
     }
 
-    public Video create(String name,String link) {
+    public Video create(String name,String link,byte [] cover,boolean allowEveryOne) {
         Video video = new Video();
         video.setLink(link);
         video.setVideoName(name);
-        video.setAllowEveryOne(true);
+        video.setAllowEveryOne(allowEveryOne);
         video.setUploadTime(Calendar.getInstance());
+        video.setCover(cover);
         create(video);
         return video;
     }
 
+    public Video create(String name,String link) {
+        return create(name,link,null,true);
+    }
+
 
     public Video create(String name, byte[] cover) {
-        Video video = new Video();
-        video.setVideoName(name);
-        video.setAllowEveryOne(true);
-        video.setCover(cover);
-        video.setUploadTime(Calendar.getInstance());
-        create(video);
-        return video;
+        return create(name,null,cover,true);
     }
 
     public Video update(String name, byte[] cover) {

@@ -2,10 +2,16 @@ package com.getknowledge.modules.courses.tutorial;
 
 import com.getknowledge.modules.courses.Course;
 import com.getknowledge.modules.courses.CourseService;
+import com.getknowledge.modules.courses.tutorial.comments.question.TutorialQuestion;
+import com.getknowledge.modules.courses.tutorial.comments.question.TutorialQuestionRepository;
+import com.getknowledge.modules.courses.tutorial.comments.review.TutorialReview;
 import com.getknowledge.modules.userInfo.UserInfo;
+import com.getknowledge.modules.userInfo.UserInfoRepository;
 import com.getknowledge.modules.userInfo.UserInfoService;
+import com.getknowledge.modules.userInfo.post.messages.PostMessage;
 import com.getknowledge.modules.video.Video;
 import com.getknowledge.modules.video.VideoRepository;
+import com.getknowledge.modules.video.comment.VideoComment;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.services.AbstractService;
@@ -35,13 +41,16 @@ public class TutorialService extends AbstractService {
     private CourseService courseService;
 
     @Autowired
-    private UserInfoService userInfoService;
+    private UserInfoRepository userInfoRepository;
 
     @Autowired
     private TraceService trace;
 
     @Autowired
     private VideoRepository videoRepository;
+
+    @Autowired
+    private TutorialQuestionRepository tutorialQuestionRepository;
 
     @Action(name = "createTutorial" , mandatoryFields = {"courseId","name"})
     @Transactional
@@ -54,16 +63,7 @@ public class TutorialService extends AbstractService {
             return result;
         }
 
-        Tutorial tutorial = new Tutorial();
-        tutorial.setName((String) data.get("name"));
-        tutorial.setCourse(course);
-        Object maxOrder = entityManager.createQuery("select max(t.orderNumber) from Tutorial t where t.course.id = :id")
-                .setParameter("id" , course.getId()).getSingleResult();
-
-        tutorial.setOrderNumber(maxOrder == null ? 1 : ((Integer) maxOrder) + 1);
-        tutorial.setLastChangeTime(Calendar.getInstance());
-        tutorialRepository.create(tutorial);
-
+        Tutorial tutorial =tutorialRepository.createTutorial(course, (String) data.get("name"));
         Result result1 = Result.Complete();
         result1.setObject(tutorial.getId());
         return result1;
@@ -72,7 +72,7 @@ public class TutorialService extends AbstractService {
     @Action(name = "getTutorial" , mandatoryFields = {"courseId" , "orderNumber"})
     @Transactional
     public Tutorial getTutorial(HashMap<String,Object> data) throws PlatformException {
-        UserInfo userInfo = userInfoService.getAuthorizedUser(data);
+        UserInfo userInfo = userInfoRepository.getCurrentUser(data);
         if (userInfo == null) {
             return null;
         }
@@ -80,9 +80,7 @@ public class TutorialService extends AbstractService {
         Long courseId = new Long((Integer)data.get("courseId"));
         Integer orderNumber = (Integer)data.get("orderNumber");
         try {
-            Tutorial tutorial = (Tutorial) entityManager.createQuery("select t from Tutorial t where t.course.id = :courseId and t.orderNumber = :orderNumber")
-                    .setParameter("courseId", courseId)
-                    .setParameter("orderNumber", orderNumber).getSingleResult();
+            Tutorial tutorial = tutorialRepository.getTutorial(courseId,orderNumber);
 
             if (!courseService.isUserHasAccessToCourse(userInfo,tutorial.getCourse())) {
                 throw new NotAuthorized("error read tutorial");
@@ -103,7 +101,7 @@ public class TutorialService extends AbstractService {
             return null;
         }
 
-        if (!courseService.isUserHasAccessToCourse(userInfoService.getAuthorizedUser(data),tutorial.getCourse())) {
+        if (!courseService.isUserHasAccessToCourse(userInfoRepository.getCurrentUser(data),tutorial.getCourse())) {
             return null;
         }
 
@@ -118,7 +116,7 @@ public class TutorialService extends AbstractService {
             return null;
         }
 
-        if (!courseService.isUserHasAccessToCourse(userInfoService.getAuthorizedUser(data),tutorial.getCourse())) {
+        if (!courseService.isUserHasAccessToCourse(userInfoRepository.getCurrentUser(data),tutorial.getCourse())) {
             return null;
         }
 
@@ -188,6 +186,7 @@ public class TutorialService extends AbstractService {
     }
 
     @ActionWithFile(name = "uploadVideoTutorial" , mandatoryFields = "tutorialId")
+    @Transactional
     public Result uploadVideoIntro(HashMap<String,Object> data, List<MultipartFile> files) {
         Tutorial tutorial = tutorialRepository.read(longFromField("tutorialId", data));
         if (tutorial == null) {
@@ -201,16 +200,13 @@ public class TutorialService extends AbstractService {
         try {
             if (tutorial.getVideo() == null) {
                 Video videoTut = new Video();
-                videoTut.setAllowEveryOne(tutorial.getCourse().isBase());
-                videoTut.setVideoName((String) data.get("videoName"));
-                videoTut.setCover(files.get(0).getBytes());
-                videoRepository.create(videoTut);
+                videoRepository.create((String) data.get("videoName"),
+                        null,
+                        files.get(0).getBytes(),
+                        tutorial.getCourse().isBase());
                 tutorial.setVideo(videoTut);
             } else {
-                Video intro = tutorial.getVideo();
-                intro.setVideoName((String) data.get("videoName"));
-                intro.setCover(files.get(0).getBytes());
-                videoRepository.merge(intro);
+                videoRepository.update((String) data.get("videoName"),files.get(0).getBytes());
             }
 
             tutorial.setLastChangeTime(Calendar.getInstance());
@@ -222,6 +218,77 @@ public class TutorialService extends AbstractService {
         }
 
         return Result.Complete();
+    }
+
+
+    @Action(name = "getQuestion" , mandatoryFields = {"tutorialId","first","max"})
+    @Transactional
+    public List<TutorialQuestion> getQuestion(HashMap<String,Object> data){
+        Tutorial tutorial = tutorialRepository.read(longFromField("tutorialId",data));
+        if (tutorial == null)
+            return null;
+
+        int first = (int) data.get("first");
+        int max = (int) data.get("max");
+
+        if (!courseService.isUserHasAccessToCourse(userInfoRepository.getCurrentUser(data),tutorial.getCourse())) {
+            return null;
+        }
+
+        return tutorialRepository.getQuestion(tutorial,first,max);
+    }
+
+    @Action(name = "addQuestion" , mandatoryFields = {"tutorialId","text"})
+    @Transactional
+    public Result addPost(HashMap<String,Object> data){
+        Tutorial tutorial = tutorialRepository.read(longFromField("tutorialId",data));
+        if (tutorial == null)
+            return Result.NotFound();
+
+        UserInfo currentUser = userInfoRepository.getCurrentUser(data);
+        if (!courseService.isUserHasAccessToCourse(currentUser,tutorial.getCourse())) {
+            return null;
+        }
+
+
+        String textMessage = (String) data.get("text");
+        tutorialQuestionRepository.createMessage(currentUser,tutorial,textMessage);
+
+        return Result.Complete();
+    }
+
+    @Action(name = "addCommentToQuestion" , mandatoryFields = {"questionId","text"})
+    @Transactional
+    public Result addCommentToPost(HashMap<String,Object> data){
+        UserInfo currentUser = userInfoRepository.getCurrentUser(data);
+        if (currentUser == null)
+            return  Result.NotAuthorized();
+
+        TutorialQuestion tutorialQuestion = tutorialQuestionRepository.read(longFromField("questionId",data));
+        if (tutorialQuestion == null) {
+            return Result.NotFound();
+        }
+        String textMessage = (String) data.get("text");
+        tutorialQuestionRepository.createComment(currentUser,tutorialQuestion,textMessage);
+
+        return Result.Complete();
+    }
+
+    @Action(name = "getReviews" , mandatoryFields = {"tutorialId","first","max"})
+    @Transactional
+    public List<TutorialReview> getReviews(HashMap<String,Object> data){
+        Tutorial tutorial = tutorialRepository.read(longFromField("tutorialId",data));
+        if (tutorial == null)
+            return null;
+
+        int first = (int) data.get("first");
+        int max = (int) data.get("max");
+
+        if (!courseService.isUserHasAccessToCourse(userInfoRepository.getCurrentUser(data),tutorial.getCourse())) {
+            return null;
+        }
+
+        return tutorialRepository.getReviews(tutorial,first,max);
     }
 
 }

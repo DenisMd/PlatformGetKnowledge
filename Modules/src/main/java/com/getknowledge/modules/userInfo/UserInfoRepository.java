@@ -1,9 +1,12 @@
 package com.getknowledge.modules.userInfo;
 
+import com.getknowledge.modules.courses.Course;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
 import com.getknowledge.modules.menu.enumerations.MenuNames;
 import com.getknowledge.modules.menu.MenuRepository;
+import com.getknowledge.modules.userInfo.courseInfo.CourseInfo;
+import com.getknowledge.modules.userInfo.courseInfo.CourseInfoRepository;
 import com.getknowledge.modules.userInfo.dialog.Dialog;
 import com.getknowledge.modules.userInfo.dialog.DialogRepository;
 import com.getknowledge.modules.userInfo.post.messages.PostMessage;
@@ -39,6 +42,9 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
 
     @Autowired
     private DialogRepository dialogRepository;
+
+    @Autowired
+    private CourseInfoRepository courseInfoRepository;
 
     @Override
     public UserInfo read(Long id) {
@@ -113,5 +119,23 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
         dialog.setCompanion(companion);
         dialogRepository.create(dialog);
         return dialog;
+    }
+
+    public void startCourse(UserInfo userInfo, Course course){
+        for (Course c : userInfo.getStudiedCourses()) {
+            if (c.equals(course)){
+                return;
+            }
+        }
+
+        userInfo.getStudiedCourses().add(course);
+
+        CourseInfo courseInfo = new CourseInfo();
+        courseInfo.setUserInfo(userInfo);
+        courseInfo.setCourse(course);
+        courseInfoRepository.create(courseInfo);
+
+        merge(userInfo);
+        return;
     }
 }

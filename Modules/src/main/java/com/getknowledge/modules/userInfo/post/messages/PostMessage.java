@@ -17,6 +17,7 @@ import java.util.List;
 public class PostMessage extends Message {
 
     @ManyToOne
+    @JsonIgnore
     private UserInfo recipient;
 
     @OneToMany
@@ -30,6 +31,7 @@ public class PostMessage extends Message {
     private List<PostMessage> comments = new ArrayList<>();
 
     @ManyToOne
+    @JsonIgnore
     private PostMessage basePost;
 
     public List<PostMessage> getComments() {
