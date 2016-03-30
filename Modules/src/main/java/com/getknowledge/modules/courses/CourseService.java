@@ -295,8 +295,6 @@ public class CourseService extends AbstractService implements ImageService {
         Course draft = course.clone();
         courseRepository.createDraft(course,draft);
 
-        courseRepository.create(draft);
-
         result = Result.Complete();
         result.setObject(draft.getId());
         return result;

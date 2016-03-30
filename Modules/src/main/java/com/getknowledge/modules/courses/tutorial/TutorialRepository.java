@@ -3,6 +3,8 @@ package com.getknowledge.modules.courses.tutorial;
 import com.getknowledge.modules.courses.Course;
 import com.getknowledge.modules.courses.tutorial.comments.question.TutorialQuestion;
 import com.getknowledge.modules.courses.tutorial.comments.review.TutorialReview;
+import com.getknowledge.modules.courses.tutorial.homeworks.HomeWork;
+import com.getknowledge.modules.courses.tutorial.homeworks.HomeWorkRepository;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.post.messages.PostMessage;
 import com.getknowledge.modules.video.VideoRepository;
@@ -26,10 +28,17 @@ public class TutorialRepository extends ProtectedRepository<Tutorial> {
     @Autowired
     private VideoRepository videoRepository;
 
+    @Autowired
+    private HomeWorkRepository homeWorkRepository;
+
     @Override
     public void remove(Tutorial tutorial) {
         if (tutorial.getVideo() != null) {
             videoRepository.remove(tutorial.getVideo().getId());
+        }
+
+        for (HomeWork homeWork : tutorial.getHomeWorks()) {
+            homeWorkRepository.remove(homeWork);
         }
 
         super.remove(tutorial);

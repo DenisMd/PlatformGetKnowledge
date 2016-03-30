@@ -7,6 +7,8 @@ import com.getknowledge.modules.courses.tags.CoursesTag;
 import com.getknowledge.modules.courses.tags.CoursesTagRepository;
 import com.getknowledge.modules.courses.tutorial.Tutorial;
 import com.getknowledge.modules.courses.tutorial.TutorialRepository;
+import com.getknowledge.modules.courses.tutorial.homeworks.HomeWork;
+import com.getknowledge.modules.courses.tutorial.homeworks.HomeWorkRepository;
 import com.getknowledge.modules.courses.version.Version;
 import com.getknowledge.modules.dictionaries.knowledge.Knowledge;
 import com.getknowledge.modules.dictionaries.knowledge.KnowledgeRepository;
@@ -46,6 +48,9 @@ public class CourseRepository extends ProtectedRepository<Course> {
 
     @Autowired
     private KnowledgeRepository knowledgeRepository;
+
+    @Autowired
+    private HomeWorkRepository homeWorkRepository;
 
     private void removeCourseInfo(Course course) {
         if (course.getTutorials() != null) {
@@ -159,11 +164,11 @@ public class CourseRepository extends ProtectedRepository<Course> {
         videoRepository.merge(to);
     }
 
-    public void createVideo (Video to, Video from) {
-        to.setCover(from.getCover());
-        to.setLink(from.getLink());
-        to.setVideoName(from.getVideoName());
-        videoRepository.create(to);
+    public void mergeHomeWork (HomeWork to, HomeWork from) {
+        to.setName(from.getName());
+        to.setData(from.getData());
+        to.setLastChangeTime(from.getLastChangeTime());
+        mergeVideo(to.getVideo(),from.getVideo());
     }
 
     public void mergeTutorial (Tutorial to, Tutorial from) {
@@ -172,15 +177,22 @@ public class CourseRepository extends ProtectedRepository<Course> {
         to.setOrderNumber(from.getOrderNumber());
         to.setLastChangeTime(from.getLastChangeTime());
         mergeVideo(to.getVideo(), from.getVideo());
-    }
 
-    public void createTutorial (Tutorial to, Tutorial from) {
-        to.setData(from.getData());
-        to.setName(from.getName());
-        to.setOrderNumber(from.getOrderNumber());
-        to.setLastChangeTime(from.getLastChangeTime());
-        createVideo(to.getVideo(), from.getVideo());
-        tutorialRepository.create(to);
+        for (HomeWork hw : from.getHomeWorks()) {
+            if (hw.getOriginal() != null) {
+                if (!hw.isDeleting()) {
+                    mergeHomeWork(hw.getOriginal(),hw);
+                    homeWorkRepository.merge(hw.getOriginal());
+                } else {
+                    homeWorkRepository.remove(hw);
+                }
+            } else {
+                HomeWork newHw = new HomeWork();
+                newHw.setTutorial(from);
+                mergeHomeWork(newHw,hw);
+                homeWorkRepository.create(newHw);
+            }
+        }
     }
 
     public void mergeDraft(Course base, Course draft) {
@@ -200,7 +212,7 @@ public class CourseRepository extends ProtectedRepository<Course> {
                     mergeTutorial(draftTutorial.getOriginalTutorial(), draftTutorial);
                     tutorialRepository.merge(draftTutorial.getOriginalTutorial());
                 } else {
-                    tutorialRepository.remove(draftTutorial.getOriginalTutorial().getId());
+                    tutorialRepository.remove(draftTutorial.getOriginalTutorial());
                 }
             } else {
                 Tutorial newTutorial = new Tutorial();
@@ -210,6 +222,38 @@ public class CourseRepository extends ProtectedRepository<Course> {
                 tutorialRepository.create(newTutorial);
             }
         }
+    }
+
+    public void createVideo (Video to, Video from) {
+        to.setCover(from.getCover());
+        to.setLink(from.getLink());
+        to.setVideoName(from.getVideoName());
+        videoRepository.create(to);
+    }
+
+    public void createTutorial (Tutorial to, Tutorial from) {
+        to.setData(from.getData());
+        to.setName(from.getName());
+        to.setOrderNumber(from.getOrderNumber());
+        to.setLastChangeTime(from.getLastChangeTime());
+        createVideo(to.getVideo(), from.getVideo());
+
+        for (HomeWork homeWork : from.getHomeWorks()) {
+            HomeWork draftHomeWork = new HomeWork();
+            draftHomeWork.setVideo(new Video());
+            draftHomeWork.setOriginal(homeWork);
+            createHomeWork(draftHomeWork,homeWork);
+        }
+
+        tutorialRepository.create(to);
+    }
+
+    public void createHomeWork (HomeWork to, HomeWork from) {
+        to.setData(from.getData());
+        to.setName(from.getName());
+        to.setLastChangeTime(from.getLastChangeTime());
+        createVideo(to.getVideo(), from.getVideo());
+        homeWorkRepository.create(to);
     }
 
     public void createDraft(Course base, Course draft) {
@@ -229,5 +273,7 @@ public class CourseRepository extends ProtectedRepository<Course> {
             tutorial.setOriginalTutorial(baseTutorial);
             createTutorial(tutorial,baseTutorial);
         }
+
+        create(draft);
     }
 }
