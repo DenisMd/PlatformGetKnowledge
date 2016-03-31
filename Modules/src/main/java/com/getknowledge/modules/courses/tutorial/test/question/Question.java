@@ -10,6 +10,7 @@ import com.getknowledge.platform.base.entities.CloneableEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Entity
@@ -31,6 +32,18 @@ public class Question extends CloneableEntity<Question> {
 
     @com.getknowledge.platform.annotations.Access(myself = true)
     private Boolean deleting = false;
+
+    @Column(name = "last_change_time")
+    @Temporal(value = TemporalType.TIMESTAMP)
+    private Calendar lastChangeTime;
+
+    public Calendar getLastChangeTime() {
+        return lastChangeTime;
+    }
+
+    public void setLastChangeTime(Calendar lastChangeTime) {
+        this.lastChangeTime = lastChangeTime;
+    }
 
     public Question getOriginalQuestion() {
         return originalQuestion;

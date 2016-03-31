@@ -9,6 +9,12 @@ import com.getknowledge.modules.courses.tutorial.Tutorial;
 import com.getknowledge.modules.courses.tutorial.TutorialRepository;
 import com.getknowledge.modules.courses.tutorial.homeworks.HomeWork;
 import com.getknowledge.modules.courses.tutorial.homeworks.HomeWorkRepository;
+import com.getknowledge.modules.courses.tutorial.test.Test;
+import com.getknowledge.modules.courses.tutorial.test.TestRepository;
+import com.getknowledge.modules.courses.tutorial.test.question.Question;
+import com.getknowledge.modules.courses.tutorial.test.question.QuestionRepository;
+import com.getknowledge.modules.courses.tutorial.test.question.answer.Answer;
+import com.getknowledge.modules.courses.tutorial.test.question.answer.AnswerRepository;
 import com.getknowledge.modules.courses.version.Version;
 import com.getknowledge.modules.dictionaries.knowledge.Knowledge;
 import com.getknowledge.modules.dictionaries.knowledge.KnowledgeRepository;
@@ -51,6 +57,15 @@ public class CourseRepository extends ProtectedRepository<Course> {
 
     @Autowired
     private HomeWorkRepository homeWorkRepository;
+
+    @Autowired
+    private TestRepository testRepository;
+
+    @Autowired
+    private QuestionRepository questionRepository;
+
+    @Autowired
+    private AnswerRepository answerRepository;
 
     private void removeCourseInfo(Course course) {
         if (course.getTutorials() != null) {
@@ -193,6 +208,49 @@ public class CourseRepository extends ProtectedRepository<Course> {
                 homeWorkRepository.create(newHw);
             }
         }
+
+        if (from.getTest() != null) {
+            if (from.getTest().getOriginalTest() != null) {
+                if (from.getTest().getDeleting()) {
+                    tutorialRepository.remove(from.getOriginalTutorial());
+                } else {
+                    mergeTest(from.getTest().getOriginalTest(),from.getTest());
+                    testRepository.merge(from.getTest().getOriginalTest());
+                }
+            } else {
+                Test test = new Test();
+                mergeTest(test,from.getTest());
+                testRepository.create(test);
+            }
+        }
+    }
+
+    public void mergeTest(Test to, Test from) {
+        to.setLastChangeTime(from.getLastChangeTime());
+        for (Question question : from.getQuestionList()) {
+            if (question.getOriginalQuestion() != null) {
+
+                if (question.getDeleting()) {
+                    questionRepository.remove(question.getOriginalQuestion());
+                } else {
+
+                }
+
+            } else {
+                Question newQ = new Question();
+                newQ.setTest(to);
+                mergeQuestion(newQ,question);
+                questionRepository.create(newQ);
+            }
+        }
+    }
+
+    public void mergeQuestion(Question to , Question from) {
+
+    }
+
+    public void mergeAnswer(Answer to, Answer from) {
+
     }
 
     public void mergeDraft(Course base, Course draft) {
@@ -241,16 +299,60 @@ public class CourseRepository extends ProtectedRepository<Course> {
         for (HomeWork homeWork : from.getHomeWorks()) {
             HomeWork draftHomeWork = new HomeWork();
             draftHomeWork.setVideo(new Video());
-            draftHomeWork.setOriginal(homeWork);
             createHomeWork(draftHomeWork,homeWork);
+            to.getHomeWorks().add(draftHomeWork);
+        }
+
+        if (from.getTest() != null) {
+            Test test = new Test();
+            createTest(test,from.getTest());
+            to.setTest(test);
         }
 
         tutorialRepository.create(to);
     }
 
+    public void createTest(Test to, Test from) {
+        to.setOriginalTest(from);
+        to.setLastChangeTime(from.getLastChangeTime());
+
+        for (Question question : from.getQuestionList()) {
+            Question draftQuestion = new Question();
+            createQuestion(draftQuestion,question);
+            to.getQuestionList().add(draftQuestion);
+        }
+
+        testRepository.create(to);
+    }
+
+    public void createQuestion(Question to, Question from) {
+        to.setLastChangeTime(from.getLastChangeTime());
+        to.setOriginalQuestion(from);
+        to.setQuestion(from.getQuestion());
+
+        for (Answer answer : from.getAnswerList()) {
+            Answer draftAnswer = new Answer();
+            createAnswer(draftAnswer,answer);
+            to.getAnswerList().add(draftAnswer);
+        }
+
+        questionRepository.create(to);
+    }
+
+    public void createAnswer(Answer to, Answer from) {
+        to.setAnswer(from.getAnswer());
+        to.setCorrect(from.isCorrect());
+        to.setDescription(from.getDescription());
+        to.setOriginalAnswer(from);
+        to.setLastChangeTime(from.getLastChangeTime());
+
+        answerRepository.create(to);
+    }
+
     public void createHomeWork (HomeWork to, HomeWork from) {
         to.setData(from.getData());
         to.setName(from.getName());
+        to.setOriginal(from);
         to.setLastChangeTime(from.getLastChangeTime());
         createVideo(to.getVideo(), from.getVideo());
         homeWorkRepository.create(to);

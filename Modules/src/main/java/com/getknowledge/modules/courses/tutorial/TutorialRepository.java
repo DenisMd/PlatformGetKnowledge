@@ -5,6 +5,7 @@ import com.getknowledge.modules.courses.tutorial.comments.question.TutorialQuest
 import com.getknowledge.modules.courses.tutorial.comments.review.TutorialReview;
 import com.getknowledge.modules.courses.tutorial.homeworks.HomeWork;
 import com.getknowledge.modules.courses.tutorial.homeworks.HomeWorkRepository;
+import com.getknowledge.modules.courses.tutorial.test.TestRepository;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.post.messages.PostMessage;
 import com.getknowledge.modules.video.VideoRepository;
@@ -31,6 +32,9 @@ public class TutorialRepository extends ProtectedRepository<Tutorial> {
     @Autowired
     private HomeWorkRepository homeWorkRepository;
 
+    @Autowired
+    private TestRepository testRepository;
+
     @Override
     public void remove(Tutorial tutorial) {
         if (tutorial.getVideo() != null) {
@@ -39,6 +43,10 @@ public class TutorialRepository extends ProtectedRepository<Tutorial> {
 
         for (HomeWork homeWork : tutorial.getHomeWorks()) {
             homeWorkRepository.remove(homeWork);
+        }
+
+        if (tutorial.getTest() != null) {
+            testRepository.remove(tutorial.getTest());
         }
 
         super.remove(tutorial);
