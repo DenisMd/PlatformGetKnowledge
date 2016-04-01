@@ -233,7 +233,8 @@ public class CourseRepository extends ProtectedRepository<Course> {
                 if (question.getDeleting()) {
                     questionRepository.remove(question.getOriginalQuestion());
                 } else {
-
+                    mergeQuestion(question.getOriginalQuestion(),question);
+                    questionRepository.merge(question.getOriginalQuestion());
                 }
 
             } else {
@@ -246,11 +247,32 @@ public class CourseRepository extends ProtectedRepository<Course> {
     }
 
     public void mergeQuestion(Question to , Question from) {
+        to.setQuestion(from.getQuestion());
+        to.setLastChangeTime(from.getLastChangeTime());
 
+        for (Answer answer : from.getAnswerList()) {
+            if (answer.getOriginalAnswer() != null) {
+
+                if (answer.getDeleting()) {
+
+                } else {
+
+                }
+
+            } else {
+                Answer newA = new Answer();
+                newA.setQuestion(to);
+                mergeAnswer(newA,answer);
+                answerRepository.create(newA);
+            }
+        }
     }
 
     public void mergeAnswer(Answer to, Answer from) {
-
+        to.setLastChangeTime(from.getLastChangeTime());
+        to.setDescription(from.getDescription());
+        to.setCorrect(from.isCorrect());
+        to.setAnswer(from.getAnswer());
     }
 
     public void mergeDraft(Course base, Course draft) {
