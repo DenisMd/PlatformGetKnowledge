@@ -299,6 +299,10 @@ public class DataController {
             if (abstractService instanceof VideoLinkService) {
                 VideoLinkService videoLinkService = (VideoLinkService) abstractService;
 
+                if (moduleLocator.findRepository(classEntity).read(id) == null) {
+                    throw new NotFound(String.format("Video not found by id %d",id));
+                }
+
                 if (!videoLinkService.isAccessToWatchVideo(id, getCurrentUser(principal))) {
                     throw new NotAuthorized("access denied for read video" , trace, TraceLevel.Warning);
                 }
