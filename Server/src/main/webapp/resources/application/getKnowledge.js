@@ -105,7 +105,6 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         }
 
         return $scope.application.text[key];
-
     };
 
     //создать ссылку на страницу с учетом языка
