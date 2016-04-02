@@ -5,7 +5,7 @@ model.controller("restorePasswordCtrl", function ($scope,$state,applicationServi
         applicationService.action($scope,"resultRestorePassword",className.system_event,"restorePassword",{
             "uuid" : $scope.uuid,
             "password" : password
-        } );
-    }
+        });
+    };
 
 });

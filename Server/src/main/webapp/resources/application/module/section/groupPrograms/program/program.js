@@ -4,25 +4,25 @@ model.controller("programCtrl", function ($scope,applicationService,className,pa
         tagsName : []
     };
 
-    function readProgram(){
-        applicationService.read($scope,"program",className.program,programId,function(program){
+    function readProgram() {
+        applicationService.read($scope, "program", className.program, programId, function (program) {
             if (!("tags" in program)) {
                 program.tagsName = [];
             } else {
                 program.tagsName = [];
-                program.tags.forEach(function(element){
+                program.tags.forEach(function (element) {
                     program.tagsName.push(element.tagName);
-                })
+                });
             }
 
             $scope.program.urls = [];
             program.links.forEach(function (item) {
                 $scope.program.urls.push({
-                    name : item
+                    name: item
                 });
             });
         });
-    };
+    }
 
     readProgram();
     $scope.programImg = function(){

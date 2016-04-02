@@ -15,15 +15,17 @@ model.controller("registerCtrl", function ($scope, $http,applicationService,clas
     };
 
     applicationService.list($scope,"lang",className.language, function (item) {
-        item.title = $scope.translate(item.name.toLowerCase())
+        item.title = $scope.translate(item.name.toLowerCase());
     });
 
     $scope.password = "";
     $scope.signUp = function() {
-        if ($scope.registerForm.$invalid) return;
+        if ($scope.registerForm.$invalid) {
+            return;
+        }
         applicationService.action($scope,"registerInfo" , className.userInfo , "register", $scope.info, function(registerInfo) {
             $scope.error = false;
-            if (registerInfo != 'Complete') {
+            if (registerInfo !== 'Complete') {
                 $scope.error = true;
             }
         });
@@ -33,7 +35,7 @@ model.controller("registerCtrl", function ($scope, $http,applicationService,clas
         var cssClass = "";
         if ($scope.error){
             cssClass = "alert-danger";
-        } else if ($scope.registerInfo == 'Complete'){
+        } else if ($scope.registerInfo === 'Complete'){
             cssClass = "alert-info";
         } else {
             cssClass = "div-hidden";

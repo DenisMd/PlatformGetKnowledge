@@ -12,7 +12,7 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
                 course.tagsName = [];
                 course.tags.forEach(function(element){
                     course.tagsName.push(element.tagName);
-                })
+                });
             }
 
             course.sourceKnowledge.forEach(function(knowledge) {
@@ -23,7 +23,7 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
                 knowledge.image = applicationService.imageHref(className.knowledge,knowledge.id);
             });
         });
-    };
+    }
 
     readCourse();
     $scope.courseImg = function(){
@@ -105,7 +105,7 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
 
     function createFilterFor(query) {
         return function filterFn(contact) {
-            return (contact.name.indexOf(query) != -1);
+            return (contact.name.indexOf(query) !== -1);
         };
     }
 
@@ -121,7 +121,7 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
         applicationService.action($scope,"tutorials",className.course,"getTutorialsForCourse",{
             courseId : +courseId
         });
-    };
+    }
 
     readTutorials();
 
@@ -145,7 +145,7 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
             $scope.showToast(result);
             readCourse();
         });
-    }
+    };
 
 
 });

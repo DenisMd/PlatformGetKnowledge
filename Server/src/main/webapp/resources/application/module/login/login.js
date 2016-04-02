@@ -18,5 +18,5 @@ model.controller("loginCtrl", function ($scope, $state,$http,applicationService,
                 $scope.error = true;
             }
         });
-    }
+    };
 });

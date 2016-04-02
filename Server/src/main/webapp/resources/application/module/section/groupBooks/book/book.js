@@ -12,7 +12,7 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
                 book.tagsName = [];
                 book.tags.forEach(function(element){
                     book.tagsName.push(element.tagName);
-                })
+                });
             }
 
             $scope.book.urls = [];
@@ -22,7 +22,7 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
                 });
             });
         });
-    };
+    }
 
     readBook();
     $scope.bookImg = function(){
@@ -56,7 +56,7 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
             $scope.showToast(result);
             readBook();
         });
-    }
+    };
 
     var croppedImg = {
         save: function(file){

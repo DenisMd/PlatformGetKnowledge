@@ -101,5 +101,5 @@ model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationServ
             $scope.knowledges = [];
             doAction();
         });
-    }
+    };
 });

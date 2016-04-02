@@ -2,5 +2,5 @@ model.controller("system_infoCtrl", function ($scope, applicationService, classN
 
     applicationService.read($scope,"settings",className.settings,1);
 
-    applicationService.list($scope,"systemServices",className.systemServices)
+    applicationService.list($scope,"systemServices",className.systemServices);
 });

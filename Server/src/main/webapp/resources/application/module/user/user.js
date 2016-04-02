@@ -1,45 +1,46 @@
 model.controller("userCtrl", function ($scope, $state,$timeout,$http,applicationService,pageService,arcService,className) {
     var userId = pageService.getPathVariable("user",$state.params.path);
 
+    function init() {
+        applicationService.read($scope, "user_info", className.userInfo, userId, function (item) {
+
+            //Если пользователя не существует бросаем 404
+            if (!item) {
+                $state.go("404");
+            }
+
+            $scope.statusText.text = item.status;
+            if ($scope.user && $scope.user.id === parseInt(userId, 10)) {
+                $scope.statusText.onSave = function (text) {
+                    applicationService.action($scope, "updateStatus", className.userInfo, "updateStatus", {status: text}, function (item) {
+                        if (item === "Complete") {
+                            applicationService.read($scope, "user_info", className.userInfo, userId, function (item) {
+                                $scope.statusText.text = item.status;
+                            });
+                        }
+                    });
+                };
+                if (item.firstLogin) {
+                    applicationService.list($scope, "countriesList", className.country);
+                    $("#userModal").modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    $("#userModal").modal('show');
+                }
+
+
+            } else {
+                $scope.statusText.readonly = true;
+            }
+        });
+    }
+
     if (userId) {
         pageService.setOnLogout(function(){
             init();
         });
         init();
-        function init() {
-            applicationService.read($scope, "user_info", className.userInfo, userId, function (item) {
-
-                //Если пользователя не существует бросаем 404
-                if (!item) {
-                    $state.go("404");
-                }
-
-                $scope.statusText.text = item.status;
-                if ($scope.user && $scope.user.id === parseInt(userId, 10)) {
-                    $scope.statusText.onSave = function (text) {
-                        applicationService.action($scope, "updateStatus", className.userInfo, "updateStatus", {status: text}, function (item) {
-                            if (item === "Complete") {
-                                applicationService.read($scope, "user_info", className.userInfo, userId, function (item) {
-                                    $scope.statusText.text = item.status;
-                                });
-                            }
-                        });
-                    };
-                    if (item.firstLogin) {
-                        applicationService.list($scope, "countriesList", className.country);
-                        $("#userModal").modal({
-                            backdrop: 'static',
-                            keyboard: false
-                        });
-                        $("#userModal").modal('show');
-                    }
-
-
-                } else {
-                    $scope.statusText.readonly = true;
-                }
-            });
-        }
     }
     $scope.closeModal = function(){
         applicationService.action($scope,"skipResult",className.userInfo,"updateExtraInfo",{});
@@ -138,7 +139,7 @@ model.controller("userCtrl", function ($scope, $state,$timeout,$http,application
         var ctx = document.getElementById("arc"+i).getContext("2d");
         var myDoughnutChart = new Chart(ctx).Doughnut(arcService.getDataForArc(item.percent,item.color),arcService.arcOptions);
         arcGraphics[i] = myDoughnutChart;
-    })
+    });
     },0);
     var initGraphics = function(firstData,secondData,thirdData){
         var statisticGraphic = angular.element("#stastistic1")[0].getContext("2d");
@@ -252,9 +253,15 @@ model.controller("userCtrl", function ($scope, $state,$timeout,$http,application
     $scope.save = function(){
         if ($scope.user) {
             var data = {};
-            if ($scope.city) data.cityId = $scope.city.id;
-            if ($scope.speciality) data.speciality = $scope.speciality;
-            if ($scope.date) data.date = $scope.date;
+            if ($scope.city) {
+                data.cityId = $scope.city.id;
+            }
+            if ($scope.speciality) {
+                data.speciality = $scope.speciality;
+            }
+            if ($scope.date) {
+                data.date = $scope.date;
+            }
 
             applicationService.action($scope, "updateExtraInfo", className.userInfo, "updateExtraInfo", data, function(item){
                 if (item === "Complete"){
@@ -263,7 +270,7 @@ model.controller("userCtrl", function ($scope, $state,$timeout,$http,application
                 }
             });
         }
-    }
+    };
 
 
 });
