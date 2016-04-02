@@ -11,17 +11,18 @@
 * Postgresql 9.1
 
 Процесс установки:
-1. В application.properties установить настройки подключения к базе данных и основные настройки приложения
-2. В GetKnowledge\Server\src\main\webapp\resources выполнить установку bower install
-3. В GetKnowledge\Server\src\main\webapp\resources выполнить установку npm install
-4. Запустить команду grunt для минифицирования и компановки основных файлов
-5. Для разработки front-end-а необходимо также включить watcher - командой grunt watch
-6. Выполнить maven clean и maven install, для артифакта Root 
-7. С помощью tomcat развернуть .war архив
+*  В application.properties установить настройки подключения к базе данных и основные настройки приложения
+*  В GetKnowledge\Server\src\main\webapp\resources выполнить установку bower install
+*  В GetKnowledge\Server\src\main\webapp\resources выполнить установку npm install
+*  Запустить команду grunt для минифицирования и компановки основных файлов
+*  Для разработки front-end-а необходимо также включить watcher - командой grunt watch
+*  Выполнить maven clean и maven install, для артифакта Root 
+*  С помощью tomcat развернуть .war архив
 
 Выполнить первоначальную установку:
-Для этого необходимо выполнить POST-запрос по адресу [domain]/data/action
-~ {
+Для этого необходимо выполнить POST-запрос по адресу: **[domain]/data/action**
+<blockquote>
+{
      className:com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo
      actionName:do
      data:
@@ -34,3 +35,4 @@
      "firstName":"имя"
      }
  }
+<blockquote>
