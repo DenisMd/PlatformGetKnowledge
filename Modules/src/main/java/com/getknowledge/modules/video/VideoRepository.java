@@ -1,10 +1,8 @@
 package com.getknowledge.modules.video;
 
 import com.getknowledge.modules.courses.Course;
-import com.getknowledge.modules.messages.MessageStatus;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.video.comment.VideoComment;
-import com.getknowledge.modules.video.comment.VideoCommentRepository;
 import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.exceptions.DeleteException;
 import com.getknowledge.platform.exceptions.PlatformException;
@@ -36,17 +34,14 @@ public class VideoRepository extends BaseRepository<Video> {
     public String pathToVideo;
 
     @Override
-    public void remove(Long id) throws PlatformException {
-        Video video = read(id);
-        if (video == null) throw new DeleteException("Video by id : " + id + " not found");
+    public void remove(Video video) {
         String separator = File.separator;
         File file = new File(pathToVideo + File.separator + video.getLink());
         if (file.exists()) {
             boolean result = file.delete();
-            if (!result) throw new DeleteException("Can't delete video file " + file.getAbsolutePath(),trace, TraceLevel.Error);
         }
 
-        super.remove(id);
+        super.remove(video);
     }
 
     public Course findCourseByVideo(Video video) {
@@ -57,13 +52,32 @@ public class VideoRepository extends BaseRepository<Video> {
         return courseList.isEmpty() ? null : courseList.get(0);
     }
 
-    public void create(String name,String link) {
+    public Video create(String name,String link,byte [] cover,boolean allowEveryOne) {
         Video video = new Video();
         video.setLink(link);
         video.setVideoName(name);
-        video.setAllowEveryOne(true);
+        video.setAllowEveryOne(allowEveryOne);
         video.setUploadTime(Calendar.getInstance());
+        video.setCover(cover);
         create(video);
+        return video;
+    }
+
+    public Video create(String name,String link) {
+        return create(name,link,null,true);
+    }
+
+
+    public Video create(String name, byte[] cover) {
+        return create(name,null,cover,true);
+    }
+
+    public Video update(String name, byte[] cover) {
+        Video video = new Video();
+        video.setVideoName(name);
+        video.setCover(cover);
+        merge(video);
+        return video;
     }
 
     //Загрузка видео в каталог

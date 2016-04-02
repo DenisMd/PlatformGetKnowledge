@@ -7,50 +7,16 @@ import javax.persistence.*;
 import java.util.Calendar;
 
 @MappedSuperclass
-public abstract class Comment extends AbstractEntity {
-    @Column(columnDefinition = "Text" , name = "message")
-    private String message;
-
-    @Column(name = "createTime")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Calendar createTime;
-
-    @OneToOne
-    private UserInfo sender;
-
+public abstract class Comment extends Message {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private MessageStatus messageStatus;
+    private CommentStatus commentStatus;
 
-    public MessageStatus getMessageStatus() {
-        return messageStatus;
+    public CommentStatus getCommentStatus() {
+        return commentStatus;
     }
 
-    public void setMessageStatus(MessageStatus messageStatus) {
-        this.messageStatus = messageStatus;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public UserInfo getSender() {
-        return sender;
-    }
-
-    public void setSender(UserInfo sender) {
-        this.sender = sender;
-    }
-
-    public Calendar getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Calendar createTime) {
-        this.createTime = createTime;
+    public void setCommentStatus(CommentStatus commentStatus) {
+        this.commentStatus = commentStatus;
     }
 }

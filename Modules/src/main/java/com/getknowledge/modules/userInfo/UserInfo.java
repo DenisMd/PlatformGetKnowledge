@@ -5,6 +5,9 @@ import com.getknowledge.modules.courses.Course;
 import com.getknowledge.modules.dictionaries.city.City;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.menu.Menu;
+import com.getknowledge.modules.userInfo.courseInfo.CourseInfo;
+import com.getknowledge.modules.userInfo.dialog.Dialog;
+import com.getknowledge.modules.userInfo.post.messages.PostMessage;
 import com.getknowledge.modules.userInfo.socialLink.UserSocialLink;
 import com.getknowledge.platform.annotations.Access;
 import com.getknowledge.platform.annotations.ModuleInfo;
@@ -77,7 +80,7 @@ public class UserInfo  extends CloneableEntity<UserInfo> implements IUser{
     //Список курсов, которые изучает данный пользователь
     @ManyToMany
     @JsonIgnore
-    @JoinTable(name = "users_studied_course")
+    @JoinTable(name = "users_studied_courses")
     private List<Course> studiedCourses = new ArrayList<>();
 
     @Transient
@@ -85,8 +88,44 @@ public class UserInfo  extends CloneableEntity<UserInfo> implements IUser{
 
     @ManyToMany
     @JsonIgnore
-    @JoinTable(name = "users_purchased_course")
+    @JoinTable(name = "users_purchased_courses")
     private List<Course> purchasedCourses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "recipient")
+    @JsonIgnore
+    private List<PostMessage> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Dialog> dialogs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "userInfo")
+    @JsonIgnore
+    private List<CourseInfo> courseInfos = new ArrayList<>();
+
+    public List<CourseInfo> getCourseInfos() {
+        return courseInfos;
+    }
+
+    public void setCourseInfos(List<CourseInfo> courseInfos) {
+        this.courseInfos = courseInfos;
+    }
+
+    public List<Dialog> getDialogs() {
+        return dialogs;
+    }
+
+    public void setDialogs(List<Dialog> dialogs) {
+        this.dialogs = dialogs;
+    }
+
+    public List<PostMessage> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<PostMessage> recipmentPosts) {
+        this.posts = recipmentPosts;
+    }
 
     public List<Course> getPurchasedCourses() {
         return purchasedCourses;
@@ -249,7 +288,6 @@ public class UserInfo  extends CloneableEntity<UserInfo> implements IUser{
         userInfo.setFirstName(this.getFirstName());
         userInfo.setLanguage(this.getLanguage());
         userInfo.setLastName(this.getLastName());
-        userInfo.setProfileImage(this.getProfileImage());
         userInfo.setSpecialty(this.getSpecialty());
         userInfo.setUser(this.getUser());
         userInfo.setMan(this.getMan());
@@ -260,8 +298,6 @@ public class UserInfo  extends CloneableEntity<UserInfo> implements IUser{
         userInfo.setLinks(this.links);
         userInfo.setUserMenu(this.userMenu);
         userInfo.setOnline(this.online);
-        userInfo.setStudiedCourses(this.getStudiedCourses());
-        userInfo.setPurchasedCourses(this.getPurchasedCourses());
         return userInfo;
     }
 }

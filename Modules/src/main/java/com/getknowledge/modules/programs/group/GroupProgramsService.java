@@ -13,6 +13,7 @@ import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -31,18 +32,11 @@ public class GroupProgramsService extends AbstractService implements ImageServic
     @Autowired
     private TraceService trace;
 
-    @Action(name = "getGroupProgramsFromSection" , mandatoryFields = {"sectionId"})
-    public List<GroupPrograms> getCourses(HashMap<String,Object> data) {
-        long sectionId = new Long((Integer)data.get("sectionId"));
-
-        return repository.getEntitiesByFieldAndValue("section.id" , sectionId);
-    }
-
     @Action(name = "createGroupPrograms" , mandatoryFields = {"sectionId", "title","url"})
+    @Transactional
     public Result createGroupCourses (HashMap<String,Object> data) throws NotAuthorized {
 
-
-        long sectionId = Long.parseLong((String) data.get("sectionId"));
+        long sectionId = longFromField("sectionId",data);
         Section section = sectionRepository.read(sectionId);
         if (section == null) {
             return Result.Failed();
@@ -52,37 +46,35 @@ public class GroupProgramsService extends AbstractService implements ImageServic
         if (!programs.getAuthorizationList().isAccessCreate(userRepository.getSingleEntityByFieldAndValue("login",data.get("principalName")))) {
             throw new NotAuthorized("access denied to create group of programs");
         }
-        programs.setTitle((String) data.get("title"));
-        programs.setSection(section);
-        programs.setUrl((String) data.get("url"));
-        repository.create(programs);
+
+        repository.createGroupPrograms((String)data.get("title"),(String)data.get("url"),section);
 
         return Result.Complete();
     }
 
     @ActionWithFile(name = "updateCover" , mandatoryFields = {"id"})
+    @Transactional
     public Result updateCover (HashMap<String,Object> data, List<MultipartFile> files) throws PlatformException {
 
-        GroupPrograms programs = repository.read(new Long((Integer)data.get("id")));
+        GroupPrograms programs = repository.read(longFromField("id",data));
 
         if (!isAccessToEdit(data,programs))
             throw new NotAuthorized("access denied");
 
         try {
             programs.setCover(files.get(0).getBytes());
+            repository.merge(programs);
         } catch (IOException e) {
             trace.logException("Error set cover for group of programs" , e , TraceLevel.Error);
             return Result.Failed();
         }
-        repository.update(programs);
+
         return Result.Complete();
     }
 
     @Override
     public byte[] getImageById(long id) {
         GroupPrograms programs = repository.read(id);
-        if (programs != null)
-            return programs.getCover();
-        return null;
+        return programs == null ? null : programs.getCover();
     }
 }

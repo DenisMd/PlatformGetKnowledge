@@ -39,23 +39,19 @@ public class PermissionRepository extends BaseRepository<Permission> {
     }
 
     @Override
-    @Transactional
-    public void remove(Long id) throws PlatformException {
-        Permission permission = read(id);
-        if (permission != null) {
-            if (!permission.getUsers().isEmpty()) {
-                permission.getUsers().forEach(u -> {
-                    u.getPermissions().remove(permission);
-                    userRepository.update(u);
-                });
-            }
-            if (!permission.getRoles().isEmpty()) {
-                permission.getRoles().forEach(r -> {
-                    r.getPermissions().remove(permission);
-                    roleRepository.update(r);
-                });
-            }
-            super.remove(id);
+    public void remove(Permission permission) {
+        if (!permission.getUsers().isEmpty()) {
+            permission.getUsers().forEach(u -> {
+                u.getPermissions().remove(permission);
+                userRepository.update(u);
+            });
         }
+        if (!permission.getRoles().isEmpty()) {
+            permission.getRoles().forEach(r -> {
+                r.getPermissions().remove(permission);
+                roleRepository.update(r);
+            });
+        }
+        super.remove(permission);
     }
 }

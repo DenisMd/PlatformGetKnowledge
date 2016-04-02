@@ -9,4 +9,11 @@ public class AttachmentImageRepository extends BaseRepository<AttachmentImage> {
     protected Class<AttachmentImage> getClassEntity() {
         return AttachmentImage.class;
     }
+
+    public AttachmentImage createAttachmentImage(byte data[]){
+        AttachmentImage attachmentImage = new AttachmentImage();
+        attachmentImage.setImage(data);
+        create(attachmentImage);
+        return attachmentImage;
+    }
 }

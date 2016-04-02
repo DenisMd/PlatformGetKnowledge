@@ -15,6 +15,7 @@ import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
 import com.getknowledge.modules.userInfo.UserInfo;
+import com.getknowledge.modules.userInfo.UserInfoRepository;
 import com.getknowledge.modules.userInfo.UserInfoService;
 import com.getknowledge.modules.video.Video;
 import com.getknowledge.modules.video.VideoRepository;
@@ -47,19 +48,14 @@ public class CourseService extends AbstractService implements ImageService {
     private GroupCoursesRepository groupCoursesRepository;
 
     @Autowired
-    private UserInfoService userInfoService;
+    private UserInfoRepository userInfoRepository;
 
     @Autowired
     private TraceService trace;
 
     @Autowired
-    private KnowledgeRepository knowledgeRepository;
-
-    @Autowired
     private LanguageRepository languageRepository;
 
-    @Autowired
-    private CoursesTagRepository coursesTagRepository;
 
     @Autowired
     private VideoRepository videoRepository;
@@ -70,14 +66,14 @@ public class CourseService extends AbstractService implements ImageService {
     @Autowired
     private ChangeListRepository changeListRepository;
 
-    private Result checkCourseRight(HashMap<String,Object> data) {
-        Long courseId = new Long((Integer)data.get("courseId"));
+    public Result checkCourseRight(HashMap<String,Object> data) {
+        Long courseId = longFromField("courseId",data);
         Course course = courseRepository.read(courseId);
         if (course == null) {
             return Result.NotFound();
         }
 
-        UserInfo userInfo = userInfoService.getAuthorizedUser(data);
+        UserInfo userInfo = userInfoRepository.getCurrentUser(data);
 
         if (!course.getAuthorizationList().isAccessEdit(userInfo.getUser())) {
             return Result.AccessDenied();
@@ -95,145 +91,66 @@ public class CourseService extends AbstractService implements ImageService {
         return result;
     }
 
-    public void mergeVideo (Video to, Video from) {
-        to.setCover(from.getCover());
-        to.setLink(from.getLink());
-        to.setVideoName(from.getVideoName());
-        videoRepository.merge(to);
-    }
-
-    public void createVideo (Video to, Video from) {
-        to.setCover(from.getCover());
-        to.setLink(from.getLink());
-        to.setVideoName(from.getVideoName());
-        videoRepository.create(to);
-    }
-
-    public void mergeTutorial (Tutorial to, Tutorial from) {
-        to.setData(from.getData());
-        to.setName(from.getName());
-        to.setOrderNumber(from.getOrderNumber());
-        to.setLastChangeTime(from.getLastChangeTime());
-        mergeVideo(to.getVideo(), from.getVideo());
-    }
-
-    public void createTutorial (Tutorial to, Tutorial from) {
-        to.setData(from.getData());
-        to.setName(from.getName());
-        to.setOrderNumber(from.getOrderNumber());
-        to.setLastChangeTime(from.getLastChangeTime());
-        createVideo(to.getVideo(), from.getVideo());
-        tutorialRepository.create(to);
-    }
-
-    public void mergeDraft(Course base, Course draft) {
-
-        base.setName(draft.getName());
-        base.setCover(draft.getCover());
-        base.setDescription(draft.getDescription());
-
-        mergeVideo(base.getIntro() , draft.getIntro());
-
-        coursesTagRepository.removeTagsFromEntity(base);
-        coursesTagRepository.createTags(draft.getTags().stream().map(tag -> tag.getTagName()).collect(Collectors.toList()),base);
-
-        for (Tutorial draftTutorial : draft.getTutorials()) {
-            if (draftTutorial.getOriginalTutorial() != null) {
-                if (!draftTutorial.isDeleting()) {
-                    mergeTutorial(draftTutorial.getOriginalTutorial(), draftTutorial);
-                    tutorialRepository.merge(draftTutorial.getOriginalTutorial());
-                } else {
-                    //delete tutorial
-                    try {
-                        tutorialRepository.remove(draftTutorial.getOriginalTutorial().getId());
-                    } catch (PlatformException e) {
-                        //Нечего делать - сдаемся
-                    }
-                }
-            } else {
-                Tutorial newTutorial = new Tutorial();
-                newTutorial.setCourse(base);
-                mergeTutorial(newTutorial,draftTutorial);
-                //create Tutorial
-                tutorialRepository.create(newTutorial);
-            }
-        }
-    }
-
-    public void createDraft(Course base, Course draft) {
-        draft.setName(base.getName());
-        draft.setCover(base.getCover());
-        draft.setDescription(base.getDescription());
-
-        Video video = new Video();
-        createVideo(video,base.getIntro());
-        draft.setIntro(video);
-
-        coursesTagRepository.createTags(base.getTags().stream().map(tag -> tag.getTagName()).collect(Collectors.toList()),base);
-
-        for (Tutorial baseTutorial : base.getTutorials()) {
-            Tutorial tutorial = new Tutorial();
-            tutorial.setVideo(new Video());
-            tutorial.setOriginalTutorial(baseTutorial);
-            createTutorial(tutorial,baseTutorial);
+    public boolean isUserHasAccessToCourse(UserInfo userInfo , Course course) {
+        if (course.isBase()) {
+            return true;
         }
 
+        if (userInfo == null) {
+            return false;
+        }
+
+        if (userInfo.getStudiedCourses().contains(course)){
+            return true;
+        }
+
+        if (userInfo.getPurchasedCourses().contains(course)){
+            return true;
+        }
+
+        return false;
     }
 
     @Action(name = "createCourse" , mandatoryFields = {"name","groupCourseId","description","language","base"})
+    @Transactional
     public Result createProgram(HashMap<String,Object> data) {
         if (!data.containsKey("principalName"))
             return Result.NotAuthorized();
 
-        UserInfo userInfo = userInfoService.getAuthorizedUser(data);
+        UserInfo userInfo = userInfoRepository.getCurrentUser(data);
 
         Course course = new Course();
-        course.setAuthor(userInfo);
-        course.setCreateDate(Calendar.getInstance());
-
         if (!course.getAuthorizationList().isAccessCreate(userInfo.getUser())) {
             return Result.AccessDenied();
         }
 
-        Long groupCourseId = new Long((Integer)data.get("groupCourseId"));
+        Long groupCourseId = new Long(longFromField("groupCourseId",data));
 
         GroupCourses groupCourses =  groupCoursesRepository.read(groupCourseId);
         if (groupCourses == null) {
-            trace.log("Group program id is incorrect" , TraceLevel.Warning);
-            return Result.Failed();
+            trace.log("Group courses not found" , TraceLevel.Warning);
+            return Result.NotFound();
         }
 
-        course.setGroupCourses(groupCourses);
-        course.setName((String) data.get("name"));
-        course.setDescription((String) data.get("description"));
-
+        Language language = null;
         try {
-            Language language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
-            course.setLanguage(language);
+            language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
         } catch (Exception exception) {
-            Result result = Result.Failed();
-            result.setObject("Language not found");
-            return result;
+            return Result.NotFound();
         }
 
-
+        List<String> tags = null;
         if (data.containsKey("tags")) {
-            List<String> tags = (List<String>) data.get("tags");
-            coursesTagRepository.createTags(tags,course);
+            tags = (List<String>) data.get("tags");
         }
 
 
-        course.setRelease(false);
-        course.setVersion(new Version(1,0,0));
+        course = courseRepository.createCourse(userInfo,groupCourses,
+                                (String)data.get("name"),
+                                (String)data.get("description"),
+                                language,tags,
+                                (Boolean)data.get("base"));
 
-        course.setBase((Boolean) data.get("base"));
-
-        courseRepository.create(course);
-
-        for (CoursesTag coursesTag : course.getTags()) {
-            coursesTag.getCourses().add(course);
-            coursesTagRepository.merge(coursesTag);
-        }
         Result result = Result.Complete();
         result.setObject(course.getId());
         return result;
@@ -251,60 +168,19 @@ public class CourseService extends AbstractService implements ImageService {
             return result;
         }
 
-        if (data.containsKey("name")) {
-            String name = (String) data.get("name");
-            course.setName(name);
-        }
-
-        if (data.containsKey("description")) {
-            String description = (String) data.get("description");
-            course.setDescription(description);
-        }
-
-        if (data.containsKey("tags")) {
-            List<String> tags = (List<String>) data.get("tags");
-            coursesTagRepository.removeTagsFromEntity(course);
-            coursesTagRepository.createTags(tags,course);
-        }
-
-
-        if (data.containsKey("sourceKnowledge")) {
-            //Source knowledge задаются только при первой версии
-            if (course.getVersion().equals(new Version(1,0,0))) {
-                course.getSourceKnowledge().clear();
-                List<Integer> ids = (List<Integer>) data.get("sourceKnowledge");
-                for (Integer id : ids) {
-                    Knowledge knowledge = knowledgeRepository.read(new Long(id));
-                    course.getSourceKnowledge().add(knowledge);
-                }
-            }
-        }
-
-        if (data.containsKey("requiredKnowledge")) {
-            //Source knowledge задаются только при первой версии и для курсов которые не являются базовыми
-            if (course.getVersion().equals(new Version(1,0,0)) && !course.isBase()) {
-                course.getRequiredKnowledge().clear();
-                List<Integer> ids = (List<Integer>) data.get("requiredKnowledge");
-                for (Integer id : ids) {
-                    Knowledge knowledge = knowledgeRepository.read(new Long(id));
-                    course.getRequiredKnowledge().add(knowledge);
-                }
-            }
-        }
-
-        courseRepository.merge(course);
-        for (CoursesTag coursesTag : course.getTags()) {
-            coursesTag.getCourses().add(course);
-            coursesTagRepository.merge(coursesTag);
-        }
-
-        coursesTagRepository.removeUnusedTags();
+        course = courseRepository.updateCourse(course,
+                                (String)data.get("name"),
+                                (String)data.get("description"),
+                                (List<String>)data.get("tags"),
+                                (List<Integer>)data.get("sourceKnowledge"),
+                                (List<Integer>)data.get("requiredKnowledge"));
 
         return Result.Complete();
     }
 
     @ActionWithFile(name = "uploadCover" , mandatoryFields = "courseId")
-    public Result updataCover(HashMap<String,Object> data, List<MultipartFile> files) {
+    @Transactional
+    public Result uploadCover(HashMap<String,Object> data, List<MultipartFile> files) {
         Result result = checkCourseRight(data);
         Course course;
         if (result.getObject() != null)  {
@@ -315,16 +191,17 @@ public class CourseService extends AbstractService implements ImageService {
 
         try {
             course.setCover(files.get(0).getBytes());
+            courseRepository.merge(course);
         } catch (IOException e) {
             trace.logException("Error read cover for program" , e, TraceLevel.Warning);
             return Result.Failed();
         }
 
-        courseRepository.merge(course);
         return Result.Complete();
     }
 
     @ActionWithFile(name = "uploadVideoIntro" , mandatoryFields = "courseId")
+    @Transactional
     public Result uploadVideoIntro(HashMap<String,Object> data, List<MultipartFile> files) {
         Result result = checkCourseRight(data);
         Course course;
@@ -336,18 +213,11 @@ public class CourseService extends AbstractService implements ImageService {
 
         try {
             if (course.getIntro() == null) {
-                Video intro = new Video();
-                intro.setAllowEveryOne(true);
-                intro.setVideoName((String) data.get("videoName"));
-                intro.setCover(files.get(0).getBytes());
-                videoRepository.create(intro);
+                Video intro = videoRepository.create((String) data.get("videoName"), files.get(0).getBytes());
                 course.setIntro(intro);
                 courseRepository.merge(course);
             } else {
-                Video intro = course.getIntro();
-                intro.setVideoName((String) data.get("videoName"));
-                intro.setCover(files.get(0).getBytes());
-                videoRepository.merge(intro);
+                videoRepository.update((String) data.get("videoName"),files.get(0).getBytes());
             }
 
         } catch (IOException e) {
@@ -356,31 +226,6 @@ public class CourseService extends AbstractService implements ImageService {
         }
 
         return Result.Complete();
-    }
-
-    @Action(name = "createTutorial" , mandatoryFields = {"courseId","name"})
-    public Result createTutorial(HashMap<String , Object> data) {
-        Result result = checkCourseRight(data);
-        Course course;
-        if (result.getObject() != null)  {
-            course = (Course) result.getObject();
-        } else {
-            return result;
-        }
-
-        Tutorial tutorial = new Tutorial();
-        tutorial.setName((String) data.get("name"));
-        tutorial.setCourse(course);
-        Object maxOrder = entityManager.createQuery("select max(t.orderNumber) from Tutorial t where t.course.id = :id")
-                .setParameter("id" , course.getId()).getSingleResult();
-
-        tutorial.setOrderNumber(maxOrder == null ? 1 : ((Integer) maxOrder) + 1);
-        tutorial.setLastChangeTime(Calendar.getInstance());
-        tutorialRepository.create(tutorial);
-
-        Result result1 = Result.Complete();
-        result1.setObject(tutorial.getId());
-        return result1;
     }
 
     @Action(name = "release" , mandatoryFields = {"courseId", "version"})
@@ -396,18 +241,8 @@ public class CourseService extends AbstractService implements ImageService {
 
         if (course.getBaseCourse() == null) {
             if (!course.isRelease()) {
-                course.setRelease(true);
-                ChangeList changeList = new ChangeList();
-                changeList.setCourse(course);
-                changeList.setVersion(course.getVersion());
-                if (course.getLanguage().getName().equals(Languages.Ru.name())) {
-                    changeList.getChangeList().add("Инициализация курса");
-                } else {
-                    changeList.getChangeList().add("Initialize course");
-                }
-                changeListRepository.create(changeList);
-                course.getChangeLists().add(changeList);
-                courseRepository.merge(course);
+                ChangeList changeList = changeListRepository.createChangeList(course,"Initialize course");
+                courseRepository.releaseBaseCourse(course,changeList);
             }
         } else {
             //Значит мы пытаемся выпустить черновик
@@ -429,16 +264,11 @@ public class CourseService extends AbstractService implements ImageService {
 
             if (data.containsKey("changes")) {
                 List<String> changes = (List<String>) data.get("changes");
-                ChangeList changeList = new ChangeList();
-                changeList.setVersion(baseCourse.getVersion());
-                changeList.setCourse(baseCourse);
-                changeList.setChangeList(changes);
-                changeListRepository.create(changeList);
+                ChangeList changeList = changeListRepository.createChangeList(baseCourse, changes);
                 baseCourse.getChangeLists().add(changeList);
             }
 
-            mergeDraft(baseCourse,course);
-
+            courseRepository.mergeDraft(baseCourse,course);
             courseRepository.merge(baseCourse);
             //удаляем черновик
             courseRepository.remove(course.getId());
@@ -463,9 +293,7 @@ public class CourseService extends AbstractService implements ImageService {
         }
 
         Course draft = course.clone();
-        createDraft(course,draft);
-
-        courseRepository.create(draft);
+        courseRepository.createDraft(course,draft);
 
         result = Result.Complete();
         result.setObject(draft.getId());
@@ -475,13 +303,9 @@ public class CourseService extends AbstractService implements ImageService {
     @Action(name = "getTutorialsForCourse" , mandatoryFields = {"courseId"})
     @Transactional
     public HashMap<Integer,String> getTutorialsForCourse(HashMap<String , Object> data) {
-        Long courseId = new Long((Integer)(data.get("courseId")));
+        Long courseId = new Long(longFromField("courseId",data));
         Course course = courseRepository.read(courseId);
         if (course == null) {
-            return null;
-        }
-        UserInfo currentUser = userInfoService.getAuthorizedUser(data);
-        if (!isUserHasAccessToCourse(currentUser , course)) {
             return null;
         }
         List<Tutorial> tutorials = course.getTutorials();
@@ -492,33 +316,24 @@ public class CourseService extends AbstractService implements ImageService {
         return result;
     }
 
-    public boolean isUserHasAccessToCourse(UserInfo userInfo , Course course) {
-        if (course.isBase()) {
-            return true;
-        }
+    @Action(name = "startCourse" , mandatoryFields = {"courseId"})
+    @Transactional
+    public Result startCourse(HashMap<String , Object> data) {
+        Long courseId = new Long(longFromField("courseId", data));
+        Course course = courseRepository.read(courseId);
+        if (course == null) return Result.NotFound();
 
-        if (userInfo == null) {
-            return false;
-        }
+        UserInfo userInfo = userInfoRepository.getCurrentUser(data);
+        if (userInfo == null) return Result.NotAuthorized();
+        if (isUserHasAccessToCourse(userInfo,course)) return Result.AccessDenied();
 
-        if (userInfo.getStudiedCourses().contains(course)){
-            return true;
-        }
-
-        if (userInfo.getPurchasedCourses().contains(course)){
-            return true;
-        }
-
-        return false;
+        userInfoRepository.startCourse(userInfo,course);
+        return Result.Complete();
     }
 
     @Override
     public byte[] getImageById(long id) {
         Course course = courseRepository.read(id);
-        if (course != null) {
-            return course.getCover();
-        } else {
-            return  null;
-        }
+        return course == null ? null : course.getCover();
     }
 }

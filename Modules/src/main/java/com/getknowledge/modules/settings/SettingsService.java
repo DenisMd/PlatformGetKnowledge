@@ -55,7 +55,7 @@ public class SettingsService extends AbstractService implements BootstrapService
     @Override
     public BootstrapInfo getBootstrapInfo() {
         BootstrapInfo bootstrapInfo = new BootstrapInfo();
-        bootstrapInfo.setName("SettingsService");
+        bootstrapInfo.setName("Settings service");
         bootstrapInfo.setOrder(0);
         bootstrapInfo.setRepeat(false);
         return bootstrapInfo;

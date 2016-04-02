@@ -30,6 +30,8 @@ public class User extends AbstractEntity {
 
     private boolean enabled=true;
 
+    private boolean blocked=false;
+
     @ManyToOne
     private Role role;
 
@@ -82,6 +84,14 @@ public class User extends AbstractEntity {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
     }
 
     @Override

@@ -57,11 +57,7 @@ public class ProgramTagRepository extends BaseRepository<ProgramTag> implements 
     public void removeUnusedTags() {
         List<ProgramTag> list = entityManager.createQuery("select t from ProgramTag  t where t.programs is empty").getResultList();
         list.forEach((tag -> {
-            try {
-                remove(tag.getId());
-            } catch (PlatformException e) {
-                trace.logException("Error remove program tag" , e, TraceLevel.Error);
-            }
+            remove(tag.getId());
         }));
     }
 }

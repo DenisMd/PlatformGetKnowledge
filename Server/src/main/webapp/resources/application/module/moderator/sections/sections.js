@@ -14,10 +14,12 @@ model.controller("sectionsCtrl", function ($scope, $state,$http,applicationServi
     };
 
     applicationService.list($scope , "sections",className.section,function(item){
-        if (!item.descriptionRu)
+        if (!item.descriptionRu) {
             item.descriptionRu = "";
-        if (!item.descriptionEn)
+        }
+        if (!item.descriptionEn) {
             item.descriptionEn = "";
+        }
     });
 
 
@@ -41,5 +43,5 @@ model.controller("sectionsCtrl", function ($scope, $state,$http,applicationServi
 
     var updateImage = function(file) {
         applicationService.actionWithFile($scope,"cover",className.section,"updateCover",{id:$scope.currentSection.id},file);
-    }
+    };
 });

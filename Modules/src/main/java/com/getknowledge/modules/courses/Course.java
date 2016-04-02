@@ -9,6 +9,7 @@ import com.getknowledge.modules.courses.tutorial.Tutorial;
 import com.getknowledge.modules.courses.version.Version;
 import com.getknowledge.modules.dictionaries.knowledge.Knowledge;
 import com.getknowledge.modules.dictionaries.language.Language;
+import com.getknowledge.modules.shop.item.Item;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.video.Video;
 import com.getknowledge.platform.annotations.*;
@@ -47,12 +48,12 @@ public class Course extends CloneableEntity<Course> implements IUser,EntityWithT
     @ManyToMany(mappedBy = "courses", cascade = {CascadeType.PERSIST})
     private List<CoursesTag> tags = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "course_source_knowledges")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "courses_source_knowledges")
     private List<Knowledge> sourceKnowledge = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "course_required_knowledges")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "courses_required_knowledges")
     private List<Knowledge> requiredKnowledge = new ArrayList<>();
 
     @Column(name = "create_date")
@@ -88,11 +89,22 @@ public class Course extends CloneableEntity<Course> implements IUser,EntityWithT
     @JsonIgnore
     private byte [] cover;
 
+    @OneToOne
+    private Item item;
+
     @Column(name = "is_base" , columnDefinition = "boolean default true")
     private Boolean base = false;
 
     @OneToMany(mappedBy = "course" , cascade = {CascadeType.REMOVE})
     private List<ChangeList> changeLists = new ArrayList<>();
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
 
     public List<ChangeList> getChangeLists() {
         return changeLists;

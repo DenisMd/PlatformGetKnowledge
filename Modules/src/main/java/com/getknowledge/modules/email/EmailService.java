@@ -35,7 +35,7 @@ public class EmailService {
         mailSender.send(msg);
     }
 
-    public void sendTemplate(String toAddress, String fromAddress,String subject, String templateName, String [] args)  {
+    public void sendTemplate(String toAddress, String fromAddress,String subject, EmailTemplates template, String [] args)  {
 
         MimeMessage msg = mailSender.createMimeMessage();
         try {
@@ -43,7 +43,7 @@ public class EmailService {
             helper.setFrom(fromAddress);
             helper.setTo(toAddress);
             helper.setSubject(subject);
-            helper.setText(getMessageFromTemplate(templateName , args),true);
+            helper.setText(getMessageFromTemplate(template.name() , args),true);
         } catch (MessagingException | IOException e) {
             trace.logException("Can not receive email for " + toAddress,e, TraceLevel.Warning);
         }
@@ -52,18 +52,19 @@ public class EmailService {
 
     private String getMessageFromTemplate(String name, String[] args) throws IOException {
         String templateName = "com.getknowledge.modules/mailTemplates/" + name + ".html";
-        InputStream is = getClass().getClassLoader().getResourceAsStream(templateName);
-        StringWriter writer = new StringWriter();
-        IOUtils.copy(is, writer , "utf-8");
-        String template = writer.toString();
-        if (args != null) {
-            int i = 0;
-            while (template.contains(":?")) {
-                if (i < args.length) {
-                    template = StringUtils.replaceOnce(template , ":?", args[i]);
-                    i++;
+        String template = null;
+        try(InputStream is = getClass().getClassLoader().getResourceAsStream(templateName)) {
+            StringWriter writer = new StringWriter();
+            IOUtils.copy(is, writer, "utf-8");
+            template = writer.toString();
+            if (args != null) {
+                int i = 0;
+                while (template.contains(":?")) {
+                    if (i < args.length) {
+                        template = StringUtils.replaceOnce(template, ":?", args[i]);
+                        i++;
+                    } else break;
                 }
-                else break;
             }
         }
         return template;

@@ -7,19 +7,8 @@ public class Test {
 
     @org.junit.Test
     public void getProgrammingLanguage() throws IOException {
-        InputStream is = null;
-        try {
-            try {
-                is = new FileInputStream(new File("dasda"));
-                is.read();
-            } catch (IOException e) {
-                throw  new RuntimeException("wwwwwwwwww");
-            }
-
-        } finally {
-
-        }
-
+        String text = "(IP:123.5.23.6545)";
+        System.err.println(text.substring(4,text.length()-1));
     }
 
 

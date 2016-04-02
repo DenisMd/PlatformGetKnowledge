@@ -14,7 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "books_group",indexes = {@Index(name = "index_by_title",  columnList="title", unique = true)})
+@Table(name = "books_group")
 @ModuleInfo(repositoryName = "GroupBooksRepository" , serviceName = "GroupBooksService")
 public class GroupBooks extends Folder {
 

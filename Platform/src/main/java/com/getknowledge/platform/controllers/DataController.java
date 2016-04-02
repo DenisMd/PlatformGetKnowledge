@@ -17,13 +17,9 @@ import com.getknowledge.platform.base.repositories.FilterCountQuery;
 import com.getknowledge.platform.base.repositories.FilterQuery;
 import com.getknowledge.platform.base.repositories.enumerations.OrderRoute;
 import com.getknowledge.platform.base.serializers.FileResponse;
-import com.getknowledge.platform.base.services.AbstractService;
-import com.getknowledge.platform.base.services.VideoLinkService;
-import com.getknowledge.platform.base.services.FileService;
-import com.getknowledge.platform.base.services.ImageService;
+import com.getknowledge.platform.base.services.*;
 import com.getknowledge.platform.exceptions.*;
 import com.getknowledge.platform.modules.Result;
-import com.getknowledge.platform.base.services.FilterService;
 import com.getknowledge.platform.modules.role.names.RoleName;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
@@ -73,7 +69,7 @@ public class DataController {
     }
 
     @Autowired
-    private ServletContext servletContext;
+    private CrudService crudService;
 
     @Autowired
     private ModuleLocator moduleLocator;
@@ -115,7 +111,7 @@ public class DataController {
 
             boolean isEditable = isAccessEdit(user,abstractEntity);
             boolean isCreatable = isAccessCreate(user,abstractEntity);
-            abstractEntity = repository.prepare(abstractEntity,repository,user);
+            abstractEntity = crudService.prepare(abstractEntity,repository,user);
             nodes.add(prepareJson(abstractEntity,isEditable,isCreatable,classEntity));
         }
 
@@ -223,7 +219,7 @@ public class DataController {
             BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
 
             User user = getCurrentUser(principal);
-            AbstractEntity entity  = repository.read(id);
+            AbstractEntity entity  = crudService.read(repository,id);
 
             if (entity == null) {
                 throw new NotFound(String.format("Entity (%s) by id : %d not found",className,id));
@@ -235,7 +231,7 @@ public class DataController {
 
             boolean isEditable = isAccessEdit(user,entity);
             boolean isCreatable = isAccessCreate(user,entity);
-            entity = repository.prepare(entity,repository,user);
+            entity = crudService.prepare(entity,repository,user);
 
             return prepareJson(entity,isEditable,isCreatable,classEntity).toString();
         } catch (ClassNotFoundException e) {
@@ -255,7 +251,7 @@ public class DataController {
                 throw new EntityLimitException("Violated limit entity " + repository.getMaxCountsEntities());
             }
 
-            List<AbstractEntity> list = repository.list();
+            List<AbstractEntity> list = crudService.list(repository);
 
             if (list == null) {
                 return null;
@@ -280,7 +276,7 @@ public class DataController {
                 throw new EntityLimitException("Violated limit entity " + repository.getMaxCountsEntities());
             }
 
-            List<AbstractEntity> list = repository.listPartial(first, max);
+            List<AbstractEntity> list = crudService.list(repository,first,max);
 
             if (list == null) {
                 return null;
@@ -302,6 +298,10 @@ public class DataController {
             AbstractService abstractService = moduleLocator.findService(classEntity);
             if (abstractService instanceof VideoLinkService) {
                 VideoLinkService videoLinkService = (VideoLinkService) abstractService;
+
+                if (moduleLocator.findRepository(classEntity).read(id) == null) {
+                    throw new NotFound(String.format("Video not found by id %d",id));
+                }
 
                 if (!videoLinkService.isAccessToWatchVideo(id, getCurrentUser(principal))) {
                     throw new NotAuthorized("access denied for read video" , trace, TraceLevel.Warning);
@@ -335,7 +335,7 @@ public class DataController {
         try {
             Class classEntity = Class.forName(className);
             BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
-            AbstractEntity entity = repository.read(id);
+            AbstractEntity entity = crudService.read(repository,id);
             if (entity == null) {
                 return null;
             }
@@ -366,7 +366,7 @@ public class DataController {
         try {
             Class classEntity = Class.forName(className);
             BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
-            AbstractEntity entity = repository.read(id);
+            AbstractEntity entity = crudService.read(repository,id);
             if (entity == null) {
                 return null;
             }
@@ -506,7 +506,7 @@ public class DataController {
             if (!isAccessCreate(user, abstractEntity) ) {
                 throw new NotAuthorized("Access denied for create entity" , trace, TraceLevel.Warning);
             }
-            moduleLocator.findRepository(classEntity).create(abstractEntity);
+            crudService.create(moduleLocator.findRepository(classEntity),abstractEntity);
             return objectMapper.writeValueAsString("Create success");
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
@@ -524,7 +524,7 @@ public class DataController {
             if (!isAccessEdit(user, abstractEntity) ) {
                 throw new NotAuthorized("Access denied for update entity" , trace, TraceLevel.Warning);
             }
-            moduleLocator.findRepository(classEntity).update(abstractEntity);
+            crudService.update(moduleLocator.findRepository(classEntity),abstractEntity);
             return objectMapper.writeValueAsString("Update success");
         } catch (IOException e) {
             throw new ParseException("Can't parse entities for update " + className,trace,TraceLevel.Warning,e);
@@ -538,12 +538,11 @@ public class DataController {
         try {
             Class classEntity = Class.forName(className);
 
-            AbstractEntity abstractEntity = moduleLocator.findRepository(classEntity).read(id);
+            AbstractEntity abstractEntity = crudService.read(moduleLocator.findRepository(classEntity),id);
             if (!isAccessRemove(getCurrentUser(principal), abstractEntity) ) {
                 throw new NotAuthorized("Access denied for remove entity" , trace, TraceLevel.Warning);
             }
-            moduleLocator.findRepository(classEntity).remove(id);
-
+            crudService.remove(moduleLocator.findRepository(classEntity),id);
             return objectMapper.writeValueAsString("Remove success");
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);

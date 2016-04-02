@@ -9,7 +9,7 @@ import com.getknowledge.platform.base.entities.AuthorizationList;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "post_image")
+@Table(name = "attachment_image")
 @ModuleInfo(repositoryName = "AttachmentImageRepository")
 public class AttachmentImage extends AbstractEntity {
 

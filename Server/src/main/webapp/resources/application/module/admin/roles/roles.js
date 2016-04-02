@@ -40,7 +40,7 @@ model.controller("rolesCtrl", function ($scope, applicationService, className,$m
     var updateFilterPermissions = function (item) {
         var isContain = false;
         $scope.currentRole.permissions.forEach(function(element){
-            if (element.permissionName == item.permissionName) {
+            if (element.permissionName === item.permissionName) {
                 isContain = true;
                 return;
             }
@@ -68,7 +68,7 @@ model.controller("rolesCtrl", function ($scope, applicationService, className,$m
 
     $scope.removePermission = function(id){
         for (var i=0; i < $scope.currentRole.permissions.length; i++) {
-            if ($scope.currentRole.permissions[i].id == id) {
+            if ($scope.currentRole.permissions[i].id === id) {
                 $scope.currentRole.permissions.splice(i,1);
                 return;
             }

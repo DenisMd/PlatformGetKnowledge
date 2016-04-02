@@ -14,6 +14,6 @@ model.controller("groupBooksCtrl", function ($scope,applicationService,className
             sectionName: sectionName,
             groupBooks: $scope.groupBook,
             className: className.book
-        }
+        };
     }
 });

@@ -83,6 +83,7 @@ public class SectionService extends AbstractService implements BootstrapService,
     }
 
     @ActionWithFile(name = "updateCover" , mandatoryFields = {"id"})
+    @Transactional
     public Result updateCover (HashMap<String,Object> data, List<MultipartFile> files) throws PlatformException {
         Section section = sectionRepository.read(longFromField("id",data));
 
@@ -91,11 +92,12 @@ public class SectionService extends AbstractService implements BootstrapService,
 
         try {
             section.setCover(files.get(0).getBytes());
+            sectionRepository.merge(section);
         } catch (IOException e) {
             trace.logException("Error set cover for section",e,TraceLevel.Error);
             return Result.Failed();
         }
-        sectionRepository.merge(section);
+
         return Result.Complete();
     }
 }

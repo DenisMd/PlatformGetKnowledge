@@ -1,7 +1,7 @@
 new Clipboard('.clipboard');
 
 var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap", "ngImgCrop" , "ngMaterial","ui.codemirror", "hljs"]);
-model.constant("codemirrorURL", "/resources/bower_components/codemirror/")
+model.constant("codemirrorURL", "/resources/bower_components/codemirror/");
 
 var player;
 
@@ -41,8 +41,9 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
 
     //hightlights
     $scope.toPrettyJSON = function (objStr, tabWidth) {
+        var obj;
         try {
-            var obj = $parse(objStr)({});
+            obj = $parse(objStr)({});
         }catch(e){
             // eat $parse error
             return _lastGoodResult;
@@ -109,7 +110,9 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
 
     //создать ссылку на страницу с учетом языка
     $scope.createUrl = function (url) {
-        if (!$scope.application) return;
+        if (!$scope.application) {
+            return;
+        }
         return '#/' + $scope.application.language + url;
     };
 
@@ -158,7 +161,9 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
 
     //создает массив для ng-repeat
     $scope.range = function(n) {
-        if (!n) return 1;
+        if (!n) {
+            return 1;
+        }
         return new Array(Math.ceil(n));
     };
 
@@ -173,13 +178,15 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
             }
         }
         return tempArr;
-    }
+    };
 
     //создаем массив по диапозону
     $scope.getRow = function (index, length, array) {
         var result = [];
         for (var i = index*length; i < length*(index+1); i++) {
-            if (array.length <= i) return result;
+            if (array.length <= i) {
+                return result;
+            }
             result.push(array[i]);
         }
         return result;
@@ -188,7 +195,9 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
     //---------------------------------------- методы для меню
     //Разлогиниваемся
     $scope.logout = function(){
-        if (!$scope.user) return;
+        if (!$scope.user) {
+            return;
+        }
         $http.get("/j_spring_security_logout").success(function(){
             applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {},function(){
                 $scope.reloadMenu();
@@ -271,7 +280,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
     });
 
     $scope.openSocialLink = function(name){
-        var object = $.grep($scope.mainLinks, function(e){ return e.name == name; });
+        var object = $.grep($scope.mainLinks, function(e){ return e.name === name; });
         if (object[0].link) {
             $scope.openInNewTab(object[0].link);
         }
@@ -304,8 +313,8 @@ model.controller("videoCtrl",function($scope){
     initVideoPlayer();
 
     $scope.open = function(id) {
-        var videoUrl = $scope.getVideoUrl(id != undefined ? id : 1);
-        if (!player ||player.currentSrc() != videoUrl) {
+        var videoUrl = $scope.getVideoUrl(id !== undefined ? id : 1);
+        if (!player ||player.currentSrc() !== videoUrl) {
             player.src({type: "video/mp4", src: videoUrl});
             player.play();
         } else {
@@ -331,9 +340,9 @@ model.controller("selectCtrl",function($scope,$sce,$filter,$document) {
     $scope.choose = false;
     var isModelOpen = false;
     $scope.model =  $scope.getData().defaultValue in $scope ? $scope[$scope.getData().defaultValue] : "";
-    $scope.modalModel;
-    $scope.selectModalValue;
-    $scope.selectValue;
+    $scope.modalModel = null;
+    $scope.selectModalValue = null;
+    $scope.selectValue = null;
 
     $scope.filter = $scope.getData().filter;
     $scope.id = $scope.getData().id;
@@ -351,7 +360,9 @@ model.controller("selectCtrl",function($scope,$sce,$filter,$document) {
         isModelOpen = false;
     } ;
     $scope.getItem = function (item) {
-        if (!item) return "";
+        if (!item) {
+            return "";
+        }
         if (item.$$unwrapTrustedValue) {
             return item;
         } else {
@@ -376,10 +387,8 @@ model.controller("selectCtrl",function($scope,$sce,$filter,$document) {
         var filteredData = $filter('filter')(list,filter);
         if (!isModal) {
             filteredData = $filter('limitTo')(filteredData, $scope.count);
-
+            var valid = true;
             if (filteredData) {
-                var valid = true;
-
                 if (filteredData.length === 1) {
                     if ($scope.choose && $scope.model.toString() === $scope.getItem(filteredData[0]).toString()) {
                         $scope.setModel(filteredData[0]);
@@ -392,7 +401,7 @@ model.controller("selectCtrl",function($scope,$sce,$filter,$document) {
                     }
                 }
             }
-            if (!$scope.choose && $scope.model && !($scope.model.toString() === $scope.getItem(filteredData[0]).toString())){
+            if (!$scope.choose && $scope.model && $scope.model.toString() !== $scope.getItem(filteredData[0]).toString()){
                 valid = false;
             }
             $scope.selectForm['main-select'].$setValidity("selectValue", valid);
@@ -487,7 +496,9 @@ model.controller("selectCtrl",function($scope,$sce,$filter,$document) {
     $scope.isRequired = function(){
         var val = $scope.getData().required;
 
-        if (!val) return false;
+        if (!val) {
+            return false;
+        }
 
         if (angular.isFunction(val)){
             return val();
@@ -500,7 +511,9 @@ model.controller("selectCtrl",function($scope,$sce,$filter,$document) {
     $scope.isDisabled = function(){
         var val = $scope.getData().disable;
 
-        if (!val) return false;
+        if (!val) {
+            return false;
+        }
 
         if (angular.isFunction(val)){
             return val();
@@ -512,7 +525,9 @@ model.controller("selectCtrl",function($scope,$sce,$filter,$document) {
     $scope.setValid = function(){
         var val = $scope.getData().isValid;
 
-        if (!val) return false;
+        if (!val) {
+            return false;
+        }
         if (angular.isFunction(val)) {
             val($scope.selectForm['main-select'].$valid);
         }
@@ -613,7 +628,9 @@ model.controller("selectImgCtrl", function($scope){
     };
 
     $scope.onChange = function (element) {
-        if (!element) return;
+        if (!element) {
+            return;
+        }
 
         if (angular.isFunction($scope.getData().save)) {
             var file = base64ToBlob(element);
@@ -665,7 +682,7 @@ model.controller("selectImgCtrl", function($scope){
                 }
                 return $scope.originalImg;
             } else {
-                $scope.originalImg = ""
+                $scope.originalImg = "";
             }
         }
         return defaultImage;
@@ -693,7 +710,7 @@ model.controller("selectImgCtrl", function($scope){
         }
         var  byteArrays = [new Uint8Array(array)];
         return new Blob(byteArrays, { type: mimeString });
-    };
+    }
     var oldImageSrc = "";
     var dialogShown = false;
 });
@@ -731,7 +748,7 @@ model.controller("datepickerCtrl", function($scope){
     };
 
     $scope.$watch("date", function(newVal,oldVal){
-        if (newVal != oldVal){
+        if (newVal !== oldVal){
             $scope.change();
         }
     });
@@ -768,7 +785,7 @@ model.directive('datepickerPopupFormat',function(dateFilter,$parse){
                  return dateFilter(viewValue,attrs.uibDatepickerPopup);
             });
         }
-    }
+    };
 });
 
 model.controller("textareaCtrl",function($scope,$element){
@@ -782,7 +799,9 @@ model.controller("textareaCtrl",function($scope,$element){
     };
 
     $scope.toggelEditButton = function(event){
-        if ($scope.isReadonly()) return;
+        if ($scope.isReadonly()) {
+            return;
+        }
 
         var elem = angular.element(event.currentTarget);
         switch (event.type) {
@@ -817,7 +836,9 @@ model.controller("textareaCtrl",function($scope,$element){
     };
 
     $scope.save = function(){
-        if (!$scope.model.text) return;
+        if (!$scope.model.text) {
+            return;
+        }
         if(angular.isFunction($scope.getData().onSave)){
             $scope.getData().onSave($scope.model.text);
         }
@@ -847,7 +868,7 @@ model.controller("textareaCtrl",function($scope,$element){
 
     $scope.getMaxLength = function(){
         return $scope.getData().maxLength;
-    }
+    };
 });
 
 model.controller("sectionCard",function($scope,$state,applicationService,className){
@@ -958,7 +979,9 @@ model.controller("postController",function($scope,$rootScope,codemirrorURL,TagSe
     var loadTheme = function(theme,editor){
         var href = codemirrorURL +"theme/"+theme+".css";
 
-        if  ($("link[href='"+ href+"']").length) return false;
+        if  ($("link[href='"+ href+"']").length) {
+            return false;
+        }
 
         var link = document.createElement('link');
         link.onload = function(){
@@ -974,14 +997,16 @@ model.controller("postController",function($scope,$rootScope,codemirrorURL,TagSe
 
     var loadMode = function (val,editor) {
         var  m, mode, spec;
-        if (m = /.+\.([^.]+)$/.exec(val)) {
-            var info = CodeMirror.findModeByExtension(m[1]);
+        m = /.+\.([^.]+)$/.exec(val);
+        var info;
+        if (m) {
+            info = CodeMirror.findModeByExtension(m[1]);
             if (info) {
                 mode = info.mode;
                 spec = info.mime;
             }
         } else if (/\//.test(val)) {
-            var info = CodeMirror.findModeByMIME(val);
+            info = CodeMirror.findModeByMIME(val);
             if (info) {
                 mode = info.mode;
                 spec = val;
@@ -1062,7 +1087,7 @@ model.controller("booksCardCtrl" , function($scope,applicationService,className)
     };
 
     applicationService.list($scope,"langs",className.language, function (item) {
-        item.title = $scope.translate(item.name.toLowerCase())
+        item.title = $scope.translate(item.name.toLowerCase());
     });
 });
 
@@ -1106,7 +1131,7 @@ model.controller("programCardCtrl" , function($scope,applicationService,classNam
     };
 
     applicationService.list($scope,"langs",className.language, function (item) {
-        item.title = $scope.translate(item.name.toLowerCase())
+        item.title = $scope.translate(item.name.toLowerCase());
     });
 });
 
@@ -1154,7 +1179,7 @@ model.controller("coursesCtrl", function($scope,applicationService,className){
     };
 
     applicationService.list($scope,"langs",className.language, function (item) {
-        item.title = $scope.translate(item.name.toLowerCase())
+        item.title = $scope.translate(item.name.toLowerCase());
     });
 });
 
@@ -1201,5 +1226,5 @@ model.service('arcService', function(){
         maintainAspectRatio:false,
         segmentShowStroke : false,
         showTooltips : false
-    }
+    };
 });

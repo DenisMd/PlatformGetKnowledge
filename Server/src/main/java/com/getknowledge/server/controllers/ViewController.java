@@ -118,7 +118,13 @@ public class ViewController {
 
     private ModelAndView filter(String  restOfTheUrl , Principal p, HttpServletResponse response) throws PlatformException {
         String [] split = restOfTheUrl.split("/");
-        UserInfo userInfo = userInfoService.getCurrentUser(p);
+        HashMap<String,Object> temp = new HashMap<>();
+        if (p != null) {
+            temp.put("principalName", p.getName());
+        } else {
+            temp.put("principalName", "");
+        }
+        UserInfo userInfo = userInfoService.getAuthorizedUser(temp);
         User user = userInfo == null ? null : userInfo.getUser();
         if (!isCorrectRole(user, split)) {
             throw new NotAuthorized("Access denied");

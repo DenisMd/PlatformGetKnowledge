@@ -13,6 +13,6 @@ model.controller("groupProgramsCtrl", function ($scope,applicationService,classN
             sectionName: sectionName,
             groupProgram: $scope.groupProgram,
             className: className.program
-        }
+        };
     }
 });

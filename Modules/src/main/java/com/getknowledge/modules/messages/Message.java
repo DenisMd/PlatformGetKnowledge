@@ -16,19 +16,8 @@ public abstract class Message extends AbstractEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar createTime;
 
-    @OneToOne
+    @ManyToOne
     private UserInfo sender;
-
-    @OneToOne
-    private UserInfo recipient;
-
-    public UserInfo getRecipient() {
-        return recipient;
-    }
-
-    public void setRecipient(UserInfo recipient) {
-        this.recipient = recipient;
-    }
 
     public String getMessage() {
         return message;

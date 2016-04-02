@@ -1,4 +1,3 @@
-;
 String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 };
@@ -45,13 +44,15 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
     .constant("resourceTemplate","/resources/template/")
     .service("pageService",function(){
         this.getPathVariable = function (key,path) {
-            if (!key) return "";
+            if (!key) {
+                return "";
+            }
 
             var urlSplit = path.split("/");
 
             for (var i=0; i < urlSplit.length; i++) {
-                if (urlSplit[i] == key) {
-                    return i == (urlSplit.length-1) ? "" : urlSplit[i+1];
+                if (urlSplit[i] === key) {
+                    return i === (urlSplit.length-1) ? "" : urlSplit[i+1];
                 }
             }
 
@@ -96,16 +97,18 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     for (var i = 0; i < moduleUrlSplit.length; i++) {
                         var isContains = false;
                         for (var j = 0; j < modules.length; j++) {
-                            if (modules[j] == moduleUrlSplit[i - 1]) {
+                            if (modules[j] === moduleUrlSplit[i - 1]) {
                                 isContains = true;
                                 break;
                             }
                         }
-                        if (isContains) continue;
+                        if (isContains) {
+                            continue;
+                        }
                         moduleUrl += "/" + moduleUrlSplit[i];
                     }
 
-                    return $http.get(resourceUrl + "page-info/" + language + ".json")
+                    return $http.get(resourceUrl + "page-info/" + language + ".json");
                 }).then(function(response) {
                     var data = response.data;
                     application.text = {};
@@ -116,20 +119,27 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     application.language = data.language;
 
                     if (moduleUrl) {
-                        return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/pageInfo.json")
-                    } else return application;
+                        return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/pageInfo.json");
+                    } else {
+                        return application;
+                    }
+
                 }).then(function (response) {
-                    if (response === application) return application;
+                    if (response === application) {
+                        return application;
+                    }
 
                     var data = response.data;
                     for (var key in data) {
-                        if (key != "text") {
+                        if (key !== "text") {
                             application[key] = data[key];
                         }
                     }
-                    return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/" + language + ".json")
+                    return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/" + language + ".json");
                 }).then(function (response) {
-                    if (response === application) return application;
+                    if (response === application) {
+                        return application;
+                    }
 
                     var data = response.data;
                     for (var key in data.text) {
@@ -162,6 +172,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             });
         };
 
+        //Это класс
         function filter(className,first,max) {
             this.className = className;
             this.first = first;
@@ -188,7 +199,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 this.result.in = {
                     fieldName : fieldName,
                     values : values
-                }
+                };
             };
 
             this.equal = function (fieldName, value) {
@@ -215,7 +226,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
 
             this.reload = function () {
                 this.result.first = 0;
-            }
+            };
         }
 
         this.createFilter = function(className,first,max) {
@@ -231,8 +242,9 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     properties : JSON.stringify(filter.result)}),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (data){
-                if (name && data)
+                if (name && data) {
                     $scope[name] = data;
+                }
                 if (isCallbackFunction && data){
                     if (angular.isArray(data.list)){
                         data.list.forEach(function(item,i,array){
@@ -271,8 +283,9 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             var isCallbackFunction = isFunction(callback);
 
             $http.get(platformDataUrl+"list?className="+className).success(function(data){
-                if (name)
+                if (name) {
                     $scope[name] = data;
+                }
                 if (isCallbackFunction){
                     data.forEach(function(item,i,array){
                         callback(item,i,array);
@@ -308,8 +321,9 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     data : JSON.stringify(data)}),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (data){
-                if (name)
+                if (name) {
                     $scope[name] = data;
+                }
                 if (isCallbackFunction){
                     if (angular.isArray(data)){
                         data.forEach(function(item,i,array){
@@ -326,7 +340,6 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         };
 
         this.createUploader = function ($scope,name,className,actionName,data,callback,prepareItem){
-            "use strict";
             var isCallbackFunction = isFunction(callback);
             var formData = {
                 className: className,
@@ -347,8 +360,9 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
 
             uploader.onSuccessItem = function(fileItem, response, status, headers) {
                 var data = response;
-                if (isCallbackFunction)
+                if (isCallbackFunction){
                     callback(data);
+                }
             };
             uploader.onErrorItem = function(fileItem, response, status, headers) {
                 errorService.showError(response,status);
@@ -359,7 +373,6 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         };
 
         this.actionWithFile = function ($scope,name,className,actionName,data,files,callback){
-            "use strict";
             var isCallbackFunction = isFunction(callback);
             var formData = {
                 className: className,
@@ -377,8 +390,9 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
 
                 uploader.onSuccessItem = function(fileItem, response, status, headers) {
                     var data = response;
-                    if (isCallbackFunction)
+                    if (isCallbackFunction){
                         callback(data);
+                    }
                 };
                 uploader.onErrorItem = function(fileItem, response, status, headers) {
                     errorService.showError(response,status);
@@ -429,10 +443,12 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     object : JSON.stringify(data)}),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (data){
-                if (name)
+                if (name){
                     $scope[name] = data;
-                if (isFunction(callback))
+                }
+                if (isFunction(callback)){
                     callback(data);
+                }
             }).error(function(error, status, headers, config){
                 errorService.showError(error,status);
             });
@@ -446,10 +462,12 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     object : JSON.stringify(data)}),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (data){
-                if (name)
+                if (name){
                     $scope[name] = data;
-                if (isFunction(callback))
+                }
+                if (isFunction(callback)){
                     callback(data);
+                }
             }).error(function(error, status, headers, config){
                 errorService.showError(error,status);
             });
@@ -457,8 +475,9 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
 
         this.remove = function ($scope,name,className,id,callback) {
             $http.get(platformDataUrl+"remove?className="+className+"&id="+id).success(function(data){
-                if (name)
+                if (name){
                     $scope[name] = data;
+                }
                 if (isFunction(callback)) {
                     callback(data);
                 }
@@ -468,17 +487,23 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         };
 
         this.imageHref = function(className,id){
-            if (!className || !id) return "";
+            if (!className || !id) {
+                return "";
+            }
             return "/data/image?className="+className+"&id="+id;
         };
 
         this.fileHref = function(className,id,key){
-            if (!className || !id) return "";
+            if (!className || !id) {
+                return "";
+            }
             return "/data/readFile?className="+className+"&id="+id+"&key="+key;
         };
 
         this.fileByKeyHref = function(className,id,key){
-            if (!className || !id) return "";
+            if (!className || !id) {
+                return "";
+            }
             return "/data/readFile?className="+className+"&id="+id+"&key="+key;
         };
 
@@ -520,7 +545,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
 
         this.getError = function(){
             return error;
-        }
+        };
 
     })
 
@@ -545,16 +570,18 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     for (var i = 0; i < moduleUrlSplit.length; i++) {
                         var isContains = false;
                         for (var j = 0; j < modules.length; j++) {
-                            if (modules[j] == moduleUrlSplit[i - 1]) {
+                            if (modules[j] === moduleUrlSplit[i - 1]) {
                                 isContains = true;
                                 break;
                             }
                         }
-                        if (isContains) continue;
+                        if (isContains) {
+                            continue;
+                        }
                         moduleUrl += "/" + moduleUrlSplit[i];
                     }
 
-                    return $http.get(resourceUrl + "page-info/" + language + ".json")
+                    return $http.get(resourceUrl + "page-info/" + language + ".json");
                 }).then(function(response) {
                     var data = response.data;
                     application.text = {};
@@ -565,20 +592,26 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     application.language = data.language;
 
                     if (moduleUrl) {
-                        return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/pageInfo.json")
-                    } else return application;
+                        return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/pageInfo.json");
+                    } else {
+                        return application;
+                    }
                 }).then(function (response) {
-                    if (response === application) return application;
+                    if (response === application) {
+                        return application;
+                    }
 
                     var data = response.data;
                     for (var key in data) {
-                        if (key != "text") {
+                        if (key !== "text") {
                             application[key] = data[key];
                         }
                     }
-                    return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/" + language + ".json")
+                    return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/" + language + ".json");
                 }).then(function (response) {
-                    if (response === application) return application;
+                    if (response === application) {
+                        return application;
+                    }
 
                     var data = response.data;
                     for (var key in data.text) {
@@ -610,7 +643,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             $rootScope.application = pageInfo;
             var url = $stateParams.path.split("/");
             for (var i=0; i < modules.length; i++) {
-                if (modules[i] == url [url.length - 2]) {
+                if (modules[i] === url [url.length - 2]) {
                     return url [url.length - 2] + "Ctrl";
                 }
             }
@@ -711,7 +744,9 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 scope : {},
                 controller: function(errorService,$scope){
                     $scope.$watch(
-                        function(){ return errorService.getError()},
+                        function(){
+                            return errorService.getError();
+                        },
                         function(newValue,oldValue){
                             if (newValue !== oldValue){
                                 $scope.error = newValue;
@@ -719,7 +754,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     });
                 },
                 templateUrl: resourceTemplate+"/error/modalForError.html"
-        }
+        };
     })
 
     .directive('moduleTemplate', function(resourceTemplate) {
@@ -736,7 +771,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 $scope.data = $scope[$attrs.data];
                 $scope.$watch($attrs.data, function(value,oldValue) {
                     $scope.data = value;
-                    if (value != oldValue) {
+                    if (value !== oldValue) {
                         if ($scope.updateValues && angular.isFunction($scope.updateValues)){
                             $scope.updateValues();
                         }
@@ -759,7 +794,9 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 options: "=options"
             },
             link:function (scope, elm, attrs,ngModel) {
-                if (!scope.type) return;
+                if (!scope.type){
+                    return;
+                }
                 switch (scope.type){
 
                     case "compareTo":
@@ -806,7 +843,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
 
             });
         }
-    }
+    };
 }])
 
     //for div
@@ -828,7 +865,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                         }
                     }
                     return false;
-                };
+                }
 
                 function isOrContains(node, container) {
                     while (node) {
@@ -838,7 +875,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                         node = node.parentNode;
                     }
                     return false;
-                };
+                }
 
                 $rootScope.$on('add', function(e, val) {
                     console.log('on add');
@@ -915,14 +952,16 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
 
                 });
             }
-        }
+        };
     }])
 .directive('contenteditable', ['$rootScope','$sce','TagService', function($rootScope,$sce,TagService) {
     return {
         restrict: 'A', // only activate on element attribute
         require: '?ngModel', // get a hold of NgModelController
         link: function(scope, element, attrs, ngModel) {
-            if (!ngModel) return; // do nothing if no ng-model
+            if (!ngModel) {
+                return;
+            } // do nothing if no ng-model
             var el = element[0];
             // Specify how UI should be updated
             ngModel.$render = function() {
@@ -953,15 +992,19 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 var s = viewValue, result = "";
                 var startPos = -1,start = 0,stopPos = -1, j = -1;
                 var startText = "";
-                while ((startPos = s.indexOf(TagService.startEditable, stopPos + 1)) !== -1
-                && (j = s.indexOf(TagService.middleEditable, startPos)) !== -1
-                && (stopPos = s.indexOf(TagService.stopEditable, startPos + 1)) !== -1) {
+                while ((startPos = s.indexOf(TagService.startEditable, stopPos + 1)) !== -1 &&
+                (j = s.indexOf(TagService.middleEditable, startPos)) !== -1 &&
+                (stopPos = s.indexOf(TagService.stopEditable, startPos + 1)) !== -1) {
                     var value = s.substring(startPos + TagService.startEditable.length, j);
                     var index = parseInt(value);
-                    if (isNaN(index)) continue;
+                    if (isNaN(index)) {
+                        continue;
+                    }
 
                     var tag = $rootScope.tagPool[index];
-                    if (!tag)  continue;
+                    if (!tag)  {
+                        continue;
+                    }
 
                     //var string = angular.toJson(tag.toJson());
                     result += s.substring(start, startPos) + startText + TagService.groupSeparator + tag.toString() + TagService.groupSeparator;
@@ -981,9 +1024,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             //    return index;
             //});
         }
-
-
-    }
+    };
 }])
     .factory("TagService",function(){
         var groupSeparator = String.fromCharCode(29);
@@ -1010,7 +1051,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             middleEditable: middleEditable,
             stopEditable: stopEditable
 
-        }
+        };
     });
 
 
@@ -1050,7 +1091,7 @@ function Tag() {
     };
 
     this.setData = function(d) {
-        if (!d || d === null || !(typeof d === 'object')) {
+        if (!d || d === null || typeof d !== 'object') {
             console.error("Tag data is not a valid");
             return;
         }

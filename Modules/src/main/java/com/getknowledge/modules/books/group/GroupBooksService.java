@@ -13,6 +13,7 @@ import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -31,18 +32,11 @@ public class GroupBooksService extends AbstractService implements ImageService{
     @Autowired
     private TraceService trace;
 
-    @Action(name = "getGroupBooksFromSection" , mandatoryFields = {"sectionId"})
-    public List<GroupBooks> getCourses(HashMap<String,Object> data) {
-        long sectionId = new Long((Integer)data.get("sectionId"));
-
-        return repository.getEntitiesByFieldAndValue("section.id" , sectionId);
-    }
-
     @Action(name = "createGroupBooks" , mandatoryFields = {"sectionId", "title","url"})
+    @Transactional
     public Result createGroupCourses (HashMap<String,Object> data) throws NotAuthorized {
 
-
-        long sectionId = Long.parseLong((String) data.get("sectionId"));
+        long sectionId = longFromField("sectionId",data);
         Section section = sectionRepository.read(sectionId);
         if (section == null) {
             return Result.Failed();
@@ -50,39 +44,37 @@ public class GroupBooksService extends AbstractService implements ImageService{
 
         GroupBooks groupBooks = new GroupBooks();
         if (!groupBooks.getAuthorizationList().isAccessCreate(userRepository.getSingleEntityByFieldAndValue("login",data.get("principalName")))) {
-            throw new NotAuthorized("access denied to create group books");
+            throw new NotAuthorized("Access denied to create group books");
         }
-        groupBooks.setTitle((String) data.get("title"));
-        groupBooks.setSection(section);
-        groupBooks.setUrl((String) data.get("url"));
-        repository.create(groupBooks);
+
+        repository.createGroupBook((String)data.get("title"),(String)data.get("url"),section);
 
         return Result.Complete();
     }
 
     @ActionWithFile(name = "updateCover" , mandatoryFields = {"id"})
+    @Transactional
     public Result updateCover (HashMap<String,Object> data, List<MultipartFile> files) throws PlatformException {
 
-        GroupBooks books = repository.read(new Long((Integer)data.get("id")));
+        GroupBooks books = repository.read(longFromField("id",data));
 
         if (!isAccessToEdit(data,books))
-            throw new NotAuthorized("access denied");
+            throw new NotAuthorized("Access denied");
 
         try {
             books.setCover(files.get(0).getBytes());
+            repository.merge(books);
         } catch (IOException e) {
             trace.logException("Error set cover for group book" , e , TraceLevel.Error);
             return Result.Failed();
         }
-        repository.update(books);
+
         return Result.Complete();
     }
 
     @Override
     public byte[] getImageById(long id) {
         GroupBooks books = repository.read(id);
-        if (books != null)
-            return books.getCover();
-        return null;
+        return books == null ? null :books.getCover() ;
     }
 }

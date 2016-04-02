@@ -34,11 +34,12 @@ model.controller("usersCtrl", function ($scope, applicationService, className,$m
     $scope.searchUsers = function(text) {
         if (text) {
             var splitArray = text.split(".");
+            var searchFields;
             if (splitArray.length > 1) {
-                var searchFields = {fields: [{"firstName": splitArray[0]}, {"lastName": splitArray[1]}]};
+                searchFields = {fields: [{"firstName": splitArray[0]}, {"lastName": splitArray[1]}]};
                 filter.searchText(searchFields);
             } else {
-                var searchFields = {fields: [{"firstName": text}, {"lastName": text},{"user.login" : text}], or: true};
+                searchFields = {fields: [{"firstName": text}, {"lastName": text},{"user.login" : text}], or: true};
                 filter.searchText(searchFields);
             }
         }
@@ -98,7 +99,7 @@ model.controller("usersCtrl", function ($scope, applicationService, className,$m
     var updateFilterPermissions = function (item) {
         var isContain = false;
         $scope.currentUser.user.permissions.forEach(function(element){
-            if (element.permissionName == item.permissionName) {
+            if (element.permissionName === item.permissionName) {
                 isContain = true;
                 return;
             }
@@ -124,7 +125,7 @@ model.controller("usersCtrl", function ($scope, applicationService, className,$m
 
     $scope.removePermission = function(id){
         for (var i=0; i < $scope.currentUser.user.permissions.length; i++) {
-            if ($scope.currentUser.user.permissions[i].id == id) {
+            if ($scope.currentUser.user.permissions[i].id === id) {
                 $scope.currentUser.user.permissions.splice(i,1);
                 return;
             }

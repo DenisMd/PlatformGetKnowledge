@@ -20,6 +20,7 @@ import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -36,9 +37,6 @@ public class BookService extends AbstractService implements ImageService,FileSer
     private LanguageRepository languageRepository;
 
     @Autowired
-    private BooksTagRepository booksTagRepository;
-
-    @Autowired
     private GroupBooksRepository groupBooksRepository;
 
     @Autowired
@@ -47,15 +45,8 @@ public class BookService extends AbstractService implements ImageService,FileSer
     @Autowired
     private BookRepository bookRepository;
 
-    private void prepareLinks(HashMap<String,Object> data , Book book) {
-        if (data.containsKey("links")) {
-            List<String> list = (List<String>) data.get("links");
-            book.setLinks(list);
-        }
-    }
-
     private Result checkBookRight(HashMap<String,Object> data) {
-        Long bookId = new Long((Integer)data.get("bookId"));
+        Long bookId = longFromField("bookId",data);
         Book book = bookRepository.read(bookId);
         if (book == null) {
             return Result.NotFound();
@@ -74,6 +65,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
 
 
     @Action(name = "createBooks" , mandatoryFields = {"name","groupBookId","description","language"})
+    @Transactional
     public Result createBook(HashMap<String,Object> data) {
         if (!data.containsKey("principalName"))
             return Result.NotAuthorized();
@@ -81,13 +73,11 @@ public class BookService extends AbstractService implements ImageService,FileSer
         UserInfo userInfo = userInfoService.getAuthorizedUser(data);
 
         Book book = new Book();
-        book.setOwner(userInfo);
-
         if (!book.getAuthorizationList().isAccessCreate(userInfo.getUser())) {
             return Result.AccessDenied();
         }
 
-        Long groupBookId = new Long((Integer)data.get("groupBookId"));
+        Long groupBookId = longFromField("groupBookId",data);
 
         GroupBooks groupBooks =  groupBooksRepository.read(groupBookId);
         if (groupBooks == null) {
@@ -95,39 +85,38 @@ public class BookService extends AbstractService implements ImageService,FileSer
             return Result.Failed();
         }
 
-        book.setGroupBooks(groupBooks);
+        String name = (String) data.get("name");
+        String description = (String) data.get("description");
+        Language language = null;
+        List<String> links = null;
+        List<String> tags = null;
 
-        book.setName((String) data.get("name"));
-        book.setDescription((String) data.get("description"));
+        if (data.containsKey("links")){
+            links = (List<String>) data.get("links");
+        }
+
+        if (data.containsKey("tags")){
+            links = (List<String>) data.get("tags");
+        }
 
         try {
-            Language language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
-            book.setLanguage(language);
+            language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
         } catch (Exception exception) {
             Result result = Result.Failed();
             result.setObject("Language not found");
             return result;
         }
 
-        prepareLinks(data,book);
 
-        if (data.containsKey("tags")) {
-            List<String> tags = (List<String>) data.get("tags");
-            booksTagRepository.createTags(tags,book);
-        }
+        bookRepository.createBook(groupBooks,userInfo,name,description,language,links,tags);
 
-        bookRepository.create(book);
-
-        for (BooksTag booksTag : book.getTags()) {
-            booksTag.getBooks().add(book);
-            booksTagRepository.merge(booksTag);
-        }
         Result result = Result.Complete();
         result.setObject(book.getId());
         return result;
     }
 
     @Action(name = "updateBookInformation" , mandatoryFields = {"bookId"})
+    @Transactional
     public Result updateBookInformation(HashMap<String,Object> data) {
 
         Result result = checkBookRight(data);
@@ -138,38 +127,26 @@ public class BookService extends AbstractService implements ImageService,FileSer
             return result;
         }
 
+        String name = (String) data.get("name");
+        String description = (String) data.get("description");
+        List<String> links = null;
+        List<String> tags = null;
 
-        if (data.containsKey("name")) {
-            String name = (String) data.get("name");
-            book.setName(name);
+        if (data.containsKey("links")){
+            links = (List<String>) data.get("links");
         }
 
-        if (data.containsKey("description")) {
-            String description = (String) data.get("description");
-            book.setDescription(description);
+        if (data.containsKey("tags")){
+            links = (List<String>) data.get("tags");
         }
 
-        prepareLinks(data,book);
-
-        if (data.containsKey("tags")) {
-            List<String> tags = (List<String>) data.get("tags");
-            booksTagRepository.removeTagsFromEntity(book);
-            booksTagRepository.createTags(tags,book);
-        }
-
-        bookRepository.merge(book);
-        for (BooksTag booksTag : book.getTags()) {
-            booksTag.getBooks().add(book);
-            booksTagRepository.merge(booksTag);
-        }
-
-        booksTagRepository.removeUnusedTags();
-
+        bookRepository.updateBook(book, name, description, links, tags);
         return Result.Complete();
     }
 
     @ActionWithFile(name = "uploadCover" , mandatoryFields = {"bookId"})
-    public Result updataCover(HashMap<String,Object> data, List<MultipartFile> files) {
+    @Transactional
+    public Result uploadCover(HashMap<String,Object> data, List<MultipartFile> files) {
         Result result = checkBookRight(data);
         Book book;
         if (result.getObject() != null)  {
@@ -190,7 +167,8 @@ public class BookService extends AbstractService implements ImageService,FileSer
     }
 
     @ActionWithFile(name = "uploadData" , mandatoryFields = {"bookId"})
-    public Result updataData(HashMap<String,Object> data, List<MultipartFile> files) {
+    @Transactional
+    public Result uploadData(HashMap<String,Object> data, List<MultipartFile> files) {
         Result result = checkBookRight(data);
         Book book;
         if (result.getObject() != null)  {

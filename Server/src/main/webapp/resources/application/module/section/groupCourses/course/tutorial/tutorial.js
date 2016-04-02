@@ -1,6 +1,6 @@
 model.controller("tutorialCtrl", function ($scope,applicationService,className,pageService,$state) {
     var courseId = pageService.getPathVariable("course",$state.params.path);
-    var tutorialNumber = pageService.getPathVariable("tutorial" , $state.params.path)
+    var tutorialNumber = pageService.getPathVariable("tutorial" , $state.params.path);
 
     function readTutorialInfo() {
         applicationService.action($scope,"tutorial",className.tutorial,"getTutorial", {
@@ -35,13 +35,13 @@ model.controller("tutorialCtrl", function ($scope,applicationService,className,p
         result.data = tutorial.data;
         applicationService.action($scope,"",className.tutorial,"updateTutorial",result,function(result){
             $scope.showToast(result);
-            if (tutorialNumber != result.orderNumber) {
+            if (tutorialNumber !== result.orderNumber) {
                 var n = window.location.href.lastIndexOf('/');
                 $scope.goTo(window.location.href.substring(0,n+1)+result.object,true);
             }
             readTutorialInfo();
         });
-    }
+    };
 
     var videoImg = {
         save: function(file){

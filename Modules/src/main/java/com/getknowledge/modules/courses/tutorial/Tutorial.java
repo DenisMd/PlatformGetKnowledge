@@ -3,6 +3,8 @@ package com.getknowledge.modules.courses.tutorial;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.courses.Course;
 import com.getknowledge.modules.courses.raiting.Rating;
+import com.getknowledge.modules.courses.tutorial.homeworks.HomeWork;
+import com.getknowledge.modules.courses.tutorial.test.Test;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoRepository;
 import com.getknowledge.modules.video.Video;
@@ -13,7 +15,9 @@ import com.getknowledge.platform.modules.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -22,6 +26,9 @@ import java.util.Objects;
 public class Tutorial  extends CloneableEntity<Tutorial> {
 
     private String name;
+
+    @OneToMany(mappedBy = "tutorial")
+    private List<HomeWork> homeWorks = new ArrayList<>();
 
     //Порядковый номер
     @Column(name = "order_number")
@@ -32,12 +39,10 @@ public class Tutorial  extends CloneableEntity<Tutorial> {
     private Course course;
 
     @Column(columnDefinition = "Text" , name = "data")
-    @com.getknowledge.platform.annotations.Access(forOwners = true)
     @JsonIgnore
     private String data;
 
     @OneToOne
-    @com.getknowledge.platform.annotations.Access(forOwners = true)
     @JsonIgnore
     private Video video;
 
@@ -52,9 +57,28 @@ public class Tutorial  extends CloneableEntity<Tutorial> {
     @Access(myself = true)
     private Tutorial originalTutorial;
 
-    @JsonIgnore
+    @com.getknowledge.platform.annotations.Access(myself = true)
     @Column(name = "deleting")
     private Boolean deleting = false;
+
+    @OneToOne
+    private Test test;
+
+    public Test getTest() {
+        return test;
+    }
+
+    public void setTest(Test test) {
+        this.test = test;
+    }
+
+    public List<HomeWork> getHomeWorks() {
+        return homeWorks;
+    }
+
+    public void setHomeWorks(List<HomeWork> homeWorks) {
+        this.homeWorks = homeWorks;
+    }
 
     public Boolean isDeleting() {
         return deleting;

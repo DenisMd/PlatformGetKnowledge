@@ -54,11 +54,7 @@ public class CoursesTagRepository extends BaseRepository<CoursesTag> implements 
     public void removeUnusedTags() {
         List<CoursesTag> list = entityManager.createQuery("select t from CoursesTag  t where t.courses is empty").getResultList();
         list.forEach((tag -> {
-            try {
-                remove(tag.getId());
-            } catch (PlatformException e) {
-                trace.logException("Error remove course tag" , e, TraceLevel.Error);
-            }
+            remove(tag.getId());
         }));
     }
 }
