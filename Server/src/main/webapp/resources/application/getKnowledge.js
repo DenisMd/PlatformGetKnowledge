@@ -913,16 +913,6 @@ model.controller("postController",function($scope,$rootScope,codemirrorURL,TagSe
         $scope.currentTag = tag;
     };
 
-    $scope.getOptions = function (tag) {
-        if (tag) {
-            return angular.extend({
-                readOnly: 'nocursor'
-            }, tag.getData());
-        } else {
-            return {};
-        }
-    };
-
     //paste code
     var defaultOptions = {
         lineNumbers: true,
@@ -931,20 +921,16 @@ model.controller("postController",function($scope,$rootScope,codemirrorURL,TagSe
 
     $scope.pasteCode = function(event) {
         $scope.showDialog(event, $scope, "pasteCode.html", function (newTagInfo) {
-            var newTag = new Tag();
+            var newTag = new ProgramTag();
             newTag.setName(newTagInfo.title);
-            newTag.setType(newTag.Type.Program);
-            var options = angular.extend({
-                text: newTagInfo.text,
-                mode: newTagInfo.mode.mode,
-                theme: newTagInfo.theme.name
-            }, defaultOptions);
-            newTag.setData(options);
+            newTag.setCode(newTagInfo.text);
+            newTag.setMode(newTagInfo.mode.mode);
+            newTag.setTheme(newTagInfo.theme.name);
             $rootScope.tagPool.push(newTag);
             var tag = $rootScope.tagPool[$rootScope.tagPool.length - 1];
             if (tag) {
-                angular.extend($scope.test,tag.getData());
-                $scope.test.title = tag.getName();
+                //angular.extend($scope.test,tag.getData());
+                //$scope.test.title = tag.getName();
                 $rootScope.$broadcast('setCaret');
                 $rootScope.$broadcast('add', TagService.getEditableTag($scope.content,tag,$rootScope.tagPool.length - 1));
             }

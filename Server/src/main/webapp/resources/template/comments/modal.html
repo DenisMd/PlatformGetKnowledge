@@ -119,12 +119,13 @@
                                         <td>
                                             {{tag.getName()}}
                                         </td>
+                                        <td><md-button class="md-accent" aria-label="Remove"><i class="fa fa-minus-circle"></i></md-button></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div layout="column" flex>
-                            <div ui-codemirror="parentScope.getOptions(currentTag)" ng-model="parentScope.currentTag.getData().text"></div>
+                            <div ui-codemirror="parentScope.currentTag.getReadOnlyOptions()" ng-model="parentScope.currentTag.getCode()"></div>
                         </div>
                     </div>
 

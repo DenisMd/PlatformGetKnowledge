@@ -1006,8 +1006,8 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                         continue;
                     }
 
-                    var string = angular.toJson(tag.toJson());
-                    result += s.substring(start, startPos) + startText + TagService.groupSeparator + string + TagService.groupSeparator;
+                    //var string = angular.toJson(tag.toJson());
+                    result += s.substring(start, startPos) + startText + TagService.groupSeparator + tag.toString() + TagService.groupSeparator;
                     startText = "";
                     start = stopPos + TagService.stopEditable.length;
                 }
@@ -1099,9 +1099,13 @@ function Tag() {
     };
 
     this.toJson = function(){
-        var json = {name:this.getName()};
-        angular.merge(json,data);
-        return json;
+        //var json =
+        //angular.merge(json,data);
+        return {name:this.getName()};
+    };
+
+    this.toString = function(){
+        return angular.toJson(this.toJson());
     };
 }
 
@@ -1121,7 +1125,7 @@ function ProgramTag() {
 
     this.setCode = function(t) {
         if (!t || !angular.isString(t)) {
-            console.error("Tag data is not a valid");
+            console.error("Tag text is not a valid");
             return;
         }
         code = t;
@@ -1136,11 +1140,17 @@ function ProgramTag() {
     };
 
     this.getOptions = function(){
-
+        return angular.copy(options);
     };
 
-    var parentJson = this.toJson;
+    this.getReadOnlyOptions = function(){
+        return angular.extend({
+            readOnly: 'nocursor'
+        }, options);
+    };
 
+
+    var parentJson = this.toJson;
     this.toJson = function(){
         var json = parentJson.call(this);
         angular.merge(json,{code:code, options:this.getOptions()});
