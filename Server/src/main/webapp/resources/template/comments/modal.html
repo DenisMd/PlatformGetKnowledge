@@ -16,7 +16,7 @@
     <!---->
 
     <div class="bubble">
-        <div contenteditable ng-model="content" class="post-editarea" contenteditable-key-listener><br/></div>
+        <div  ng-model="content" class="post-editarea" contenteditable contenteditable-key-listener></div>
         <span class="tool-button tool-button-1">
             <i class="fa fa-camera"></i>
             <md-tooltip md-direction="bottom">
@@ -89,7 +89,7 @@
             </form>
         </md-dialog>
     </script>
-    {{tagPool}}
+    {{test}}
     <script type="text/ng-template" id="tagPool.html">
         <md-dialog aria-label="Tags Pool" ng-cloak flex="80">
                 <md-toolbar class="statistic-card-title">
@@ -125,7 +125,9 @@
                             </table>
                         </div>
                         <div layout="column" flex>
-                            <div ui-codemirror="parentScope.currentTag.getReadOnlyOptions()" ng-model="parentScope.currentTag.getCode()"></div>
+                            <div ng-if="parentScope.currentTag">
+                                <div ui-codemirror="parentScope.currentTag.getReadOnlyOptions()" ng-model="parentScope.currentTag.getCode()"></div>
+                            </div>
                         </div>
                     </div>
 
