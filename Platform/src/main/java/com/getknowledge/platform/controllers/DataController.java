@@ -236,6 +236,8 @@ public class DataController {
             return prepareJson(entity,isEditable,isCreatable,classEntity).toString();
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
+        } catch (PlatformException p) {
+            throw p;
         } catch (Exception e) {
             throw new SystemError("Unhandled exception : " + e.getMessage(),trace,TraceLevel.Error,e);
         }
@@ -260,6 +262,8 @@ public class DataController {
             return listToJsonString(list,getCurrentUser(principal),repository,classEntity).toString();
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
+        } catch (PlatformException p) {
+            throw p;
         } catch (Exception e) {
             throw new SystemError("Unhandled exception : " + e.getMessage(),trace,TraceLevel.Error,e);
         }
@@ -319,6 +323,8 @@ public class DataController {
 
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
+        } catch (PlatformException p) {
+            throw p;
         } catch (Exception e) {
             if (e.getCause() instanceof SocketException) {
                 //Ничего не даелаем так пользователь просто выключил видео
@@ -355,6 +361,8 @@ public class DataController {
             return null;
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
+        } catch (PlatformException p) {
+            throw p;
         } catch (Exception e) {
             throw new SystemError("Unhandled exception : " + e.getMessage(),trace,TraceLevel.Error,e);
         }
@@ -387,6 +395,8 @@ public class DataController {
             return null;
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
+        } catch (PlatformException p) {
+            throw p;
         } catch (Exception e) {
             throw new SystemError("Unhandled exception : " + e.getMessage(),trace,TraceLevel.Error,e);
         }
@@ -491,6 +501,8 @@ public class DataController {
             return objectNode.toString();
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
+        } catch (PlatformException p) {
+            throw p;
         } catch (Exception e) {
             throw new SystemError("Unhandled exception : " + e.getMessage(),trace,TraceLevel.Error,e);
         }
