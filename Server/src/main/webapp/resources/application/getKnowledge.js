@@ -140,8 +140,6 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
             return false;
         }
         if ($state.includes('404') || $state.includes('accessDenied')){
-            //TODO:не понятно что здесь вообще было
-            $rootScope.application = applicationProperties;
             return true;
         } else {
             var str = window.location.hash.split("/").splice(2).join("/");
