@@ -346,12 +346,36 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             }
         }
 
+        /**
+         *
+         * @param {String} className - имя класса для которого создается фильтр
+         * @param {Number} first - с какого номера начинать поиск
+         * @param {Number} max - сколько элементов должно быть в ответе
+         *
+         * @return {Filter}
+         * */
         this.createFilter = function(className,first,max) {
               return new Filter(className,first,max);
         };
 
+
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {Filter} filter - созданный фильтр по которому будет построен запрос
+         *  @param {Function} callback - функция пост-обработки response
+         *
+         *  @description создает запрос для фильтра объектов
+         * */
         this.filterRequest = function ($scope,name,filter,callback) {
+
             var isCallbackFunction = plUtils.isFunction(callback);
+
+            if (filter === null || filter.result === null) {
+                console.error("Filter is null in filterRequest");
+                return;
+            }
+
             $http({
                 method: 'POST',
                 url: platformDataUrl+'filter',
@@ -363,13 +387,13 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                     $scope[name] = data;
                 }
                 if (isCallbackFunction && data){
-                    if (angular.isArray(data.list)){
+                    if (angular.isArray(data.list)) {
                         data.list.forEach(function(item,i,array){
                             callback(item,i,array,data.creatable);
                         });
                     }
                 }
-            }).error(function(error, status, headers, config){
+            }).error(function(error, status){
                 errorService.showError(error,status);
             });
         };
