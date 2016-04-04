@@ -653,8 +653,8 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             return "module/" + $stateParams.path;
         }
 
-        function getCtrl ($stateParams,$rootScope,applicationProperties,moduleParam){
-            $rootScope.application = applicationProperties;
+        function getCtrl ($stateParams,$rootScope,pageInfo,moduleParam){
+            $rootScope.pageInfo = pageInfo;
             var url = $stateParams.path.split("/");
             for (var i=0; i < moduleParam.length; i++) {
                 if (moduleParam[i] === url [url.length - 2]) {
@@ -672,20 +672,20 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
         $stateProvider.state('home', {
             url : "/:language",
             resolve: {
-                applicationProperties : applicationProperties
+                pageInfo : pageInfo
             },
             views : {
                 '' : {
                     templateUrl : resourceTemplate + 'indexTemplate.html',
-                    controller : function($rootScope,applicationProperties){
-                        $rootScope.application = applicationProperties;
+                    controller : function($rootScope,pageInfo){
+                        $rootScope.application = pageInfo;
                     }
                 }
             }
         }).state('moduleParam',{
             url : '/:language/{path:nonURIEncoded}',
             resolve: {
-                applicationProperties : applicationProperties
+                pageInfo : pageInfo
             },
             views : {
                 '' : {
@@ -696,21 +696,21 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             }
         })  .state("404",{
             resolve: {
-                applicationProperties : applicationProperties
+                pageInfo : pageInfo
             },
             templateUrl: "/404",
-            controller : function($rootScope,applicationProperties, $scope){
-                $rootScope.application = applicationProperties;
+            controller : function($rootScope,pageInfo, $scope){
+                $rootScope.application = pageInfo;
             }
         })
             .state("accessDenied",{
 
                 resolve: {
-                    applicationProperties : applicationProperties
+                    pageInfo : pageInfo
                 },
                 templateUrl: "/accessDenied",
-                controller : function($rootScope,applicationProperties, $scope){
-                    $rootScope.application = applicationProperties;
+                controller : function($rootScope,pageInfo, $scope){
+                    $rootScope.application = pageInfo;
                 }
             });
         $urlRouterProvider.otherwise(function($injector) {
