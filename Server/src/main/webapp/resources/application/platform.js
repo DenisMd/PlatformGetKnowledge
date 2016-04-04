@@ -1089,7 +1089,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             }
         };
     }])
-.directive('contenteditable', ['$rootScope','$sce','TagService', function($rootScope,$sce,TagService) {
+    .directive('contenteditable', ['$rootScope','$sce','TagService', function($rootScope,$sce,TagService) {
     return {
         restrict: 'A', // only activate on element attribute
         require: '?ngModel', // get a hold of NgModelController
