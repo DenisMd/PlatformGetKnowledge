@@ -906,7 +906,7 @@ model.controller("postController",['$scope','$rootScope','$timeout','codemirrorU
         }
     };
     //'fb<br>{"name":"java","code":"int i = 0; \nif (i < 0){\n i += 9;\n} else {\n i++;\n}","options":{"lineNumbers":true,"indentWithTabs":true,"mode":"text/x-java","theme":"default"}}'
-    $scope.content = "!!!";
+    $scope.content = '!!!&nbsp;{"name":"tt","code":"var i = \"hello world\"","options":{"lineNumbers":true,"indentWithTabs":true,"mode":"javascript","theme":"twilight"}}&nbsp;<br>';
 
     //first loading
     var initValue = $scope.content;
@@ -1308,40 +1308,12 @@ model.directive('contenteditable', ['$rootScope', '$sce', 'TagService', function
             }
 
             ngModel.$parsers.push(function (viewValue) {
-                var s = viewValue, result = "";
-                var startPos = -1, start = 0, stopPos = -1, j = -1;
-                var startText = "";
-                while ((startPos = s.indexOf(TagService.startEditable, stopPos + 1)) !== -1 &&
-                (j = s.indexOf(TagService.middleEditable, startPos)) !== -1 &&
-                (stopPos = s.indexOf(TagService.stopEditable, startPos + 1)) !== -1) {
-                    var value = s.substring(startPos + TagService.startEditable.length, j);
-                    var index = parseInt(value);
-                    if (isNaN(index)) {
-                        continue;
-                    }
-
-                    var tag = $rootScope.tagPool[index];
-                    if (!tag) {
-                        continue;
-                    }
-
-                    //var string = angular.toJson(tag.toJson());
-                    result += s.substring(start, startPos) + startText + TagService.groupSeparator + tag.toString() + TagService.groupSeparator;
-                    startText = "";
-                    start = stopPos + TagService.stopEditable.length;
-                }
-                if (result) {
-                    result += s.substring(stopPos + TagService.stopEditable.length);
-                    return result;
-                }
-                return s;
+                return TagService.replaceSpanOnTagValue(viewValue);
             });
 
-            //ngModel.$formatters.push(function(modelValue) {
-            //    var value = modelValue.slice(1,modelValue.indexOf("("));
-            //    var index = parseInt(value);
-            //    return index;
-            //});
+            ngModel.$formatters.push(function(modelValue) {
+            });
+
         }
     };
 }]);
@@ -1377,7 +1349,14 @@ model.directive('contenteditableKeyListener', [function () {
                 return false;
             }
 
-            scope.$on('add', function (e, val) {
+            /**
+             * @param e {Event} - объект генерируемый при возникновении события
+             * @param val {String} - вставляемая строка
+             * @param initValue {Boolean} - является ли строка инициализацией
+             *
+             *  @description добаление текста по картке
+             */
+            scope.$on('add', function (e, val, initValue) {
                 var sel, range;
                 if (window.getSelection) {
                     // IE9 and non-IE
@@ -1461,12 +1440,49 @@ model.factory("TagService", function () {
     var middleEditable = ')_';
     var stopEditable = '</span>';
 
+
     var getEditableTag = function (model, tag, index) {
         var before = '&#8203;', after = "";
         if (!model) {
             after = "</br>";
         }
         return startEditable + (index) + middleEditable + tag.getName() + stopEditable + after;
+    };
+
+     /**
+     *
+     * @param value {String} - строка для разбора
+     * @returns {String}
+     *
+     * @description Заменяет в строке ссылки пула тегов на json-представление тега
+     */
+     var replaceSpanOnTagValue = function replaceSpanOnTagValue(value){
+        var s = value, result = "";
+        var startPos = -1, start = 0, stopPos = -1, j = -1;
+        var startText = "";
+        while ((startPos = s.indexOf(TagService.startEditable, stopPos + 1)) !== -1 &&
+        (j = s.indexOf(TagService.middleEditable, startPos)) !== -1 &&
+        (stopPos = s.indexOf(TagService.stopEditable, startPos + 1)) !== -1) {
+            var value = s.substring(startPos + TagService.startEditable.length, j);
+            var index = parseInt(value);
+            if (isNaN(index)) {
+                continue;
+            }
+
+            var tag = $rootScope.tagPool[index];
+            if (!tag) {
+                continue;
+            }
+
+            result += s.substring(start, startPos) + startText + TagService.groupSeparator + tag.toString() + TagService.groupSeparator;
+            startText = "";
+            start = stopPos + TagService.stopEditable.length;
+        }
+        if (result) {
+            result += s.substring(stopPos + TagService.stopEditable.length);
+            return result;
+        }
+        return s;
     };
 
     return {
@@ -1476,18 +1492,15 @@ model.factory("TagService", function () {
         getEditableTag: getEditableTag,
         startEditable: startEditable,
         middleEditable: middleEditable,
-        stopEditable: stopEditable
+        stopEditable: stopEditable,
+        replaceSpanOnTagValue : replaceSpanOnTagValue
 
     };
 });
 
 
 function Tag() {
-    this.Type = Object.freeze({Program: 1, Math: 2, Image: 3});
-
     var name = "tag";
-    var type = this.Type.Program;
-    var data = {};
 
     this.getName = function () {
         return name;
@@ -1501,34 +1514,8 @@ function Tag() {
         name = n;
     };
 
-    this.getType = function () {
-        return type;
-    };
-
-    this.setType = function (t) {
-        if (!t) {
-            console.error("Tag type is not a valid");
-            return;
-        }
-        type = t;
-    };
-
-    this.getData = function () {
-        return data;
-    };
-
-    this.setData = function (d) {
-        if (!d || d === null || typeof d !== 'object') {
-            console.error("Tag data is not a valid");
-            return;
-        }
-        data = d;
-    };
-
     this.toJson = function () {
-        //var json =
-        //angular.merge(json,data);
-        return {name: this.getName()};
+        return {type: this.constructor.name, name: this.getName()};
     };
 
     this.toString = function () {
