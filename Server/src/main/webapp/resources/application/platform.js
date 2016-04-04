@@ -10,7 +10,9 @@ function PlatformUtils(){
         }
         return false;
     };
-
+    this.valueToString = function(val){
+        return val !== null ? val.toString() : val;
+    };
 
 }
 
@@ -106,10 +108,8 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             }
         };
     })
-    .service("applicationService", function ($http,$stateParams,$sce,FileUploader,pageService,moduleParam,resourceUrl,platformDataUrl,errorService) {
 
-        //Настройки приложения
-        //TODO: не понятно
+    .service("applicationService", function ($http,$stateParams,$sce,FileUploader,pageService,moduleParam,resourceUrl,platformDataUrl,errorService) {
 
         /**
          * @param {Object} $scope - скопе из которого вызывается метод
@@ -261,7 +261,6 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                 this.result.first = 0;
             };
 
-
             this.clearAll = function(){
                 this.clearOrder();
                 this.clearIn();
@@ -322,11 +321,22 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             });
         };
 
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {String} className - имя класса
+         *  @param {Integer} id - 8-byte идентификатор сущности
+         *  @param {Function} callback - функция пост-обработки response
+         *
+         * @description Читает объект по его идентификатору и записывает его в $scope[name]
+         * */
         this.read = function($scope, name, className, id, callback) {
             var isCallbackFunction = plUtils.isFunction(callback);
             $http.get(platformDataUrl+"read?className="+className+"&id="+id)
                 .success(function(data){
-                    $scope[name] = data;
+                    if (name) {
+                        $scope[name] = data;
+                    }
                     if (isCallbackFunction) {
                         callback(data);
                     }
@@ -336,14 +346,31 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
 
         };
 
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {String} className - имя класса
+         *
+         *
+         * @description Записывает кол-во объектов в $scope[name]
+         * */
         this.count = function($scope, name, className) {
             $http.get(platformDataUrl+"count?className="+className).success(function(data){
                 $scope[name] = data;
-            }).error(function(error, status, headers, config){
+            }).error(function(error, status){
                 errorService.showError(error,status);
             });
         };
 
+
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {String} className - имя класса
+         *  @param {Function} callback - функция пост-обработки response
+         *
+         * @description Читает весь список объектов и записывает его в $scope[name]
+         * */
         this.list = function ($scope,name,className,callback) {
             var isCallbackFunction = plUtils.isFunction(callback);
 
@@ -356,34 +383,60 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                         callback(item,i,array);
                     });
                 }
-            }).error(function(error, status, headers, config){
+            }).error(function(error, status){
                 errorService.showError(error,status);
             });
         };
 
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {String} className - имя класса
+         *  @param {Integer} first - номер с кторого нужно начинать
+         *  @param {Integer} max - окно(ко-во) элементов в запросе
+         *  @param {Function} callback - функция пост-обработки response
+         *
+         * @description Читает частичный список и записывает его в $scope[name]
+         * */
         this.listPartial = function ($scope,name,className,first,max,callback) {
             var isCallbackFunction = plUtils.isFunction(callback);
 
             $http.get(platformDataUrl+"listPartial?className="+className+"&first="+first+"&max="+max).success(function(data){
-                $scope[name] = data;
+
+                if (name) {
+                    $scope[name] = data;
+                }
+
                 if (isCallbackFunction){
                     data.forEach(function(item,i,array){
                         callback(item,i,array);
                     });
                 }
-            }).error(function(error, status, headers, config){
+            }).error(function(error, status){
                 errorService.showError(error,status);
             });
         };
 
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {String} className - имя класса
+         *  @param {String} actionName - имя действия на сторне сервера
+         *  @param {Object} data - данные передаваемые на сервер
+         *  @param {Function} callback - функция пост-обработки response
+         *
+         * @description выполняет определенную логику на сервере и результат записывает в $scope[name]
+         * */
         this.action = function ($scope,name,className,actionName,data,callback){
             var isCallbackFunction = plUtils.isFunction(callback);
             $http({
                 method: 'POST',
                 url: platformDataUrl+'action',
-                data: $.param({className: className,
+                data: $.param({
+                    className: className,
                     actionName:actionName,
-                    data : JSON.stringify(data)}),
+                    data : JSON.stringify(data)
+                }),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (data){
                 if (name) {
@@ -404,12 +457,24 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             });
         };
 
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {String} className - имя класса
+         *  @param {String} actionName - имя действия на сторне сервера
+         *  @param {Object} data - данные передаваемые на сервер
+         *  @param {Function} callback - функция пост-обработки response
+         *  @param {Function} prepareItem - функцей вызывается перед загрузкой элементов на сервер
+         *
+         *  @return {FileUploader}
+         * @description создает uploader
+         * */
         this.createUploader = function ($scope,name,className,actionName,data,callback,prepareItem){
             var isCallbackFunction = plUtils.isFunction(callback);
             var formData = {
-                className: className,
+                className:  className,
                 actionName: actionName,
-                data: JSON.stringify(data)
+                data:       JSON.stringify(data)
             };
             var uploader = new FileUploader({
                 url: platformDataUrl+'actionWithFile',
@@ -418,18 +483,18 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                     if (plUtils.isFunction(prepareItem)) {
                         prepareItem(formData);
                     }
-                    console.log(formData);
+
                     item.formData.push(formData);
                 }
             });
 
-            uploader.onSuccessItem = function(fileItem, response, status, headers) {
+            uploader.onSuccessItem = function(fileItem, response) {
                 var data = response;
                 if (isCallbackFunction){
                     callback(data);
                 }
             };
-            uploader.onErrorItem = function(fileItem, response, status, headers) {
+            uploader.onErrorItem = function(fileItem, response, status) {
                 errorService.showError(response,status);
             };
 
@@ -437,31 +502,27 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
 
         };
 
+
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {String} className - имя класса
+         *  @param {String} actionName - имя действия на сторне сервера
+         *  @param {Object} data - данные передаваемые на сервер
+         *  @param {Object} files - файлы
+         *  @param {Function} callback - функция пост-обработки response
+         *
+         * @description загружает файлы на сервер
+         * */
         this.actionWithFile = function ($scope,name,className,actionName,data,files,callback){
             var isCallbackFunction = plUtils.isFunction(callback);
             var formData = {
-                className: className,
+                className:  className,
                 actionName: actionName,
-                data: JSON.stringify(data)
+                data:       JSON.stringify(data)
             };
             if (files) {
-                var uploader = new FileUploader({
-                    url: platformDataUrl+'actionWithFile',
-                    autoUpload: false,
-                    onBeforeUploadItem: function(item) {
-                        item.formData.push(formData);
-                    }
-                });
-
-                uploader.onSuccessItem = function(fileItem, response, status, headers) {
-                    var data = response;
-                    if (isCallbackFunction){
-                        callback(data);
-                    }
-                };
-                uploader.onErrorItem = function(fileItem, response, status, headers) {
-                    errorService.showError(response,status);
-                };
+                var uploader = this.createUploader($scope,name,className,actionName,data,callback,null);
 
                 if (Array.isArray(files)){
                     uploader.queue = files;
@@ -469,37 +530,18 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                     uploader.addToQueue(files);
                 }
                 uploader.uploadAll();
-            } else {
-                $http({
-                    method: 'POST',
-                    url: platformDataUrl+'actionWithFile',
-                    headers: {
-                        'Content-Type': undefined
-                    },
-                    data: formData
-                }).success(function (data){
-                    success(data);
-
-                }).error(function(error, status, headers, config){
-                    errorService.showError(error,status);
-                });
-            }
-
-            function success(data){
-                $scope[name] = data;
-                if (isCallbackFunction){
-                    if (angular.isArray(data)){
-                        data.forEach(function(item,i,array){
-                            callback(item,i,array);
-                        });
-                    } else {
-                        callback(data);
-                    }
-
-                }
             }
         };
 
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {String} className - имя класса
+         *  @param {Object} data - модель объекта         *
+         *  @param {Function} callback - функция пост-обработки response
+         *
+         * @description создает объект из модели
+         * */
         this.create = function ($scope,name,className,data,callback){
             $http({
                 method: 'POST',
@@ -519,6 +561,15 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             });
         };
 
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {String} className - имя класса
+         *  @param {Object} data - модель объекта         *
+         *  @param {Function} callback - функция пост-обработки response
+         *
+         * @description обновляет данные модели
+         * */
         this.update = function ($scope,name,className,data,callback){
             $http({
                 method: 'POST',
@@ -538,6 +589,15 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             });
         };
 
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {String} className - имя класса
+         *  @param {Integer} id - ид сущности         *
+         *  @param {Function} callback - функция пост-обработки response
+         *
+         * @description удаляет данные по id
+         * */
         this.remove = function ($scope,name,className,id,callback) {
             $http.get(platformDataUrl+"remove?className="+className+"&id="+id).success(function(data){
                 if (name){
@@ -551,6 +611,12 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             });
         };
 
+        /**
+         *  @param {String} className - имя класса
+         *  @param {Integer} id - ид сущности
+         *
+         * @description получает ссылку для показа изображения
+         * */
         this.imageHref = function(className,id){
             if (!className || !id) {
                 return "";
@@ -558,13 +624,13 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             return "/data/image?className="+className+"&id="+id;
         };
 
-        this.fileHref = function(className,id,key){
-            if (!className || !id) {
-                return "";
-            }
-            return "/data/readFile?className="+className+"&id="+id+"&key="+key;
-        };
-
+        /**
+         *  @param {String} className - имя класса
+         *  @param {Integer} id - ид сущности
+         *  @param {String} key - ключ по которому будет получен файл
+         *
+         * @description получает ссылку для скачивания файла
+         * */
         this.fileByKeyHref = function(className,id,key){
             if (!className || !id) {
                 return "";
@@ -573,7 +639,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
         };
     })
 
-    .service("errorService", function (resourceUrl) {
+    .service("errorService", function () {
         function showModalError(){
             var modal = angular.element('#errorMessage');
             modal.modal('show');
@@ -698,13 +764,9 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                     console.error("Error loading page translation(" + error.config.url + ")");
                 });
         };
-        function valToString(val) {
-            return val !== null ? val.toString() : val;
-        }
-
         $urlMatcherFactoryProvider.type('nonURIEncoded', {
-            encode: valToString,
-            decode: valToString,
+            encode: plUtils.valueToString,
+            decode: plUtils.valueToString,
             is: function () { return true; }
         });
 
@@ -736,8 +798,9 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             views : {
                 '' : {
                     templateUrl : resourceTemplate + 'indexTemplate.html',
-                    controller : function($rootScope,applicationProperties){
+                    controllerProvider : function($rootScope,applicationProperties){
                         $rootScope.application = applicationProperties;
+                        return "indexController";
                     }
                 }
             }
@@ -825,7 +888,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                             }
                     });
                 },
-                templateUrl: resourceTemplate+"/error/modalForError.html"
+                templateUrl: resourceTemplate+"/error/errorDialog.html"
         };
     })
 

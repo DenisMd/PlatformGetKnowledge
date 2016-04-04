@@ -50,7 +50,7 @@ module.exports = function(grunt){
                 '<%= grunt.template.today("yyyy-mm-dd") %> \n*/'
             },
             dist1: {
-                src: ['application/**/*.js'],
+                src: ['application/platform.js','application/getKnowledge.js','application/controllers/**/*.js','application/module/**/*.js'],
                 dest: 'dist/js/mainApplication.js'
             },
             dist2: {
