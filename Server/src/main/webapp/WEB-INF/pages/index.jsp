@@ -39,18 +39,7 @@
 </head>
 <body>
 
-    <header class="header-info">
-        <div class="header-item header-left">
-            <button class="menu-toggle" ng-click="toggelClick()"><span class="hamburger">&#9776;</span></button>
-            <div class="site-title"><a ng-href="{{createUrl('')}}">getKnowledge();</a></div>
-        </div>
-        <div class="header-item header-right">
-            <div class="header-item language-panel"><a ng-class="application.language=='ru'?'selected':''"
-                                                       ng-click="changeLanguage('ru')">Ru</a>/<a
-                    ng-class="application.language=='en'?'selected':''" ng-click="changeLanguage('en')">En</a></div>
-        </div>
-        <div class="header-item header-center"></div>
-    </header>
+    <module-template name="components/header" data="headerData"></module-template>
 
     <module-template name="menus/mainMenu" data="menu"></module-template>
 

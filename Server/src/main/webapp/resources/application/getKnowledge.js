@@ -29,6 +29,27 @@ model.config(function (hljsServiceProvider,codemirrorURL) {
 
 model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService,pageService, className,$mdToast,$mdDialog, $mdMedia,$parse) {
 
+    //информация о заголовке
+
+    $scope.toggelMenu = true;
+
+    $scope.headerData = {
+        languages : ['ru','en'],
+        toggelClickCallback : function(){
+            $scope.toggelMenu = !$scope.toggelMenu;
+        }
+    };
+
+
+
+    //Возвращает корректный url с учетом языка
+    $scope.createUrl = function (url) {
+        if (!$scope.application) {
+            return;
+        }
+        return '#/' + $scope.application.language + url;
+    };
+
     //Toast
     $scope.showToast = function (text) {
         $mdToast.show(
@@ -107,13 +128,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         return $scope.application.text[key];
     };
 
-    //создать ссылку на страницу с учетом языка
-    $scope.createUrl = function (url) {
-        if (!$scope.application) {
-            return;
-        }
-        return '#/' + $scope.application.language + url;
-    };
+
 
     $scope.addUrlToPath = function (url) {
         return window.location + url;
@@ -204,13 +219,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         });
     };
 
-    $scope.toggelMenu = true;
 
-    $scope.toggelClick = function () {
-        $scope.toggelMenu = !$scope.toggelMenu;
-        var wrapper = angular.element("#wrapper");
-        wrapper.toggleClass("wrapper-left");
-    };
 
     $scope.menuScrollConfig = {
         theme: 'light-3',
