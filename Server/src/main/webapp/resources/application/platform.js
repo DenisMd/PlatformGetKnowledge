@@ -10,6 +10,8 @@ function PlatformUtils(){
         }
         return false;
     };
+
+
 }
 
 //Глобальные утилиты
@@ -212,29 +214,86 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             });
         };
 
-        //Это класс
-        function filter(className,first,max) {
+        //Класс для настройки фильтров
+        function Filter(className,first,max) {
             this.className = className;
             this.first = first;
             this.max = max;
-            this.result = {first : this.first, max : this.max};
 
+            this.result = {
+                first : this.first,
+                max : this.max
+            };
+
+            /**
+             * @param {Number} value - значение на которое произойдет сдвиг в фильтре
+             * @return {void}
+             * */
             this.increase = function (value) {
                 this.result.first = this.result.first + value;
             };
 
-            this.setOrder = function(order,desc) {
+            /**
+             * @param {String} fieldName - имя поля по кторому будет идти сортировка
+             * @param {Boolean} desc - в обратном порядке или нет
+             *
+             * @description добавляет в массив сортировку по полю
+             *
+             * */
+            this.setOrder = function(fieldName,desc) {
                 if (!("order" in this.result)) {
                     this.result.order = [];
                 }
 
-                this.result.order.push({"field" : order , "route" : desc ? "Desc" : "Asc"});
+                this.result.order.push({"field" : fieldName , "route" : desc ? "Desc" : "Asc"});
             };
 
-            this.searchText = function(fields) {
-                this.result.searchText = fields;
+            /**
+             * @description Убирает сортировку
+             *
+             * */
+            this.clearOrder = function () {
+                this.result.order = [];
             };
 
+            /**
+             *
+             * @param {Boolean} or - объеденить поиск по 'или'
+             * @description создает структуру для поиска строк
+             * */
+            this.createSearchText = function(or) {
+                this.result.searchText = {};
+                this.result.searchText.fields = [];
+                if (or) {
+                    this.result.searchText.or = true;
+                }
+            };
+
+            /**
+             *
+             * @param {String} fieldName - имя поля в объекте
+             * @param {String} value - значение
+             * @description создает структуру для поиска строк
+             * */
+            this.addSearchField = function(fieldName,value) {
+                this.result.searchText.fields.push({fieldName:value});
+            };
+
+            /**
+             * @description Убирает поиск
+             *
+             * */
+            this.clearSearch = function () {
+                this.result.searchText = null;
+            };
+
+
+            /**
+             *
+             * @param {String} fieldName - имя поля в объекте
+             * @param {String} values - значения
+             * @description ищет значения среди вбранных
+             * */
             this.in = function (fieldName, values) {
                 this.result.in = {
                     fieldName : fieldName,
@@ -242,6 +301,20 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                 };
             };
 
+            /**
+             * @description Убирает включение
+             *
+             * */
+            this.clearIn = function (fieldName, values) {
+                delete this.result.in;
+            };
+
+            /**
+             *
+             * @param {String} fieldName - имя поля в объекте
+             * @param {String} value - значение
+             * @description ищет значения по равенству
+             * */
             this.equal = function (fieldName, value) {
               if (!this.result.equal) {
                   this.result.equal = [];
@@ -252,25 +325,29 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
               });
             };
 
+            /**
+             * @description Убирает равенство
+             *
+             * */
             this.clearEqual = function() {
                 delete this.result.equal;
-            };
-
-            this.clearIn = function (fieldName, values) {
-                delete this.result.in;
-            };
-
-            this.clearOrder = function () {
-                this.result.order = [];
             };
 
             this.reload = function () {
                 this.result.first = 0;
             };
+
+
+            this.clearAll = function(){
+                this.clearOrder();
+                this.clearIn();
+                this.clearEqual();
+                this.clearSearch();
+            }
         }
 
         this.createFilter = function(className,first,max) {
-              return new filter(className,first,max);
+              return new Filter(className,first,max);
         };
 
         this.filterRequest = function ($scope,name,filter,callback) {
