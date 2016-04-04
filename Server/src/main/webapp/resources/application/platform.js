@@ -2,7 +2,7 @@ String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
-angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angular-loading-bar','ngAnimate','angularFileUpload'])
+angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angular-loading-bar','ngAnimate','angularFileUpload'])
     .factory('className', function() {
         return {
             "userInfo" : "com.getknowledge.modules.userInfo.UserInfo",
@@ -37,22 +37,34 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "tutorial" : "com.getknowledge.modules.courses.tutorial.Tutorial"
          };
     })
-    .factory('modules',function(){
+    .factory('moduleParam',function(){
+        //Параметризированные модули(получают параметры из url)
         return ["user","accept","section","restorePassword","groupCourses","groupBooks","groupPrograms","book","program","course","tutorial"];
     })
     .constant("resourceUrl", "/resources/application/")
     .constant("resourceTemplate","/resources/template/")
+    .constant("platformDataUrl" , "/data/")
     .service("pageService",function(){
-        this.getPathVariable = function (key,path) {
-            if (!key) {
+        /**
+         * @param {String} key - ключ по которому выбираем значение
+         * @param {String} url - путь в котором ищем key
+         * @returns {String}
+         * @description Функция находить в url ключ и возвращает параметр следующий за ключом
+         * */
+        this.getPathVariable = function (key,url) {
+            if (!(key instanceof String)) {
                 return "";
             }
 
-            var urlSplit = path.split("/");
+            if (!(url instanceof String)) {
+                return "";
+            }
 
-            for (var i=0; i < urlSplit.length; i++) {
-                if (urlSplit[i] === key) {
-                    return i === (urlSplit.length-1) ? "" : urlSplit[i+1];
+            var splitArray = url.split("/");
+
+            for (var i=0; i < splitArray.length; i++) {
+                if (splitArray[i] === key) {
+                    return i === (splitArray.length-1) ? "" : splitArray[i+1];
                 }
             }
 
@@ -73,31 +85,31 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 onLogoutFun();
             }
         };
-
         this.setOnLogout  = function(fun){
             if (angular.isFunction(fun)){
                 onLogoutFun = fun;
             }
         };
     })
-    .service("applicationService", function ($http,$stateParams,$sce,FileUploader,pageService,modules,resourceUrl,errorService) {
-        "use strict";
+    .service("applicationService", function ($http,$stateParams,$sce,FileUploader,pageService,moduleParam,resourceUrl,platformDataUrl,errorService) {
 
-        var platformDataUrl = "/data/";
-
-        this.pageInfo = function($http,$stateParams,$sce,pageService,modules,resourceUrl,errorService){
-            var application;
+        //Настройки приложения
+        this.applicationProperties = function($http,$stateParams,$sce,pageService,errorService,moduleParam,resourceUrl){
+            var applicationData;
             var moduleUrl = "";
-            var language = $stateParams.language? $stateParams.language:pageService.getLanguage();
+            var language = $stateParams.language ? $stateParams.language : pageService.getLanguage();
+
+            //Получаем глобальные настройки из pageInfo приложения
             return $http.get(resourceUrl + 'page-info/pageInfo.json')
                 .then(function (response) {
-                    var data = response.data;
-                    application = data;
-                    var moduleUrlSplit = $stateParams.path? $stateParams.path.split("/"):"";
+
+                    applicationData = response.data;
+                    var moduleUrlSplit = $stateParams.path ? $stateParams.path.split("/") : [];
+
                     for (var i = 0; i < moduleUrlSplit.length; i++) {
                         var isContains = false;
-                        for (var j = 0; j < modules.length; j++) {
-                            if (modules[j] === moduleUrlSplit[i - 1]) {
+                        for (var j = 0; j < moduleParam.length; j++) {
+                            if (moduleParam[j] === moduleUrlSplit[i - 1]) {
                                 isContains = true;
                                 break;
                             }
@@ -109,52 +121,57 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     }
 
                     return $http.get(resourceUrl + "page-info/" + language + ".json");
+
+                    //Получаем глобальные переводы
                 }).then(function(response) {
+
                     var data = response.data;
-                    application.text = {};
-                    for (var stingData in data.text) {
-                        application.text[stingData] = $sce.trustAsHtml(data.text[stingData]);
+                    applicationData.text = {};
+
+                    for (var key in data.text) {
+                        applicationData.text[key] = $sce.trustAsHtml(data.text[key]);
                     }
 
-                    application.language = data.language;
+                    applicationData.language = data.language;
 
                     if (moduleUrl) {
                         return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/pageInfo.json");
                     } else {
-                        return application;
+                        return applicationData;
                     }
 
+                    //Если мы находимся в модуле загружаем настройки модуля
                 }).then(function (response) {
-                    if (response === application) {
-                        return application;
-                    }
 
                     var data = response.data;
                     for (var key in data) {
                         if (key !== "text") {
-                            application[key] = data[key];
+                            applicationData[key] = data[key];
                         }
                     }
+
+                    //Загружаем переводы модуля
                     return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/" + language + ".json");
+                }, function(error) {
+                    errorService.showError(error,status);
+                    console.error("Error loading application properties (" + error.config.url + ")");
                 }).then(function (response) {
-                    if (response === application) {
-                        return application;
-                    }
 
                     var data = response.data;
                     for (var key in data.text) {
-                        if (application.text[key]) {
+                        if (applicationData.text[key]) {
                             continue;
                         }
-                        application.text[key] = data.text[key];
+                        applicationData.text[key] = data.text[key];
                     }
-                    return application;
+                    return applicationData;
                 }, function(error) {
-                    console.log("Error loading page translation(" + error.config.url + ")");
+                    errorService.showError(error,status);
+                    console.error("Error loading page translation(" + error.config.url + ")");
                 });
         };
 
-        this.login = function ($scope,name, user, pass,callback) {
+        this.login = function ($scope,name,user,pass,callback) {
             var isCallbackFunction = isFunction(callback);
             $http({
                 method: 'POST',
@@ -516,8 +533,6 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
     })
 
     .service("errorService", function (resourceUrl) {
-        "use strict";
-
         function showModalError(){
             var modal = angular.element('#errorMessage');
             modal.modal('show');
@@ -550,15 +565,14 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
     })
 
     .provider('applicationProvider', function ApplicationServiceProvider() {
-        this.$get= ['$http','$stateParams','$sce','pageService','modules','resourceUrl','errorService',function applicationServiceFactory($http,$stateParams,$sce,pageService,modules,resourceUrl,errorService){
-            return new applicationService($http,$stateParams,$sce,pageService,modules,resourceUrl,errorService);
+        this.$get= ['$http','$stateParams','$sce','pageService','moduleParam','resourceUrl','errorService',function applicationServiceFactory($http,$stateParams,$sce,pageService,moduleParam,resourceUrl,errorService){
+            return new applicationService($http,$stateParams,$sce,pageService,moduleParam,resourceUrl,errorService);
         }];
 
     })
 
     .config(function ($stateProvider, $urlRouterProvider,$urlMatcherFactoryProvider,applicationServiceProvider,resourceTemplate) {
-        //console.log(applicationServiceProvider.$get.pageInfo());
-        var pageInfo = function($http,$stateParams,$sce,pageService,modules,resourceUrl,errorService){
+        var pageInfo = function($http,$stateParams,$sce,pageService,moduleParam,resourceUrl,errorService){
             var application;
             var moduleUrl = "";
             var language = $stateParams.language? $stateParams.language:pageService.getLanguage();
@@ -569,8 +583,8 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     var moduleUrlSplit = $stateParams.path? $stateParams.path.split("/"):"";
                     for (var i = 0; i < moduleUrlSplit.length; i++) {
                         var isContains = false;
-                        for (var j = 0; j < modules.length; j++) {
-                            if (modules[j] === moduleUrlSplit[i - 1]) {
+                        for (var j = 0; j < moduleParam.length; j++) {
+                            if (moduleParam[j] === moduleUrlSplit[i - 1]) {
                                 isContains = true;
                                 break;
                             }
@@ -639,11 +653,11 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             return "module/" + $stateParams.path;
         }
 
-        function getCtrl ($stateParams,$rootScope,pageInfo,modules){
-            $rootScope.application = pageInfo;
+        function getCtrl ($stateParams,$rootScope,applicationProperties,moduleParam){
+            $rootScope.application = applicationProperties;
             var url = $stateParams.path.split("/");
-            for (var i=0; i < modules.length; i++) {
-                if (modules[i] === url [url.length - 2]) {
+            for (var i=0; i < moduleParam.length; i++) {
+                if (moduleParam[i] === url [url.length - 2]) {
                     return url [url.length - 2] + "Ctrl";
                 }
             }
@@ -658,20 +672,20 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         $stateProvider.state('home', {
             url : "/:language",
             resolve: {
-                pageInfo : pageInfo
+                applicationProperties : applicationProperties
             },
             views : {
                 '' : {
                     templateUrl : resourceTemplate + 'indexTemplate.html',
-                    controller : function($rootScope,pageInfo){
-                        $rootScope.application = pageInfo;
+                    controller : function($rootScope,applicationProperties){
+                        $rootScope.application = applicationProperties;
                     }
                 }
             }
-        }).state('modules',{
+        }).state('moduleParam',{
             url : '/:language/{path:nonURIEncoded}',
             resolve: {
-                pageInfo : pageInfo
+                applicationProperties : applicationProperties
             },
             views : {
                 '' : {
@@ -682,25 +696,24 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             }
         })  .state("404",{
             resolve: {
-                pageInfo : pageInfo
+                applicationProperties : applicationProperties
             },
             templateUrl: "/404",
-            controller : function($rootScope,pageInfo, $scope){
-                $rootScope.application = pageInfo;
+            controller : function($rootScope,applicationProperties, $scope){
+                $rootScope.application = applicationProperties;
             }
         })
             .state("accessDenied",{
 
                 resolve: {
-                    pageInfo : pageInfo
+                    applicationProperties : applicationProperties
                 },
                 templateUrl: "/accessDenied",
-                controller : function($rootScope,pageInfo, $scope){
-                    $rootScope.application = pageInfo;
+                controller : function($rootScope,applicationProperties, $scope){
+                    $rootScope.application = applicationProperties;
                 }
             });
         $urlRouterProvider.otherwise(function($injector) {
-
             var $state = $injector.get('$state');
 
             $state.go('404', null, {

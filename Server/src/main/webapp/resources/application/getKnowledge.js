@@ -1,6 +1,6 @@
 new Clipboard('.clipboard');
 
-var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap", "ngImgCrop" , "ngMaterial","ui.codemirror", "hljs"]);
+var model = angular.module("mainApp", ["backend.service", "ui.bootstrap", "ngImgCrop" , "ngMaterial","ui.codemirror", "hljs"]);
 model.constant("codemirrorURL", "/resources/bower_components/codemirror/");
 
 var player;
@@ -140,7 +140,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
             return false;
         }
         if ($state.includes('404') || $state.includes('accessDenied')){
-            $rootScope.application = pageInfo;
+            $rootScope.application = applicationProperties;
             return true;
         } else {
             var str = window.location.hash.split("/").splice(2).join("/");

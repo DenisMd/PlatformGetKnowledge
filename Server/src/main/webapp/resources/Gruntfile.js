@@ -32,10 +32,11 @@ module.exports = function(grunt){
                     angular:true,
                     videojs:true,
                     CodeMirror:true,
-                    pageInfo:true,
+                    applicationProperties:true,
                     Tag:true,
                     Chart:true,
-                    applicationService:true
+                    applicationService:true,
+                    ProgramTag:true
                 }
             },
             "<%= pkg.name %>":{
