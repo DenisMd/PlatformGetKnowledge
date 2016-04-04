@@ -343,7 +343,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                 this.clearIn();
                 this.clearEqual();
                 this.clearSearch();
-            }
+            };
         }
 
         /**
