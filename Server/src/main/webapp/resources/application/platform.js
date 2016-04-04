@@ -2,6 +2,19 @@ String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
+
+function PlatformUtils(){
+    this.isFunction = function(func){
+        if (func && angular.isFunction(func)){
+            return true;
+        }
+        return false;
+    };
+}
+
+//Глобальные утилиты
+var plUtils = new PlatformUtils();
+
 angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angular-loading-bar','ngAnimate','angularFileUpload'])
     .factory('className', function() {
         return {
@@ -94,6 +107,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
     .service("applicationService", function ($http,$stateParams,$sce,FileUploader,pageService,moduleParam,resourceUrl,platformDataUrl,errorService) {
 
         //Настройки приложения
+        //TODO: не понятно
         this.applicationProperties = function($http,$stateParams,$sce,pageService,errorService,moduleParam,resourceUrl){
             var applicationData;
             var moduleUrl = "";
@@ -171,19 +185,28 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                 });
         };
 
-        this.login = function ($scope,name,user,pass,callback) {
-            var isCallbackFunction = isFunction(callback);
+        /**
+         * @param {Object} $scope - скопе из которого вызывается метод
+         * @param {String} name - имя в скопе в которое запишется response
+         * @param {String} email - email пользователя
+         * @param {String} pass - пароль введеннный пользователем
+         * @param {Function} callback - функция пост-обработки response
+         * @return {void}
+         * @description - аутенифицирует пользователя в системе и записывает его в $scope
+         *
+         * */
+        this.login = function ($scope,name,email,pass,callback) {
             $http({
                 method: 'POST',
                 url: "/j_spring_security_check",
                 data:  $.param({
-                    username: user,
+                    username: email,
                     password: pass
                 }),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (data) {
                 $scope[name] = data;
-                if (isCallbackFunction) {
+                if (plUtils.isFunction(callback)) {
                     callback(data);
                 }
             });
@@ -251,7 +274,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
         };
 
         this.filterRequest = function ($scope,name,filter,callback) {
-            var isCallbackFunction = isFunction(callback);
+            var isCallbackFunction = plUtils.isFunction(callback);
             $http({
                 method: 'POST',
                 url: platformDataUrl+'filter',
@@ -275,7 +298,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
         };
 
         this.read = function($scope, name, className, id, callback) {
-            var isCallbackFunction = isFunction(callback);
+            var isCallbackFunction = plUtils.isFunction(callback);
             $http.get(platformDataUrl+"read?className="+className+"&id="+id)
                 .success(function(data){
                     $scope[name] = data;
@@ -297,7 +320,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
         };
 
         this.list = function ($scope,name,className,callback) {
-            var isCallbackFunction = isFunction(callback);
+            var isCallbackFunction = plUtils.isFunction(callback);
 
             $http.get(platformDataUrl+"list?className="+className).success(function(data){
                 if (name) {
@@ -314,7 +337,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
         };
 
         this.listPartial = function ($scope,name,className,first,max,callback) {
-            var isCallbackFunction = isFunction(callback);
+            var isCallbackFunction = plUtils.isFunction(callback);
 
             $http.get(platformDataUrl+"listPartial?className="+className+"&first="+first+"&max="+max).success(function(data){
                 $scope[name] = data;
@@ -329,7 +352,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
         };
 
         this.action = function ($scope,name,className,actionName,data,callback){
-            var isCallbackFunction = isFunction(callback);
+            var isCallbackFunction = plUtils.isFunction(callback);
             $http({
                 method: 'POST',
                 url: platformDataUrl+'action',
@@ -357,7 +380,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
         };
 
         this.createUploader = function ($scope,name,className,actionName,data,callback,prepareItem){
-            var isCallbackFunction = isFunction(callback);
+            var isCallbackFunction = plUtils.isFunction(callback);
             var formData = {
                 className: className,
                 actionName: actionName,
@@ -367,7 +390,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                 url: platformDataUrl+'actionWithFile',
                 autoUpload: false,
                 onBeforeUploadItem: function(item) {
-                    if (isFunction(prepareItem)) {
+                    if (plUtils.isFunction(prepareItem)) {
                         prepareItem(formData);
                     }
                     console.log(formData);
@@ -390,7 +413,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
         };
 
         this.actionWithFile = function ($scope,name,className,actionName,data,files,callback){
-            var isCallbackFunction = isFunction(callback);
+            var isCallbackFunction = plUtils.isFunction(callback);
             var formData = {
                 className: className,
                 actionName: actionName,
@@ -463,7 +486,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                 if (name){
                     $scope[name] = data;
                 }
-                if (isFunction(callback)){
+                if (plUtils.isFunction(callback)){
                     callback(data);
                 }
             }).error(function(error, status, headers, config){
@@ -482,7 +505,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                 if (name){
                     $scope[name] = data;
                 }
-                if (isFunction(callback)){
+                if (plUtils.isFunction(callback)){
                     callback(data);
                 }
             }).error(function(error, status, headers, config){
@@ -495,7 +518,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                 if (name){
                     $scope[name] = data;
                 }
-                if (isFunction(callback)) {
+                if (plUtils.isFunction(callback)) {
                     callback(data);
                 }
              }).error(function(error, status, headers, config){
@@ -523,13 +546,6 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             }
             return "/data/readFile?className="+className+"&id="+id+"&key="+key;
         };
-
-        function isFunction(func){
-            if (func && angular.isFunction(func)){
-                return true;
-            }
-            return false;
-        }
     })
 
     .service("errorService", function (resourceUrl) {
@@ -785,7 +801,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                 $scope.$watch($attrs.data, function(value,oldValue) {
                     $scope.data = value;
                     if (value !== oldValue) {
-                        if ($scope.updateValues && angular.isFunction($scope.updateValues)){
+                        if ($scope.updateValues && plUtils.isFunction($scope.updateValues)){
                             $scope.updateValues();
                         }
                     }
