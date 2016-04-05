@@ -15,6 +15,7 @@ import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.base.repositories.FilterCountQuery;
 import com.getknowledge.platform.base.repositories.FilterQuery;
+import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.base.repositories.enumerations.OrderRoute;
 import com.getknowledge.platform.base.serializers.FileResponse;
 import com.getknowledge.platform.base.services.*;
@@ -219,6 +220,10 @@ public class DataController {
             BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
 
             User user = getCurrentUser(principal);
+            if (repository instanceof ProtectedRepository) {
+                ((ProtectedRepository) repository).setCurrentUser(user);
+            }
+
             AbstractEntity entity  = crudService.read(repository,id);
 
             if (entity == null) {

@@ -1,9 +1,13 @@
-model.controller("mainMenuController",function($scope,applicationService,$http,className,pageService){
+model.controller("mainMenuController",function($scope,$state,$rootScope,applicationService,$http,className){
 
-    var loadMenu = function(){
+    var loadMenu = function(callback){
+        if (!callback) {
+            callback=$scope.getData().callback;
+        }
+
         applicationService.action($scope, "menu", className.menu, "getMenu", {}, function(menu){
-            if (plUtils.isFunction($scope.getData().callback)){
-                $scope.getData().callback(menu);
+            if (plUtils.isFunction(callback)){
+                callback(menu);
             }
         });
     };
@@ -18,7 +22,7 @@ model.controller("mainMenuController",function($scope,applicationService,$http,c
         $http.get("/j_spring_security_logout").success(function(){
             applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {},function(){
                 loadMenu();
-                pageService.onLogout();
+                $state.go("home",{language:$scope.application.language});
             });
         });
     };
@@ -39,4 +43,7 @@ model.controller("mainMenuController",function($scope,applicationService,$http,c
         }
     };
 
+    $rootScope.$on('reloadMenu', function (event, callback) {
+        loadMenu(callback);
+    });
 });

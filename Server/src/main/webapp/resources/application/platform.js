@@ -95,18 +95,6 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
         this.getLanguage = function(){
             return language;
         };
-
-        var onLogoutFun;
-        this.onLogout = function(){
-            if (angular.isFunction(onLogoutFun)){
-                onLogoutFun();
-            }
-        };
-        this.setOnLogout  = function(fun){
-            if (angular.isFunction(fun)){
-                onLogoutFun = fun;
-            }
-        };
     })
 
     .service("applicationService", function ($http,$stateParams,$sce,FileUploader,pageService,moduleParam,resourceUrl,platformDataUrl,errorService) {

@@ -9,6 +9,6 @@ model.controller("headerController",function($scope){
         if (plUtils.isFunction($scope.getData().toggelClickCallback)) {
             $scope.getData().toggelClickCallback();
         }
-
     };
+
 });
