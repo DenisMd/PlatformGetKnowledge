@@ -3,7 +3,7 @@ model.controller("mainMenuController",function($scope,applicationService,$http,c
     var loadMenu = function(){
         applicationService.action($scope, "menu", className.menu, "getMenu", {}, function(menu){
             if (plUtils.isFunction($scope.getData().callback)){
-                $scope.getData().callback();
+                $scope.getData().callback(menu);
             }
         });
     };
