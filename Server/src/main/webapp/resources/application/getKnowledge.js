@@ -183,6 +183,10 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         }
     };
 
+    $scope.userImg = function(id){
+        return applicationService.imageHref(className.userInfo,id);
+    };
+
     //создает массив для ng-repeat
     $scope.range = function(n) {
         if (!n) {
@@ -216,33 +220,6 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         return result;
     };
 
-    //---------------------------------------- методы для меню
-    //Разлогиниваемся
-    $scope.logout = function(){
-        if (!$scope.user) {
-            return;
-        }
-        $http.get("/j_spring_security_logout").success(function(){
-            applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {},function(){
-                $scope.reloadMenu();
-                pageService.onLogout();
-            });
-        });
-    };
-
-
-    //scroll для модалок
-    $scope.modalScrollConfig = {
-        theme: 'dark-3',
-        advanced: {
-            updateOnContentResize: true,
-            updateOnSelectorChange: true
-        }
-    };
-
-    $scope.userImg = function(id){
-        return applicationService.imageHref(className.userInfo,id);
-    };
 
     //--------------------------------------------- опции слайдера
     $scope.carouselData = {

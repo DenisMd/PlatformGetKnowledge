@@ -1,4 +1,4 @@
-model.controller("mainMenuController",function($scope,applicationService,className){
+model.controller("mainMenuController",function($scope,applicationService,$http,className,pageService){
 
     var loadMenu = function(){
         applicationService.action($scope, "menu", className.menu, "getMenu", {}, function(menu){
@@ -9,6 +9,19 @@ model.controller("mainMenuController",function($scope,applicationService,classNa
     };
 
     loadMenu();
+
+    //Разлогиниваемся
+    $scope.logout = function(){
+        if (!$scope.user) {
+            return;
+        }
+        $http.get("/j_spring_security_logout").success(function(){
+            applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {},function(){
+                loadMenu();
+                pageService.onLogout();
+            });
+        });
+    };
 
     $scope.menuScrollConfig = {
         theme: 'light-3',
