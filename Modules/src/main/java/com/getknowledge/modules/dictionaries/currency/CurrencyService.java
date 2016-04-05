@@ -107,6 +107,7 @@ public class CurrencyService extends AbstractService implements BootstrapService
 
     //every day - обновлять курсы валют
     @Scheduled(cron = "0 1 1 * * ?")
+    @Transactional
     public void updateCurrency(){
         try {
             parseXmlFromCbr(false);

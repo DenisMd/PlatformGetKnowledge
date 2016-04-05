@@ -867,7 +867,7 @@ model.controller("postController",['$scope','$rootScope','$timeout','codemirrorU
             this.codeShown = !this.codeShown;
         }
     };
-    //'fb<br>{"name":"java","code":"int i = 0; \nif (i < 0){\n i += 9;\n} else {\n i++;\n}","options":{"lineNumbers":true,"indentWithTabs":true,"mode":"text/x-java","theme":"default"}}'
+
     $scope.content = '!!!&nbsp;{"name":"tt","code":"var i = \"hello world\"","options":{"lineNumbers":true,"indentWithTabs":true,"mode":"javascript","theme":"twilight"}}&nbsp;<br>';
 
     //first loading
@@ -1413,13 +1413,13 @@ model.factory("TagService", function () {
 
      /**
      *
-     * @param value {String} - строка для разбора
+     * @param v {String} - строка для разбора
      * @returns {String}
      *
      * @description Заменяет в строке ссылки пула тегов на json-представление тега
      */
-     var replaceSpanOnTagValue = function replaceSpanOnTagValue(value){
-        var s = value, result = "";
+     var replaceSpanOnTagValue = function replaceSpanOnTagValue(v){
+        var s = v, result = "";
         var startPos = -1, start = 0, stopPos = -1, j = -1;
         var startText = "";
         while ((startPos = s.indexOf(TagService.startEditable, stopPos + 1)) !== -1 &&
