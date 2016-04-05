@@ -36,7 +36,8 @@ module.exports = function(grunt){
                     Tag:true,
                     Chart:true,
                     applicationService:true,
-                    ProgramTag:true
+                    ProgramTag:true,
+                    plUtils:true
                 }
             },
             "<%= pkg.name %>":{
