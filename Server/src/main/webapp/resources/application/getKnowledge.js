@@ -1485,6 +1485,8 @@ model.factory("TagService", function () {
         return s;
     };
 
+
+
     return {
         groupSeparator: groupSeparator,
         nonBreakingSpace: nonBreakingSpace,
@@ -1493,6 +1495,7 @@ model.factory("TagService", function () {
         startEditable: startEditable,
         middleEditable: middleEditable,
         stopEditable: stopEditable,
+
         replaceSpanOnTagValue : replaceSpanOnTagValue
 
     };
