@@ -43,7 +43,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
     $scope.menuData = {
         callback : function(menu) {
                 $scope.cardsData = {
-                    title : "ourCourses",
+                    title : "our_courses",
                     cardsInRow : 3,
                     cards : menu.items,
                     prefix : ''
