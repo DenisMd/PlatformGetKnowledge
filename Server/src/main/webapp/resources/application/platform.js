@@ -2,7 +2,24 @@ String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
-angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angular-loading-bar','ngAnimate','angularFileUpload'])
+
+function PlatformUtils(){
+    this.isFunction = function(func){
+        if (func && angular.isFunction(func)){
+            return true;
+        }
+        return false;
+    };
+    this.valueToString = function(val){
+        return val !== null ? val.toString() : val;
+    };
+
+}
+
+//Глобальные утилиты
+var plUtils = new PlatformUtils();
+
+angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angular-loading-bar','ngAnimate','angularFileUpload'])
     .factory('className', function() {
         return {
             "userInfo" : "com.getknowledge.modules.userInfo.UserInfo",
@@ -37,22 +54,34 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             "tutorial" : "com.getknowledge.modules.courses.tutorial.Tutorial"
          };
     })
-    .factory('modules',function(){
+    .factory('moduleParam',function(){
+        //Параметризированные модули(получают параметры из url)
         return ["user","accept","section","restorePassword","groupCourses","groupBooks","groupPrograms","book","program","course","tutorial"];
     })
     .constant("resourceUrl", "/resources/application/")
     .constant("resourceTemplate","/resources/template/")
+    .constant("platformDataUrl" , "/data/")
     .service("pageService",function(){
-        this.getPathVariable = function (key,path) {
+        /**
+         * @param {String} key - ключ по которому выбираем значение
+         * @param {String} url - путь в котором ищем key
+         * @returns {String}
+         * @description Функция находить в url ключ и возвращает параметр следующий за ключом
+         * */
+        this.getPathVariable = function (key,url) {
             if (!key) {
                 return "";
             }
 
-            var urlSplit = path.split("/");
+            if (!url) {
+                return "";
+            }
 
-            for (var i=0; i < urlSplit.length; i++) {
-                if (urlSplit[i] === key) {
-                    return i === (urlSplit.length-1) ? "" : urlSplit[i+1];
+            var splitArray = url.split("/");
+
+            for (var i=0; i < splitArray.length; i++) {
+                if (splitArray[i] === key) {
+                    return i === (splitArray.length-1) ? "" : splitArray[i+1];
                 }
             }
 
@@ -66,135 +95,117 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         this.getLanguage = function(){
             return language;
         };
-
-        var onLogoutFun;
-        this.onLogout = function(){
-            if (angular.isFunction(onLogoutFun)){
-                onLogoutFun();
-            }
-        };
-
-        this.setOnLogout  = function(fun){
-            if (angular.isFunction(fun)){
-                onLogoutFun = fun;
-            }
-        };
     })
-    .service("applicationService", function ($http,$stateParams,$sce,FileUploader,pageService,modules,resourceUrl,errorService) {
-        "use strict";
 
-        var platformDataUrl = "/data/";
+    .service("applicationService", function ($http,$stateParams,$sce,FileUploader,pageService,moduleParam,resourceUrl,platformDataUrl,errorService) {
 
-        this.pageInfo = function($http,$stateParams,$sce,pageService,modules,resourceUrl,errorService){
-            var application;
-            var moduleUrl = "";
-            var language = $stateParams.language? $stateParams.language:pageService.getLanguage();
-            return $http.get(resourceUrl + 'page-info/pageInfo.json')
-                .then(function (response) {
-                    var data = response.data;
-                    application = data;
-                    var moduleUrlSplit = $stateParams.path? $stateParams.path.split("/"):"";
-                    for (var i = 0; i < moduleUrlSplit.length; i++) {
-                        var isContains = false;
-                        for (var j = 0; j < modules.length; j++) {
-                            if (modules[j] === moduleUrlSplit[i - 1]) {
-                                isContains = true;
-                                break;
-                            }
-                        }
-                        if (isContains) {
-                            continue;
-                        }
-                        moduleUrl += "/" + moduleUrlSplit[i];
-                    }
-
-                    return $http.get(resourceUrl + "page-info/" + language + ".json");
-                }).then(function(response) {
-                    var data = response.data;
-                    application.text = {};
-                    for (var stingData in data.text) {
-                        application.text[stingData] = $sce.trustAsHtml(data.text[stingData]);
-                    }
-
-                    application.language = data.language;
-
-                    if (moduleUrl) {
-                        return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/pageInfo.json");
-                    } else {
-                        return application;
-                    }
-
-                }).then(function (response) {
-                    if (response === application) {
-                        return application;
-                    }
-
-                    var data = response.data;
-                    for (var key in data) {
-                        if (key !== "text") {
-                            application[key] = data[key];
-                        }
-                    }
-                    return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/" + language + ".json");
-                }).then(function (response) {
-                    if (response === application) {
-                        return application;
-                    }
-
-                    var data = response.data;
-                    for (var key in data.text) {
-                        if (application.text[key]) {
-                            continue;
-                        }
-                        application.text[key] = data.text[key];
-                    }
-                    return application;
-                }, function(error) {
-                    console.log("Error loading page translation(" + error.config.url + ")");
-                });
-        };
-
-        this.login = function ($scope,name, user, pass,callback) {
-            var isCallbackFunction = isFunction(callback);
+        /**
+         * @param {Object} $scope - скопе из которого вызывается метод
+         * @param {String} name - имя в скопе в которое запишется response
+         * @param {String} email - email пользователя
+         * @param {String} pass - пароль введеннный пользователем
+         * @param {Function} callback - функция пост-обработки response
+         * @return {void}
+         * @description - аутенифицирует пользователя в системе и записывает его в $scope
+         *
+         * */
+        this.login = function ($scope,name,email,pass,callback) {
             $http({
                 method: 'POST',
                 url: "/j_spring_security_check",
                 data:  $.param({
-                    username: user,
+                    username: email,
                     password: pass
                 }),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (data) {
                 $scope[name] = data;
-                if (isCallbackFunction) {
+                if (plUtils.isFunction(callback)) {
                     callback(data);
                 }
             });
         };
 
-        //Это класс
-        function filter(className,first,max) {
+        //Класс для настройки фильтров
+        function Filter(className,first,max) {
             this.className = className;
             this.first = first;
             this.max = max;
-            this.result = {first : this.first, max : this.max};
 
+            this.result = {
+                first : this.first,
+                max : this.max
+            };
+
+            /**
+             * @param {Number} value - значение на которое произойдет сдвиг в фильтре
+             * @return {void}
+             * */
             this.increase = function (value) {
                 this.result.first = this.result.first + value;
             };
 
-            this.setOrder = function(order,desc) {
+            /**
+             * @param {String} fieldName - имя поля по кторому будет идти сортировка
+             * @param {Boolean} desc - в обратном порядке или нет
+             *
+             * @description добавляет в массив сортировку по полю
+             *
+             * */
+            this.setOrder = function(fieldName,desc) {
                 if (!("order" in this.result)) {
                     this.result.order = [];
                 }
 
-                this.result.order.push({"field" : order , "route" : desc ? "Desc" : "Asc"});
+                this.result.order.push({"field" : fieldName , "route" : desc ? "Desc" : "Asc"});
             };
 
-            this.searchText = function(fields) {
-                this.result.searchText = fields;
+            /**
+             * @description Убирает сортировку
+             *
+             * */
+            this.clearOrder = function () {
+                this.result.order = [];
             };
 
+            /**
+             *
+             * @param {Boolean} or - объеденить поиск по 'или'
+             * @description создает структуру для поиска строк
+             * */
+            this.createSearchText = function(or) {
+                this.result.searchText = {};
+                this.result.searchText.fields = [];
+                if (or) {
+                    this.result.searchText.or = true;
+                }
+            };
+
+            /**
+             *
+             * @param {String} fieldName - имя поля в объекте
+             * @param {String} value - значение
+             * @description создает структуру для поиска строк
+             * */
+            this.addSearchField = function(fieldName,value) {
+                this.result.searchText.fields.push({fieldName:value});
+            };
+
+            /**
+             * @description Убирает поиск
+             *
+             * */
+            this.clearSearch = function () {
+                this.result.searchText = null;
+            };
+
+
+            /**
+             *
+             * @param {String} fieldName - имя поля в объекте
+             * @param {String} values - значения
+             * @description ищет значения среди вбранных
+             * */
             this.in = function (fieldName, values) {
                 this.result.in = {
                     fieldName : fieldName,
@@ -202,6 +213,20 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 };
             };
 
+            /**
+             * @description Убирает включение
+             *
+             * */
+            this.clearIn = function (fieldName, values) {
+                delete this.result.in;
+            };
+
+            /**
+             *
+             * @param {String} fieldName - имя поля в объекте
+             * @param {String} value - значение
+             * @description ищет значения по равенству
+             * */
             this.equal = function (fieldName, value) {
               if (!this.result.equal) {
                   this.result.equal = [];
@@ -212,29 +237,56 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
               });
             };
 
+            /**
+             * @description Убирает равенство
+             *
+             * */
             this.clearEqual = function() {
                 delete this.result.equal;
-            };
-
-            this.clearIn = function (fieldName, values) {
-                delete this.result.in;
-            };
-
-            this.clearOrder = function () {
-                this.result.order = [];
             };
 
             this.reload = function () {
                 this.result.first = 0;
             };
+
+            this.clearAll = function(){
+                this.clearOrder();
+                this.clearIn();
+                this.clearEqual();
+                this.clearSearch();
+            };
         }
 
+        /**
+         *
+         * @param {String} className - имя класса для которого создается фильтр
+         * @param {Number} first - с какого номера начинать поиск
+         * @param {Number} max - сколько элементов должно быть в ответе
+         *
+         * @return {Filter}
+         * */
         this.createFilter = function(className,first,max) {
-              return new filter(className,first,max);
+              return new Filter(className,first,max);
         };
 
+
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {Filter} filter - созданный фильтр по которому будет построен запрос
+         *  @param {Function} callback - функция пост-обработки response
+         *
+         *  @description создает запрос для фильтра объектов
+         * */
         this.filterRequest = function ($scope,name,filter,callback) {
-            var isCallbackFunction = isFunction(callback);
+
+            var isCallbackFunction = plUtils.isFunction(callback);
+
+            if (filter === null || filter.result === null) {
+                console.error("Filter is null in filterRequest");
+                return;
+            }
+
             $http({
                 method: 'POST',
                 url: platformDataUrl+'filter',
@@ -246,22 +298,33 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     $scope[name] = data;
                 }
                 if (isCallbackFunction && data){
-                    if (angular.isArray(data.list)){
+                    if (angular.isArray(data.list)) {
                         data.list.forEach(function(item,i,array){
                             callback(item,i,array,data.creatable);
                         });
                     }
                 }
-            }).error(function(error, status, headers, config){
+            }).error(function(error, status){
                 errorService.showError(error,status);
             });
         };
 
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {String} className - имя класса
+         *  @param {Integer} id - 8-byte идентификатор сущности
+         *  @param {Function} callback - функция пост-обработки response
+         *
+         * @description Читает объект по его идентификатору и записывает его в $scope[name]
+         * */
         this.read = function($scope, name, className, id, callback) {
-            var isCallbackFunction = isFunction(callback);
+            var isCallbackFunction = plUtils.isFunction(callback);
             $http.get(platformDataUrl+"read?className="+className+"&id="+id)
                 .success(function(data){
-                    $scope[name] = data;
+                    if (name) {
+                        $scope[name] = data;
+                    }
                     if (isCallbackFunction) {
                         callback(data);
                     }
@@ -271,16 +334,33 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
 
         };
 
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {String} className - имя класса
+         *
+         *
+         * @description Записывает кол-во объектов в $scope[name]
+         * */
         this.count = function($scope, name, className) {
             $http.get(platformDataUrl+"count?className="+className).success(function(data){
                 $scope[name] = data;
-            }).error(function(error, status, headers, config){
+            }).error(function(error, status){
                 errorService.showError(error,status);
             });
         };
 
+
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {String} className - имя класса
+         *  @param {Function} callback - функция пост-обработки response
+         *
+         * @description Читает весь список объектов и записывает его в $scope[name]
+         * */
         this.list = function ($scope,name,className,callback) {
-            var isCallbackFunction = isFunction(callback);
+            var isCallbackFunction = plUtils.isFunction(callback);
 
             $http.get(platformDataUrl+"list?className="+className).success(function(data){
                 if (name) {
@@ -291,34 +371,60 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                         callback(item,i,array);
                     });
                 }
-            }).error(function(error, status, headers, config){
+            }).error(function(error, status){
                 errorService.showError(error,status);
             });
         };
 
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {String} className - имя класса
+         *  @param {Integer} first - номер с кторого нужно начинать
+         *  @param {Integer} max - окно(ко-во) элементов в запросе
+         *  @param {Function} callback - функция пост-обработки response
+         *
+         * @description Читает частичный список и записывает его в $scope[name]
+         * */
         this.listPartial = function ($scope,name,className,first,max,callback) {
-            var isCallbackFunction = isFunction(callback);
+            var isCallbackFunction = plUtils.isFunction(callback);
 
             $http.get(platformDataUrl+"listPartial?className="+className+"&first="+first+"&max="+max).success(function(data){
-                $scope[name] = data;
+
+                if (name) {
+                    $scope[name] = data;
+                }
+
                 if (isCallbackFunction){
                     data.forEach(function(item,i,array){
                         callback(item,i,array);
                     });
                 }
-            }).error(function(error, status, headers, config){
+            }).error(function(error, status){
                 errorService.showError(error,status);
             });
         };
 
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {String} className - имя класса
+         *  @param {String} actionName - имя действия на сторне сервера
+         *  @param {Object} data - данные передаваемые на сервер
+         *  @param {Function} callback - функция пост-обработки response
+         *
+         * @description выполняет определенную логику на сервере и результат записывает в $scope[name]
+         * */
         this.action = function ($scope,name,className,actionName,data,callback){
-            var isCallbackFunction = isFunction(callback);
+            var isCallbackFunction = plUtils.isFunction(callback);
             $http({
                 method: 'POST',
                 url: platformDataUrl+'action',
-                data: $.param({className: className,
+                data: $.param({
+                    className: className,
                     actionName:actionName,
-                    data : JSON.stringify(data)}),
+                    data : JSON.stringify(data)
+                }),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             }).success(function (data){
                 if (name) {
@@ -339,32 +445,44 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             });
         };
 
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {String} className - имя класса
+         *  @param {String} actionName - имя действия на сторне сервера
+         *  @param {Object} data - данные передаваемые на сервер
+         *  @param {Function} callback - функция пост-обработки response
+         *  @param {Function} prepareItem - функцей вызывается перед загрузкой элементов на сервер
+         *
+         *  @return {FileUploader}
+         * @description создает uploader
+         * */
         this.createUploader = function ($scope,name,className,actionName,data,callback,prepareItem){
-            var isCallbackFunction = isFunction(callback);
+            var isCallbackFunction = plUtils.isFunction(callback);
             var formData = {
-                className: className,
+                className:  className,
                 actionName: actionName,
-                data: JSON.stringify(data)
+                data:       JSON.stringify(data)
             };
             var uploader = new FileUploader({
                 url: platformDataUrl+'actionWithFile',
                 autoUpload: false,
                 onBeforeUploadItem: function(item) {
-                    if (isFunction(prepareItem)) {
+                    if (plUtils.isFunction(prepareItem)) {
                         prepareItem(formData);
                     }
-                    console.log(formData);
+
                     item.formData.push(formData);
                 }
             });
 
-            uploader.onSuccessItem = function(fileItem, response, status, headers) {
+            uploader.onSuccessItem = function(fileItem, response) {
                 var data = response;
                 if (isCallbackFunction){
                     callback(data);
                 }
             };
-            uploader.onErrorItem = function(fileItem, response, status, headers) {
+            uploader.onErrorItem = function(fileItem, response, status) {
                 errorService.showError(response,status);
             };
 
@@ -372,31 +490,27 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
 
         };
 
+
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {String} className - имя класса
+         *  @param {String} actionName - имя действия на сторне сервера
+         *  @param {Object} data - данные передаваемые на сервер
+         *  @param {Object} files - файлы
+         *  @param {Function} callback - функция пост-обработки response
+         *
+         * @description загружает файлы на сервер
+         * */
         this.actionWithFile = function ($scope,name,className,actionName,data,files,callback){
-            var isCallbackFunction = isFunction(callback);
+            var isCallbackFunction = plUtils.isFunction(callback);
             var formData = {
-                className: className,
+                className:  className,
                 actionName: actionName,
-                data: JSON.stringify(data)
+                data:       JSON.stringify(data)
             };
             if (files) {
-                var uploader = new FileUploader({
-                    url: platformDataUrl+'actionWithFile',
-                    autoUpload: false,
-                    onBeforeUploadItem: function(item) {
-                        item.formData.push(formData);
-                    }
-                });
-
-                uploader.onSuccessItem = function(fileItem, response, status, headers) {
-                    var data = response;
-                    if (isCallbackFunction){
-                        callback(data);
-                    }
-                };
-                uploader.onErrorItem = function(fileItem, response, status, headers) {
-                    errorService.showError(response,status);
-                };
+                var uploader = this.createUploader($scope,name,className,actionName,data,callback,null);
 
                 if (Array.isArray(files)){
                     uploader.queue = files;
@@ -404,37 +518,18 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     uploader.addToQueue(files);
                 }
                 uploader.uploadAll();
-            } else {
-                $http({
-                    method: 'POST',
-                    url: platformDataUrl+'actionWithFile',
-                    headers: {
-                        'Content-Type': undefined
-                    },
-                    data: formData
-                }).success(function (data){
-                    success(data);
-
-                }).error(function(error, status, headers, config){
-                    errorService.showError(error,status);
-                });
-            }
-
-            function success(data){
-                $scope[name] = data;
-                if (isCallbackFunction){
-                    if (angular.isArray(data)){
-                        data.forEach(function(item,i,array){
-                            callback(item,i,array);
-                        });
-                    } else {
-                        callback(data);
-                    }
-
-                }
             }
         };
 
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {String} className - имя класса
+         *  @param {Object} data - модель объекта         *
+         *  @param {Function} callback - функция пост-обработки response
+         *
+         * @description создает объект из модели
+         * */
         this.create = function ($scope,name,className,data,callback){
             $http({
                 method: 'POST',
@@ -446,7 +541,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 if (name){
                     $scope[name] = data;
                 }
-                if (isFunction(callback)){
+                if (plUtils.isFunction(callback)){
                     callback(data);
                 }
             }).error(function(error, status, headers, config){
@@ -454,6 +549,15 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             });
         };
 
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {String} className - имя класса
+         *  @param {Object} data - модель объекта         *
+         *  @param {Function} callback - функция пост-обработки response
+         *
+         * @description обновляет данные модели
+         * */
         this.update = function ($scope,name,className,data,callback){
             $http({
                 method: 'POST',
@@ -465,7 +569,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 if (name){
                     $scope[name] = data;
                 }
-                if (isFunction(callback)){
+                if (plUtils.isFunction(callback)){
                     callback(data);
                 }
             }).error(function(error, status, headers, config){
@@ -473,12 +577,21 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             });
         };
 
+        /**
+         *  @param {Object} $scope - скопе из которого вызывается метод
+         *  @param {String} name - имя в скопе в которое запишется response
+         *  @param {String} className - имя класса
+         *  @param {Integer} id - ид сущности         *
+         *  @param {Function} callback - функция пост-обработки response
+         *
+         * @description удаляет данные по id
+         * */
         this.remove = function ($scope,name,className,id,callback) {
             $http.get(platformDataUrl+"remove?className="+className+"&id="+id).success(function(data){
                 if (name){
                     $scope[name] = data;
                 }
-                if (isFunction(callback)) {
+                if (plUtils.isFunction(callback)) {
                     callback(data);
                 }
              }).error(function(error, status, headers, config){
@@ -486,6 +599,12 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             });
         };
 
+        /**
+         *  @param {String} className - имя класса
+         *  @param {Integer} id - ид сущности
+         *
+         * @description получает ссылку для показа изображения
+         * */
         this.imageHref = function(className,id){
             if (!className || !id) {
                 return "";
@@ -493,31 +612,22 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             return "/data/image?className="+className+"&id="+id;
         };
 
-        this.fileHref = function(className,id,key){
-            if (!className || !id) {
-                return "";
-            }
-            return "/data/readFile?className="+className+"&id="+id+"&key="+key;
-        };
-
+        /**
+         *  @param {String} className - имя класса
+         *  @param {Integer} id - ид сущности
+         *  @param {String} key - ключ по которому будет получен файл
+         *
+         * @description получает ссылку для скачивания файла
+         * */
         this.fileByKeyHref = function(className,id,key){
             if (!className || !id) {
                 return "";
             }
             return "/data/readFile?className="+className+"&id="+id+"&key="+key;
         };
-
-        function isFunction(func){
-            if (func && angular.isFunction(func)){
-                return true;
-            }
-            return false;
-        }
     })
 
-    .service("errorService", function (resourceUrl) {
-        "use strict";
-
+    .service("errorService", function () {
         function showModalError(){
             var modal = angular.element('#errorMessage');
             modal.modal('show');
@@ -550,27 +660,29 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
     })
 
     .provider('applicationProvider', function ApplicationServiceProvider() {
-        this.$get= ['$http','$stateParams','$sce','pageService','modules','resourceUrl','errorService',function applicationServiceFactory($http,$stateParams,$sce,pageService,modules,resourceUrl,errorService){
-            return new applicationService($http,$stateParams,$sce,pageService,modules,resourceUrl,errorService);
+        this.$get= ['$http','$stateParams','$sce','pageService','moduleParam','resourceUrl','errorService',function applicationServiceFactory($http,$stateParams,$sce,pageService,moduleParam,resourceUrl,errorService){
+            return new applicationService($http,$stateParams,$sce,pageService,moduleParam,resourceUrl,errorService);
         }];
 
     })
 
     .config(function ($stateProvider, $urlRouterProvider,$urlMatcherFactoryProvider,applicationServiceProvider,resourceTemplate) {
-        //console.log(applicationServiceProvider.$get.pageInfo());
-        var pageInfo = function($http,$stateParams,$sce,pageService,modules,resourceUrl,errorService){
-            var application;
+        var applicationProperties = function($http,$stateParams,$sce,pageService,errorService,moduleParam,resourceUrl){
+            var applicationData;
             var moduleUrl = "";
-            var language = $stateParams.language? $stateParams.language:pageService.getLanguage();
+            var language = $stateParams.language ? $stateParams.language : pageService.getLanguage();
+
+            //Получаем глобальные настройки из pageInfo приложения
             return $http.get(resourceUrl + 'page-info/pageInfo.json')
                 .then(function (response) {
-                    var data = response.data;
-                    application = data;
-                    var moduleUrlSplit = $stateParams.path? $stateParams.path.split("/"):"";
+
+                    applicationData = response.data;
+                    var moduleUrlSplit = $stateParams.path ? $stateParams.path.split("/") : [];
+
                     for (var i = 0; i < moduleUrlSplit.length; i++) {
                         var isContains = false;
-                        for (var j = 0; j < modules.length; j++) {
-                            if (modules[j] === moduleUrlSplit[i - 1]) {
+                        for (var j = 0; j < moduleParam.length; j++) {
+                            if (moduleParam[j] === moduleUrlSplit[i - 1]) {
                                 isContains = true;
                                 break;
                             }
@@ -582,56 +694,67 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                     }
 
                     return $http.get(resourceUrl + "page-info/" + language + ".json");
+
+                    //Получаем глобальные переводы
                 }).then(function(response) {
+
                     var data = response.data;
-                    application.text = {};
-                    for (var stingData in data.text) {
-                        application.text[stingData] = $sce.trustAsHtml(data.text[stingData]);
+                    applicationData.text = {};
+
+                    for (var key in data.text) {
+                        applicationData.text[key] = $sce.trustAsHtml(data.text[key]);
                     }
 
-                    application.language = data.language;
+                    applicationData.language = data.language;
 
                     if (moduleUrl) {
                         return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/pageInfo.json");
                     } else {
-                        return application;
+                        return applicationData;
                     }
+
+                    //Если мы находимся в модуле загружаем настройки модуля
                 }).then(function (response) {
-                    if (response === application) {
-                        return application;
+
+                    //Так как может вернуться applicationData
+                    if (response === applicationData) {
+                        return applicationData;
                     }
 
                     var data = response.data;
                     for (var key in data) {
                         if (key !== "text") {
-                            application[key] = data[key];
+                            applicationData[key] = data[key];
                         }
                     }
+
+                    //Загружаем переводы модуля
                     return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/" + language + ".json");
+                }, function(error) {
+                    errorService.showError(error,status);
+                    console.error("Error loading application properties (" + error.config.url + ")");
                 }).then(function (response) {
-                    if (response === application) {
-                        return application;
+
+                    if (response === applicationData) {
+                        return applicationData;
                     }
 
                     var data = response.data;
                     for (var key in data.text) {
-                        if (application.text[key]) {
+                        if (applicationData.text[key]) {
                             continue;
                         }
-                        application.text[key] = data.text[key];
+                        applicationData.text[key] = data.text[key];
                     }
-                    return application;
+                    return applicationData;
                 }, function(error) {
-                    console.log("Error loading page translation(" + error.config.url + ")");
+                    errorService.showError(error,status);
+                    console.error("Error loading page translation(" + error.config.url + ")");
                 });
         };
-        function valToString(val) {
-            return val !== null ? val.toString() : val;
-        }
-
         $urlMatcherFactoryProvider.type('nonURIEncoded', {
-            encode: valToString,
-            decode: valToString,
+            encode: plUtils.valueToString,
+            decode: plUtils.valueToString,
             is: function () { return true; }
         });
 
@@ -639,11 +762,11 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             return "module/" + $stateParams.path;
         }
 
-        function getCtrl ($stateParams,$rootScope,pageInfo,modules){
-            $rootScope.application = pageInfo;
+        function getCtrl ($stateParams,$rootScope,applicationProperties,moduleParam){
+            $rootScope.application = applicationProperties;
             var url = $stateParams.path.split("/");
-            for (var i=0; i < modules.length; i++) {
-                if (modules[i] === url [url.length - 2]) {
+            for (var i=0; i < moduleParam.length; i++) {
+                if (moduleParam[i] === url [url.length - 2]) {
                     return url [url.length - 2] + "Ctrl";
                 }
             }
@@ -658,20 +781,21 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
         $stateProvider.state('home', {
             url : "/:language",
             resolve: {
-                pageInfo : pageInfo
+                applicationProperties : applicationProperties
             },
             views : {
                 '' : {
                     templateUrl : resourceTemplate + 'indexTemplate.html',
-                    controller : function($rootScope,pageInfo){
-                        $rootScope.application = pageInfo;
+                    controllerProvider : function($rootScope,applicationProperties){
+                        $rootScope.application = applicationProperties;
+                        return "indexController";
                     }
                 }
             }
-        }).state('modules',{
+        }).state('moduleParam',{
             url : '/:language/{path:nonURIEncoded}',
             resolve: {
-                pageInfo : pageInfo
+                applicationProperties : applicationProperties
             },
             views : {
                 '' : {
@@ -682,25 +806,24 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
             }
         })  .state("404",{
             resolve: {
-                pageInfo : pageInfo
+                applicationProperties : applicationProperties
             },
             templateUrl: "/404",
-            controller : function($rootScope,pageInfo, $scope){
-                $rootScope.application = pageInfo;
+            controller : function($rootScope,applicationProperties, $scope){
+                $rootScope.application = applicationProperties;
             }
         })
             .state("accessDenied",{
 
                 resolve: {
-                    pageInfo : pageInfo
+                    applicationProperties : applicationProperties
                 },
                 templateUrl: "/accessDenied",
-                controller : function($rootScope,pageInfo, $scope){
-                    $rootScope.application = pageInfo;
+                controller : function($rootScope,applicationProperties, $scope){
+                    $rootScope.application = applicationProperties;
                 }
             });
         $urlRouterProvider.otherwise(function($injector) {
-
             var $state = $injector.get('$state');
 
             $state.go('404', null, {
@@ -753,7 +876,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                             }
                     });
                 },
-                templateUrl: resourceTemplate+"/error/modalForError.html"
+                templateUrl: resourceTemplate+"/error/errorDialog.html"
         };
     })
 
@@ -772,7 +895,7 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 $scope.$watch($attrs.data, function(value,oldValue) {
                     $scope.data = value;
                     if (value !== oldValue) {
-                        if ($scope.updateValues && angular.isFunction($scope.updateValues)){
+                        if ($scope.updateValues && plUtils.isFunction($scope.updateValues)){
                             $scope.updateValues();
                         }
                     }
@@ -812,4 +935,349 @@ angular.module("BackEndService", ['ui.router','ngSanitize','ngScrollbars','angul
                 }
             }
         };
+    })
+
+    //for textarea
+    .directive('insertAtCaret', ['$rootScope', function($rootScope) {
+    return {
+        link: function(scope, element, attrs) {
+            $rootScope.$on('add', function(e, val) {
+                console.log('on add');
+                console.log(val);
+                var domElement = element[0];
+                if (document.selection) {
+                    domElement.focus();
+                    var sel = document.selection.createRange();
+                    sel.text = val;
+                    domElement.focus();
+                } else if (element.selectionStart || element.selectionStart === 0) {
+                    var startPos = element.selectionStart;
+                    var endPos = element.selectionEnd;
+                    var scrollTop = element.scrollTop;
+                    domElement.value = element.value.substring(0, startPos) + val + element.value.substring(endPos, element.value.length);
+                    domElement.focus();
+                    domElement.selectionStart = startPos + val.length;
+                    domElement.selectionEnd = startPos + val.length;
+                    domElement.scrollTop = scrollTop;
+                } else {
+                    domElement.value += val;
+                    domElement.focus();
+                }
+
+            });
+        }
+    };
+}])
+
+    //for div
+    .directive('contenteditableKeyListener', ['$rootScope', function($rootScope) {
+        return {
+            link: function(scope, element, attrs) {
+                var domElement = element[0];
+                function elementContainsSelection(el) {
+                    var sel;
+                    if (window.getSelection) {
+                        sel = window.getSelection();
+                        if (sel.rangeCount > 0) {
+                            for (var i = 0; i < sel.rangeCount; ++i) {
+                                if (!isOrContains(sel.getRangeAt(i).commonAncestorContainer, el)) {
+                                    return false;
+                                }
+                            }
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
+                function isOrContains(node, container) {
+                    while (node) {
+                        if (node === container) {
+                            return true;
+                        }
+                        node = node.parentNode;
+                    }
+                    return false;
+                }
+
+                $rootScope.$on('add', function(e, val) {
+                    console.log('on add');
+                    console.log(val);
+                    var sel, range;
+                    if (window.getSelection) {
+                        // IE9 and non-IE
+                        sel = window.getSelection();
+                        if (elementContainsSelection(domElement)) {
+                            if (sel.getRangeAt && sel.rangeCount) {
+                                range = sel.getRangeAt(0);
+                                range.deleteContents();
+
+                                // Range.createContextualFragment() would be useful here but is
+                                // non-standard and not supported in all browsers (IE9, for one)
+                                var el = document.createElement("div");
+                                el.innerHTML = val;
+                                var frag = document.createDocumentFragment(),
+                                    node, lastNode;
+                                while ((node = el.firstChild)) {
+                                    lastNode = frag.appendChild(node);
+                                }
+                                range.insertNode(frag);
+
+                                // Preserve the selection
+                                if (lastNode) {
+                                    range = range.cloneRange();
+                                    range.setStartAfter(lastNode);
+                                    range.collapse(true);
+                                    sel.removeAllRanges();
+                                    sel.addRange(range);
+                                }
+                            }
+                        }
+                    }
+
+                });
+
+                var range;
+                element.on("mouseup keyup blur", function(){
+                    var doc = domElement.ownerDocument || domElement.document;
+                    var win = doc.defaultView || doc.parentWindow;
+                    var sel,r;
+                    if (win.getSelection) {
+                        sel = win.getSelection();
+                        if (sel.rangeCount > 0) {
+                            var selection = win.getSelection();
+                            r = selection.getRangeAt(0);
+                            if (isOrContains(r.commonAncestorContainer, domElement)){
+                                range = r.cloneRange();
+                            }
+                        }
+                    }
+                });
+
+                $rootScope.$on('setCaret', function(e) {
+                    domElement.focus();
+                        var sel = window.getSelection();
+                        if (sel) {
+                            if (sel.rangeCount > 0) {
+                                sel.removeAllRanges();
+                            }
+                            var r = document.createRange();
+                            if (range){
+                                r.setStart(range.startContainer, range.startOffset);
+                                r.setEnd(range.endContainer, range.endOffset);
+                                r.collapse(true);
+                            } else {
+                                r.selectNodeContents(domElement);
+                                r.collapse(false);
+                            }
+                            sel.addRange(r);
+                        }
+
+                });
+            }
+        };
+    }])
+    .directive('contenteditable', ['$rootScope','$sce','TagService', function($rootScope,$sce,TagService) {
+    return {
+        restrict: 'A', // only activate on element attribute
+        require: '?ngModel', // get a hold of NgModelController
+        link: function(scope, element, attrs, ngModel) {
+            if (!ngModel) {
+                return;
+            } // do nothing if no ng-model
+            var el = element[0];
+            // Specify how UI should be updated
+            ngModel.$render = function() {
+                element.html($sce.getTrustedHtml(ngModel.$viewValue || ''));
+            };
+
+            // Listen for change events to enable binding
+            element.on('blur keyup change', function() {
+                scope.$evalAsync(read);
+            });
+            element.on("keypress", function (event) {
+                if (event.which === 13) {
+                    scope.$apply(function () {
+
+                    });
+
+                }
+            });
+
+            read();
+
+            function read() {
+                var html = element.html();
+                ngModel.$setViewValue(html);
+            }
+
+            ngModel.$parsers.push(function(viewValue) {
+                var s = viewValue, result = "";
+                var startPos = -1,start = 0,stopPos = -1, j = -1;
+                var startText = "";
+                while ((startPos = s.indexOf(TagService.startEditable, stopPos + 1)) !== -1 &&
+                (j = s.indexOf(TagService.middleEditable, startPos)) !== -1 &&
+                (stopPos = s.indexOf(TagService.stopEditable, startPos + 1)) !== -1) {
+                    var value = s.substring(startPos + TagService.startEditable.length, j);
+                    var index = parseInt(value);
+                    if (isNaN(index)) {
+                        continue;
+                    }
+
+                    var tag = $rootScope.tagPool[index];
+                    if (!tag)  {
+                        continue;
+                    }
+
+                    //var string = angular.toJson(tag.toJson());
+                    result += s.substring(start, startPos) + startText + TagService.groupSeparator + tag.toString() + TagService.groupSeparator;
+                    startText = "";
+                    start = stopPos + TagService.stopEditable.length;
+                }
+                if (result){
+                    result += s.substring(stopPos + TagService.stopEditable.length);
+                    return result;
+                }
+                return s;
+            });
+
+            //ngModel.$formatters.push(function(modelValue) {
+            //    var value = modelValue.slice(1,modelValue.indexOf("("));
+            //    var index = parseInt(value);
+            //    return index;
+            //});
+        }
+    };
+}])
+    .factory("TagService",function(){
+        var groupSeparator = String.fromCharCode(29);
+        var nonBreakingSpace = "&nbsp;";
+
+        var startEditable = '<span contenteditable="false">';
+        var middleEditable = ')_';
+        var stopEditable = '</span>';
+
+        var getEditableTag = function(model,tag,index){
+            var before = '&#8203;', after = "";
+            if (!model){
+                after = "</br>";
+            }
+            return startEditable + (index) + middleEditable + tag.getName() + stopEditable + after;
+        };
+
+        return{
+            groupSeparator:groupSeparator,
+            nonBreakingSpace:nonBreakingSpace,
+
+            getEditableTag:getEditableTag,
+            startEditable: startEditable,
+            middleEditable: middleEditable,
+            stopEditable: stopEditable
+
+        };
     });
+
+
+function Tag() {
+    this.Type = Object.freeze({Program: 1, Math: 2, Image: 3});
+
+    var name = "tag";
+    var type = this.Type.Program;
+    var data = {};
+
+    this.getName = function() {
+        return name;
+    };
+
+    this.setName = function(n){
+        if (!name || typeof name !== 'string') {
+            console.error("Tag name is not a valid");
+            return;
+        }
+        name = n;
+    };
+
+    this.getType = function() {
+        return type;
+    };
+
+    this.setType = function(t){
+        if (!t) {
+            console.error("Tag type is not a valid");
+            return;
+        }
+        type = t;
+    };
+
+    this.getData = function() {
+        return data;
+    };
+
+    this.setData = function(d) {
+        if (!d || d === null || typeof d !== 'object') {
+            console.error("Tag data is not a valid");
+            return;
+        }
+        data = d;
+    };
+
+    this.toJson = function(){
+        //var json =
+        //angular.merge(json,data);
+        return {name:this.getName()};
+    };
+
+    this.toString = function(){
+        return angular.toJson(this.toJson());
+    };
+}
+
+function ProgramTag() {
+    Tag.call(this);
+
+    var options = {
+        lineNumbers: true,
+        indentWithTabs: true
+    };
+
+    var code = "";
+
+    this.getCode = function() {
+        return code;
+    };
+
+    this.setCode = function(t) {
+        if (!t || !angular.isString(t)) {
+            console.error("Tag text is not a valid");
+            return;
+        }
+        code = t;
+    };
+
+    this.setMode = function(m){
+        options.mode = m;
+    };
+
+    this.setTheme = function(t){
+        options.theme = t;
+    };
+
+    this.getOptions = function(){
+        return angular.copy(options);
+    };
+
+    this.getReadOnlyOptions = function(){
+        return angular.extend({
+            readOnly: 'nocursor'
+        }, options);
+    };
+
+
+    var parentJson = this.toJson;
+    this.toJson = function(){
+        var json = parentJson.call(this);
+        angular.merge(json,{code:code, options:this.getOptions()});
+        return json;
+    };
+}
+

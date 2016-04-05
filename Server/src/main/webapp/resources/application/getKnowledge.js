@@ -1,6 +1,6 @@
 new Clipboard('.clipboard');
 
-var model = angular.module("mainApp", ["BackEndService", "ui.bootstrap", "ngImgCrop" , "ngMaterial","ui.codemirror", "hljs"]);
+var model = angular.module("mainApp", ["backend.service", "ui.bootstrap", "ngImgCrop" , "ngMaterial","ui.codemirror", "hljs"]);
 model.constant("codemirrorURL", "/resources/bower_components/codemirror/");
 
 var player;
@@ -28,6 +28,94 @@ model.config(function (hljsServiceProvider,codemirrorURL) {
 });
 
 model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService,pageService, className,$mdToast,$mdDialog, $mdMedia,$parse) {
+
+    //информация о заголовке страници
+    $scope.toggelMenu = true;
+
+    $scope.headerData = {
+        languages : ['ru','en'],
+        toggelClickCallback : function(){
+            $scope.toggelMenu = !$scope.toggelMenu;
+        }
+    };
+
+    //информация о главном меню на странице
+    $scope.menuData = {
+        callback : function(menu) {
+                $scope.cardsData = {
+                    title : "our_courses",
+                    cardsInRow : 3,
+                    cards : menu.items,
+                    prefix : ''
+                };
+        }
+    };
+
+    applicationService.list($scope,"mainLinks" , className.socialLinks);
+    applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {});
+
+    applicationService.list($scope , "programmingLanguages",className.programmingLanguages);
+    applicationService.list($scope , "programmingStyles",className.programmingStyles);
+
+    //--------------------------------------------------------- Основные системные методы
+
+    //Возвращает корректный url с учетом языка
+    $scope.createUrl = function (url) {
+        if (!$scope.application) {
+            return;
+        }
+        return '#/' + $scope.application.language + url;
+    };
+
+    //перевести по ключу
+    $scope.translate = function (key) {
+        if (!$scope.application || !$scope.application.text || !(key in $scope.application.text)) {
+            return key;
+        }
+
+        return $scope.application.text[key];
+    };
+
+    //Получаем url для загрузки видео
+    $scope.getVideoUrl = function (id) {
+        return "/data/readVideo?className="+className.video+"&id="+id;
+    };
+
+    //смена языка
+    $scope.changeLanguage = function (language) {
+        if (!$scope.application.language || $scope.application.language === language) {
+            return false;
+        }
+        if ($state.includes('404') || $state.includes('accessDenied')){
+            return true;
+        } else {
+            var str = window.location.hash.split("/").splice(2).join("/");
+            if (str) {
+                $state.go("modules", {
+                    language: language,
+                    path: str
+                });
+            } else {
+                $state.go("home", {
+                    language: language
+                });
+            }
+            return true;
+        }
+    };
+
+    //получения пользовательского изображения
+    $scope.userImg = function(id){
+        return applicationService.imageHref(className.userInfo,id);
+    };
+
+    //Получения обложки для видео
+    $scope.videoImg = function(id){
+        return applicationService.imageHref(className.video,id);
+    };
+
+
+    //------------------------------------------------------------------------ Утилиты
 
     //Toast
     $scope.showToast = function (text) {
@@ -91,31 +179,6 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         $scope.order = reverse?"-"+order:order;
     };
 
-
-    //---------------------------------------- системные методы
-    //Получаем url для загрузки видео
-    $scope.getVideoUrl = function (id) {
-        return "/data/readVideo?className="+className.video+"&id="+id;
-    };
-
-    //перевести по ключу
-    $scope.translate = function (key) {
-        if (!$scope.application || !$scope.application.text || !(key in $scope.application.text)) {
-            return key;
-        }
-
-        return $scope.application.text[key];
-
-    };
-
-    //создать ссылку на страницу с учетом языка
-    $scope.createUrl = function (url) {
-        if (!$scope.application) {
-            return;
-        }
-        return '#/' + $scope.application.language + url;
-    };
-
     $scope.addUrlToPath = function (url) {
         return window.location + url;
     };
@@ -133,30 +196,6 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
             url,
             '_blank' // <- This is what makes it open in a new window.
         );
-    };
-
-    //смена языка
-    $scope.changeLanguage = function (language) {
-        if (!$scope.application.language || $scope.application.language === language) {
-            return false;
-        }
-        if ($state.includes('404') || $state.includes('accessDenied')){
-            $rootScope.application = pageInfo;
-            return true;
-        } else {
-            var str = window.location.hash.split("/").splice(2).join("/");
-            if (str) {
-                $state.go("modules", {
-                    language: language,
-                    path: str
-                });
-            } else {
-                $state.go("home", {
-                    language: language
-                });
-            }
-            return true;
-        }
     };
 
     //создает массив для ng-repeat
@@ -192,49 +231,6 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         return result;
     };
 
-    //---------------------------------------- методы для меню
-    //Разлогиниваемся
-    $scope.logout = function(){
-        if (!$scope.user) {
-            return;
-        }
-        $http.get("/j_spring_security_logout").success(function(){
-            applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {},function(){
-                $scope.reloadMenu();
-                pageService.onLogout();
-            });
-        });
-    };
-
-    $scope.toggelMenu = true;
-
-    $scope.toggelClick = function () {
-        $scope.toggelMenu = !$scope.toggelMenu;
-        var wrapper = angular.element("#wrapper");
-        wrapper.toggleClass("wrapper-left");
-    };
-
-    $scope.menuScrollConfig = {
-        theme: 'light-3',
-        snapOffset: 100,
-        advanced: {
-            updateOnContentResize: true,
-            updateOnSelectorChange: "ul li"
-        }
-    };
-
-    //scroll для модалок
-    $scope.modalScrollConfig = {
-        theme: 'dark-3',
-        advanced: {
-            updateOnContentResize: true,
-            updateOnSelectorChange: true
-        }
-    };
-
-    $scope.userImg = function(id){
-        return applicationService.imageHref(className.userInfo,id);
-    };
 
     //--------------------------------------------- опции слайдера
     $scope.carouselData = {
@@ -262,40 +258,6 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
             }
         ]
     };
-
-    $scope.reloadMenu = function(callback){
-        applicationService.action($scope, "menu", className.menu, "getMenu", {}, function(menu){
-            if (angular.isFunction(callback)){
-                callback(menu);
-            }
-        });
-    };
-    $scope.reloadMenu(function(menu){
-        $scope.cardsData = {
-            title : "ourCourses",
-            cardsInRow : 3,
-            cards : menu.items,
-            prefix : ''
-        };
-    });
-
-    $scope.openSocialLink = function(name){
-        var object = $.grep($scope.mainLinks, function(e){ return e.name === name; });
-        if (object[0].link) {
-            $scope.openInNewTab(object[0].link);
-        }
-    };
-
-    $scope.videoImg = function(id){
-        return applicationService.imageHref(className.video,id);
-    };
-
-
-    applicationService.list($scope,"mainLinks" , className.socialLinks);
-    applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {});
-
-    applicationService.list($scope , "programmingLanguages",className.programmingLanguages);
-    applicationService.list($scope , "programmingStyles",className.programmingStyles);
 });
 
 model.controller("treeListCtrl" , function ($scope) {

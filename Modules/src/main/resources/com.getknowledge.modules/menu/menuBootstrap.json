@@ -11,11 +11,6 @@
       "imageUrl": "/resources/image/menu/icons/books.png"
     },
     {
-      "name": "books",
-      "url": "/groupBooks",
-      "imageUrl": "/resources/image/menu/icons/books.png"
-    },
-    {
       "name": "programs",
       "url": "/groupPrograms",
       "imageUrl": "/resources/image/menu/icons/programs.png"
@@ -250,11 +245,6 @@
           "name" : "progress",
           "url" : "/progress",
           "imageUrl" : "/resources/image/user-menu/arrow.png"
-        },
-        {
-          "name" : "mailBox",
-          "url" : "/mailBox",
-          "imageUrl" : "/resources/image/user-menu/mail.png"
         },
         {
           "name" : "friends",

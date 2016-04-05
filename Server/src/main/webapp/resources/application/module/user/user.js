@@ -37,9 +37,6 @@ model.controller("userCtrl", function ($scope, $state,$timeout,$http,application
     }
 
     if (userId) {
-        pageService.setOnLogout(function(){
-            init();
-        });
         init();
     }
     $scope.closeModal = function(){

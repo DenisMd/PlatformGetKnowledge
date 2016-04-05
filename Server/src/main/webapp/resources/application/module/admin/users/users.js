@@ -34,13 +34,15 @@ model.controller("usersCtrl", function ($scope, applicationService, className,$m
     $scope.searchUsers = function(text) {
         if (text) {
             var splitArray = text.split(".");
-            var searchFields;
             if (splitArray.length > 1) {
-                searchFields = {fields: [{"firstName": splitArray[0]}, {"lastName": splitArray[1]}]};
-                filter.searchText(searchFields);
+                filter.createSearchText(false);
+                filter.addSearchField("firstName",splitArray[0]);
+                filter.addSearchField("lastName",splitArray[1]);
             } else {
-                searchFields = {fields: [{"firstName": text}, {"lastName": text},{"user.login" : text}], or: true};
-                filter.searchText(searchFields);
+                filter.createSearchText(true);
+                filter.addSearchField("firstName",text);
+                filter.addSearchField("user.login",text);
+                filter.addSearchField("lastName",text);
             }
         }
         $scope.users = [];

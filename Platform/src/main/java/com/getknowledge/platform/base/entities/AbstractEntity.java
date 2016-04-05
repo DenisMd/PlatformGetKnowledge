@@ -11,12 +11,24 @@ public abstract class AbstractEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "object_version")
+    @Version
+    private Long objectVersion;
+
     public void setId(Long id) {
         this.id = id;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public Long getObjectVersion() {
+        return objectVersion;
+    }
+
+    public void setObjectVersion(Long objectVersion) {
+        this.objectVersion = objectVersion;
     }
 
     @JsonIgnore
