@@ -29,7 +29,7 @@ model.config(function (hljsServiceProvider,codemirrorURL) {
 
 model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService,pageService, className,$mdToast,$mdDialog, $mdMedia,$parse) {
 
-    //информация о заголовке
+    //информация о заголовке страници
     $scope.toggelMenu = true;
 
     $scope.headerData = {
@@ -39,19 +39,25 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         }
     };
 
-    //информация о меню
+    //информация о главном меню на странице
     $scope.menuData = {
         callback : function(menu) {
-            //    $scope.cardsData = {
-            //        title : "ourCourses",
-            //        cardsInRow : 3,
-            //        cards : menu.items,
-            //        prefix : ''
-            //    };
+                $scope.cardsData = {
+                    title : "ourCourses",
+                    cardsInRow : 3,
+                    cards : menu.items,
+                    prefix : ''
+                };
         }
     };
 
+    applicationService.list($scope,"mainLinks" , className.socialLinks);
+    applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {});
 
+    applicationService.list($scope , "programmingLanguages",className.programmingLanguages);
+    applicationService.list($scope , "programmingStyles",className.programmingStyles);
+
+    //--------------------------------------------------------- Основные системные методы
 
     //Возвращает корректный url с учетом языка
     $scope.createUrl = function (url) {
@@ -60,6 +66,56 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         }
         return '#/' + $scope.application.language + url;
     };
+
+    //перевести по ключу
+    $scope.translate = function (key) {
+        if (!$scope.application || !$scope.application.text || !(key in $scope.application.text)) {
+            return key;
+        }
+
+        return $scope.application.text[key];
+    };
+
+    //Получаем url для загрузки видео
+    $scope.getVideoUrl = function (id) {
+        return "/data/readVideo?className="+className.video+"&id="+id;
+    };
+
+    //смена языка
+    $scope.changeLanguage = function (language) {
+        if (!$scope.application.language || $scope.application.language === language) {
+            return false;
+        }
+        if ($state.includes('404') || $state.includes('accessDenied')){
+            return true;
+        } else {
+            var str = window.location.hash.split("/").splice(2).join("/");
+            if (str) {
+                $state.go("modules", {
+                    language: language,
+                    path: str
+                });
+            } else {
+                $state.go("home", {
+                    language: language
+                });
+            }
+            return true;
+        }
+    };
+
+    //получения пользовательского изображения
+    $scope.userImg = function(id){
+        return applicationService.imageHref(className.userInfo,id);
+    };
+
+    //Получения обложки для видео
+    $scope.videoImg = function(id){
+        return applicationService.imageHref(className.video,id);
+    };
+
+
+    //------------------------------------------------------------------------ Утилиты
 
     //Toast
     $scope.showToast = function (text) {
@@ -123,24 +179,6 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         $scope.order = reverse?"-"+order:order;
     };
 
-
-    //---------------------------------------- системные методы
-    //Получаем url для загрузки видео
-    $scope.getVideoUrl = function (id) {
-        return "/data/readVideo?className="+className.video+"&id="+id;
-    };
-
-    //перевести по ключу
-    $scope.translate = function (key) {
-        if (!$scope.application || !$scope.application.text || !(key in $scope.application.text)) {
-            return key;
-        }
-
-        return $scope.application.text[key];
-    };
-
-
-
     $scope.addUrlToPath = function (url) {
         return window.location + url;
     };
@@ -158,33 +196,6 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
             url,
             '_blank' // <- This is what makes it open in a new window.
         );
-    };
-
-    //смена языка
-    $scope.changeLanguage = function (language) {
-        if (!$scope.application.language || $scope.application.language === language) {
-            return false;
-        }
-        if ($state.includes('404') || $state.includes('accessDenied')){
-            return true;
-        } else {
-            var str = window.location.hash.split("/").splice(2).join("/");
-            if (str) {
-                $state.go("modules", {
-                    language: language,
-                    path: str
-                });
-            } else {
-                $state.go("home", {
-                    language: language
-                });
-            }
-            return true;
-        }
-    };
-
-    $scope.userImg = function(id){
-        return applicationService.imageHref(className.userInfo,id);
     };
 
     //создает массив для ng-repeat
@@ -247,17 +258,6 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
             }
         ]
     };
-
-    $scope.videoImg = function(id){
-        return applicationService.imageHref(className.video,id);
-    };
-
-
-    applicationService.list($scope,"mainLinks" , className.socialLinks);
-    applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {});
-
-    applicationService.list($scope , "programmingLanguages",className.programmingLanguages);
-    applicationService.list($scope , "programmingStyles",className.programmingStyles);
 });
 
 model.controller("treeListCtrl" , function ($scope) {
