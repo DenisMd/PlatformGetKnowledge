@@ -30,13 +30,24 @@ model.config(function (hljsServiceProvider,codemirrorURL) {
 model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService,pageService, className,$mdToast,$mdDialog, $mdMedia,$parse) {
 
     //информация о заголовке
-
     $scope.toggelMenu = true;
 
     $scope.headerData = {
         languages : ['ru','en'],
         toggelClickCallback : function(){
             $scope.toggelMenu = !$scope.toggelMenu;
+        }
+    };
+
+    //информация о меню
+    $scope.menuData = {
+        callback : function(menu) {
+            //    $scope.cardsData = {
+            //        title : "ourCourses",
+            //        cardsInRow : 3,
+            //        cards : menu.items,
+            //        prefix : ''
+            //    };
         }
     };
 
@@ -220,16 +231,6 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
     };
 
 
-
-    $scope.menuScrollConfig = {
-        theme: 'light-3',
-        snapOffset: 100,
-        advanced: {
-            updateOnContentResize: true,
-            updateOnSelectorChange: "ul li"
-        }
-    };
-
     //scroll для модалок
     $scope.modalScrollConfig = {
         theme: 'dark-3',
@@ -268,29 +269,6 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
                 text: "carousel_design"
             }
         ]
-    };
-
-    $scope.reloadMenu = function(callback){
-        applicationService.action($scope, "menu", className.menu, "getMenu", {}, function(menu){
-            if (angular.isFunction(callback)){
-                callback(menu);
-            }
-        });
-    };
-    $scope.reloadMenu(function(menu){
-        $scope.cardsData = {
-            title : "ourCourses",
-            cardsInRow : 3,
-            cards : menu.items,
-            prefix : ''
-        };
-    });
-
-    $scope.openSocialLink = function(name){
-        var object = $.grep($scope.mainLinks, function(e){ return e.name === name; });
-        if (object[0].link) {
-            $scope.openInNewTab(object[0].link);
-        }
     };
 
     $scope.videoImg = function(id){

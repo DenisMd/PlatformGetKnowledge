@@ -21,7 +21,6 @@
     <link rel="stylesheet" href="/resources/bower_components/codemirror/lib/codemirror.css" type="text/css">
 
     <%--Наши css--%>
-    <%--Dist css--%>
     <link rel="stylesheet" type="text/css" , href="/resources/dist/css/main-min.css">
     <%--<link rel="stylesheet" type="text/css" href="/resources/css/main/index.css">--%>
     <%--<link rel="stylesheet" type="text/css" href="/resources/css/main/cards.css">--%>
@@ -39,9 +38,9 @@
 </head>
 <body>
 
-    <module-template name="components/header" data="headerData"></module-template>
+    <module-template name="components/header"   data="headerData"></module-template>
 
-    <module-template name="menus/mainMenu" data="menu"></module-template>
+    <module-template name="components/mainMenu" data="menuData"></module-template>
 
     <div class="full-window wrapper wrapper-left" id="wrapper">
         <%--  ng-scrollbars ng-scrollbars-config="modalScrollConfig"--%>
@@ -85,12 +84,9 @@
     <%--Utils--%>
     <%--<script src="/resources/bower_components/angular-sanitize/angular-sanitize.min.js"></script>--%>
 
-
     <%--<script src="/resources/bower_components/videojs-hotkeys/videojs.hotkeys.min.js"></script>--%>
     <%--<script src="/resources/application/platform.js"></script>--%>
     <%--<script src="/resources/application/getKnowledge.js"></script>--%>
-
-
 
     <%--<c:forEach items="${scripts}" var="src">--%>
         <%--<script src="<c:out value="${src}"></c:out>"></script>--%>
