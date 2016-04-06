@@ -126,12 +126,6 @@ public abstract class BaseRepository<T extends AbstractEntity> {
 
     public AbstractEntity prepare(AbstractEntity entity, BaseRepository repository, User currentUser) throws Exception {
         if (repository instanceof PrepareEntity) {
-
-            if (repository instanceof ProtectedRepository) {
-                ProtectedRepository protectedRepository = (ProtectedRepository) repository;
-                protectedRepository.setCurrentUser(currentUser);
-            }
-
             properties : for (PropertyDescriptor pd : Introspector.getBeanInfo(entity.getClass()).getPropertyDescriptors()) {
                 if (pd.getReadMethod() != null && !"class".equals(pd.getName())) {
                     Object result = pd.getReadMethod().invoke(entity);
@@ -152,7 +146,7 @@ public abstract class BaseRepository<T extends AbstractEntity> {
             }
 
 
-            return ((PrepareEntity) repository).prepare(entity);
+            return ((PrepareEntity) repository).prepare(entity,currentUser);
         }
         return entity;
     }

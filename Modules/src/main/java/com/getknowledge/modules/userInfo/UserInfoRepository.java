@@ -47,8 +47,8 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
     private CourseInfoRepository courseInfoRepository;
 
     @Override
-    public UserInfo prepare(UserInfo entity) {
-        UserInfo userInfo = super.prepare(entity);
+    public UserInfo prepare(UserInfo entity, com.getknowledge.platform.modules.user.User currentUser) {
+        UserInfo userInfo = super.prepare(entity,currentUser);
         if (currentUser != null && currentUser.getId().equals(userInfo.getUser().getId())) {
             userInfo.setUserMenu(menuRepository.getSingleEntityByFieldAndValue("name", MenuNames.AuthorizedUser.name()));
         } else {
