@@ -11,14 +11,9 @@ import com.getknowledge.platform.modules.user.User;
 import java.lang.reflect.Field;
 
 public abstract class ProtectedRepository <T extends CloneableEntity<T>> extends BaseRepository<T> implements PrepareEntity<T>  {
-    protected User currentUser = null;
-
-    public void setCurrentUser(User user) {
-        this.currentUser = user;
-    }
 
     @Override
-    public T prepare(T entity) {
+    public T prepare(T entity,User currentUser) {
         if (entity == null) {return null;}
         User owner = null;
         if (entity instanceof IUser) {

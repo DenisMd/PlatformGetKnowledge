@@ -15,6 +15,8 @@ module.exports = function(grunt){
         },
         jshint : {
             options:{
+                '-W100': true,
+                'attr-unsafe-chars': true,
                 curly:true,
                 eqeqeq:true,
                 noarg:true,
@@ -37,7 +39,9 @@ module.exports = function(grunt){
                     Chart:true,
                     applicationService:true,
                     ProgramTag:true,
-                    plUtils:true
+                    plUtils:true,
+                    $rootScope:true,
+                    TagService:true
                 }
             },
             "<%= pkg.name %>":{
@@ -127,5 +131,5 @@ module.exports = function(grunt){
     grunt.registerTask('dist2', ['concat:dist2']);
     grunt.registerTask('process' , ["dist","uglify"]);
     grunt.registerTask('process2' , ["dist2","cssmin"]);
-    grunt.registerTask('default',["jshint" ,"concat" ,"uglify", "cssmin"]);
+    grunt.registerTask('default',["concat" ,"uglify", "cssmin"]);
 };

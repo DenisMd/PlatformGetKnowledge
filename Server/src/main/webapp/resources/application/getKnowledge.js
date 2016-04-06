@@ -827,7 +827,11 @@ model.controller("sectionCard",function($scope,$state,applicationService,classNa
     };
 });
 
-model.controller("postController",function($scope,$rootScope,codemirrorURL,TagService){
+model.controller("postController",['$scope','$rootScope','$timeout','codemirrorURL','TagService',function($scope,$rootScope,$timeout,codemirrorURL,TagService){
+    var loadString = function(string){
+        $scope.$broadcast('setCaret');
+        $scope.$broadcast('add', string);
+    };
     $scope.test = {
         readOnly: 'nocursor',
         codeShown:false,
@@ -835,14 +839,21 @@ model.controller("postController",function($scope,$rootScope,codemirrorURL,TagSe
             this.codeShown = !this.codeShown;
         }
     };
-    $scope.content = "";
+
+    $scope.content = '!!!&nbsp;{"name":"tt","code":"var i = \"hello world\"","options":{"lineNumbers":true,"indentWithTabs":true,"mode":"javascript","theme":"twilight"}}&nbsp;<br>';
+
+    //first loading
+    var initValue = $scope.content;
+    $timeout(function() {
+        loadString(initValue);
+    },0);
 
     //open Tags Pool
     $scope.openPool = function(event){
         $scope.showDialog(event, $scope, "tagPool.html", function(){});
     };
 
-    $scope.currentTag = {};
+    $scope.currentTag = null;
 
     $scope.setCurrentTag = function(tag){
         $scope.currentTag = tag;
@@ -866,8 +877,7 @@ model.controller("postController",function($scope,$rootScope,codemirrorURL,TagSe
             if (tag) {
                 //angular.extend($scope.test,tag.getData());
                 //$scope.test.title = tag.getName();
-                $rootScope.$broadcast('setCaret');
-                $rootScope.$broadcast('add', TagService.getEditableTag($scope.content,tag,$rootScope.tagPool.length - 1));
+                loadString(TagService.getEditableTag($scope.content,tag,$rootScope.tagPool.length - 1));
             }
         },null,refresh,function(){
 
@@ -954,7 +964,7 @@ model.controller("postController",function($scope,$rootScope,codemirrorURL,TagSe
         }
     };
 
-});
+}]);
 
 model.controller("folderCardsCtrl" , function ($scope,applicationService) {
     var filter = applicationService.createFilter($scope.getData().className,0,10);
@@ -1162,3 +1172,340 @@ model.service('arcService', function(){
         showTooltips : false
     };
 });
+
+
+//for textarea
+model.directive('insertAtCaret', ['$rootScope', function($rootScope) {
+    return {
+        link: function(scope, element, attrs) {
+            $rootScope.$on('add', function(e, val) {
+                console.log('on add');
+                console.log(val);
+                var domElement = element[0];
+                if (document.selection) {
+                    domElement.focus();
+                    var sel = document.selection.createRange();
+                    sel.text = val;
+                    domElement.focus();
+                } else if (element.selectionStart || element.selectionStart === 0) {
+                    var startPos = element.selectionStart;
+                    var endPos = element.selectionEnd;
+                    var scrollTop = element.scrollTop;
+                    domElement.value = element.value.substring(0, startPos) + val + element.value.substring(endPos, element.value.length);
+                    domElement.focus();
+                    domElement.selectionStart = startPos + val.length;
+                    domElement.selectionEnd = startPos + val.length;
+                    domElement.scrollTop = scrollTop;
+                } else {
+                    domElement.value += val;
+                    domElement.focus();
+                }
+
+            });
+        }
+    };
+}]);
+
+    //tag editor
+model.directive('contenteditable', ['$rootScope', '$sce', 'TagService', function ($rootScope, $sce, TagService) {
+    return {
+        restrict: 'A', // only activate on element attribute
+        require: '?ngModel', // get a hold of NgModelController
+        link: function (scope, element, attrs, ngModel) {
+            if (!ngModel) {
+                return;
+            } // do nothing if no ng-model
+            var el = element[0];
+            // Specify how UI should be updated
+            ngModel.$render = function () {
+                element.html($sce.getTrustedHtml(ngModel.$viewValue || ''));
+            };
+
+            // Listen for change events to enable binding
+            element.on('blur keyup change', function () {
+                scope.$evalAsync(read);
+            });
+            element.on("keypress", function (event) {
+                if (event.which === 13) {
+                    scope.$apply(function () {
+
+                    });
+
+                }
+            });
+
+            read();
+
+            function read() {
+                var html = element.html();
+                ngModel.$setViewValue(html);
+            }
+
+            ngModel.$parsers.push(function (viewValue) {
+                return TagService.replaceSpanOnTagValue(viewValue);
+            });
+
+            ngModel.$formatters.push(function(modelValue) {
+            });
+
+        }
+    };
+}]);
+
+model.directive('contenteditableKeyListener', [function () {
+    return {
+        link: function (scope, element, attrs) {
+            var domElement = element[0];
+
+            function elementContainsSelection(el) {
+                var sel;
+                if (window.getSelection) {
+                    sel = window.getSelection();
+                    if (sel.rangeCount > 0) {
+                        for (var i = 0; i < sel.rangeCount; ++i) {
+                            if (!isOrContains(sel.getRangeAt(i).commonAncestorContainer, el)) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            function isOrContains(node, container) {
+                while (node) {
+                    if (node === container) {
+                        return true;
+                    }
+                    node = node.parentNode;
+                }
+                return false;
+            }
+
+            /**
+             * @param e {Event} - объект генерируемый при возникновении события
+             * @param val {String} - вставляемая строка
+             * @param initValue {Boolean} - является ли строка инициализацией
+             *
+             *  @description добаление текста по картке
+             */
+            scope.$on('add', function (e, val, initValue) {
+                var sel, range;
+                if (window.getSelection) {
+                    // IE9 and non-IE
+                    sel = window.getSelection();
+                    if (elementContainsSelection(domElement)) {
+                        if (sel.getRangeAt && sel.rangeCount) {
+                            range = sel.getRangeAt(0);
+                            range.deleteContents();
+
+                            // Range.createContextualFragment() would be useful here but is
+                            // non-standard and not supported in all browsers (IE9, for one)
+                            var el = document.createElement("div");
+                            el.innerHTML = val;
+                            var frag = document.createDocumentFragment(),
+                                node, lastNode;
+                            while ((node = el.firstChild)) {
+                                lastNode = frag.appendChild(node);
+                            }
+                            range.insertNode(frag);
+
+                            // Preserve the selection
+                            if (lastNode) {
+                                range = range.cloneRange();
+                                range.setStartAfter(lastNode);
+                                range.collapse(true);
+                                sel.removeAllRanges();
+                                sel.addRange(range);
+                            }
+                        }
+                    }
+                }
+
+            });
+
+            var range;
+            element.on("mouseup keyup blur", function () {
+                var doc = domElement.ownerDocument || domElement.document;
+                var win = doc.defaultView || doc.parentWindow;
+                var sel, r;
+                if (win.getSelection) {
+                    sel = win.getSelection();
+                    if (sel.rangeCount > 0) {
+                        var selection = win.getSelection();
+                        r = selection.getRangeAt(0);
+                        if (isOrContains(r.commonAncestorContainer, domElement)) {
+                            range = r.cloneRange();
+                        }
+                    }
+                }
+            });
+
+            scope.$on('setCaret', function (e) {
+                domElement.focus();
+                var sel = window.getSelection();
+                if (sel) {
+                    if (sel.rangeCount > 0) {
+                        sel.removeAllRanges();
+                    }
+                    var r = document.createRange();
+                    if (range) {
+                        r.setStart(range.startContainer, range.startOffset);
+                        r.setEnd(range.endContainer, range.endOffset);
+                        r.collapse(true);
+                    } else {
+                        r.selectNodeContents(domElement);
+                        r.collapse(false);
+                    }
+                    sel.addRange(r);
+                }
+
+            });
+        }
+    };
+}]);
+
+model.factory("TagService", function () {
+    var groupSeparator = String.fromCharCode(29);
+    var nonBreakingSpace = "&nbsp;";
+
+    var startEditable = '<span contenteditable="false">';
+    var middleEditable = ')_';
+    var stopEditable = '</span>';
+
+
+    var getEditableTag = function (model, tag, index) {
+        var before = '&#8203;', after = "";
+        if (!model) {
+            after = "</br>";
+        }
+        return startEditable + (index) + middleEditable + tag.getName() + stopEditable + after;
+    };
+
+     /**
+     *
+     * @param v {String} - строка для разбора
+     * @returns {String}
+     *
+     * @description Заменяет в строке ссылки пула тегов на json-представление тега
+     */
+     var replaceSpanOnTagValue = function replaceSpanOnTagValue(v){
+        var s = v, result = "";
+        var startPos = -1, start = 0, stopPos = -1, j = -1;
+        var startText = "";
+        while ((startPos = s.indexOf(TagService.startEditable, stopPos + 1)) !== -1 &&
+        (j = s.indexOf(TagService.middleEditable, startPos)) !== -1 &&
+        (stopPos = s.indexOf(TagService.stopEditable, startPos + 1)) !== -1) {
+            var value = s.substring(startPos + TagService.startEditable.length, j);
+            var index = parseInt(value);
+            if (isNaN(index)) {
+                continue;
+            }
+
+            var tag = $rootScope.tagPool[index];
+            if (!tag) {
+                continue;
+            }
+
+            result += s.substring(start, startPos) + startText + TagService.groupSeparator + tag.toString() + TagService.groupSeparator;
+            startText = "";
+            start = stopPos + TagService.stopEditable.length;
+        }
+        if (result) {
+            result += s.substring(stopPos + TagService.stopEditable.length);
+            return result;
+        }
+        return s;
+    };
+
+
+
+    return {
+        groupSeparator: groupSeparator,
+        nonBreakingSpace: nonBreakingSpace,
+
+        getEditableTag: getEditableTag,
+        startEditable: startEditable,
+        middleEditable: middleEditable,
+        stopEditable: stopEditable,
+
+        replaceSpanOnTagValue : replaceSpanOnTagValue
+
+    };
+});
+
+
+function Tag() {
+    var name = "tag";
+
+    this.getName = function () {
+        return name;
+    };
+
+    this.setName = function (n) {
+        if (!name || typeof name !== 'string') {
+            console.error("Tag name is not a valid");
+            return;
+        }
+        name = n;
+    };
+
+    this.toJson = function () {
+        return {type: this.constructor.name, name: this.getName()};
+    };
+
+    this.toString = function () {
+        return angular.toJson(this.toJson());
+    };
+}
+
+function ProgramTag() {
+    Tag.call(this);
+
+    var options = {
+        lineNumbers: true,
+        indentWithTabs: true
+    };
+
+    var code = "";
+
+    this.getCode = function () {
+        return code;
+    };
+
+    this.setCode = function (t) {
+        if (!t || !angular.isString(t)) {
+            console.error("Tag text is not a valid");
+            return;
+        }
+        code = t;
+    };
+
+    this.setMode = function (m) {
+        options.mode = m;
+    };
+
+    this.setTheme = function (t) {
+        options.theme = t;
+    };
+
+    this.getOptions = function () {
+        return angular.copy(options);
+    };
+
+    this.getReadOnlyOptions = function () {
+        return angular.extend({
+            readOnly: 'nocursor'
+        }, options);
+    };
+
+
+    var parentJson = this.toJson;
+    this.toJson = function () {
+        var json = parentJson.call(this);
+        angular.merge(json, {code: code, options: this.getOptions()});
+        return json;
+    };
+}
+
