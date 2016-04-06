@@ -219,16 +219,13 @@ public class DataController {
             Class classEntity = Class.forName(className);
             BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
 
-            User user = getCurrentUser(principal);
-            if (repository instanceof ProtectedRepository) {
-                ((ProtectedRepository) repository).setCurrentUser(user);
-            }
-
             AbstractEntity entity  = crudService.read(repository,id);
 
             if (entity == null) {
                 throw new NotFound(String.format("Entity (%s) by id : %d not found",className,id));
             }
+
+            User user = getCurrentUser(principal);
 
             if (!isAccessRead(user, entity)) {
                 throw new NotAuthorized(String.format("Access denied for read entity (%s) by id : %d",className,id), trace , TraceLevel.Warning);

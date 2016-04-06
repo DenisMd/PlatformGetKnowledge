@@ -47,10 +47,8 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
     private CourseInfoRepository courseInfoRepository;
 
     @Override
-    public UserInfo read(Long id) {
-        UserInfo userInfo = super.read(id);
-        if (userInfo == null)
-            return null;
+    public UserInfo prepare(UserInfo entity) {
+        UserInfo userInfo = super.prepare(entity);
         if (currentUser != null && currentUser.getId().equals(userInfo.getUser().getId())) {
             userInfo.setUserMenu(menuRepository.getSingleEntityByFieldAndValue("name", MenuNames.AuthorizedUser.name()));
         } else {
@@ -63,7 +61,6 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
         ).findFirst().isPresent());
         return userInfo;
     }
-
 
     @Override
     public void remove(UserInfo userInfo) {
