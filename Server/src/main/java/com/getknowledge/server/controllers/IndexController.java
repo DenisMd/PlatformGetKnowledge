@@ -49,12 +49,12 @@ public class IndexController {
 
     public List<String> getScripts() {
         List<String> scripts = new LinkedList<>();
-        String path = servletContext.getRealPath("/resources/application/module");
+        String path = servletContext.getRealPath("/resources/application");
         List<File> files = (List<File>) FileUtils.listFiles(new File(path), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
 
         for (File file : files) {
             String filePath = file.getPath();
-            if (!filePath.endsWith(".js")) {
+            if (!filePath.endsWith(".js") || filePath.endsWith("getKnowledge.js") || filePath.endsWith("platform.js")) {
                 continue;
             }
 
