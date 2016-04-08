@@ -12,6 +12,7 @@ public enum PermissionNames {
     CreateCourse("Create course"),EditCourse("EditCourse"),
     EditKnowledge("Edit knowledge"),
     BlockComments("Block comments"),
+    EditNews("Edit news"),
     UploadVideos("Upload videos");
 
     private String name;
