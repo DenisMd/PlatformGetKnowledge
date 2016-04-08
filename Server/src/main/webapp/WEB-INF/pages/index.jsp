@@ -41,9 +41,9 @@
 
     <module-template name="components/mainMenu" data="menuData"></module-template>
 
-    <div class="full-window wrapper wrapper-left" id="wrapper">
+    <div class="wrapper wrapper-left" id="wrapper">
         <%--  ng-scrollbars ng-scrollbars-config="modalScrollConfig"--%>
-            <div ui-view class="full-window"></div>
+            <div ui-view></div>
             <footer>
                 © Марков Денис 2016
             </footer>

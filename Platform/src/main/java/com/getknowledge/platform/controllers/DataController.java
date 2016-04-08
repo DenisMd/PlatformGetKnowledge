@@ -487,15 +487,12 @@ public class DataController {
             int max   = (int) data.get("max");
 
             List<AbstractEntity> list = filterService.getList(filterQuery,first,max);
-
-            if (list == null) {
-                return null;
-            }
-
             ObjectNode objectNode = objectMapper.createObjectNode();
             User user = getCurrentUser(principal);
             objectNode.put("totalEntitiesCount" , filterService.getCount(filterCountQuery));
-            objectNode.putArray("list").addAll(listToJsonString(list,user,repository,classEntity));
+            if (list != null) {
+                objectNode.putArray("list").addAll(listToJsonString(list, user, repository, classEntity));
+            }
             Constructor<?> cos = classEntity.getConstructor();
             AbstractEntity abstractEntity = (AbstractEntity) cos.newInstance();
             objectNode.put("creatable" , isAccessCreate(user, abstractEntity));

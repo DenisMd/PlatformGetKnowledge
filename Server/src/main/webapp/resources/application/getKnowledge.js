@@ -42,6 +42,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
     //информация о главном меню на странице
     $scope.menuData = {
         callback : function(menu) {
+                ////информация о пунктах меню через "карточки"
                 $scope.cardsData = {
                     title : "our_courses",
                     cardsInRow : 3,
