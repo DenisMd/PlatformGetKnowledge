@@ -1,11 +1,14 @@
 [video 1]
 name = Why getKnowledge()?
 link = index/video1.mp4
+cover = com.getknowledge.modules/mainVideos/cover1.jpg
 
 [video 2]
 name = Why
 link = index/video1.mp4
+cover = com.getknowledge.modules/mainVideos/cover1.jpg
 
 [video 3]
 name = Intro
 link = index/video1.mp4
+cover = com.getknowledge.modules/mainVideos/cover1.jpg

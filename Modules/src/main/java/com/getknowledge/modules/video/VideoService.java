@@ -17,6 +17,7 @@ import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
 import com.getknowledge.platform.modules.user.User;
+import org.apache.commons.io.IOUtils;
 import org.ini4j.Ini;
 import org.ini4j.Profile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 
@@ -53,7 +55,16 @@ public class VideoService extends AbstractService implements BootstrapService,Vi
                 Profile.Section section = ini.get(sectionName);
                 String name = section.get("name",String.class);
                 String link = section.get("link",String.class);
-                videoRepository.create(name, link);
+
+                Video video = videoRepository.create(name, link);
+
+                String videoCover = section.get("cover",String.class);
+
+                try (InputStream is = getClass().getClassLoader().getResourceAsStream(videoCover)) {
+                    video.setCover(IOUtils.toByteArray(is));
+                    videoRepository.merge(video);
+                }
+
             }
         }
     }
