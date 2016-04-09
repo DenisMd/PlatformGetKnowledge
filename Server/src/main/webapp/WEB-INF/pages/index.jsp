@@ -45,7 +45,7 @@
         <div ui-view ></div>
     </div>
 
-    <footer id="footer-page" class="footer-margin">
+    <footer id="footer-page" class="footer-margin" ng-cloak>
         © Марков Денис и Ежик 2016
     </footer>
 
