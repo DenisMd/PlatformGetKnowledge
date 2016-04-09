@@ -733,6 +733,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                     return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/" + language + ".json");
                 }, function(error) {
                     console.error("Error loading application properties (" + error.config.url + ")");
+                    return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/" + language + ".json");
                 }).then(function (response) {
                     if (response === applicationData) {
                         return applicationData;
