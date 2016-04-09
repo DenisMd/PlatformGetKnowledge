@@ -5,10 +5,8 @@ String.prototype.capitalizeFirstLetter = function() {
 
 function PlatformUtils(){
     this.isFunction = function(func){
-        if (func && angular.isFunction(func)){
-            return true;
-        }
-        return false;
+        return !!(func && angular.isFunction(func));
+
     };
     this.valueToString = function(val){
         return val !== null ? val.toString() : val;
@@ -490,9 +488,8 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             });
 
             uploader.onSuccessItem = function(fileItem, response) {
-                var data = response;
                 if (isCallbackFunction){
-                    callback(data);
+                    callback(response);
                 }
             };
             uploader.onErrorItem = function(fileItem, response, status) {

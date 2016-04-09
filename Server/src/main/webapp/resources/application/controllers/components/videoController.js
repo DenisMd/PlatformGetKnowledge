@@ -4,7 +4,7 @@ function initVideoPlayer() {
     if (!player) {
         var options = {
             "controls": true,
-            "preload": "matadata",
+            "preload": "metadata",
             "autoplay": false,
             "width": 720,
             "height": 480
