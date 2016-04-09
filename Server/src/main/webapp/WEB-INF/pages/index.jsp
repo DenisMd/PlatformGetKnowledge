@@ -62,8 +62,8 @@
     <script src="/resources/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
 
     <%--&lt;%&ndash;Frameworks&ndash;%&gt;--%>
-    <script src="/resources/bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
-    <script src="/resources/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <%--<script src="/resources/bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>--%>
+    <%--<script src="/resources/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>--%>
     <script src="/resources/bower_components/angular-material/angular-material.js" type="text/javascript" ></script>
 
     <%--&lt;%&ndash;Costumize&ndash;%&gt;--%>

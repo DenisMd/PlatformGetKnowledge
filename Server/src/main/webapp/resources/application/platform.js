@@ -668,7 +668,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
     })
 
     .config(function ($stateProvider, $urlRouterProvider,$urlMatcherFactoryProvider,applicationServiceProvider,resourceTemplate) {
-        var applicationProperties = function($http,$stateParams,$sce,pageService,errorService,moduleParam,resourceUrl){
+        var applicationProperties = function($http,$stateParams,$sce,pageService,moduleParam,resourceUrl){
             var applicationData;
             var moduleUrl = "";
             var language = $stateParams.language ? $stateParams.language : pageService.getLanguage();
@@ -732,10 +732,8 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                     //Загружаем переводы модуля
                     return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/" + language + ".json");
                 }, function(error) {
-                    errorService.showError(error,status);
                     console.error("Error loading application properties (" + error.config.url + ")");
                 }).then(function (response) {
-
                     if (response === applicationData) {
                         return applicationData;
                     }
@@ -749,7 +747,6 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                     }
                     return applicationData;
                 }, function(error) {
-                    errorService.showError(error,status);
                     console.error("Error loading page translation(" + error.config.url + ")");
                 });
         };
