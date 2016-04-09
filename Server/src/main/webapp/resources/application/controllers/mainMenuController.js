@@ -1,5 +1,8 @@
 model.controller("mainMenuController",function($scope,$state,$rootScope,applicationService,$http,className){
 
+    //Загружаем ссылки на стороние ресурсы
+    applicationService.list($scope,"mainLinks",className.socialLinks);
+
     var loadMenu = function(callback){
         if (!callback) {
             callback=$scope.getData().callback;

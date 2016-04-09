@@ -49,6 +49,9 @@
         © Марков Денис и Ежик 2016
     </footer>
 
+    <%--Модальное окно для показа видео--%>
+    <module-template name="dialogs/videoDialog"></module-template>
+
 
     <%--Important--%>
     <%--<script src="/resources/dist/js/bower.js" type="text/javascript"></script>--%>

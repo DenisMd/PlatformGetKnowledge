@@ -305,7 +305,7 @@ public class DataController {
             if (abstractService instanceof VideoLinkService) {
                 VideoLinkService videoLinkService = (VideoLinkService) abstractService;
 
-                if (moduleLocator.findRepository(classEntity).read(id) == null) {
+                if (crudService.read(moduleLocator.findRepository(classEntity),id) == null) {
                     throw new NotFound(String.format("Video not found by id %d",id));
                 }
 

@@ -3,22 +3,6 @@ new Clipboard('.clipboard');
 var model = angular.module("mainApp", ["backend.service", "ngImgCrop" , "ngMaterial","ui.codemirror", "hljs"]);
 model.constant("codemirrorURL", "/resources/bower_components/codemirror/");
 
-var player;
-
-function initVideoPlayer() {
-    var options = {
-        "controls": true,
-        "preload": "matadata",
-        "autoplay": false,
-        "width": 720,
-        "height": 480
-    };
-    player = videojs(document.getElementById('main-video'), options, function () {
-        player = this;
-    });
-
-}
-
 model.config(function (hljsServiceProvider,codemirrorURL) {
     hljsServiceProvider.setOptions({
         // replace tab with 4 spaces
@@ -52,8 +36,11 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state,$l
         }
     };
 
-    applicationService.list($scope,"mainLinks" , className.socialLinks);
-    applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {});
+    //получаем текущего пользователя в системе
+    $scope.getAuthorizedUser = function(callback){
+        applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {},callback);
+    };
+    $scope.getAuthorizedUser();
 
     applicationService.list($scope , "programmingLanguages",className.programmingLanguages);
     applicationService.list($scope , "programmingStyles",className.programmingStyles);
@@ -75,11 +62,6 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state,$l
         }
 
         return $scope.application.text[key];
-    };
-
-    //Получаем url для загрузки видео
-    $scope.getVideoUrl = function (id) {
-        return "/data/readVideo?className="+className.video+"&id="+id;
     };
 
     //смена языка
@@ -109,12 +91,6 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state,$l
     $scope.userImg = function(id){
         return applicationService.imageHref(className.userInfo,id);
     };
-
-    //Получения обложки для видео
-    $scope.videoImg = function(id){
-        return applicationService.imageHref(className.video,id);
-    };
-
 
     //------------------------------------------------------------------------ Утилиты
 
@@ -242,32 +218,6 @@ model.controller("treeListCtrl" , function ($scope) {
             $scope.currentMenuItem.level = level;
         }
     };
-});
-
-model.controller("videoCtrl",function($scope){
-    initVideoPlayer();
-
-    $scope.open = function(id) {
-        var videoUrl = $scope.getVideoUrl(id !== undefined ? id : 1);
-        if (!player ||player.currentSrc() !== videoUrl) {
-            player.src({type: "video/mp4", src: videoUrl});
-            player.play();
-        } else {
-            player.play();
-        }
-        $('#videoModal').modal('show');
-
-    };
-
-    $scope.close = function(){
-        if (player) {
-            player.pause();
-        }
-    };
-
-    $('#videoModal').on("hidden.bs.modal",function(){
-        $scope.close();
-    });
 });
 
 //select value
@@ -1174,7 +1124,6 @@ model.service('arcService', function(){
     };
 });
 
-
 //for textarea
 model.directive('insertAtCaret', ['$rootScope', function($rootScope) {
     return {
@@ -1207,7 +1156,7 @@ model.directive('insertAtCaret', ['$rootScope', function($rootScope) {
     };
 }]);
 
-    //tag editor
+//tag editor
 model.directive('contenteditable', ['$rootScope', '$sce', 'TagService', function ($rootScope, $sce, TagService) {
     return {
         restrict: 'A', // only activate on element attribute
@@ -1435,7 +1384,6 @@ model.factory("TagService", function () {
 
     };
 });
-
 
 function Tag() {
     var name = "tag";

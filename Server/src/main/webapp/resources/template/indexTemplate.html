@@ -1,15 +1,9 @@
 <module-template name="components/carousel" data="carouselData"></module-template>
 
-<div class="video-content" ng-controller="videoCtrl">
+<div class="video-content" >
     <div class="site-information">
         <div class="col-md-3 col-sm-4 right-text">
-            <div class="video-image">
-                <img src="/resources/image/index/video/videoCover1.png"
-                     class="img-thumbnail video-poster">
-                <a ng-click="open()" class="video-play"><span class="glyphicon glyphicon-play-circle"
-                                                              aria-hidden="true"></span></a>
-            </div>
-
+            <module-template name="components/video" data="indexVideo1"></module-template>
         </div>
         <div class="col-md-9  col-sm-8 left-text video-text">
             <div class="video-text-title">
@@ -20,9 +14,7 @@
     </div>
     <div class="site-information">
         <div class="col-md-3 col-sm-4 right-text">
-            <img src="/resources/image/index/video/videoCover1.png" class="img-thumbnail video-poster"></a>
-            <a ng-click="open()" class="video-play"><span class="glyphicon glyphicon-play-circle"
-                                                          aria-hidden="true"></span></a>
+            <module-template name="components/video" data="indexVideo2"></module-template>
         </div>
         <div class="col-md-9  col-sm-8 left-text video-text">
             <div class="video-text-title">
@@ -31,30 +23,6 @@
             {{translate('video2')}}
         </div>
     </div>
-    <!-- Modal -->
-    <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content modal-center">
-                <!--<div class="modal-body">-->
-                <video id="main-video" class="video-js vjs-default-skin vjs-big-play-centered">
-                    <!--poster="/resources/image/index/slider/programming.jpg" data-setup="{{videoSetup}}">-->
-                </video>
-                <!--</div>-->
-            </div>
-        </div>
-    </div>
 </div>
 
 <module-template name="cards/cards1" data="cardsData"></module-template>
-
-<!--<script>-->
-<!--videojs('main-video').ready(function() {-->
-<!--this.hotkeys({-->
-<!--volumeStep: 0.1,-->
-<!--fullscreenKey: function(event, player) {-->
-<!--// override fullscreen to trigger when pressing the F key or Ctrl+Enter-->
-<!--return ((event.which === 70) || (event.ctrlKey && event.which === 13));-->
-<!--}-->
-<!--});-->
-<!--});-->
-<!--</script>-->

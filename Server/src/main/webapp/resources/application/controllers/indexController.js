@@ -25,4 +25,16 @@ model.controller("indexController",function($scope){
             }
         ]
     };
+
+    //Первое видео
+    $scope.indexVideo1 = {
+        id : 1,
+        showComments : true
+    };
+
+    //Первое видео
+    $scope.indexVideo2 = {
+        id : 2,
+        showComments : true
+    };
 });
