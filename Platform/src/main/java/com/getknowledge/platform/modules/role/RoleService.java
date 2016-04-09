@@ -56,6 +56,7 @@ public class RoleService extends AbstractService implements BootstrapService {
             moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.EditCourse));
             moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.EditKnowledge));
             moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.BlockComments));
+            moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.EditNews));
             roleRepository.create(moderator);
         }
     }

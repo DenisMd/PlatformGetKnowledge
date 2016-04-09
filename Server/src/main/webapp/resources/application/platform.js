@@ -51,7 +51,8 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             "book" : "com.getknowledge.modules.books.Book",
             "program" : "com.getknowledge.modules.programs.Program",
             "course" : "com.getknowledge.modules.courses.Course",
-            "tutorial" : "com.getknowledge.modules.courses.tutorial.Tutorial"
+            "tutorial" : "com.getknowledge.modules.courses.tutorial.Tutorial",
+            "news" : "com.getknowledge.modules.news.News"
          };
     })
     .factory('moduleParam',function(){
