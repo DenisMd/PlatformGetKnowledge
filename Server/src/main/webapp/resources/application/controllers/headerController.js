@@ -4,7 +4,7 @@ model.controller("headerController",function($scope){
     $scope.toggelClick = function () {
         $scope.toggelMenu = !$scope.toggelMenu;
         var wrapper = angular.element("#wrapper");
-        wrapper.toggleClass("wrapper-left");
+        wrapper.toggleClass("wrapper-main-content");
 
         if (plUtils.isFunction($scope.getData().toggelClickCallback)) {
             $scope.getData().toggelClickCallback();
