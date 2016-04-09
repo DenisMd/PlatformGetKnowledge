@@ -672,14 +672,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
 
     })
 
-    .provider('applicationProvider', function ApplicationServiceProvider() {
-        this.$get= ['$http','$stateParams','$sce','pageService','moduleParam','resourceUrl','errorService',function applicationServiceFactory($http,$stateParams,$sce,pageService,moduleParam,resourceUrl,errorService){
-            return new applicationService($http,$stateParams,$sce,pageService,moduleParam,resourceUrl,errorService);
-        }];
-
-    })
-
-    .config(function ($stateProvider,$urlRouterProvider,$urlMatcherFactoryProvider,$languagesProvider,applicationServiceProvider,resourceTemplate) {
+    .config(function ($stateProvider,$urlRouterProvider,$urlMatcherFactoryProvider,$languagesProvider,resourceTemplate) {
         var applicationProperties = function($http,$state,$stateParams,$languages,$timeout,$sce,pageService,moduleParam,resourceUrl){
             var applicationData;
             var moduleUrl = "";
