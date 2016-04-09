@@ -42,13 +42,12 @@
     <module-template name="components/mainMenu" data="menuData"></module-template>
 
     <div class="wrapper wrapper-main-content" id="wrapper">
-        <%--  ng-scrollbars ng-scrollbars-config="modalScrollConfig"--%>
-            <div ui-view></div>
-            <footer>
-                © Марков Денис 2016
-            </footer>
+        <div ui-view ></div>
     </div>
 
+    <footer id="footer-page" class="footer-margin">
+        © Марков Денис и Ежик 2016
+    </footer>
 
 
     <%--Important--%>

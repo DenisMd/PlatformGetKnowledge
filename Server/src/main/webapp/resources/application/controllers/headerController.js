@@ -6,6 +6,9 @@ model.controller("headerController",function($scope){
         var wrapper = angular.element("#wrapper");
         wrapper.toggleClass("wrapper-main-content");
 
+        var siteFooter = angular.element("#footer-page");
+        siteFooter.toggleClass("footer-margin");
+
         if (plUtils.isFunction($scope.getData().toggelClickCallback)) {
             $scope.getData().toggelClickCallback();
         }

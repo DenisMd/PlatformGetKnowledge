@@ -232,6 +232,8 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     margin-left: auto;
     padding-left: 20px;
     position: relative;
+    min-height:100%;
+    margin-bottom: -30px;
 }
 .wrapper-main-content{
     padding-left: 270px;
@@ -446,12 +448,23 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     border-color: #ddd !important;
 }
 
+.wrapper:after {
+    content: "";
+    display: block;
+}
+
 /*Footer*/
-footer {
-    left: 0;
-    bottom: 0;
-    width: 100%;
+#footer-page, .wrapper:after {
     height: 30px;
+}
+#footer-page {
+    background: #11171c;
     text-align: center;
-    font-size: 19px;
+    font-size: 18px;
+    color: white;
+    transition: all linear 0.5s;
+}
+
+.footer-margin{
+    margin-left: 250px;
 }
