@@ -59,6 +59,18 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
         //Параметризированные модули(получают параметры из url)
         return ["user","accept","section","restorePassword","groupCourses","groupBooks","groupPrograms","book","program","course","tutorial"];
     })
+    .provider('$languages',function(){
+        return {
+            defaultLanguage : "ru",
+            languages : ["ru","en"],
+            $get: function(){
+                return {
+                    defaultLanguage : this.defaultLanguage,
+                    languages : this.languages
+                }
+            }
+        }
+    })
     .constant("resourceUrl", "/resources/application/")
     .constant("resourceTemplate","/resources/template/")
     .constant("platformDataUrl" , "/data/")
@@ -667,11 +679,23 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
 
     })
 
-    .config(function ($stateProvider, $urlRouterProvider,$urlMatcherFactoryProvider,applicationServiceProvider,resourceTemplate) {
-        var applicationProperties = function($http,$stateParams,$sce,pageService,moduleParam,resourceUrl){
+    .config(function ($stateProvider,$urlRouterProvider,$urlMatcherFactoryProvider,$languagesProvider,applicationServiceProvider,resourceTemplate) {
+        var applicationProperties = function($http,$state,$stateParams,$languages,$timeout,$sce,pageService,moduleParam,resourceUrl){
             var applicationData;
             var moduleUrl = "";
             var language = $stateParams.language ? $stateParams.language : pageService.getLanguage();
+
+            if ($languages.languages.indexOf(language) === -1) {
+                //Невозможно сделать переход из resolve : {};
+                $timeout(function(){
+                    if (!$stateParams.path) {
+                        $state.go("home", {language: $languages.defaultLanguage});
+                    } else {
+                        $state.go("moduleParam", {language: $languages.defaultLanguage, path : $stateParams.path});
+                    }
+                });
+                return;
+            }
 
             //Получаем глобальные настройки из pageInfo приложения
             return $http.get(resourceUrl + 'page-info/pageInfo.json')
@@ -707,7 +731,6 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                     }
 
                     applicationData.language = data.language;
-
                     if (moduleUrl) {
                         return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/pageInfo.json");
                     } else {
@@ -716,6 +739,10 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
 
                     //Если мы находимся в модуле загружаем настройки модуля
                 }).then(function (response) {
+
+                    if (response === undefined) {
+                        return;
+                    }
 
                     //Так как может вернуться applicationData
                     if (response === applicationData) {
@@ -735,6 +762,11 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                     console.error("Error loading application properties (" + error.config.url + ")");
                     return $http.get(resourceUrl + "module" + moduleUrl + "/page-info/" + language + ".json");
                 }).then(function (response) {
+
+                    if (response === undefined) {
+                        return;
+                    }
+
                     if (response === applicationData) {
                         return applicationData;
                     }
@@ -772,10 +804,10 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             return url [url.length - 1] + "Ctrl";
         }
 
-        $urlRouterProvider.when('' , '/ru');
-        $urlRouterProvider.when('/' , '/ru');
-        $urlRouterProvider.when('/#' , '/ru');
-        $urlRouterProvider.when('/#/' , '/ru');
+        $urlRouterProvider.when('' , '/' + $languagesProvider.defaultLanguages);
+        $urlRouterProvider.when('/' , '/' + $languagesProvider.defaultLanguages);
+        $urlRouterProvider.when('/#' , '/' + $languagesProvider.defaultLanguages);
+        $urlRouterProvider.when('/#/' , '/' + $languagesProvider.defaultLanguages);
 
         $stateProvider.state('home', {
             url : "/:language",
@@ -808,7 +840,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                 applicationProperties : applicationProperties
             },
             templateUrl: "/404",
-            controller : function($rootScope,applicationProperties, $scope){
+            controller : function($rootScope,applicationProperties){
                 $rootScope.application = applicationProperties;
             }
         })

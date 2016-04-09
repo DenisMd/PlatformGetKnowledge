@@ -27,13 +27,13 @@ model.config(function (hljsServiceProvider,codemirrorURL) {
     CodeMirror.modeURL = codemirrorURL+ "mode/%N/%N.js";
 });
 
-model.controller("mainController", function ($scope,$rootScope, $http, $state, applicationService,pageService, className,$mdToast,$mdDialog, $mdMedia,$parse) {
+model.controller("mainController", function ($scope,$rootScope, $http, $state,$languages, applicationService,pageService, className,$mdToast,$mdDialog, $mdMedia,$parse) {
 
     //информация о заголовке страници
     $scope.toggelMenu = true;
 
     $scope.headerData = {
-        languages : ['ru','en'],
+        languages : $languages.languages,
         toggelClickCallback : function(){
             $scope.toggelMenu = !$scope.toggelMenu;
         }
@@ -92,7 +92,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state, a
         } else {
             var str = window.location.hash.split("/").splice(2).join("/");
             if (str) {
-                $state.go("modules", {
+                $state.go("moduleParam", {
                     language: language,
                     path: str
                 });
