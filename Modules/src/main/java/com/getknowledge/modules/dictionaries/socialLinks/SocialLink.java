@@ -15,9 +15,10 @@ import javax.persistence.Table;
 @ModuleInfo(repositoryName = "SocialLinkRepository" , serviceName = "SocialLinksService")
 public class SocialLink extends AbstractEntity {
 
+    @Column(nullable = false)
     private String name;
 
-    @Column(length = 500)
+    @Column(length = 500 , nullable = false)
     private String link;
 
     public String getLink() {

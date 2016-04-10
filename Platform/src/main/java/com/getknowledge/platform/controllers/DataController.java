@@ -107,7 +107,7 @@ public class DataController {
                 if (abstractEntity.isContinueIfNotEnoughRights()) {
                     continue;
                 }
-                throw new NotAuthorized("Access denied for read entity from list" , trace, TraceLevel.Warning);
+                throw new NotAuthorized(String.format("Access denied for read entity (%s) from list" , classEntity.getName()) , trace, TraceLevel.Warning);
             }
 
             boolean isEditable = isAccessEdit(user,abstractEntity);
@@ -272,7 +272,7 @@ public class DataController {
             BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
 
             if (repository.count() > repository.getMaxCountsEntities()) {
-                throw new EntityLimitException("Violated limit entity " + repository.getMaxCountsEntities());
+                throw new EntityLimitException(String.format("Violated limit entity %d for className : %s ",repository.getMaxCountsEntities(),className));
             }
 
             List<AbstractEntity> list = crudService.list(repository);
@@ -299,7 +299,7 @@ public class DataController {
             BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
 
             if (max > repository.getMaxCountsEntities()) {
-                throw new EntityLimitException("Violated limit entity " + repository.getMaxCountsEntities());
+                throw new EntityLimitException(String.format("Violated limit entity %d for className : %s ",repository.getMaxCountsEntities(),className));
             }
 
             List<AbstractEntity> list = crudService.list(repository,first,max);
@@ -536,7 +536,7 @@ public class DataController {
             AbstractEntity abstractEntity = (AbstractEntity) objectMapper.readValue(jsonObject, classEntity);
             User user = getCurrentUser(principal);
             if (!isAccessCreate(user, abstractEntity) ) {
-                throw new NotAuthorized("Access denied for create entity" , trace, TraceLevel.Warning);
+                throw new NotAuthorized(String.format("Access denied for create entity (%s)",className) , trace, TraceLevel.Warning);
             }
             crudService.create(moduleLocator.findRepository(classEntity),abstractEntity);
             return objectMapper.writeValueAsString("Create success");
@@ -554,7 +554,7 @@ public class DataController {
             AbstractEntity abstractEntity = (AbstractEntity) objectMapper.readValue(jsonObject, classEntity);
             User user = getCurrentUser(principal);
             if (!isAccessEdit(user, abstractEntity) ) {
-                throw new NotAuthorized("Access denied for update entity" , trace, TraceLevel.Warning);
+                throw new NotAuthorized(String.format("Access denied for update entity (%s)",className) , trace, TraceLevel.Warning);
             }
             crudService.update(moduleLocator.findRepository(classEntity),abstractEntity);
             return objectMapper.writeValueAsString("Update success");
@@ -572,7 +572,7 @@ public class DataController {
 
             AbstractEntity abstractEntity = crudService.read(moduleLocator.findRepository(classEntity),id);
             if (!isAccessRemove(getCurrentUser(principal), abstractEntity) ) {
-                throw new NotAuthorized("Access denied for remove entity" , trace, TraceLevel.Warning);
+                throw new NotAuthorized(String.format("Access denied for remove entity (%s)",className) , trace, TraceLevel.Warning);
             }
             crudService.remove(moduleLocator.findRepository(classEntity),id);
             return objectMapper.writeValueAsString("Remove success");

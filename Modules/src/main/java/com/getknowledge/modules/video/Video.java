@@ -15,10 +15,10 @@ import java.util.Calendar;
 @ModuleInfo(repositoryName = "VideoRepository" , serviceName = "VideoService")
 public class Video extends AbstractEntity{
 
-    @Column(name = "video_name")
+    @Column(name = "video_name" ,nullable = false)
     private String videoName;
 
-    @Column(length = 2000)
+    @Column(length = 2000 , nullable = false)
     private String link;
 
     @Basic(fetch= FetchType.LAZY)
@@ -26,10 +26,10 @@ public class Video extends AbstractEntity{
     @JsonIgnore
     private byte[] cover;
 
-    @Column(name = "allow_every_one")
+    @Column(name = "allow_every_one" , nullable = false)
     private boolean allowEveryOne = false;
 
-    @Column(name = "upload_time")
+    @Column(name = "upload_time", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar uploadTime;
 

@@ -15,8 +15,10 @@ import java.util.List;
 @ModuleInfo(repositoryName = "MenuItemsRepository")
 public class MenuItem extends AbstractEntity {
 
+    @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
     private String url;
 
     @OneToMany
