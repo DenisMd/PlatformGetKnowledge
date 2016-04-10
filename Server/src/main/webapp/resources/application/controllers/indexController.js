@@ -41,7 +41,7 @@ model.controller("indexController",function($scope,applicationService,className)
     //информация о пунктах меню через "карточки"
     applicationService.action($scope, "", className.menu, "getMenu", {}, function(menu){
         $scope.cardsData = {
-            title : "our_courses",
+            title : "portal_sections",
             cardsInRow : 3,
             cards : menu.items,
             prefix : ''
