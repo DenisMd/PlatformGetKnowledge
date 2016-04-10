@@ -1286,7 +1286,8 @@ model.directive('contenteditableKeyListener', [function () {
     };
 }]);
 
-model.factory("TagService", function () {
+//основные опирации для работы с тегами
+model.factory("TagService", function ($rootScope) {
     var groupSeparator = String.fromCharCode(29);
     var nonBreakingSpace = "&nbsp;";
 
@@ -1314,10 +1315,10 @@ model.factory("TagService", function () {
         var s = v, result = "";
         var startPos = -1, start = 0, stopPos = -1, j = -1;
         var startText = "";
-        while ((startPos = s.indexOf(TagService.startEditable, stopPos + 1)) !== -1 &&
-        (j = s.indexOf(TagService.middleEditable, startPos)) !== -1 &&
-        (stopPos = s.indexOf(TagService.stopEditable, startPos + 1)) !== -1) {
-            var value = s.substring(startPos + TagService.startEditable.length, j);
+        while ((startPos = s.indexOf(startEditable, stopPos + 1)) !== -1 &&
+        (j = s.indexOf(middleEditable, startPos)) !== -1 &&
+        (stopPos = s.indexOf(stopEditable, startPos + 1)) !== -1) {
+            var value = s.substring(startPos + startEditable.length, j);
             var index = parseInt(value);
             if (isNaN(index)) {
                 continue;
@@ -1328,12 +1329,12 @@ model.factory("TagService", function () {
                 continue;
             }
 
-            result += s.substring(start, startPos) + startText + TagService.groupSeparator + tag.toString() + TagService.groupSeparator;
+            result += s.substring(start, startPos) + startText + groupSeparator + tag.toString() + groupSeparator;
             startText = "";
-            start = stopPos + TagService.stopEditable.length;
+            start = stopPos + stopEditable.length;
         }
         if (result) {
-            result += s.substring(stopPos + TagService.stopEditable.length);
+            result += s.substring(stopPos + stopEditable.length);
             return result;
         }
         return s;
