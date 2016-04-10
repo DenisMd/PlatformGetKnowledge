@@ -151,24 +151,24 @@ public class DataController {
         return p == null ? null : userRepository.getSingleEntityByFieldAndValue("login",p.getName());
     }
 
-    private boolean isAccessRead(User user, AbstractEntity abstractEntity) throws NotAuthorized {
+    private boolean isAccessRead(User user, AbstractEntity abstractEntity) {
         AuthorizationList al = abstractEntity.getAuthorizationList();
         if (al != null && al.allowReadEveryOne) {
             return true;
         }
 
-        if (user == null) throw new NotAuthorized("User not found");
+        if (user == null) return false;
 
         if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
             return true;
         }
 
 
-        return al != null && al.isAccessRead(user);
+        return al != null && (al.isAccessRead(user) || isAccessFromService(user,abstractEntity,1,al.allowUseAuthorizedService));
 
     }
 
-    private boolean isAccessCreate(User user, AbstractEntity abstractEntity) throws NotAuthorized {
+    private boolean isAccessCreate(User user, AbstractEntity abstractEntity) {
         AuthorizationList al = abstractEntity.getAuthorizationList();
         if (al != null && al.allowCreateEveryOne) return true;
 
@@ -178,11 +178,11 @@ public class DataController {
             return true;
         }
 
-        return al != null && al.isAccessCreate(user);
+        return al != null && (al.isAccessCreate(user) || isAccessFromService(user,abstractEntity,3,al.allowUseAuthorizedService));
 
     }
 
-    private boolean isAccessEdit(User user, AbstractEntity abstractEntity) throws NotAuthorized {
+    private boolean isAccessEdit(User user, AbstractEntity abstractEntity) {
         AuthorizationList al = abstractEntity.getAuthorizationList();
         if (user == null) return false;
 
@@ -190,11 +190,11 @@ public class DataController {
             return true;
         }
 
-        return al != null && al.isAccessEdit(user);
+        return al != null && (al.isAccessEdit(user) || isAccessFromService(user,abstractEntity,2,al.allowUseAuthorizedService));
 
     }
 
-    private boolean isAccessRemove(User user, AbstractEntity abstractEntity) throws NotAuthorized {
+    private boolean isAccessRemove(User user, AbstractEntity abstractEntity) {
         AuthorizationList al = abstractEntity.getAuthorizationList();
         if (user == null) return false;
 
@@ -202,8 +202,28 @@ public class DataController {
             return true;
         }
 
-        return al != null && al.isAccessRemove(user);
+        return al != null && (al.isAccessRemove(user) || isAccessFromService(user,abstractEntity,4,al.allowUseAuthorizedService));
 
+    }
+
+    private boolean isAccessFromService(User currentUser,AbstractEntity abstractEntity,int type,boolean allow) {
+        if (!allow) return allow;
+
+        try {
+            AbstractService abstractService = moduleLocator.findService(abstractEntity.getClass());
+            if (abstractService instanceof AuthorizedService) {
+                AuthorizedService authorizedService = (AuthorizedService) abstractService;
+                switch (type) {
+                    case 1: return authorizedService.isAccessForRead(currentUser,abstractEntity);
+                    case 2: return authorizedService.isAccessForEdit(currentUser,abstractEntity);
+                    case 3: return authorizedService.isAccessForCreate(currentUser,abstractEntity);
+                    case 4: return authorizedService.isAccessForRemove(currentUser,abstractEntity);
+                }
+            }
+            return false;
+        } catch (ModuleNotFound moduleNotFound) {
+            return false;
+        }
     }
 
     private boolean checkUserList(User user, List<User> users) {
@@ -305,12 +325,13 @@ public class DataController {
             if (abstractService instanceof VideoLinkService) {
                 VideoLinkService videoLinkService = (VideoLinkService) abstractService;
 
-                if (crudService.read(moduleLocator.findRepository(classEntity),id) == null) {
+                AbstractEntity video = crudService.read(moduleLocator.findRepository(classEntity),id);
+                if (video == null) {
                     throw new NotFound(String.format("Video not found by id %d",id));
                 }
 
-                if (!videoLinkService.isAccessToWatchVideo(id, getCurrentUser(principal))) {
-                    throw new NotAuthorized("access denied for read video" , trace, TraceLevel.Warning);
+                if (!isAccessRead(getCurrentUser(principal), video)) {
+                    throw new NotAuthorized("Access denied for read video" , trace, TraceLevel.Warning);
                 }
 
                 String videoUrl = videoLinkService.getVideoLink(id);

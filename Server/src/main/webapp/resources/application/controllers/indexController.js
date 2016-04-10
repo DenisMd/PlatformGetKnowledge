@@ -1,4 +1,4 @@
-model.controller("indexController",function($scope){
+model.controller("indexController",function($scope,applicationService,className){
     //--------------------------------------------- опции слайдера
     $scope.carouselData = {
         interval : 5000,
@@ -37,4 +37,28 @@ model.controller("indexController",function($scope){
         id : 2,
         showComments : true
     };
+
+    //информация о пунктах меню через "карточки"
+    applicationService.action($scope, "", className.menu, "getMenu", {}, function(menu){
+        $scope.cardsData = {
+            title : "our_courses",
+            cardsInRow : 3,
+            cards : menu.items,
+            prefix : ''
+        };
+        $scope.$broadcast("fillCards",$scope.cardsData);
+    });
+
+    //создаем массив по диапозону
+    $scope.getRow = function (index, length, array) {
+        var result = [];
+        for (var i = index*length; i < length*(index+1); i++) {
+            if (array.length <= i) {
+                return result;
+            }
+            result.push(array[i]);
+        }
+        return result;
+    };
+
 });

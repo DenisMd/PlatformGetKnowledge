@@ -4,5 +4,4 @@ import com.getknowledge.platform.modules.user.User;
 
 public interface VideoLinkService {
     String getVideoLink(long id);
-    boolean isAccessToWatchVideo(long id,User currentUser);
 }
