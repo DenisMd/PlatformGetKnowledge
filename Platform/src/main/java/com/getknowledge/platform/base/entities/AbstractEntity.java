@@ -46,6 +46,7 @@ public abstract class AbstractEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AbstractEntity)) return false;
+        if (!(this.getClass().isAssignableFrom(o.getClass()))) return false;
 
         AbstractEntity that = (AbstractEntity) o;
 

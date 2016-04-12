@@ -54,6 +54,38 @@ public abstract class AbstractService {
 
     }
 
+    public boolean isAccessToCreate(HashMap<String,Object> data, AbstractEntity abstractEntity) {
+        String principalName = (String) data.get("principalName");
+        if (principalName == null || principalName.isEmpty()) {
+            return  false;
+        }
+
+        User currentUser = userRepository.getSingleEntityByFieldAndValue("login" , principalName);
+
+        if (currentUser.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+            return true;
+        }
+
+        return abstractEntity.getAuthorizationList() != null && abstractEntity.getAuthorizationList().isAccessCreate(currentUser);
+
+    }
+
+    public boolean isAccessToRemove(HashMap<String,Object> data, AbstractEntity abstractEntity) {
+        String principalName = (String) data.get("principalName");
+        if (principalName == null || principalName.isEmpty()) {
+            return  false;
+        }
+
+        User currentUser = userRepository.getSingleEntityByFieldAndValue("login" , principalName);
+
+        if (currentUser.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+            return true;
+        }
+
+        return abstractEntity.getAuthorizationList() != null && abstractEntity.getAuthorizationList().isAccessRemove(currentUser);
+
+    }
+
     public Long longFromField(String key, HashMap<String, Object> data) {
         return new Long((Integer)data.get(key));
     }

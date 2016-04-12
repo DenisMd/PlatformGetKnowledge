@@ -1,7 +1,9 @@
-<div class="site-info-card">
+<link rel="stylesheet" type="text/css" href="/resources/css/components/cards.css">
+
+<div class="site-info-card" ng-controller="cardsController">
     <h2 class="text-center">{{translate(getData().title)}}</h2>
-    <div class="row  thumbnail-card" ng-repeat="index in range(getData().cards.length / getData().cardsInRow) track by $index">
-        <div class="col-lg-{{12 / getData().cardsInRow}} col-info" ng-repeat="card in getRow($index, getData().cardsInRow, getData().cards)">
+    <div class="row thumbnail-card" ng-repeat="items in cardsItem">
+        <div class="col-lg-{{colLg}} col-info" ng-repeat="card in items">
             <div class="thumbnail thumbnail-height-300">
                 <div class="caption text-center card">
                     <p class="card-image text-center"><img ng-src="{{card.iconUrl}}"></p>

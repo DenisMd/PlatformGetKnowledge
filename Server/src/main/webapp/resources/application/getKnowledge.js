@@ -24,17 +24,7 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state,$l
     };
 
     //информация о главном меню на странице
-    $scope.menuData = {
-        callback : function(menu) {
-                ////информация о пунктах меню через "карточки"
-                $scope.cardsData = {
-                    title : "our_courses",
-                    cardsInRow : 3,
-                    cards : menu.items,
-                    prefix : ''
-                };
-        }
-    };
+    $scope.menuData = {};
 
     //получаем текущего пользователя в системе
     $scope.getAuthorizedUser = function(callback){
@@ -175,14 +165,6 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state,$l
         );
     };
 
-    //создает массив для ng-repeat
-    $scope.range = function(n) {
-        if (!n) {
-            return 1;
-        }
-        return new Array(Math.ceil(n));
-    };
-
     $scope.splitArray = function(array,even) {
         var tempArr = [];
         for (var i = 0; i < array.length; i++) {
@@ -194,18 +176,6 @@ model.controller("mainController", function ($scope,$rootScope, $http, $state,$l
             }
         }
         return tempArr;
-    };
-
-    //создаем массив по диапозону
-    $scope.getRow = function (index, length, array) {
-        var result = [];
-        for (var i = index*length; i < length*(index+1); i++) {
-            if (array.length <= i) {
-                return result;
-            }
-            result.push(array[i]);
-        }
-        return result;
     };
 });
 

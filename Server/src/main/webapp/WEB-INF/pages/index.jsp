@@ -23,7 +23,6 @@
     <%--Наши css--%>
     <%--<link rel="stylesheet" type="text/css" , href="/resources/dist/css/main-min.css">--%>
     <link rel="stylesheet" type="text/css" href="/resources/css/main/index.css">
-    <link rel="stylesheet" type="text/css" href="/resources/css/main/cards.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/main/loaderBar.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/main/menu.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/main/scroll.css">

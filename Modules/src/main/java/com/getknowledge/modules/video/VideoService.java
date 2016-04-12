@@ -2,6 +2,8 @@ package com.getknowledge.modules.video;
 
 import com.getknowledge.modules.courses.Course;
 import com.getknowledge.modules.courses.CourseService;
+import com.getknowledge.modules.courses.tutorial.Tutorial;
+import com.getknowledge.modules.courses.tutorial.homeworks.HomeWork;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoRepository;
 import com.getknowledge.modules.userInfo.UserInfoService;
@@ -9,10 +11,8 @@ import com.getknowledge.modules.video.comment.VideoComment;
 import com.getknowledge.modules.video.comment.VideoCommentRepository;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
-import com.getknowledge.platform.base.services.AbstractService;
-import com.getknowledge.platform.base.services.BootstrapService;
-import com.getknowledge.platform.base.services.ImageService;
-import com.getknowledge.platform.base.services.VideoLinkService;
+import com.getknowledge.platform.base.entities.AbstractEntity;
+import com.getknowledge.platform.base.services.*;
 import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service("VideoService")
-public class VideoService extends AbstractService implements BootstrapService,VideoLinkService,ImageService {
+public class VideoService extends AuthorizedService<Video> implements BootstrapService,VideoLinkService,ImageService {
 
     @Autowired
     private VideoRepository videoRepository;
@@ -64,7 +64,6 @@ public class VideoService extends AbstractService implements BootstrapService,Vi
                     video.setCover(IOUtils.toByteArray(is));
                     videoRepository.merge(video);
                 }
-
             }
         }
     }
@@ -86,7 +85,7 @@ public class VideoService extends AbstractService implements BootstrapService,Vi
             return Result.Failed();
         }
         UserInfo userInfo = userInfoService.getAuthorizedUser(data);
-        if (userInfo == null || !isAccessToEdit(data,video)) {
+        if (userInfo == null || !isAccessForEdit(userInfo.getUser(),video)) {
             return Result.AccessDenied();
         }
 
@@ -146,17 +145,40 @@ public class VideoService extends AbstractService implements BootstrapService,Vi
 
     @Override
     @Transactional
-    public boolean isAccessToWatchVideo(long id,User currentUser) {
-        Video video = videoRepository.read(id);
-        if (video == null) return false;
-        if (video.isAllowEveryOne()) return true;
+    public boolean isAccessForRead(User currentUser, Video entity) {
+        if (entity == null) return false;
+        if (entity.isAllowEveryOne()) return true;
 
         UserInfo userInfo = userInfoRepository.getUserInfoByUser(currentUser);
-        Course course = videoRepository.findCourseByVideo(video);
+        Course course = videoRepository.findCourseByVideo(entity);
 
         if(!courseService.isUserHasAccessToCourse(userInfo,course))
             return false;
 
         return true;
+    }
+
+    @Override
+    public boolean isAccessForEdit(User currentUser, Video entity) {
+        if (currentUser == null) return false;
+        if (entity == null) return false;
+
+        List<Course> courses = entityManager.createQuery("select c from Course c where c.intro.id = :id")
+                .setParameter("id",entity.getId()).getResultList();
+        if (courses.isEmpty()) {
+            List<Tutorial> tutorials = entityManager.createQuery("select t from Tutorial t where t.video.id = :id")
+                    .setParameter("id",entity.getId()).getResultList();
+            if (tutorials.isEmpty()) {
+                List<HomeWork> homeWorks = entityManager.createQuery("select hw from HomeWork hw where hw.video.id = :id")
+                        .setParameter("id",entity.getId()).getResultList();
+                if (homeWorks.isEmpty()) {
+                    return false;
+                }
+                return homeWorks.get(0).getTutorial().getCourse().getAuthor().getUser().equals(currentUser);
+            }
+            return tutorials.get(0).getCourse().getAuthor().getUser().equals(currentUser);
+        }
+
+        return courses.get(0).getAuthor().getUser().equals(currentUser);
     }
 }
