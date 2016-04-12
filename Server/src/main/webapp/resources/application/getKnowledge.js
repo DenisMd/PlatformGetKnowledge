@@ -779,9 +779,9 @@ model.controller("sectionCard",function($scope,$state,applicationService,classNa
 });
 
 model.controller("postController",['$scope','$rootScope','$timeout','codemirrorURL','TagService',function($scope,$rootScope,$timeout,codemirrorURL,TagService){
-    var loadString = function(string){
+    var loadString = function(string,isInit){
         $scope.$broadcast('setCaret');
-        $scope.$broadcast('add', string);
+        $scope.$broadcast('add', string, isInit);
     };
     $scope.test = {
         readOnly: 'nocursor',
@@ -791,12 +791,14 @@ model.controller("postController",['$scope','$rootScope','$timeout','codemirrorU
         }
     };
 
-    $scope.content = '!!!&nbsp;{"name":"tt","code":"var i = \"hello world\"","options":{"lineNumbers":true,"indentWithTabs":true,"mode":"javascript","theme":"twilight"}}&nbsp;<br>';
+    $scope.tagPool = [];
+
+    $scope.content = '!!!&nbsp;{"type":"ProgramTag","name":"c","code":"var i = \\\"hello world\\\"","options":{"lineNumbers":true,"indentWithTabs":true,"mode":"javascript","theme":"default"}}<br>';
 
     //first loading
     var initValue = $scope.content;
     $timeout(function() {
-        loadString(initValue);
+        loadString(initValue, true);
     },0);
 
     //open Tags Pool
@@ -823,12 +825,12 @@ model.controller("postController",['$scope','$rootScope','$timeout','codemirrorU
             newTag.setCode(newTagInfo.text);
             newTag.setMode(newTagInfo.mode.mode);
             newTag.setTheme(newTagInfo.theme.name);
-            $rootScope.tagPool.push(newTag);
-            var tag = $rootScope.tagPool[$rootScope.tagPool.length - 1];
+            $scope.tagPool.push(newTag);
+            var tag = $scope.tagPool[$scope.tagPool.length - 1];
             if (tag) {
                 //angular.extend($scope.test,tag.getData());
                 //$scope.test.title = tag.getName();
-                loadString(TagService.getEditableTag($scope.content,tag,$rootScope.tagPool.length - 1));
+                loadString(TagService.getEditableTag($scope.content,tag,$scope.tagPool.length - 1));
             }
         },null,refresh,function(){
 
@@ -1192,7 +1194,7 @@ model.directive('contenteditable', ['$rootScope', '$sce', 'TagService', function
             }
 
             ngModel.$parsers.push(function (viewValue) {
-                return TagService.replaceSpanOnTagValue(viewValue);
+                return TagService.parser(viewValue,scope);
             });
 
             ngModel.$formatters.push(function(modelValue) {
@@ -1202,7 +1204,7 @@ model.directive('contenteditable', ['$rootScope', '$sce', 'TagService', function
     };
 }]);
 
-model.directive('contenteditableKeyListener', [function () {
+model.directive('contenteditableKeyListener', ['TagService',function (TagService) {
     return {
         link: function (scope, element, attrs) {
             var domElement = element[0];
@@ -1235,12 +1237,12 @@ model.directive('contenteditableKeyListener', [function () {
 
             /**
              * @param e {Event} - объект генерируемый при возникновении события
-             * @param val {String} - вставляемая строка
-             * @param initValue {Boolean} - является ли строка инициализацией
+             * @param value {String} - вставляемая строка
+             * @param isInitValue {Boolean} - является ли строка инициализацией
              *
              *  @description добаление текста по картке
              */
-            scope.$on('add', function (e, val, initValue) {
+            scope.$on('add', function (e, value, isInitValue) {
                 var sel, range;
                 if (window.getSelection) {
                     // IE9 and non-IE
@@ -1253,7 +1255,12 @@ model.directive('contenteditableKeyListener', [function () {
                             // Range.createContextualFragment() would be useful here but is
                             // non-standard and not supported in all browsers (IE9, for one)
                             var el = document.createElement("div");
-                            el.innerHTML = val;
+                            if (isInitValue){
+                                el.innerHTML = TagService.formatter(value,scope);
+                            } else {
+                                el.innerHTML = value;
+                            }
+
                             var frag = document.createDocumentFragment(),
                                 node, lastNode;
                             while ((node = el.firstChild)) {
@@ -1317,7 +1324,7 @@ model.directive('contenteditableKeyListener', [function () {
 }]);
 
 //основные опирации для работы с тегами
-model.factory("TagService", function ($rootScope) {
+model.factory("TagService", function () {
     var groupSeparator = String.fromCharCode(29);
     var nonBreakingSpace = "&nbsp;";
 
@@ -1329,19 +1336,20 @@ model.factory("TagService", function ($rootScope) {
     var getEditableTag = function (model, tag, index) {
         var before = '&#8203;', after = "";
         if (!model) {
-            after = "</br>";
+            after = "<br>";
         }
         return startEditable + (index) + middleEditable + tag.getName() + stopEditable + after;
     };
 
-     /**
+    /**
      *
      * @param v {String} - строка для разбора
+     * @param scope
      * @returns {String}
      *
      * @description Заменяет в строке ссылки пула тегов на json-представление тега
      */
-     var replaceSpanOnTagValue = function replaceSpanOnTagValue(v){
+     var parser = function (v,scope){
         var s = v, result = "";
         var startPos = -1, start = 0, stopPos = -1, j = -1;
         var startText = "";
@@ -1354,7 +1362,7 @@ model.factory("TagService", function ($rootScope) {
                 continue;
             }
 
-            var tag = $rootScope.tagPool[index];
+            var tag = scope.tagPool[index];
             if (!tag) {
                 continue;
             }
@@ -1371,6 +1379,55 @@ model.factory("TagService", function ($rootScope) {
     };
 
 
+    /**
+     * @param value {String} - строка для разбора
+     * @param scope
+     * @returns {String}
+     *
+     * @description Заменяет json-представление тега преходящее с сервера на ссылку ппула тегов, при этом происходит добавление в пул
+     */
+    var formatter = function(value,scope){
+        var result = "";
+        var startPos = -1, start = 0, stopPos = -1, j = -1;
+        var startText = "";
+        while ((startPos = value.indexOf(groupSeparator, stopPos + 1)) !== -1 &&
+        (stopPos = value.indexOf(groupSeparator, startPos + 1)) !== -1) {
+            var stringTag = value.substring(startPos + groupSeparator.length, stopPos);
+            if (stringTag){
+                var jsonTag = JSON.parse(stringTag);
+                if (jsonTag) {
+                    var type;
+                    if (!(type = jsonTag.type)) {
+                        continue;
+                    }
+                    var tag;
+                    switch (type) {
+                        case "ProgramTag":
+                            tag = new ProgramTag();
+                            break;
+                        default :
+                            tag = new Tag();
+                    }
+
+                    tag.fromJson(jsonTag);
+
+                    scope.tagPool.push(tag);
+
+                    result += value.substring(start, startPos) + this.getEditableTag(value,tag,scope.tagPool.length - 1);
+                }
+            }
+            start = stopPos + stopEditable.length;
+        }
+        if (result) {
+            result += value.substring(stopPos + stopEditable.length);
+            var suffix = "<br>";
+            if (result.indexOf(suffix, this.length - suffix.length) === -1){
+                result += "<br>"
+            }
+            return result;
+        }
+        return value;
+    };
 
     return {
         groupSeparator: groupSeparator,
@@ -1381,7 +1438,8 @@ model.factory("TagService", function ($rootScope) {
         middleEditable: middleEditable,
         stopEditable: stopEditable,
 
-        replaceSpanOnTagValue : replaceSpanOnTagValue
+        parser : parser,
+        formatter : formatter
 
     };
 });
@@ -1403,6 +1461,17 @@ function Tag() {
 
     this.toJson = function () {
         return {type: this.constructor.name, name: this.getName()};
+    };
+
+    this.fromJson = function (json) {
+        if (!json){
+            console.error("JSON not defined");
+        }
+
+        var value;
+        if (value = json.name){
+            this.setName(value);
+        }
     };
 
     this.toString = function () {
@@ -1440,6 +1509,10 @@ function ProgramTag() {
         options.theme = t;
     };
 
+    this.setOptions = function(options){
+        this.options = options;
+    };
+
     this.getOptions = function () {
         return angular.copy(options);
     };
@@ -1454,8 +1527,25 @@ function ProgramTag() {
     var parentJson = this.toJson;
     this.toJson = function () {
         var json = parentJson.call(this);
-        angular.merge(json, {code: code, options: this.getOptions()});
+        var codeToJSON = code.replace(/"/g, '\\"');
+        angular.merge(json, {code: codeToJSON, options: this.getOptions()});
         return json;
+    };
+
+    var parentFromJson = this.fromJson;
+    this.fromJson = function (json) {
+        if (!json){
+            console.error("JSON not defined");
+            return;
+        }
+        parentFromJson.call(this,json);
+        var value;
+        if (value = json.code){
+            this.setCode(value);
+        }
+        if (value = json.options){
+            this.setOptions(value);
+        }
     };
 }
 

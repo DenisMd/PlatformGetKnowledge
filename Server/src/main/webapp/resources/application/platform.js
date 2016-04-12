@@ -879,7 +879,6 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             }
         });
 
-        $rootScope.tagPool = [];
     })
 
     .directive("errorModalTemplate",function(resourceTemplate){
