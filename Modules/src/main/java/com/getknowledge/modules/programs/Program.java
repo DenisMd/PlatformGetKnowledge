@@ -8,10 +8,7 @@ import com.getknowledge.modules.programs.group.GroupPrograms;
 import com.getknowledge.modules.programs.tags.ProgramTag;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.annotations.ModuleInfo;
-import com.getknowledge.platform.base.entities.AuthorizationList;
-import com.getknowledge.platform.base.entities.CloneableEntity;
-import com.getknowledge.platform.base.entities.EntityWithTags;
-import com.getknowledge.platform.base.entities.IUser;
+import com.getknowledge.platform.base.entities.*;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import com.getknowledge.platform.modules.user.User;
@@ -23,7 +20,7 @@ import java.util.List;
 @Entity
 @Table(name = "program")
 @ModuleInfo(repositoryName = "ProgramRepository" , serviceName = "ProgramService")
-public class Program extends CloneableEntity<Program> implements IUser,EntityWithTags<ProgramTag> {
+public class Program extends AbstractEntity implements CloneableEntity<Program>,IUser,EntityWithTags<ProgramTag> {
     private String name;
 
     @Column(length = 1000)
@@ -176,6 +173,7 @@ public class Program extends CloneableEntity<Program> implements IUser,EntityWit
         cloneProgram.setLinks(this.getLinks());
         cloneProgram.setOwner(this.getOwner());
         cloneProgram.setTags(this.getTags());
+        cloneProgram.setObjectVersion(this.getObjectVersion());
         return cloneProgram;
     }
 }

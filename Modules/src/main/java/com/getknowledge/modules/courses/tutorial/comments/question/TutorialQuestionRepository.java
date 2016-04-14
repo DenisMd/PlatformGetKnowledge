@@ -7,13 +7,14 @@ import com.getknowledge.modules.messages.attachments.AttachmentImage;
 import com.getknowledge.modules.messages.attachments.AttachmentImageRepository;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.Calendar;
 
 @Repository("TutorialQuestionRepository")
-public class TutorialQuestionRepository extends BaseRepository<TutorialQuestion> {
+public class TutorialQuestionRepository extends ProtectedRepository<TutorialQuestion> {
     @Override
     protected Class<TutorialQuestion> getClassEntity() {
         return TutorialQuestion.class;

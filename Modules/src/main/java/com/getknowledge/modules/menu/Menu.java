@@ -17,7 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "menu")
 @ModuleInfo(repositoryName = "MenuRepository" , serviceName = "MenuService")
-public class Menu extends CloneableEntity<Menu>{
+public class Menu extends AbstractEntity implements CloneableEntity<Menu>{
 
     @Column(name = "name" , unique = true)
     private String name;
@@ -61,6 +61,7 @@ public class Menu extends CloneableEntity<Menu>{
         menu.setName(getName());
         menu.setRole(getRole());
         menu.setItems(getItems());
+        menu.setObjectVersion(this.getObjectVersion());
         return menu;
     }
 

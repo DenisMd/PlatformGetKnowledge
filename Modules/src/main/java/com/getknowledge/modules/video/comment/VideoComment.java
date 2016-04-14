@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.messages.Comment;
 import com.getknowledge.modules.video.Video;
 import com.getknowledge.platform.annotations.ModuleInfo;
+import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
+import com.getknowledge.platform.base.entities.CloneableEntity;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
@@ -34,5 +36,17 @@ public class VideoComment extends Comment {
         AuthorizationList authorizationList = new AuthorizationList();
         authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.BlockComments));
         return authorizationList;
+    }
+
+    @Override
+    public AbstractEntity clone() {
+        VideoComment videoComment = new VideoComment();
+        videoComment.setCommentStatus(this.getCommentStatus());
+        videoComment.setCreateTime(this.getCreateTime());
+        videoComment.setMessage(this.getMessage());
+        videoComment.setSender(this.getSender());
+        videoComment.setId(this.getId());
+        videoComment.setObjectVersion(this.getObjectVersion());
+        return videoComment;
     }
 }

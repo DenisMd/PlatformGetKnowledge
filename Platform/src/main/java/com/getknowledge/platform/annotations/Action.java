@@ -12,4 +12,5 @@ public @interface Action {
     String name() default "";
     String[] mandatoryFields() default "";
     boolean prepareEntity() default  false;
+    String repositoryName() default "";
 }

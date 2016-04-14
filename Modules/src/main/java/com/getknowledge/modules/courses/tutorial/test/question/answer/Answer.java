@@ -11,7 +11,7 @@ import java.util.Calendar;
 
 @Entity
 @Table(name = "answer")
-public class Answer extends CloneableEntity<Answer> {
+public class Answer extends AbstractEntity implements CloneableEntity<Answer> {
 
     private String answer;
 
@@ -101,6 +101,7 @@ public class Answer extends CloneableEntity<Answer> {
         answer.setDescription(getDescription());
         answer.setOriginalAnswer(getOriginalAnswer());
         answer.setQuestion(getQuestion());
+        answer.setObjectVersion(this.getObjectVersion());
         return answer;
     }
 

@@ -94,7 +94,9 @@ public class VideoService extends AuthorizedService<Video> implements BootstrapS
         return Result.Complete();
     }
 
-    @Action(name = "getComments" , mandatoryFields = {"videoId","first","max"})
+    @Action(name = "getComments" , mandatoryFields = {"videoId","first","max"}
+            ,prepareEntity = true
+            ,repositoryName = "VideoCommentRepository")
     @Transactional
     public List<VideoComment> getComments(HashMap<String,Object> data) {
         Long videoId = longFromField("videoId",data);
