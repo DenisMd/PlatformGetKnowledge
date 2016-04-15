@@ -104,9 +104,26 @@ public class VideoService extends AuthorizedService<Video> implements BootstrapS
             throw new AccessDeniedException("Access denied for read comments");
         }
         if (video != null)
-            return videoRepository.getComments(video,first,max);
+            return videoRepository.getComments(video, first, max);
         return null;
     }
+
+    @Action(name = "countComments" , mandatoryFields = {"videoId"})
+    @Transactional
+    public Long countComments(HashMap<String,Object> data) throws AccessDeniedException {
+        Long videoId = longFromField("videoId",data);
+        Integer first = (Integer) data.get("first");
+        Integer max = (Integer) data.get("max");
+        Video video = videoRepository.read(videoId);
+        UserInfo currentUser = userInfoRepository.getCurrentUser(data);
+        if (!isAccessForRead(currentUser == null ? null : currentUser.getUser(),video)){
+            throw new AccessDeniedException("Access denied for read comments count");
+        }
+        if (video != null)
+            return videoRepository.countComments(video);
+        return null;
+    }
+
 
     @Action(name = "addComment" , mandatoryFields = {"videoId","text"})
     @Transactional

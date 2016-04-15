@@ -151,4 +151,11 @@ public class VideoRepository extends BaseRepository<Video> {
                 .setMaxResults(max).getResultList();
         return list;
     }
+
+    public Long countComments(Video video){
+        Long count = (Long) entityManager.createQuery("select count(comments.id) from VideoComment comments " +
+                "where comments.video.id = :videoId")
+                .setParameter("videoId" , video.getId()).getSingleResult();
+        return count;
+    }
 }
