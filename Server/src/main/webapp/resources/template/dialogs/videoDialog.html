@@ -6,7 +6,18 @@
             </video>
             <div class="video-comments">
                 <!--Comments-->
-                {{videoComments}}
+                <div class="comment row" ng-repeat="videoComment in videoComments">
+                    <div class="col-sm-4">
+                        <img ng-src="{{userImg(videoComment.sender.id)}}">
+                        <br>
+                        {{videoComment.sender.lastName + ' ' + videoComment.sender.firstName}}
+                        <br>
+                        {{videoComment.sender.speciality}}
+                    </div>
+                    <div class="col-sm-6">
+                        {{videoComment.message}}
+                    </div>
+                </div>
                 <button class="btn btn-primary" ng-click="loadMoreComments()">Load more</button>
             </div>
         </div>
