@@ -28,7 +28,7 @@ public class TutorialQuestion extends Comment {
     @JsonIgnore
     private List<AttachmentImage> images = new ArrayList<>();
 
-    private boolean comment = false;
+    private Boolean comment = false;
 
     @OneToMany(mappedBy = "base")
     @JsonIgnore

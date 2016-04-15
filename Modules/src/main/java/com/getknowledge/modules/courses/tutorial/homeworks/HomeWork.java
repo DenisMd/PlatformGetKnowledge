@@ -40,7 +40,7 @@ public class HomeWork extends AbstractEntity implements CloneableEntity<HomeWork
 
     @JsonIgnore
     @Column(name = "deleting")
-    private boolean deleting = false;
+    private Boolean deleting = false;
 
     public Calendar getLastChangeTime() {
         return lastChangeTime;

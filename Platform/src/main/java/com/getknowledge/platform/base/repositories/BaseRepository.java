@@ -2,6 +2,8 @@ package com.getknowledge.platform.base.repositories;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.getknowledge.platform.annotations.ModelView;
+import com.getknowledge.platform.annotations.ViewType;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.user.User;
@@ -14,9 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.swing.text.View;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class BaseRepository<T extends AbstractEntity> {
@@ -55,7 +60,7 @@ public abstract class BaseRepository<T extends AbstractEntity> {
                     Object result = pd.getReadMethod().invoke(object);
                     if (result != null) {
                         if (pd.getWriteMethod() != null)
-                            pd.getWriteMethod().invoke(classicObject,result);
+                            pd.getWriteMethod().invoke(classicObject, result);
                     }
                 }
             }
@@ -80,12 +85,12 @@ public abstract class BaseRepository<T extends AbstractEntity> {
     }
 
     public T read(Long id) {
-        T result = entityManager.find(getClassEntity() , id);
+        T result = entityManager.find(getClassEntity(), id);
         return result;
     }
 
     public List<T> list() {
-        List<T> list = (List<T>)entityManager.createQuery("Select t from " + getClassEntity().getSimpleName() + " t order by t.id").getResultList();
+        List<T> list = (List<T>) entityManager.createQuery("Select t from " + getClassEntity().getSimpleName() + " t order by t.id").getResultList();
         return list;
     }
 
@@ -93,60 +98,86 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         Query query = entityManager.createQuery("Select t from " + getClassEntity().getSimpleName() + " t order by t.id");
         query.setFirstResult(first);
         query.setMaxResults(max);
-        List<T> list = (List<T>)query.getResultList();
+        List<T> list = (List<T>) query.getResultList();
         return list;
     }
 
     public Long count() {
-        long rowCnt= (Long) entityManager.createQuery("SELECT count(a) FROM " + getClassEntity().getSimpleName() + " a").getSingleResult();
+        long rowCnt = (Long) entityManager.createQuery("SELECT count(a) FROM " + getClassEntity().getSimpleName() + " a").getSingleResult();
         return rowCnt;
     }
 
     public List<T> getEntitiesByFieldAndValue(String field, Object value) {
-        List<T> list = (List<T>)entityManager.createQuery("select ent from " + getClassEntity().getSimpleName() + " ent where ent."+field+"=:value")
-                .setParameter("value" , value).getResultList();
+        List<T> list = (List<T>) entityManager.createQuery("select ent from " + getClassEntity().getSimpleName() + " ent where ent." + field + "=:value")
+                .setParameter("value", value).getResultList();
         return list;
     }
 
     public T getSingleEntityByFieldAndValue(String field, Object value) {
-        List<T> list = getEntitiesByFieldAndValue(field,value);
+        List<T> list = getEntitiesByFieldAndValue(field, value);
         return list.isEmpty() ? null : list.get(0);
     }
 
 
     public FilterQuery<T> initFilter() {
-        FilterQuery<T> filterQuery = new FilterQuery<>(entityManager,getClassEntity());
+        FilterQuery<T> filterQuery = new FilterQuery<>(entityManager, getClassEntity());
         return filterQuery;
     }
 
     public FilterCountQuery<T> initCountFilter() {
-        FilterCountQuery<T> filterQuery = new FilterCountQuery<>(entityManager,getClassEntity());
+        FilterCountQuery<T> filterQuery = new FilterCountQuery<>(entityManager, getClassEntity());
         return filterQuery;
     }
 
-    public AbstractEntity prepare(AbstractEntity entity, BaseRepository repository, User currentUser) throws Exception {
+    private static Field findFieldByName(String name, Class<?> type) {
+        try {
+           return type.getDeclaredField(name);
+        } catch (NoSuchFieldException e) {
+            if (type.getSuperclass() != null) {
+                return findFieldByName(name,type.getSuperclass());
+            }
+        }
+
+        return null;
+    }
+
+    public AbstractEntity prepare(AbstractEntity entity, BaseRepository repository, User currentUser, List<ViewType> viewTypes) throws Exception {
         if (repository instanceof PrepareEntity) {
-            properties : for (PropertyDescriptor pd : Introspector.getBeanInfo(entity.getClass()).getPropertyDescriptors()) {
+            properties:
+            for (PropertyDescriptor pd : Introspector.getBeanInfo(entity.getClass()).getPropertyDescriptors()) {
                 if (pd.getReadMethod() != null && !"class".equals(pd.getName())) {
                     Object result = pd.getReadMethod().invoke(entity);
                     if (result == null) continue;
                     if (result instanceof AbstractEntity) {
-                        for (Annotation annotation : pd.getReadMethod().getAnnotations()) {
+                        List<ViewType> types = null;
+
+                        Field field = findFieldByName(pd.getName(),entity.getClass());
+                        if (field == null) {
+                            continue;
+                        }
+
+                        for (Annotation annotation : field.getDeclaredAnnotations()) {
                             if (annotation instanceof JsonIgnore) {
                                 continue properties;
+                            }
+
+                            if (annotation instanceof ModelView) {
+                                ModelView modelView = (ModelView) annotation;
+                                ViewType[] typesViewTypes1 =modelView.type();
+                                types = Arrays.asList(typesViewTypes1);
                             }
                         }
 
                         AbstractEntity abstractEntity = (AbstractEntity) result;
-                        BaseRepository<AbstractEntity> repository2 = (BaseRepository<AbstractEntity>)moduleLocator.findRepository(abstractEntity.getClass());
-                        if(pd.getWriteMethod() != null)
-                            pd.getWriteMethod().invoke(entity, prepare(abstractEntity,repository2,currentUser));
+                        BaseRepository<AbstractEntity> repository2 = (BaseRepository<AbstractEntity>) moduleLocator.findRepository(abstractEntity.getClass());
+                        if (pd.getWriteMethod() != null)
+                            pd.getWriteMethod().invoke(entity, prepare(abstractEntity, repository2, currentUser, types));
                     }
                 }
             }
 
 
-            return ((PrepareEntity) repository).prepare(entity,currentUser);
+            return ((PrepareEntity) repository).prepare(entity, currentUser, viewTypes);
         }
         return entity;
     }

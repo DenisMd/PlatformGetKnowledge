@@ -32,7 +32,7 @@ public class Tutorial  extends AbstractEntity implements CloneableEntity<Tutoria
 
     //Порядковый номер
     @Column(name = "order_number")
-    private int orderNumber;
+    private Integer orderNumber;
 
     @ManyToOne
     @JsonIgnore

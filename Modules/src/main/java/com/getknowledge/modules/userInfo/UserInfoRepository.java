@@ -10,6 +10,7 @@ import com.getknowledge.modules.userInfo.courseInfo.CourseInfoRepository;
 import com.getknowledge.modules.userInfo.dialog.Dialog;
 import com.getknowledge.modules.userInfo.dialog.DialogRepository;
 import com.getknowledge.modules.userInfo.post.messages.PostMessage;
+import com.getknowledge.platform.annotations.ViewType;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
@@ -47,8 +48,8 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
     private CourseInfoRepository courseInfoRepository;
 
     @Override
-    public UserInfo prepare(UserInfo entity, com.getknowledge.platform.modules.user.User currentUser) {
-        UserInfo userInfo = super.prepare(entity,currentUser);
+    public UserInfo prepare(UserInfo entity, com.getknowledge.platform.modules.user.User currentUser,List<ViewType> viewTypes) {
+        UserInfo userInfo = super.prepare(entity,currentUser,viewTypes);
         if (currentUser != null && currentUser.getId().equals(userInfo.getUser().getId())) {
             userInfo.setUserMenu(menuRepository.getSingleEntityByFieldAndValue("name", MenuNames.AuthorizedUser.name()));
         } else {

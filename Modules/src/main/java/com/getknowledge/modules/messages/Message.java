@@ -1,6 +1,8 @@
 package com.getknowledge.modules.messages;
 
 import com.getknowledge.modules.userInfo.UserInfo;
+import com.getknowledge.platform.annotations.ModelView;
+import com.getknowledge.platform.annotations.ViewType;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.CloneableEntity;
 
@@ -18,6 +20,7 @@ public abstract class Message extends AbstractEntity implements CloneableEntity 
     private Calendar createTime;
 
     @ManyToOne
+    @ModelView(type = ViewType.CompactPublic)
     private UserInfo sender;
 
     public String getMessage() {

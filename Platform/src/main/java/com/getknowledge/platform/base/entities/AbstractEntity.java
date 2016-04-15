@@ -1,18 +1,23 @@
 package com.getknowledge.platform.base.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.platform.annotations.ModelView;
+import com.getknowledge.platform.annotations.ViewType;
 
 import javax.persistence.*;
+import javax.swing.text.View;
 
 @MappedSuperclass
 public abstract class AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ModelView(type = {ViewType.CompactPublic, ViewType.Internal,ViewType.Public})
     private Long id;
 
     @Column(name = "object_version")
     @Version
+    @ModelView(type = {ViewType.CompactPublic, ViewType.Internal,ViewType.Public})
     private Long objectVersion;
 
     public void setId(Long id) {

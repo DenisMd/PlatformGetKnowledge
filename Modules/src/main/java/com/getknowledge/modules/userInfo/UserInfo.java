@@ -10,7 +10,9 @@ import com.getknowledge.modules.userInfo.dialog.Dialog;
 import com.getknowledge.modules.userInfo.post.messages.PostMessage;
 import com.getknowledge.modules.userInfo.socialLink.UserSocialLink;
 import com.getknowledge.platform.annotations.Access;
+import com.getknowledge.platform.annotations.ModelView;
 import com.getknowledge.platform.annotations.ModuleInfo;
+import com.getknowledge.platform.annotations.ViewType;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.entities.IUser;
@@ -28,12 +30,15 @@ import java.util.List;
 public class UserInfo extends AbstractEntity implements CloneableEntity<UserInfo>,IUser{
 
     @Column(name = "first_name")
+    @ModelView(type = ViewType.CompactPublic)
     private String firstName;
 
     @Column(name = "last_name")
+    @ModelView(type = ViewType.CompactPublic)
     private String lastName;
 
     @Column(length = 40)
+    @ModelView(type = ViewType.CompactPublic)
     private String specialty;
 
     @Column(name = "birth_day")
@@ -85,7 +90,7 @@ public class UserInfo extends AbstractEntity implements CloneableEntity<UserInfo
     private List<Course> studiedCourses = new ArrayList<>();
 
     @Transient
-    private boolean online = false;
+    private Boolean online = false;
 
     @ManyToMany
     @JsonIgnore
