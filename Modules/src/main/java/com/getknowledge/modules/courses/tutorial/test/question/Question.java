@@ -15,7 +15,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "question")
-public class Question extends CloneableEntity<Question> {
+public class Question extends AbstractEntity implements CloneableEntity<Question> {
 
     public String question;
 
@@ -93,6 +93,7 @@ public class Question extends CloneableEntity<Question> {
         question.setDeleting(getDeleting());
         question.setQuestion(getQuestion());
         question.setTest(getTest());
+        question.setObjectVersion(this.getObjectVersion());
         return question;
     }
 

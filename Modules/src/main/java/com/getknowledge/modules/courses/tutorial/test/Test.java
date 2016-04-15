@@ -14,7 +14,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "test")
-public class Test extends CloneableEntity<Test> {
+public class Test extends AbstractEntity implements CloneableEntity<Test> {
 
     @OneToMany(mappedBy = "test")
     private List<Question> questionList = new ArrayList<>();
@@ -73,6 +73,7 @@ public class Test extends CloneableEntity<Test> {
         Test test = new Test();
         test.setQuestionList(getQuestionList());
         test.setOriginalTest(getOriginalTest());
+        test.setObjectVersion(this.getObjectVersion());
         return test;
     }
 }

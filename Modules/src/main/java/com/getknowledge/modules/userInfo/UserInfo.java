@@ -11,6 +11,7 @@ import com.getknowledge.modules.userInfo.post.messages.PostMessage;
 import com.getknowledge.modules.userInfo.socialLink.UserSocialLink;
 import com.getknowledge.platform.annotations.Access;
 import com.getknowledge.platform.annotations.ModuleInfo;
+import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.entities.IUser;
 import com.getknowledge.platform.base.entities.CloneableEntity;
@@ -24,7 +25,7 @@ import java.util.List;
 @Entity
 @Table(name = "user_info")
 @ModuleInfo(repositoryName = "UserInfoRepository" , serviceName = "UserInfoService")
-public class UserInfo  extends CloneableEntity<UserInfo> implements IUser{
+public class UserInfo extends AbstractEntity implements CloneableEntity<UserInfo>,IUser{
 
     @Column(name = "first_name")
     private String firstName;
@@ -298,6 +299,7 @@ public class UserInfo  extends CloneableEntity<UserInfo> implements IUser{
         userInfo.setLinks(this.links);
         userInfo.setUserMenu(this.userMenu);
         userInfo.setOnline(this.online);
+        userInfo.setObjectVersion(this.getObjectVersion());
         return userInfo;
     }
 }

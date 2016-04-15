@@ -4,12 +4,13 @@ import com.getknowledge.modules.messages.CommentStatus;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.video.Video;
 import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Calendar;
 
 @Repository("VideoCommentRepository")
-public class VideoCommentRepository extends BaseRepository<VideoComment> {
+public class VideoCommentRepository extends ProtectedRepository<VideoComment> {
     @Override
     protected Class<VideoComment> getClassEntity() {
         return VideoComment.class;

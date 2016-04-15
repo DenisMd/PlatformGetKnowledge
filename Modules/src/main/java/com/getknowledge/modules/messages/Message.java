@@ -2,12 +2,13 @@ package com.getknowledge.modules.messages;
 
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
+import com.getknowledge.platform.base.entities.CloneableEntity;
 
 import javax.persistence.*;
 import java.util.Calendar;
 
 @MappedSuperclass
-public abstract class Message extends AbstractEntity {
+public abstract class Message extends AbstractEntity implements CloneableEntity {
 
     @Column(columnDefinition = "Text" , name = "message")
     private String message;
@@ -42,4 +43,7 @@ public abstract class Message extends AbstractEntity {
     public void setCreateTime(Calendar createTime) {
         this.createTime = createTime;
     }
+
+    @Override
+    public abstract AbstractEntity clone();
 }

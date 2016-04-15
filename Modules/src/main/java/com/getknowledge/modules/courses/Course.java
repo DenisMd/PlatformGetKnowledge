@@ -13,10 +13,7 @@ import com.getknowledge.modules.shop.item.Item;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.video.Video;
 import com.getknowledge.platform.annotations.*;
-import com.getknowledge.platform.base.entities.AuthorizationList;
-import com.getknowledge.platform.base.entities.CloneableEntity;
-import com.getknowledge.platform.base.entities.EntityWithTags;
-import com.getknowledge.platform.base.entities.IUser;
+import com.getknowledge.platform.base.entities.*;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import com.getknowledge.platform.modules.user.User;
@@ -30,7 +27,7 @@ import java.util.List;
 @Entity
 @Table(name = "course")
 @ModuleInfo(repositoryName = "CourseRepository" ,serviceName = "CourseService")
-public class Course extends CloneableEntity<Course> implements IUser,EntityWithTags<CoursesTag>{
+public class Course extends AbstractEntity implements CloneableEntity<Course>,IUser,EntityWithTags<CoursesTag>{
 
     private String name;
 
@@ -301,6 +298,7 @@ public class Course extends CloneableEntity<Course> implements IUser,EntityWithT
         course.setBase(this.isBase());
         course.setCreateDate(this.getCreateDate());
         course.setChangeLists(this.getChangeLists());
+        course.setObjectVersion(this.getObjectVersion());
         return course;
     }
 

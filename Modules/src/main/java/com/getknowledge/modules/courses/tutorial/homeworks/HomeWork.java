@@ -14,7 +14,7 @@ import java.util.Calendar;
 @Entity
 @Table(name = "home_work")
 @ModuleInfo(repositoryName = "HomeWorkRepository" , serviceName = "HomeWorkService")
-public class HomeWork extends CloneableEntity<HomeWork> {
+public class HomeWork extends AbstractEntity implements CloneableEntity<HomeWork> {
 
     @ManyToOne
     @JsonIgnore
@@ -102,6 +102,8 @@ public class HomeWork extends CloneableEntity<HomeWork> {
     public HomeWork clone() {
         HomeWork homeWork = new HomeWork();
         homeWork.setName(getName());
+        homeWork.setId(this.getId());
+        homeWork.setObjectVersion(this.getObjectVersion());
         return homeWork;
     }
 

@@ -6,13 +6,14 @@ import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.dialog.Dialog;
 import com.getknowledge.modules.userInfo.dialog.DialogRepository;
 import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.Calendar;
 
 @Repository("DialogMessageRepository")
-public class DialogMessageRepository extends BaseRepository<DialogMessage> {
+public class DialogMessageRepository extends ProtectedRepository<DialogMessage> {
 
     @Autowired
     private AttachmentImageRepository attachmentImageRepository;

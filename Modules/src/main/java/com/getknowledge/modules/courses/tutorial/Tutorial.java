@@ -23,7 +23,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "tutorial")
 @ModuleInfo(repositoryName = "TutorialRepository" , serviceName = "TutorialService")
-public class Tutorial  extends CloneableEntity<Tutorial> {
+public class Tutorial  extends AbstractEntity implements CloneableEntity<Tutorial> {
 
     private String name;
 
@@ -167,6 +167,7 @@ public class Tutorial  extends CloneableEntity<Tutorial> {
         tutorial.setVideo(this.getVideo());
         tutorial.setLastChangeTime(this.getLastChangeTime());
         tutorial.setOrderNumber(this.getOrderNumber());
+        tutorial.setObjectVersion(this.getObjectVersion());
         return tutorial;
     }
 }

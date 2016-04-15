@@ -41,6 +41,18 @@ public class TutorialReview extends Comment {
     }
 
     @Override
+    public AbstractEntity clone() {
+        TutorialReview tutorialReview = new TutorialReview();
+        tutorialReview.setRating(this.getRating());
+        tutorialReview.setCreateTime(this.getCreateTime());
+        tutorialReview.setMessage(this.getMessage());
+        tutorialReview.setSender(this.getSender());
+        tutorialReview.setId(this.getId());
+        tutorialReview.setObjectVersion(this.getObjectVersion());
+        return tutorialReview;
+    }
+
+    @Override
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
         authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.BlockComments));
