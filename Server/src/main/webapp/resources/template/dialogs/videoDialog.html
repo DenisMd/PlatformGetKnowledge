@@ -1,9 +1,15 @@
 <!-- Modal -->
-<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div ng-controller="videoDialogController" class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content modal-center">
             <video id="main-video" class="video-js vjs-default-skin vjs-big-play-centered">
             </video>
+            <div class="video-comments">
+                <!--Comments-->
+                {{videoComments}}
+                <button class="btn btn-primary" ng-click="loadMoreComments()">Load more</button>
+            </div>
         </div>
+
     </div>
 </div>

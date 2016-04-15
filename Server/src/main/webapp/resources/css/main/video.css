@@ -42,3 +42,8 @@
 .video-play span:hover{
     color: #17789D;
 }
+
+.video-comments {
+    height: 300px;
+    width: 728px;
+}
