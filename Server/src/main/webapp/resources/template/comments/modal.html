@@ -14,6 +14,11 @@
         <!--Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur eos fugiat illum inventore, ipsum labore laboriosam mollitia, natus nisi non nulla odit perferendis porro quas, quasi saepe sint veniam voluptates.-->
     <!--</div>-->
     <!---->
+    <div class="bubble">
+        <div  ng-model="content" contenteditable="false" class="post-editarea">
+
+        </div>
+    </div>
 
     <div class="bubble">
         <div  ng-model="content" class="post-editarea" contenteditable contenteditable-key-listener></div>
@@ -43,9 +48,7 @@
         </span>
     </div>
 
-    <button ng-click="insert()">Paste</button>
-
-    {{content}}
+    <button ng-click="send()">Paste</button>
     <script type="text/ng-template" id="pasteCode.html">
         <md-dialog aria-label="Paste code" ng-cloak flex="80">
             <form name="codeTag">
@@ -89,7 +92,6 @@
             </form>
         </md-dialog>
     </script>
-    {{test}}
     <script type="text/ng-template" id="tagPool.html">
         <md-dialog aria-label="Tags Pool" ng-cloak flex="80">
                 <md-toolbar class="statistic-card-title">

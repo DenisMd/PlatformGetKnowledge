@@ -93,7 +93,6 @@
     </div>
 
     <module-template data="statusText" name="comments/modal"></module-template>
-    <module-template data="statusText" name="comments/modal"></module-template>
 
 
 </div>

@@ -750,21 +750,25 @@ model.controller("sectionCard",function($scope,$state,applicationService,classNa
     };
 });
 
-model.controller("postController",['$scope','$timeout','codemirrorURL','TagService',function($scope,$timeout,codemirrorURL,TagService){
+model.controller("postController",['$scope','$timeout','$state','codemirrorURL','TagService','className','applicationService','pageService',
+    function($scope,$timeout,$state,codemirrorURL,TagService,className,applicationService,pageService){
     var loadString = function(string,isInit){
         $scope.$broadcast('setCaret');
         $scope.$broadcast('add', string, isInit);
     };
-    $scope.test = {
-        readOnly: 'nocursor',
-        codeShown:false,
-        showCode : function(){
-            this.codeShown = !this.codeShown;
-        }
-    };
 
     $scope.tagPool = [];
 
+        applicationService.action($scope,"" , className.userInfo,"getPosts",
+            {
+                userId: parseInt(pageService.getPathVariable("user",$state.params.path), 10),
+                first : 0,
+                max:10
+            },function(result){
+                if(result.message){
+                    loadString(result.message, true);
+                }
+            });
     $scope.content = "";//'!!!&nbsp;{"type":"ProgramTag","name":"c","code":"var i = \\\"hello world\\\"","options":{"lineNumbers":true,"indentWithTabs":true,"mode":"javascript","theme":"default"}}<br>';
 
     //first loading
@@ -800,8 +804,6 @@ model.controller("postController",['$scope','$timeout','codemirrorURL','TagServi
             $scope.tagPool.push(newTag);
             var tag = $scope.tagPool[$scope.tagPool.length - 1];
             if (tag) {
-                //angular.extend($scope.test,tag.getData());
-                //$scope.test.title = tag.getName();
                 loadString(TagService.getEditableTag($scope.content,tag,$scope.tagPool.length - 1));
             }
         },null,refresh,function(){
@@ -809,6 +811,14 @@ model.controller("postController",['$scope','$timeout','codemirrorURL','TagServi
         });
     };
 
+    $scope.send = function(){
+        applicationService.action($scope,"" , className.userInfo,"addPost",
+            {
+                userId: parseInt(pageService.getPathVariable("user",$state.params.path), 10),
+                text: $scope.content
+            },function(result){
+        });
+    };
 
     $scope.code = {
         text:"var i = \"hello world\"",
@@ -1357,10 +1367,10 @@ model.factory("TagService", function () {
                     result += value.substring(start, startPos) + this.getEditableTag(value,tag,scope.tagPool.length - 1);
                 }
             }
-            start = stopPos + stopEditable.length;
+            start = stopPos + groupSeparator.length;
         }
         if (result) {
-            result += value.substring(stopPos + stopEditable.length);
+            result += value.substring(stopPos + groupSeparator.length);
             var suffix = "<br>";
             if (result.indexOf(suffix, this.length - suffix.length) === -1){
                 result += "<br>"
