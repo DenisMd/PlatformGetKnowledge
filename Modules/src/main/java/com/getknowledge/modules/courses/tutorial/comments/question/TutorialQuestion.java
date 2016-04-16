@@ -7,6 +7,7 @@ import com.getknowledge.modules.messages.Message;
 import com.getknowledge.modules.messages.attachments.AttachmentImage;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.annotations.ModuleInfo;
+import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
@@ -27,7 +28,7 @@ public class TutorialQuestion extends Comment {
     @JsonIgnore
     private List<AttachmentImage> images = new ArrayList<>();
 
-    private boolean comment = false;
+    private Boolean comment = false;
 
     @OneToMany(mappedBy = "base")
     @JsonIgnore
@@ -79,6 +80,18 @@ public class TutorialQuestion extends Comment {
 
     public void setTutorial(Tutorial tutorial) {
         this.tutorial = tutorial;
+    }
+
+    @Override
+    public AbstractEntity clone() {
+        TutorialQuestion tutorialQuestion = new TutorialQuestion();
+        tutorialQuestion.setComment(this.isComment());
+        tutorialQuestion.setCreateTime(this.getCreateTime());
+        tutorialQuestion.setMessage(this.getMessage());
+        tutorialQuestion.setSender(this.getSender());
+        tutorialQuestion.setId(this.getId());
+        tutorialQuestion.setObjectVersion(this.getObjectVersion());
+        return tutorialQuestion;
     }
 
     @Override

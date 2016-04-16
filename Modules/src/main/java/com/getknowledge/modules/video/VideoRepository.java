@@ -143,12 +143,19 @@ public class VideoRepository extends BaseRepository<Video> {
         return video == null ? null : pathToVideo + File.separator + video.getLink();
     }
 
-    public List<VideoComment> comments(Video video,int first,int max){
+    public List<VideoComment> getComments(Video video, int first, int max){
         List<VideoComment> list = entityManager.createQuery("select comments from VideoComment comments " +
                 "where comments.video.id = :videoId order by comments.createTime desc")
                 .setParameter("videoId" , video.getId())
                 .setFirstResult(first)
                 .setMaxResults(max).getResultList();
         return list;
+    }
+
+    public Long countComments(Video video){
+        Long count = (Long) entityManager.createQuery("select count(comments.id) from VideoComment comments " +
+                "where comments.video.id = :videoId")
+                .setParameter("videoId" , video.getId()).getSingleResult();
+        return count;
     }
 }

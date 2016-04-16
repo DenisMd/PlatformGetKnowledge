@@ -5,7 +5,9 @@ import com.getknowledge.modules.messages.Message;
 import com.getknowledge.modules.messages.attachments.AttachmentImage;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.annotations.ModuleInfo;
+import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
+import javafx.geometry.Pos;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ public class PostMessage extends Message {
     @JsonIgnore
     private List<AttachmentImage> images = new ArrayList<>();
 
-    private boolean comment = false;
+    private Boolean comment = false;
 
     @OneToMany(mappedBy = "basePost")
     @JsonIgnore
@@ -72,6 +74,19 @@ public class PostMessage extends Message {
 
     public void setImages(List<AttachmentImage> images) {
         this.images = images;
+    }
+
+
+    @Override
+    public AbstractEntity clone() {
+        PostMessage postMessage = new PostMessage();
+        postMessage.setComment(this.isComment());
+        postMessage.setCreateTime(this.getCreateTime());
+        postMessage.setMessage(this.getMessage());
+        postMessage.setSender(this.getSender());
+        postMessage.setId(this.getId());
+        postMessage.setObjectVersion(this.getObjectVersion());
+        return postMessage;
     }
 
     @Override

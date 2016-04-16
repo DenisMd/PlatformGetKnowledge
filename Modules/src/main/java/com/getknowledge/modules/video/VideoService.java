@@ -6,13 +6,12 @@ import com.getknowledge.modules.courses.tutorial.Tutorial;
 import com.getknowledge.modules.courses.tutorial.homeworks.HomeWork;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoRepository;
-import com.getknowledge.modules.userInfo.UserInfoService;
 import com.getknowledge.modules.video.comment.VideoComment;
 import com.getknowledge.modules.video.comment.VideoCommentRepository;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
-import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.services.*;
+import com.getknowledge.platform.exceptions.AccessDeniedException;
 import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
@@ -34,9 +33,6 @@ public class VideoService extends AuthorizedService<Video> implements BootstrapS
 
     @Autowired
     private VideoRepository videoRepository;
-
-    @Autowired
-    private UserInfoService userInfoService;
 
     @Autowired
     private UserInfoRepository userInfoRepository;
@@ -84,7 +80,7 @@ public class VideoService extends AuthorizedService<Video> implements BootstrapS
         if (video == null){
             return Result.Failed();
         }
-        UserInfo userInfo = userInfoService.getAuthorizedUser(data);
+        UserInfo userInfo = userInfoRepository.getCurrentUser(data);
         if (userInfo == null || !isAccessForEdit(userInfo.getUser(),video)) {
             return Result.AccessDenied();
         }
@@ -94,22 +90,45 @@ public class VideoService extends AuthorizedService<Video> implements BootstrapS
         return Result.Complete();
     }
 
-    @Action(name = "getComments" , mandatoryFields = {"videoId","first","max"})
+    @Action(name = "getComments" , mandatoryFields = {"videoId","first","max"}
+            ,prepareEntity = true
+            ,repositoryName = "VideoCommentRepository")
     @Transactional
-    public List<VideoComment> getComments(HashMap<String,Object> data) {
+    public List<VideoComment> getComments(HashMap<String,Object> data) throws AccessDeniedException {
         Long videoId = longFromField("videoId",data);
         Integer first = (Integer) data.get("first");
         Integer max = (Integer) data.get("max");
         Video video = videoRepository.read(videoId);
+        UserInfo currentUser = userInfoRepository.getCurrentUser(data);
+        if (!isAccessForRead(currentUser == null ? null : currentUser.getUser(),video)){
+            throw new AccessDeniedException("Access denied for read comments");
+        }
         if (video != null)
-            return videoRepository.comments(video,first,max);
+            return videoRepository.getComments(video, first, max);
         return null;
     }
+
+    @Action(name = "countComments" , mandatoryFields = {"videoId"})
+    @Transactional
+    public Long countComments(HashMap<String,Object> data) throws AccessDeniedException {
+        Long videoId = longFromField("videoId",data);
+        Integer first = (Integer) data.get("first");
+        Integer max = (Integer) data.get("max");
+        Video video = videoRepository.read(videoId);
+        UserInfo currentUser = userInfoRepository.getCurrentUser(data);
+        if (!isAccessForRead(currentUser == null ? null : currentUser.getUser(),video)){
+            throw new AccessDeniedException("Access denied for read comments count");
+        }
+        if (video != null)
+            return videoRepository.countComments(video);
+        return null;
+    }
+
 
     @Action(name = "addComment" , mandatoryFields = {"videoId","text"})
     @Transactional
     public Result addComment(HashMap<String,Object> data) throws NotAuthorized {
-        UserInfo userInfo = userInfoService.getAuthorizedUser(data);
+        UserInfo userInfo = userInfoRepository.getCurrentUser(data);
         if (userInfo == null) {
             Result.NotAuthorized();
         }
@@ -119,6 +138,10 @@ public class VideoService extends AuthorizedService<Video> implements BootstrapS
 
         if (video == null){
             Result.NotFound();
+        }
+
+        if (!isAccessForRead(userInfo.getUser(),video)){
+            Result.AccessDenied();
         }
 
         String text = (String) data.get("text");

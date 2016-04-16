@@ -3,10 +3,11 @@ package com.getknowledge.modules.courses.tutorial.comments.review;
 import com.getknowledge.modules.courses.tutorial.comments.question.TutorialQuestion;
 import com.getknowledge.modules.messages.CommentStatus;
 import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository("TutorialReviewRepository")
-public class TutorialReviewRepository extends BaseRepository<TutorialReview> {
+public class TutorialReviewRepository extends ProtectedRepository<TutorialReview> {
     @Override
     protected Class<TutorialReview> getClassEntity() {
         return TutorialReview.class;

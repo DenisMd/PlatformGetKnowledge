@@ -44,6 +44,17 @@ public class DialogMessage extends Message {
     }
 
     @Override
+    public AbstractEntity clone() {
+        DialogMessage dialogMessage = new DialogMessage();
+        dialogMessage.setCreateTime(this.getCreateTime());
+        dialogMessage.setMessage(this.getMessage());
+        dialogMessage.setSender(this.getSender());
+        dialogMessage.setId(this.getId());
+        dialogMessage.setObjectVersion(this.getObjectVersion());
+        return dialogMessage;
+    }
+
+    @Override
     public AuthorizationList getAuthorizationList() {
         return null;
     }

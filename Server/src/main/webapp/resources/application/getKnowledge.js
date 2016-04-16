@@ -11,7 +11,9 @@ model.config(function (hljsServiceProvider,codemirrorURL) {
     CodeMirror.modeURL = codemirrorURL+ "mode/%N/%N.js";
 });
 
-model.controller("mainController", function ($scope, $http, $state,$languages, applicationService,pageService, className,$mdToast,$mdDialog, $mdMedia,$parse) {
+model.controller("mainController", function ($scope,$http,$state,$languages,applicationService,pageService,className,$mdToast,$mdDialog, $mdMedia,$parse) {
+
+    $scope.mainScope = $scope;
 
     //информация о заголовке страници
     $scope.toggelMenu = true;

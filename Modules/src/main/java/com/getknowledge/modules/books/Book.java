@@ -6,10 +6,7 @@ import com.getknowledge.modules.books.tags.BooksTag;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.annotations.ModuleInfo;
-import com.getknowledge.platform.base.entities.AuthorizationList;
-import com.getknowledge.platform.base.entities.CloneableEntity;
-import com.getknowledge.platform.base.entities.EntityWithTags;
-import com.getknowledge.platform.base.entities.IUser;
+import com.getknowledge.platform.base.entities.*;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import com.getknowledge.platform.modules.user.User;
@@ -21,7 +18,7 @@ import java.util.List;
 @Entity
 @Table(name = "book")
 @ModuleInfo(repositoryName = "BookRepository" , serviceName = "BookService")
-public class Book extends CloneableEntity<Book> implements IUser, EntityWithTags<BooksTag>{
+public class Book extends AbstractEntity implements CloneableEntity<Book>,IUser, EntityWithTags<BooksTag>{
 
     private String name;
 
@@ -173,6 +170,7 @@ public class Book extends CloneableEntity<Book> implements IUser, EntityWithTags
         cloneBook.setLinks(this.getLinks());
         cloneBook.setOwner(this.getOwner());
         cloneBook.setTags(this.getTags());
+        cloneBook.setObjectVersion(this.getObjectVersion());
         return cloneBook;
     }
 }

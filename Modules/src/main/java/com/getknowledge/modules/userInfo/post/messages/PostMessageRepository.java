@@ -5,6 +5,7 @@ import com.getknowledge.modules.messages.attachments.AttachmentImage;
 import com.getknowledge.modules.messages.attachments.AttachmentImageRepository;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.exceptions.DeleteException;
 import com.getknowledge.platform.exceptions.PlatformException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Calendar;
 
 @Repository("PostMessageRepository")
-public class PostMessageRepository extends BaseRepository<PostMessage> {
+public class PostMessageRepository extends ProtectedRepository<PostMessage> {
     @Override
     protected Class<PostMessage> getClassEntity() {
         return PostMessage.class;

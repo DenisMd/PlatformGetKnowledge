@@ -17,7 +17,7 @@ function initVideoPlayer() {
 
 
 
-model.controller("videoCtrl",function($scope,className,applicationService){
+model.controller("videoCtrl",function($scope,videoDialogService,className,applicationService){
 
     initVideoPlayer();
 
@@ -30,6 +30,7 @@ model.controller("videoCtrl",function($scope,className,applicationService){
 
     $scope.open = function() {
         var videoUrl = getVideoUrl($scope.video.id);
+        videoDialogService.afterOpen($scope.video.id);
         if (!player ||player.currentSrc() !== videoUrl) {
             player.src({type: "video/mp4", src: videoUrl});
             player.play();

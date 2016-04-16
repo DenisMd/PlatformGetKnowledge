@@ -1,9 +1,25 @@
 <!-- Modal -->
-<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div ng-controller="videoDialogController" class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content modal-center">
             <video id="main-video" class="video-js vjs-default-skin vjs-big-play-centered">
             </video>
+            <div class="video-comments">
+                <!--Comments-->
+                <div class="comment row" ng-repeat="videoComment in videoComments">
+                    <div class="col-sm-4">
+                        <img ng-src="{{userImg(videoComment.sender.id)}}">
+                        <br>
+                        {{videoComment.sender.lastName + ' ' + videoComment.sender.firstName}}
+                        <br>
+                        {{videoComment.sender.speciality}}
+                    </div>
+                    <div class="col-sm-6">
+                        {{videoComment.message}}
+                    </div>
+                </div>
+                <button class="btn btn-primary" ng-click="loadMoreComments()">Load more</button>
+            </div>
         </div>
     </div>
 </div>

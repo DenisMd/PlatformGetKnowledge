@@ -1,14 +1,18 @@
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 public class Test {
 
     @org.junit.Test
-    public void getProgrammingLanguage() throws IOException {
-        String text = "(IP:123.5.23.6545)";
-        System.err.println(text.substring(4,text.length()-1));
+    public void getProgrammingLanguage() throws IOException, ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMM");
+        Date date = format.parse("171");
+        System.out.println(date.toString());
     }
 
 

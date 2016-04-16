@@ -100,14 +100,16 @@ public class DataController {
         return objectNode;
     }
 
-    private ArrayNode listToJsonString(List<AbstractEntity> list,User user,BaseRepository repository,Class<?> classEntity) throws Exception {
+    private ArrayNode listToJsonString(List<AbstractEntity> list,User user,BaseRepository repository,Class<?> classEntity,boolean checkAccess) throws Exception {
         ArrayNode nodes = objectMapper.createArrayNode();
         for (AbstractEntity abstractEntity : list) {
-            if (!isAccessRead(user, abstractEntity) ) {
-                if (abstractEntity.isContinueIfNotEnoughRights()) {
-                    continue;
+            if (checkAccess) {
+                if (!isAccessRead(user, abstractEntity)) {
+                    if (abstractEntity.isContinueIfNotEnoughRights()) {
+                        continue;
+                    }
+                    throw new NotAuthorized(String.format("Access denied for read entity (%s) from list", classEntity.getName()), trace, TraceLevel.Warning);
                 }
-                throw new NotAuthorized(String.format("Access denied for read entity (%s) from list" , classEntity.getName()) , trace, TraceLevel.Warning);
             }
 
             boolean isEditable = isAccessEdit(user,abstractEntity);
@@ -281,7 +283,7 @@ public class DataController {
                 return null;
             }
 
-            return listToJsonString(list,getCurrentUser(principal),repository,classEntity).toString();
+            return listToJsonString(list,getCurrentUser(principal),repository,classEntity,true).toString();
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
         } catch (PlatformException p) {
@@ -308,7 +310,7 @@ public class DataController {
                 return null;
             }
 
-            return listToJsonString(list,getCurrentUser(principal),repository,classEntity).toString();
+            return listToJsonString(list,getCurrentUser(principal),repository,classEntity,true).toString();
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
         } catch (Exception e) {
@@ -512,7 +514,7 @@ public class DataController {
             User user = getCurrentUser(principal);
             objectNode.put("totalEntitiesCount" , filterService.getCount(filterCountQuery));
             if (list != null) {
-                objectNode.putArray("list").addAll(listToJsonString(list, user, repository, classEntity));
+                objectNode.putArray("list").addAll(listToJsonString(list, user, repository, classEntity,true));
             }
             Constructor<?> cos = classEntity.getConstructor();
             AbstractEntity abstractEntity = (AbstractEntity) cos.newInstance();
@@ -603,14 +605,20 @@ public class DataController {
                 if (data != null) {
                     Object result = method.invoke(abstractService, data);
                     if (action.prepareEntity()) {
+                        BaseRepository baseRepository = null;
+                        if (action.repositoryName().isEmpty()) {
+                            baseRepository = moduleLocator.findRepository(classEntity);
+                        } else {
+                            baseRepository = moduleLocator.findRepository(action.repositoryName());
+                        }
                         if (result instanceof  AbstractEntity) {
                             AbstractEntity entity = (AbstractEntity) result;
                             boolean isEditable = isAccessEdit(currentUser,entity);
                             boolean isCreatable = isAccessCreate(currentUser,entity);
-
+                            entity = crudService.prepare(entity,baseRepository,getCurrentUser(principal));
                             return prepareJson(entity,isEditable,isCreatable,classEntity).toString();
                         } else if(result instanceof List) {
-                            return listToJsonString((List<AbstractEntity>) result,currentUser,moduleLocator.findRepository(classEntity),classEntity).toString();
+                            return listToJsonString((List<AbstractEntity>) result,currentUser,baseRepository,classEntity,false).toString();
                         }
                     }
                     //TODO: обработать result
