@@ -12,14 +12,14 @@ import java.util.Calendar;
 @MappedSuperclass
 public abstract class Message extends AbstractEntity implements CloneableEntity {
 
-    @Column(columnDefinition = "Text" , name = "message")
+    @Column(columnDefinition = "Text" , name = "message",nullable = false)
     private String message;
 
-    @Column(name = "createTime")
+    @Column(name = "createTime",nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar createTime;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @ModelView(type = ViewType.CompactPublic)
     private UserInfo sender;
 

@@ -7,7 +7,8 @@ function initVideoPlayer() {
             "preload": "metadata",
             "autoplay": false,
             "width": 720,
-            "height": 480
+            "height": 480,
+            aspectRatio: '16:9'
         };
         player = videojs(document.getElementById('main-video'), options, function () {
             player = this;

@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @ModuleInfo(repositoryName = "VideoCommentRepository" , serviceName = "VideoCommentService")
 public class VideoComment extends Comment {
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonIgnore
     private Video video;
 

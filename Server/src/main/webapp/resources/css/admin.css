@@ -24,12 +24,6 @@
     cursor: pointer;
 }
 
-.loadMore {
-    text-align: center;
-    cursor: pointer;
-    color: #00b3ee;
-}
-
 .red-critical{
     color: red;
 }

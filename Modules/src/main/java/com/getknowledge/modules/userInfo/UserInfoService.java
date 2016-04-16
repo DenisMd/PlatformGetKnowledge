@@ -267,7 +267,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
         }
 
         if (data.containsKey("speciality")) {
-            userInfo.setSpecialty((String) data.get("speciality"));
+            userInfo.setSpeciality((String) data.get("speciality"));
         }
 
         if (data.containsKey("date")) {

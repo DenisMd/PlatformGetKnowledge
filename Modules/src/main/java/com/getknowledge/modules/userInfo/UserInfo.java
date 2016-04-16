@@ -39,7 +39,7 @@ public class UserInfo extends AbstractEntity implements CloneableEntity<UserInfo
 
     @Column(length = 40)
     @ModelView(type = ViewType.CompactPublic)
-    private String specialty;
+    private String speciality;
 
     @Column(name = "birth_day")
     private Calendar birthDay;
@@ -221,12 +221,12 @@ public class UserInfo extends AbstractEntity implements CloneableEntity<UserInfo
         this.profileImage = profileImage;
     }
 
-    public String getSpecialty() {
-        return specialty;
+    public String getSpeciality() {
+        return speciality;
     }
 
-    public void setSpecialty(String specialty) {
-        this.specialty = specialty;
+    public void setSpeciality(String speciality) {
+        this.speciality = speciality;
     }
 
     public String getFirstName() {
@@ -294,7 +294,7 @@ public class UserInfo extends AbstractEntity implements CloneableEntity<UserInfo
         userInfo.setFirstName(this.getFirstName());
         userInfo.setLanguage(this.getLanguage());
         userInfo.setLastName(this.getLastName());
-        userInfo.setSpecialty(this.getSpecialty());
+        userInfo.setSpeciality(this.getSpeciality());
         userInfo.setUser(this.getUser());
         userInfo.setMan(this.getMan());
         userInfo.setFirstLogin(this.getFirstLogin());

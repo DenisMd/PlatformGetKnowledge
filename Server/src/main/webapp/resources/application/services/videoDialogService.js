@@ -17,10 +17,16 @@ model.factory('videoDialogService', function(applicationService,className) {
                 first : 0,
                 max : 10
             };
-            applicationService.action(mainScope,"",className.video,"getComments",videoInfo,callbackFunction);
+            applicationService.action(mainScope,"videoCommentsCount",className.video,"countComments",videoInfo,function(){
+                applicationService.action(mainScope,"",className.video,"getComments",videoInfo,callbackFunction);
+            });
         },
 
         loadMore : function(number){
+            //Больше нету кооментариев
+            if (mainScope.videoCommentsCount <= videoInfo.first) {
+                return;
+            }
             videoInfo.first += number;
             applicationService.action(mainScope,"",className.video,"getComments",videoInfo,callbackFunction);
         }

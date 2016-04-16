@@ -468,3 +468,10 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
 .footer-margin{
     margin-left: 250px;
 }
+
+/*Load more*/
+.loadMore {
+    text-align: center;
+    cursor: pointer;
+    color: #00b3ee;
+}

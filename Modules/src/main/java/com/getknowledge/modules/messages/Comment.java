@@ -9,8 +9,8 @@ import java.util.Calendar;
 @MappedSuperclass
 public abstract class Comment extends Message {
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private CommentStatus commentStatus;
+    @Column(name = "status",nullable = false)
+    private CommentStatus commentStatus = CommentStatus.Normal;
 
     public CommentStatus getCommentStatus() {
         return commentStatus;

@@ -2,31 +2,42 @@
 
 <!-- Modal -->
 <div ng-controller="videoDialogController" class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog video" role="document">
         <div class="modal-content modal-center">
             <video id="main-video" class="video-js vjs-default-skin vjs-big-play-centered">
             </video>
             <div class="video-comments">
-                <div class="row" ng-show="user">
+                <div ng-show="user">
                     <img ng-src="{{userImg(user.id)}}">
-                    <textarea>
-
-                    </textarea>
+                    <div class="bubble">
+                        <div  ng-model="content" class="post-editarea" contenteditable contenteditable-key-listener></div>
+                    </div>
                 </div>
+                <div class="not-authorized-text text-center" ng-show="!user">{{translate("video_dialog_not_authorized")}}</div>
                 <!--Comments-->
-                <div class="comment row" ng-repeat="videoComment in videoComments">
-                    <div class="col-sm-4">
-                        <img ng-src="{{userImg(videoComment.sender.id)}}">
-                        <br>
-                        {{videoComment.sender.lastName + ' ' + videoComment.sender.firstName}}
-                        <br>
-                        {{videoComment.sender.speciality}}
-                    </div>
-                    <div class="col-sm-6">
-                        {{videoComment.message}}
+                <div class="video_comments_count">
+                    {{translate("video_comments_count") + videoCommentsCount}}
+                </div>
+                <div class="comment" ng-repeat="videoComment in videoComments">
+                    <div layout="row" layout-align="start center">
+                        <div flex="30" class="text-center">
+                            <img ng-src="{{userImg(videoComment.sender.id)}}">
+                            <br>
+                            {{videoComment.sender.lastName + ' ' + videoComment.sender.firstName}}
+                            <br>
+                            {{videoComment.sender.speciality}}
+                        </div>
+                        <div flex="60">
+                            <div class="bubble">
+                                <div>{{videoComment.message}}</div>
+                            </div>
+                            <div class="comment-time">{{videoComment.createTime | date : 'medium'}}</div>
+                        </div>
+                        <div flex="10">
+                        </div>
                     </div>
                 </div>
-                <button class="btn btn-primary" ng-click="loadMoreComments()">Load more</button>
+                <div class="text-center loadMore video-comments-padding">{{translate("load_more")}}</div>
             </div>
         </div>
     </div>

@@ -4,6 +4,8 @@
 
 [contenteditable]:not([contenteditable="false"])  {
     min-height: 84px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 .post-editarea{
@@ -42,10 +44,6 @@
     -o-transform: rotate(45deg);
 }
 
-.bubble>div{
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
 
 .tool-button{
     min-width: 0;

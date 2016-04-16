@@ -1,0 +1,20 @@
+.not-authorized-text {
+    font-size: 15px;
+    color: #989898;
+    padding: 15px 0;
+}
+
+.comment-time {
+    color: #1B3FC5;
+    text-align: right;
+}
+
+.video-comments-padding {
+    padding: 15px 0;
+}
+
+.video_comments_count {
+    font-size: 15px;
+    padding-left: 10px;
+    font-weight: bold;
+}
