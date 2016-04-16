@@ -3,8 +3,6 @@
 }
 
 [contenteditable]:not([contenteditable="false"])  {
-    border: 1px solid #ccc;
-    border-radius: 4px;
     min-height: 84px;
 }
 
@@ -42,6 +40,11 @@
     -moz-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     -o-transform: rotate(45deg);
+}
+
+.bubble>div{
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 .tool-button{
