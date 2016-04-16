@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/resources/css/dialogs/videoDialog.css">
+
 <!-- Modal -->
 <div ng-controller="videoDialogController" class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -5,6 +7,12 @@
             <video id="main-video" class="video-js vjs-default-skin vjs-big-play-centered">
             </video>
             <div class="video-comments">
+                <div class="row" ng-show="user">
+                    <img ng-src="{{userImg(user.id)}}">
+                    <textarea>
+
+                    </textarea>
+                </div>
                 <!--Comments-->
                 <div class="comment row" ng-repeat="videoComment in videoComments">
                     <div class="col-sm-4">
