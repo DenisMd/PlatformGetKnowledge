@@ -11,7 +11,7 @@ model.config(function (hljsServiceProvider,codemirrorURL) {
     CodeMirror.modeURL = codemirrorURL+ "mode/%N/%N.js";
 });
 
-model.controller("mainController", function ($scope,$rootScope, $http, $state,$languages, applicationService,pageService, className,$mdToast,$mdDialog, $mdMedia,$parse) {
+model.controller("mainController", function ($scope, $http, $state,$languages, applicationService,pageService, className,$mdToast,$mdDialog, $mdMedia,$parse) {
 
     //информация о заголовке страници
     $scope.toggelMenu = true;
@@ -748,7 +748,7 @@ model.controller("sectionCard",function($scope,$state,applicationService,classNa
     };
 });
 
-model.controller("postController",['$scope','$rootScope','$timeout','codemirrorURL','TagService',function($scope,$rootScope,$timeout,codemirrorURL,TagService){
+model.controller("postController",['$scope','$timeout','codemirrorURL','TagService',function($scope,$timeout,codemirrorURL,TagService){
     var loadString = function(string,isInit){
         $scope.$broadcast('setCaret');
         $scope.$broadcast('add', string, isInit);
@@ -763,7 +763,7 @@ model.controller("postController",['$scope','$rootScope','$timeout','codemirrorU
 
     $scope.tagPool = [];
 
-    $scope.content = '!!!&nbsp;{"type":"ProgramTag","name":"c","code":"var i = \\\"hello world\\\"","options":{"lineNumbers":true,"indentWithTabs":true,"mode":"javascript","theme":"default"}}<br>';
+    $scope.content = "";//'!!!&nbsp;{"type":"ProgramTag","name":"c","code":"var i = \\\"hello world\\\"","options":{"lineNumbers":true,"indentWithTabs":true,"mode":"javascript","theme":"default"}}<br>';
 
     //first loading
     var initValue = $scope.content;
@@ -1096,40 +1096,8 @@ model.service('arcService', function(){
     };
 });
 
-//for textarea
-model.directive('insertAtCaret', ['$rootScope', function($rootScope) {
-    return {
-        link: function(scope, element, attrs) {
-            $rootScope.$on('add', function(e, val) {
-                console.log('on add');
-                console.log(val);
-                var domElement = element[0];
-                if (document.selection) {
-                    domElement.focus();
-                    var sel = document.selection.createRange();
-                    sel.text = val;
-                    domElement.focus();
-                } else if (element.selectionStart || element.selectionStart === 0) {
-                    var startPos = element.selectionStart;
-                    var endPos = element.selectionEnd;
-                    var scrollTop = element.scrollTop;
-                    domElement.value = element.value.substring(0, startPos) + val + element.value.substring(endPos, element.value.length);
-                    domElement.focus();
-                    domElement.selectionStart = startPos + val.length;
-                    domElement.selectionEnd = startPos + val.length;
-                    domElement.scrollTop = scrollTop;
-                } else {
-                    domElement.value += val;
-                    domElement.focus();
-                }
-
-            });
-        }
-    };
-}]);
-
 //tag editor
-model.directive('contenteditable', ['$rootScope', '$sce', 'TagService', function ($rootScope, $sce, TagService) {
+model.directive('contenteditable', ['$sce', 'TagService', function ($sce, TagService) {
     return {
         restrict: 'A', // only activate on element attribute
         require: '?ngModel', // get a hold of NgModelController
@@ -1146,6 +1114,9 @@ model.directive('contenteditable', ['$rootScope', '$sce', 'TagService', function
             // Listen for change events to enable binding
             element.on('blur keyup change', function () {
                 scope.$evalAsync(read);
+                if (!el.lastChild || el.lastChild.nodeName.toLowerCase() != "br") {
+                    el.appendChild(document.createElement('br'));
+                }
             });
             element.on("keypress", function (event) {
                 if (event.which === 13) {
@@ -1167,8 +1138,6 @@ model.directive('contenteditable', ['$rootScope', '$sce', 'TagService', function
                 return TagService.parser(viewValue,scope);
             });
 
-            ngModel.$formatters.push(function(modelValue) {
-            });
 
         }
     };
