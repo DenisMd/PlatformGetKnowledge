@@ -49,8 +49,14 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
 
     @Override
     public UserInfo prepare(UserInfo entity, com.getknowledge.platform.modules.user.User currentUser,List<ViewType> viewTypes) {
+
+        //сохраняем идентификатор,так как при подготовке может обнулиться свойство user
+        long userId         = entity.getUser().getId();
+        String userLogin    = entity.getUser().getLogin();
+
         UserInfo userInfo = super.prepare(entity,currentUser,viewTypes);
-        if (currentUser != null && currentUser.getId().equals(userInfo.getUser().getId())) {
+
+        if (currentUser != null && currentUser.getId().equals(userId)) {
             userInfo.setUserMenu(menuRepository.getSingleEntityByFieldAndValue("name", MenuNames.AuthorizedUser.name()));
         } else {
             userInfo.setUserMenu(menuRepository.getSingleEntityByFieldAndValue("name", MenuNames.NotAuthorizedUser.name()));
@@ -58,7 +64,7 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
 
         List<User> list = ((List<User>)(List<?>)sessionRegistry.getAllPrincipals());
         userInfo.setOnline(list.stream().filter(
-                userDetail -> userDetail.getUsername().equals(userInfo.getUser().getLogin())
+                userDetail -> userDetail.getUsername().equals(userLogin)
         ).findFirst().isPresent());
         return userInfo;
     }
