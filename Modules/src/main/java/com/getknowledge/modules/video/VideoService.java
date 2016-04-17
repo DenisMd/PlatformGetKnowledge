@@ -165,6 +165,29 @@ public class VideoService extends AuthorizedService<Video> implements BootstrapS
         return Result.Complete();
     }
 
+    @Action(name = "removeVideoComment" , mandatoryFields = {"videoCommentId"})
+    @Transactional
+    public Result removeVideoComment(HashMap<String,Object> data) throws NotAuthorized {
+        UserInfo userInfo = userInfoRepository.getCurrentUser(data);
+        if (userInfo == null) {
+            return Result.NotAuthorized();
+        }
+
+        Long videoCommentId = longFromField("videoCommentId",data);
+        VideoComment videoComment = videoCommentRepository.read(videoCommentId);
+        if (videoComment == null) {
+            return Result.NotFound();
+        }
+
+        if (!videoComment.getSender().getId().equals(userInfo.getId())) {
+            return Result.AccessDenied();
+        }
+
+        videoCommentRepository.remove(videoComment);
+
+        return Result.Complete();
+    }
+
     @Override
     @Transactional
     public String getVideoLink(long id) {

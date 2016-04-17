@@ -475,3 +475,11 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     cursor: pointer;
     color: #00b3ee;
 }
+
+.modal {
+    z-index: 32;
+}
+
+.modal-backdrop {
+    z-index: 31;
+}

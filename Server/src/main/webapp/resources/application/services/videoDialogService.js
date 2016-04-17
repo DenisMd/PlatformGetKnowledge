@@ -35,6 +35,11 @@ model.factory('videoDialogService', function(applicationService,className) {
 
         getVideoInfo : function(){
             return videoInfo;
+        },
+
+        removeByIndex : function(index){
+            mainScope.videoComments.splice(index,1);
+            mainScope.totalVideoCommentsCount--;
         }
     }
 });
