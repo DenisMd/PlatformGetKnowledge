@@ -798,10 +798,10 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             return url [url.length - 1] + "Ctrl";
         }
 
-        $urlRouterProvider.when('' , '/' + $languagesProvider.defaultLanguages);
-        $urlRouterProvider.when('/' , '/' + $languagesProvider.defaultLanguages);
-        $urlRouterProvider.when('/#' , '/' + $languagesProvider.defaultLanguages);
-        $urlRouterProvider.when('/#/' , '/' + $languagesProvider.defaultLanguages);
+        $urlRouterProvider.when('' , '/' + $languagesProvider.defaultLanguage);
+        $urlRouterProvider.when('/' , '/' + $languagesProvider.defaultLanguage);
+        $urlRouterProvider.when('/#' , '/' + $languagesProvider.defaultLanguage);
+        $urlRouterProvider.when('/#/' , '/' + $languagesProvider.defaultLanguage);
 
         $stateProvider.state('home', {
             url : "/:language",

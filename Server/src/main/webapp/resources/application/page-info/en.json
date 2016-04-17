@@ -69,6 +69,7 @@
     "move"          : "Move",
     "link"          : "Link",
     "i"             : "I",
+    "spam"          : "Spam",
 
 
     "failed"        : "Failed",
@@ -93,6 +94,7 @@
     "source_code"         : "Source code",
     "group_courses"       : "Group courses",
     "go_to_course"        : "Go to course",
+    "max_length"          : "Length is too big",
 
     "video1_title"  : "Почему getKnowlege() ?",
     "video2_title"  : "Что значит быть программистом сегодня?",

@@ -147,7 +147,7 @@ public class VideoService extends AuthorizedService<Video> implements BootstrapS
 
         String text = (String) data.get("text");
         if (text.length() > 250) {
-            return Result.Failed("Max length violated");
+            return Result.Failed("max_length");
         }
 
         VideoComment last = videoCommentRepository.lastVideoComment();
@@ -157,7 +157,7 @@ public class VideoService extends AuthorizedService<Video> implements BootstrapS
 
             long subtract =  Calendar.getInstance().getTimeInMillis() - last.getCreateTime().getTimeInMillis();
             if (subtract < 30000) {
-                return Result.Failed("Spam");
+                return Result.Failed("spam");
             }
         }
 
