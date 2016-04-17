@@ -18,3 +18,16 @@
     padding-left: 10px;
     font-weight: bold;
 }
+
+.video-comment {
+    margin-bottom: 10px;
+}
+
+.comment-edit {
+    margin-top: 10px;
+}
+
+
+.video-comment-message {
+    word-break: break-all;
+}

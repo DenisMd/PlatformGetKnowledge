@@ -68,6 +68,17 @@
     "message"       : "Message",
     "move"          : "Move",
     "link"          : "Link",
+    "i"             : "I",
+
+
+    "failed"        : "Failed",
+    "complete"      : "Complete",
+    "sessionFailed" : "Session failed",
+    "emailNotSend"  : "Email not sent",
+    "notAuthorized" : "Not authorized",
+    "accessDenied"  : "Access denied",
+    "notFound"      : "Not found",
+
 
     "404_response"        : "Page not found!",
     "403_response"        : "Access for page denied!",

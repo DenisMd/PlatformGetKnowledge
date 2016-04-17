@@ -2,6 +2,10 @@ String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
+String.prototype.toLowercaseFirstLetter = function() {
+    return this.charAt(0).toLowerCase() + this.slice(1);
+};
+
 
 function PlatformUtils(){
     this.isFunction = function(func){

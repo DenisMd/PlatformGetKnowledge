@@ -7,18 +7,38 @@
             <video id="main-video" class="video-js vjs-default-skin vjs-big-play-centered">
             </video>
             <div class="video-comments">
-                <div ng-show="user">
-                    <img ng-src="{{userImg(user.id)}}">
-                    <div class="bubble">
-                        <div  ng-model="content" class="post-editarea" contenteditable contenteditable-key-listener></div>
+                <div layout="row" layout-align="start center">
+                    <div flex="30"></div>
+                    <div flex="50">
+                        <module-template name="components/infoMessage" data="videoCommentErrorMessage"></module-template>
+                    </div>
+                    <div flex="20"></div>
+
+                </div>
+                <div ng-show="user" layout="row" layout-align="start center" class="comment-edit">
+                    <div flex="30" class="text-center">
+                        <img ng-src="{{userImg(user.id)}}">
+                        <br>
+                        {{translate("i")}}
+                    </div>
+                    <div flex="50">
+                        <div class="bubble">
+                            <div  ng-model="commentMessage" class="post-editarea" contenteditable>
+                            </div>
+                        </div>
+                    </div>
+                    <div flex="20">
+                        <md-button class="md-raised md-primary" ng-click="sendMessage(commentMessage)">Send</md-button>
                     </div>
                 </div>
+
                 <div class="not-authorized-text text-center" ng-show="!user">{{translate("video_dialog_not_authorized")}}</div>
                 <!--Comments-->
+                <hr>
                 <div class="video_comments_count">
-                    {{translate("video_comments_count") + videoCommentsCount}}
+                    {{translate("video_comments_count") + totalVideoCommentsCount}}
                 </div>
-                <div class="comment" ng-repeat="videoComment in videoComments">
+                <div class="video-comment" ng-repeat="videoComment in videoComments">
                     <div layout="row" layout-align="start center">
                         <div flex="30" class="text-center">
                             <img ng-src="{{userImg(videoComment.sender.id)}}">
@@ -28,8 +48,8 @@
                             {{videoComment.sender.speciality}}
                         </div>
                         <div flex="60">
-                            <div class="bubble">
-                                <div>{{videoComment.message}}</div>
+                            <div class="bubble video-comment-message">
+                                <div ng-bind-html="videoComment.message"></div>
                             </div>
                             <div class="comment-time">{{videoComment.createTime | date : 'medium'}}</div>
                         </div>
@@ -37,8 +57,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="text-center loadMore video-comments-padding">{{translate("load_more")}}</div>
-            </div>
-        </div>
-    </div>
+                <div class="text-center loadMore video-comments-padding" ng-show="videoCommentsCount < totalVideoCommentsCount" ng-click="loadMoreComments()">{{translate("load_more")}}</div>
+            </div>  <!--Video comments-->
+        </div> <!--modal content-->
+    </div> <!--modal dialog video-->
 </div>

@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -130,23 +131,34 @@ public class VideoService extends AuthorizedService<Video> implements BootstrapS
     public Result addComment(HashMap<String,Object> data) throws NotAuthorized {
         UserInfo userInfo = userInfoRepository.getCurrentUser(data);
         if (userInfo == null) {
-            Result.NotAuthorized();
+            return Result.NotAuthorized();
         }
 
         Long videoId = longFromField("videoId",data);
         Video video = videoRepository.read(videoId);
 
         if (video == null){
-            Result.NotFound();
+            return Result.NotFound();
         }
 
         if (!isAccessForRead(userInfo.getUser(),video)){
-            Result.AccessDenied();
+            return Result.AccessDenied();
         }
 
         String text = (String) data.get("text");
         if (text.length() > 250) {
-            Result.Failed();
+            return Result.Failed("Max length violated");
+        }
+
+        VideoComment last = videoCommentRepository.lastVideoComment();
+
+        //Если один и тот же пользователь в течении 30 сек пытается отправить еще одно сообщение отклоняем его как спам
+        if (last!= null && last.getSender().getId().equals(userInfo.getId())) {
+
+            long subtract =  Calendar.getInstance().getTimeInMillis() - last.getCreateTime().getTimeInMillis();
+            if (subtract < 30000) {
+                return Result.Failed("Spam");
+            }
         }
 
         videoCommentRepository.createComment(text,video,userInfo);

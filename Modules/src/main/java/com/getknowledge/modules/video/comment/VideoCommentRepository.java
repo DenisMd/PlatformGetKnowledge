@@ -8,6 +8,7 @@ import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Calendar;
+import java.util.List;
 
 @Repository("VideoCommentRepository")
 public class VideoCommentRepository extends ProtectedRepository<VideoComment> {
@@ -30,5 +31,14 @@ public class VideoCommentRepository extends ProtectedRepository<VideoComment> {
         videoComment.setMessage(null);
         videoComment.setCommentStatus(commentStatus);
         merge(videoComment);
+    }
+
+    public VideoComment lastVideoComment() {
+        List<VideoComment> videoCommentList = entityManager.createQuery(
+                "select vc from VideoComment vc " +
+                        "where vc.createTime = (select max(vc2.createTime) from VideoComment vc2)"
+        ).getResultList();
+
+        return videoCommentList.isEmpty() ? null : videoCommentList.get(0);
     }
 }

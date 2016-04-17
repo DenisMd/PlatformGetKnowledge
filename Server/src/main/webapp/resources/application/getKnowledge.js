@@ -56,6 +56,17 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
         return $scope.application.text[key];
     };
 
+    //Из result получить сообщение
+    $scope.getResultMessage = function(result) {
+        if (!result || !result.status)
+            return "";
+        if (result.message) {
+            return $scope.translate(result.status.toLowercaseFirstLetter()) + " : " + $scope.translate(result.message.toLowercaseFirstLetter());
+        } else {
+            return $scope.translate(result.status.toLowercaseFirstLetter());
+        }
+    };
+
     //смена языка
     $scope.changeLanguage = function (language) {
         if (!$scope.application.language || $scope.application.language === language) {

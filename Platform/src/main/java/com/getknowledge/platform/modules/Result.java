@@ -44,9 +44,68 @@ public class Result {
         return result;
     }
 
+    public static Result Complete(String message){
+        Result result = new Result();
+        result.setStatus("Complete");
+        result.setMessage(message);
+        return result;
+    }
+
+    public static Result Failed(String message){
+        Result result = new Result();
+        result.setStatus("Failed");
+        result.setMessage(message);
+        return result;
+    }
+
+    public static Result SessionFailed(String message){
+        Result result = new Result();
+        result.setStatus("SessionFailed");
+        result.setMessage(message);
+        return result;
+    }
+
+    public static Result EmailNotSend(String message){
+        Result result = new Result();
+        result.setStatus("EmailNotSend");
+        result.setMessage(message);
+        return result;
+    }
+
+    public static Result NotAuthorized(String message){
+        Result result = new Result();
+        result.setStatus("NotAuthorized");
+        result.setMessage(message);
+        return result;
+    }
+
+    public static Result AccessDenied(String message){
+        Result result = new Result();
+        result.setStatus("AccessDenied");
+        result.setMessage(message);
+        return result;
+    }
+
+    public static Result NotFound(String message){
+        Result result = new Result();
+        result.setStatus("Not found");
+        result.setMessage(message);
+        return result;
+    }
+
     private String status;
 
     private Object object = null;
+
+    private String message;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public String getStatus() {
         return status;
