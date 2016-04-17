@@ -28,6 +28,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             "menu" : "com.getknowledge.modules.menu.Menu",
             "menuItem" : "com.getknowledge.modules.menu.item.MenuItem",
             "video" : "com.getknowledge.modules.video.Video",
+            "videoComments" : "com.getknowledge.modules.video.comment.VideoComment",
             "language" : "com.getknowledge.modules.dictionaries.language.Language",
             "country" : "com.getknowledge.modules.dictionaries.country.Country",
             "region" : "com.getknowledge.modules.dictionaries.region.Region",

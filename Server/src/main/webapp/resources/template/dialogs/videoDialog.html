@@ -49,7 +49,7 @@
                         </div>
                         <div flex="60">
                             <i class="fa fa-times right-icon" aria-hidden="true" ng-click="showDeleteVideoDialog($event,videoComment.id,$index)" ng-hide="!user || user.id !== videoComment.sender.id"></i>
-                            <i class="fa fa-lock right-icon" aria-hidden="true" ng-show="videoComment.editable"></i>
+                            <i class="fa fa-lock right-icon" aria-hidden="true" ng-click="showBlockCommentDialog($event)" ng-show="videoComment.editable"></i>
                             <div class="bubble video-comment-message">
                                 <div ng-bind-html="videoComment.message"></div>
                             </div>
@@ -64,3 +64,37 @@
         </div> <!--modal content-->
     </div> <!--modal dialog video-->
 </div>
+
+
+<script type="text/ng-template" id="blockVideoComment.html">
+    <md-dialog ng-cloak>
+        <form>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>{{parentScope.translate("block_video_comment")}}</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="cancel()">
+                        <md-icon md-svg-src="resources/image/svg/close.svg" aria-label="Close dialog"></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <div class="md-dialog-content">
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>{{parentScope.translate("block_status")}}</label>
+                        <md-select ng-model="blockStatus">
+                            <md-option ng-repeat="bSt in parentScope.blockStatuses" value="{{bSt}}">
+                                {{translate(bSt)}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </md-dialog-content>
+            <md-dialog-actions layout="row">
+                <md-button class="md-raised md-primary" ng-click="answer(blockStatus)">
+                    {{parentScope.translate("block")}}
+                </md-button>
+            </md-dialog-actions>
+        </form>
+    </md-dialog>
+</script>

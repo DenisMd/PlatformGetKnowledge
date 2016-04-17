@@ -32,7 +32,7 @@ model.controller("videoDialogController",function($scope,$mdDialog,videoDialogSe
             .ok($scope.translate("delete"))
             .cancel($scope.translate("cancel"));
         $mdDialog.show(confirm).then(function() {
-            applicationService.action($scope,"",className.video,"removeVideoComment",{
+            applicationService.action($scope,"",className.videoComments,"removeVideoComment",{
                 "videoCommentId" : videoCommentId
             },function (result) {
                 $scope.showToast($scope.getResultMessage(result));
@@ -42,4 +42,14 @@ model.controller("videoDialogController",function($scope,$mdDialog,videoDialogSe
             });
         });
     };
+
+    $scope.blockStatuses = ["normal","advertising","spam","insult"];
+    $scope.showBlockCommentDialog = function(ev) {
+        $scope.showDialog(ev,$scope,"blockVideoComment.html",function(answer){
+            console.log(answer);
+        });
+    };
+
+
+
 });
