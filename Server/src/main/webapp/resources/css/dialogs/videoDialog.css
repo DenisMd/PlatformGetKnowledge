@@ -31,3 +31,18 @@
 .video-comment-message {
     word-break: break-all;
 }
+
+.video-comments {
+    margin-top: 10px;
+}
+
+.right-icon {
+    float: right;
+    margin: 0 5px;
+    cursor: pointer;
+    color: #9e9e9e;
+}
+
+.right-icon:hover {
+    color: #6d6d6d;
+}

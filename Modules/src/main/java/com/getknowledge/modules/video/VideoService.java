@@ -156,7 +156,7 @@ public class VideoService extends AuthorizedService<Video> implements BootstrapS
         if (last!= null && last.getSender().getId().equals(userInfo.getId())) {
 
             long subtract =  Calendar.getInstance().getTimeInMillis() - last.getCreateTime().getTimeInMillis();
-            if (subtract < 30000) {
+            if (subtract < 30_000) {
                 return Result.Failed("spam");
             }
         }

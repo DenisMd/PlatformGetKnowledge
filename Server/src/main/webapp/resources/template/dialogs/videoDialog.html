@@ -48,6 +48,8 @@
                             {{videoComment.sender.speciality}}
                         </div>
                         <div flex="60">
+                            <i class="fa fa-times right-icon" aria-hidden="true" ng-hide="!user || user.id !== videoComment.sender.id"></i>
+                            <i class="fa fa-lock right-icon" aria-hidden="true" ng-show="videoComment.editable"></i>
                             <div class="bubble video-comment-message">
                                 <div ng-bind-html="videoComment.message"></div>
                             </div>
