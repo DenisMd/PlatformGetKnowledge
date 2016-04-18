@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet" href="/resources/css/login.css">
+<link rel="stylesheet" href="/resources/css/authorize-forms/forms.css">
 
 <form class="center-form">
     <div ng-class="resultForgotPassword?'':'div-hidden'" class="alert alert-info text-center" role="alert">

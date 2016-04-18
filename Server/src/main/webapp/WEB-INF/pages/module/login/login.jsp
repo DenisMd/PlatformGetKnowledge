@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet" href="/resources/css/login.css">
+<link rel="stylesheet" href="/resources/css/authorize-forms/forms.css">
 
 <div>
     <module-template name="components/infoMessage" data="loginError"></module-template>

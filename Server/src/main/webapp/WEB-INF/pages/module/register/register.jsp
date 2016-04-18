@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet" href="/resources/css/login.css">
+<link rel="stylesheet" href="/resources/css/authorize-forms/forms.css">
 <div ng-class="getClass()" class="alert text-center" role="alert">
     {{translate(registerInfo)}}
 </div>
