@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @ModuleInfo(repositoryName = "ProgrammingStyleRepository" , serviceName = "ProgrammingStyleService")
 public class ProgrammingStyle extends AbstractEntity{
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
     public String getName() {

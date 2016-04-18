@@ -19,17 +19,17 @@ public class UserEvent extends AbstractEntity{
     private UserInfo owner;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_event_type")
+    @Column(name = "user_event_type" , nullable =  false)
     private UserEventType userEventType;
 
     @Column(columnDefinition = "Text" , name = "data")
     private String data;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_time")
+    @Column(name = "create_time" , nullable = false)
     private Calendar createTime;
 
-    @Column(name = "is_checked")
+    @Column(name = "is_checked" , nullable = false)
     private Boolean checked = false;
 
     public boolean isChecked() {

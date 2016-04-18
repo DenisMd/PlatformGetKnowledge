@@ -14,10 +14,10 @@ import javax.persistence.*;
 @ModuleInfo(repositoryName = "CityRepository" , serviceName = "CityService")
 public class City extends AbstractEntity {
 
-    @Column(name = "city_name")
+    @Column(name = "city_name" , nullable = false)
     private String cityName;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonIgnore
     private Region region;
 

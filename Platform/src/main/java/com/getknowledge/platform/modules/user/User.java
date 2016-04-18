@@ -21,18 +21,20 @@ public class User extends AbstractEntity {
     @Column(unique = true)
     private String login;
 
-    @Column(name = "hash_pwd" , length = 500)
+    @Column(name = "hash_pwd" , length = 500 , nullable = false)
     @JsonIgnore
     private String hashPwd;
 
     @Transient
     private String pwdTransient;
 
+    @Column(nullable = false)
     private boolean enabled=true;
 
+    @Column(nullable = false)
     private boolean blocked=false;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Role role;
 
     @Column(name = "block_message",length = 500)
@@ -42,7 +44,7 @@ public class User extends AbstractEntity {
     @JoinTable(name = "sys_permissions_of_user")
     private List<Permission> permissions = new ArrayList<>();
 
-    @Column(name = "create_date")
+    @Column(name = "create_date" , nullable = false)
     private Calendar createDate;
 
     public User() {

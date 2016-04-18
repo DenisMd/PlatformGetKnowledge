@@ -23,10 +23,11 @@ public class Test extends AbstractEntity implements CloneableEntity<Test> {
     @Access(myself = true)
     private Test originalTest;
 
+    @Column(nullable = false)
     @com.getknowledge.platform.annotations.Access(myself = true)
     private Boolean deleting = false;
 
-    @Column(name = "last_change_time")
+    @Column(name = "last_change_time" , nullable = false)
     @Temporal(value = TemporalType.TIMESTAMP)
     private Calendar lastChangeTime;
 

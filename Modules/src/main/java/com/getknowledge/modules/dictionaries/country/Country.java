@@ -19,7 +19,7 @@ import java.util.List;
 public class Country extends AbstractEntity {
 
 
-    @Column(name = "country_name")
+    @Column(name = "country_name" , nullable = false)
     private String countryName;
 
     @OneToMany(mappedBy = "country")

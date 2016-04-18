@@ -21,6 +21,8 @@ import java.util.List;
 @Table(name = "program")
 @ModuleInfo(repositoryName = "ProgramRepository" , serviceName = "ProgramService")
 public class Program extends AbstractEntity implements CloneableEntity<Program>,IUser,EntityWithTags<ProgramTag> {
+
+    @Column(nullable = false)
     private String name;
 
     @Column(length = 1000)

@@ -20,6 +20,7 @@ import java.util.List;
 @ModuleInfo(repositoryName = "BookRepository" , serviceName = "BookService")
 public class Book extends AbstractEntity implements CloneableEntity<Book>,IUser, EntityWithTags<BooksTag>{
 
+    @Column(nullable = false)
     private String name;
 
     @Column(length = 1000)

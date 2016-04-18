@@ -15,9 +15,10 @@ import javax.persistence.Table;
 @ModuleInfo(repositoryName = "ProgrammingLanguageRepository" ,serviceName = "ProgrammingLanguageService")
 public class ProgrammingLanguage extends AbstractEntity {
 
+    @Column(nullable = false)
     private String name;
 
-    @Column(name = "mode")
+    @Column(name = "mode" , nullable = false)
     private String mode;
 
     public String getName() {

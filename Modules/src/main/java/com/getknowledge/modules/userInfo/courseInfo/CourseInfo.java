@@ -16,10 +16,10 @@ import java.util.List;
 public class CourseInfo extends AbstractEntity {
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(optional = false)
     private UserInfo userInfo;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonIgnore
     private Course course;
 

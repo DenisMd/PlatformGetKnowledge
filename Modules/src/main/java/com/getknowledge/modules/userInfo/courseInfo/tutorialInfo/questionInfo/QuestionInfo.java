@@ -7,22 +7,20 @@ import com.getknowledge.modules.userInfo.courseInfo.tutorialInfo.TutorialInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "question_info")
 public class QuestionInfo extends AbstractEntity {
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonIgnore
     private TutorialInfo tutorialInfo;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Question question;
 
+    @Column(nullable = false)
     private String answers;
 
     private int score;

@@ -7,6 +7,7 @@ import javax.persistence.*;
 @MappedSuperclass
 public abstract class Folder extends AbstractEntity {
 
+    @Column(nullable = false)
     private String title;
 
     @Column(name = "url" , unique = true)

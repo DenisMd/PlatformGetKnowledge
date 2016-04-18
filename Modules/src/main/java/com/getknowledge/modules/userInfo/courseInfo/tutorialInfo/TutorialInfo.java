@@ -18,11 +18,11 @@ import java.util.List;
 @Table(name = "tutorial_info")
 public class TutorialInfo extends AbstractEntity {
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonIgnore
     private CourseInfo courseInfo;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonIgnore
     private Tutorial tutorial;
 

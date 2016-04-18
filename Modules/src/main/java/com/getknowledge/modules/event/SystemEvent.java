@@ -13,14 +13,17 @@ import java.util.Calendar;
 @ModuleInfo(repositoryName = "SystemEventRepository" , serviceName = "SystemEventService")
 public class SystemEvent extends AbstractEntity {
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     SystemEventType systemEventType;
 
     @OneToOne
     private UserInfo userInfo;
 
+    @Column(nullable = false)
     private String uuid;
 
+    @Column(nullable = false)
     private Calendar calendar;
 
     public SystemEventType getSystemEventType() {

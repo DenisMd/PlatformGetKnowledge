@@ -29,11 +29,11 @@ import java.util.List;
 @ModuleInfo(repositoryName = "UserInfoRepository" , serviceName = "UserInfoService")
 public class UserInfo extends AbstractEntity implements CloneableEntity<UserInfo>,IUser{
 
-    @Column(name = "first_name")
+    @Column(name = "first_name" , nullable = false)
     @ModelView(type = ViewType.CompactPublic)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name" , nullable = false)
     @ModelView(type = ViewType.CompactPublic)
     private String lastName;
 
@@ -50,20 +50,21 @@ public class UserInfo extends AbstractEntity implements CloneableEntity<UserInfo
     private byte[] profileImage;
 
     @Access(myself = true)
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Language language;
 
     @ManyToOne
     private City city;
 
     @Access(roles = {"ROLE_ADMIN"})
-    @OneToOne
+    @OneToOne(optional = false)
     private User user;
 
-    @Column(name = "man")
+    @Column(name = "man" , nullable = false)
     private Boolean man;
 
     @Access(myself = true)
+    @Column(nullable = false)
     private Boolean firstLogin;
 
     @Column(length = 120)

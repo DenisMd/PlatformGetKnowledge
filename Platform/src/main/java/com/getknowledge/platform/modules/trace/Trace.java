@@ -16,13 +16,14 @@ public class Trace extends AbstractEntity {
     @Column(length = 500)
     private String message;
 
-    @Column(name = "trace_level")
+    @Column(name = "trace_level" , nullable = false)
     @Enumerated(EnumType.STRING)
     private TraceLevel traceLevel;
 
     @Column(columnDefinition = "Text" , name = "stack_trace")
     private String stackTrace;
 
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar calendar = Calendar.getInstance();
 

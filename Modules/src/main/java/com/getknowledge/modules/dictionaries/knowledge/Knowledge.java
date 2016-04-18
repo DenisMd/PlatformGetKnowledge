@@ -15,10 +15,11 @@ import javax.persistence.*;
 @ModuleInfo(repositoryName = "KnowledgeRepository" , serviceName = "KnowledgeService")
 public class Knowledge extends AbstractEntity {
 
-    @Column(name = "type")
+    @Column(name = "type" , nullable = false)
     @Enumerated(EnumType.STRING)
     private KnowledgeType knowledgeType;
 
+    @Column(nullable = false)
     private String name;
 
     @Column(length = 750)

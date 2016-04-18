@@ -17,9 +17,10 @@ import java.util.List;
 @Table(name = "question")
 public class Question extends AbstractEntity implements CloneableEntity<Question> {
 
+    @Column(nullable = false)
     public String question;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonIgnore
     private Test test;
 
@@ -30,10 +31,11 @@ public class Question extends AbstractEntity implements CloneableEntity<Question
     @com.getknowledge.platform.annotations.Access(myself = true)
     private Question originalQuestion;
 
+    @Column(nullable = false)
     @com.getknowledge.platform.annotations.Access(myself = true)
     private Boolean deleting = false;
 
-    @Column(name = "last_change_time")
+    @Column(name = "last_change_time" , nullable = false)
     @Temporal(value = TemporalType.TIMESTAMP)
     private Calendar lastChangeTime;
 

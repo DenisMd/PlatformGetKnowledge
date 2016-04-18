@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @ModuleInfo(repositoryName = "LanguageRepository" , serviceName = "LanguageService")
 public class Language extends AbstractEntity {
 
-    @Column(length = 5)
+    @Column(length = 5 , nullable = false)
     private String name;
 
     public String getName() {

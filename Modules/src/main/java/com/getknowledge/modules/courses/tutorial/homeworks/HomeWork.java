@@ -16,10 +16,11 @@ import java.util.Calendar;
 @ModuleInfo(repositoryName = "HomeWorkRepository" , serviceName = "HomeWorkService")
 public class HomeWork extends AbstractEntity implements CloneableEntity<HomeWork> {
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonIgnore
     private Tutorial tutorial;
 
+    @Column(nullable = false)
     private String name;
 
     @Column(columnDefinition = "Text" , name = "data")
@@ -30,7 +31,7 @@ public class HomeWork extends AbstractEntity implements CloneableEntity<HomeWork
     @JsonIgnore
     private Video video;
 
-    @Column(name = "last_change_time")
+    @Column(name = "last_change_time" , nullable = false)
     @Temporal(value = TemporalType.TIMESTAMP)
     private Calendar lastChangeTime;
 
@@ -39,7 +40,7 @@ public class HomeWork extends AbstractEntity implements CloneableEntity<HomeWork
     private HomeWork original;
 
     @JsonIgnore
-    @Column(name = "deleting")
+    @Column(name = "deleting" , nullable = false)
     private Boolean deleting = false;
 
     public Calendar getLastChangeTime() {

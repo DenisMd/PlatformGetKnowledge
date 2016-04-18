@@ -13,21 +13,21 @@ import java.util.Calendar;
 @ModuleInfo(repositoryName = "TaskRepository" , serviceName = "TaskService")
 public class Task  extends AbstractEntity{
 
-    @Column(name = "name")
+    @Column(name = "name" , nullable = false)
     private String taskName;
 
     @Column(columnDefinition = "Text",name = "json_data")
     private String jsonData;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "task_status")
+    @Column(name = "task_status" , nullable = false)
     private TaskStatus taskStatus = TaskStatus.NotStarted;
 
-    @Column(name = "start_date")
+    @Column(name = "start_date" , nullable = false)
     @Temporal(value = TemporalType.TIMESTAMP)
     private Calendar startDate;
 
-    @Column(name = "service_name")
+    @Column(name = "service_name" , nullable = false)
     private String serviceName;
 
     @Column(columnDefinition = "Text" , name = "stack_trace")

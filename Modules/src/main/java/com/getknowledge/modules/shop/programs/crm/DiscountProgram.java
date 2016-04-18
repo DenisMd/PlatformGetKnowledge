@@ -12,6 +12,7 @@ import java.util.List;
 @Table(name = "crm_discount_programs")
 public class DiscountProgram extends AbstractEntity {
 
+    @Column(nullable = false)
     private String name;
 
     @Column(length = 1000)
@@ -28,8 +29,8 @@ public class DiscountProgram extends AbstractEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar endDate;
 
-    @Column(name = "immediately_start")
-    private boolean immediatelyStart;
+    @Column(name = "immediately_start" , nullable = false)
+    private boolean immediatelyStart = false;
 
     public boolean isImmediatelyStart() {
         return immediatelyStart;

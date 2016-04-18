@@ -20,7 +20,7 @@ import java.util.List;
 @ModuleInfo(repositoryName = "SectionRepository" , serviceName = "SectionService")
 public class Section extends AbstractEntity {
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
     @Column(columnDefinition = "Text" , name = "description_ru")
@@ -29,7 +29,7 @@ public class Section extends AbstractEntity {
     @Column(columnDefinition = "Text" , name = "description_en")
     private String descriptionEn;
 
-    @OneToOne
+    @OneToOne(optional = false)
     @JoinColumn(name = "menu_item")
     private MenuItem menuItem;
 

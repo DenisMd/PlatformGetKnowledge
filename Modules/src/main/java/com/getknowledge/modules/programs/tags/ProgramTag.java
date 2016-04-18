@@ -6,10 +6,7 @@ import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.entities.ITag;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +14,7 @@ import java.util.List;
 @Table(name = "program_tag")
 public class ProgramTag extends AbstractEntity implements ITag {
 
+    @Column(nullable = false)
     private String tagName;
 
     @ManyToMany

@@ -29,6 +29,7 @@ import java.util.List;
 @ModuleInfo(repositoryName = "CourseRepository" ,serviceName = "CourseService")
 public class Course extends AbstractEntity implements CloneableEntity<Course>,IUser,EntityWithTags<CoursesTag>{
 
+    @Column(nullable = false)
     private String name;
 
     private String description;
@@ -53,10 +54,11 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
     @JoinTable(name = "courses_required_knowledges")
     private List<Knowledge> requiredKnowledge = new ArrayList<>();
 
-    @Column(name = "create_date")
+    @Column(name = "create_date" , nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar createDate;
 
+    @Column(nullable = false)
     private Boolean release = false;
 
     @OneToOne
@@ -89,7 +91,7 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
     @OneToOne
     private Item item;
 
-    @Column(name = "is_base" , columnDefinition = "boolean default true")
+    @Column(name = "is_base" , columnDefinition = "boolean default true" , nullable = false)
     private Boolean base = false;
 
     @OneToMany(mappedBy = "course" , cascade = {CascadeType.REMOVE})

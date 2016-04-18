@@ -12,10 +12,7 @@ import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +25,7 @@ public class TutorialQuestion extends Comment {
     @JsonIgnore
     private List<AttachmentImage> images = new ArrayList<>();
 
+    @Column(nullable = false)
     private Boolean comment = false;
 
     @OneToMany(mappedBy = "base")
@@ -38,7 +36,7 @@ public class TutorialQuestion extends Comment {
     @JsonIgnore
     private TutorialQuestion base;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonIgnore
     public Tutorial tutorial;
 

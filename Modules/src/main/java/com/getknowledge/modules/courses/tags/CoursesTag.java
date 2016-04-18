@@ -14,7 +14,7 @@ import java.util.List;
 @Table(name = "courses_tag")
 public class CoursesTag extends AbstractEntity implements ITag {
 
-    @Column(name = "tag_name")
+    @Column(name = "tag_name" , nullable = false)
     private String tagName;
 
     @ManyToMany

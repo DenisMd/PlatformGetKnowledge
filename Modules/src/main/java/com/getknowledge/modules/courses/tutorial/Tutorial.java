@@ -25,16 +25,17 @@ import java.util.Objects;
 @ModuleInfo(repositoryName = "TutorialRepository" , serviceName = "TutorialService")
 public class Tutorial  extends AbstractEntity implements CloneableEntity<Tutorial> {
 
+    @Column(nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "tutorial")
     private List<HomeWork> homeWorks = new ArrayList<>();
 
     //Порядковый номер
-    @Column(name = "order_number")
+    @Column(name = "order_number" , nullable = false)
     private Integer orderNumber;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonIgnore
     private Course course;
 
@@ -49,7 +50,7 @@ public class Tutorial  extends AbstractEntity implements CloneableEntity<Tutoria
     @Transient
     private Rating avgTutorialRating;
 
-    @Column(name = "last_change_time")
+    @Column(name = "last_change_time" , nullable = false)
     @Temporal(value = TemporalType.TIMESTAMP)
     private Calendar lastChangeTime;
 
@@ -58,7 +59,7 @@ public class Tutorial  extends AbstractEntity implements CloneableEntity<Tutoria
     private Tutorial originalTutorial;
 
     @com.getknowledge.platform.annotations.Access(myself = true)
-    @Column(name = "deleting")
+    @Column(name = "deleting" , nullable = false)
     private Boolean deleting = false;
 
     @OneToOne

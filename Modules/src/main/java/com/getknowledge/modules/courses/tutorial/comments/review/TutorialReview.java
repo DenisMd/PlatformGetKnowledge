@@ -18,10 +18,10 @@ import javax.persistence.*;
 @ModuleInfo(repositoryName = "TutorialReviewRepository" , serviceName = "TutorialReviewService")
 public class TutorialReview extends Comment {
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Tutorial tutorial;
 
-    @OneToOne
+    @OneToOne(optional = false)
     private Rating rating;
 
     public Tutorial getTutorial() {

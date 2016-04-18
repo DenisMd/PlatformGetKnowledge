@@ -14,9 +14,10 @@ import java.util.Calendar;
 @ModuleInfo(repositoryName = "BootstrapInfoRepository" , serviceName = "BootstrapInfoService")
 public class BootstrapInfo extends AbstractEntity {
 
-    @Column(name = "bootstrap_order")
+    @Column(name = "bootstrap_order" , nullable = false)
     private Integer order = 0;
 
+    @Column(name = "name" , nullable = false)
     private String name;
 
     @Column(name = "state")
@@ -29,7 +30,7 @@ public class BootstrapInfo extends AbstractEntity {
     @Column(columnDefinition = "Text" , name = "stack_trace")
     private String stackTrace;
 
-    @Column(name = "start_time")
+    @Column(name = "start_time", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar startTime;
 

@@ -13,12 +13,14 @@ import java.util.Calendar;
 @Table(name = "news")
 @ModuleInfo(repositoryName = "NewsRepository", serviceName = "NewsService")
 public class News extends AbstractEntity {
+
+    @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "Text")
+    @Column(columnDefinition = "Text" , nullable = false)
     private String message;
 
-    @Column(name = "post_date")
+    @Column(name = "post_date" , nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar postDate;
 

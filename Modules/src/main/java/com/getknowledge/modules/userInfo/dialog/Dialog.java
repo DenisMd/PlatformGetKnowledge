@@ -22,10 +22,10 @@ public class Dialog extends AbstractEntity{
     @JsonIgnore
     private List<DialogMessage> messages = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private UserInfo user;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private UserInfo companion;
 
     public UserInfo getUser() {

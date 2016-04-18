@@ -3,6 +3,7 @@ import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -12,10 +13,12 @@ import javax.persistence.Table;
 @ModuleInfo(repositoryName = "SettingsRepository" , serviceName = "SettingsService")
 public class Settings extends AbstractEntity {
 
+    @Column(nullable = false)
     private String domain;
 
     private String version;
 
+    @Column(nullable = false)
     private String email;
 
     public String getEmail() {

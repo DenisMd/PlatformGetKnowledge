@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @ModuleInfo(repositoryName = "GroupBooksRepository" , serviceName = "GroupBooksService")
 public class GroupBooks extends Folder {
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonIgnore
     private Section section;
 

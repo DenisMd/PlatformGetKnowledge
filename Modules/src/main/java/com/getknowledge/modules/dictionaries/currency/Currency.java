@@ -14,16 +14,16 @@ import java.math.BigDecimal;
 @ModuleInfo(repositoryName = "CurrencyRepository" , serviceName = "CurrencyService")
 public class Currency extends AbstractEntity {
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
-    @Column(length = 3)
+    @Column(length = 3 , nullable = false)
     private String charCode;
 
-    @Column(name = "value")
+    @Column(name = "value" , nullable = false)
     private BigDecimal value;
 
-    @Column(name = "base_currency")
+    @Column(name = "base_currency" , nullable = false)
     private Boolean baseCurrency = false;
 
     public String getCharCode() {

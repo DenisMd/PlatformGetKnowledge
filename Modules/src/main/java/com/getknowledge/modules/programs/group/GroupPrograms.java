@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @ModuleInfo(repositoryName = "GroupProgramsRepository" , serviceName = "GroupProgramsService")
 public class GroupPrograms extends Folder {
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonIgnore
     private Section section;
 

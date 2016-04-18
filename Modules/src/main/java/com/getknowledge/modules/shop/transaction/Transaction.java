@@ -14,11 +14,13 @@ import java.util.Calendar;
 @ModuleInfo(repositoryName = "TransactionRepository" , serviceName = "TransactionService")
 public class Transaction extends AbstractEntity {
 
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar startDate;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private TransactionType transactionType;
+    private TransactionType transactionType = TransactionType.NotStarted;
 
     @OneToOne(optional = false)
     private Item item;

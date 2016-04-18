@@ -13,15 +13,18 @@ import java.util.Calendar;
 @Table(name = "answer")
 public class Answer extends AbstractEntity implements CloneableEntity<Answer> {
 
+    @Column(nullable = false)
     private String answer;
 
     @JsonIgnore
+    @Column(nullable = false)
     private String description;
 
     @JsonIgnore
+    @Column(nullable = false)
     private boolean correct;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonIgnore
     private Question question;
 
@@ -30,9 +33,10 @@ public class Answer extends AbstractEntity implements CloneableEntity<Answer> {
     private Answer originalAnswer;
 
     @com.getknowledge.platform.annotations.Access(myself = true)
+    @Column(nullable = false)
     private Boolean deleting = false;
 
-    @Column(name = "last_change_time")
+    @Column(name = "last_change_time" , nullable = false)
     @Temporal(value = TemporalType.TIMESTAMP)
     private Calendar lastChangeTime;
 

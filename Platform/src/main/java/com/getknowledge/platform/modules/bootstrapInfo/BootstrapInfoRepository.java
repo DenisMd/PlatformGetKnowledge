@@ -31,6 +31,7 @@ public class BootstrapInfoRepository extends BaseRepository<BootstrapInfo> {
         BootstrapInfo bootstrapInfo = getSingleEntityByFieldAndValue("name" , object.getName());
         if (bootstrapInfo != null) return bootstrapInfo;
         object.setBootstrapState(BootstrapState.NotComplete);
+        object.setStartTime(Calendar.getInstance());
         super.create(object);
         return object;
     }

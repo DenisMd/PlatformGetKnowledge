@@ -15,7 +15,7 @@ import javax.persistence.*;
 @ModuleInfo(repositoryName = "GroupCoursesRepository" , serviceName = "GroupCoursesService")
 public class GroupCourses extends Folder {
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonIgnore
     private Section section;
 

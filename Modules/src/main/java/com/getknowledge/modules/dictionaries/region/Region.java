@@ -15,10 +15,10 @@ import java.util.List;
 @ModuleInfo(repositoryName = "RegionRepository", serviceName = "RegionService")
 public class Region extends AbstractEntity {
 
-    @Column(name = "region_name")
+    @Column(name = "region_name" , nullable = false)
     private String regionName;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonIgnore
     private Country country;
 

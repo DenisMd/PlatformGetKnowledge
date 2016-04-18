@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Entity
 public class FileAttachment {
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JsonIgnore
     private HpMessage message;
 

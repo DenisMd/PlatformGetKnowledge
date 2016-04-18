@@ -21,13 +21,14 @@ import java.util.List;
 @ModuleInfo(repositoryName =  "HPMessageRepository" , serviceName = "HPMessageService")
 public class HpMessage extends AbstractEntity{
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    HpMessageType type;
+    HpMessageType type = HpMessageType.Question;
 
-    @Column(length = 120)
+    @Column(length = 120 , nullable = false)
     private String title;
 
-    @Column(columnDefinition = "Text" , name = "message")
+    @Column(columnDefinition = "Text" , name = "message" , nullable = false)
     private String message;
 
     @ManyToOne

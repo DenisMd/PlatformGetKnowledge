@@ -8,13 +8,13 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Version {
 
-    @Column(name = "major_version")
+    @Column(name = "major_version" , nullable = false)
     private int majorVersion;
 
-    @Column(name = "middle_version")
+    @Column(name = "middle_version" , nullable = false)
     private int middleVersion;
 
-    @Column(name = "minor_version")
+    @Column(name = "minor_version" , nullable = false)
     private int minorVersion;
 
     public Version() {
