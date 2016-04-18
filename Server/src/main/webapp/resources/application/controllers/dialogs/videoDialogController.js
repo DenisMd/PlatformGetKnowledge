@@ -15,6 +15,7 @@ model.controller("videoDialogController",function($scope,$mdDialog,videoDialogSe
         applicationService.action(null,"",className.video,"addComment",videoInfo,function(result){
             $scope.videoCommentErrorMessage = {};
             if (result.status === "Complete") {
+                $scope.commentMessage = null;
                 videoDialogService.afterOpen(videoInfo.videoId);
             } else {
                 $scope.videoCommentErrorMessage.message = $scope.getResultMessage(result);
@@ -43,10 +44,19 @@ model.controller("videoDialogController",function($scope,$mdDialog,videoDialogSe
         });
     };
 
-    $scope.blockStatuses = ["normal","advertising","spam","insult"];
-    $scope.showBlockCommentDialog = function(ev) {
+    $scope.blockStatuses = ["advertising","spam","insult"];
+    $scope.showBlockCommentDialog = function(ev,videoCommentId,index) {
         $scope.showDialog(ev,$scope,"blockVideoComment.html",function(answer){
             console.log(answer);
+            applicationService.action($scope,"",className.videoComments,"blockComment",{
+                videoCommentId : videoCommentId,
+                status  : answer.capitalizeFirstLetter()
+            },function(result){
+                $scope.showToast($scope.getResultMessage(result));
+                if (result.status === 'Complete') {
+                    videoDialogService.blockByIndx(index,answer.capitalizeFirstLetter());
+                }
+            });
         });
     };
 

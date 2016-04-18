@@ -49,9 +49,12 @@
                         </div>
                         <div flex="60">
                             <i class="fa fa-times right-icon" aria-hidden="true" ng-click="showDeleteVideoDialog($event,videoComment.id,$index)" ng-hide="!user || user.id !== videoComment.sender.id"></i>
-                            <i class="fa fa-lock right-icon" aria-hidden="true" ng-click="showBlockCommentDialog($event)" ng-show="videoComment.editable"></i>
+                            <i class="fa fa-lock right-icon" aria-hidden="true" ng-click="showBlockCommentDialog($event,videoComment.id,$index)" ng-show="videoComment.editable && videoComment.commentStatus === 'Normal'""></i>
                             <div class="bubble video-comment-message">
-                                <div ng-bind-html="videoComment.message"></div>
+                                <div ng-bind-html="videoComment.message" ng-show="videoComment.commentStatus === 'Normal'"></div>
+                                <div ng-show="videoComment.commentStatus !== 'Normal'" class="video-comment-blocked-message">
+                                    {{translate(videoComment.commentStatus.toLowercaseFirstLetter())}}
+                                </div>
                             </div>
                             <div class="comment-time">{{videoComment.createTime | date : 'medium'}}</div>
                         </div>
@@ -84,7 +87,7 @@
                         <label>{{parentScope.translate("block_status")}}</label>
                         <md-select ng-model="blockStatus">
                             <md-option ng-repeat="bSt in parentScope.blockStatuses" value="{{bSt}}">
-                                {{translate(bSt)}}
+                                {{parentScope.translate(bSt)}}
                             </md-option>
                         </md-select>
                     </md-input-container>

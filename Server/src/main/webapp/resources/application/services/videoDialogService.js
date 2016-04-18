@@ -40,6 +40,11 @@ model.factory('videoDialogService', function(applicationService,className) {
         removeByIndex : function(index){
             mainScope.videoComments.splice(index,1);
             mainScope.totalVideoCommentsCount--;
+        },
+
+        blockByIndx : function(index,status) {
+            mainScope.videoComments[index].message = null;
+            mainScope.videoComments[index].commentStatus = status;
         }
     }
 });

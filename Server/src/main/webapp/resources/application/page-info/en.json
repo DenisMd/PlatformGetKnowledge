@@ -70,6 +70,9 @@
     "link"          : "Link",
     "i"             : "I",
     "spam"          : "Spam",
+    "advertising"   : "Advertising",
+    "insult"        : "Insult",
+    "block"         : "Block",
 
 
     "failed"        : "Failed",
@@ -120,6 +123,8 @@
 
     "video_dialog_not_authorized" : "Для отпарвки кооментария необходимо авторизироваться в системе",
     "video_comments_count" : "Количество кооментариев : ",
-    "video_comments_remove" : "Remove video comment"
+    "video_comments_remove" : "Remove video comment",
+    "block_video_comment"   : "Block video comment",
+    "block_status"          : "Block status"
   }
 }

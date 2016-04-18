@@ -46,3 +46,7 @@
 .right-icon:hover {
     color: #6d6d6d;
 }
+
+.video-comment-blocked-message {
+    color: #9e9e9e;
+}

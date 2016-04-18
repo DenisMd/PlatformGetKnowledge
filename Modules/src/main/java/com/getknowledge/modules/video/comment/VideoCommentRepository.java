@@ -28,7 +28,7 @@ public class VideoCommentRepository extends ProtectedRepository<VideoComment> {
     }
 
     public void blockComment(VideoComment videoComment,CommentStatus commentStatus){
-        videoComment.setMessage(null);
+        videoComment.setMessage("");
         videoComment.setCommentStatus(commentStatus);
         merge(videoComment);
     }
