@@ -48,17 +48,4 @@ model.controller("indexController",function($scope,applicationService,className)
         };
         $scope.$broadcast("fillCards",$scope.cardsData);
     });
-
-    //создаем массив по диапозону
-    $scope.getRow = function (index, length, array) {
-        var result = [];
-        for (var i = index*length; i < length*(index+1); i++) {
-            if (array.length <= i) {
-                return result;
-            }
-            result.push(array[i]);
-        }
-        return result;
-    };
-
 });

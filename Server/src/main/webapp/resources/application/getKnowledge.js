@@ -13,6 +13,7 @@ model.config(function (hljsServiceProvider,codemirrorURL) {
 
 model.controller("mainController", function ($scope,$http,$state,$languages,applicationService,pageService,className,$mdToast,$mdDialog, $mdMedia,$parse) {
 
+    //----------------------------------------------------- инициализация клиентской информации
     $scope.mainScope = $scope;
 
     //информация о заголовке страници
@@ -28,24 +29,7 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
     //информация о главном меню на странице
     $scope.menuData = {};
 
-    //получаем текущего пользователя в системе
-    $scope.getAuthorizedUser = function(callback){
-        applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {},callback);
-    };
-    $scope.getAuthorizedUser();
-
-    applicationService.list($scope , "programmingLanguages",className.programmingLanguages);
-    applicationService.list($scope , "programmingStyles",className.programmingStyles);
-
-    //--------------------------------------------------------- Основные системные методы
-
-    //Возвращает корректный url с учетом языка
-    $scope.createUrl = function (url) {
-        if (!$scope.application) {
-            return;
-        }
-        return '#/' + $scope.application.language + url;
-    };
+    //--------------------------------------------------------- методы по работе с языком
 
     //перевести по ключу
     $scope.translate = function (key) {
@@ -90,12 +74,49 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
         }
     };
 
+    //------------------------------------------------------------------------ методы по работе с пользовтаелем
+
+    //получаем текущего пользователя в системе
+    $scope.getAuthorizedUser = function(callback){
+        applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {},callback);
+    };
+    $scope.getAuthorizedUser();
+
     //получения пользовательского изображения
     $scope.userImg = function(id){
         return applicationService.imageHref(className.userInfo,id);
     };
 
-    //------------------------------------------------------------------------ Утилиты
+    //------------------------------------------------------------------------ методы по работе с ссылками
+
+    //Возвращает корректный url с учетом языка
+    $scope.createUrl = function (url) {
+        if (!$scope.application) {
+            return;
+        }
+        return '#/' + $scope.application.language + url;
+    };
+
+    $scope.addUrlToPath = function (url) {
+        return window.location + url;
+    };
+
+    $scope.goTo = function(url,isAbsolutePath) {
+        if (isAbsolutePath) {
+            window.location.href = url;
+        } else {
+            window.location.href = $scope.addUrlToPath("/"+url);
+        }
+    };
+
+    $scope.openInNewTab = function(url) {
+        window.open(
+            url,
+            '_blank' // <- This is what makes it open in a new window.
+        );
+    };
+
+    //------------------------------------------------------------------------ методы по работе с диалогами и уведомлениями
 
     //Toast
     $scope.showToast = function (text) {
@@ -105,22 +126,6 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
                 .position("bottom right")
                 .hideDelay(3000)
         );
-    };
-
-    //hightlights
-    $scope.toPrettyJSON = function (objStr, tabWidth) {
-        var obj;
-        try {
-            obj = $parse(objStr)({});
-        }catch(e){
-            // eat $parse error
-            return _lastGoodResult;
-        }
-
-        var result = JSON.stringify(obj, null, Number(tabWidth));
-        _lastGoodResult = result;
-
-        return result;
     };
 
     //Dialog
@@ -152,32 +157,33 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
         });
     };
 
-    //Устанавливает сортировку для массива
+    //-------------------------------------- удалить их
+
+    //hightlights
+    //TODO: убрать
+    $scope.toPrettyJSON = function (objStr, tabWidth) {
+        var obj;
+        try {
+            obj = $parse(objStr)({});
+        }catch(e){
+            // eat $parse error
+            return _lastGoodResult;
+        }
+
+        var result = JSON.stringify(obj, null, Number(tabWidth));
+        _lastGoodResult = result;
+
+        return result;
+    };
+
+    //TODO: убрать
     var reverse = false;
     $scope.setOrder = function (order) {
         reverse = !reverse;
         $scope.order = reverse?"-"+order:order;
     };
 
-    $scope.addUrlToPath = function (url) {
-        return window.location + url;
-    };
-
-    $scope.goTo = function(url,isAbsolutePath) {
-        if (isAbsolutePath) {
-            window.location.href = url;
-        } else {
-            window.location.href = $scope.addUrlToPath("/"+url);
-        }
-    };
-
-    $scope.openInNewTab = function(url) {
-        window.open(
-            url,
-            '_blank' // <- This is what makes it open in a new window.
-        );
-    };
-
+    //TODO: убрать
     $scope.splitArray = function(array,even) {
         var tempArr = [];
         for (var i = 0; i < array.length; i++) {
@@ -190,6 +196,9 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
         }
         return tempArr;
     };
+
+    applicationService.list($scope , "programmingLanguages",className.programmingLanguages);
+    applicationService.list($scope , "programmingStyles",className.programmingStyles);
 });
 
 model.controller("treeListCtrl" , function ($scope) {
