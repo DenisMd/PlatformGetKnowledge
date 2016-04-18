@@ -3,7 +3,7 @@
 <div ng-class="getClass()" class="alert text-center" role="alert">
     {{translate(registerInfo)}}
 </div>
-<form class="center-form" name="registerForm">
+<form class="center-form without-margin-top" name="registerForm">
 
     <div class="form-group form-title">
         {{translate("signUp")}}

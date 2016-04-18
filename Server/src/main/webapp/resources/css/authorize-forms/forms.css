@@ -6,6 +6,10 @@
     width:350px;
 }
 
+.without-margin-top {
+    margin: 0 auto;
+}
+
 .form-title {
     font: 40px 'Exo', sans-serif;
     text-align: center;
