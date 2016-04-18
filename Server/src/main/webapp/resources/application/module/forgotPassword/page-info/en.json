@@ -1,9 +1,9 @@
 {
   "text" : {
-    "forgotPassword" : "Forgot your password?",
-    "restorePassword" : "Restore password",
-    "Failed" : "Email not found.",
-    "EmailNotSend" : "Error sending email. Try later.",
-    "Complete" : "Instructions sanded on email."
+    "forgot_password" : "Forgot your password?",
+    "forgot_restore" : "Restore password",
+    "forgot_email_not_found" : "Email not found.",
+    "forgot_email_not_send" : "Error sending email. Try later.",
+    "forgot_complete" : "Instructions sanded on email."
   }
 }

@@ -2,11 +2,9 @@
 <link rel="stylesheet" href="/resources/css/authorize-forms/forms.css">
 
 <form class="center-form">
-    <div ng-class="resultForgotPassword?'':'div-hidden'" class="alert alert-info text-center" role="alert">
-        {{translate(resultForgotPassword)}}
-    </div>
+    <module-template name="components/infoMessage" data="forgotError"></module-template>
     <div class="form-group form-title">
-        {{translate("forgotPassword")}}
+        {{translate("forgot_password")}}
     </div>
 
     <div class="form-group">
@@ -14,7 +12,7 @@
         <input type="text" class="form-control" id="inputEmail" placeholder="{{translate('email')}}" ng-model="email">
     </div>
     <div class="form-group login-btns">
-        <button class="btn login-btn login-btn-margin" ng-click="forgotPassword(email)">{{translate("restorePassword")}}</button>
+        <button class="btn login-btn login-btn-margin" ng-click="forgotPassword(email)">{{translate("forgot_restore")}}</button>
     </div>
 </form>
 
