@@ -58,6 +58,7 @@ public class UserInfo extends AbstractEntity implements CloneableEntity<UserInfo
 
     @Access(roles = {"ROLE_ADMIN"})
     @OneToOne(optional = false)
+    @JoinColumns(value = {@JoinColumn(name = "user_id" , unique = true)})
     private User user;
 
     @Column(name = "man" , nullable = false)
