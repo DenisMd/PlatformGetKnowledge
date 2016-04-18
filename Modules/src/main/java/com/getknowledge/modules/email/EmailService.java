@@ -43,7 +43,7 @@ public class EmailService {
             helper.setFrom(fromAddress);
             helper.setTo(toAddress);
             helper.setSubject(subject);
-            helper.setText(getMessageFromTemplate(template.name() , args),true);
+            helper.setText(getMessageFromTemplate(template.getName() , args),true);
         } catch (MessagingException | IOException e) {
             trace.logException("Can not receive email for " + toAddress,e, TraceLevel.Warning);
         }

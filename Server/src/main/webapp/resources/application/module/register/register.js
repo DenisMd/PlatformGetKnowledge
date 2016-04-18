@@ -2,14 +2,16 @@ model.controller("registerCtrl", function ($scope, $http,applicationService,clas
     $scope.info = {
         "sex" : true
     };
+
+    // Информация о доступных языках
     $scope.languageData = {
-        "id" : "languages",
-        "count" : 3,
-        "filter":"title",
-        "class" : "input-group-lg",
-        "listName" : "lang",
-        "required" : true,
-        "callback" : function (value){
+        "id"        : "languages",
+        "count"     : 3,
+        "filter"    :"title",
+        "class"     : "input-group-lg",
+        "listName"  : "lang",
+        "required"  : true,
+        "callback"  : function (value){
             $scope.info.language = value.name;
         }
     };
@@ -18,28 +20,39 @@ model.controller("registerCtrl", function ($scope, $http,applicationService,clas
         item.title = $scope.translate(item.name.toLowerCase());
     });
 
-    $scope.password = "";
     $scope.signUp = function() {
         if ($scope.registerForm.$invalid) {
             return;
         }
-        applicationService.action($scope,"registerInfo" , className.userInfo , "register", $scope.info, function(registerInfo) {
-            $scope.error = false;
-            if (registerInfo !== 'Complete') {
-                $scope.error = true;
+        applicationService.action($scope,"registerInfo",className.userInfo,"register",$scope.info, function(registerInfo) {
+            if (registerInfo === 'Complete') {
+                $scope.registerInfo = {
+                    message : $scope.translate("register_complete"),
+                    type : 'success'
+                };
+            } else if (registerInfo === 'PasswordLessThan6'){
+                $scope.registerInfo = {
+                    message : $scope.translate("register_password_less_than_6"),
+                    type : 'danger'
+                };
+            }  else if (registerInfo === 'UserAlreadyCreated'){
+                $scope.registerInfo = {
+                    message : $scope.translate("register_already_created"),
+                    type : 'danger'
+                };
+            } else if (registerInfo === 'LanguageNotSupported'){
+                $scope.registerInfo = {
+                    message : $scope.translate("register_language_not_found"),
+                    type : 'danger'
+                };
+            } else if (registerInfo === 'EmailNotSend'){
+                $scope.registerInfo = {
+                    message : $scope.translate("register_email_failed"),
+                    type : 'danger'
+                };
             }
+            //Переместить скролл в самый вверх страници для просмотра ссобщения
+            $('html,body').scrollTop(0);
         });
-    };
-
-    $scope.getClass = function(){
-        var cssClass = "";
-        if ($scope.error){
-            cssClass = "alert-danger";
-        } else if ($scope.registerInfo === 'Complete'){
-            cssClass = "alert-info";
-        } else {
-            cssClass = "div-hidden";
-        }
-        return cssClass;
     };
 });

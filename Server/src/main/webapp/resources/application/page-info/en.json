@@ -73,6 +73,8 @@
     "advertising"   : "Advertising",
     "insult"        : "Insult",
     "block"         : "Block",
+    "male"          : "Male",
+    "female"        : "Female",
 
 
     "failed"        : "Failed",
@@ -98,6 +100,8 @@
     "group_courses"       : "Group courses",
     "go_to_course"        : "Go to course",
     "max_length"          : "Length is too big",
+    "first_name"          : "First name",
+    "last_name"           : "Last name",
 
     "video1_title"  : "Почему getKnowlege() ?",
     "video2_title"  : "Что значит быть программистом сегодня?",

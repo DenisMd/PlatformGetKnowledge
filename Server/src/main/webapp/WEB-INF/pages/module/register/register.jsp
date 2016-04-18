@@ -1,12 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet" href="/resources/css/authorize-forms/forms.css">
-<div ng-class="getClass()" class="alert text-center" role="alert">
-    {{translate(registerInfo)}}
-</div>
-<form class="center-form without-margin-top" name="registerForm">
 
+<form class="center-form without-margin-top" name="registerForm">
+    <module-template name="components/infoMessage" data="registerInfo"></module-template>
     <div class="form-group form-title">
-        {{translate("signUp")}}
+        {{translate("register")}}
     </div>
 
     <div class="form-group">
@@ -20,8 +18,8 @@
     </div>
 
     <div class="form-group">
-        <label for="inputRepeatPassword" class="control-label">{{translate("repeatPassword")}}</label>
-        <input type="password" use-validation="compareTo" required options="{'value':info.password}" class="form-control input-lg on-error on-success" id="inputRepeatPassword" placeholder='{{translate("repeatPassword")}}' ng-model="password">
+        <label for="inputRepeatPassword" class="control-label">{{translate("register_repeat_password")}}</label>
+        <input type="password" use-validation="compareTo" required options="{'value':info.password}" class="form-control input-lg on-error on-success" id="inputRepeatPassword" placeholder='{{translate("register_repeat_password")}}' ng-model="password">
     </div>
 
     <div class="form-group">
@@ -52,6 +50,6 @@
     </div>
 
     <div class="form-group login-btns">
-        <button class="btn login-btn" ng-click="signUp()" ng-disabled="registerForm.$invalid">{{translate("register")}}</button>
+        <button class="btn login-btn" ng-click="signUp()" ng-disabled="registerForm.$invalid">{{translate("register_do")}}</button>
     </div>
 </form>

@@ -1,16 +1,14 @@
 {
   "text" : {
-    "signUp": "Registration",
-    "repeatPassword": "Confirm your password",
-    "firstName" : "First name",
-    "lastName" : "Last name",
-    "male": "Male",
-    "female":"Female",
-    "register": "Register",
-    "UserAlreadyCreated" : "User with email already created",
-    "PasswordLessThan6" : "Password less then 6 characters",
-    "Complete" : "For continue registration check email. If mail not received, support about it in help desk.",
-    "LanguageNotSupported" : "Selected language not supported.",
-    "EmailNotSend" : "Email not scented. Try again. If not sending again support to help desk."
+
+    "register"                      : "Sing up",
+    "register_repeat_password"      : "Confirm your password",
+    "register_do"                   : "Register",
+    "register_already_created"      : "User with email already created",
+    "register_password_less_than_6" : "Password less then 6 characters",
+    "register_complete"             : "For continue registration check email. If mail not received, support about it in help desk.",
+    "register_language_not_found"   : "Selected language not supported.",
+    "register_email_failed"         : "Email not scented. Try again. If not sending again support to help desk."
+
   }
 }
