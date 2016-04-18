@@ -2,11 +2,11 @@
 <link rel="stylesheet" href="/resources/css/authorize-forms/forms.css">
 
 <div>
-    <module-template name="components/infoMessage" data="loginError"></module-template>
     <form class="center-form">
-    <div class="form-group form-title">
-        {{translate("login_in")}}
-    </div>
+        <module-template name="components/infoMessage" data="loginError"></module-template>
+        <div class="form-group form-title">
+            {{translate("login_in")}}
+        </div>
 
         <div class="form-group">
             <label for="inputEmail" class="control-label">{{translate("email")}}</label>
