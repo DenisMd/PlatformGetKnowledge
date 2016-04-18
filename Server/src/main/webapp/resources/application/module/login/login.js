@@ -3,6 +3,8 @@ model.controller("loginCtrl", function ($scope,$rootScope,$state,$http,applicati
     $scope.login = function() {
         applicationService.login($scope,"",$scope.loginData.login,$scope.loginData.password,function(data){
             if (data.message === 'success') {
+
+                //Перенаправляем на страницу пользователя
                 $scope.getAuthorizedUser(
                     function(user){
                         var language = user.language;
@@ -16,6 +18,7 @@ model.controller("loginCtrl", function ($scope,$rootScope,$state,$http,applicati
                             $state.go($state.$current, {"language": language, path:"user/"+user.id});
                         });
                 });
+
             } else {
                 $scope.loginError = {
                     message : $scope.translate("login_error"),
