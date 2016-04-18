@@ -50,3 +50,7 @@
 .video-comment-blocked-message {
     color: #9e9e9e;
 }
+
+.user-name {
+    font-weight: bold;
+}
