@@ -1,9 +1,9 @@
 {
   "text" : {
-    "signIn" : "Sign in",
-    "forgotPassword" : "Forgot your password?",
-    "dontHaveAccount" : "Don't have an account?",
-    "SignUp" : "Sign up",
-    "loginError" : "Incorrect password or login"
+    "login_in"                : "Sign in",
+    "login_forgot_password"   : "Forgot your password?",
+    "login_dont_have_account" : "Don't have an account?",
+    "login_up"                : "Sign up",
+    "login_error"             : "Incorrect password or login"
   }
 }

@@ -19,7 +19,7 @@ model.controller("videoDialogController",function($scope,$mdDialog,videoDialogSe
                 videoDialogService.afterOpen(videoInfo.videoId);
             } else {
                 $scope.videoCommentErrorMessage.message = $scope.getResultMessage(result);
-                $scope.videoCommentErrorMessage.type = 'danger'
+                $scope.videoCommentErrorMessage.type = 'danger';
             }
         });
     };

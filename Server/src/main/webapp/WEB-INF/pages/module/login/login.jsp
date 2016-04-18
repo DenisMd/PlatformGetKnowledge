@@ -2,33 +2,31 @@
 <link rel="stylesheet" href="/resources/css/login.css">
 
 <div>
-    <div ng-class="error?'':'div-hidden'" class="alert alert-danger text-center" role="alert">
-        {{translate("loginError")}}
-    </div>
+    <module-template name="components/infoMessage" data="loginError"></module-template>
     <form class="center-form">
     <div class="form-group form-title">
-        {{translate("signIn")}}
+        {{translate("login_in")}}
     </div>
 
         <div class="form-group">
             <label for="inputEmail" class="control-label">{{translate("email")}}</label>
-            <input type="text" class="form-control" id="inputEmail" placeholder="{{translate('email')}}" ng-model="info.login">
+            <input type="text" class="form-control" id="inputEmail" placeholder="{{translate('email')}}" ng-model="loginData.login">
         </div>
 
         <div class="form-group">
             <label for="inputPassword" class="control-label">{{translate("password")}}</label>
-            <input type="password" class="form-control" id="inputPassword" placeholder="{{translate('password')}}" ng-model="info.password">
+            <input type="password" class="form-control" id="inputPassword" placeholder="{{translate('password')}}" ng-model="loginData.password">
         </div>
 
         <div class="form-group">
-            <label class="control-label"><a ng-href="{{createUrl('/forgotPassword')}}"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> {{translate("forgotPassword")}}</a></label>
+            <label class="control-label"><a ng-href="{{createUrl('/forgotPassword')}}"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> {{translate("login_forgot_password")}}</a></label>
         </div>
 
         <div class="form-group login-btns">
             <button class="btn login-btn" ng-click="login()">{{translate("login")}}</button>
         </div>
         <div class="form-group text-center">
-            {{translate("dontHaveAccount")}} <a ng-href="{{createUrl('/register')}}">{{translate("SignUp")}}</a>
+            {{translate("login_dont_have_account")}} <a ng-href="{{createUrl('/register')}}">{{translate("login_up")}}</a>
         </div>
     </form>
 </div>

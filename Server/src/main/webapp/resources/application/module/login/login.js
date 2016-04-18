@@ -1,7 +1,7 @@
-model.controller("loginCtrl", function ($scope,$rootScope,$state,$http,applicationService,className) {
-    $scope.info = {};
+model.controller("loginCtrl", function ($scope,$rootScope,$state,$http,applicationService) {
+
     $scope.login = function() {
-        applicationService.login($scope,"loginResult",$scope.info.login,$scope.info.password,function(data){
+        applicationService.login($scope,"",$scope.loginData.login,$scope.loginData.password,function(data){
             if (data.message === 'success') {
                 $scope.getAuthorizedUser(
                     function(user){
@@ -17,8 +17,12 @@ model.controller("loginCtrl", function ($scope,$rootScope,$state,$http,applicati
                         });
                 });
             } else {
-                $scope.error = true;
+                $scope.loginError = {
+                    message : $scope.translate("login_error"),
+                    type : 'danger'
+                };
             }
         });
     };
+
 });

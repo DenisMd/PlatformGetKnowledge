@@ -1,9 +1,9 @@
 {
   "text" : {
-    "signIn" : "Войти",
-    "forgotPassword" : "Забыли свой пароль?",
-    "dontHaveAccount" : "Нету аккаунта?",
-    "SignUp" : "Зарегистрироваться",
-    "loginError" : "Неправильный логин или пароль"
+    "login_in"                : "Войти",
+    "login_forgot_password"   : "Забыли свой пароль?",
+    "login_dont_have_account" : "Нету аккаунта?",
+    "login_up"                : "Зарегистрироваться",
+    "login_error"             : "Неправильный логин или пароль"
   }
 }
