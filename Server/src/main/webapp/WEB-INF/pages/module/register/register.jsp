@@ -34,7 +34,7 @@
 
     <div class="form-group">
         <label class="control-label">Выберите язык</label><br/>
-        <module-template data="languageData" name="inputs/select"></module-template>
+        <module-template data="languageData" name="inputs/list"></module-template>
     </div>
 
     <div class="form-group">

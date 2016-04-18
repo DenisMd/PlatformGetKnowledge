@@ -1,4 +1,4 @@
-<div style="position: relative" ng-controller="selectCtrl" ng-form name="selectForm">
+<div style="position: relative" ng-controller="listController" ng-form name="selectForm">
     <div class="select-with-input" hide-options="hideSelect()">
         <div class="input-group"  ng-class="class">
             <input name="main-select" type="text" ng-disabled="isDisabled()" ng-required="isRequired()" class="form-control select-input on-error" placeholder="{{translate('searchFor')}}" ng-keyup="setSelect(true)" ng-model="model">
