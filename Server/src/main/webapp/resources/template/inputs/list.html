@@ -1,53 +1,24 @@
 <div style="position: relative" ng-controller="listController" ng-form name="selectForm">
     <div class="select-with-input" hide-options="hideSelect()">
-        <div class="input-group"  ng-class="class">
-            <input name="main-select" type="text" ng-disabled="isDisabled()" ng-required="isRequired()" class="form-control select-input on-error" placeholder="{{translate('searchFor')}}" ng-keyup="setSelect(true)" ng-model="model">
+        <div class="input-group"  ng-class="cssClass">
+
+            <input name="main-select" type="text" ng-disabled="isDisabled()" ng-required="isRequired()" class="form-control select-input on-error"
+                   placeholder="{{translate('search_for')}}" ng-keyup="setSelect(true)" ng-model="model" autocomplete="off">
+
             <div class="input-group-btn">
-                <button class="btn btn-default" ng-disabled="isDisabled()" type="button" ng-click="open()">
+                <button class="btn btn-default" ng-disabled="isDisabled()" type="button" ng-click="openDialog()">
                     <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
                 </button>
             </div>
 
         </div><!-- /input-group -->
+
         <input type="text" style="display:none;width:0;height:0"/>
-        <div class="select-options-container" ng-show="choose">
+        <div class="select-options-container" ng-show="isShowSelectOptions">
             <ul class="select-options">
-                <li class="select-option" ng-repeat="item in getFilteredData()" ng-mouseenter="onEvent($event)" ng-mouseleave="onEvent($event)" ng-click="setModel(item)">{{getItem(item)}}</li>
+                <li class="select-option" ng-repeat="item in getFilteredData(false)" ng-mouseenter="onEvent($event)" ng-mouseleave="onEvent($event)" ng-click="setModel(item)">{{getItem(item)}}</li>
             </ul>
         </div>
-    </div>
 
-    <div class="modal fade" ng-attr-id="{{id}}">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header modal-find">
-                    <span class="caption-find">
-                        <input name="search-input" type="text" class="form-control select-input on-error" placeholder="{{translate('searchFor')}}"
-                               ng-model="modalModel">
-                    </span>
-                </div>
-                <div class="modal-body modal-find">
-                    <div class="table-content" ng-scrollbars ng-scrollbars-config="selectScrollConfig">
-                        <table class="table table-border">
-                            <tr class="caption-find" ng-repeat="item in getFilteredData(true)" ng-mouseenter="onEvent($event)"
-                                ng-mouseleave="onEvent($event)" ng-click="setModalModel($event,item)">
-                                <td>
-                                    {{getItem(item)}}
-                                </td>
-                            </tr>
-                            <tr ng-if="empty(true)">
-                                <td>
-                                    {{translate('No_Item')}}
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-                <div class="modal-footer modal-find">
-                    <button type="button" class="btn btn-primary" ng-disabled="!selectModalValue" ng-click="saveModalModel()">{{translate("save")}}</button>
-                    <button type="button" class="btn btn-danger" ng-click="closeModal()">{{translate("close")}}</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    </div>
 </div>

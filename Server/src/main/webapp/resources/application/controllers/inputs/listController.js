@@ -1,30 +1,57 @@
 //список элементов для выбора
-model.controller("listController",function($scope,$sce,$filter) {
+model.controller("listController",function($scope,listDialogService,$sce) {
 
-    var isModelOpen = false;
 
-    $scope.choose           = false;
-    $scope.modalModel       = null;
-    $scope.selectModalValue = null;
-    $scope.selectValue      = null;
-    $scope.list             = [];
+    var field           = $scope.getData().field;
+    var currentElement  = null;
 
-    $scope.model            = $scope.getData().defaultValue in $scope ? $scope[$scope.getData().defaultValue] : "";
-    $scope.filter           = $scope.getData().filter;
-    $scope.id               = $scope.getData().id;
-    $scope.count            = $scope.getData().count;
-    $scope.class            = $scope.getData().class;
-    $scope.callback         = angular.isFunction($scope.getData().callback)? $scope.getData().callback : null;
+    //Данная опция отвечает за показ списка элементов под строкой ввода
+    $scope.isShowSelectOptions  = false;
 
-    var selector            = '#' + $scope.id;
 
-    $scope.closeModal = function(){
-        $(selector).modal("hide");
-        $scope.resetActiveElementInModal();
-        $scope.modalModel = "";
-        $scope.selectModalValue = null;
-        isModelOpen = false;
-    } ;
+    $scope.selectModalValue     = null;
+    $scope.selectValue          = null;
+    $scope.list                 = [];
+
+    //Если задано значение по умолчанию устанавливаем его для модели
+    $scope.model            = $scope.getData().defaultValue ? $scope.getData().defaultValue : "";
+
+    //Еласс для input-group
+    $scope.cssClass         = $scope.getData().cssClass ? $scope.getData().cssClass : "input-group-lg";
+
+    //Функция которая будет вызываться при выборе элемента из списка
+    var callback            = angular.isFunction($scope.getData().callback)? $scope.getData().callback : null;
+
+
+    //-------------------------------------------------------------------------- Events
+    //Сбрасывает состояние модели
+    if ($scope.getData().id != null) {
+        $scope.$on('reset' + $scope.getData().id.capitalizeFirstLetter() + 'Event', function (event, args) {
+            $scope.model = "";
+            $scope.selectValue = null;
+            $scope.isShowSelectOptions = false;
+        });
+    }
+
+    //-------------------------------------------------------------------------- Методы
+
+
+    $scope.openDialog = function(){
+        listDialogService.setListInfo({
+            list : $scope.getList()
+        });
+        $scope.$broadcast("openListDialogModalEvent");
+    };
+
+    $scope.resetActiveElementInModal = function(){
+        if (currentElement) {
+            currentElement.removeClass("info");
+            currentElement = null;
+        }
+    };
+
+
+
     $scope.getItem = function (item) {
         if (!item) {
             return "";
@@ -32,7 +59,7 @@ model.controller("listController",function($scope,$sce,$filter) {
         if (item.$$unwrapTrustedValue) {
             return item;
         } else {
-            return item[$scope.filter];
+            return item[field];
         }
     };
 
@@ -41,55 +68,12 @@ model.controller("listController",function($scope,$sce,$filter) {
         return $scope.list;
     };
 
-    $scope.getFilteredData = function (isModal) {
-        var list = $scope.getList();
-
-        var filter = {};
-        if (!$scope.filter) {
-            filter = isModal?$scope.modalModel:$scope.model;
-        } else {
-            filter[$scope.filter] = isModal?$scope.modalModel:$scope.model;
-        }
-        var filteredData = $filter('filter')(list,filter);
-        if (!isModal) {
-            filteredData = $filter('limitTo')(filteredData, $scope.count);
-            var valid = true;
-            if (filteredData) {
-                if (filteredData.length === 1) {
-                    if ($scope.choose && $scope.model.toString() === $scope.getItem(filteredData[0]).toString()) {
-                        $scope.setModel(filteredData[0]);
-                    }
-                } else {
-                    if (filteredData.length === 0) {
-                        if ($scope.isRequired()) {
-                            valid = false;
-                        }
-                    }
-                }
-            }
-            if (!$scope.choose && $scope.model && $scope.model.toString() !== $scope.getItem(filteredData[0]).toString()){
-                valid = false;
-            }
-            $scope.selectForm['main-select'].$setValidity("selectValue", valid);
-            $scope.setValid();
-        } else {
-            if (isModelOpen) {
-                if (filteredData.length === 0) {
-                    $scope.selectForm['search-input'].$setValidity("searchValue", false);
-                } else {
-                    $scope.selectForm['search-input'].$setValidity("searchValue", true);
-                }
-            }
-        }
-        return filteredData;
-    };
-
     $scope.empty = function(isModal){
         return $scope.getFilteredData(isModal).length === 0;
     };
 
     $scope.setSelect = function (value) {
-        $scope.choose = value;
+        $scope.isShowSelectOptions = value;
     };
 
     $scope.onEvent = function (event) {
@@ -104,36 +88,16 @@ model.controller("listController",function($scope,$sce,$filter) {
         }
     };
 
-    $scope.resetModel = function () {
-        $scope.model = "";
-        $scope.selectValue = null;
-        $scope.choose = false;
-    };
+
 
     $scope.setModel = function (value) {
         $scope.model = getValue(value);
         $scope.selectValue = value;
-        $scope.choose = false;
-        $scope.callback(value);
+        $scope.isShowSelectOptions = false;
+        callback(value);
     };
 
-    $scope.open = function () {
-        $(selector).modal({
-            backdrop: 'static',
-            keyboard: false
-        });
-        $(selector).modal('show');
-        $(selector+" .table-content").height(getHeight());
-        isModelOpen = true;
-    };
 
-    var currentElement;
-    $scope.resetActiveElementInModal = function(){
-        if (currentElement) {
-            currentElement.removeClass("info");
-            currentElement = null;
-        }
-    };
 
     $scope.setModalModel = function(event,value){
         $scope.resetActiveElementInModal();
@@ -152,9 +116,9 @@ model.controller("listController",function($scope,$sce,$filter) {
     //закрытие подсказки, если щелчок происходдит за пределами элемнта
     $scope.hideSelect = function(){
         $scope.$apply(function () {
-            if ($scope.choose) {
+            if ($scope.isShowSelectOptions) {
                 $scope.getFilteredData();
-                $scope.choose = false;
+                $scope.isShowSelectOptions = false;
             }
         });
     };
@@ -202,10 +166,7 @@ model.controller("listController",function($scope,$sce,$filter) {
     //scroll для таблицы
     $scope.selectScrollConfig = angular.merge({setHeight: getHeight()}, $scope.modalScrollConfig);
 
-    //ожидание сброса значения
-    $scope.$on('reset'+$scope.id.capitalizeFirstLetter()+'Event', function(event, args) {
-        $scope.resetModel();
-    });
+
 
     //подсчет высоты основного содержания модалки
     function getHeight(){
@@ -219,7 +180,7 @@ model.controller("listController",function($scope,$sce,$filter) {
         if (angular.isString(value) || value.$$unwrapTrustedValue) {
             return value;
         } else {
-            return value[$scope.filter];
+            return value[field];
         }
     }
 

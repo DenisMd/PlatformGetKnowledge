@@ -50,6 +50,8 @@
 
     <%--Модальное окно для показа видео--%>
     <module-template name="dialogs/videoDialog"></module-template>
+    <%--Модальное окно для показа списка--%>
+    <module-template name="dialogs/listDialog"></module-template>
 
 
     <%--Important--%>

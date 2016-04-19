@@ -1,0 +1,33 @@
+<div class="modal fade" id="listDialogId" ng-controller="listDialogController">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-find">
+                    <span class="caption-find">
+                        <input name="search-input" type="text" class="form-control select-input on-error" placeholder="{{translate('search_for')}}"
+                               ng-model="modalModel">
+                    </span>
+            </div>
+            <div class="modal-body modal-find">
+                <div class="table-content" ng-scrollbars ng-scrollbars-config="selectScrollConfig">
+                    <table class="table table-border">
+                        <tr class="caption-find" ng-repeat="item in getData()" ng-mouseenter="onEvent($event)"
+                            ng-mouseleave="onEvent($event)" ng-click="setModalModel($event,item)">
+                            <td>
+                                {{getItem(item)}}
+                            </td>
+                        </tr>
+                        <tr ng-if="empty(true)">
+                            <td>
+                                {{translate('No_Item')}}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer modal-find">
+                <button type="button" class="btn btn-primary" ng-disabled="!selectModalValue" ng-click="saveModalModel()">{{translate("save")}}</button>
+                <button type="button" class="btn btn-danger" ng-click="closeModal()">{{translate("close")}}</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

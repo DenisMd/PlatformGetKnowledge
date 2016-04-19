@@ -23,13 +23,13 @@
     </div>
 
     <div class="form-group">
-        <label for="inputFirstName" class="control-label">{{translate("firstName")}}</label>
-        <input type="text" class="form-control input-lg  on-error on-success" required id="inputFirstName" placeholder='{{translate("firstName")}}' ng-model="info.firstName">
+        <label for="inputFirstName" class="control-label">{{translate("first_name")}}</label>
+        <input type="text" class="form-control input-lg  on-error on-success" required id="inputFirstName" placeholder='{{translate("first_name")}}' ng-model="info.firstName">
     </div>
 
     <div class="form-group">
-        <label for="inputLastName" class="control-label">{{translate("lastName")}}</label>
-        <input type="text" class="form-control input-lg on-error on-success" required id="inputLastName" placeholder='{{translate("lastName")}}' ng-model="info.lastName">
+        <label for="inputLastName" class="control-label">{{translate("last_name")}}</label>
+        <input type="text" class="form-control input-lg on-error on-success" required id="inputLastName" placeholder='{{translate("last_name")}}' ng-model="info.lastName">
     </div>
 
     <div class="form-group">
