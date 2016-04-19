@@ -10,7 +10,7 @@
             <div class="modal-body modal-find">
                 <div class="table-content" ng-scrollbars ng-scrollbars-config="selectScrollConfig">
                     <table class="table table-border">
-                        <tr class="caption-find" ng-repeat="item in getData()" ng-mouseenter="onEvent($event)"
+                        <tr class="caption-find" ng-repeat="item in getItems()" ng-mouseenter="onEvent($event)"
                             ng-mouseleave="onEvent($event)" ng-click="setModalModel($event,item)">
                             <td>
                                 {{getItem(item)}}

@@ -1,34 +1,51 @@
 model.controller("listDialogController",function($scope,listDialogService,$filter){
-
-    var isModelOpen = false;
-    var field       = listDialogService.getListInfo().field;
-    var modalId     = "listDialogId";
-
+    var field           = null;
+    var currentElement  = null;
 
     $scope.modalModel = null;
 
-    $scope.$on("openListDialogModalEvent",function(event){
-        $(modalId).modal({
-            backdrop: 'static',
-            keyboard: false
-        });
-        $(modalId).modal('show');
-        $(modalId+" .table-content").height(getHeight());
-    });
+    $scope.resetActiveElementInModal = function(){
+        if (currentElement) {
+            currentElement.removeClass("info");
+            currentElement = null;
+        }
+    };
 
     $scope.closeModal = function(){
-        $(modalId).modal("hide");
+        listDialogService.closeDialog();
         $scope.resetActiveElementInModal();
         $scope.modalModel       = "";
         $scope.selectModalValue = null;
         isModelOpen             = false;
     };
 
+    $scope.setModalModel = function(event,value){
+        $scope.resetActiveElementInModal();
+        var elem = angular.element(event.currentTarget);
+        currentElement = elem;
+        elem.addClass("info");
+        $scope.selectModalValue = value;
+    };
 
-    $scope.getData = function () {
+    $scope.onEvent = function (event) {
+        var elem = angular.element(event.currentTarget);
+        switch (event.type) {
+            case "mouseenter":
+                elem.addClass("active");
+                break;
+            case "mouseleave":
+                elem.removeClass("active");
+                break;
+        }
+    };
+
+
+    $scope.getItems = function () {
         var list = listDialogService.getListInfo().list;
-
         var data = {};
+
+        field = listDialogService.getListInfo().field;
+
         if (!field) {
             data = $scope.modalModel;
         } else {
@@ -46,5 +63,8 @@ model.controller("listDialogController",function($scope,listDialogService,$filte
 
         return filteredData;
     };
+
+    //scroll для таблицы
+    $scope.selectScrollConfig = angular.merge({setHeight: listDialogService.height()}, $scope.modalScrollConfig);
 
 });

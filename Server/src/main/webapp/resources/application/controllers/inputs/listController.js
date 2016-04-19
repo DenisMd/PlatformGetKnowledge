@@ -3,7 +3,6 @@ model.controller("listController",function($scope,listDialogService,$sce) {
 
 
     var field           = $scope.getData().field;
-    var currentElement  = null;
 
     //Данная опция отвечает за показ списка элементов под строкой ввода
     $scope.isShowSelectOptions  = false;
@@ -11,7 +10,6 @@ model.controller("listController",function($scope,listDialogService,$sce) {
 
     $scope.selectModalValue     = null;
     $scope.selectValue          = null;
-    $scope.list                 = [];
 
     //Если задано значение по умолчанию устанавливаем его для модели
     $scope.model            = $scope.getData().defaultValue ? $scope.getData().defaultValue : "";
@@ -35,19 +33,20 @@ model.controller("listController",function($scope,listDialogService,$sce) {
 
     //-------------------------------------------------------------------------- Методы
 
-
-    $scope.openDialog = function(){
-        listDialogService.setListInfo({
-            list : $scope.getList()
-        });
-        $scope.$broadcast("openListDialogModalEvent");
+    //получение списка из scope
+    $scope.getList = function(){
+        return $scope.getData().listName in $scope ? $scope[$scope.getData().listName] : [];;
     };
 
-    $scope.resetActiveElementInModal = function(){
-        if (currentElement) {
-            currentElement.removeClass("info");
-            currentElement = null;
-        }
+    //открыть диалог
+    $scope.openDialog = function(){
+        listDialogService.setListInfo({
+            list : $scope.getList(),
+            maxHeight : $scope.getData().maxHeigt,
+            length : $scope.getData().length,
+            field : $scope.getData().field
+        });
+        listDialogService.openDialog();
     };
 
 
@@ -63,10 +62,7 @@ model.controller("listController",function($scope,listDialogService,$sce) {
         }
     };
 
-    $scope.getList = function(){
-        $scope.list = $scope.getData().listName in $scope ? $scope[$scope.getData().listName] : [];
-        return $scope.list;
-    };
+
 
     $scope.empty = function(isModal){
         return $scope.getFilteredData(isModal).length === 0;
@@ -76,18 +72,6 @@ model.controller("listController",function($scope,listDialogService,$sce) {
         $scope.isShowSelectOptions = value;
     };
 
-    $scope.onEvent = function (event) {
-        var elem = angular.element(event.currentTarget);
-        switch (event.type) {
-            case "mouseenter":
-                elem.addClass("active");
-                break;
-            case "mouseleave":
-                elem.removeClass("active");
-                break;
-        }
-    };
-
 
 
     $scope.setModel = function (value) {
@@ -95,16 +79,6 @@ model.controller("listController",function($scope,listDialogService,$sce) {
         $scope.selectValue = value;
         $scope.isShowSelectOptions = false;
         callback(value);
-    };
-
-
-
-    $scope.setModalModel = function(event,value){
-        $scope.resetActiveElementInModal();
-        var elem = angular.element(event.currentTarget);
-        currentElement = elem;
-        elem.addClass("info");
-        $scope.selectModalValue = value;
     };
 
     $scope.saveModalModel = function(){
@@ -162,18 +136,6 @@ model.controller("listController",function($scope,listDialogService,$sce) {
             val($scope.selectForm['main-select'].$valid);
         }
     };
-
-    //scroll для таблицы
-    $scope.selectScrollConfig = angular.merge({setHeight: getHeight()}, $scope.modalScrollConfig);
-
-
-
-    //подсчет высоты основного содержания модалки
-    function getHeight(){
-        var height = $scope.getData().maxHeight? $scope.getData().maxHeight: 400;
-        var temp = 40 * $scope.getList().length;
-        return !temp || temp > height? height : temp;
-    }
 
     //текст отображающийся в input
     function getValue(value){
