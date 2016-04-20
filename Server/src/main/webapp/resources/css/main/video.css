@@ -36,7 +36,8 @@
     text-align: center;
 }
 .video-play span{
-    font-size: 10vh;
+    font-size: 70px;
+    font-size: 10vmax;
     color: #000000;
 }
 .video-play span:hover{
