@@ -2,6 +2,7 @@ package com.getknowledge.platform.modules.task;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.getknowledge.platform.base.services.AbstractService;
+import com.getknowledge.platform.base.services.CrudService;
 import com.getknowledge.platform.modules.task.enumerations.TaskStatus;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
@@ -23,17 +24,16 @@ import java.util.concurrent.TimeUnit;
 @Service("TaskService")
 public class TaskService extends AbstractService {
 
-    @Autowired
-    private UserRepository userRepository;
-
     public static Thread thread;
-    public static boolean isStart = true;
-
-    @Autowired
-    TaskRepository taskRepository;
 
     @Autowired
     TraceService traceService;
+
+    @Autowired
+    private CrudService crudService;
+
+    @Autowired
+    private TaskRepository taskRepository;
 
     @Autowired
     private ModuleLocator moduleLocator;
@@ -69,7 +69,7 @@ public class TaskService extends AbstractService {
                                             HashMap<String, Object> data = objectMapper.readValue(task.getJsonData(), typeRef);
                                             method.invoke(abstractService, data);
                                             task.setTaskStatus(TaskStatus.Complete);
-                                            taskRepository.merge(task);
+                                            crudService.merge(task,taskRepository);
                                             traceService.log("Task " + task.toString() + " complete", TraceLevel.Event);
                                             return;
                                         }
@@ -78,7 +78,7 @@ public class TaskService extends AbstractService {
                                     traceService.logException("Exception for task : " + task.toString(), e, TraceLevel.Warning);
                                     task.setTaskStatus(TaskStatus.Failed);
                                     task.setStackTrace(ExceptionUtils.getStackTrace(e));
-                                    taskRepository.merge(task);
+                                    crudService.merge(task,taskRepository);
                                     return;
                                 }
 

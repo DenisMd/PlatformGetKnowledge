@@ -40,4 +40,8 @@ public class CrudService {
     public AbstractEntity prepare(AbstractEntity entity,BaseRepository baseRepository, User currentUser) throws Exception {
         return baseRepository.prepare(entity,baseRepository,currentUser,null);
     }
+
+    public void merge(AbstractEntity entity,BaseRepository baseRepository) {
+        baseRepository.merge(entity);
+    }
 }
