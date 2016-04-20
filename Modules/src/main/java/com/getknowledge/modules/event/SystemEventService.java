@@ -47,8 +47,12 @@ public class SystemEventService extends AbstractService {
     }
 
     @Task(name = "cancelRegistration")
+    @Transactional
     public void cancelRegistration(HashMap<String , Object> data) throws PlatformException {
         SystemEvent registerInfo = systemEventRepository.getSingleEntityByFieldAndValue("uuid", data.get("uuid").toString());
+        if (registerInfo == null) {
+            return;
+        }
         if (!registerInfo.getUserInfo().getUser().isEnabled()) {
             trace.log("Cancel registration for user " + registerInfo.getUserInfo().getUser().getLogin() , TraceLevel.Event);
             systemEventRepository.removeWithUser(registerInfo.getId());
@@ -58,6 +62,7 @@ public class SystemEventService extends AbstractService {
     }
 
     @Action(name = "restorePassword", mandatoryFields = {"uuid" , "password"})
+    @Transactional
     public Result restorePassword(HashMap<String , Object> data) throws PlatformException {
         String uuid = (String) data.get("uuid");
         SystemEvent restorePasswordInfo = systemEventRepository.getSingleEntityByFieldAndValue("uuid", uuid);
@@ -71,6 +76,7 @@ public class SystemEventService extends AbstractService {
     }
 
     @Task(name = "removeRestorePasswordInfo")
+    @Transactional
     public void removeRestorePasswordInfo(HashMap<String , Object> data) throws PlatformException {
         SystemEvent restorePasswordInfo = systemEventRepository.getSingleEntityByFieldAndValue("uuid", data.get("uuid").toString());
         if (restorePasswordInfo == null) return;

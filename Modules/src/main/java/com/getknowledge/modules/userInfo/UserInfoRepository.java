@@ -73,8 +73,8 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
     public void remove(UserInfo userInfo) {
         //Пользователей не возможно удалить если они активиравонны
         if (!userInfo.getUser().isEnabled()){
-            userRepository.remove(userInfo.getUser());
             super.remove(userInfo);
+            userRepository.remove(userInfo.getUser());
         }
     }
 
