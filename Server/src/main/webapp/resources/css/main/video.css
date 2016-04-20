@@ -43,3 +43,9 @@
 .video-play span:hover{
     color: #17789D;
 }
+
+@media (min-width: 992px) {
+    .video-play span {
+        font-size: 8vmax;
+    }
+}
