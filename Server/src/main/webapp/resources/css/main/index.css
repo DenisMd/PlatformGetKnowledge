@@ -1,8 +1,13 @@
-html, body{
+html {
     height: 100%;
+}
+
+body{
+    min-height: 100%;
     font-family: 'PT Sans', sans-serif;
     font-size: 14px;
     line-height: 1.5;
+    top:0 !important;
 }
 :focus {
     outline: 0;
