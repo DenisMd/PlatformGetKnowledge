@@ -32,12 +32,16 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
     //--------------------------------------------------------- методы по работе с языком
 
     //перевести по ключу
-    $scope.translate = function (key) {
+    $scope.translate = function (key,isHtml) {
         if (!$scope.application || !$scope.application.text || !(key in $scope.application.text)) {
             return key;
         }
 
-        return $scope.application.text[key];
+        if (isHtml) {
+            return $scope.application.text[key];
+        }
+
+        return $scope.application.text[key].toString();
     };
 
     //Из result получить сообщение

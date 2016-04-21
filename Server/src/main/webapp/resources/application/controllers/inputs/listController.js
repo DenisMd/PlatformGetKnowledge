@@ -38,6 +38,18 @@ model.controller("listController",function($scope,listDialogService,$filter) {
         return $scope.getData().listName in $scope ? $scope[$scope.getData().listName] : [];
     }
 
+    function setValid(){
+        var val = $scope.getData().valid;
+
+        if (!val) {
+            return false;
+        }
+
+        if (angular.isFunction(val)) {
+            val($scope.selectForm['main-select'].$valid);
+        }
+    };
+
     //открыть диалог
     $scope.openDialog = function(){
         listDialogService.setListInfo({
@@ -59,7 +71,7 @@ model.controller("listController",function($scope,listDialogService,$filter) {
     };
 
     //При нажатие клавиши в input[main-select]
-    $scope.onKeyUp = function(){
+    $scope.fillFiltredItem = function(){
         $scope.isShowSelectOptions = true;
         $scope.filtredList = $scope.getFilteredData();
     };
@@ -69,21 +81,18 @@ model.controller("listController",function($scope,listDialogService,$filter) {
         var filter  = {};
         filter[$scope.titleField] = $scope.selectedItem ? $scope.selectedItem[$scope.titleField] : "";
 
-        console.log(list);
-
         var filteredData = $filter('filter')(list, filter);
         filteredData = $filter('limitTo')(filteredData, count);
 
         var valid = false;
         if (filteredData.length >= 1) {
-            if ($scope.selectedItem && $scope.selectedItem[$scope.titleField]  && $scope.selectedItem[$scope.titleField].toString() === filteredData[0][$scope.titleField].toString()) {
+            if ($scope.selectedItem && $scope.selectedItem[$scope.titleField]  && $scope.selectedItem[$scope.titleField] === filteredData[0][$scope.titleField]) {
                 valid = true;
             }
         }
 
-        console.log(valid);
         $scope.selectForm['main-select'].$setValidity("selectValue", valid);
-        $scope.setValid();
+        setValid();
 
         return filteredData;
     };
@@ -126,25 +135,5 @@ model.controller("listController",function($scope,listDialogService,$filter) {
             return val;
         }
     };
-
-    $scope.setValid = function(){
-        var val = $scope.getData().isValid;
-
-        if (!val) {
-            return false;
-        }
-        if (angular.isFunction(val)) {
-            val($scope.selectForm['main-select'].$valid);
-        }
-    };
-
-    //текст отображающийся в input
-    function getTitle(value){
-        if (angular.isString(value) || value.$$unwrapTrustedValue) {
-            return value;
-        } else {
-            return value[field];
-        }
-    }
 
 });
