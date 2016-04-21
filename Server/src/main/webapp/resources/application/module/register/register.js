@@ -5,12 +5,12 @@ model.controller("registerCtrl", function ($scope, $http,applicationService,clas
 
     // Информация о доступных языках
     $scope.languageData = {
-        "count"     :  3,
-        "field"     : "title",
-        "cssClass"  : "input-group-lg",
-        "listName"  : "lang",
-        "required"  : true,
-        "defaultValue" : "Русский",
+        "count"         :  3,
+        "titleField"    : "title",
+        "classForInput"      : "input-group-lg",
+        "listName"      : "lang",
+        "required"      : true,
+        "defaultIndex"  : 0,
         "callback"  : function (value){
             $scope.info.language = value.name;
         }

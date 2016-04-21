@@ -6,7 +6,7 @@ model.factory('listDialogService', function() {
     //подсчет высоты основного содержания модалки
     function getHeight(){
         var height = listInfo.maxHeight? listInfo.maxHeight: 400;
-        var temp = 40 * listInfo.length;
+        var temp = 40 * listInfo.list.length;
         return !temp || temp > height? height : temp;
     }
 
@@ -34,7 +34,7 @@ model.factory('listDialogService', function() {
         },
 
         height : function() {
-            return getHeight();
+            return 0;//getHeight();
         },
 
         modelOpen : function(isOpen) {
