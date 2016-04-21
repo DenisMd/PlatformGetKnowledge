@@ -7,16 +7,15 @@ model.controller("registerCtrl", function ($scope, $http,applicationService,clas
     $scope.languageData = {
         "count"         :  3,
         "titleField"    : "title",
-        "classForInput"      : "input-group-lg",
-        "listName"      : "lang",
+        "classForInput" : "input-group-lg",
+        "listName"      : "systemLanguages",
         "required"      : true,
-        "defaultIndex"  : 0,
         "callback"  : function (value){
             $scope.info.language = value.name;
         }
     };
 
-    applicationService.list($scope,"lang",className.language, function (item) {
+    applicationService.list($scope,"systemLanguages",className.language, function (item) {
         item.title = $scope.translate(item.name.toLowerCase());
     });
 
