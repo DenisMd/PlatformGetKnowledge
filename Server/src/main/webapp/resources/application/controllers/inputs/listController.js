@@ -50,7 +50,10 @@ model.controller("listController",function($scope,listDialogService,$filter) {
     //При выборе элемента
     $scope.setItem = function (value) {
         //Делаем копию объекта
-        $scope.selectedItem = value;
+        $scope.selectedItem = {};
+        angular.extend($scope.selectedItem,value);
+        //сбрасываем отфильтрованные значения и ставим валидацию
+        $scope.getFilteredData();
         $scope.isShowSelectOptions  = false;
         callback(value);
     };
@@ -73,7 +76,7 @@ model.controller("listController",function($scope,listDialogService,$filter) {
 
         var valid = false;
         if (filteredData.length >= 1) {
-            if ($scope.selectedItem && $scope.selectedItem[$scope.titleField].toString() === filteredData[0][$scope.titleField].toString()) {
+            if ($scope.selectedItem && $scope.selectedItem[$scope.titleField]  && $scope.selectedItem[$scope.titleField].toString() === filteredData[0][$scope.titleField].toString()) {
                 valid = true;
             }
         }
