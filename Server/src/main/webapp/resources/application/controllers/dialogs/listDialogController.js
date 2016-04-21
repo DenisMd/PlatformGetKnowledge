@@ -16,7 +16,7 @@ model.controller("listDialogController",function($scope,listDialogService,$filte
         $scope.resetActiveElementInModal();
         $scope.modalModel       = "";
         $scope.selectModalValue = null;
-        isModelOpen             = false;
+        listDialogService.modelOpen(false);
     };
 
     $scope.setModalModel = function(event,value){
@@ -41,6 +41,7 @@ model.controller("listDialogController",function($scope,listDialogService,$filte
 
 
     $scope.getItems = function () {
+        console.log("ddddd");
         var list = listDialogService.getListInfo().list;
         var data = {};
 
@@ -53,7 +54,7 @@ model.controller("listDialogController",function($scope,listDialogService,$filte
         }
         var filteredData = $filter('filter')(list,data);
 
-        if (isModelOpen) {
+        if (listDialogService.modelOpen()) {
             if (filteredData.length === 0) {
                 $scope.selectForm['search-input'].$setValidity("searchValue", false);
             } else {

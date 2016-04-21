@@ -20,6 +20,7 @@ model.factory('listDialogService', function() {
         },
 
         openDialog : function(){
+            isModelOpen = true;
             $(modalId).modal({
                 backdrop: 'static',
                 keyboard: false
@@ -36,7 +37,10 @@ model.factory('listDialogService', function() {
             return getHeight();
         },
 
-        setModelOpen : function(isOpen) {
+        modelOpen : function(isOpen) {
+            if (isOpen !== undefined)
+                isModelOpen = isOpen;
+            return isModelOpen;
         }
     };
 });
