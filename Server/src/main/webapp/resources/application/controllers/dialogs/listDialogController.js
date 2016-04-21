@@ -41,7 +41,6 @@ model.controller("listDialogController",function($scope,listDialogService,$filte
 
 
     $scope.getItems = function () {
-        console.log("ddddd");
         var list = listDialogService.getListInfo().list;
         var data = {};
 
