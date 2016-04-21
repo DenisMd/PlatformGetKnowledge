@@ -10,6 +10,7 @@ model.controller("registerCtrl", function ($scope, $http,applicationService,clas
         "classForInput" : "input-group-lg",
         "listName"      : "systemLanguages",
         "required"      : true,
+        "maxHeight"     : 720,
         "callback"  : function (value){
             $scope.info.language = value.name;
         }

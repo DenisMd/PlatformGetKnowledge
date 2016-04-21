@@ -1,6 +1,15 @@
 //список элементов для выбора
 model.controller("listController",function($scope,listDialogService,$filter) {
 
+    $scope.menuScrollConfig = {
+        theme: 'light-3',
+        snapOffset: 100,
+        advanced: {
+            updateOnContentResize: true,
+            updateOnSelectorChange: "ul li"
+        }
+    };
+
     //Свойство, которое будет использоваться для заголовка моделей
     $scope.titleField = $scope.getData().titleField;
 
@@ -38,45 +47,7 @@ model.controller("listController",function($scope,listDialogService,$filter) {
         return $scope.getData().listName in $scope ? $scope[$scope.getData().listName] : [];
     }
 
-    function setValid(){
-        var val = $scope.getData().valid;
-
-        if (!val) {
-            return false;
-        }
-
-        if (angular.isFunction(val)) {
-            val($scope.selectForm['main-select'].$valid);
-        }
-    };
-
-    //открыть диалог
-    $scope.openDialog = function(){
-        listDialogService.setListInfo({
-            list        : getList(),
-            maxHeight   : $scope.getData().maxHeigt
-        });
-        listDialogService.openDialog();
-    };
-
-    //При выборе элемента
-    $scope.setItem = function (value) {
-        //Делаем копию объекта
-        $scope.selectedItem = {};
-        angular.extend($scope.selectedItem,value);
-        //сбрасываем отфильтрованные значения и ставим валидацию
-        $scope.getFilteredData();
-        $scope.isShowSelectOptions  = false;
-        callback(value);
-    };
-
-    //При нажатие клавиши в input[main-select]
-    $scope.fillFiltredItem = function(){
-        $scope.isShowSelectOptions = true;
-        $scope.filtredList = $scope.getFilteredData();
-    };
-
-    $scope.getFilteredData = function() {
+    function getFilteredData() {
         var list    = getList();
         var filter  = {};
         filter[$scope.titleField] = $scope.selectedItem ? $scope.selectedItem[$scope.titleField] : "";
@@ -97,11 +68,56 @@ model.controller("listController",function($scope,listDialogService,$filter) {
         return filteredData;
     };
 
+    function setValid(){
+        var val = $scope.getData().valid;
+
+        if (!val) {
+            return false;
+        }
+
+        if (angular.isFunction(val)) {
+            val($scope.selectForm['main-select'].$valid);
+        }
+    };
+
+    //открыть диалог
+    $scope.openDialog = function(){
+        listDialogService.setListInfo({
+            list        : getList(),
+            maxHeight   : $scope.getData().maxHeight,
+            titleField  : $scope.titleField
+        });
+        listDialogService.openDialog();
+    };
+
+    //При выборе элемента
+    $scope.setItem = function (value) {
+        //Делаем копию объекта
+        $scope.selectedItem = {};
+        angular.extend($scope.selectedItem,value);
+        //сбрасываем отфильтрованные значения и ставим валидацию
+        getFilteredData();
+        $scope.isShowSelectOptions  = false;
+        callback(value);
+    };
+
+    listDialogService.setCallbackSave(function(value){
+        $scope.setItem(value);
+    });
+
+    //При нажатие клавиши в input[main-select]
+    $scope.fillFiltredItem = function(){
+        $scope.isShowSelectOptions = true;
+        $scope.filtredList = getFilteredData();
+    };
+
+
+
     //закрытие подсказки, если щелчок происходдит за пределами элемнта
     $scope.hideSelect = function(){
         $scope.$apply(function () {
             if ($scope.isShowSelectOptions) {
-                $scope.getFilteredData();
+                getFilteredData();
                 $scope.isShowSelectOptions = false;
             }
         });

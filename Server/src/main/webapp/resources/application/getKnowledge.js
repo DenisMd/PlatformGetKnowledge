@@ -29,6 +29,15 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
     //информация о главном меню на странице
     $scope.menuData = {};
 
+    //scroll для модалок
+    $scope.modalScrollConfig = {
+        theme: 'dark-3',
+        advanced: {
+            updateOnContentResize: true,
+            updateOnSelectorChange: true
+        }
+    };
+
     //--------------------------------------------------------- методы по работе с языком
 
     //перевести по ключу

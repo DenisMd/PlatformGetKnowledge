@@ -1,7 +1,8 @@
 model.factory('listDialogService', function() {
     var listInfo    = {};
     var modalId     = "#listDialogId";
-    var isModelOpen = false;
+    var callbackOpen = null;
+    var callbackSave = null;
 
     //подсчет высоты основного содержания модалки
     function getHeight(){
@@ -11,6 +12,14 @@ model.factory('listDialogService', function() {
     }
 
     return {
+        setCallbackOpen : function(func) {
+            callbackOpen = func;
+        },
+
+        setCallbackSave : function (func) {
+            callbackSave = func
+        },
+
         getListInfo : function(){
             return listInfo;
         },
@@ -20,27 +29,24 @@ model.factory('listDialogService', function() {
         },
 
         openDialog : function(){
-            isModelOpen = true;
             $(modalId).modal({
                 backdrop: 'static',
                 keyboard: false
             });
             $(modalId).modal('show');
             $(modalId+" .table-content").height(getHeight());
+            callbackOpen();
         },
 
-        closeDialog : function() {
+        closeDialog : function(element) {
+            if (element){
+                callbackSave(element);
+            }
             $(modalId).modal("hide");
         },
 
         height : function() {
             return 0;//getHeight();
-        },
-
-        modelOpen : function(isOpen) {
-            if (isOpen !== undefined)
-                isModelOpen = isOpen;
-            return isModelOpen;
         }
     };
 });
