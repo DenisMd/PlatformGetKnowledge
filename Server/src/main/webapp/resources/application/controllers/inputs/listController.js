@@ -1,10 +1,11 @@
 //список элементов для выбора
-model.controller("listController",function($scope,listDialogService,$sce) {
+model.controller("listController",function($scope,listDialogService,$filter) {
 
-
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!
     var field           = $scope.getData().field;
 
     //Данная опция отвечает за показ списка элементов под строкой ввода
+    //!!!!!!!!
     $scope.isShowSelectOptions  = false;
 
 
@@ -12,7 +13,7 @@ model.controller("listController",function($scope,listDialogService,$sce) {
     $scope.selectValue          = null;
 
     //Если задано значение по умолчанию устанавливаем его для модели
-    $scope.model            = $scope.getData().defaultValue ? $scope.getData().defaultValue : "";
+    $scope.selectedItem       = $scope.getData().defaultValue ? $scope.getData().defaultValue : "";
 
     //Еласс для input-group
     $scope.cssClass         = $scope.getData().cssClass ? $scope.getData().cssClass : "input-group-lg";
@@ -25,7 +26,7 @@ model.controller("listController",function($scope,listDialogService,$sce) {
     //Сбрасывает состояние модели
     if ($scope.getData().id != null) {
         $scope.$on('reset' + $scope.getData().id.capitalizeFirstLetter() + 'Event', function (event, args) {
-            $scope.model = "";
+            $scope.selectedItem = "";
             $scope.selectValue = null;
             $scope.isShowSelectOptions = false;
         });
@@ -68,14 +69,8 @@ model.controller("listController",function($scope,listDialogService,$sce) {
         return $scope.getFilteredData(isModal).length === 0;
     };
 
-    $scope.setSelect = function (value) {
-        $scope.isShowSelectOptions = value;
-    };
-
-
-
-    $scope.setModel = function (value) {
-        $scope.model = getValue(value);
+    $scope.setItem = function (value) {
+        $scope.selectedItem = getTitle(value);
         $scope.selectValue = value;
         $scope.isShowSelectOptions = false;
         callback(value);
@@ -83,11 +78,46 @@ model.controller("listController",function($scope,listDialogService,$sce) {
 
     $scope.saveModalModel = function(){
         $('#' + $scope.id).modal('hide');
-        $scope.setModel($scope.selectModalValue);
+        $scope.setItem($scope.selectModalValue);
         $scope.resetActiveElementInModal();
     };
 
+    $scope.getFilteredData = function() {
+        var list = $scope.getList();
+
+        var filter = {};
+
+        if (!field) {
+            filter = $scope.model;
+        } else {
+            filter[field] = $scope.model;
+        }
+        var filteredData = $filter('filter')(list, filter);
+        filteredData = $filter('limitTo')(filteredData, $scope.count);
+        var valid = true;
+        if (filteredData) {
+            if (filteredData.length === 1) {
+                if ($scope.choose && $scope.model.toString() === $scope.getItem(filteredData[0]).toString()) {
+                    $scope.setModel(filteredData[0]);
+                }
+            } else {
+                if (filteredData.length === 0) {
+                    if ($scope.isRequired()) {
+                        valid = false;
+                    }
+                }
+            }
+        }
+        if (!$scope.choose && $scope.model && $scope.model.toString() !== $scope.getItem(filteredData[0]).toString()) {
+            valid = false;
+        }
+        $scope.selectForm['main-select'].$setValidity("selectValue", valid);
+        $scope.setValid();
+
+    };
+
     //закрытие подсказки, если щелчок происходдит за пределами элемнта
+    //!!!!!!!!
     $scope.hideSelect = function(){
         $scope.$apply(function () {
             if ($scope.isShowSelectOptions) {
@@ -138,7 +168,7 @@ model.controller("listController",function($scope,listDialogService,$sce) {
     };
 
     //текст отображающийся в input
-    function getValue(value){
+    function getTitle(value){
         if (angular.isString(value) || value.$$unwrapTrustedValue) {
             return value;
         } else {

@@ -1,9 +1,8 @@
 <div style="position: relative" ng-controller="listController" ng-form name="selectForm">
     <div class="select-with-input" hide-options="hideSelect()">
         <div class="input-group"  ng-class="cssClass">
-
             <input name="main-select" type="text" ng-disabled="isDisabled()" ng-required="isRequired()" class="form-control select-input on-error"
-                   placeholder="{{translate('search_for')}}" ng-keyup="setSelect(true)" ng-model="model" autocomplete="off">
+                   placeholder="{{translate('search_for')}}" ng-keyup="isShowSelectOptions = true" ng-model="selectedItem" autocomplete="off">
 
             <div class="input-group-btn">
                 <button class="btn btn-default" ng-disabled="isDisabled()" type="button" ng-click="openDialog()">
@@ -16,7 +15,7 @@
         <input type="text" style="display:none;width:0;height:0"/>
         <div class="select-options-container" ng-show="isShowSelectOptions">
             <ul class="select-options">
-                <li class="select-option" ng-repeat="item in getFilteredData(false)" ng-mouseenter="onEvent($event)" ng-mouseleave="onEvent($event)" ng-click="setModel(item)">{{getItem(item)}}</li>
+                <li class="select-option" ng-repeat="item in getFilteredData(false)" ng-mouseenter="onEvent($event)" ng-mouseleave="onEvent($event)" ng-click="setItem(item)">{{getItem(item)}}</li>
             </ul>
         </div>
 
