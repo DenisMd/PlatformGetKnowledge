@@ -30,6 +30,7 @@
     <link rel="stylesheet" type="text/css" href="/resources/css/main/video.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/main/graphics.css">
     <link rel="stylesheet" type="text/css"  href="/resources/css/main/editor.css">
+    <link rel="stylesheet" type="text/css"  href="/resources/css/main/listInput.css">
 
     <link rel="shortcut icon" type="image/x-icon" href="/resources/image/favicon.ico" />
     <meta charset="utf-8">

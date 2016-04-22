@@ -44,10 +44,11 @@ model.controller("listDialogController",function($scope,listDialogService,$filte
     };
 
     listDialogService.setCallbackOpen(function(){
+        $scope.currenItem = null;
         $scope.updateList();
         //scroll для таблицы
-
         $scope.selectScrollConfig = angular.merge({setHeight: listDialogService.height()}, $scope.modalScrollConfig);
+
     });
 
 

@@ -1,0 +1,88 @@
+/*Modal window in selector*/
+.modal-find{
+    padding: 6px;
+}
+
+.modal-body.modal-find{
+    position: relative;
+}
+
+.modal-footer.modal-find{
+    text-align: center;
+}
+
+.table-border {
+    border-collapse: separate !important;
+    border-spacing: 0;
+    margin-bottom: 0;
+}
+.table-border {
+    border: solid #ccc 1px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 1px 1px #ccc;
+    -moz-box-shadow: 0 1px 1px #ccc;
+    box-shadow: 0 1px 1px #ccc;
+}
+.table-border tr:hover {
+    background: #ECECEC;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+}
+.table-border > tbody > tr >td, .table-border > tbody > tr >th {
+    border-left: 1px solid #ccc;
+    border-top: 0;
+    padding: 10px;
+    text-align: left;
+}
+.table-border th {
+    background-color: #ECECEC;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#F8F8F8), to(#ECECEC));
+    background-image: -webkit-linear-gradient(top, #F8F8F8, #ECECEC);
+    background-image: -moz-linear-gradient(top, #F8F8F8, #ECECEC);
+    background-image: linear-gradient(top, #F8F8F8, #ECECEC);
+    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+    -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;
+    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+    border-top: none;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+.table-border td:first-child, .table-border th:first-child {
+    border-left: none;
+}
+.table-border th:first-child {
+    -moz-border-radius: 6px 0 0 0;
+    -webkit-border-radius: 6px 0 0 0;
+    border-radius: 6px 0 0 0;
+}
+.table-border th:last-child {
+    -moz-border-radius: 0 6px 0 0;
+    -webkit-border-radius: 0 6px 0 0;
+    border-radius: 0 6px 0 0;
+}
+.table-border th:only-child{
+    -moz-border-radius: 6px 6px 0 0;
+    -webkit-border-radius: 6px 6px 0 0;
+    border-radius: 6px 6px 0 0;
+}
+.table-border tr:last-child td:first-child {
+    -moz-border-radius: 0 0 0 6px;
+    -webkit-border-radius: 0 0 0 6px;
+    border-radius: 0 0 0 6px;
+}
+.table-border tr:last-child td:last-child {
+    -moz-border-radius: 0 0 6px 0;
+    -webkit-border-radius: 0 0 6px 0;
+    border-radius: 0 0 6px 0;
+}
+
+.table-content{
+    overflow: auto;
+    position: relative;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0 1px;
+}
