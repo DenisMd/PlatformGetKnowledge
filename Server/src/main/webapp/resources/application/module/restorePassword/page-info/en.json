@@ -1,7 +1,7 @@
 {
   "text" : {
-    "restorePassword" : "Restore password",
-    "Complete" : "Restore password success.",
-    "Failed" : "Unique id not correct."
+    "restore_password"          : "Restore password",
+    "restore_password_complete" : "Restore password success.",
+    "restore_password_failed"   : "Unique id not correct."
   }
 }

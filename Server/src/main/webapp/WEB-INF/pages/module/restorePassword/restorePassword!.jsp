@@ -1,12 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet" href="/resources/css/login.css">
+<link rel="stylesheet" href="/resources/css/authorize-forms/forms.css">
 
 <form class="center-form">
-    <div ng-class="resultRestorePassword?'':'div-hidden'" class="alert alert-info text-center" role="alert">
-        {{translate(resultRestorePassword)}}
-    </div>
+    <module-template name="components/infoMessage" data="restorePasswordInfo"></module-template>
     <div class="form-group form-title">
-        {{translate("restorePassword")}}
+        {{translate("restore_password")}}
     </div>
 
     <div class="form-group">
@@ -14,6 +12,6 @@
         <input type="text" class="form-control" id="inputPassword" placeholder="{{translate('password')}}" ng-model="password">
     </div>
     <div class="form-group login-btns">
-        <button class="btn login-btn login-btn-margin" ng-click="restorePassword(password)">{{translate("restorePassword")}}</button>
+        <button class="btn login-btn login-btn-margin" ng-click="restorePassword(password)">{{translate("restore_password")}}</button>
     </div>
 </form>
