@@ -167,11 +167,11 @@ model.controller("userCtrl", function ($scope, $state,$timeout,$http,application
 
 
     $scope.countryData = {
-        "id" : "country",
-        "count" : 3,
-        "filter":"countryName",
-        "listName" : "countriesList",
-        "maxHeight" : 300,
+        "id"            : "country",
+        "count"         : 3,
+        "titleField"    :"countryName",
+        "listName"      : "countriesList",
+        "maxHeight"     : 300,
         "isValid" : function(value){
             isCountryValid = value;
         },
@@ -187,11 +187,11 @@ model.controller("userCtrl", function ($scope, $state,$timeout,$http,application
     };
 
     $scope.regionData = {
-        "id" : "region",
-        "count" : 3,//
-        "filter":"regionName",
-        "listName" : "regionsList",
-        "maxHeight" : 300,//
+        "id"            : "region",
+        "count"         : 3,
+        "titleField"    :"regionName",
+        "listName"      : "regionsList",
+        "maxHeight"     : 300,
         "disable" : function(){
             return !isCountryValid || !$scope.country || isRegionDisable;
         },
@@ -210,12 +210,11 @@ model.controller("userCtrl", function ($scope, $state,$timeout,$http,application
     };
 
     $scope.cityData = {
-        "id" : "city",
-        "count" : 3,
-        "filter":"cityName",
-        "listName" : "citiesList",
-        //"required" : true,
-        "maxHeight" : 300,
+        "id"            : "city",
+        "count"         : 3,
+        "titleField"    :"cityName",
+        "listName"      : "citiesList",
+        "maxHeight"     : 300,
         "disable" : function(){
             return !isCountryValid || !isRegionValid  || !$scope.country  || !$scope.region  || isCityDisable;
         },
