@@ -31,10 +31,15 @@ public class SystemEventService extends AbstractService {
     @Action(name = "completeRegistration", mandatoryFields = {"uuid"})
     @Transactional
     public RegisterResult completeRegistration(HashMap<String , Object> data) {
+
         String uuid = (String) data.get("uuid");
         SystemEvent registerInfo = systemEventRepository.getSingleEntityByFieldAndValue("uuid", uuid);
-        if (registerInfo == null || registerInfo.getSystemEventType() != SystemEventType.Register) return RegisterResult.NotFound;
+
+        if (registerInfo == null || registerInfo.getSystemEventType() != SystemEventType.Register)
+            return RegisterResult.NotFound;
+
         User user = userRepository.read(registerInfo.getUserInfo().getUser().getId());
+
         if (!user.isEnabled()) {
             user.setEnabled(true);
             userRepository.merge(user);
@@ -64,14 +69,20 @@ public class SystemEventService extends AbstractService {
     @Action(name = "restorePassword", mandatoryFields = {"uuid" , "password"})
     @Transactional
     public Result restorePassword(HashMap<String , Object> data) throws PlatformException {
+
         String uuid = (String) data.get("uuid");
         SystemEvent restorePasswordInfo = systemEventRepository.getSingleEntityByFieldAndValue("uuid", uuid);
-        if (restorePasswordInfo == null || restorePasswordInfo.getSystemEventType() != SystemEventType.RestorePassword) return Result.Failed();
+
+        if (restorePasswordInfo == null || restorePasswordInfo.getSystemEventType() != SystemEventType.RestorePassword)
+            return Result.Failed();
+
         User user = userRepository.read(restorePasswordInfo.getUserInfo().getUser().getId());
         String password = (String) data.get("password");
         user.hashRawPassword(password);
+
         userRepository.merge(user);
         systemEventRepository.remove(restorePasswordInfo.getId());
+
         return Result.Complete();
     }
 
