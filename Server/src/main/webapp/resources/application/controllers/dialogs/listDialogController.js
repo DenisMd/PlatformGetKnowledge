@@ -30,22 +30,23 @@ model.controller("listDialogController",function($scope,listDialogService,$filte
 
 
         return filteredData;
-    };
+    }
 
     function resetActiveElementInModal(){
         if (currentElement) {
             currentElement.removeClass("info");
             currentElement = null;
         }
-    };
+    }
 
     $scope.updateList = function () {
         $scope.filtredList = getItems();
-    }
+    };
 
     listDialogService.setCallbackOpen(function(){
         $scope.updateList();
         //scroll для таблицы
+
         $scope.selectScrollConfig = angular.merge({setHeight: listDialogService.height()}, $scope.modalScrollConfig);
     });
 
