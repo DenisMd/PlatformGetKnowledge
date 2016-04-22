@@ -1,8 +1,8 @@
 {
   "text" : {
-    "NotFound" : "Identifications not found!",
-    "Complete" : "Registration completed! May sign in by your login.",
-    "AlreadyActivate" : "This identifications already activated!",
-    "loginPage" : "Login page"
+    "accept_not_found"        : "Identifications not found!",
+    "accept_complete"         : "Registration completed! May sign in by your login.",
+    "accept_already_activate" : "This identifications already activated!",
+    "accept_login_page"       : "Login page"
   }
 }
