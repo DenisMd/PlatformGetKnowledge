@@ -61,14 +61,14 @@ model.controller("listController",function($scope,listDialogService,$filter) {
                 valid = true;
             }
         }
-
+        
         $scope.selectForm['main-select'].$setValidity("selectValue", valid);
-        checkValid();
+        checkValid(valid);
 
         return filteredData;
-    };
+    }
 
-    function checkValid(){
+    function checkValid(valid){
         var val = $scope.getData().valid;
 
         if (!val) {
@@ -76,9 +76,9 @@ model.controller("listController",function($scope,listDialogService,$filter) {
         }
 
         if (angular.isFunction(val)) {
-            val($scope.selectForm['main-select'].$valid);
+            val(valid);
         }
-    };
+    }
 
     //открыть диалог
     $scope.openDialog = function(){
