@@ -63,16 +63,16 @@ model.controller("listController",function($scope,listDialogService,$filter) {
         }
 
         $scope.selectForm['main-select'].$setValidity("selectValue", valid);
-        setValid();
+        checkValid();
 
         return filteredData;
     };
 
-    function setValid(){
+    function checkValid(){
         var val = $scope.getData().valid;
 
         if (!val) {
-            return false;
+            return;
         }
 
         if (angular.isFunction(val)) {
@@ -87,6 +87,10 @@ model.controller("listController",function($scope,listDialogService,$filter) {
             maxHeight   : $scope.getData().maxHeight,
             titleField  : $scope.titleField
         });
+        //устанавливаем действие на выбор элемента из модального окна
+        listDialogService.setCallbackSave(function(value){
+            $scope.setItem(value);
+        });
         listDialogService.openDialog();
     };
 
@@ -100,10 +104,6 @@ model.controller("listController",function($scope,listDialogService,$filter) {
         $scope.isShowSelectOptions  = false;
         callback(value);
     };
-
-    listDialogService.setCallbackSave(function(value){
-        $scope.setItem(value);
-    });
 
     //При нажатие клавиши в input[main-select]
     $scope.fillFiltredItem = function(){

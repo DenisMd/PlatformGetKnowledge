@@ -172,7 +172,7 @@ model.controller("userCtrl", function ($scope, $state,$timeout,$http,application
         "titleField"    :"countryName",
         "listName"      : "countriesList",
         "maxHeight"     : 300,
-        "isValid" : function(value){
+        "valid" : function(value){
             isCountryValid = value;
         },
         required: false,
@@ -198,7 +198,7 @@ model.controller("userCtrl", function ($scope, $state,$timeout,$http,application
         "required" : function(){
             return $scope.country;
         },
-        "isValid" : function(value){
+        "valid" : function(value){
             isRegionValid = value;
         },
         "callback" : function (value){
