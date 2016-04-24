@@ -1,5 +1,10 @@
 <link rel="stylesheet" href="/resources/css/selectors/staticSelector.css">
 
+<md-input-container class="md-block" ng-if="getData().filter">
+    <label>{{translate(getData().filter.title)}}</label>
+    <input ng-model="search">
+</md-input-container>
+{{search}}
 <div class="table-selector" ng-controller="staticSelectorController">
     <div ng-scrollbars ng-scrollbars-config="tableScroll">
         <table class="table table-hover">

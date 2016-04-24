@@ -6,6 +6,11 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className,
     $scope.selectorData = {
         list        : [],
         tableName   :   "bootstrap_services",
+        filter      : {
+            title : "name",
+            type  : "text",
+            field : "name"
+        },
         headerNames : [
             {
                 name : "id",
@@ -41,8 +46,8 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className,
         $scope.selectorData.list.push(service);
     });
 
+    //Обновляем информацию о сервисе
     $scope.updateService = function() {
-
       applicationService.update($scope,"updateResult",className.bootstrap_services,$scope.currentService,function(result){
          $scope.showToast(result);
       });
