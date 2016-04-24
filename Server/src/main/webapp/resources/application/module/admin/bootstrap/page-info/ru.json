@@ -1,14 +1,14 @@
 {
   "text" : {
-    "bootstrap_title"  : "Инициализация сервисов в системе",
-    "bootstrap_services" : "Сервисы",
-    "bootstrap_state" : "Состояние сервиса",
-    "bootstrap_repeat" : "Повторяемый",
-    "bootstrap_order" : "Порядок выполнения",
-    "bootstrap_errorMessage" : "Сообщение об ошибке",
-    "bootstrap_stackTrace" : "Трасса стека",
-    "bootstrap_serviceInfo" : "Информация о сервисе",
-    "bootstrap_doBootstrap" : "Выполнить инициализацию",
-    "bootstrap_domain" : "Домен"
+    "bootstrap_title"         : "Инициализация сервисов в системе",
+    "bootstrap_services"      : "Сервисы",
+    "bootstrap_state"         : "Состояние сервиса",
+    "bootstrap_repeat"        : "Повторяемый",
+    "bootstrap_order"         : "Порядок выполнения",
+    "bootstrap_errorMessage"  : "Сообщение об ошибке",
+    "bootstrap_stackTrace"    : "Трасса стека",
+    "bootstrap_serviceInfo"   : "Информация о сервисе",
+    "bootstrap_doBootstrap"   : "Выполнить инициализацию",
+    "bootstrap_domain"        : "Домен"
   }
 }

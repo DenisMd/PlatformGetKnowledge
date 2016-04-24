@@ -1,4 +1,4 @@
-<link href="/resources/css/accept.css" rel="stylesheet">
+<link href="/resources/css/accept/accept.css" rel="stylesheet">
 
 <!-- Add or remove "with-glare" class. Removing the glare makes the screen interactive -->
 

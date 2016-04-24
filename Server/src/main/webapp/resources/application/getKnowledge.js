@@ -201,13 +201,6 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
     };
 
     //TODO: убрать
-    var reverse = false;
-    $scope.setOrder = function (order) {
-        reverse = !reverse;
-        $scope.order = reverse?"-"+order:order;
-    };
-
-    //TODO: убрать
     $scope.splitArray = function(array,even) {
         var tempArr = [];
         for (var i = 0; i < array.length; i++) {

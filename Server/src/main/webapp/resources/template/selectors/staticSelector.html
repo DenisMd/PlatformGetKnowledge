@@ -1,0 +1,25 @@
+<link rel="stylesheet" href="/resources/css/selectors/staticSelector.css">
+
+<div class="table-selector" ng-controller="staticSelectorController">
+    <div ng-scrollbars ng-scrollbars-config="tableScroll">
+        <table class="table table-hover">
+            <caption>{{translate(getData().tableName)}}</caption>
+            <thead>
+            <tr>
+                <th ng-repeat="header in getData().headerNames" ng-click="setOrder(header)">
+                    {{translate(header.title ? header.title : header.name)}}
+                    <i class="fa fa-sort-desc" aria-hidden="true"   ng-show="header.name == orderItem && orderReverse"></i>
+                    <i class="fa fa-sort-asc" aria-hidden="true"    ng-show="header.name == orderItem && !orderReverse"></i>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in getData().list | orderBy:orderItem:orderReverse" class="selected-row" ng-click="getData().selectItemCallback(item)">
+                <td ng-repeat="header in getData().headerNames">
+                    {{item[header.name]}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
