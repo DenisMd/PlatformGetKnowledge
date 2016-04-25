@@ -6,11 +6,23 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className,
     $scope.selectorData = {
         list        : [],
         tableName   :   "bootstrap_services",
-        filter      : {
-            title : "name",
-            type  : "text",
-            field : "name"
-        },
+        filters      : [
+            {
+                title : "name",
+                type  : "text",
+                field : "name"
+            },
+            {
+                title : "id",
+                type  : "number",
+                field : "id"
+            },
+            {
+                title : "bootstrap_repeat",
+                type : "checkBox",
+                field : "repeat"
+            }
+        ],
         headerNames : [
             {
                 name : "id",

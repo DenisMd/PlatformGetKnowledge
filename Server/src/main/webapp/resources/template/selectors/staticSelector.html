@@ -1,17 +1,17 @@
 <link rel="stylesheet" href="/resources/css/selectors/staticSelector.css">
 
-<md-input-container class="md-block" ng-if="getData().filter">
-    <label>{{translate(getData().filter.title)}}</label>
-    <input ng-model="search">
+<md-input-container class="md-block" ng-repeat="filter in getData().filters">
+    <label>{{translate(filter.title)}}</label>
+    <input ng-model="filter.model" type="{{filter.type}}">
 </md-input-container>
-{{search}}
+
 <div class="table-selector" ng-controller="staticSelectorController">
     <div ng-scrollbars ng-scrollbars-config="tableScroll">
         <table class="table table-hover">
-            <caption>{{translate(getData().tableName)}}</caption>
+            <caption>{{translate(getData().tableName) + ' : ' + getData().list.length + ' ' + translate('of_records')}}</caption>
             <thead>
             <tr>
-                <th ng-repeat="header in getData().headerNames" ng-click="setOrder(header)">
+                <th ng-repeat="header in getData().headerNames" ng-click="setOrder(header)" ng-class="{'unsortable-column' : !header.orderBy}">
                     {{translate(header.title ? header.title : header.name)}}
                     <i class="fa fa-sort-desc" aria-hidden="true"   ng-show="header.name == orderItem && orderReverse"></i>
                     <i class="fa fa-sort-asc" aria-hidden="true"    ng-show="header.name == orderItem && !orderReverse"></i>
@@ -19,7 +19,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="item in getData().list | orderBy:orderItem:orderReverse" class="selected-row" ng-click="getData().selectItemCallback(item)">
+            <tr ng-repeat="item in getData().list | filter:filterSearch | orderBy:orderItem:orderReverse" class="selected-row" ng-click="getData().selectItemCallback(item)">
                 <td ng-repeat="header in getData().headerNames">
                     {{item[header.name]}}
                 </td>
