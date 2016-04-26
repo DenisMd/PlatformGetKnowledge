@@ -53,9 +53,6 @@
     <module-template name="dialogs/videoDialog"></module-template>
     <%--Модальное окно для показа списка--%>
     <module-template name="dialogs/listDialog"></module-template>
-    <%--Модальное окно для показа пользовательских фильтров--%>
-    <module-template name="dialogs/customFilter"></module-template>
-
 
     <%--Important--%>
     <%--<script src="/resources/dist/js/bower.js" type="text/javascript"></script>--%>
