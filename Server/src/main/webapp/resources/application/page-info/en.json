@@ -131,6 +131,8 @@
     "block_status"          : "Block status",
 
     "page_404"  : "Page not found. Error : 404",
-    "page_403"  : "Access denied. Error : 403"
+    "page_403"  : "Access denied. Error : 403",
+
+    "custom_filter" : "Custom filters"
   }
 }

@@ -1,9 +1,28 @@
 <link rel="stylesheet" href="/resources/css/selectors/staticSelector.css">
 
-<md-input-container class="md-block" ng-repeat="filter in getData().filters">
-    <label>{{translate(filter.title)}}</label>
-    <input ng-model="filter.model" type="{{filter.type}}">
-</md-input-container>
+
+<div layout-gt-sm="row">
+    <div ng-repeat="filter in getData().filters | filter:{'default' : true}" ng-switch="filter.type">
+
+        <div ng-switch-when="checkBox">
+            <md-checkbox  ng-model="filter.model" >
+                {{translate(filter.title)}}
+            </md-checkbox>
+        </div>
+
+        <div ng-switch-default>
+            <md-input-container class="md-block" flex-gt-sm>
+                <label>{{translate(filter.title)}}</label>
+                <input ng-model="filter.model" type="{{filter.type}}">
+            </md-input-container>
+        </div>
+
+
+    </div>
+    <md-button class="md-raised">{{translate("custom_filter")}}</md-button>
+</div>
+
+
 
 <div class="table-selector" ng-controller="staticSelectorController">
     <div ng-scrollbars ng-scrollbars-config="tableScroll">

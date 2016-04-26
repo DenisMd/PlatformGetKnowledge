@@ -10,7 +10,8 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className,
             {
                 title : "name",
                 type  : "text",
-                field : "name"
+                field : "name",
+                default : true
             },
             {
                 title : "id",
@@ -20,7 +21,8 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className,
             {
                 title : "bootstrap_repeat",
                 type : "checkBox",
-                field : "repeat"
+                field : "repeat",
+                default : true
             }
         ],
         headerNames : [
