@@ -4,30 +4,96 @@ var TYPES = {
     Parameter   : "Parameter"
 };
 
-//info: {name }
+//info: {name,type} - Field
+//info: {name , symbol} - Operation
+//info: {values = [,,]} - Parameters
 function filterItem(type , info){
     this.type = type;
     this.info = info;
 }
 
+/**
+ *  @param{filterItem} field
+    @param{filterItem} oper
+    @param{filterItem} param
+ * */
+
+function filterExpression(field,oper,param) {
+    this.field = field;
+    this.oper = oper;
+    this.param = param;
+}
+
 
 model.controller("customFilterController",function($scope,customFilterService){
+    
+    $scope.operationMap = {
+        text : {
+            values : [
+                {
+                    name : "equals",
+                    symbol : "="
+                },{
+                    name : "like",
+                    symbol : "like"
+                }
+            ]
+        },
+        number : {
+            values : [
+                {
+                    name : "equals",
+                    symbol : "="
+                },{
+                    name : "more",
+                    symbol : ">"
+                },{
+                    name : "moreOrEqual",
+                    symbol : ">="
+                },{
+                    name : "less",
+                    symbol : "<"
+                },{
+                    name : "lessOrEqual",
+                    symbol : ">"
+                },{
+                    name : "between",
+                    symbol : "between"
+                }
+            ],
+        },
+        other : {
+            values : [
+                {
+                    name : "equals",
+                    symbol : "="
+                }
+            ]
+        }
+    };
 
+    //Выбранная операция
+    $scope.selectedOperation = {};
+    
+    //Массив из filterExpressions
     $scope.filterRequest = [];
 
-    function isLogicalOperation(item){
-        return item.info.name == "And" || item.info.name == "Or";
-    }
+    $scope.isParamsInput = false;
+    
+    $scope.currentFilterExpression = new filterExpression(null,null,null);
 
     $scope.addField = function(field){
-        var length = $scope.filterRequest.length;
-        //Добавляем филд в запрос фильтра если в запросе ничего нет или он идет после логической операции
-        if (length == 0 || isLogicalOperation($scope.filterRequest[length-1]) ) {
-            $scope.filterRequest.push(field);
-        } else if ($scope.filterRequest[length-1].type == TYPES.Field) {
-            //изменяем последний филд
-            $scope.filterRequest[length-1] = field;
+        if (!$scope.isParamsInput) {
+            $scope.currentFilterExpression.field = new filterItem(TYPES.Field, {name: field.field, type: field.type});
+            $scope.selectedOperation = {};
         }
+    };
+
+    $scope.addOperation = function () {
+        $scope.currentFilterExpression.oper = new filterItem(TYPES.Operation,{
+            name : $scope.selectedOperation.value.name,
+            symbol : $scope.selectedOperation.value.symbol});
+        $scope.isParamsInput = true;
     };
 
     //Вызывается при отрытие диалога
