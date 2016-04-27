@@ -98,6 +98,3 @@
         <%--</form>--%>
     <%--</md-dialog>--%>
 <%--</script>--%>
-
-<%--Модальное окно для показа пользовательских фильтров--%>
-<module-template name="dialogs/customFilter"></module-template>

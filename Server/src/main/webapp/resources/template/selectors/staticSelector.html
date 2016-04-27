@@ -17,12 +17,12 @@
             </md-input-container>
         </div>
 
-
     </div>
     <md-button class="md-raised">{{translate("custom_filter")}}</md-button>
 </div>
 
-
+<%--Модальное окно для показа пользовательских фильтров--%>
+<module-template name="dialogs/customFilter"></module-template>
 
 <div class="table-selector" ng-controller="staticSelectorController">
     <div ng-scrollbars ng-scrollbars-config="tableScroll">
