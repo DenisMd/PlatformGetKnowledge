@@ -1,3 +1,3 @@
-model.controller("customFilterController",function($scope){
+model.controller("customFilterController",function($scope,customFilterService){
 
 });

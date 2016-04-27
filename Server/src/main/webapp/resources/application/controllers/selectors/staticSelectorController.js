@@ -1,4 +1,4 @@
-model.controller("staticSelectorController" , function ($scope) {
+model.controller("staticSelectorController" , function ($scope , customFilterService) {
     $scope.tableScroll = {
         theme: 'dark-3',
         setHeight: 400,
@@ -61,4 +61,8 @@ model.controller("staticSelectorController" , function ($scope) {
 
         return true;
     };
+
+    $scope.openCustomFilter = function(){
+        customFilterService.openDialog();
+    }
 });

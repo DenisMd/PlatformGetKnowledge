@@ -1,3 +1,20 @@
 <link rel="stylesheet" href="/resources/css/dialogs/customFilter.css">
 
-<!--customFilterController-->
+<div class="modal fade" id="customFilterDialogId" ng-controller="customFilterController">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-find">
+                   <div>
+                       SSS2
+                   </div>
+            </div><!-- /.modal-header -->
+            <div class="modal-body modal-find">
+               SSS
+            </div>
+            <div class="modal-footer modal-find">
+                <button type="button" class="btn btn-primary" ng-disabled="!currenItem" ng-click="saveModalModel()">{{translate("save")}}</button>
+                <button type="button" class="btn btn-danger" ng-click="closeModal()">{{translate("close")}}</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

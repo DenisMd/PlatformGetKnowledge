@@ -1,30 +1,28 @@
 <link rel="stylesheet" href="/resources/css/selectors/staticSelector.css">
 
-
-<div layout-gt-sm="row">
-    <div ng-repeat="filter in getData().filters | filter:{'default' : true}" ng-switch="filter.type">
-
-        <div ng-switch-when="checkBox">
-            <md-checkbox  ng-model="filter.model" >
-                {{translate(filter.title)}}
-            </md-checkbox>
-        </div>
-
-        <div ng-switch-default>
-            <md-input-container class="md-block" flex-gt-sm>
-                <label>{{translate(filter.title)}}</label>
-                <input ng-model="filter.model" type="{{filter.type}}">
-            </md-input-container>
-        </div>
-
-    </div>
-    <md-button class="md-raised">{{translate("custom_filter")}}</md-button>
-</div>
-
-<%--Модальное окно для показа пользовательских фильтров--%>
-<module-template name="dialogs/customFilter"></module-template>
-
 <div class="table-selector" ng-controller="staticSelectorController">
+    <div layout-gt-sm="row">
+        <div ng-repeat="filter in getData().filters | filter:{'default' : true}" ng-switch="filter.type">
+
+            <div ng-switch-when="checkBox">
+                <md-checkbox  ng-model="filter.model" >
+                    {{translate(filter.title)}}
+                </md-checkbox>
+            </div>
+
+            <div ng-switch-default>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>{{translate(filter.title)}}</label>
+                    <input ng-model="filter.model" type="{{filter.type}}">
+                </md-input-container>
+            </div>
+
+        </div>
+        <md-button class="md-raised" ng-click="openCustomFilter()">{{translate("custom_filter")}}</md-button>
+    </div>
+
+    <!--Модальное окно для показа пользовательских фильтров-->
+    <module-template name="dialogs/customFilter"></module-template>
     <div ng-scrollbars ng-scrollbars-config="tableScroll">
         <table class="table table-hover">
             <caption>{{translate(getData().tableName) + ' : ' + getData().list.length + ' ' + translate('of_records')}}</caption>

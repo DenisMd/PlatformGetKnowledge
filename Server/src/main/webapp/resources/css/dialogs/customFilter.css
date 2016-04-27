@@ -1,0 +1,12 @@
+/*Modal window in custom filter*/
+.modal-find{
+    padding: 6px;
+}
+
+.modal-body.modal-find{
+    position: relative;
+}
+
+.modal-footer.modal-find{
+    text-align: center;
+}
