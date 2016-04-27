@@ -10,3 +10,7 @@
 .modal-footer.modal-find{
     text-align: center;
 }
+
+.filter-body {
+    height: 300px;
+}
