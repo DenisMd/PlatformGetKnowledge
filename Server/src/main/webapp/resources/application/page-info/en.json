@@ -134,6 +134,7 @@
     "page_403"  : "Access denied. Error : 403",
 
     "custom_filter" : "Custom filters",
-    "do_filter"     : "Filtering"
+    "do_filter"     : "Filtering",
+    "filter_fields" : "Fields for filters"
   }
 }

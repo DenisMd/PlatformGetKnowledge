@@ -4,16 +4,52 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header modal-find">
-                   <div>
-                        SSS
+                   <div ng-repeat="element in request">
+                        {{element.value}}
                    </div>
             </div><!-- /.modal-header -->
             <div class="modal-body modal-find">
                <div class="row filter-body">
-                   <div class="col-lg-6">
-
+                   <div class="col-lg-6 left-block">
+                       <table class="table table-hover">
+                           <caption>{{translate("filter_fields")}}</caption>
+                           <thead>
+                           <tr>
+                               <th>{{translate("name")}}</th>
+                               <th>{{translate("type")}}</th>
+                               <th>{{translate("title")}}</th>
+                           </tr>
+                           </thead>
+                           <tbody>
+                               <tr ng-repeat="filterInfo in filtersInfo" class="selected-row" ng-click="addField(filterInfo)">
+                                   <td>{{filterInfo.field}}</td>
+                                   <td>{{filterInfo.type}}</td>
+                                   <td>{{translate(filterInfo.title)}}</td>
+                               </tr>
+                           </tbody>
+                       </table>
                    </div>
-                   <div class="col-lg-6"></div>
+                   <div class="col-lg-6">
+                       <div ng-if="currentElement" ng-switch="currentElement.type">
+                           <div ng-switch="currentElement.type">
+                               <div ng-switch-when="text">
+                                   <div ng-repeat="operation in operationsFromMapByType('text')">
+                                       {{operation}}
+                                   </div>
+                               </div>
+                               <div ng-switch-when="number">
+                                   <div ng-repeat="operation in operationsFromMapByType('number')">
+                                       {{operation}}
+                                   </div>
+                               </div>
+                               <div ng-switch-default>
+                                   <div ng-repeat="operation in operationsFromMapByType('others')">
+                                       {{operation}}
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
                </div>
             </div>
             <div class="modal-footer modal-find">

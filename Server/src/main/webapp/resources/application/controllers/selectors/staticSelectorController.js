@@ -63,6 +63,7 @@ model.controller("staticSelectorController" , function ($scope , customFilterSer
     };
 
     $scope.openCustomFilter = function(){
+        customFilterService.filtersInfo($scope.getData().filters);
         customFilterService.openDialog();
     }
 });
