@@ -112,6 +112,10 @@ model.controller("customFilterController",function($scope,customFilterService){
         $scope.isParamsInput = false;
     };
 
+    $scope.removeFromRequest = function(index) {
+        $scope.filterRequest.splice(index,1);
+    };
+
     //Вызывается при отрытие диалога
     customFilterService.setCallbackOpen(function(){
         $scope.filtersInfo = customFilterService.filtersInfo();

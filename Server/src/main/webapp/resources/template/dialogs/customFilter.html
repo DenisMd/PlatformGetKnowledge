@@ -7,6 +7,7 @@
                    <div ng-repeat="element in filterRequest">
                        {{element.field.info.name}} {{element.oper.info.symbol}} {{element.param.info.values[0]}}
                        <span ng-if="element.oper.info.name == 'between'">{{element.param.info.values[1]}}</span>
+                       <i class="fa fa-times" aria-hidden="true" ng-click="removeFromRequest($index)"></i>
                        <span ng-if="!$last">{{translate(logicalExpression)}}</span>
                    </div>
                    <div ng-if="currentFilterExpression.field">
