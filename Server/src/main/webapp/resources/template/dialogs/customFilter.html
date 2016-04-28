@@ -4,10 +4,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header modal-find">
-                   <div ng-repeat="element in request">
-                        {{element.value}}
+                   <div ng-repeat="element in filterRequest">
+                       {{element.field.info.name}} {{element.oper.info.symbol}} {{element.param.info.values[0]}}
+                       <span ng-if="element.oper.info.name == 'between'">{{element.param.info.values[1]}}</span>
+                       <span ng-if="!$last">{{translate(logicalExpression)}}</span>
                    </div>
-                   <div>{{currentFilterExpression.field.info.name}}</div>
+                   <div ng-if="currentFilterExpression.field">
+                       {{currentFilterExpression.field.info.name}} {{currentFilterExpression.oper.info.symbol}} {{currentFilterExpression.param.info.values[0]}}
+                       <span ng-if="currentFilterExpression.oper.info.name == 'between'">{{currentFilterExpression.param.info.values[1]}}</span>
+                   </div>
             </div><!-- /.modal-header -->
             <div class="modal-body modal-find">
                <div class="row filter-body">
@@ -63,6 +68,7 @@
                                    <div class="form-group">
                                        <label for="text-param">{{translate("parameter")}}</label>
                                        <input type="text" class="form-control" id="text-param" ng-model="params">
+                                       <button class="btn btn-default"  ng-click="createFilterExpression(params)">{{translate("ok")}}</button>
                                    </div>
                                </div>
                                <div ng-switch-when="number">
@@ -75,23 +81,33 @@
                                            <label for="between-param2">{{translate("to")}}</label>
                                            <input type="number" class="form-control" id="between-param2" ng-model="params2">
                                        </div>
+                                       <button class="btn btn-default"  ng-click="createFilterExpression(params,params2)">{{translate("ok")}}</button>
                                    </div>
                                    <div ng-if="selectedOperation.value.name !== 'between'">
                                        <div class="form-group">
                                            <label for="number-param">{{translate("number")}}</label>
                                            <input type="number" class="form-control" id="number-param" ng-model="params">
                                        </div>
+                                       <button class="btn btn-default"  ng-click="createFilterExpression(params)">{{translate("ok")}}</button>
                                    </div>
                                </div>
                            </div>
-                           <button class="btn btn-default"  ng-click="createFilterExpression(params,params2)">{{translate("ok")}}</button>
+
                        </div>
 
                    </div>
-               </div>
+               </div>  <!--.row-->
+                <div class="row">
+                    <label>
+                        <input type="radio" name="operations" ng-value="'and'" ng-model="logicalExpression">{{translate("and")}}
+                    </label>
+                    <label>
+                        <input type="radio" name="operations" ng-value="'or'" ng-model="logicalExpression">{{translate("or")}}
+                    </label>
+                </div>
             </div>
             <div class="modal-footer modal-find">
-                <button type="button" class="btn btn-primary" ng-disabled="true" ng-click="saveFilter()">{{translate("do_filter")}}</button>
+                <button type="button" class="btn btn-primary" ng-disabled="currentFilterExpression.field" ng-click="saveFilter()">{{translate("do_filter")}}</button>
                 <button type="button" class="btn btn-danger" ng-click="closeModal()">{{translate("close")}}</button>
             </div>
         </div><!-- /.modal-content -->

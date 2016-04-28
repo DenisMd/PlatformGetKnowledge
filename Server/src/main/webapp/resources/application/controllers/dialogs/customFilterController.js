@@ -26,7 +26,10 @@ function filterExpression(field,oper,param) {
 
 
 model.controller("customFilterController",function($scope,customFilterService){
-    
+
+
+    $scope.logicalExpression = "and";
+
     $scope.operationMap = {
         text : {
             values : [
@@ -82,6 +85,7 @@ model.controller("customFilterController",function($scope,customFilterService){
     
     $scope.currentFilterExpression = new filterExpression(null,null,null);
 
+    //Добавление поля в фильтр
     $scope.addField = function(field){
         if (!$scope.isParamsInput) {
             $scope.currentFilterExpression.field = new filterItem(TYPES.Field, {name: field.field, type: field.type});
@@ -89,11 +93,23 @@ model.controller("customFilterController",function($scope,customFilterService){
         }
     };
 
+    //Добовление операции в фильтр
     $scope.addOperation = function () {
         $scope.currentFilterExpression.oper = new filterItem(TYPES.Operation,{
             name : $scope.selectedOperation.value.name,
             symbol : $scope.selectedOperation.value.symbol});
         $scope.isParamsInput = true;
+    };
+
+    $scope.createFilterExpression = function(param1,param2) {
+        var paramValues = [param1];
+        if (param2) {paramValues.push(param2);}
+        $scope.currentFilterExpression.param = new filterItem(TYPES.Parameter,{
+           values : paramValues
+        });
+        $scope.filterRequest.push($scope.currentFilterExpression);
+        $scope.currentFilterExpression = new filterExpression(null,null,null);
+        $scope.isParamsInput = false;
     };
 
     //Вызывается при отрытие диалога
