@@ -4,7 +4,7 @@
     <div layout-gt-sm="row">
         <div ng-repeat="filter in getData().filters | filter:{'default' : true}" ng-switch="filter.type">
 
-            <div ng-switch-when="checkBox">
+            <div ng-switch-when="check_box">
                 <md-checkbox  ng-model="filter.model" >
                     {{translate(filter.title)}}
                 </md-checkbox>

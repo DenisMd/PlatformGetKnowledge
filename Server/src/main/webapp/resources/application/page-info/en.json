@@ -73,6 +73,10 @@
     "male"          : "Male",
     "female"        : "Female",
     "ok"            : "Ok",
+    "and"           : "And",
+    "or"            : "Or",
+    "send"          : "Send",
+    "next"          : "Next",
 
 
     "failed"        : "Failed",
@@ -135,6 +139,21 @@
 
     "custom_filter" : "Custom filters",
     "do_filter"     : "Filtering",
-    "filter_fields" : "Fields for filters"
+    "clear_filter"  : "Clear filter",
+    "filter_join_by": "Join filters by: ",
+
+    "text_field"          : "Text field",
+    "number_field"        : "Number field",
+    "check_box_field"     : "Check Box",
+
+    "operation_equals"        : "Equals",
+    "operation_like"          : "Like",
+    "operation_more"          : "More",
+    "operation_less"          : "Less",
+    "operation_more_or_equal" : "More or Equal",
+    "operation_less_or_equal" : "Less or Equal",
+    "operation_between"       : "Between",
+    "operation_after"         : "After",
+    "operation_before"        : "Before"
   }
 }

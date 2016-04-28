@@ -1,114 +1,131 @@
 <link rel="stylesheet" href="/resources/css/dialogs/customFilter.css">
 
 <div class="modal fade" id="customFilterDialogId" ng-controller="customFilterController">
-    <div class="modal-dialog">
+    <div class="modal-dialog custom-filter-dialog">
         <div class="modal-content">
             <div class="modal-header modal-find">
-                   <div ng-repeat="element in filterRequest">
-                       {{element.field.info.name}} {{element.oper.info.symbol}} {{element.param.info.values[0]}}
-                       <span ng-if="element.oper.info.name == 'between'">{{element.param.info.values[1]}}</span>
-                       <i class="fa fa-times" aria-hidden="true" ng-click="removeFromRequest($index)"></i>
-                       <span ng-if="!$last">{{translate(logicalExpression)}}</span>
-                   </div>
-                   <div ng-if="currentFilterExpression.field">
-                       {{currentFilterExpression.field.info.name}} {{currentFilterExpression.oper.info.symbol}} {{currentFilterExpression.param.info.values[0]}}
-                       <span ng-if="currentFilterExpression.oper.info.name == 'between'">{{currentFilterExpression.param.info.values[1]}}</span>
-                   </div>
+                <div ng-repeat="element in filterRequest">
+                    {{element.field.info.name}} {{element.oper.info.symbol}} {{element.param.info.values[0]}}
+                    <span ng-if="element.oper.info.name == 'between'">{{element.param.info.values[1]}}</span>
+                    <i class="fa fa-times" aria-hidden="true" ng-click="removeFromRequest($index)"></i>
+                    <span ng-if="!$last">{{translate(logicalExpression)}}</span>
+                </div>
+                <div ng-if="currentFilterExpression.field">
+                    {{currentFilterExpression.field.info.name}} {{currentFilterExpression.oper.info.symbol}}
+                    {{currentFilterExpression.param.info.values[0]}}
+                    <span ng-if="currentFilterExpression.oper.info.name == 'between'">{{currentFilterExpression.param.info.values[1]}}</span>
+                </div>
             </div><!-- /.modal-header -->
             <div class="modal-body modal-find">
-               <div class="row filter-body">
-                   <div class="col-lg-6 left-block">
-                       <table class="table table-hover">
-                           <caption>{{translate("filter_fields")}}</caption>
-                           <thead>
-                           <tr>
-                               <th>{{translate("name")}}</th>
-                               <th>{{translate("type")}}</th>
-                               <th>{{translate("title")}}</th>
-                           </tr>
-                           </thead>
-                           <tbody>
-                               <tr ng-repeat="filterInfo in filtersInfo" class="selected-row" ng-click="addField(filterInfo)">
-                                   <td>{{filterInfo.field}}</td>
-                                   <td>{{filterInfo.type}}</td>
-                                   <td>{{translate(filterInfo.title)}}</td>
-                               </tr>
-                           </tbody>
-                       </table>
-                   </div>
-                   <div class="col-lg-6">
-                       <div ng-if="currentFilterExpression.field && !isParamsInput" ng-switch="currentFilterExpression.field.info.type">
-                           <div ng-switch-when="text">
-                               <div class="radio" ng-repeat="value in operationMap.text.values">
-                                   <label>
-                                       <input type="radio" name="operations" ng-value="value" ng-model="selectedOperation.value">{{value.name + '(' + value.symbol + ')'}}
-                                   </label>
-                               </div>
-                           </div>
-                           <div ng-switch-when="number">
-                               <div class="radio" ng-repeat="value in operationMap.number.values">
-                                   <label>
-                                       <input type="radio" name="operations" ng-value="value" ng-model="selectedOperation.value">{{value.name + '(' + value.symbol + ')'}}
-                                   </label>
-                               </div>
-                           </div>
-                           <div ng-switch-default>
-                               <div class="radio" ng-repeat="value in operationMap.other.values">
-                                   <label>
-                                       <input type="radio" name="operations" ng-value="value" ng-model="selectedOperation.value">{{value.name + '(' + value.symbol + ')'}}
-                                   </label>
-                               </div>
-                           </div>
-                           <div>
-                               <button class="btn btn-default" ng-if="selectedOperation.value" ng-click="addOperation()">{{translate("next")}}</button>
-                           </div>
-                       </div>
-                       <div ng-if="isParamsInput">
-                           <div ng-switch="currentFilterExpression.field.info.type">
-                               <div ng-switch-when="text">
-                                   <div class="form-group">
-                                       <label for="text-param">{{translate("parameter")}}</label>
-                                       <input type="text" class="form-control" id="text-param" ng-model="params">
-                                       <button class="btn btn-default"  ng-click="createFilterExpression(params)">{{translate("ok")}}</button>
-                                   </div>
-                               </div>
-                               <div ng-switch-when="number">
-                                   <div ng-if="selectedOperation.value.name === 'between'">
-                                       <div class="form-group">
-                                           <label for="between-param1">{{translate("from")}}</label>
-                                           <input type="number" class="form-control" id="between-param1" ng-model="params">
-                                       </div>
-                                       <div class="form-group">
-                                           <label for="between-param2">{{translate("to")}}</label>
-                                           <input type="number" class="form-control" id="between-param2" ng-model="params2">
-                                       </div>
-                                       <button class="btn btn-default"  ng-click="createFilterExpression(params,params2)">{{translate("ok")}}</button>
-                                   </div>
-                                   <div ng-if="selectedOperation.value.name !== 'between'">
-                                       <div class="form-group">
-                                           <label for="number-param">{{translate("number")}}</label>
-                                           <input type="number" class="form-control" id="number-param" ng-model="params">
-                                       </div>
-                                       <button class="btn btn-default"  ng-click="createFilterExpression(params)">{{translate("ok")}}</button>
-                                   </div>
-                               </div>
-                           </div>
+                <div class="filter-body">
+                    <div class="col-lg-8 left-block">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>{{translate("name")}}</th>
+                                <th>{{translate("type")}}</th>
+                                <th>{{translate("title")}}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="filterInfo in filtersInfo" class="selected-row"
+                                ng-click="addField(filterInfo)">
+                                <td>{{filterInfo.field}}</td>
+                                <td>{{translate(filterInfo.type+"_field")}}</td>
+                                <td>{{translate(filterInfo.title)}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-lg-4">
+                        <div ng-if="currentFilterExpression.field && !isParamsInput"
+                             ng-switch="currentFilterExpression.field.info.type">
+                            <div ng-switch-when="text">
+                                <md-radio-group ng-model="selectedOperation.value">
+                                    <md-radio-button ng-value="value" class="md-primary" ng-repeat="value in operationMap.text.values">
+                                        {{translate("operation_" + value.name)}}
+                                    </md-radio-button>
+                                </md-radio-group>
+                            </div>
+                            <div ng-switch-when="number">
+                                <md-radio-group ng-model="selectedOperation.value">
+                                    <md-radio-button ng-value="value" class="md-primary" ng-repeat="value in operationMap.number.values">
+                                        {{translate("operation_" + value.name)}}
+                                    </md-radio-button>
+                                </md-radio-group>
+                            </div>
+                            <div ng-switch-default>
+                                <md-radio-group ng-model="selectedOperation.value">
+                                    <md-radio-button ng-value="value" class="md-primary" ng-repeat="value in operationMap.other.values">
+                                        {{translate("operation_" + value.name)}}
+                                    </md-radio-button>
+                                </md-radio-group>
+                            </div>
+                            <div>
+                                <button class="btn btn-default" ng-if="selectedOperation.value"
+                                        ng-click="addOperation()">{{translate("next")}}
+                                </button>
+                            </div>
+                        </div>
+                        <div ng-if="isParamsInput">
+                            <div ng-switch="currentFilterExpression.field.info.type">
+                                <div ng-switch-when="text">
+                                    <div class="form-group">
+                                        <label for="text-param">{{translate("parameter")}}</label>
+                                        <input type="text" class="form-control" id="text-param" ng-model="params">
+                                        <button class="btn btn-default" ng-click="createFilterExpression(params)">
+                                            {{translate("ok")}}
+                                        </button>
+                                    </div>
+                                </div>
+                                <div ng-switch-when="number">
+                                    <div ng-if="selectedOperation.value.name === 'between'">
+                                        <div class="form-group">
+                                            <label for="between-param1">{{translate("from")}}</label>
+                                            <input type="number" class="form-control" id="between-param1"
+                                                   ng-model="params">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="between-param2">{{translate("to")}}</label>
+                                            <input type="number" class="form-control" id="between-param2"
+                                                   ng-model="params2">
+                                        </div>
+                                        <button class="btn btn-default"
+                                                ng-click="createFilterExpression(params,params2)">{{translate("ok")}}
+                                        </button>
+                                    </div>
+                                    <div ng-if="selectedOperation.value.name !== 'between'">
+                                        <div class="form-group">
+                                            <label for="number-param">{{translate("number")}}</label>
+                                            <input type="number" class="form-control" id="number-param"
+                                                   ng-model="params">
+                                        </div>
+                                        <button class="btn btn-default" ng-click="createFilterExpression(params)">
+                                            {{translate("ok")}}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
 
-                       </div>
+                        </div>
 
-                   </div>
-               </div>  <!--.row-->
-                <div class="row">
-                    <label>
-                        <input type="radio" name="operations" ng-value="'and'" ng-model="logicalExpression">{{translate("and")}}
-                    </label>
-                    <label>
-                        <input type="radio" name="operations" ng-value="'or'" ng-model="logicalExpression">{{translate("or")}}
-                    </label>
+                    </div>
+                </div>  <!--.row-->
+                <div>
+                    <md-radio-group ng-model="logicalExpression" layout="row" layout-align="center">
+                        <p class="filter-logical-operation">{{translate("filter_join_by")}}</p>
+                        <md-radio-button value="and" class="md-primary">{{translate("and")}}</md-radio-button>
+                        <md-radio-button value="or">{{translate("or")}}</md-radio-button>
+                    </md-radio-group>
                 </div>
             </div>
             <div class="modal-footer modal-find">
-                <button type="button" class="btn btn-primary" ng-disabled="currentFilterExpression.field" ng-click="saveFilter()">{{translate("do_filter")}}</button>
+                <button type="button" class="btn btn-default" ng-disabled="!(filterRequest.length > 0)"
+                        ng-click="clearFilter()">{{translate("clear_filter")}}
+                </button>
+                <button type="button" class="btn btn-primary" ng-disabled="currentFilterExpression.field"
+                        ng-click="saveFilter()">{{translate("do_filter")}}
+                </button>
                 <button type="button" class="btn btn-danger" ng-click="closeModal()">{{translate("close")}}</button>
             </div>
         </div><!-- /.modal-content -->

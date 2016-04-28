@@ -20,7 +20,7 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className,
             },
             {
                 title : "bootstrap_repeat",
-                type : "checkBox",
+                type : "check_box",
                 field : "repeat",
                 default : true
             }

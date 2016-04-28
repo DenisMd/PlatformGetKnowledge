@@ -1,4 +1,8 @@
 /*Modal window in custom filter*/
+.custom-filter-dialog {
+    width: 800px;
+}
+
 .modal-find{
     padding: 6px;
 }
@@ -16,5 +20,9 @@
 }
 
 .left-block {
-    border-right: 1px solid black;
+}
+
+.filter-logical-operation {
+    font-size: 16px;
+    padding-right: 15px;
 }

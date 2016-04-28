@@ -42,7 +42,7 @@ model.controller("staticSelectorController" , function ($scope , customFilterSer
                         }
                     }
                     break;
-                case "checkBox":
+                case "check_box":
                     if (filter.model !== undefined) {
                         if (item[filter.field] === filter.model) {
                             filtersResult.push(true);

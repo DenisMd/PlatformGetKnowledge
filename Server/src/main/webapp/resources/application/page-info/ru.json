@@ -74,6 +74,10 @@
     "male"          : "Мужчина",
     "female"        : "Женщина",
     "ok"            : "Ok",
+    "and"           : "И",
+    "or"            : "Или",
+    "send"          : "Отправить",
+    "next"          : "Далее",
 
     "failed"        : "Ошибка выполнения",
     "complete"      : "Завершено",
@@ -134,7 +138,22 @@
 
     "custom_filter" : "Пользовательские фильтры",
     "do_filter"     : "Применить фильтр",
-    "filter_fields" : "Поля для фильтров"
+    "clear_filter"  : "Сбросить фильтр",
+    "filter_join_by": "Объеденение фильтров по: ",
+
+    "text_field"          : "Текстовое поле",
+    "number_field"        : "Числовое поле",
+    "check_box_field"     : "Галочка",
+
+    "operation_equals"        : "Сравнение",
+    "operation_like"          : "Подобие",
+    "operation_more"          : "Больше",
+    "operation_less"          : "Меньше",
+    "operation_more_or_equal" : "Больше или равно",
+    "operation_less_or_equal" : "Меньше или равно",
+    "operation_between"       : "Между",
+    "operation_after"         : "После",
+    "operation_before"        : "До"
 
   }
 }

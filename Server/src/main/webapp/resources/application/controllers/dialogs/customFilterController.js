@@ -51,13 +51,13 @@ model.controller("customFilterController",function($scope,customFilterService){
                     name : "more",
                     symbol : ">"
                 },{
-                    name : "moreOrEqual",
+                    name : "more_or_equal",
                     symbol : ">="
                 },{
                     name : "less",
                     symbol : "<"
                 },{
-                    name : "lessOrEqual",
+                    name : "less_or_equal",
                     symbol : ">"
                 },{
                     name : "between",
@@ -110,6 +110,10 @@ model.controller("customFilterController",function($scope,customFilterService){
         $scope.filterRequest.push($scope.currentFilterExpression);
         $scope.currentFilterExpression = new filterExpression(null,null,null);
         $scope.isParamsInput = false;
+    };
+
+    $scope.clearFilter = function () {
+        $scope.filterRequest = [];
     };
 
     $scope.removeFromRequest = function(index) {
