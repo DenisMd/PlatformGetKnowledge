@@ -4,13 +4,15 @@
     <div class="modal-dialog custom-filter-dialog">
         <div class="modal-content">
             <div class="modal-header modal-find">
-                <div ng-repeat="element in filterRequest">
-                    {{element.field.info.name}} {{element.oper.info.symbol}} {{element.param.info.values[0]}}
-                    <span ng-if="element.oper.info.name == 'between'">{{element.param.info.values[1]}}</span>
-                    <i class="fa fa-times" aria-hidden="true" ng-click="removeFromRequest($index)"></i>
+                <div ng-repeat="element in filterRequest" class="current-filter-expression">
+                    <div class="filter-part">
+                        {{element.field.info.name}} {{element.oper.info.symbol}} {{element.param.info.values[0]}}
+                        <span ng-if="element.oper.info.name == 'between'">{{element.param.info.values[1]}}</span>
+                        <i class="fa fa-times" aria-hidden="true" ng-click="removeFromRequest($index)"></i>
+                    </div>
                     <span ng-if="!$last">{{translate(logicalExpression)}}</span>
                 </div>
-                <div ng-if="currentFilterExpression.field">
+                <div ng-if="currentFilterExpression.field" class="current-filter-expression">
                     {{currentFilterExpression.field.info.name}} {{currentFilterExpression.oper.info.symbol}}
                     {{currentFilterExpression.param.info.values[0]}}
                     <span ng-if="currentFilterExpression.oper.info.name == 'between'">{{currentFilterExpression.param.info.values[1]}}</span>

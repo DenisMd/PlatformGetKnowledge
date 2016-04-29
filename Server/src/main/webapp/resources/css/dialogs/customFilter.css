@@ -26,3 +26,17 @@
     font-size: 16px;
     padding-right: 15px;
 }
+
+.current-filter-expression {
+    font-size: 20px;
+    color: #5b5b5b;
+    display: inline-block;
+}
+
+.filter-part {
+    display: inline-block;
+    margin: 0 5px;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 25%;
+}
