@@ -63,7 +63,9 @@ module.exports = function(grunt){
                 dest: 'dist/css/main.css'
             },
             dist3:{
-                src: ['bower_components/jquery/dist/jquery.min.js',
+                src: [
+                    'node_modules/moment/moment.js',
+                    'bower_components/jquery/dist/jquery.min.js',
                       'bower_components/bootstrap/dist/js/bootstrap.min.js',
                       'bower_components/angular/angular.min.js',
                     'bower_components/angular-ui-router/release/angular-ui-router.min.js',
@@ -88,7 +90,10 @@ module.exports = function(grunt){
                       'bower_components/codemirror/addon/mode/loadmode.js',
                       'bower_components/codemirror/mode/meta.js',
                       'bower_components/angular-ui-codemirror/ui-codemirror.js',
-                      'bower_components/angular-sanitize/angular-sanitize.min.js'],
+                      'bower_components/angular-sanitize/angular-sanitize.min.js',
+                      'node_modules/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
+                      'node_modules/angular-bootstrap-datetimepicker/src/js/datetimepicker.templates.js'
+                ],
                 dest: 'dist/js/bower.js'
             }
         },

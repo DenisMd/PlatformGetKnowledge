@@ -1,6 +1,6 @@
 new Clipboard('.clipboard');
 
-var model = angular.module("mainApp", ["backend.service", "ngImgCrop" , "ngMaterial","ui.codemirror", "hljs"]);
+var model = angular.module("mainApp", ["backend.service", "ngImgCrop" , "ngMaterial","ui.codemirror", "hljs",'ui.bootstrap.datetimepicker']);
 model.constant("codemirrorURL", "/resources/bower_components/codemirror/");
 
 model.config(function (hljsServiceProvider,codemirrorURL) {

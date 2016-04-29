@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="/resources/bower_components/highlightjs/styles/railscasts.css">
     <link rel="stylesheet" href="/resources/bower_components/ng-img-crop/compile/minified/ng-img-crop.css" type="text/css">
     <link rel="stylesheet" href="/resources/bower_components/codemirror/lib/codemirror.css" type="text/css">
+    <link rel="stylesheet" href="/resources/node_modules/angular-bootstrap-datetimepicker/src/css/datetimepicker.css" type="text/css">
 
     <%--Наши css--%>
     <%--<link rel="stylesheet" type="text/css" , href="/resources/dist/css/main-min.css">--%>
@@ -59,6 +60,7 @@
     <%--<script src="/resources/dist/js/mainApplicationMin.js" type="text/javascript" ></script>--%>
 
 
+
     <script src="/resources/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="/resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/resources/bower_components/angular/angular.min.js"></script>
@@ -87,6 +89,9 @@
     <script src="/resources/bower_components/codemirror/addon/mode/loadmode.js"></script>
     <script src="/resources/bower_components/codemirror/mode/meta.js"></script>
     <script src="/resources/bower_components/angular-ui-codemirror/ui-codemirror.js"></script>
+    <script src="/resources/node_modules/moment/moment.js"></script>
+    <script src="/resources/node_modules/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
+    <script src="/resources/node_modules/angular-bootstrap-datetimepicker/src/js/datetimepicker.templates.js"></script>
 
     <%--Utils--%>
     <script src="/resources/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
