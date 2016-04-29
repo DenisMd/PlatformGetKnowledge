@@ -101,6 +101,11 @@ model.controller("customFilterController",function($scope,customFilterService){
         $scope.isParamsInput = true;
     };
 
+    $scope.backToOperation = function(){
+        $scope.currentFilterExpression.oper = null;
+        $scope.isParamsInput = false;
+    };
+
     $scope.createFilterExpression = function(param1,param2) {
         var paramValues = [param1];
         if (param2) {paramValues.push(param2);}

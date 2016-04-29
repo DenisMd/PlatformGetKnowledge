@@ -73,10 +73,13 @@
                                     <div class="form-group">
                                         <label for="text-param">{{translate("parameter")}}</label>
                                         <input type="text" class="form-control" id="text-param" ng-model="params">
-                                        <button class="btn btn-default" ng-click="createFilterExpression(params)">
-                                            {{translate("ok")}}
-                                        </button>
                                     </div>
+                                    <button class="btn btn-default" ng-click="backToOperation()">
+                                        {{translate("back")}}
+                                    </button>
+                                    <button class="btn btn-primary" ng-click="createFilterExpression(params)"  ng-disabled="params === undefined">
+                                        {{translate("add")}}
+                                    </button>
                                 </div>
                                 <div ng-switch-when="number">
                                     <div ng-if="selectedOperation.value.name === 'between'">
@@ -90,8 +93,11 @@
                                             <input type="number" class="form-control" id="between-param2"
                                                    ng-model="params2">
                                         </div>
-                                        <button class="btn btn-default"
-                                                ng-click="createFilterExpression(params,params2)">{{translate("ok")}}
+                                        <button class="btn btn-default" ng-click="backToOperation()">
+                                            {{translate("back")}}
+                                        </button>
+                                        <button class="btn btn-primary" ng-click="createFilterExpression(params,params2)"  ng-disabled="params === undefined || params2 === undefined || params >= params2">
+                                            {{translate("add")}}
                                         </button>
                                     </div>
                                     <div ng-if="selectedOperation.value.name !== 'between'">
@@ -100,10 +106,24 @@
                                             <input type="number" class="form-control" id="number-param"
                                                    ng-model="params">
                                         </div>
-                                        <button class="btn btn-default" ng-click="createFilterExpression(params)">
-                                            {{translate("ok")}}
+                                        <button class="btn btn-default" ng-click="backToOperation()">
+                                            {{translate("back")}}
+                                        </button>
+                                        <button class="btn btn-primary" ng-click="createFilterExpression(params)"  ng-disabled="params === undefined">
+                                            {{translate("add")}}
                                         </button>
                                     </div>
+                                </div>
+                                <div ng-switch-when="check_box">
+                                    <md-switch ng-model="params" aria-label="Switch params">
+                                        {{translate("parameter")}} : {{ params }}
+                                    </md-switch>
+                                    <button class="btn btn-default" ng-click="backToOperation()">
+                                        {{translate("back")}}
+                                    </button>
+                                    <button class="btn btn-primary" ng-click="createFilterExpression(params)" ng-disabled="params === undefined">
+                                        {{translate("add")}}
+                                    </button>
                                 </div>
                             </div>
 

@@ -77,6 +77,12 @@
     "or"            : "Or",
     "send"          : "Send",
     "next"          : "Next",
+    "back"          : "Back",
+    "add"           : "Add",
+    "parameter"     : "Parameter",
+    "number"        : "Number",
+    "to"            : "To",
+    "from"          : "From",
 
 
     "failed"        : "Failed",
