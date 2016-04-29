@@ -119,8 +119,8 @@
                         <module-template data="cityData" name="inputs/list"></module-template>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">{{translate("birthday_select")}} dd.mm.yyyy</label>
-                        <module-template data="dateData" name="inputs/datepicker"></module-template>
+                        <label class="control-label">{{translate("birthday_select")}}</label>
+                        <module-template name="inputs/dateTimePicker"></module-template>
                     </div>
                     <div class="form-group">
                         <label class="control-label">{{translate("specialty_select")}}</label>
