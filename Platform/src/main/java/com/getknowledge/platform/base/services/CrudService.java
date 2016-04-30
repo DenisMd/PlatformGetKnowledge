@@ -9,32 +9,38 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
+/**
+ *
+ * Данный сервис используется для исполнения операций внутри транзакций через Api rest-server-а
+ *
+ * */
 @Transactional
 @Service("CrudService")
 public class CrudService {
 
     public void create(BaseRepository baseRepository, AbstractEntity abstractEntity){
-        baseRepository.create(abstractEntity);
+        baseRepository.create(abstractEntity,true);
     }
 
     public void update(BaseRepository baseRepository, AbstractEntity abstractEntity){
-        baseRepository.update(abstractEntity);
+        baseRepository.update(abstractEntity,true);
     }
 
     public void remove(BaseRepository baseRepository, Long id) throws PlatformException {
-        baseRepository.remove(id);
+        baseRepository.remove(id,true);
     }
 
     public AbstractEntity read(BaseRepository baseRepository, Long id) throws PlatformException {
-        return baseRepository.read(id);
+        return baseRepository.read(id,true);
     }
 
     public List<AbstractEntity> list(BaseRepository baseRepository) throws PlatformException {
-        return baseRepository.list();
+        return baseRepository.list(true);
     }
 
     public List<AbstractEntity> list(BaseRepository baseRepository,int first, int max) throws PlatformException {
-        return baseRepository.listPartial(first,max);
+        return baseRepository.listPartial(first,max,true);
     }
 
     public AbstractEntity prepare(AbstractEntity entity,BaseRepository baseRepository, User currentUser) throws Exception {

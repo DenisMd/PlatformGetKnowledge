@@ -48,6 +48,10 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         entityManager.persist(object);
     }
 
+    public void create(T object, boolean fromRequestApi) {
+        create(object);
+    }
+
     public void update(T object) {
         T classicObject = read(object.getId());
 
@@ -72,12 +76,20 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         entityManager.merge(classicObject);
     }
 
+    public void update(T object, boolean fromRequestApi) {
+        update(object);
+    }
+
     public void merge(T object) {
         entityManager.merge(object);
     }
 
     public void remove(Long id) {
         remove(entityManager.find(getClassEntity(), id));
+    }
+
+    public void remove(Long id , boolean fromRequestApi) {
+        remove(id);
     }
 
     public void remove(T entity) {
@@ -89,9 +101,17 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         return result;
     }
 
+    public T read(Long id , boolean fromRequestApi) {
+        return read(id);
+    }
+
     public List<T> list() {
         List<T> list = (List<T>) entityManager.createQuery("Select t from " + getClassEntity().getSimpleName() + " t order by t.id").getResultList();
         return list;
+    }
+
+    public List<T> list(boolean fromRequestApi) {
+        return list();
     }
 
     public List<T> listPartial(int first, int max) {
@@ -100,6 +120,10 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         query.setMaxResults(max);
         List<T> list = (List<T>) query.getResultList();
         return list;
+    }
+
+    public List<T> listPartial(int first, int max, boolean isRequestApi) {
+        return listPartial(first,max);
     }
 
     public Long count() {
