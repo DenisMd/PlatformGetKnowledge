@@ -21,8 +21,7 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className,
             {
                 title : "bootstrap_repeat",
                 type : "check_box",
-                field : "repeat",
-                default : true
+                field : "repeat"
             }
         ],
         headerNames : [
