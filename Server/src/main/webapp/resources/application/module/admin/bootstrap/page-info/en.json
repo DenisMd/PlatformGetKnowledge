@@ -5,6 +5,7 @@
     "bootstrap_services"      : "Services",
     "bootstrap_repeat"        : "Repeatable",
     "bootstrap_order"         : "Order",
+    "bootstrap_start_time"    : "Start time",
     "bootstrap_errorMessage"  : "Error message",
     "bootstrap_stackTrace"    : "Stack trace",
     "bootstrap_serviceInfo"   : "Service information",

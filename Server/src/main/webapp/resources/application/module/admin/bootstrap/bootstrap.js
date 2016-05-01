@@ -22,6 +22,11 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className,
                 title : "bootstrap_repeat",
                 type : "check_box",
                 field : "repeat"
+            },
+            {
+                title : "bootstrap_start_time",
+                type : "dateTime",
+                field : "startTime"
             }
         ],
         headerNames : [
@@ -46,6 +51,10 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className,
             {
                 name : "repeat",
                 title : "bootstrap_repeat"
+            },{
+                name : "startTime",
+                title : "bootstrap_start_time",
+                filter : "date"
             }
         ],
         selectItemCallback : function (item) {

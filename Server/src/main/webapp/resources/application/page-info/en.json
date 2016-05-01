@@ -83,6 +83,7 @@
     "number"        : "Number",
     "to"            : "To",
     "from"          : "From",
+    "date"          : "Date",
 
 
     "failed"        : "Failed",
@@ -151,6 +152,7 @@
     "text_field"          : "Text field",
     "number_field"        : "Number field",
     "check_box_field"     : "Check Box",
+    "dateTime_field"      : "Date/Time",
 
     "operation_equals"        : "Equals",
     "operation_like"          : "Like",

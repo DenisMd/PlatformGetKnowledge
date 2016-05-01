@@ -65,6 +65,20 @@ model.controller("customFilterController",function($scope,customFilterService){
                 }
             ],
         },
+        dateTime : {
+            values : [
+                {
+                    name : "after",
+                    symbol : "after"
+                },{
+                    name : "before",
+                    symbol : "before"
+                },{
+                    name : "between",
+                    symbol : "between"
+                }
+            ]
+        },
         other : {
             values : [
                 {
@@ -117,6 +131,19 @@ model.controller("customFilterController",function($scope,customFilterService){
         $scope.isParamsInput = false;
     };
 
+    $scope.createDateExpression = function() {
+        var paramValues = [$scope.dateParam1];
+        if ($scope.dateParam2) {paramValues.push($scope.dateParam2);}
+        $scope.currentFilterExpression.param = new filterItem(TYPES.Parameter,{
+            values : paramValues
+        });
+        $scope.filterRequest.push($scope.currentFilterExpression);
+        $scope.currentFilterExpression = new filterExpression(null,null,null);
+        $scope.isParamsInput = false;
+        $scope.dateParam1 = undefined;
+        $scope.dateParam2 = undefined;
+    };
+
     $scope.clearFilter = function () {
         $scope.filterRequest = [];
     };
@@ -138,5 +165,43 @@ model.controller("customFilterController",function($scope,customFilterService){
     //Закрываем модель без примения фильтра
     $scope.closeModal = function(){
         customFilterService.closeDialog();
+    };
+
+    $scope.typeWithMultiplyParams = function (type) {
+        if (type === "between") {
+            return true;
+        }
+        
+        return false;
+    };
+
+    $scope.dateTimeOptions1 = {
+        id : "param1",
+        format : "DD-MMMM-YYYY-HH-mm",
+        minView : 'minute' ,
+        startView : 'year',
+        onChange: function(date,isValid){
+            console.log(date + " : " + isValid);
+            if (isValid) {
+                $scope.dateParam1 = date;
+            } else {
+                console.log(isValid);
+                $scope.dateParam1 = undefined;
+            }
+        }
+    };
+
+    $scope.dateTimeOptions2 = {
+        id : "param2",
+        format : "DD-MMMM-YYYY-HH-mm",
+        minView : 'minute' ,
+        startView : 'year',
+        onChange: function(date,isValid){
+            if (isValid) {
+                $scope.dateParam2 = date;
+            } else {
+                $scope.dateParam2 = undefined;
+            }
+        }
     };
 });

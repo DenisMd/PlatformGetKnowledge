@@ -66,6 +66,7 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
 
     //смена языка
     $scope.changeLanguage = function (language) {
+        moment.locale(language);
         if (!$scope.application.language || $scope.application.language === language) {
             return false;
         }

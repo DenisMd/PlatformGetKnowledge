@@ -679,7 +679,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             var applicationData;
             var moduleUrl = "";
             var language = $stateParams.language ? $stateParams.language : pageService.getLanguage();
-
+            moment.locale(language);
             if ($languages.languages.indexOf(language) === -1) {
                 //Невозможно сделать переход из resolve : {};
                 $timeout(function(){

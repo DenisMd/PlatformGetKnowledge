@@ -84,6 +84,7 @@
     "number"        : "Число",
     "to"            : "До",
     "from"          : "От",
+    "date"          : "Дата",
 
     "failed"        : "Ошибка выполнения",
     "complete"      : "Завершено",
@@ -150,6 +151,7 @@
     "text_field"          : "Текстовое поле",
     "number_field"        : "Числовое поле",
     "check_box_field"     : "Галочка",
+    "dateTime_field"      : "Дата/Время",
 
     "operation_equals"        : "Сравнение",
     "operation_like"          : "Подобие",

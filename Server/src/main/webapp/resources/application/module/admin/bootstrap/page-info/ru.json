@@ -5,6 +5,7 @@
     "bootstrap_state"         : "Состояние сервиса",
     "bootstrap_repeat"        : "Повторяемый",
     "bootstrap_order"         : "Порядок выполнения",
+    "bootstrap_start_time"    : "Последнее время запуска сервиса",
     "bootstrap_errorMessage"  : "Сообщение об ошибке",
     "bootstrap_stackTrace"    : "Трасса стека",
     "bootstrap_serviceInfo"   : "Информация о сервисе",

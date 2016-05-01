@@ -38,7 +38,8 @@
             <tbody>
             <tr ng-repeat="item in getData().list | filter:filterSearch | orderBy:orderItem:orderReverse" class="selected-row" ng-click="getData().selectItemCallback(item)">
                 <td ng-repeat="header in getData().headerNames">
-                    {{item[header.name]}}
+                    <span ng-if="header.filter === 'date'">{{item[header.name] | date:'medium'}}</span>
+                    <span ng-if="header.filter !== 'date'">{{item[header.name]}}</span>
                 </td>
             </tr>
             </tbody>
