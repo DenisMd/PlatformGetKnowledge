@@ -227,13 +227,20 @@ model.controller("userCtrl", function ($scope, $state,$timeout,$http,application
     };
 
 
-    $scope.dateData = {
-        onChange: function(date){
-            $scope.date = date;
+    $scope.dateTimeOptions = {
+        id : "birth-day",
+        format : "DD-MMMM-YYYY",
+        minView : 'day' ,
+        startView : 'year',
+        onChange: function(date,isValid){
+            if (isValid) {
+                $scope.date = date;
+            } else {
+                $scope.date = null;
+            }
         }
     };
-
-
+    
     //данные для image
     $scope.imageLoad = {
         id : "image-loud",

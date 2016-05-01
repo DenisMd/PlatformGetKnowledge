@@ -120,7 +120,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label">{{translate("birthday_select")}}</label>
-                        <module-template name="inputs/dateTimePicker"></module-template>
+                        <module-template name="inputs/dateTimePicker" data="dateTimeOptions"></module-template>
                     </div>
                     <div class="form-group">
                         <label class="control-label">{{translate("specialty_select")}}</label>

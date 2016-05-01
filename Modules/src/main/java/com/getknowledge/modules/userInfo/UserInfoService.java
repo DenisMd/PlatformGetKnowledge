@@ -271,14 +271,10 @@ public class UserInfoService extends AbstractService implements BootstrapService
         }
 
         if (data.containsKey("date")) {
-            try {
-                Date date = new SimpleDateFormat("dd.MM.yyyy").parse((String) data.get("date"));
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
-                userInfo.setBirthDay(calendar);
-            } catch (ParseException e) {
-                trace.logException("Error date format : " + (String) data.get("date"), e, TraceLevel.Event);
-            }
+            Date date = new Date(longFromField("date" , data));
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            userInfo.setBirthDay(calendar);
         }
 
         userInfo.setFirstLogin(false);
