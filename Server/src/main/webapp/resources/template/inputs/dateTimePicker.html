@@ -1,7 +1,7 @@
 <div class="dropdown" ng-controller="dateTimePickerController">
     <a class="dropdown-toggle" ng-attr-id="{{inputId}}" role="button" data-toggle="dropdown" data-target="#">
         <div class="input-group">
-            <input type="text" class="form-control" data-ng-model="data.dateDropDownInput" data-date-time-input="{{inputFormat}}">
+            <input type="text" class="form-control" data-ng-model="data.dateDropDownInput" ng-change="onTimeSet(data.dateDropDownInput)" data-date-time-input="{{inputFormat}}">
             <span class="input-group-addon">
                 <i class="glyphicon glyphicon-calendar"></i>
             </span>
