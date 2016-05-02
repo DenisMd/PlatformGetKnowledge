@@ -36,6 +36,7 @@ model.controller("userCtrl", function ($scope, $state,$timeout,$http,application
         });
     }
 
+
     if (userId) {
         init();
     }
@@ -73,6 +74,21 @@ model.controller("userCtrl", function ($scope, $state,$timeout,$http,application
     $scope.arcScrollConfig = angular.merge({axis:"x", advanced:{ autoExpandHorizontalScroll: true }}, $scope.modalScrollConfig);
 
     //статистика
+    //TODO посмотреть можно ли выключть responsive настройки
+
+    function initStatisticGraphics(firstData,secondData,thirdData){
+        var statisticGraphic = angular.element("#stastistic1")[0].getContext("2d");
+        var graphic = new Chart(statisticGraphic).Line(firstData, arcService.getMainOption());
+        statisticGraphics.push(graphic);
+
+        statisticGraphic = $("#stastistic2").get(0).getContext("2d");
+        graphic = new Chart(statisticGraphic).Bar(secondData, arcService.getMainOption());
+        statisticGraphics.push(graphic);
+
+        statisticGraphic = $("#stastistic3").get(0).getContext("2d");
+        graphic = new Chart(statisticGraphic).Pie(thirdData, arcService.getMainOption());
+        statisticGraphics.push(graphic);
+    };
     $scope.showStatistic = true;
     $scope.toggelStatistic = function(){
         $scope.showStatistic = !$scope.showStatistic;
@@ -138,22 +154,8 @@ model.controller("userCtrl", function ($scope, $state,$timeout,$http,application
         arcGraphics[i] = myDoughnutChart;
     });
     },0);
-    var initGraphics = function(firstData,secondData,thirdData){
-        var statisticGraphic = angular.element("#stastistic1")[0].getContext("2d");
-        var graphic = new Chart(statisticGraphic).Line(graphicData, arcService.mainOption);
-        statisticGraphics.push(graphic);
 
-        statisticGraphic = $("#stastistic2").get(0).getContext("2d");
-        graphic = new Chart(statisticGraphic).Bar(graphicData, arcService.mainOption);
-        statisticGraphics.push(graphic);
-
-        statisticGraphic = $("#stastistic3").get(0).getContext("2d");
-        graphic = new Chart(statisticGraphic).Pie(dataCircle, arcService.mainOption);
-        statisticGraphics.push(graphic);
-
-
-    };
-    initGraphics();
+    initStatisticGraphics(graphicData,graphicData,dataCircle);
 
 
 

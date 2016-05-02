@@ -576,8 +576,8 @@ model.controller("postController",['$scope','$timeout','$state','codemirrorURL',
                     loadString(result.message, true);
                 }
             });
-    $scope.content = "";//'!!!&nbsp;{"type":"ProgramTag","name":"c","code":"var i = \\\"hello world\\\"","options":{"lineNumbers":true,"indentWithTabs":true,"mode":"javascript","theme":"default"}}<br>';
-
+    $scope.content = "";//;
+    $scope.readData = '!!!&nbsp;{"type":"ProgramTag","name":"c","code":"var i = \\\"hello world\\\"","options":{"lineNumbers":true,"indentWithTabs":true,"mode":"javascript","theme":"default"}}<br>';
     //first loading
     var initValue = $scope.content;
     $timeout(function() {
@@ -907,12 +907,28 @@ model.service('arcService', function(){
         percentageInnerCutout : 80
     };
 
-    this.mainOption = {
+    var responsiveOption = {
         responsive: true,
-        maintainAspectRatio:false,
+        maintainAspectRatio:false
+    };
+    var mainGraphicsOption = {
         segmentShowStroke : false,
         showTooltips : false
     };
+    var mainOptions = {};
+    angular.extend(mainOptions,mainGraphicsOption);
+    angular.extend(mainOptions,responsiveOption);
+    
+    this.getMainOption = function (visible) {
+        if (visible){
+            return mainOptions;
+        } else {
+            return mainGraphicsOption;
+        }
+
+    };
+
+
 });
 
 //tag editor
@@ -1145,7 +1161,57 @@ model.factory("TagService", function () {
      * @description Заменяет json-представление тега преходящее с сервера на ссылку ппула тегов, при этом происходит добавление в пул
      */
     var formatter = function(value,scope){
-        var result = "";
+            var result = "";
+            var startPos = -1, start = 0, stopPos = -1, j = -1;
+            var startText = "";
+            while ((startPos = value.indexOf(groupSeparator, stopPos + 1)) !== -1 &&
+            (stopPos = value.indexOf(groupSeparator, startPos + 1)) !== -1) {
+                var stringTag = value.substring(startPos + groupSeparator.length, stopPos);
+                if (stringTag){
+                    var jsonTag = JSON.parse(stringTag);
+                    if (jsonTag) {
+                        var type;
+                        if (!(type = jsonTag.type)) {
+                            continue;
+                        }
+                        var tag;
+                        switch (type) {
+                            case "ProgramTag":
+                                tag = new ProgramTag();
+                                break;
+                            default :
+                                tag = new Tag();
+                        }
+
+                        tag.fromJson(jsonTag);
+
+                        scope.tagPool.push(tag);
+
+                        result += value.substring(start, startPos) + this.getEditableTag(value,tag,scope.tagPool.length - 1);
+                    }
+                }
+                start = stopPos + groupSeparator.length;
+            }
+            if (result) {
+                result += value.substring(stopPos + groupSeparator.length);
+                var suffix = "<br>";
+                if (result.indexOf(suffix, this.length - suffix.length) === -1){
+                    result += "<br>"
+                }
+                return result;
+            }
+            return value;
+        };
+
+    /**
+     * @param value {String} - строка для разбора
+     * @param element - DOM-элемент
+     *
+     * @description Добавляет DOM-элементу значения. Заменяет все json-представления тега читаемымой формой
+     */
+    var readFormatter = function(value,element){
+        if (!value) return;
+        var result = false;
         var startPos = -1, start = 0, stopPos = -1, j = -1;
         var startText = "";
         while ((startPos = value.indexOf(groupSeparator, stopPos + 1)) !== -1 &&
@@ -1162,29 +1228,24 @@ model.factory("TagService", function () {
                     switch (type) {
                         case "ProgramTag":
                             tag = new ProgramTag();
+                            tag.fromJson(jsonTag);
+                            element.append("<div ui-codemirror='" + angular.toJson(tag.getReadOnlyOptions()) + "'>" + tag.getCode() + "</div>");
                             break;
                         default :
                             tag = new Tag();
                     }
-
-                    tag.fromJson(jsonTag);
-
-                    scope.tagPool.push(tag);
-
-                    result += value.substring(start, startPos) + this.getEditableTag(value,tag,scope.tagPool.length - 1);
+                    element.append(value.substring(start, startPos));
+                    result = true;
                 }
             }
             start = stopPos + groupSeparator.length;
         }
         if (result) {
-            result += value.substring(stopPos + groupSeparator.length);
-            var suffix = "<br>";
-            if (result.indexOf(suffix, this.length - suffix.length) === -1){
-                result += "<br>"
-            }
-            return result;
+            element.append(value.substring(stopPos + groupSeparator.length));
+        } else {
+            element.append(value);
         }
-        return value;
+
     };
 
     return {
@@ -1197,10 +1258,42 @@ model.factory("TagService", function () {
         stopEditable: stopEditable,
 
         parser : parser,
-        formatter : formatter
+        formatter : formatter,
+        readFormatter : readFormatter
 
     };
 });
+
+model.directive("contentListener",['$compile','TagService',function ($compile,TagService) {
+    return {
+        scope: {
+            content: '=contentListener'
+        },
+        link: function (scope, element, attrs) {
+            if (scope.content) {
+                TagService.readFormatter(scope.content, element);
+                $compile(element)(scope);
+            }
+        }
+    }
+}]);
+
+model.directive("showTag",['$compile','TagService',function ($compile,TagService) {
+    return {
+        scope: {
+            tag: '=showTag'
+        },
+        controller: function () {
+
+        },
+        link: function (scope, element, attrs) {
+            if (scope.content) {
+                TagService.readFormatter(scope.content, element);
+                $compile(element)(scope);
+            }
+        }
+    }
+}]);
 
 function Tag() {
     var name = "tag";
