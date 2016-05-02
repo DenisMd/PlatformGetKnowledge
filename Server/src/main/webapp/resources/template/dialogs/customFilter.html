@@ -159,7 +159,7 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div ng-switch-when="check_box">
+                                <div ng-switch-when="check_box" ng-init="params = false">
                                     <md-switch ng-model="params" aria-label="Switch params">
                                         {{translate("parameter")}} : {{ params }}
                                     </md-switch>

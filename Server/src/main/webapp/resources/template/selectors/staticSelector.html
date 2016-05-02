@@ -1,8 +1,22 @@
 <link rel="stylesheet" href="/resources/css/selectors/staticSelector.css">
 
 <div class="table-selector" ng-controller="staticSelectorController">
-    <div layout-gt-sm="row">
-        <div ng-repeat="filter in getData().filters | filter:{'default' : true}" ng-switch="filter.type">
+    <div layout-gt-sm="row" layout-align="center">
+        <span ng-repeat="action in getData().actions" class="action">
+            <span class="fa fa-3x" ng-class="action.icon"  ng-click="action.actionCallback($event)" ng-style="{color : action.color}">
+                <md-tooltip>
+                    <span class="tooltip-text">{{translate(action.tooltip)}}</span>
+                </md-tooltip>
+            </span>
+        </span>
+        <span class="filter-action">
+            <span class="fa fa-3x fa-filter"  ng-click="openCustomFilter()">
+                <md-tooltip>
+                    <span class="tooltip-text">{{translate("custom_filter")}}</span>
+                </md-tooltip>
+            </span>
+        </span>
+        <span ng-repeat="filter in getData().filters | filter:{'default' : true}" ng-switch="filter.type">
 
             <div ng-switch-when="check_box">
                 <md-checkbox  ng-model="filter.model" >
@@ -11,14 +25,12 @@
             </div>
 
             <div ng-switch-default>
-                <md-input-container class="md-block" flex-gt-sm>
-                    <label>{{translate(filter.title)}}</label>
-                    <input ng-model="filter.model" type="{{filter.type}}">
-                </md-input-container>
+                <div class="form-group">
+                    <input type="{{filter.type}}" class="form-control" ng-model="filter.model" placeholder="{{translate(filter.title)}}">
+                </div>
             </div>
 
-        </div>
-        <md-button class="md-raised" ng-click="openCustomFilter()">{{translate("custom_filter")}}</md-button>
+        </span>
     </div>
 
     <!--Модальное окно для показа пользовательских фильтров-->
