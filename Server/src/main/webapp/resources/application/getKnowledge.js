@@ -584,7 +584,7 @@ model.controller("postController",['$scope','$timeout','$state','codemirrorURL',
                 }
             });
     $scope.content = "";//;
-    $scope.readData = '!!!&nbsp;{"type":"ProgramTag","name":"c","code":"var i = \\\"hello world\\\"","options":{"lineNumbers":true,"indentWithTabs":true,"mode":"javascript","theme":"default"}}<br>';
+    $scope.readData = '!!!&nbsp;{"type":"ProgramTag","name":"c","code":"var i = \\\"hello world\\\"","options":{"lineNumbers":true,"indentWithTabs":true,"mode":"javascript","theme":"blackboard"}}<br>'
     //first loading
     var initValue = $scope.content;
     $timeout(function() {
@@ -619,6 +619,7 @@ model.controller("postController",['$scope','$timeout','$state','codemirrorURL',
             var tag = $scope.tagPool[$scope.tagPool.length - 1];
             if (tag) {
                 loadString(TagService.getEditableTag($scope.content,tag,$scope.tagPool.length - 1));
+                $scope.tag = tag;
             }
         },null,refresh,function(){
 
@@ -650,13 +651,13 @@ model.controller("postController",['$scope','$timeout','$state','codemirrorURL',
         onLoad : function(_editor){
             $scope.modeChanged = function(){
                 var mode = $scope.code.mode.mode;
-                loadMode(mode,_editor);
+                TagService.loadMode(mode,_editor);
             };
 
             $scope.themeChanged = function(){
                 var css = $scope.code.theme.name.toLowerCase();
                 if (css !== "default"){
-                    if(!loadTheme(css,_editor)){
+                    if(!TagService.loadTheme(css,_editor)){
                         _editor.setOption("theme", css);
                     }
                 } else {
@@ -669,49 +670,7 @@ model.controller("postController",['$scope','$timeout','$state','codemirrorURL',
         }
     },defaultOptions);
 
-    var loadTheme = function(theme,editor){
-        var href = codemirrorURL +"theme/"+theme+".css";
 
-        if  ($("link[href='"+ href+"']").length) {
-            return false;
-        }
-
-        var link = document.createElement('link');
-        link.onload = function(){
-            editor.setOption("theme", theme);
-        };
-        link.rel = "stylesheet";
-        link.type = "text/css";
-        link.href = href;
-
-        document.getElementsByTagName('head')[0].appendChild(link);
-        return true;
-    };
-
-    var loadMode = function (val,editor) {
-        var  m, mode, spec;
-        m = /.+\.([^.]+)$/.exec(val);
-        var info;
-        if (m) {
-            info = CodeMirror.findModeByExtension(m[1]);
-            if (info) {
-                mode = info.mode;
-                spec = info.mime;
-            }
-        } else if (/\//.test(val)) {
-            info = CodeMirror.findModeByMIME(val);
-            if (info) {
-                mode = info.mode;
-                spec = val;
-            }
-        } else {
-            mode = spec = val;
-        }
-        if (mode) {
-            editor.setOption("mode", spec);
-            CodeMirror.autoLoadMode(editor, mode);
-        }
-    };
 
 }]);
 
@@ -1105,13 +1064,17 @@ model.directive('contenteditableKeyListener', ['TagService',function (TagService
 }]);
 
 //основные опирации для работы с тегами
-model.factory("TagService", function () {
+model.factory("TagService", function (codemirrorURL) {
     var groupSeparator = String.fromCharCode(29);
     var nonBreakingSpace = "&nbsp;";
 
     var startEditable = '<span contenteditable="false">';
     var middleEditable = ')_';
     var stopEditable = '</span>';
+
+    var beforeParse = function (str) {
+        return str.replace(/[\/\\]/g, "\\$&");
+    };
 
 
     var getEditableTag = function (model, tag, index) {
@@ -1216,7 +1179,7 @@ model.factory("TagService", function () {
      *
      * @description Добавляет DOM-элементу значения. Заменяет все json-представления тега читаемымой формой
      */
-    var readFormatter = function(value,element){
+    var readFormatter = function(value,element,$compile,$scope){
         if (!value) return;
         var result = false;
         var startPos = -1, start = 0, stopPos = -1, j = -1;
@@ -1236,7 +1199,11 @@ model.factory("TagService", function () {
                         case "ProgramTag":
                             tag = new ProgramTag();
                             tag.fromJson(jsonTag);
-                            element.append("<div ui-codemirror='" + angular.toJson(tag.getReadOnlyOptions()) + "'>" + tag.getCode() + "</div>");
+                            loadMode(tag.getMode());
+                            loadTheme(tag.getTheme());
+                            var newScope = $scope.$new();
+                            newScope.tag = tag;
+                            element.append($compile("<div show-tag='tag'/>")(newScope));
                             break;
                         default :
                             tag = new Tag();
@@ -1255,6 +1222,52 @@ model.factory("TagService", function () {
 
     };
 
+    var loadTheme = function(theme,editor){
+        var href = codemirrorURL +"theme/"+theme+".css";
+
+        if  ($("link[href='"+ href+"']").length) {
+            return false;
+        }
+
+        var link = document.createElement('link');
+        link.onload = function(){
+            if (editor) {
+                editor.setOption("theme", theme);
+            }
+        };
+        link.rel = "stylesheet";
+        link.type = "text/css";
+        link.href = href;
+
+        document.getElementsByTagName('head')[0].appendChild(link);
+        return true;
+    };
+
+    var loadMode = function (val,editor) {
+        var  m, mode, spec;
+        m = /.+\.([^.]+)$/.exec(val);
+        var info;
+        if (m) {
+            info = CodeMirror.findModeByExtension(m[1]);
+            if (info) {
+                mode = info.mode;
+                spec = info.mime;
+            }
+        } else if (/\//.test(val)) {
+            info = CodeMirror.findModeByMIME(val);
+            if (info) {
+                mode = info.mode;
+                spec = val;
+            }
+        } else {
+            mode = spec = val;
+        }
+        if (editor && mode) {
+            editor.setOption("mode", spec);
+            CodeMirror.autoLoadMode(editor, mode);
+        }
+    };
+
     return {
         groupSeparator: groupSeparator,
         nonBreakingSpace: nonBreakingSpace,
@@ -1266,7 +1279,10 @@ model.factory("TagService", function () {
 
         parser : parser,
         formatter : formatter,
-        readFormatter : readFormatter
+        readFormatter : readFormatter,
+
+        loadMode : loadMode,
+        loadTheme : loadTheme
 
     };
 });
@@ -1278,8 +1294,8 @@ model.directive("contentListener",['$compile','TagService',function ($compile,Ta
         },
         link: function (scope, element, attrs) {
             if (scope.content) {
-                TagService.readFormatter(scope.content, element);
-                $compile(element)(scope);
+                TagService.readFormatter(scope.content, element,$compile,scope);
+                //$compile(element)(scope);
             }
         }
     }
@@ -1287,18 +1303,19 @@ model.directive("contentListener",['$compile','TagService',function ($compile,Ta
 
 model.directive("showTag",['$compile','TagService',function ($compile,TagService) {
     return {
+        restrict: 'A',
         scope: {
             tag: '=showTag'
         },
-        controller: function () {
-
+        controller: function ($scope) {
+            $scope.parentScope = $scope.$parent;
+            $scope.codeShown = false;
+            $scope.showCode = function () {
+                $scope.codeShown = !$scope.codeShown;
+            };
+            $scope.model = {};
         },
-        link: function (scope, element, attrs) {
-            if (scope.content) {
-                TagService.readFormatter(scope.content, element);
-                $compile(element)(scope);
-            }
-        }
+        templateUrl:"showTag.html"
     }
 }]);
 
@@ -1363,8 +1380,16 @@ function ProgramTag() {
         options.mode = m;
     };
 
+    this.getMode = function () {
+        return this.options.mode;
+    };
+
     this.setTheme = function (t) {
         options.theme = t;
+    };
+
+    this.getTheme = function () {
+        return this.options.theme;
     };
 
     this.setOptions = function(options){

@@ -3,13 +3,6 @@
     <!--<div>-->
         <!--Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur eos fugiat illum inventore, ipsum labore laboriosam mollitia, natus nisi non nulla odit perferendis porro quas, quasi saepe sint veniam voluptates.-->
     <!--</div>-->
-    <div class="tag">
-        <div class="tag-title" ng-click="test.showCode()">
-            <i class="fa" ng-class="test.codeShown?'fa-caret-down':'fa-caret-right'"></i>
-            {{translate("source_code")+' ) '+test.title}}
-        </div>
-        <div class="autoresize" ui-codemirror="test" ng-model="test.text"  ui-refresh="test.text" ng-if="test.codeShown"></div>
-    </div>
     <!--<div>-->
         <!--Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur eos fugiat illum inventore, ipsum labore laboriosam mollitia, natus nisi non nulla odit perferendis porro quas, quasi saepe sint veniam voluptates.-->
     <!--</div>-->
@@ -147,9 +140,9 @@
         <div class="tag">
             <div class="tag-title" ng-click="showCode()">
                 <i class="fa" ng-class="codeShown?'fa-caret-down':'fa-caret-right'"></i>
-                {{translate("source_code")+' ) '+test.title}}
+                {{parentScope.translate("source_code")+' ) '+tag.getName()}}
             </div>
-            <div ui-codemirror="options" ng-if="codeShown">{{tag.getCode()}}</div>
+            <div ui-codemirror="tag.getReadOnlyOptions()" ng-if="codeShown" ng-model="tag.getCode()"></div>
         </div>
     </script>
 </div>
