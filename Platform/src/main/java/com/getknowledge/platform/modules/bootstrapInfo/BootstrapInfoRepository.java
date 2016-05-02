@@ -41,7 +41,22 @@ public class BootstrapInfoRepository extends BaseRepository<BootstrapInfo> {
                 (bi -> createIfNotExist(bi.getBootstrapInfo()));
     }
 
-    public void doBootstrap(BootstrapService bootstrapService,HashMap<String,Object> data) {
+    @Override
+    public void remove(BootstrapInfo entity) {
+        //Удаление bootstrap сервисов не возможно
+        throw new RuntimeException("Impossible remove bootstrap service");
+    }
+
+    @Override
+    public void create(BootstrapInfo object, boolean fromRequestApi) {
+        if (fromRequestApi) {
+            throw new RuntimeException("Impossible create bootstrap service from request Api");
+        } else {
+            super.create(object,fromRequestApi);
+        }
+    }
+
+    public void doBootstrap(BootstrapService bootstrapService, HashMap<String,Object> data) {
         BootstrapInfo bootstrapInfo = null;
         try {
             bootstrapInfo = getSingleEntityByFieldAndValue("name", bootstrapService.getBootstrapInfo().getName());

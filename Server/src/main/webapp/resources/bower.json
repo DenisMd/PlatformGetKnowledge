@@ -42,6 +42,7 @@
     "angular-chart.js": "~0.8.8",
     "angular-highlightjs": "~0.5.1",
     "highlightjs": "~9.0.0",
-    "angular-ui-codemirror": "~0.3.0"
+    "angular-ui-codemirror": "~0.3.0",
+    "moment": "~2.13.0"
   }
 }

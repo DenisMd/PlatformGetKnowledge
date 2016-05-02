@@ -8,7 +8,11 @@
     "grunt-contrib-uglify": "latest",
     "grunt-contrib-cssmin": "latest",
     "grunt-contrib-watch": "latest",
-    "grunt-newer" : "latest",
-    "grunt-bower-concat" : "latest"
+    "grunt-newer": "latest",
+    "grunt-bower-concat": "latest"
+  },
+  "dependencies": {
+    "angular-bootstrap-datetimepicker": "^1.0.1",
+    "angular-date-time-input": "^1.1.0"
   }
 }

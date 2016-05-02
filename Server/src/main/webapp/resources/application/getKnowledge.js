@@ -1,6 +1,6 @@
 new Clipboard('.clipboard');
 
-var model = angular.module("mainApp", ["backend.service", "ngImgCrop" , "ngMaterial","ui.codemirror", "hljs"]);
+var model = angular.module("mainApp", ["backend.service", "ngImgCrop" , "ngMaterial","ui.codemirror", "hljs",'ui.bootstrap.datetimepicker','ui.dateTimeInput']);
 model.constant("codemirrorURL", "/resources/bower_components/codemirror/");
 
 model.config(function (hljsServiceProvider,codemirrorURL) {
@@ -29,15 +29,28 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
     //информация о главном меню на странице
     $scope.menuData = {};
 
+    //scroll для модалок
+    $scope.modalScrollConfig = {
+        theme: 'dark-3',
+        advanced: {
+            updateOnContentResize: true,
+            updateOnSelectorChange: true
+        }
+    };
+
     //--------------------------------------------------------- методы по работе с языком
 
     //перевести по ключу
-    $scope.translate = function (key) {
+    $scope.translate = function (key,isHtml) {
         if (!$scope.application || !$scope.application.text || !(key in $scope.application.text)) {
             return key;
         }
 
-        return $scope.application.text[key];
+        if (isHtml) {
+            return $scope.application.text[key];
+        }
+
+        return $scope.application.text[key].toString();
     };
 
     //Из result получить сообщение
@@ -53,6 +66,7 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
 
     //смена языка
     $scope.changeLanguage = function (language) {
+        moment.locale(language);
         if (!$scope.application.language || $scope.application.language === language) {
             return false;
         }
@@ -185,13 +199,6 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
         _lastGoodResult = result;
 
         return result;
-    };
-
-    //TODO: убрать
-    var reverse = false;
-    $scope.setOrder = function (order) {
-        reverse = !reverse;
-        $scope.order = reverse?"-"+order:order;
     };
 
     //TODO: убрать

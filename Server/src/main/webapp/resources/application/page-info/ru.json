@@ -74,6 +74,17 @@
     "male"          : "Мужчина",
     "female"        : "Женщина",
     "ok"            : "Ok",
+    "and"           : "И",
+    "or"            : "Или",
+    "send"          : "Отправить",
+    "next"          : "Далее",
+    "back"          : "Назад",
+    "add"           : "Добавить",
+    "parameter"     : "Параметр",
+    "number"        : "Число",
+    "to"            : "До",
+    "from"          : "От",
+    "date"          : "Дата",
 
     "failed"        : "Ошибка выполнения",
     "complete"      : "Завершено",
@@ -130,7 +141,27 @@
     "block_status"          : "Причина блокировки",
 
     "page_404"  : "Страница не найдена. Ошибка : 404",
-    "page_403"  : "Доступ заблокирован. Ошибка : 403"
+    "page_403"  : "Доступ заблокирован. Ошибка : 403",
+
+    "custom_filter" : "Пользовательский фильтр",
+    "do_filter"     : "Применить фильтр",
+    "clear_filter"  : "Сбросить фильтр",
+    "filter_join_by": "Объеденение фильтров по: ",
+
+    "text_field"          : "Текстовое поле",
+    "number_field"        : "Числовое поле",
+    "check_box_field"     : "Галочка",
+    "dateTime_field"      : "Дата/Время",
+
+    "operation_equals"        : "Сравнение",
+    "operation_like"          : "Подобие",
+    "operation_more"          : "Больше",
+    "operation_less"          : "Меньше",
+    "operation_more_or_equal" : "Больше или равно",
+    "operation_less_or_equal" : "Меньше или равно",
+    "operation_between"       : "Между",
+    "operation_after"         : "После",
+    "operation_before"        : "До"
 
   }
 }

@@ -1,6 +1,4 @@
-<link href="/resources/css/accept.css" rel="stylesheet">
-
-
+<link href="/resources/css/accept/accept.css" rel="stylesheet">
 
 <!-- Add or remove "with-glare" class. Removing the glare makes the screen interactive -->
 
@@ -10,14 +8,14 @@
             <div class="mb-screen-position">
                 <div class="mb-screen">
 
-                    <div class="info accepted"  ng-show="result == 'Complete'">
+                    <div class="info accepted"  ng-show="result === 'complete'">
                         <div class="glyphicon glyphicon-ok"></div><{{uuid}}><br>
-                        {{translate(result)}} <a ng-href="{{createUrl('/login')}}">{{translate('loginPage')}}</a>
+                        {{translate('accept_' + result)}} <a ng-href="{{createUrl('/login')}}">{{translate('accept_login_page')}}</a>
                     </div>
 
-                    <div class="info not-accepted" ng-hide="result == 'Complete'">
+                    <div class="info not-accepted" ng-hide="result === 'complete'">
                         <div class="glyphicon glyphicon-remove"></div><{{uuid}}><br>
-                        {{translate(result)}}
+                        {{translate('accept_' + result)}}
                     </div>
 
                 </div>

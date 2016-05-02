@@ -1,6 +1,15 @@
 //список элементов для выбора
 model.controller("listController",function($scope,listDialogService,$filter) {
 
+    $scope.menuScrollConfig = {
+        theme: 'light-3',
+        snapOffset: 100,
+        advanced: {
+            updateOnContentResize: true,
+            updateOnSelectorChange: "ul li"
+        }
+    };
+
     //Свойство, которое будет использоваться для заголовка моделей
     $scope.titleField = $scope.getData().titleField;
 
@@ -38,11 +47,49 @@ model.controller("listController",function($scope,listDialogService,$filter) {
         return $scope.getData().listName in $scope ? $scope[$scope.getData().listName] : [];
     }
 
+    function getFilteredData() {
+        var list    = getList();
+        var filter  = {};
+        filter[$scope.titleField] = $scope.selectedItem ? $scope.selectedItem[$scope.titleField] : "";
+
+        var filteredData = $filter('filter')(list, filter);
+        filteredData = $filter('limitTo')(filteredData, count);
+
+        var valid = false;
+        if (filteredData.length >= 1) {
+            if ($scope.selectedItem && $scope.selectedItem[$scope.titleField]  && $scope.selectedItem[$scope.titleField] === filteredData[0][$scope.titleField]) {
+                valid = true;
+            }
+        }
+        
+        $scope.selectForm['main-select'].$setValidity("selectValue", valid);
+        checkValid(valid);
+
+        return filteredData;
+    }
+
+    function checkValid(valid){
+        var val = $scope.getData().valid;
+
+        if (!val) {
+            return;
+        }
+
+        if (angular.isFunction(val)) {
+            val(valid);
+        }
+    }
+
     //открыть диалог
     $scope.openDialog = function(){
         listDialogService.setListInfo({
             list        : getList(),
-            maxHeight   : $scope.getData().maxHeigt
+            maxHeight   : $scope.getData().maxHeight,
+            titleField  : $scope.titleField
+        });
+        //устанавливаем действие на выбор элемента из модального окна
+        listDialogService.setCallbackSave(function(value){
+            $scope.setItem(value);
         });
         listDialogService.openDialog();
     };
@@ -53,46 +100,24 @@ model.controller("listController",function($scope,listDialogService,$filter) {
         $scope.selectedItem = {};
         angular.extend($scope.selectedItem,value);
         //сбрасываем отфильтрованные значения и ставим валидацию
-        $scope.getFilteredData();
+        getFilteredData();
         $scope.isShowSelectOptions  = false;
         callback(value);
     };
 
     //При нажатие клавиши в input[main-select]
-    $scope.onKeyUp = function(){
+    $scope.fillFiltredItem = function(){
         $scope.isShowSelectOptions = true;
-        $scope.filtredList = $scope.getFilteredData();
+        $scope.filtredList = getFilteredData();
     };
 
-    $scope.getFilteredData = function() {
-        var list    = getList();
-        var filter  = {};
-        filter[$scope.titleField] = $scope.selectedItem ? $scope.selectedItem[$scope.titleField] : "";
 
-        console.log(list);
-
-        var filteredData = $filter('filter')(list, filter);
-        filteredData = $filter('limitTo')(filteredData, count);
-
-        var valid = false;
-        if (filteredData.length >= 1) {
-            if ($scope.selectedItem && $scope.selectedItem[$scope.titleField]  && $scope.selectedItem[$scope.titleField].toString() === filteredData[0][$scope.titleField].toString()) {
-                valid = true;
-            }
-        }
-
-        console.log(valid);
-        $scope.selectForm['main-select'].$setValidity("selectValue", valid);
-        $scope.setValid();
-
-        return filteredData;
-    };
 
     //закрытие подсказки, если щелчок происходдит за пределами элемнта
     $scope.hideSelect = function(){
         $scope.$apply(function () {
             if ($scope.isShowSelectOptions) {
-                $scope.getFilteredData();
+                getFilteredData();
                 $scope.isShowSelectOptions = false;
             }
         });
@@ -126,25 +151,5 @@ model.controller("listController",function($scope,listDialogService,$filter) {
             return val;
         }
     };
-
-    $scope.setValid = function(){
-        var val = $scope.getData().isValid;
-
-        if (!val) {
-            return false;
-        }
-        if (angular.isFunction(val)) {
-            val($scope.selectForm['main-select'].$valid);
-        }
-    };
-
-    //текст отображающийся в input
-    function getTitle(value){
-        if (angular.isString(value) || value.$$unwrapTrustedValue) {
-            return value;
-        } else {
-            return value[field];
-        }
-    }
 
 });

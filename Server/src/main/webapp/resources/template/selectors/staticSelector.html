@@ -1,0 +1,48 @@
+<link rel="stylesheet" href="/resources/css/selectors/staticSelector.css">
+
+<div class="table-selector" ng-controller="staticSelectorController">
+    <div layout-gt-sm="row">
+        <div ng-repeat="filter in getData().filters | filter:{'default' : true}" ng-switch="filter.type">
+
+            <div ng-switch-when="check_box">
+                <md-checkbox  ng-model="filter.model" >
+                    {{translate(filter.title)}}
+                </md-checkbox>
+            </div>
+
+            <div ng-switch-default>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>{{translate(filter.title)}}</label>
+                    <input ng-model="filter.model" type="{{filter.type}}">
+                </md-input-container>
+            </div>
+
+        </div>
+        <md-button class="md-raised" ng-click="openCustomFilter()">{{translate("custom_filter")}}</md-button>
+    </div>
+
+    <!--Модальное окно для показа пользовательских фильтров-->
+    <module-template name="dialogs/customFilter"></module-template>
+    <div ng-scrollbars ng-scrollbars-config="tableScroll">
+        <table class="table table-hover">
+            <caption>{{translate(getData().tableName) + ' : ' + getData().list.length + ' ' + translate('of_records')}}</caption>
+            <thead>
+            <tr>
+                <th ng-repeat="header in getData().headerNames" ng-click="setOrder(header)" ng-class="{'unsortable-column' : !header.orderBy}">
+                    {{translate(header.title ? header.title : header.name)}}
+                    <i class="fa fa-sort-desc" aria-hidden="true"   ng-show="header.name == orderItem && orderReverse"></i>
+                    <i class="fa fa-sort-asc" aria-hidden="true"    ng-show="header.name == orderItem && !orderReverse"></i>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in getData().list | filter:filterSearch | orderBy:orderItem:orderReverse" class="selected-row" ng-click="getData().selectItemCallback(item)">
+                <td ng-repeat="header in getData().headerNames">
+                    <span ng-if="header.filter === 'date'">{{item[header.name] | date:'medium'}}</span>
+                    <span ng-if="header.filter !== 'date'">{{item[header.name]}}</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

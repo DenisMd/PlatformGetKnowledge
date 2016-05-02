@@ -21,7 +21,7 @@ model.controller("loginCtrl", function ($scope,$rootScope,$state,$http,applicati
 
             } else {
                 $scope.loginError = {
-                    message : $scope.translate("forgot_email_not_send"),
+                    message : $scope.translate("login_error"),
                     type : 'danger'
                 };
             }

@@ -87,7 +87,13 @@ public abstract class AbstractService {
     }
 
     public Long longFromField(String key, HashMap<String, Object> data) {
-        return new Long((Integer)data.get(key));
+        if (data.get(key) instanceof Integer) {
+            return new Long((Integer) data.get(key));
+        } else if (data.get(key) instanceof Long) {
+            return (Long) data.get(key);
+        }
+
+        throw new RuntimeException(String.format("Key %s is not number",key));
     }
 
 }

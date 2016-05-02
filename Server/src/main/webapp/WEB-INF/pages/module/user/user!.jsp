@@ -108,19 +108,19 @@
                 <form name="firsTimeForm" style="position: relative;">
                     <div class="form-group">
                         <label class="control-label">{{translate("country_select")}}</label>
-                        <module-template data="countryData" name="inputs/select"></module-template>
+                        <module-template data="countryData" name="inputs/list"></module-template>
                     </div>
                     <div class="form-group">
                         <label class="control-label">{{translate("region_select")}}</label>
-                        <module-template data="regionData" name="inputs/select"></module-template>
+                        <module-template data="regionData" name="inputs/list"></module-template>
                     </div>
                     <div class="form-group">
                         <label class="control-label">{{translate("city_select")}}</label>
-                        <module-template data="cityData" name="inputs/select"></module-template>
+                        <module-template data="cityData" name="inputs/list"></module-template>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">{{translate("birthday_select")}} dd.mm.yyyy</label>
-                        <module-template data="dateData" name="inputs/datepicker"></module-template>
+                        <label class="control-label">{{translate("birthday_select")}}</label>
+                        <module-template name="inputs/dateTimePicker" data="dateTimeOptions"></module-template>
                     </div>
                     <div class="form-group">
                         <label class="control-label">{{translate("specialty_select")}}</label>
