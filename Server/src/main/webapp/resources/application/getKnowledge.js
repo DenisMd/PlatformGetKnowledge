@@ -1203,7 +1203,8 @@ model.factory("TagService", function (codemirrorURL) {
                             loadTheme(tag.getTheme());
                             var newScope = $scope.$new();
                             newScope.tag = tag;
-                            element.append($compile("<div show-tag='tag'/>")(newScope));
+                            newScope.translate = $scope.translate;
+                            element.append($compile("<div show-tag='tag' translate='translate'/>")(newScope));
                             break;
                         default :
                             tag = new Tag();
@@ -1262,9 +1263,17 @@ model.factory("TagService", function (codemirrorURL) {
         } else {
             mode = spec = val;
         }
-        if (editor && mode) {
-            editor.setOption("mode", spec);
-            CodeMirror.autoLoadMode(editor, mode);
+        if (mode) {
+            if (editor) {
+                editor.setOption("mode", spec);
+                CodeMirror.autoLoadMode(editor, mode);
+            } else {
+                var script = document.createElement('script');
+                script.src = CodeMirror.modeURL.replace(/%N/g, mode);
+                script.type='text/javascript';
+                document.getElementsByTagName('body')[0].appendChild(script);
+            }
+
         }
     };
 
@@ -1290,12 +1299,13 @@ model.factory("TagService", function (codemirrorURL) {
 model.directive("contentListener",['$compile','TagService',function ($compile,TagService) {
     return {
         scope: {
-            content: '=contentListener'
+            content: '=contentListener',
+            translate:"&"
         },
         link: function (scope, element, attrs) {
             if (scope.content) {
                 TagService.readFormatter(scope.content, element,$compile,scope);
-                //$compile(element)(scope);
+                scope.translate = scope.translate();
             }
         }
     }
@@ -1305,15 +1315,23 @@ model.directive("showTag",['$compile','TagService',function ($compile,TagService
     return {
         restrict: 'A',
         scope: {
-            tag: '=showTag'
+            tag: '=showTag',
+            translate:'&'
         },
         controller: function ($scope) {
-            $scope.parentScope = $scope.$parent;
+            $scope.translate = $scope.translate();
+            console.log($scope.translate("close"));
             $scope.codeShown = false;
             $scope.showCode = function () {
                 $scope.codeShown = !$scope.codeShown;
             };
             $scope.model = {};
+
+            $scope.$watch('tag',function(newValue){
+                if (newValue){
+                    $scope.model.code = newValue.getCode();
+                }
+            });
         },
         templateUrl:"showTag.html"
     }
@@ -1402,7 +1420,7 @@ function ProgramTag() {
 
     this.getReadOnlyOptions = function () {
         return angular.extend({
-            readOnly: 'nocursor'
+            readOnly: 'true'
         }, options);
     };
 

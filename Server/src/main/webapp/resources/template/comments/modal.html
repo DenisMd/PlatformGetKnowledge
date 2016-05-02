@@ -8,7 +8,7 @@
     <!--</div>-->
     <!---->
     <div class="bubble">
-        <div class="post-editarea" content-listener="readData">
+        <div class="post-editarea" content-listener="readData" translate="translate">
         </div>
     </div>
 
@@ -39,7 +39,6 @@
             </md-tooltip>
         </span>
     </div>
-
     <button ng-click="send()">Paste</button>
     <script type="text/ng-template" id="pasteCode.html">
         <md-dialog aria-label="Paste code" ng-cloak flex="80">
@@ -140,9 +139,9 @@
         <div class="tag">
             <div class="tag-title" ng-click="showCode()">
                 <i class="fa" ng-class="codeShown?'fa-caret-down':'fa-caret-right'"></i>
-                {{parentScope.translate("source_code")+' ) '+tag.getName()}}
+                {{translate("source_code")+' ) '+tag.getName()}}
             </div>
-            <div ui-codemirror="tag.getReadOnlyOptions()" ng-if="codeShown" ng-model="tag.getCode()"></div>
+            <div ui-codemirror="tag.getReadOnlyOptions()" ng-if="codeShown" ng-model="model.code"></div>
         </div>
     </script>
 </div>
