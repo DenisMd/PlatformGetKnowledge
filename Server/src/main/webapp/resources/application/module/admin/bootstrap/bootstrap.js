@@ -59,30 +59,48 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className,
         ],
         selectItemCallback : function (item) {
             $scope.currentService = item;
-        }
-    };   
+            if ($scope.currentService != null && $scope.currentService.stackTrace != null) {
+                $scope.stackTraceData.stack = $scope.currentService.stackTrace;
+            }
+        },
+        actions : [
+            {
+                icon : "fa-cogs",
+                color : "#15206C",
+                tooltip : "bootstrap_do_bootstrap",
+                actionCallback : function (ev){
+                    //$event
+                    $scope.showDialog(ev,$scope,"doBootstrapModal.html",function(answer){
+                        applicationService.action($scope,"bootstrapResult" , className.bootstrap_services,"do",answer,function(result){
+                            $scope.showToast($scope.getResultMessage(result));
+                            updateList();
+                        });
+                    });
+                }
+            }
+        ]
+    };
     
-    
-    //Список сервисов для которых выполняется bootstrap опции
-    applicationService.list($scope , "bootstrap_services",className.bootstrap_services,function (service) {
-        $scope.selectorData.list.push(service);
-    });
+    //Информация для вывода stack trace при ошибке выполнения сервиса
+    $scope.stackTraceData = {
+        title : "bootstrap_stackTrace"   
+    };
 
     //Обновляем информацию о сервисе
     $scope.updateService = function() {
-      applicationService.update($scope,"updateResult",className.bootstrap_services,$scope.currentService,function(result){
-         $scope.showToast(result);
-      });
-    };
-
-
-    $scope.showBootstrapDialog = function(ev) {
-        $scope.showDialog(ev,$scope,"doBootstrapModal.html",function(answer){
-            applicationService.action($scope,"bootstrapResult" , className.bootstrap_services,"do",answer,function(result){
-                $scope.showToast(result);
-                applicationService.list($scope , "bootstrap_services",className.bootstrap_services);
-            });
+        applicationService.update($scope,"",className.bootstrap_services,$scope.currentService,function(result){
+            $scope.showToast(result);
         });
     };
+
+    function updateList() {
+        $scope.selectorData.list = [];
+        //Список сервисов для которых выполняется bootstrap опции
+        applicationService.list($scope , "bootstrap_services",className.bootstrap_services,function (service) {
+            $scope.selectorData.list.push(service);
+        });
+    }
+
+    updateList();
 
 });

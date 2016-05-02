@@ -9,7 +9,7 @@
     "bootstrap_errorMessage"  : "Сообщение об ошибке",
     "bootstrap_stackTrace"    : "Трасса стека",
     "bootstrap_serviceInfo"   : "Информация о сервисе",
-    "bootstrap_doBootstrap"   : "Выполнить инициализацию",
+    "bootstrap_do_bootstrap"  : "Выполнить инициализацию",
     "bootstrap_domain"        : "Домен"
   }
 }

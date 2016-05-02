@@ -153,13 +153,20 @@ model.controller("customFilterController",function($scope,customFilterService){
     };
 
     //Вызывается при отрытие диалога
-    customFilterService.setCallbackOpen(function(){
+    customFilterService.setCallbackOpen(function(defaultFilter){
+        if (defaultFilter) {
+            $scope.logicalExpression = defaultFilter.logicalOperation;
+            $scope.filterRequest = angular.copy(defaultFilter.filterData);
+        }
         $scope.filtersInfo = customFilterService.filtersInfo();
     });
 
     //Сохраняем структуру фильтра для исполнения
     $scope.saveFilter = function(){
-        customFilterService.saveDialog($scope.filterRequest);
+        customFilterService.saveDialog({
+            logicalOperation : $scope.logicalExpression,
+            filterData : angular.copy($scope.filterRequest)
+        });
     };
 
     //Закрываем модель без примения фильтра
@@ -181,11 +188,10 @@ model.controller("customFilterController",function($scope,customFilterService){
         minView : 'minute' ,
         startView : 'year',
         onChange: function(date,isValid){
-            console.log(date + " : " + isValid);
+            console.log(date);
             if (isValid) {
                 $scope.dateParam1 = date;
             } else {
-                console.log(isValid);
                 $scope.dateParam1 = undefined;
             }
         }

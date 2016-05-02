@@ -7,7 +7,7 @@ model.controller("dateTimePickerController",function ($scope) {
         startView : $scope.getData().startView
     };
 
-    $scope.onTimeSet = function (newDate, oldDate) {
+    $scope.onTimeSet = function (newDate) {
         $scope.getData().onChange(moment(newDate).valueOf() , moment(newDate).isValid());
     }
 });

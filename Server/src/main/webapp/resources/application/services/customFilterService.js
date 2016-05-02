@@ -19,10 +19,10 @@ model.factory('customFilterService', function() {
             callbackSave = callback;
         },
 
-        openDialog : function(){
+        openDialog : function(defaultValue){
             $(modalId).modal('show');
             if (angular.isFunction(callbackOpen)) {
-                callbackOpen();
+                callbackOpen(defaultValue);
             }
         },
         closeDialog : function() {

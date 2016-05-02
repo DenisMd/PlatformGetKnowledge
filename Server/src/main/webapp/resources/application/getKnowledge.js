@@ -1,3 +1,4 @@
+//инициализацтя пользовательских модулей
 new Clipboard('.clipboard');
 
 var model = angular.module("mainApp", ["backend.service", "ngImgCrop" , "ngMaterial","ui.codemirror", "hljs",'ui.bootstrap.datetimepicker','ui.dateTimeInput']);
@@ -11,6 +12,8 @@ model.config(function (hljsServiceProvider,codemirrorURL) {
     CodeMirror.modeURL = codemirrorURL+ "mode/%N/%N.js";
 });
 
+
+//Главный контроллер
 model.controller("mainController", function ($scope,$http,$state,$languages,applicationService,pageService,className,$mdToast,$mdDialog, $mdMedia,$parse) {
 
     //----------------------------------------------------- инициализация клиентской информации
@@ -182,6 +185,12 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
         $mdDialog.show(confirm).then(callback);
     };
 
+    //-------------------------------------- Утилиты
+    $scope.objectIsEmpty = function (obj) {
+        if (!obj) return true;
+        return Object.keys(obj).length === 0 && JSON.stringify(obj) === JSON.stringify({});
+    };
+    
     //-------------------------------------- удалить их
 
     //hightlights

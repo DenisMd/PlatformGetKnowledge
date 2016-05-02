@@ -1,0 +1,11 @@
+<md-toolbar class="md-warn">
+    <div class="md-toolbar-tools">
+        <h2 class="md-flex">{{translate(getData().title)}}</h2>
+    </div>
+</md-toolbar>
+<md-content flex layout-padding>
+    <md-button class="btn md-raised md-warn clipboard"  data-clipboard-text="{{currentService.stackTrace}}">
+        {{translate("copy_to_clipboard")}}
+    </md-button>
+    <div ui-codemirror="{readOnly: true , lineNumbers: true}" ng-model="currentService.stackTrace"></div>
+</md-content>
