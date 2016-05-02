@@ -1319,8 +1319,7 @@ model.directive("showTag",['$compile','TagService',function ($compile,TagService
             translate:'&'
         },
         controller: function ($scope) {
-            $scope.translate = $scope.translate();
-            console.log($scope.translate("close"));
+            $scope.translate = $scope.translate()();
             $scope.codeShown = false;
             $scope.showCode = function () {
                 $scope.codeShown = !$scope.codeShown;
