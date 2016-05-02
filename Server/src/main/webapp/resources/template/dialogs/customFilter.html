@@ -30,17 +30,17 @@
                         <table class="table table-hover">
                             <thead>
                             <tr>
+                                <th>{{translate("title")}}</th>
                                 <th>{{translate("name")}}</th>
                                 <th>{{translate("type")}}</th>
-                                <th>{{translate("title")}}</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr ng-repeat="filterInfo in filtersInfo" class="selected-row"
                                 ng-click="addField(filterInfo)">
+                                <td>{{translate(filterInfo.title)}}</td>
                                 <td>{{filterInfo.field}}</td>
                                 <td>{{translate(filterInfo.type+"_field")}}</td>
-                                <td>{{translate(filterInfo.title)}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -65,6 +65,13 @@
                             <div ng-switch-when="dateTime">
                                 <md-radio-group ng-model="selectedOperation.value">
                                     <md-radio-button ng-value="value" class="md-primary" ng-repeat="value in operationMap.dateTime.values">
+                                        {{translate("operation_" + value.name)}}
+                                    </md-radio-button>
+                                </md-radio-group>
+                            </div>
+                            <div ng-switch-when="enum">
+                                <md-radio-group ng-model="selectedOperation.value">
+                                    <md-radio-button ng-value="value" class="md-primary" ng-repeat="value in operationMap.enum.values">
                                         {{translate("operation_" + value.name)}}
                                     </md-radio-button>
                                 </md-radio-group>
@@ -158,6 +165,24 @@
                                             {{translate("add")}}
                                         </button>
                                     </div>
+                                </div>
+                                <div ng-switch-when="enum">
+                                    <div class="form-group">
+                                        <md-input-container>
+                                            <label>{{translate("parameter")}}</label>
+                                            <md-select ng-model="params">
+                                                <md-option ng-repeat="constant in currentFilterExpression.field.info.constants" value="{{constant}}">
+                                                    {{constant}}
+                                                </md-option>
+                                            </md-select>
+                                        </md-input-container>
+                                    </div>
+                                    <button class="btn btn-default" ng-click="backToOperation()">
+                                        {{translate("back")}}
+                                    </button>
+                                    <button class="btn btn-primary" ng-click="createFilterExpression(params)"  ng-disabled="params === undefined">
+                                        {{translate("add")}}
+                                    </button>
                                 </div>
                                 <div ng-switch-when="check_box" ng-init="params = false">
                                     <md-switch ng-model="params" aria-label="Switch params">

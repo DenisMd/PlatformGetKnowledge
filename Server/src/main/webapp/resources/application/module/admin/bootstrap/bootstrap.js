@@ -27,6 +27,12 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className,
                 title : "bootstrap_start_time",
                 type : "dateTime",
                 field : "startTime"
+            },
+            {
+                title : "bootstrap_state",
+                type : "enum",
+                field : "bootstrapState",
+                constants : ["NotComplete" , "Completed" , "Failed"]
             }
         ],
         headerNames : [

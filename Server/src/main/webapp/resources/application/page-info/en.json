@@ -153,6 +153,7 @@
     "number_field"        : "Number field",
     "check_box_field"     : "Check Box",
     "dateTime_field"      : "Date/Time",
+    "enum_field"          : "Enumeration",
 
     "operation_equals"        : "Equals",
     "operation_like"          : "Like",
@@ -162,6 +163,7 @@
     "operation_less_or_equal" : "Less or Equal",
     "operation_between"       : "Between",
     "operation_after"         : "After",
-    "operation_before"        : "Before"
+    "operation_before"        : "Before",
+    "operation_in"            : "One of ..."
   }
 }

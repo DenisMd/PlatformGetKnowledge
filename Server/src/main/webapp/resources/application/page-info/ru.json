@@ -152,6 +152,7 @@
     "number_field"        : "Числовое поле",
     "check_box_field"     : "Галочка",
     "dateTime_field"      : "Дата/Время",
+    "enum_field"          : "Перечесление",
 
     "operation_equals"        : "Сравнение",
     "operation_like"          : "Подобие",
@@ -161,7 +162,8 @@
     "operation_less_or_equal" : "Меньше или равно",
     "operation_between"       : "Между",
     "operation_after"         : "После",
-    "operation_before"        : "До"
+    "operation_before"        : "До",
+    "operation_in"            : "Одно из ..."
 
   }
 }

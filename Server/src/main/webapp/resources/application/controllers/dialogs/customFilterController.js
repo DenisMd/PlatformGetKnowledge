@@ -4,7 +4,7 @@ var TYPES = {
     Parameter   : "Parameter"
 };
 
-//info: {name,type} - Field
+//info: {name,type,constants} - Field
 //info: {name , symbol} - Operation
 //info: {values = [,,]} - Parameters
 function filterItem(type , info){
@@ -39,6 +39,9 @@ model.controller("customFilterController",function($scope,customFilterService){
                 },{
                     name : "like",
                     symbol : "like"
+                },{
+                    name : "in",
+                    symbol : "in"
                 }
             ]
         },
@@ -62,7 +65,11 @@ model.controller("customFilterController",function($scope,customFilterService){
                 },{
                     name : "between",
                     symbol : "between"
+                },{
+                    name : "in",
+                    symbol : "in"
                 }
+
             ],
         },
         dateTime : {
@@ -78,6 +85,18 @@ model.controller("customFilterController",function($scope,customFilterService){
                     symbol : "between"
                 }
             ]
+        },
+        enum : {
+          values : [
+              {
+                  name : "equals",
+                  symbol : "="
+              },
+              {
+                  name : "in",
+                  symbol : "in"
+              }
+          ]
         },
         other : {
             values : [
@@ -102,7 +121,7 @@ model.controller("customFilterController",function($scope,customFilterService){
     //Добавление поля в фильтр
     $scope.addField = function(field){
         if (!$scope.isParamsInput) {
-            $scope.currentFilterExpression.field = new filterItem(TYPES.Field, {name: field.field, type: field.type});
+            $scope.currentFilterExpression.field = new filterItem(TYPES.Field, {name: field.field, type: field.type , constants : field.constants});
             $scope.selectedOperation = {};
         }
     };
