@@ -66,7 +66,7 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className,
         actions : [
             {
                 icon : "fa-cogs",
-                color : "black",
+                color : "#15206C",
                 tooltip : "bootstrap_do_bootstrap",
                 actionCallback : function (ev){
                     //$event
