@@ -104,7 +104,7 @@
             <div class="modal-header">
                 <h4 class="modal-title">{{translate("extraRegister")}}</h4>
             </div>
-            <div class="modal-body first-form-body" ng-scrollbars ng-scrollbars-config="modalScrollConfig">
+            <div class="modal-body first-form-body">
                 <form name="firsTimeForm" style="position: relative;">
                     <div class="form-group">
                         <label class="control-label">{{translate("country_select")}}</label>

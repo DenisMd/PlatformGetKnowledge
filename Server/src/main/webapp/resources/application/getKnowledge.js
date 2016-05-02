@@ -592,8 +592,8 @@ model.controller("postController",['$scope','$timeout','$state','codemirrorURL',
                     loadString(result.message, true);
                 }
             });
-    $scope.content = "";//'!!!&nbsp;{"type":"ProgramTag","name":"c","code":"var i = \\\"hello world\\\"","options":{"lineNumbers":true,"indentWithTabs":true,"mode":"javascript","theme":"default"}}<br>';
-
+    $scope.content = "";//;
+    $scope.readData = '!!!&nbsp;{"type":"ProgramTag","name":"c","code":"var i = \\\"hello world\\\"","options":{"lineNumbers":true,"indentWithTabs":true,"mode":"javascript","theme":"blackboard"}}<br>'
     //first loading
     var initValue = $scope.content;
     $timeout(function() {
@@ -628,6 +628,7 @@ model.controller("postController",['$scope','$timeout','$state','codemirrorURL',
             var tag = $scope.tagPool[$scope.tagPool.length - 1];
             if (tag) {
                 loadString(TagService.getEditableTag($scope.content,tag,$scope.tagPool.length - 1));
+                $scope.tag = tag;
             }
         },null,refresh,function(){
 
@@ -659,13 +660,13 @@ model.controller("postController",['$scope','$timeout','$state','codemirrorURL',
         onLoad : function(_editor){
             $scope.modeChanged = function(){
                 var mode = $scope.code.mode.mode;
-                loadMode(mode,_editor);
+                TagService.loadMode(mode,_editor);
             };
 
             $scope.themeChanged = function(){
                 var css = $scope.code.theme.name.toLowerCase();
                 if (css !== "default"){
-                    if(!loadTheme(css,_editor)){
+                    if(!TagService.loadTheme(css,_editor)){
                         _editor.setOption("theme", css);
                     }
                 } else {
@@ -678,49 +679,7 @@ model.controller("postController",['$scope','$timeout','$state','codemirrorURL',
         }
     },defaultOptions);
 
-    var loadTheme = function(theme,editor){
-        var href = codemirrorURL +"theme/"+theme+".css";
 
-        if  ($("link[href='"+ href+"']").length) {
-            return false;
-        }
-
-        var link = document.createElement('link');
-        link.onload = function(){
-            editor.setOption("theme", theme);
-        };
-        link.rel = "stylesheet";
-        link.type = "text/css";
-        link.href = href;
-
-        document.getElementsByTagName('head')[0].appendChild(link);
-        return true;
-    };
-
-    var loadMode = function (val,editor) {
-        var  m, mode, spec;
-        m = /.+\.([^.]+)$/.exec(val);
-        var info;
-        if (m) {
-            info = CodeMirror.findModeByExtension(m[1]);
-            if (info) {
-                mode = info.mode;
-                spec = info.mime;
-            }
-        } else if (/\//.test(val)) {
-            info = CodeMirror.findModeByMIME(val);
-            if (info) {
-                mode = info.mode;
-                spec = val;
-            }
-        } else {
-            mode = spec = val;
-        }
-        if (mode) {
-            editor.setOption("mode", spec);
-            CodeMirror.autoLoadMode(editor, mode);
-        }
-    };
 
 }]);
 
@@ -923,12 +882,28 @@ model.service('arcService', function(){
         percentageInnerCutout : 80
     };
 
-    this.mainOption = {
+    var responsiveOption = {
         responsive: true,
-        maintainAspectRatio:false,
+        maintainAspectRatio:false
+    };
+    var mainGraphicsOption = {
         segmentShowStroke : false,
         showTooltips : false
     };
+    var mainOptions = {};
+    angular.extend(mainOptions,mainGraphicsOption);
+    angular.extend(mainOptions,responsiveOption);
+    
+    this.getMainOption = function (visible) {
+        if (visible){
+            return mainOptions;
+        } else {
+            return mainGraphicsOption;
+        }
+
+    };
+
+
 });
 
 //tag editor
@@ -1098,13 +1073,17 @@ model.directive('contenteditableKeyListener', ['TagService',function (TagService
 }]);
 
 //основные опирации для работы с тегами
-model.factory("TagService", function () {
+model.factory("TagService", function (codemirrorURL) {
     var groupSeparator = String.fromCharCode(29);
     var nonBreakingSpace = "&nbsp;";
 
     var startEditable = '<span contenteditable="false">';
     var middleEditable = ')_';
     var stopEditable = '</span>';
+
+    var beforeParse = function (str) {
+        return str.replace(/[\/\\]/g, "\\$&");
+    };
 
 
     var getEditableTag = function (model, tag, index) {
@@ -1161,7 +1140,57 @@ model.factory("TagService", function () {
      * @description Заменяет json-представление тега преходящее с сервера на ссылку ппула тегов, при этом происходит добавление в пул
      */
     var formatter = function(value,scope){
-        var result = "";
+            var result = "";
+            var startPos = -1, start = 0, stopPos = -1, j = -1;
+            var startText = "";
+            while ((startPos = value.indexOf(groupSeparator, stopPos + 1)) !== -1 &&
+            (stopPos = value.indexOf(groupSeparator, startPos + 1)) !== -1) {
+                var stringTag = value.substring(startPos + groupSeparator.length, stopPos);
+                if (stringTag){
+                    var jsonTag = JSON.parse(stringTag);
+                    if (jsonTag) {
+                        var type;
+                        if (!(type = jsonTag.type)) {
+                            continue;
+                        }
+                        var tag;
+                        switch (type) {
+                            case "ProgramTag":
+                                tag = new ProgramTag();
+                                break;
+                            default :
+                                tag = new Tag();
+                        }
+
+                        tag.fromJson(jsonTag);
+
+                        scope.tagPool.push(tag);
+
+                        result += value.substring(start, startPos) + this.getEditableTag(value,tag,scope.tagPool.length - 1);
+                    }
+                }
+                start = stopPos + groupSeparator.length;
+            }
+            if (result) {
+                result += value.substring(stopPos + groupSeparator.length);
+                var suffix = "<br>";
+                if (result.indexOf(suffix, this.length - suffix.length) === -1){
+                    result += "<br>"
+                }
+                return result;
+            }
+            return value;
+        };
+
+    /**
+     * @param value {String} - строка для разбора
+     * @param element - DOM-элемент
+     *
+     * @description Добавляет DOM-элементу значения. Заменяет все json-представления тега читаемымой формой
+     */
+    var readFormatter = function(value,element,$compile,$scope){
+        if (!value) return;
+        var result = false;
         var startPos = -1, start = 0, stopPos = -1, j = -1;
         var startText = "";
         while ((startPos = value.indexOf(groupSeparator, stopPos + 1)) !== -1 &&
@@ -1178,29 +1207,83 @@ model.factory("TagService", function () {
                     switch (type) {
                         case "ProgramTag":
                             tag = new ProgramTag();
+                            tag.fromJson(jsonTag);
+                            loadMode(tag.getMode());
+                            loadTheme(tag.getTheme());
+                            var newScope = $scope.$new();
+                            newScope.tag = tag;
+                            newScope.translate = $scope.translate;
+                            element.append($compile("<div show-tag='tag' translate='translate'/>")(newScope));
                             break;
                         default :
                             tag = new Tag();
                     }
-
-                    tag.fromJson(jsonTag);
-
-                    scope.tagPool.push(tag);
-
-                    result += value.substring(start, startPos) + this.getEditableTag(value,tag,scope.tagPool.length - 1);
+                    element.append(value.substring(start, startPos));
+                    result = true;
                 }
             }
             start = stopPos + groupSeparator.length;
         }
         if (result) {
-            result += value.substring(stopPos + groupSeparator.length);
-            var suffix = "<br>";
-            if (result.indexOf(suffix, this.length - suffix.length) === -1){
-                result += "<br>"
-            }
-            return result;
+            element.append(value.substring(stopPos + groupSeparator.length));
+        } else {
+            element.append(value);
         }
-        return value;
+
+    };
+
+    var loadTheme = function(theme,editor){
+        var href = codemirrorURL +"theme/"+theme+".css";
+
+        if  ($("link[href='"+ href+"']").length) {
+            return false;
+        }
+
+        var link = document.createElement('link');
+        link.onload = function(){
+            if (editor) {
+                editor.setOption("theme", theme);
+            }
+        };
+        link.rel = "stylesheet";
+        link.type = "text/css";
+        link.href = href;
+
+        document.getElementsByTagName('head')[0].appendChild(link);
+        return true;
+    };
+
+    var loadMode = function (val,editor) {
+        var  m, mode, spec;
+        m = /.+\.([^.]+)$/.exec(val);
+        var info;
+        if (m) {
+            info = CodeMirror.findModeByExtension(m[1]);
+            if (info) {
+                mode = info.mode;
+                spec = info.mime;
+            }
+        } else if (/\//.test(val)) {
+            info = CodeMirror.findModeByMIME(val);
+            if (info) {
+                mode = info.mode;
+                spec = val;
+            }
+        } else {
+            mode = spec = val;
+        }
+        if (mode) {
+            if (editor) {
+                editor.setOption("mode", spec);
+                CodeMirror.autoLoadMode(editor, mode);
+            } else {
+                var script = document.createElement('script');
+                script.src = CodeMirror.modeURL.replace(/%N/g, mode);
+                script.type='text/javascript';
+                document.getElementsByTagName('body')[0].appendChild(script);
+            }
+
+        }
     };
 
     return {
@@ -1213,10 +1296,54 @@ model.factory("TagService", function () {
         stopEditable: stopEditable,
 
         parser : parser,
-        formatter : formatter
+        formatter : formatter,
+        readFormatter : readFormatter,
+
+        loadMode : loadMode,
+        loadTheme : loadTheme
 
     };
 });
+
+model.directive("contentListener",['$compile','TagService',function ($compile,TagService) {
+    return {
+        scope: {
+            content: '=contentListener',
+            translate:"&"
+        },
+        link: function (scope, element, attrs) {
+            if (scope.content) {
+                TagService.readFormatter(scope.content, element,$compile,scope);
+                scope.translate = scope.translate();
+            }
+        }
+    }
+}]);
+
+model.directive("showTag",['$compile','TagService',function ($compile,TagService) {
+    return {
+        restrict: 'A',
+        scope: {
+            tag: '=showTag',
+            translate:'&'
+        },
+        controller: function ($scope) {
+            $scope.translate = $scope.translate()();
+            $scope.codeShown = false;
+            $scope.showCode = function () {
+                $scope.codeShown = !$scope.codeShown;
+            };
+            $scope.model = {};
+
+            $scope.$watch('tag',function(newValue){
+                if (newValue){
+                    $scope.model.code = newValue.getCode();
+                }
+            });
+        },
+        templateUrl:"showTag.html"
+    }
+}]);
 
 function Tag() {
     var name = "tag";
@@ -1279,8 +1406,16 @@ function ProgramTag() {
         options.mode = m;
     };
 
+    this.getMode = function () {
+        return this.options.mode;
+    };
+
     this.setTheme = function (t) {
         options.theme = t;
+    };
+
+    this.getTheme = function () {
+        return this.options.theme;
     };
 
     this.setOptions = function(options){
@@ -1293,7 +1428,7 @@ function ProgramTag() {
 
     this.getReadOnlyOptions = function () {
         return angular.extend({
-            readOnly: 'nocursor'
+            readOnly: 'true'
         }, options);
     };
 

@@ -140,3 +140,7 @@
 .disabled-padding-right{
     padding-right: 0;
 }
+
+.post-editarea .CodeMirror{
+    height: auto;
+}

@@ -3,20 +3,12 @@
     <!--<div>-->
         <!--Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur eos fugiat illum inventore, ipsum labore laboriosam mollitia, natus nisi non nulla odit perferendis porro quas, quasi saepe sint veniam voluptates.-->
     <!--</div>-->
-    <!--<div class="tag">-->
-        <!--<div class="tag-title" ng-click="test.showCode()">-->
-            <!--<i class="fa" ng-class="test.codeShown?'fa-caret-down':'fa-caret-right'"></i>-->
-            <!--{{translate("source_code")+' ) '+test.title}}-->
-        <!--</div>-->
-        <!--<div class="autoresize" ui-codemirror="test" ng-model="test.text"  ui-refresh="test.text" ng-if="test.codeShown"></div>-->
-    <!--</div>-->
     <!--<div>-->
         <!--Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur eos fugiat illum inventore, ipsum labore laboriosam mollitia, natus nisi non nulla odit perferendis porro quas, quasi saepe sint veniam voluptates.-->
     <!--</div>-->
     <!---->
     <div class="bubble">
-        <div  ng-model="content" contenteditable="false" class="post-editarea">
-
+        <div class="post-editarea" content-listener="readData" translate="translate">
         </div>
     </div>
 
@@ -47,7 +39,6 @@
             </md-tooltip>
         </span>
     </div>
-
     <button ng-click="send()">Paste</button>
     <script type="text/ng-template" id="pasteCode.html">
         <md-dialog aria-label="Paste code" ng-cloak flex="80">
@@ -144,4 +135,14 @@
                 </md-dialog-actions>
         </md-dialog>
     </script>
+    <script type="text/ng-template" id="showTag.html">
+        <div class="tag">
+            <div class="tag-title" ng-click="showCode()">
+                <i class="fa" ng-class="codeShown?'fa-caret-down':'fa-caret-right'"></i>
+                {{translate("source_code")+' ) '+tag.getName()}}
+            </div>
+            <div ui-codemirror="tag.getReadOnlyOptions()" ng-if="codeShown" ng-model="model.code"></div>
+        </div>
+    </script>
 </div>
+
