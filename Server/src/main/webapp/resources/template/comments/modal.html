@@ -119,7 +119,7 @@
                         </div>
                         <div layout="column" flex>
                             <div ng-if="parentScope.currentTag">
-                                <div ui-codemirror="parentScope.currentTag.getReadOnlyOptions()" ng-model="parentScope.currentTag.getCode()"></div>
+                                <div ui-codemirror="parentScope.currentTag.getReadOnlyOptions()"></div>
                             </div>
                         </div>
                     </div>
@@ -141,7 +141,7 @@
                 <i class="fa" ng-class="codeShown?'fa-caret-down':'fa-caret-right'"></i>
                 {{translate("source_code")+' ) '+tag.getName()}}
             </div>
-            <div ui-codemirror="tag.getReadOnlyOptions()" ng-if="codeShown" ng-model="model.code"></div>
+            <div ui-codemirror="tag.getReadOnlyOptions()" ng-if="codeShown"></div>
         </div>
     </script>
 </div>
