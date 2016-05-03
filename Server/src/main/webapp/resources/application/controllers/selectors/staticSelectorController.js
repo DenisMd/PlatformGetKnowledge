@@ -84,49 +84,40 @@ model.controller("staticSelectorController" , function ($scope , customFilterSer
             var filterItem = $scope.customFilterInfo.filterData[i];
             switch (filterItem.oper.info.name) {
                 case "equals" :
-                    if (item[filterItem.field.info.name] == filterItem.param.info.values[0]) {
-                        result = true;
-                    } else result = false;
+                    result = item[filterItem.field.info.name] == filterItem.param.info.values[0];
                     break;
                 case  "like" : 
-                    if (item[filterItem.field.info.name].like(filterItem.param.info.values[0])) {
-                        result = true
-                    } else result = false;
+                    result = item[filterItem.field.info.name].like(filterItem.param.info.values[0]);
                     break;
                 case "more" :
-                    if (item[filterItem.field.info.name] > filterItem.param.info.values[0]) {
-                        result = true
-                    } else result = false;
+                    result = item[filterItem.field.info.name] > filterItem.param.info.values[0];
                     break;
                 case "more_or_equal" :
-                    if (item[filterItem.field.info.name] >= filterItem.param.info.values[0]) {
-                        result = true
-                    } else result = false;
+                    result = item[filterItem.field.info.name] >= filterItem.param.info.values[0];
                     break;
                 case "less" :
-                    if (item[filterItem.field.info.name] < filterItem.param.info.values[0]) {
-                        result = true
-                    } else result = false;
+                    result = item[filterItem.field.info.name] < filterItem.param.info.values[0];
                     break;
                 case "less_or_equal" :
-                    if (item[filterItem.field.info.name] <= filterItem.param.info.values[0]) {
-                        result = true
-                    } else result = false;
+                    result = item[filterItem.field.info.name] <= filterItem.param.info.values[0];
                     break;
                 case "between" :
-                    if (item[filterItem.field.info.name] >= filterItem.param.info.values[0] && item[filterItem.field.info.name] <= filterItem.param.info.values[1]) {
-                        result = true
-                    } else result = false;
+                    result = item[filterItem.field.info.name] >= filterItem.param.info.values[0] && item[filterItem.field.info.name] <= filterItem.param.info.values[1];
                     break;
                 case "after" :
-                    if (item[filterItem.field.info.name] > filterItem.param.info.values[0]) {
-                        result = true
-                    } else result = false;
+                    result = item[filterItem.field.info.name] > filterItem.param.info.values[0];
                     break;
                 case "before" :
-                    if (item[filterItem.field.info.name] < filterItem.param.info.values[0]) {
-                        result = true
-                    } else result = false;
+                    result = item[filterItem.field.info.name] < filterItem.param.info.values[0];
+                    break;
+                case "in" :
+                    result = false;
+                    filterItem.param.info.values.forEach(function (value) {
+                        if (item[filterItem.field.info.name] == value) {
+                            result = true;
+                        }
+                    });
+
                     break;
             }
             if (result) {

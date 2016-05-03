@@ -208,14 +208,6 @@ model.controller("customFilterController",function($scope,customFilterService){
         customFilterService.closeDialog();
     };
 
-    $scope.typeWithMultiplyParams = function (type) {
-        if (type === "between" || type === "in") {
-            return true;
-        }
-        
-        return false;
-    };
-
     $scope.dateTimeOptions1 = {
         id : "param1",
         format : "DD-MMMM-YYYY-HH-mm",
