@@ -532,7 +532,7 @@ public class DataController {
     
     //Методы на изменение -----------------------------------------------------------------------------------
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public @ResponseBody String create(@RequestParam("object") String jsonObject, @RequestParam("className") String className, Principal principal) throws PlatformException {
+    public @ResponseBody Result create(@RequestParam("object") String jsonObject, @RequestParam("className") String className, Principal principal) throws PlatformException {
         try {
             Class classEntity = Class.forName(className);
             AbstractEntity abstractEntity = (AbstractEntity) objectMapper.readValue(jsonObject, classEntity);
@@ -541,7 +541,7 @@ public class DataController {
                 throw new NotAuthorized(String.format("Access denied for create entity (%s)",className) , trace, TraceLevel.Warning);
             }
             crudService.create(moduleLocator.findRepository(classEntity),abstractEntity);
-            return objectMapper.writeValueAsString("Create success");
+            return Result.Complete();
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
         } catch (IOException e) {
@@ -550,7 +550,7 @@ public class DataController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public @ResponseBody String update(@RequestParam("object") String jsonObject, @RequestParam("className") String className, Principal principal) throws PlatformException {
+    public @ResponseBody Result update(@RequestParam("object") String jsonObject, @RequestParam("className") String className, Principal principal) throws PlatformException {
         try {
             Class classEntity = Class.forName(className);
             AbstractEntity abstractEntity = (AbstractEntity) objectMapper.readValue(jsonObject, classEntity);
@@ -559,7 +559,7 @@ public class DataController {
                 throw new NotAuthorized(String.format("Access denied for update entity (%s)",className) , trace, TraceLevel.Warning);
             }
             crudService.update(moduleLocator.findRepository(classEntity),abstractEntity);
-            return objectMapper.writeValueAsString("Update success");
+            return Result.Complete();
         } catch (IOException e) {
             throw new ParseException("Can't parse entities for update " + className,trace,TraceLevel.Warning,e);
         } catch (ClassNotFoundException e) {
@@ -568,7 +568,7 @@ public class DataController {
     }
 
     @RequestMapping(value = "/remove", method = RequestMethod.GET)
-    public @ResponseBody String remove(@RequestParam("id") Long id, @RequestParam("className") String className, Principal principal) throws PlatformException {
+    public @ResponseBody Result remove(@RequestParam("id") Long id, @RequestParam("className") String className, Principal principal) throws PlatformException {
         try {
             Class classEntity = Class.forName(className);
 
@@ -577,12 +577,9 @@ public class DataController {
                 throw new NotAuthorized(String.format("Access denied for remove entity (%s)",className) , trace, TraceLevel.Warning);
             }
             crudService.remove(moduleLocator.findRepository(classEntity),id);
-            return objectMapper.writeValueAsString("Remove success");
+            return Result.Complete();
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
-        } catch (JsonProcessingException e) {
-            //Сюда мы не попдаем
-            return null;
         }
     }
 

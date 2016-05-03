@@ -3,10 +3,10 @@
     "permission_title" : "Права",
     "permission" : "Право",
     "permission_note" : "Описание",
-    "permission_updatePermission" : "Обновить право",
-    "permission_createPermission" : "Создать право",
-    "permission_deletePermission" : "Удалить право",
-    "permission_deleteMessage" : "Вы действительно хотите удалить право",
-    "permission_deleteContentMessage" : "Все ссылки на право будут удаены"
+    "permission_update_permission" : "Обновить право",
+    "permission_create_permission" : "Создать право",
+    "permission_delete_permission" : "Удалить право",
+    "permission_delete_message" : "Вы действительно хотите удалить право",
+    "permission_delete_content_message" : "Все ссылки на право будут удаены"
   }
 }

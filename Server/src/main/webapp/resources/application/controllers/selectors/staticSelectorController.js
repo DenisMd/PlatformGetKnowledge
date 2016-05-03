@@ -2,6 +2,12 @@ model.controller("staticSelectorController" , function ($scope , customFilterSer
 
     $scope.customFilterInfo;
 
+    $scope.showDeleteColumn = false;
+
+    $scope.deleteAction = function () {
+        $scope.showDeleteColumn = !$scope.showDeleteColumn;
+    };
+
     $scope.tableScroll = {
         theme: 'dark-3',
         setHeight: 400,

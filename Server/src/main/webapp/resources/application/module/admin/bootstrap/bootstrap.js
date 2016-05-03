@@ -95,7 +95,7 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className,
     //Обновляем информацию о сервисе
     $scope.updateService = function() {
         applicationService.update($scope,"",className.bootstrap_services,$scope.currentService,function(result){
-            $scope.showToast(result);
+            $scope.showToast($scope.getResultMessage(result));
         });
     };
 

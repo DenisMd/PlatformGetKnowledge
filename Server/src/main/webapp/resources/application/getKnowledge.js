@@ -174,10 +174,10 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
         });
     };
 
-    $scope.showConfirmDialog = function(ev,title,ariaLabel,okBtn,cancelBtn,callback) {
+    $scope.showConfirmDialog = function(ev,title,content,ariaLabel,okBtn,cancelBtn,callback) {
         var confirm = $mdDialog.confirm()
             .title(title)
-            .textContent()
+            .textContent(content)
             .targetEvent(ev)
             .ariaLabel(ariaLabel)
             .ok(okBtn ? okBtn : $scope.translate("ok"))
