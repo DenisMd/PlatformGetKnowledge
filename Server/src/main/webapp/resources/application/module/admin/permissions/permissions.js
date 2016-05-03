@@ -83,7 +83,7 @@ model.controller("permissionsCtrl", function ($scope, applicationService, classN
     permissionList();
 
     $scope.updatePermission = function() {
-        applicationService.update($scope,"updateResult",className.permissions,$scope.currentPermission,function(result){
+        applicationService.update($scope,"",className.permissions,$scope.currentPermission,function(result){
             $scope.showToast($scope.getResultMessage(result));
         });
     };

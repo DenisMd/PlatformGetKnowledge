@@ -1,5 +1,87 @@
 model.controller("rolesCtrl", function ($scope, applicationService, className,$mdDialog) {
 
+    function roleList() {
+        $scope.selectorData.list = [];
+        applicationService.list($scope, "roles", className.roles,function (item) {
+            $scope.selectorData.list.push(item);
+        });
+    }
+
+    $scope.selectorData = {
+        list        : [],
+        tableName   :   "roles_title",
+        filters      : [
+            {
+                title : "name",
+                type  : "text",
+                field : "roleName",
+                default : true
+            }
+        ],
+        headerNames : [
+            {
+                name : "id",
+                orderBy : true
+            },
+            {
+                name : "roleName",
+                title : "name",
+                orderBy : true
+            },
+            {
+                name : "note",
+                title : "permission_note"
+            }
+        ],
+        selectItemCallback : function (item) {
+            $scope.currentPermission = item;
+
+            applicationService.action($scope,"permissionUsers",className.permissions,"getUsersByPermission",{
+                permissionId : item.id
+            });
+
+            applicationService.action($scope,"permissionRoles",className.permissions,"getRolesByPermission",{
+                permissionId : item.id
+            });
+        },
+        actions : [
+            {
+                icon : "fa-plus",
+                color : "#46BE28",
+                tooltip : "permission_create_permission",
+                actionCallback : function (ev){
+                    $scope.showDialog(ev,$scope,"createPermission.html",function(answer){
+                        applicationService.create($scope,"createPermissionResult", className.permissions,answer,function(result){
+                            $scope.showToast($scope.getResultMessage(result));
+                            permissionList();
+                        });
+                    });
+                }
+            }
+        ],
+        deleteOptions : {
+            deleteCallback : function (ev,item) {
+                $scope.showConfirmDialog(
+                    ev,
+                    $scope.translate("permission_delete_message") + " " + item.permissionName,
+                    $scope.translate("permission_delete_content_message"),
+                    'Delete permission',
+                    $scope.translate("delete"),
+                    $scope.translate("cancel"),
+                    function () {
+                        applicationService.remove($scope, "", className.permissions, item.id, function (result) {
+                            $scope.showToast($scope.getResultMessage(result));
+                            permissionList();
+                        });
+                    }
+                )
+            },
+            deleteTitle : "permission_delete_permission"
+        }
+    };
+
+    roleList();
+
     $scope.setCurrentItem = function (item) {
         $scope.currentRole = item;
         $scope.showAutoCompleteForRight = false;
@@ -88,5 +170,5 @@ model.controller("rolesCtrl", function ($scope, applicationService, className,$m
         }
     };
 
-    applicationService.list($scope, "roles", className.roles);
+
 });

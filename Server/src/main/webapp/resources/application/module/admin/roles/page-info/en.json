@@ -3,11 +3,11 @@
     "role" : "Role",
     "roles_title" : "User roles",
     "role_note" : "Note",
-    "role_updateRole" : "Update role",
-    "role_createRole" : "Create role",
-    "role_deleteRole" : "Delete role",
-    "role_deleteContentMessage" : "Delete is impossible if exist reference on user",
-    "role_addNewPermission" : "Add new permission",
-    "role_removePermission" : "Remove permission"
+    "role_update_role" : "Update role",
+    "role_create_role" : "Create role",
+    "role_delete_role" : "Delete role",
+    "role_delete_content_message" : "Delete is impossible if exist reference on user",
+    "role_add_new_permission" : "Add new permission",
+    "role_remove_permission" : "Remove permission"
   }
 }

@@ -1,42 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet" type="text/css" href="/resources/css/admin.css">
+<link rel="stylesheet" href="/resources/css/workflow/workflow.css">
 
-<div class="panel panel-default">
-    <div class="panel-body">
-        <span class="panel-item fa fa-3x fa-plus create" tooltip-placement="bottom"
-              uib-tooltip="{{translate('role_createRole')}}" ng-click="showAdvanced($event)">
-        </span>
-        <span class="panel-item fa fa-3x fa-minus delete" tooltip-placement="bottom"
-              uib-tooltip="{{translate('role_deleteRole')}}" ng-click="showDeleteDialog($event)" ng-if="currentRole != null">
-        </span>
-    </div>
-</div>
-
-<div class="table-selector">
-    <table class="table table-hover ">
-        <caption>{{translate("roles_title")}}</caption>
-        <thead>
-        <tr>
-            <th ng-click="setOrder('id')">
-                {{translate("id")}}
-            </th>
-            <th ng-click="setOrder('name')">
-                {{translate("name")}}
-            </th>
-            <th>
-                {{translate("role_note")}}
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="role in roles | orderBy:order" class="selected-row"
-            ng-click="setCurrentItem(role)">
-            <td>{{role.id}}</td>
-            <td>{{role.roleName}}</td>
-            <td>{{role.note}}</td>
-        </tr>
-        </tbody>
-    </table>
+<div class="selector-zone">
+    <module-template name="selectors/staticSelector" data="selectorData"></module-template>
 </div>
 
 <md-content>
@@ -50,16 +16,16 @@
                     <label for="note">{{translate("role_note")}}:</label>
                     <textarea class="form-control" rows="5" id="note" ng-model="currentRole.note"></textarea>
                 </div>
-                <md-button class="md-raised md-primary" ng-click="updateRole()" ng-disabled="!currentRole">{{translate("role_updateRole")}}</md-button>
+                <md-button class="md-raised md-primary" ng-click="updateRole()" ng-disabled="!currentRole">{{translate("role_update_role")}}</md-button>
                 </p>
             </md-content>
         </md-tab>
         <md-tab label="{{translate('permissions')}}" ng-if="currentRole != null">
             <md-content>
                 <p>
-                    <a href="" ng-click="addNewPermission()">{{translate("role_addNewPermission")}}</a>
+                    <a href="" ng-click="addNewPermission()">{{translate("role_add_new_permission")}}</a>
                      |
-                    <a href="" ng-click="showDeleteColumn = !showDeleteColumn;">{{translate("role_removePermission")}}</a>
+                    <a href="" ng-click="showDeleteColumn = !showDeleteColumn;">{{translate("role_remove_permission")}}</a>
                 </p>
                 <div ng-show="showAutoCompleteForRight">
                     <module-template data="permissionsData" name="inputs/select"></module-template>
@@ -80,7 +46,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <md-button class="md-raised md-primary" ng-click="updateRole()" ng-disabled="!currentRole">{{translate("role_updateRole")}}</md-button>
+                <md-button class="md-raised md-primary" ng-click="updateRole()" ng-disabled="!currentRole">{{translate("role_update_role")}}</md-button>
             </md-content>
         </md-tab>
     </md-tabs>
@@ -92,7 +58,7 @@
         <form>
             <md-toolbar>
                 <div class="md-toolbar-tools">
-                    <h2>{{parentScope.translate("role_createRole")}}</h2>
+                    <h2>{{parentScope.translate("role_create_role")}}</h2>
                     <span flex></span>
                     <md-button class="md-icon-button" ng-click="cancel()">
                         <md-icon md-svg-src="resources/image/svg/close.svg" aria-label="Close dialog"></md-icon>

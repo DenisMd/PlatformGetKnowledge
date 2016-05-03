@@ -3,11 +3,11 @@
     "role" : "Роль",
     "roles_title" : "Роли пользователя",
     "role_note" : "Описание",
-    "role_updateRole" : "Обновить роль",
-    "role_createRole" : "Создать роль",
-    "role_deleteRole" : "Удалить роль",
-    "role_deleteContentMessage" : "Удаление возможно если нету ссылкок на пользоватилей",
-    "role_addNewPermission" : "Добавить новое право",
-    "role_removePermission" : "Удалить право"
+    "role_update_role" : "Обновить роль",
+    "role_create_role" : "Создать роль",
+    "role_delete_role" : "Удалить роль",
+    "role_delete_content_message" : "Удаление возможно если нету ссылкок на пользоватилей",
+    "role_add_new_permission" : "Добавить новое право",
+    "role_remove_permission" : "Удалить право"
   }
 }
