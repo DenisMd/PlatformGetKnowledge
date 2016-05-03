@@ -112,6 +112,8 @@
     "first_name"          : "First name",
     "last_name"           : "Last name",
     "search_for"          : "Search in ...",
+    "add_param"           : "Add parameter",
+    "remove_param"        : "Remove parameter",
 
     "video1_title"  : "Почему getKnowlege() ?",
     "video2_title"  : "Что значит быть программистом сегодня?",

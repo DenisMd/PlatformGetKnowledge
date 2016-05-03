@@ -7,8 +7,11 @@
                 <div ng-repeat="element in filterRequest" class="current-filter-expression">
                     <div class="filter-part">
                         {{element.field.info.name}} {{element.oper.info.symbol}}
-                        <span ng-if="element.field.info.type === 'dateTime'">{{element.param.info.values[0] | date:'medium'}}</span>
-                        <span ng-if="element.field.info.type !== 'dateTime'">{{element.param.info.values[0]}}</span>
+                        <span ng-if="!typeWithMultiplyParams(element.oper.info.name)">
+                            <span ng-if="element.field.info.type === 'dateTime'">{{element.param.info.values[0] | date:'medium'}}</span>
+                            <span ng-if="element.field.info.type !== 'dateTime'">{{element.param.info.values[0]}}</span>
+                        </span>
+
 
                         <span ng-if="typeWithMultiplyParams(element.oper.info.name)"> ,
                             <span ng-if="element.field.info.type == 'dateTime'">{{element.param.info.values[1] |date:'medium'}}</span>
@@ -25,8 +28,8 @@
                 </div>
             </div><!-- /.modal-header -->
             <div class="modal-body modal-find">
-                <div class="filter-body">
-                    <div class="col-lg-8 left-block">
+                <div class="filter-body" layout="row">
+                    <div flex="70">
                         <table class="table table-hover">
                             <thead>
                             <tr>
@@ -45,7 +48,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-lg-4">
+                    <div flex="30"  layout-margin ng-scrollbars ng-scrollbars-config="selectScrollConfig">
                         <div ng-if="currentFilterExpression.field && !isParamsInput"
                              ng-switch="currentFilterExpression.field.info.type">
                             <div ng-switch-when="text">
@@ -92,16 +95,31 @@
                         <div ng-if="isParamsInput">
                             <div ng-switch="currentFilterExpression.field.info.type">
                                 <div ng-switch-when="text">
-                                    <div class="form-group">
-                                        <label for="text-param">{{translate("parameter")}}</label>
-                                        <input type="text" class="form-control" id="text-param" ng-model="params">
+                                    <div ng-if="selectedOperation.value.name === 'in'" ng-init="inParams = [{}]">
+                                        <a href="" ng-click="inParams.push({})">{{translate("add_param")}}</a>
+                                        <div class="form-group" ng-repeat="inParam in inParams" layout="row"  layout-align="center center">
+                                            <input type="text" class="form-control" ng-model="inParam.text" placeholder="{{translate('parameter') + ' ' + ($index+1)}}">
+                                            <span flex="10" class="text-center" ng-if="inParams.length > 1"><i class="fa fa-times" aria-hidden="true" ng-click="inParams.splice($index,1)"></i></span>
+                                        </div>
+                                        <button class="btn btn-default" ng-click="backToOperation()">
+                                            {{translate("back")}}
+                                        </button>
+                                        <button class="btn btn-primary" ng-click="createFilterExpressionFromArray(inParams)">
+                                            {{translate("add")}}
+                                        </button>
                                     </div>
-                                    <button class="btn btn-default" ng-click="backToOperation()">
-                                        {{translate("back")}}
-                                    </button>
-                                    <button class="btn btn-primary" ng-click="createFilterExpression(params)"  ng-disabled="params === undefined">
-                                        {{translate("add")}}
-                                    </button>
+                                    <div ng-if="selectedOperation.value.name !== 'in'">
+                                        <div class="form-group">
+                                            <label for="text-param">{{translate("parameter")}}</label>
+                                            <input type="text" class="form-control" id="text-param" ng-model="params">
+                                        </div>
+                                        <button class="btn btn-default" ng-click="backToOperation()">
+                                            {{translate("back")}}
+                                        </button>
+                                        <button class="btn btn-primary" ng-click="createFilterExpression(params)"  ng-disabled="params === undefined">
+                                            {{translate("add")}}
+                                        </button>
+                                    </div>
                                 </div>
                                 <div ng-switch-when="number">
                                     <div ng-if="selectedOperation.value.name === 'between'">
@@ -122,7 +140,20 @@
                                             {{translate("add")}}
                                         </button>
                                     </div>
-                                    <div ng-if="selectedOperation.value.name !== 'between'">
+                                    <div ng-if="selectedOperation.value.name === 'in'" ng-init="inParams = [{}]">
+                                        <a href="" ng-click="inParams.push({})">{{translate("add_param")}}</a>
+                                        <div class="form-group" ng-repeat="inParam in inParams" layout="row"  layout-align="center center">
+                                            <input type="number" class="form-control" ng-model="inParam.text" placeholder="{{translate('parameter') + ' ' + ($index+1)}}">
+                                            <span flex="10" class="text-center" ng-if="inParams.length > 1"><i class="fa fa-times" aria-hidden="true" ng-click="inParams.splice($index,1)"></i></span>
+                                        </div>
+                                        <button class="btn btn-default" ng-click="backToOperation()">
+                                            {{translate("back")}}
+                                        </button>
+                                        <button class="btn btn-primary" ng-click="createFilterExpressionFromArray(inParams)">
+                                            {{translate("add")}}
+                                        </button>
+                                    </div>
+                                    <div ng-if="selectedOperation.value.name !== 'between' && selectedOperation.value.name !== 'in'">
                                         <div class="form-group">
                                             <label for="number-param">{{translate("number")}}</label>
                                             <input type="number" class="form-control" id="number-param"
@@ -167,22 +198,44 @@
                                     </div>
                                 </div>
                                 <div ng-switch-when="enum">
-                                    <div class="form-group">
-                                        <md-input-container>
-                                            <label>{{translate("parameter")}}</label>
-                                            <md-select ng-model="params">
-                                                <md-option ng-repeat="constant in currentFilterExpression.field.info.constants" value="{{constant}}">
-                                                    {{constant}}
-                                                </md-option>
-                                            </md-select>
-                                        </md-input-container>
+                                    <div ng-if="selectedOperation.value.name === 'in'" ng-init="inParams = [{}]">
+                                        <a href="" ng-click="inParams.push({})">{{translate("add_param")}}</a>
+                                        <div class="form-group" ng-repeat="inParam in inParams" layout="row" layout-align="center center">
+                                            <md-input-container>
+                                                <label>{{translate("parameter")}}</label>
+                                                <md-select ng-model="inParam.text">
+                                                    <md-option ng-repeat="constant in currentFilterExpression.field.info.constants" value="{{constant}}">
+                                                        {{constant}}
+                                                    </md-option>
+                                                </md-select>
+                                            </md-input-container>
+                                            <span flex="10" class="text-center" ng-if="inParams.length > 1"><i class="fa fa-times" aria-hidden="true" ng-click="inParams.splice($index,1)"></i></span>
+                                        </div>
+                                        <button class="btn btn-default" ng-click="backToOperation()">
+                                            {{translate("back")}}
+                                        </button>
+                                        <button class="btn btn-primary" ng-click="createFilterExpressionFromArray(inParams)">
+                                            {{translate("add")}}
+                                        </button>
                                     </div>
-                                    <button class="btn btn-default" ng-click="backToOperation()">
-                                        {{translate("back")}}
-                                    </button>
-                                    <button class="btn btn-primary" ng-click="createFilterExpression(params)"  ng-disabled="params === undefined">
-                                        {{translate("add")}}
-                                    </button>
+                                    <div ng-if="selectedOperation.value.name !== 'in'">
+                                        <div class="form-group">
+                                            <md-input-container>
+                                                <label>{{translate("parameter")}}</label>
+                                                <md-select ng-model="params">
+                                                    <md-option ng-repeat="constant in currentFilterExpression.field.info.constants" value="{{constant}}">
+                                                        {{constant}}
+                                                    </md-option>
+                                                </md-select>
+                                            </md-input-container>
+                                        </div>
+                                        <button class="btn btn-default" ng-click="backToOperation()">
+                                            {{translate("back")}}
+                                        </button>
+                                        <button class="btn btn-primary" ng-click="createFilterExpression(params)"  ng-disabled="params === undefined">
+                                            {{translate("add")}}
+                                        </button>
+                                    </div>
                                 </div>
                                 <div ng-switch-when="check_box" ng-init="params = false">
                                     <md-switch ng-model="params" aria-label="Switch params">

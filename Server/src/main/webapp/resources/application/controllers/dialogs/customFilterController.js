@@ -149,6 +149,21 @@ model.controller("customFilterController",function($scope,customFilterService){
         $scope.currentFilterExpression = new filterExpression(null,null,null);
         $scope.isParamsInput = false;
     };
+    
+    $scope.createFilterExpressionFromArray = function (params) {
+        var tempArr = [];
+
+        params.forEach(function (item) {
+            tempArr.push(item.text);
+        });
+
+        $scope.currentFilterExpression.param = new filterItem(TYPES.Parameter,{
+            values : tempArr
+        });
+        $scope.filterRequest.push($scope.currentFilterExpression);
+        $scope.currentFilterExpression = new filterExpression(null,null,null);
+        $scope.isParamsInput = false;
+    };
 
     $scope.createDateExpression = function() {
         var paramValues = [$scope.dateParam1];
@@ -194,7 +209,7 @@ model.controller("customFilterController",function($scope,customFilterService){
     };
 
     $scope.typeWithMultiplyParams = function (type) {
-        if (type === "between") {
+        if (type === "between" || type === "in") {
             return true;
         }
         
@@ -229,4 +244,6 @@ model.controller("customFilterController",function($scope,customFilterService){
             }
         }
     };
+
+    $scope.selectScrollConfig = angular.merge({setHeight: 440}, $scope.modalScrollConfig);
 });
