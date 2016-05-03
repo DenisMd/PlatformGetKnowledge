@@ -201,7 +201,7 @@
                                     <div ng-if="selectedOperation.value.name === 'in'" ng-init="inParams = [{}]">
                                         <a href="" ng-click="inParams.push({})">{{translate("add_param")}}</a>
                                         <div class="form-group" ng-repeat="inParam in inParams" layout="row" layout-align="center center">
-                                            <md-input-container>
+                                            <md-input-container flex>
                                                 <label>{{translate("parameter")}}</label>
                                                 <md-select ng-model="inParam.text">
                                                     <md-option ng-repeat="constant in currentFilterExpression.field.info.constants" value="{{constant}}">
