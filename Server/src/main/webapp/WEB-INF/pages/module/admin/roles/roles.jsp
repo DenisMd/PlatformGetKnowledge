@@ -28,19 +28,19 @@
                     <a href="" ng-click="showDeleteColumn = !showDeleteColumn;">{{translate("role_remove_permission")}}</a>
                 </p>
                 <div ng-show="showAutoCompleteForRight">
-                    <module-template data="permissionsData" name="inputs/select"></module-template>
+                    <module-template data="permissionsData" name="inputs/list"></module-template>
                 </div>
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th ng-show="showDeleteColumn">{{translate("role_removePermission")}}</th>
+                            <th ng-show="showDeleteColumn">{{translate("role_remove_permission")}}</th>
                             <th>{{translate("id")}}</th>
                             <th>{{translate("name")}}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="permission in currentRole.permissions">
-                            <td ng-show="showDeleteColumn"><span class="fa fa-minus delete" ng-click="removePermission(permission.id)"></span></td>
+                            <td ng-show="showDeleteColumn"><span class="fa fa-times remove-icon" ng-click="removePermission(permission.id)"></span></td>
                             <td>{{permission.id}}</td>
                             <td>{{permission.permissionName}}</td>
                         </tr>
