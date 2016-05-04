@@ -104,16 +104,16 @@ model.controller("clientSelectorController" , function ($scope , customFilterSer
                 case  "like" : 
                     result = item[filterItem.field.info.name].like(filterItem.param.info.values[0]);
                     break;
-                case "more" :
+                case "great_than" :
                     result = item[filterItem.field.info.name] > filterItem.param.info.values[0];
                     break;
-                case "more_or_equal" :
+                case "great_than_or_equal_to" :
                     result = item[filterItem.field.info.name] >= filterItem.param.info.values[0];
                     break;
-                case "less" :
+                case "less_than" :
                     result = item[filterItem.field.info.name] < filterItem.param.info.values[0];
                     break;
-                case "less_or_equal" :
+                case "less_than_or_equal" :
                     result = item[filterItem.field.info.name] <= filterItem.param.info.values[0];
                     break;
                 case "between" :

@@ -438,6 +438,20 @@ public class DataController {
     }
 
 
+    //Формат для фильтров
+    //{
+    //  order : [{route : Asc , field : name1} , {route : Desc , field : name2}],
+    //  filtersInfo : {
+    //      logicalExpression : "and/or",
+    //      filters : [
+    //          {
+    //              name : "equals",
+    //              field : "fieldName" -- user.role.roleName
+    //              type : "" number/text/logical/date/enum
+    //              values : ["aaa", "bbb"]
+    //          }]
+    //  }
+    // }
     @RequestMapping(value = "/filter" , method = RequestMethod.POST)
     public @ResponseBody String filterMethod(@RequestParam("properties") String properties, @RequestParam("className") String className, Principal principal) throws PlatformException {
         try {
@@ -468,41 +482,57 @@ public class DataController {
                 }
             }
 
-//            searchText : {fields : [{fieldName1 : value1} , {fieldName2 : value2}] , or : true}
-            if (data.containsKey("searchText")) {
-                HashMap<String, Object> searchText = (HashMap<String, Object>) data.get("searchText");
-                List<HashMap<String, Object>> fields = (List<HashMap<String, Object>>) searchText.get("fields");
-                String [] fieldNames = new String[fields.size()];
-                String [] fieldValues = new String[fields.size()];
-                int i = 0;
-                for (HashMap<String, Object> search : fields) {
-                    for (String field : search.keySet()) {
-                        fieldNames[i] = field;
-                        fieldValues[i] = (String) search.get(field);
+            if (data.containsKey("filtersInfo")) {
+                HashMap<String, Object> filtersInfo = (HashMap<String, Object>) data.get("filtersInfo");
+
+                // and/or
+                String logicalExpression = (String) filtersInfo.get("logicalExpression");
+                filterQuery.setLogicalExpression(logicalExpression);
+                filterCountQuery.setLogicalExpression(logicalExpression);
+
+                List<HashMap<String, Object>> filters = (List<HashMap<String, Object>>) filtersInfo.get("filters");
+
+                for (HashMap<String, Object> filter : filters) {
+                    List<String> values     = (List<String>) filter.get("values");
+                    String fieldName        = (String) filter.get("field");
+                    String type             = (String) filter.get("type");
+                    String name             = (String)filter.get("name");
+
+                    switch (name) {
+                        case "equals" :
+                            filterQuery.equal(fieldName,values.get(0),type);
+                            filterCountQuery.equal(fieldName,values.get(0),type);
+                            break;
+                        case "like" :
+                            filterQuery.like(fieldName, values.get(0));
+                            filterCountQuery.like(fieldName, values.get(0));
+                            break;
+                        case "greatThan" :
+                            filterQuery.greaterThan(fieldName,values.get(0),type);
+                            filterCountQuery.greaterThan(fieldName,values.get(0),type);
+                            break;
+                        case "greaterThanOrEqualTo":
+                            filterQuery.greaterThanOrEqualTo(fieldName, values.get(0), type);
+                            filterCountQuery.greaterThanOrEqualTo(fieldName,values.get(0),type);
+                            break;
+                        case "lessThan":
+                            filterQuery.lessThan(fieldName, values.get(0), type);
+                            filterCountQuery.lessThan(fieldName, values.get(0), type);
+                            break;
+                        case "lessThanOrEqualTo":
+                            filterQuery.lessThanOrEqualTo(fieldName, values.get(0), type);
+                            filterCountQuery.lessThanOrEqualTo(fieldName, values.get(0), type);
+                            break;
+                        case "between":
+                            filterQuery.between(fieldName, values, type);
+                            filterCountQuery.between(fieldName, values, type);
+                            break;
+                        case "in":
+                            filterQuery.in(fieldName,values,type);
+                            filterCountQuery.in(fieldName,values,type);
+                            break;
+                        default: new ParseException("Error filter type : " + name, trace , TraceLevel.Event);
                     }
-                    i++;
-                }
-                filterQuery.searchText(fieldNames,fieldValues, searchText.containsKey("or"));
-                filterCountQuery.searchText(fieldNames,fieldValues, searchText.containsKey("or"));
-            }
-
-            //in : {fieldName : "name" , values : ["value1" , "value2"]}
-            if (data.containsKey("in")) {
-                HashMap<String , Object> in = (HashMap<String, Object>) data.get("in");
-                String fieldName = (String) in.get("fieldName");
-                List<String> list = (List<String>) in.get("values");
-                filterQuery.in(fieldName , list);
-                filterCountQuery.in(fieldName , list);
-            }
-
-            //equal : [{fieldName : "name" , value : "value"}]
-            if (data.containsKey("equal")) {
-                List<HashMap<String , Object>> equal = (List<HashMap<String, Object>>) data.get("equal");
-                for (HashMap<String , Object> equalElement : equal) {
-                    String fieldName = (String) equalElement.get("fieldName");
-                    String value = (String) equalElement.get("value");
-                    filterQuery.equal(fieldName, value);
-                    filterCountQuery.equal(fieldName, value);
                 }
             }
 

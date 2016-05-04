@@ -6,9 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class FilterQuery<T> {
     //Задание свойст для фильтров
@@ -19,6 +17,7 @@ public class FilterQuery<T> {
     protected Predicate previousPredicate = null;
     protected EntityManager entityManager;
     protected Class<T>  pClassEntity = null;
+    private  boolean isConj = false;
 
     public FilterQuery(){
 
@@ -29,29 +28,21 @@ public class FilterQuery<T> {
         criteriaQuery = criteriaBuilder.createQuery(classEntity);
         root = criteriaQuery.from(classEntity);
         orders = new ArrayList<>();
-        previousPredicate = criteriaBuilder.conjunction();
         this.entityManager = entityManager;
         pClassEntity = classEntity;
     }
 
-    private Path parseField(String field) {
-        Path path = null;
-
-        if (field.contains(".")) {
-
-            String [] split = field.split("\\.");
-            Join join = root.join(split[0],JoinType.INNER);
-
-            for (int i =1; i < split.length-1; i++) {
-                join = join.join(split[i],JoinType.INNER);
-            }
-
-            path = join.get(split[split.length-1]);
-
-        } else {
-            path = root.get(field);
+    public void setLogicalExpression(String logicalExpression) {
+        switch (logicalExpression) {
+            case "and" :
+                previousPredicate = criteriaBuilder.conjunction();
+                isConj = true;
+                break;
+            case "or" :
+                previousPredicate = criteriaBuilder.disjunction();
+                isConj = false;
+                break;
         }
-        return path;
     }
 
     public void setOrder (String orderField, OrderRoute order) {
@@ -63,125 +54,95 @@ public class FilterQuery<T> {
         }
     }
 
-    public void searchText (String [] field, String [] values, boolean or) {
-
-        List<Predicate> likes = new ArrayList<>();
-
-        for (int i =0; i < field.length; i++) {
-            Path path = parseField(field[i]);
-            likes.add(criteriaBuilder.like(path,"%"+values[i]+"%"));
-        }
-
-        Predicate result = null;
-
-        if (likes.size() == 1) {
-            result = likes.get(0);
-        } else {
-            result = likes.get(0);
-            for (int i = 1; i < likes.size(); i++) {
-                if (or)
-                    result = criteriaBuilder.or(likes.get(i) , result);
-                else
-                    result = criteriaBuilder.and(likes.get(i) , result);
-            }
-        }
-
-        if (previousPredicate != null) {
-            result = criteriaBuilder.and(previousPredicate, result);
-        }
-
-        previousPredicate = result;
-    }
-
-    private Enum covertStringToEnum(String fieldName , String value) {
-        try {
-            if (fieldName.contains(".")) {
-                String [] split = fieldName.split("\\.");
-                Class type = pClassEntity.getDeclaredField(split[0]).getType();
-                for (int i=1; i < split.length;i++) {
-                    type = type.getClass().getDeclaredField(split[i]).getType();
-                }
-                return Enum.valueOf((Class<Enum>) type, value);
-            }
-            Enum result = Enum.valueOf((Class<Enum>) pClassEntity.getDeclaredField(fieldName).getType(), value);
-            return result;
-        } catch (NoSuchFieldException e) {
-            return null;
-        }
-    }
-
-    private boolean isEnum(String fieldName) {
-
-        try {
-            if (fieldName.contains(".")) {
-                String [] split = fieldName.split("\\.");
-                Class type = pClassEntity.getDeclaredField(split[0]).getType();
-                for (int i=1; i < split.length;i++) {
-                    type = type.getClass().getDeclaredField(split[i]).getType();
-                }
-                return type.isEnum();
-            }
-            Field result = pClassEntity.getDeclaredField(fieldName);
-            return result.getType().isEnum();
-        } catch (NoSuchFieldException e) {
-            return false;
-        }
-    }
-
-    public void in (String  field, List values) {
-
+    public void equal(String field, String value ,String type) {
         Path path = parseField(field);
 
-        if (isEnum(field)) {
-            List enumList = new ArrayList<>();
-            for (Object value : values) {
-                if (value == null || ((String)value).isEmpty()) {
-                    continue;
-                }
-                enumList.add(covertStringToEnum(field, (String) value));
-            }
-            if (enumList.isEmpty())
-                return;
-            values = enumList;
-        }
-
-        Predicate inP = path.in(values);
-
-        if (previousPredicate != null) {
-            inP = criteriaBuilder.and(previousPredicate, inP);
-        }
-
-        previousPredicate = inP;
-    }
-
-    public void betweenDates(String field, Date start, Date end) {
-        Path path = parseField(field);
-
-        Predicate result = criteriaBuilder.between(path,start,end);
-
-        if (previousPredicate != null)
-            result = criteriaBuilder.and(previousPredicate,result);
-
-        previousPredicate = result;
-    }
-
-    public void equal(String field, Object value) {
-        Path path = parseField(field);
-
-        if (isEnum(field)) {
-            if (value == null || ((String)value).isEmpty()) {
-                return;
-            }
-            value = covertStringToEnum(field, (String) value);
-        }
+        Object obj = convert(value,field,type);
 
         Predicate result = criteriaBuilder.equal(path,value);
 
-        if (previousPredicate != null)
-            result = criteriaBuilder.and(previousPredicate,result);
-
-        previousPredicate = result;
+        addPrevPredicate(result);
     }
+
+    public void like(String field, String value) {
+        Path path = parseField(field);
+
+        Predicate result = criteriaBuilder.like(path,value);
+
+        addPrevPredicate(result);
+    }
+
+    public void greaterThan(String field, String value ,String type) {
+        Path path = parseField(field);
+
+        Object obj = convert(value,field,type);
+
+        Predicate result = criteriaBuilder.greaterThan(path, value);
+
+        addPrevPredicate(result);
+    }
+
+    public void greaterThanOrEqualTo(String field, String value ,String type) {
+        Path path = parseField(field);
+
+        Object obj = convert(value,field,type);
+
+        Predicate result = criteriaBuilder.greaterThanOrEqualTo(path,value);
+
+        addPrevPredicate(result);
+    }
+
+    public void lessThan(String field, String value ,String type) {
+        Path path = parseField(field);
+
+        Object obj = convert(value,field,type);
+
+        Predicate result = criteriaBuilder.lessThan(path,value);
+
+        addPrevPredicate(result);
+    }
+
+    public void lessThanOrEqualTo(String field, String value ,String type) {
+        Path path = parseField(field);
+
+        Object obj = convert(value,field,type);
+
+        Predicate result = criteriaBuilder.lessThanOrEqualTo(path, value);
+
+        addPrevPredicate(result);
+    }
+
+    public void between(String field, List<String> values ,String type) {
+        Path path = parseField(field);
+
+        Comparable [] objs = new Comparable[2];
+        objs[0] = (Comparable) convert(values.get(0),field,type);
+        objs[1] = (Comparable) convert(values.get(1),field,type);
+
+        Predicate result = criteriaBuilder.between(path, objs[0], objs[1]);
+
+        addPrevPredicate(result);
+    }
+
+
+
+
+    public void in (String  field, List<String> values,String type) {
+
+        Path path = parseField(field);
+
+        List<Object> objects = new ArrayList<>();
+
+        for (String value : values) {
+            objects.add(convert(value,field,type));
+        }
+
+        Predicate result = path.in(values);
+
+        addPrevPredicate(result);
+    }
+
+
 
     public Query getQuery(int first , int max) {
 
@@ -203,5 +164,93 @@ public class FilterQuery<T> {
 
     public Root<T> getRoot() {
         return root;
+    }
+
+    private Enum convertStringToEnum(String fieldName , String value) {
+        try {
+            if (fieldName.contains(".")) {
+                String [] split = fieldName.split("\\.");
+                Class type = pClassEntity.getDeclaredField(split[0]).getType();
+                for (int i=1; i < split.length;i++) {
+                    type = type.getClass().getDeclaredField(split[i]).getType();
+                }
+                return Enum.valueOf((Class<Enum>) type, value);
+            }
+            Enum result = Enum.valueOf((Class<Enum>) pClassEntity.getDeclaredField(fieldName).getType(), value);
+            return result;
+        } catch (NoSuchFieldException e) {
+            return null;
+        }
+    }
+
+    private Class getType(String fieldName) {
+        try {
+            if (fieldName.contains(".")) {
+                String [] split = fieldName.split("\\.");
+                Class type = pClassEntity.getDeclaredField(split[0]).getType();
+                for (int i=1; i < split.length;i++) {
+                    type = type.getClass().getDeclaredField(split[i]).getType();
+                }
+                return type;
+            }
+            Field result = pClassEntity.getDeclaredField(fieldName);
+            return result.getType();
+        } catch (NoSuchFieldException e) {
+            return null;
+        }
+    }
+
+    private Object convert(String str,String fieldName,String type) {
+        Class clazz = getType(fieldName);
+        if (clazz == null) return str;
+
+        if (clazz.isEnum()) {
+            return convertStringToEnum(fieldName, str);
+        }
+
+        if (type.equals("date")) {
+            Calendar cal = GregorianCalendar.getInstance();
+            cal.setTimeInMillis(Long.parseLong(str));
+            return cal;
+        }
+
+        if (clazz.getName().equals("java.lang.Integer")) {
+            return Integer.parseInt(str);
+        } else if (clazz.getName().equals("java.lang.Long")){
+            return Long.parseLong(str);
+        }
+
+        return str;
+    }
+
+    private void addPrevPredicate(Predicate result) {
+        if (previousPredicate != null) {
+            if (isConj)
+                result = criteriaBuilder.and(previousPredicate, result);
+            else
+                result = criteriaBuilder.or(previousPredicate,result);
+        }
+
+        previousPredicate = result;
+    }
+
+    private Path parseField(String field) {
+        Path path = null;
+
+        if (field.contains(".")) {
+
+            String [] split = field.split("\\.");
+            Join join = root.join(split[0],JoinType.INNER);
+
+            for (int i =1; i < split.length-1; i++) {
+                join = join.join(split[i],JoinType.INNER);
+            }
+
+            path = join.get(split[split.length-1]);
+
+        } else {
+            path = root.get(field);
+        }
+        return path;
     }
 }

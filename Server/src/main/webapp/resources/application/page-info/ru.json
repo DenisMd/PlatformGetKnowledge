@@ -157,16 +157,16 @@
     "dateTime_field"      : "Дата/Время",
     "enum_field"          : "Перечесление",
 
-    "operation_equals"        : "Сравнение",
-    "operation_like"          : "Подобие",
-    "operation_more"          : "Больше",
-    "operation_less"          : "Меньше",
-    "operation_more_or_equal" : "Больше или равно",
-    "operation_less_or_equal" : "Меньше или равно",
-    "operation_between"       : "Между",
-    "operation_after"         : "После",
-    "operation_before"        : "До",
-    "operation_in"            : "Одно из ..."
+    "operation_equals"                  : "Сравнение",
+    "operation_like"                    : "Подобие",
+    "operation_great_than"              : "Больше",
+    "operation_less_than"               : "Меньше",
+    "operation_great_than_or_equal_to"  : "Больше или равно",
+    "operation_less_than_or_equal"      : "Меньше или равно",
+    "operation_between"                 : "Между",
+    "operation_after"                   : "После",
+    "operation_before"                  : "До",
+    "operation_in"                      : "Одно из ..."
 
   }
 }
