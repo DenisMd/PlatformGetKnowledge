@@ -1,4 +1,4 @@
-model.controller("rolesCtrl", function ($scope, applicationService, className,$mdDialog) {
+model.controller("rolesCtrl", function ($scope, applicationService, className) {
 
     function roleList() {
         $scope.selectorData.list = [];

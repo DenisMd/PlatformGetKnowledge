@@ -65,7 +65,8 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             "program" : "com.getknowledge.modules.programs.Program",
             "course" : "com.getknowledge.modules.courses.Course",
             "tutorial" : "com.getknowledge.modules.courses.tutorial.Tutorial",
-            "news" : "com.getknowledge.modules.news.News"
+            "news" : "com.getknowledge.modules.news.News",
+            "currency" : "com.getknowledge.modules.dictionaries.currency.Currency"
          };
     })
     .factory('moduleParam',function(){

@@ -1,0 +1,9 @@
+{
+  "text" : {
+    "currency_info"       : "Information about currency",
+    "currency_char_code"  : "Character code",
+    "currency_is_base"    : "Is base currency",
+    "currency_value"      : "Value in relation base currency",
+    "currency_update"     : "Update information from central bank"
+  }
+}

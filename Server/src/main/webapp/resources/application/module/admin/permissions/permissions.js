@@ -1,4 +1,4 @@
-model.controller("permissionsCtrl", function ($scope, applicationService, className, $mdDialog) {//Данные для статического селектара
+model.controller("permissionsCtrl", function ($scope, applicationService, className) {//Данные для статического селектара
 
     function permissionList() {
         $scope.selectorData.list = [];
