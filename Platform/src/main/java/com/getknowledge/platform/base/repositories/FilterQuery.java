@@ -28,6 +28,7 @@ public class FilterQuery<T> {
         criteriaQuery = criteriaBuilder.createQuery(classEntity);
         root = criteriaQuery.from(classEntity);
         orders = new ArrayList<>();
+        previousPredicate = criteriaBuilder.conjunction();
         this.entityManager = entityManager;
         pClassEntity = classEntity;
     }

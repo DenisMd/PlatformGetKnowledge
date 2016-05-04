@@ -8,6 +8,7 @@ public class FilterCountQuery<T> extends FilterQuery<T> {
         criteriaBuilder = entityManager.getCriteriaBuilder();
         criteriaQuery = criteriaBuilder.createQuery(Long.class);
         root = criteriaQuery.from(classEntity);
+        previousPredicate = criteriaBuilder.conjunction();
         this.entityManager = entityManager;
         pClassEntity = classEntity;
     }
