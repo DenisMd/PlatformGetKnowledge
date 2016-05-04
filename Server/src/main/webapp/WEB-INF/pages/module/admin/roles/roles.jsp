@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="/resources/css/workflow/workflow.css">
 
 <div class="selector-zone">
-    <module-template name="selectors/staticSelector" data="selectorData"></module-template>
+    <module-template name="selectors/clientSelector" data="selectorData"></module-template>
 </div>
 
 <md-content>

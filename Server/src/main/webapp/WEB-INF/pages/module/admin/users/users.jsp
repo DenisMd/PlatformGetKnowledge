@@ -1,62 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet" type="text/css" href="/resources/css/admin.css">
+<link rel="stylesheet" href="/resources/css/workflow/workflow.css">
 
-<div class="panel panel-default">
-    <div class="panel-body">
-        <span class="panel-item fa fa-3x fa-minus delete" tooltip-placement="bottom"
-              uib-tooltip="{{translate('user_remove')}}" ng-click="showDeleteDialog($event)" ng-if="currentUser != null">
-        </span>
-        <md-input-container>
-            <label>{{translate("user_findUser")}}</label>
-            <input ng-model="searchTextField">
-
-        </md-input-container>
-        <md-button ng-click="searchUsers(searchTextField)" class="md-raised">{{translate("search")}}</md-button>
-    </div>
+<div class="selector-zone">
+    <module-template name="selectors/serverSelector" data="selectorData"></module-template>
 </div>
 
-<div class="table-selector">
-    <table class="table table-hover ">
-        <caption>{{translate("user_title")}} : {{countUsers + ' ' + translate("ofRecords")}}</caption>
-        <thead>
-        <tr>
-            <th ng-click="setUserOrder('id')">
-                {{translate("id")}}
-            </th>
-            <th>
-                {{translate("user_role")}}
-            </th>
-            <th ng-click="setUserOrder('user.login')">
-                {{translate("email")}}
-            </th>
-            <th>
-                {{translate("name")}}
-            </th>
-            <th ng-click="setUserOrder('user.createDate')">
-                {{translate("user_createDate")}}
-            </th>
-            <th ng-click="setUserOrder('user.enabled')">
-                {{translate("user_enabled")}}
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="userInfo in users" ng-click="setCurrentItem(userInfo)">
-            <td>{{userInfo.id}}</td>
-            <td>{{userInfo.user.role.roleName}}</td>
-            <td>{{userInfo.user.login}}</td>
-            <td>{{userInfo.lastName + ' ' + userInfo.firstName}}</td>
-            <td>{{userInfo.user.createDate | date:'medium'}}</td>
-            <td>{{userInfo.user.enabled}}</td>
-        </tr>
-        <tr>
-            <td colspan="6" ng-click="loadMore()" class="loadMore">
-                {{translate("user_loadMore")}}
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
 
 <md-content>
     <md-tabs md-dynamic-height md-border-bottom>

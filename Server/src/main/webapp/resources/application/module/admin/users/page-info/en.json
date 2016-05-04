@@ -1,17 +1,19 @@
 {
   "text" : {
     "user_title": "Users",
-    "createDate" : "Create date",
     "user" : "User",
+    "user_create_date" : "Register date",
     "user_enabled" : "Enabled",
-    "user_loadMore" : "Load more users...",
+    "user_blocked" : "Blocked",
+    "user_load_more" : "Load more users...",
     "user_role" : "Role",
-    "user_findUser" : "Find user",
+    "user_find_user" : "Find user",
     "user_update" : "Update user",
     "user_remove" : "Remove user",
     "user_block" : "Block user",
-    "user_addNewPermission" : "Add new permission",
-    "user_removePermission" : "Remove permission",
-    "user_updatePermissions" : "Update permissions"
+    "user_add_new_permission" : "Add new permission",
+    "user_remove_permission" : "Remove permission",
+    "user_update_permissions" : "Update permissions",
+    "user_block" : "Block user"
   }
 }

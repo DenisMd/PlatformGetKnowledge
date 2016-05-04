@@ -3,81 +3,126 @@ model.controller("usersCtrl", function ($scope, applicationService, className,$m
     //иницилизация
     $scope.showAutoCompleteForRight = false;
     $scope.showDeleteColumn = false;
-    $scope.users = [];
 
-    applicationService.count($scope,"countUsers",className.userInfo);
+    $scope.selectorData = {
+        className   : className.userInfo,
+        tableName   :   "user_title",
+        loadMoreTitle : "user_load_more",
+        filters      : [
+            {
+                title : "email",
+                type  : "text",
+                field : "user.login",
+                default : true
+            }
+        ],
+        headerNames : [
+            {
+                name : "id",
+                orderBy : true
+            }, {
+                name : "user.role.roleName",
+                title : "user_role"
+            },
+            {
+                name : "user.login",
+                title : "email"
+            },
+            {
+                name : "fullName",
+                title : "name"
+            },{
+                name : "user.createDate",
+                title : "user_create_date",
+                filter : "date",
+                orderBy : true
+            },{
+                name : "user.enabled",
+                title : "user_enabled",
+                orderBy : true
+            },{
+                name : "user.blocked",
+                title : "user_blocked",
+                orderBy : true
+            }
+        ],
+        callBackForFilter : function(user) {
+            user.fullName = user.firstName + ' ' + user.lastName;
+        },
+        selectItemCallback : function (item) {
+            $scope.currentUser = item;
+            $scope.defaultRoleName = item.user.role.roleName;
+            $scope.showAutoCompleteForRight = false;
+            $scope.showDeleteColumn = false;
+        },
+        actions : [
+            {
+                icon : "fa-lock",
+                color : "#15206C",
+                tooltip : "user_block",
+                actionCallback : function (ev){
+                    $scope.showDialog(ev,$scope,"blockUserHtml.html",function(answer){
+                        //applicationService.create($scope,"", className.roles,answer,function(result){
+                        //    $scope.showToast($scope.getResultMessage(result));
+                        //    roleList();
+                        //});
+                    });
+                }
+            }
+        ]
+    };
+
     applicationService.list($scope,"listRoles",className.roles);
 
-    var filter = applicationService.createFilter(className.userInfo,0,10);
 
-    var addUsers = function(user){
-        $scope.users.push(user);
-    };
+    //var filter = applicationService.createFilter(className.userInfo,0,10);
+    //
+    //var addUsers = function(user){
+    //    $scope.users.push(user);
+    //};
+    //
+    //var doAction = function(){
+    //    applicationService.filterRequest($scope,"",filter,addUsers);
+    //};
+    //
+    //doAction();
 
-    var doAction = function(){
-        applicationService.filterRequest($scope,"",filter,addUsers);
-    };
+    //var reverse = false;
+    //$scope.setUserOrder = function(orderName) {
+    //    reverse = !reverse;
+    //
+    //    filter.clearOrder();
+    //    filter.setOrder(orderName,reverse);
+    //    filter.reload();
+    //    $scope.users = [];
+    //    doAction();
+    //};
 
-    doAction();
-
-    var reverse = false;
-    $scope.setUserOrder = function(orderName) {
-        reverse = !reverse;
-
-        filter.clearOrder();
-        filter.setOrder(orderName,reverse);
-        filter.reload();
-        $scope.users = [];
-        doAction();
-    };
-
-    $scope.searchUsers = function(text) {
-        if (text) {
-            var splitArray = text.split(".");
-            if (splitArray.length > 1) {
-                filter.createSearchText(false);
-                filter.addSearchField("firstName",splitArray[0]);
-                filter.addSearchField("lastName",splitArray[1]);
-            } else {
-                filter.createSearchText(true);
-                filter.addSearchField("firstName",text);
-                filter.addSearchField("user.login",text);
-                filter.addSearchField("lastName",text);
-            }
-        }
-        $scope.users = [];
-        filter.reload();
-        doAction();
-    };
-
-    $scope.showDeleteDialog = function(ev) {
-        var confirm = $mdDialog.confirm()
-            .title($scope.translate("user_remove") + " " + $scope.currentUser.user.login)
-            .textContent()
-            .targetEvent(ev)
-            .ariaLabel('Delete user')
-            .ok($scope.translate("delete"))
-            .cancel($scope.translate("cancel"));
-        $mdDialog.show(confirm).then(function() {
-            applicationService.remove($scope,"",className.userInfo,$scope.currentUser.id,function (result) {
-                $scope.showToast(result);
-                doAction();
-            });
-        });
-    };
+    //$scope.searchUsers = function(text) {
+    //    if (text) {
+    //        var splitArray = text.split(".");
+    //        if (splitArray.length > 1) {
+    //            filter.createSearchText(false);
+    //            filter.addSearchField("firstName",splitArray[0]);
+    //            filter.addSearchField("lastName",splitArray[1]);
+    //        } else {
+    //            filter.createSearchText(true);
+    //            filter.addSearchField("firstName",text);
+    //            filter.addSearchField("user.login",text);
+    //            filter.addSearchField("lastName",text);
+    //        }
+    //    }
+    //    $scope.users = [];
+    //    filter.reload();
+    //    doAction();
+    //};
 
 
-    $scope.setCurrentItem = function (item) {
-        $scope.currentUser = item;
-        $scope.defaultRoleName = item.user.role.roleName;
-        $scope.showAutoCompleteForRight = false;
-        $scope.showDeleteColumn = false;
-    };
 
-    $scope.loadMore = function () {
-        filter.increase(10);
-        doAction();
-    };
+    //$scope.loadMore = function () {
+    //    filter.increase(10);
+    //    doAction();
+    //};
 
     $scope.roleData = {
         "id" : "roles",

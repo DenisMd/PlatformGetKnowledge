@@ -1,8 +1,17 @@
-model.controller("staticSelectorController" , function ($scope , customFilterService) {
+model.controller("clientSelectorController" , function ($scope , customFilterService) {
 
     $scope.customFilterInfo;
 
     $scope.showDeleteColumn = false;
+
+    $scope.getItemByName = function(item,name) {
+        var splitArr = name.split(".");
+        var result = item[splitArr[0]];
+        for (var i=1; i < splitArr.length; i++) {
+            result = result[splitArr[i]];
+        }
+        return result;
+    };
 
     $scope.deleteAction = function () {
         $scope.showDeleteColumn = !$scope.showDeleteColumn;
