@@ -9,13 +9,6 @@
                 </md-tooltip>
             </span>
         </span>
-        <span class="filter-delete" ng-if="getData().deleteOptions">
-            <span class="fa fa-3x fa-minus"  ng-click="deleteAction()">
-                <md-tooltip>
-                    <span class="tooltip-text">{{translate(getData().deleteOptions.deleteTitle)}}</span>
-                </md-tooltip>
-            </span>
-        </span>
         <span class="filter-action">
             <span class="fa fa-3x fa-filter"  ng-click="openCustomFilter()">
                 <md-tooltip>
@@ -47,9 +40,6 @@
             <caption>{{translate(getData().tableName) + ' : ' + filterdList.length + ' ' + translate('of_records')}}</caption>
             <thead>
             <tr>
-                <th ng-show="showDeleteColumn">
-                    {{translate("delete")}}
-                </th>
                 <th ng-repeat="header in getData().headerNames" ng-click="setOrder(header)" ng-class="{'unsortable-column' : !header.orderBy}">
                     {{translate(header.title ? header.title : header.name)}}
                     <i class="fa fa-sort-desc" aria-hidden="true"   ng-show="header.name == orderItem && orderReverse"></i>
@@ -57,16 +47,20 @@
                 </th>
             </tr>
             </thead>
-            <tbody>
-            <tr ng-repeat="item in filterdList = (getData().list | filter:filterSearch | orderBy:orderItem:orderReverse)" class="selected-row" ng-click="getData().selectItemCallback(item)">
-                <td ng-show="showDeleteColumn" ng-click="getData().deleteOptions.deleteCallback($event,item)">
-                    <i class="fa fa-times filter-delete"></i>
-                </td>
-                <td ng-repeat="header in getData().headerNames">
-                    <span ng-if="header.filter === 'date'">{{getItemByName(item , header.name) | date:'medium'}}</span>
-                    <span ng-if="header.filter !== 'date'">{{getItemByName(item , header.name)}}</span>
-                </td>
-            </tr>
+            <tbody ng-repeat="item in filterdList = (getData().list | filter:filterSearch | orderBy:orderItem:orderReverse)" ng-init="item.hideColumnInfo = true">
+                <tr ng-if="!item.hideColumnInfo">
+                    <td colspan="{{getData().headerNames.length}}" style="background-color: #f5f5f5;">
+                        <div class="row-panel" ng-show="!item.hideColumnInfo">
+                            <i  ng-if="getData().deleteOptions" class="fa fa-times filter-delete" ng-click="getData().deleteOptions.deleteCallback($event,item)"></i>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="selected-row" ng-click="selectItem(item)">
+                    <td ng-repeat="header in getData().headerNames">
+                        <span ng-if="header.filter === 'date'">{{getItemByName(item , header.name) | date:'medium'}}</span>
+                        <span ng-if="header.filter !== 'date'">{{getItemByName(item , header.name)}}</span>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

@@ -219,6 +219,8 @@ public class FilterQuery<T> {
             return Integer.parseInt(str);
         } else if (clazz.getName().equals("java.lang.Long")){
             return Long.parseLong(str);
+        } else if (clazz.getName().equals("java.lang.Boolean")){
+            return Boolean.parseBoolean(str);
         }
 
         return str;

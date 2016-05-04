@@ -21,6 +21,17 @@
 }
 
 .filter-delete {
-    margin-right: 20px;
     color : #cd4142;
+}
+
+.row-panel {
+    -webkit-transition: max-height 2s ease;
+    -moz-transition: max-height 2s ease;
+    transition: max-height 2s ease;
+
+    max-height: 400px;
+}
+
+.row-panel.ng-hide {
+    max-height: 0;
 }

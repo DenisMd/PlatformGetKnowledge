@@ -3,6 +3,20 @@ model.controller("clientSelectorController" , function ($scope , customFilterSer
     $scope.customFilterInfo;
 
     $scope.showDeleteColumn = false;
+    
+    $scope.filterdList = [];
+
+    $scope.tableScroll = {
+        theme: 'dark-3',
+        setHeight: 400,
+        advanced: {
+            updateOnContentResize: true,
+            updateOnSelectorChange: true
+        }
+    };
+
+    $scope.orderItem = "";
+    $scope.orderReverse = false;
 
     $scope.getItemByName = function(item,name) {
         var splitArr = name.split(".");
@@ -17,17 +31,7 @@ model.controller("clientSelectorController" , function ($scope , customFilterSer
         $scope.showDeleteColumn = !$scope.showDeleteColumn;
     };
 
-    $scope.tableScroll = {
-        theme: 'dark-3',
-        setHeight: 400,
-        advanced: {
-            updateOnContentResize: true,
-            updateOnSelectorChange: true
-        }
-    };
-
-    $scope.orderItem = "";
-    $scope.orderReverse = false;
+    
     $scope.setOrder = function (header) {
         if (header.orderBy === true) {
             $scope.orderItem = header.name;
@@ -35,6 +39,10 @@ model.controller("clientSelectorController" , function ($scope , customFilterSer
         }
     };
 
+    $scope.selectItem = function (item) {
+        $scope.getData().selectItemCallback(item);
+        item.hideColumnInfo = !item.hideColumnInfo;
+    };
 
     $scope.filterSearch = function(item,index,allItems)
     {

@@ -36,8 +36,8 @@
                     <input type="{{filter.type}}" class="form-control" ng-model="filter.model" placeholder="{{translate(filter.title)}}">
                 </div>
             </div>
-
         </span>
+        <button class="btn btn-default" ng-click="doFilters()">{{translate("do_filter")}}</button>
     </div>
 
     <!--Модальное окно для показа пользовательских фильтров-->
@@ -68,7 +68,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="6" ng-click="loadMore()" class="loadMore">
+                    <td colspan="{{getData().headerNames.length}}" ng-click="loadMore()" class="loadMore">
                         {{translate(getData().loadMoreTitle)}}
                     </td>
                 </tr>
