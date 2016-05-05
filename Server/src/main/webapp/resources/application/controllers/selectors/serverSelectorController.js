@@ -28,6 +28,11 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
 
     doAction();
 
+    $scope.selectItem = function (item) {
+        $scope.getData().selectItemCallback(item);
+        item.hideColumnInfo = !item.hideColumnInfo;
+    };
+
     $scope.setOrder = function(header) {
         if (header.orderBy === true) {
             $scope.orderItem = header.name;

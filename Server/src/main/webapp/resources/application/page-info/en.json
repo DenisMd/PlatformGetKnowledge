@@ -85,6 +85,8 @@
     "to"            : "To",
     "from"          : "From",
     "date"          : "Date",
+    "block"         : "Block",
+    "unblock"       : "Unblock",
 
 
     "failed"        : "Failed",

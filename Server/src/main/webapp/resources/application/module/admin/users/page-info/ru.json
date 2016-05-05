@@ -14,6 +14,8 @@
     "user_add_new_permission" : "Добавить новое право",
     "user_remove_permission" : "Удалить право",
     "user_update_permissions" : "Обновить права",
-    "user_block" : "Заблокировать пользователя"
+    "user_block" : "Заблокировать пользователя",
+    "user_unblock" : "Разблокировать пользователя",
+    "user_block_message" : "Причина блокировки пользователя"
   }
 }

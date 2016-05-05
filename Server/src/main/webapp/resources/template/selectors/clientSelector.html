@@ -48,9 +48,9 @@
             </tr>
             </thead>
             <tbody ng-repeat="item in filterdList = (getData().list | filter:filterSearch | orderBy:orderItem:orderReverse)" ng-init="item.hideColumnInfo = true">
-                <tr ng-if="!item.hideColumnInfo">
-                    <td colspan="{{getData().headerNames.length}}" style="background-color: #f5f5f5;">
-                        <div class="row-panel" ng-show="!item.hideColumnInfo">
+                <tr ng-if="!item.hideColumnInfo" class="row-panel">
+                    <td colspan="{{getData().headerNames.length}}">
+                        <div class="item-panel" ng-show="!item.hideColumnInfo">
                             <i  ng-if="getData().deleteOptions" class="fa fa-times filter-delete" ng-click="getData().deleteOptions.deleteCallback($event,item)"></i>
                         </div>
                     </td>

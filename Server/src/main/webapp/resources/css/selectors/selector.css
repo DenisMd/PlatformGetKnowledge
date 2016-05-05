@@ -25,6 +25,10 @@
 }
 
 .row-panel {
+    background-color: #f5f5f5
+}
+
+.item-panel {
     -webkit-transition: max-height 2s ease;
     -moz-transition: max-height 2s ease;
     transition: max-height 2s ease;
@@ -32,6 +36,6 @@
     max-height: 400px;
 }
 
-.row-panel.ng-hide {
+.item-panel.ng-hide {
     max-height: 0;
 }

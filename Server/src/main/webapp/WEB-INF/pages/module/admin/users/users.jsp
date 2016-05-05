@@ -17,6 +17,9 @@
                     {{translate("user_create_date")}} : {{currentUser.user.createDate | date:'medium'}}<br/>
                     {{translate("user_blocked")}} : {{currentUser.user.blocked}}<br/>
                     {{translate("user_enabled")}} : {{currentUser.user.enabled}}<br/>
+                    <span ng-if="currentUser.user.blockMessage">
+                        {{translate("user_block_message")}} : {{currentUser.user.blockMessage}}<br>
+                    </span>
                     <module-template data="roleData" name="inputs/list"></module-template>
                 </p>
                 <md-button class="md-raised md-primary" ng-click="updateUser()" ng-disabled="!currentUser">{{translate("user_update")}}</md-button>
@@ -53,3 +56,34 @@
         </md-tab>
     </md-tabs>
 </md-content>
+
+<script type="text/ng-template" id="blockUser.html">
+    <md-dialog ng-cloak>
+        <form>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>{{parentScope.translate("user_block")}}</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="cancel()">
+                        <md-icon md-svg-src="resources/image/svg/close.svg" aria-label="Close dialog"></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <div class="md-dialog-content">
+                    <div>
+                        <md-input-container class="md-block">
+                            <label>{{parentScope.translate("user_block_message")}}</label>
+                            <textarea ng-model="blockMessage" md-maxlength="500" rows="5" md-select-on-focus></textarea>
+                        </md-input-container>
+                    </div>
+                </div>
+            </md-dialog-content>
+            <md-dialog-actions layout="row">
+                <md-button class="md-raised md-primary" ng-click="answer(blockMessage)" ng-disabled="!blockMessage">
+                    {{parentScope.translate("do_it")}}
+                </md-button>
+            </md-dialog-actions>
+        </form>
+    </md-dialog>
+</script>

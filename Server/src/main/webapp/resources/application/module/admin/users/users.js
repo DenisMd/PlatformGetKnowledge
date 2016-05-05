@@ -79,18 +79,42 @@ model.controller("usersCtrl", function ($scope, applicationService, className,$m
             $scope.showAutoCompleteForRight = false;
             $scope.showDeleteColumn = false;
         },
-        actions : [
+        actionsForItem : [
             {
                 icon : "fa-lock",
                 color : "#15206C",
                 tooltip : "user_block",
-                actionCallback : function (ev){
-                    $scope.showDialog(ev,$scope,"blockUserHtml.html",function(answer){
-                        //applicationService.create($scope,"", className.roles,answer,function(result){
-                        //    $scope.showToast($scope.getResultMessage(result));
-                        //    roleList();
-                        //});
+                actionCallback : function (ev,item){
+                    $scope.showDialog(ev,$scope,"blockUser.html",function(answer){
+                        applicationService.action($scope,"",className.userInfo,"blockUser",{
+                            userId : item.id,
+                            blockMessage : answer
+                        },function(result){
+                            $scope.showToast($scope.getResultMessage(result));
+                        });
                     });
+                }
+            },
+            {
+                icon : "fa-unlock",
+                color : "#15206C",
+                tooltip : "user_unblock",
+                actionCallback : function (ev,item){
+                    $scope.showConfirmDialog(
+                        ev,
+                        $scope.translate("user_unblock") + " " + item.user.login,
+                        "",
+                        'Unblock user',
+                        $scope.translate("unblock"),
+                        $scope.translate("cancel"),
+                        function () {
+                            applicationService.action($scope,"",className.userInfo,"unblockUser",{
+                                userId : item.id
+                            },function(result){
+                                $scope.showToast($scope.getResultMessage(result));
+                            });
+                        }
+                    );
                 }
             }
         ]
