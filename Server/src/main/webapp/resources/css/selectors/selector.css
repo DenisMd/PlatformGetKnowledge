@@ -1,0 +1,41 @@
+.selected-row {
+    cursor: pointer;
+}
+
+.unsortable-column {
+    color : #bbb;
+    cursor: default;
+}
+
+.tooltip-text {
+    font-size: 16px;
+}
+
+.action {
+    margin: 0 20px;
+}
+
+.filter-action {
+    margin-right: 20px;
+    color : #8149CD;
+}
+
+.filter-delete {
+    color : #cd4142;
+}
+
+.row-panel {
+    background-color: #f5f5f5
+}
+
+.item-panel {
+    -webkit-transition: max-height 2s ease;
+    -moz-transition: max-height 2s ease;
+    transition: max-height 2s ease;
+
+    max-height: 400px;
+}
+
+.item-panel.ng-hide {
+    max-height: 0;
+}

@@ -66,4 +66,16 @@ public class UserRepository extends BaseRepository<User> {
         User user = getSingleEntityByFieldAndValue("login", login);
         return user;
     }
+
+    public void blockUser(User user , String message) {
+        user.setBlocked(true);
+        user.setBlockMessage(message);
+        merge(user);
+    }
+
+    public void unBlockUser(User user) {
+        user.setBlocked(false);
+        user.setBlockMessage(null);
+        merge(user);
+    }
 }

@@ -568,6 +568,40 @@ public class UserInfoService extends AbstractService implements BootstrapService
         return Result.Complete();
     }
 
+    @Action(name = "blockUser" , mandatoryFields = {"userId" , "blockMessage"})
+    @Transactional
+    public Result blockUser(HashMap<String,Object> data) {
+        long userId = longFromField("userId",data);
+        UserInfo userInfo = userInfoRepository.read(userId);
+        if (userInfo == null) {
+            return Result.NotFound("User not found");
+        }
+
+        if (!isAccessToEdit(data,userInfo)) {
+            return Result.AccessDenied();
+        }
+
+        userRepository.blockUser(userInfo.getUser(), (String) data.get("blockMessage"));
+        return Result.Complete();
+    }
+
+    @Action(name = "unblockUser" , mandatoryFields = {"userId"})
+    @Transactional
+    public Result unblockUser(HashMap<String,Object> data) {
+        long userId = longFromField("userId",data);
+        UserInfo userInfo = userInfoRepository.read(userId);
+        if (userInfo == null) {
+            return Result.NotFound("User not found");
+        }
+
+        if (!isAccessToEdit(data,userInfo)) {
+            return Result.AccessDenied();
+        }
+
+        userRepository.unBlockUser(userInfo.getUser());
+        return Result.Complete();
+    }
+
     @Override
     public byte[] getImageById(long id) {
         UserInfo userInfo = userInfoRepository.read(id);

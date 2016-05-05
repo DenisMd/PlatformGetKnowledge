@@ -1,40 +1,102 @@
-model.controller("rolesCtrl", function ($scope, applicationService, className,$mdDialog) {
+model.controller("rolesCtrl", function ($scope, applicationService, className) {
 
-    $scope.setCurrentItem = function (item) {
-        $scope.currentRole = item;
-        $scope.showAutoCompleteForRight = false;
-        $scope.showDeleteColumn = false;
+    function roleList() {
+        $scope.selectorData.list = [];
+        applicationService.list($scope, "roles", className.roles,function (item) {
+            $scope.selectorData.list.push(item);
+        });
+    }
+
+    $scope.selectorData = {
+        list        : [],
+        tableName   :   "roles_title",
+        filters      : [
+            {
+                title : "name",
+                type  : "text",
+                field : "roleName",
+                default : true
+            }
+        ],
+        headerNames : [
+            {
+                name : "id",
+                orderBy : true
+            },
+            {
+                name : "roleName",
+                title : "name",
+                orderBy : true
+            },
+            {
+                name : "note",
+                title : "role_note"
+            }
+        ],
+        selectItemCallback : function (item) {
+            $scope.currentRole = item;
+            $scope.showAutoCompleteForRight = false;
+            $scope.showDeleteColumn = false;
+        },
+        actions : [
+            {
+                icon : "fa-plus",
+                color : "#46BE28",
+                tooltip : "role_create_role",
+                actionCallback : function (ev){
+                    $scope.showDialog(ev,$scope,"createRole.html",function(answer){
+                        applicationService.create($scope,"", className.roles,answer,function(result){
+                            $scope.showToast($scope.getResultMessage(result));
+                            roleList();
+                        });
+                    });
+                }
+            }
+        ],
+        deleteOptions : {
+            deleteCallback : function (ev,item) {
+                $scope.showConfirmDialog(
+                    ev,
+                    $scope.translate("role_delete_role") + " " + item.roleName,
+                    $scope.translate("role_delete_content_message"),
+                    'Delete role',
+                    $scope.translate("delete"),
+                    $scope.translate("cancel"),
+                    function () {
+                        applicationService.remove($scope,"",className.roles,item.id,function (result) {
+                            $scope.showToast($scope.getResultMessage(result));
+                            roleList();
+                        });
+                    }
+                )
+            },
+            deleteTitle : "role_delete_role"
+        }
     };
+
+    roleList();
 
     $scope.updateRole = function(){
         applicationService.update($scope,"updateResult",className.roles,$scope.currentRole,function(result){
-            $scope.showToast(result);
+            $scope.showToast($scope.getResultMessage(result));
         });
     };
 
-    $scope.showAdvanced = function(ev) {
-        $scope.showDialog(ev,$scope,"createRole.html",function(answer){
-            applicationService.create($scope,"", className.roles,answer,function(result){
-                $scope.showToast(result);
-                applicationService.list($scope , "roles", className.roles);
-            });
-        });
-    };
+    //-------------------------------------------------- Логика для добавления и удаления прав для ролей
+    $scope.showAutoCompleteForRight = false;
+    $scope.showDeleteColumn = false;
 
-    $scope.showDeleteDialog = function(ev) {
-        var confirm = $mdDialog.confirm()
-            .title($scope.translate("role_deleteRole") + " " + $scope.currentRole.roleName)
-            .textContent($scope.translate("role_deleteContentMessage"))
-            .targetEvent(ev)
-            .ariaLabel('Delete role')
-            .ok($scope.translate("delete"))
-            .cancel($scope.translate("cancel"));
-        $mdDialog.show(confirm).then(function() {
-            applicationService.remove($scope,"",className.roles,$scope.currentRole.id,function (result) {
-                $scope.showToast(result);
-                applicationService.list($scope , "roles", className.roles);
-            });
-        });
+    //Информация для отображение в list-input
+    $scope.permissionsData = {
+        "count"             : 3,
+        "titleField"        :"permissionName",
+        "classForInput"     : "input-group-sm",
+        "listName"          : "filterPermissions",
+        "required"          : true,
+        "callback" : function (value){
+            $scope.currentRole.permissions.push(value);
+            $scope.showAutoCompleteForRight = false;
+        }
     };
 
     var updateFilterPermissions = function (item) {
@@ -50,8 +112,7 @@ model.controller("rolesCtrl", function ($scope, applicationService, className,$m
         }
     };
 
-    $scope.showAutoCompleteForRight = false;
-    $scope.showDeleteColumn = false;
+
     $scope.addNewPermission = function() {
         $scope.showAutoCompleteForRight = !$scope.showAutoCompleteForRight;
         $scope.filterPermissions = [];
@@ -75,18 +136,5 @@ model.controller("rolesCtrl", function ($scope, applicationService, className,$m
         }
     };
 
-    $scope.permissionsData = {
-        "id" : "permissions",
-        "count" : 1,
-        "filter":"permissionName",
-        "class" : "input-group-sm",
-        "listName" : "filterPermissions",
-        "required" : true,
-        "callback" : function (value){
-            $scope.currentRole.permissions.push(value);
-            $scope.showAutoCompleteForRight = false;
-        }
-    };
 
-    applicationService.list($scope, "roles", className.roles);
 });

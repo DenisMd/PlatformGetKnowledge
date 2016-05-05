@@ -17,7 +17,7 @@ model.controller("listController",function($scope,listDialogService,$filter) {
     $scope.isShowSelectOptions  = false;
 
     //Выбранный объект из списка
-    $scope.selectedItem   = null;
+    $scope.selectedItem   = $scope[$scope.getData().defaultValue];
 
     //Класс для input-group
     $scope.classForInput         = $scope.getData().classForInput ? $scope.getData().classForInput : "input-group-lg";

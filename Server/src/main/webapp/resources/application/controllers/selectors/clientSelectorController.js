@@ -1,6 +1,10 @@
-model.controller("staticSelectorController" , function ($scope , customFilterService) {
+model.controller("clientSelectorController" , function ($scope , customFilterService) {
 
     $scope.customFilterInfo;
+
+    $scope.showDeleteColumn = false;
+    
+    $scope.filterdList = [];
 
     $scope.tableScroll = {
         theme: 'dark-3',
@@ -13,6 +17,25 @@ model.controller("staticSelectorController" , function ($scope , customFilterSer
 
     $scope.orderItem = "";
     $scope.orderReverse = false;
+
+    $scope.getItemByName = function(item,name) {
+        var splitArr = name.split(".");
+        var result = item[splitArr[0]];
+        for (var i=1; i < splitArr.length; i++) {
+            result = result[splitArr[i]];
+        }
+        return result;
+    };
+
+    $scope.showRowPanel = function(item) {
+        return !item.hideColumnInfo && ($scope.getData().actionsForItem || $scope.getData().deleteOptions);
+    };
+
+    $scope.deleteAction = function () {
+        $scope.showDeleteColumn = !$scope.showDeleteColumn;
+    };
+
+    
     $scope.setOrder = function (header) {
         if (header.orderBy === true) {
             $scope.orderItem = header.name;
@@ -20,6 +43,10 @@ model.controller("staticSelectorController" , function ($scope , customFilterSer
         }
     };
 
+    $scope.selectItem = function (item) {
+        $scope.getData().selectItemCallback(item);
+        item.hideColumnInfo = !item.hideColumnInfo;
+    };
 
     $scope.filterSearch = function(item,index,allItems)
     {
@@ -89,16 +116,16 @@ model.controller("staticSelectorController" , function ($scope , customFilterSer
                 case  "like" : 
                     result = item[filterItem.field.info.name].like(filterItem.param.info.values[0]);
                     break;
-                case "more" :
+                case "great_than" :
                     result = item[filterItem.field.info.name] > filterItem.param.info.values[0];
                     break;
-                case "more_or_equal" :
+                case "great_than_or_equal_to" :
                     result = item[filterItem.field.info.name] >= filterItem.param.info.values[0];
                     break;
-                case "less" :
+                case "less_than" :
                     result = item[filterItem.field.info.name] < filterItem.param.info.values[0];
                     break;
-                case "less_or_equal" :
+                case "less_than_or_equal" :
                     result = item[filterItem.field.info.name] <= filterItem.param.info.values[0];
                     break;
                 case "between" :

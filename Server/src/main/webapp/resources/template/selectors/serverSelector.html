@@ -1,0 +1,95 @@
+<link rel="stylesheet" href="/resources/css/selectors/selector.css">
+
+<div class="table-selector" ng-controller="serverSelectorController">
+    <div layout-gt-sm="row" layout-align="center">
+        <span ng-repeat="action in getData().actions" class="action">
+            <span class="fa fa-3x" ng-class="action.icon" ng-click="action.actionCallback($event)"
+                  ng-style="{color : action.color}">
+                <md-tooltip>
+                    <span class="tooltip-text">{{translate(action.tooltip)}}</span>
+                </md-tooltip>
+            </span>
+        </span>
+        <span class="filter-action">
+            <span class="fa fa-3x fa-filter" ng-click="openCustomFilter()">
+                <md-tooltip>
+                    <span class="tooltip-text">{{translate("custom_filter")}}</span>
+                </md-tooltip>
+            </span>
+        </span>
+        <span ng-repeat="filter in getData().filters | filter:{'default' : true}" ng-switch="filter.type">
+
+            <div ng-switch-when="check_box">
+                <md-checkbox ng-model="filter.model">
+                    {{translate(filter.title)}}
+                </md-checkbox>
+            </div>
+
+            <div ng-switch-default>
+                <div class="form-group">
+                    <input type="{{filter.type}}" class="form-control" ng-model="filter.model"
+                           placeholder="{{translate(filter.title)}}">
+                </div>
+            </div>
+        </span>
+        <button class="btn btn-default" ng-click="doFilters()">{{translate("do_filter")}}</button>
+    </div>
+
+    <!--Модальное окно для показа пользовательских фильтров-->
+    <module-template name="dialogs/customFilter"></module-template>
+    <div ng-scrollbars ng-scrollbars-config="tableScroll">
+        <table class="table table-hover">
+            <caption>{{translate(getData().tableName) + ' : ' + listInfo.totalEntitiesCount + ' ' +
+                translate('of_records')}}
+            </caption>
+            <thead>
+            <tr>
+                <th ng-show="showDeleteColumn">
+                    {{translate("delete")}}
+                </th>
+                <th ng-repeat="header in getData().headerNames" ng-click="setOrder(header)"
+                    ng-class="{'unsortable-column' : !header.orderBy}">
+                    {{translate(header.title ? header.title : header.name)}}
+                    <i class="fa fa-sort-desc" aria-hidden="true"
+                       ng-show="header.name == orderItem && orderReverse"></i>
+                    <i class="fa fa-sort-asc" aria-hidden="true"
+                       ng-show="header.name == orderItem && !orderReverse"></i>
+                </th>
+            </tr>
+            </thead>
+            <tbody ng-repeat="item in list" ng-init="item.hideColumnInfo=true">
+            <tr ng-if="showRowPanel(item)" class="row-panel">
+                <td colspan="{{getData().headerNames.length}}">
+                    <div class="item-panel" ng-show="!item.hideColumnInfo">
+                        <i ng-if="getData().deleteOptions" class="fa fa-times filter-delete"
+                           ng-click="getData().deleteOptions.deleteCallback($event,item)"></i>
+                    </div>
+                    <span ng-repeat="action in getData().actionsForItem" class="action">
+                        <span class="fa fa-3x" ng-class="action.icon" ng-click="action.actionCallback($event,item)" ng-style="{color : action.color}">
+                            <md-tooltip>
+                                <span class="tooltip-text">{{translate(action.tooltip)}}</span>
+                            </md-tooltip>
+                        </span>
+                     </span>
+                </td>
+            </tr>
+            <tr class="selected-row" ng-click="selectItem(item)">
+                <td ng-show="showDeleteColumn" ng-click="getData().deleteOptions.deleteCallback($event,item)">
+                    <i class="fa fa-times filter-delete"></i>
+                </td>
+                <td ng-repeat="header in getData().headerNames">
+                    <span ng-if="header.filter === 'date'">{{getItemByName(item , header.name) | date:'medium'}}</span>
+                    <span ng-if="header.filter !== 'date'">{{getItemByName(item , header.name)}}</span>
+                </td>
+            </tr>
+            </tbody>
+            <tbody>
+                <tr ng-show="listInfo.totalEntitiesCount > (filter.result.first + filter.max)">
+                    <td colspan="{{getData().headerNames.length}}" ng-click="loadMore()" class="loadMore">
+                        {{translate(getData().loadMoreTitle)}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -47,6 +47,14 @@ public class User extends AbstractEntity {
     @Column(name = "create_date" , nullable = false)
     private Calendar createDate;
 
+    public String getBlockMessage() {
+        return blockMessage;
+    }
+
+    public void setBlockMessage(String blockMessage) {
+        this.blockMessage = blockMessage;
+    }
+
     public User() {
         createDate = Calendar.getInstance();
     }

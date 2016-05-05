@@ -1,14 +1,16 @@
 {
   "text" : {
     "tasks"  : "Tasks",
-    "task_Complete" : "Complete",
-    "task_Failed" : "Failed",
-    "task_NotStarted" : "Not started",
-    "task_Runnable" : "Runnable",
+    "task_complete" : "Complete",
+    "task_failed" : "Failed",
+    "task_not_started" : "Not started",
+    "task_runnable" : "Runnable",
     "task_status" : "Task status",
     "task_calendar" : "Execution time",
-    "task_loadMore" : "Load more tasks....",
-    "task_jsonData" : "Json data",
-    "task_stackTrace" : "Stack trace"
+    "task_load_more" : "Load more tasks....",
+    "task_json_data" : "Json data",
+    "task_stack_trace" : "Stack trace",
+    "task_name" : "Task name",
+    "task_service_name" : "Service name"
   }
 }

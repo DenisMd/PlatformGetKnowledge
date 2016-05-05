@@ -65,7 +65,8 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             "program" : "com.getknowledge.modules.programs.Program",
             "course" : "com.getknowledge.modules.courses.Course",
             "tutorial" : "com.getknowledge.modules.courses.tutorial.Tutorial",
-            "news" : "com.getknowledge.modules.news.News"
+            "news" : "com.getknowledge.modules.news.News",
+            "currency" : "com.getknowledge.modules.dictionaries.currency.Currency"
          };
     })
     .factory('moduleParam',function(){
@@ -194,81 +195,123 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                 this.result.order = [];
             };
 
-            /**
-             *
-             * @param {Boolean} or - объеденить поиск по 'или'
-             * @description создает структуру для поиска строк
-             * */
-            this.createSearchText = function(or) {
-                this.result.searchText = {};
-                this.result.searchText.fields = [];
-                if (or) {
-                    this.result.searchText.or = true;
-                }
-            };
-
-            /**
-             *
-             * @param {String} fieldName - имя поля в объекте
-             * @param {String} value - значение
-             * @description создает структуру для поиска строк
-             * */
-            this.addSearchField = function(fieldName,value) {
-                this.result.searchText.fields.push({fieldName:value});
-            };
-
-            /**
-             * @description Убирает поиск
-             *
-             * */
-            this.clearSearch = function () {
-                this.result.searchText = null;
-            };
-
-
-            /**
-             *
-             * @param {String} fieldName - имя поля в объекте
-             * @param {String} values - значения
-             * @description ищет значения среди вбранных
-             * */
-            this.in = function (fieldName, values) {
-                this.result.in = {
-                    fieldName : fieldName,
-                    values : values
+            this.createFiltersInfo = function () {
+                this.result.filtersInfo = {
+                    logicalExpression : "and",
+                    filters : []
                 };
             };
 
-            /**
-             * @description Убирает включение
-             *
-             * */
-            this.clearIn = function (fieldName, values) {
-                delete this.result.in;
+            this.deleteFiltersInfo = function () {
+                delete this.result.filtersInfo;
             };
 
-            /**
-             *
-             * @param {String} fieldName - имя поля в объекте
-             * @param {String} value - значение
-             * @description ищет значения по равенству
-             * */
-            this.equal = function (fieldName, value) {
-              if (!this.result.equal) {
-                  this.result.equal = [];
-              }
-              this.result.equal.push({
-                  fieldName : fieldName,
-                  value : value
-              });
+            this.setLogicalExpression = function (value) {
+                this.result.filtersInfo.logicalExpression = value;
             };
 
-            /**
-             * @description Убирает равенство
-             *
-             * */
-            this.clearEqual = function() {
-                delete this.result.equal;
+            this.deleteFilters = function (index) {
+                this.result.filtersInfo.filters.splice(index,1);
+            };
+
+            this.equals = function (field,type,value) {
+                this.result.filtersInfo.filters.push(
+                    {
+                        name : "equals",
+                        field : field,
+                        type : type,
+                        values : [value.toString()]
+                    }
+                );
+                return this.result.filtersInfo.filters.length-1;
+            };
+
+            this.like = function (field,type,value) {
+                this.result.filtersInfo.filters.push(
+                    {
+                        name : "like",
+                        field : field,
+                        type : type,
+                        values : [value.toString()]
+                    }
+                );
+                return this.result.filtersInfo.filters.length-1;
+            };
+
+            this.greatThan = function (field,type,value) {
+                this.result.filtersInfo.filters.push(
+                    {
+                        name : "greatThan",
+                        field : field,
+                        type : type,
+                        values : [value.toString()]
+                    }
+                );
+                return this.result.filtersInfo.filters.length-1;
+            };
+
+            this.greaterThanOrEqualTo = function (field,type,value) {
+                this.result.filtersInfo.filters.push(
+                    {
+                        name : "greaterThanOrEqualTo",
+                        field : field,
+                        type : type,
+                        values : [value.toString()]
+                    }
+                );
+                return this.result.filtersInfo.filters.length-1;
+            };
+
+            this.lessThan = function (field,type,value) {
+                this.result.filtersInfo.filters.push(
+                    {
+                        name : "lessThan",
+                        field : field,
+                        type : type,
+                        values : [value.toString()]
+                    }
+                );
+                return this.result.filtersInfo.filters.length-1;
+            };
+
+            this.lessThanOrEqualTo = function (field,type,value) {
+                this.result.filtersInfo.filters.push(
+                    {
+                        name : "lessThanOrEqualTo",
+                        field : field,
+                        type : type,
+                        values : [value.toString()]
+                    }
+                );
+                return this.result.filtersInfo.filters.length-1;
+            };
+
+            this.between = function (field,type,value1,value2) {
+                this.result.filtersInfo.filters.push(
+                    {
+                        name : "between",
+                        field : field,
+                        type : type,
+                        values : [value1.toString(),value2.toString()]
+                    }
+                );
+                return this.result.filtersInfo.filters.length-1;
+            };
+
+            this.in = function (field,type,values) {
+                var resultValues = [];
+                values.forEach(function (item) {
+                    resultValues.push(item.toString());
+                });
+                this.result.filtersInfo.filters.push(
+                    {
+                        name : "in",
+                        field : field,
+                        type : type,
+                        values : resultValues
+                    }
+                );
+                return this.result.filtersInfo.filters.length-1;
             };
 
             this.reload = function () {
@@ -277,9 +320,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
 
             this.clearAll = function(){
                 this.clearOrder();
-                this.clearIn();
-                this.clearEqual();
-                this.clearSearch();
+                this.deleteFiltersInfo();
             };
         }
 

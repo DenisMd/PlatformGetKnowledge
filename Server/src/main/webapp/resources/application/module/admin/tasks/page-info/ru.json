@@ -1,14 +1,16 @@
 {
   "text" : {
     "tasks"  : "Задачи",
-    "task_Complete" : "Завершенное",
-    "task_Failed" : "Провалено",
-    "task_NotStarted" : "Не начат",
-    "task_Runnable" : "Выполняется",
+    "task_complete" : "Завершенное",
+    "task_failed" : "Провалено",
+    "task_not_started" : "Не начат",
+    "task_runnable" : "Выполняется",
     "task_status" : "Сосотояние задачи",
     "task_calendar" : "Время исполнения",
-    "task_loadMore" : "Загрузить больше задач.....",
-    "task_jsonData" : "Json информация",
-    "task_stackTrace" : "Трасса стека"
+    "task_load_more" : "Загрузить больше задач.....",
+    "task_json_data" : "Json информация",
+    "task_stack_trace" : "Трасса стека",
+    "task_name" : "Имя задачи",
+    "task_service_name" : "Сервис исполнитель"
   }
 }

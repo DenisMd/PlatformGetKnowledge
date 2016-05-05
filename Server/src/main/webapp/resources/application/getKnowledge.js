@@ -1,14 +1,10 @@
 //инициализацтя пользовательских модулей
 new Clipboard('.clipboard');
 
-var model = angular.module("mainApp", ["backend.service", "ngImgCrop" , "ngMaterial","ui.codemirror", "hljs",'ui.bootstrap.datetimepicker','ui.dateTimeInput']);
+var model = angular.module("mainApp", ["backend.service", "ngImgCrop" , "ngMaterial","ui.codemirror",'ui.bootstrap.datetimepicker','ui.dateTimeInput']);
 model.constant("codemirrorURL", "/resources/bower_components/codemirror/");
 
-model.config(function (hljsServiceProvider,codemirrorURL) {
-    hljsServiceProvider.setOptions({
-        // replace tab with 4 spaces
-        tabReplace: '    '
-    });
+model.config(function (codemirrorURL) {
     CodeMirror.modeURL = codemirrorURL+ "mode/%N/%N.js";
 });
 
@@ -174,10 +170,10 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
         });
     };
 
-    $scope.showConfirmDialog = function(ev,title,ariaLabel,okBtn,cancelBtn,callback) {
+    $scope.showConfirmDialog = function(ev,title,content,ariaLabel,okBtn,cancelBtn,callback) {
         var confirm = $mdDialog.confirm()
             .title(title)
-            .textContent()
+            .textContent(content)
             .targetEvent(ev)
             .ariaLabel(ariaLabel)
             .ok(okBtn ? okBtn : $scope.translate("ok"))
@@ -190,26 +186,16 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
         if (!obj) return true;
         return Object.keys(obj).length === 0 && JSON.stringify(obj) === JSON.stringify({});
     };
-    
-    //-------------------------------------- удалить их
 
-    //hightlights
-    //TODO: убрать
+    //Формирует из строки json в читабельный вид
     $scope.toPrettyJSON = function (objStr, tabWidth) {
         var obj;
-        try {
-            obj = $parse(objStr)({});
-        }catch(e){
-            // eat $parse error
-            return _lastGoodResult;
-        }
-
+        obj = $parse(objStr)({});
         var result = JSON.stringify(obj, null, Number(tabWidth));
-        _lastGoodResult = result;
-
         return result;
     };
-
+    
+    //-------------------------------------- удалить их
     //TODO: убрать
     $scope.splitArray = function(array,even) {
         var tempArr = [];

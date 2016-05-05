@@ -4,8 +4,8 @@
     </div>
 </md-toolbar>
 <md-content flex layout-padding>
-    <md-button class="btn md-raised md-warn clipboard"  data-clipboard-text="{{currentService.stackTrace}}">
+    <md-button class="btn md-raised md-warn clipboard"  data-clipboard-text="{{getData().stack}}">
         {{translate("copy_to_clipboard")}}
     </md-button>
-    <div ui-codemirror="{readOnly: true , lineNumbers: true}" ng-model="currentService.stackTrace"></div>
+    <div ui-codemirror="{readOnly: true , lineNumbers: true}" ng-model="getData().stack"></div>
 </md-content>

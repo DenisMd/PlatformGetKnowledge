@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-@Service
+@Service("CurrencyService")
 public class CurrencyService extends AbstractService implements BootstrapService {
 
     private final String cbrUrl = "http://www.cbr.ru/scripts/XML_daily.asp";

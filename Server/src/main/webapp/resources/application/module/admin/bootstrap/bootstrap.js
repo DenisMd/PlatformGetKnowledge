@@ -1,4 +1,4 @@
-model.controller("bootstrapCtrl", function ($scope,applicationService,className,$mdDialog,$mdMedia) {
+model.controller("bootstrapCtrl", function ($scope,applicationService,className) {
 
     $scope.currentService = null;
 
@@ -65,7 +65,7 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className,
         ],
         selectItemCallback : function (item) {
             $scope.currentService = item;
-            if ($scope.currentService != null && $scope.currentService.stackTrace != null) {
+            if ($scope.currentService.stackTrace) {
                 $scope.stackTraceData.stack = $scope.currentService.stackTrace;
             }
         },
@@ -79,7 +79,7 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className,
                     $scope.showDialog(ev,$scope,"doBootstrapModal.html",function(answer){
                         applicationService.action($scope,"bootstrapResult" , className.bootstrap_services,"do",answer,function(result){
                             $scope.showToast($scope.getResultMessage(result));
-                            updateList();
+                            bootstrapInfoList();
                         });
                     });
                 }
@@ -95,11 +95,11 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className,
     //Обновляем информацию о сервисе
     $scope.updateService = function() {
         applicationService.update($scope,"",className.bootstrap_services,$scope.currentService,function(result){
-            $scope.showToast(result);
+            $scope.showToast($scope.getResultMessage(result));
         });
     };
 
-    function updateList() {
+    function bootstrapInfoList() {
         $scope.selectorData.list = [];
         //Список сервисов для которых выполняется bootstrap опции
         applicationService.list($scope , "bootstrap_services",className.bootstrap_services,function (service) {
@@ -107,6 +107,6 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className,
         });
     }
 
-    updateList();
+    bootstrapInfoList();
 
 });

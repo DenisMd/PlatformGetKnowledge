@@ -51,17 +51,17 @@ model.controller("customFilterController",function($scope,customFilterService){
                     name : "equals",
                     symbol : "="
                 },{
-                    name : "more",
+                    name : "great_than",
                     symbol : ">"
                 },{
-                    name : "more_or_equal",
+                    name : "great_than_or_equal_to",
                     symbol : ">="
                 },{
-                    name : "less",
+                    name : "less_than",
                     symbol : "<"
                 },{
-                    name : "less_or_equal",
-                    symbol : ">"
+                    name : "less_than_or_equal",
+                    symbol : "<="
                 },{
                     name : "between",
                     symbol : "between"
@@ -214,7 +214,6 @@ model.controller("customFilterController",function($scope,customFilterService){
         minView : 'minute' ,
         startView : 'year',
         onChange: function(date,isValid){
-            console.log(date);
             if (isValid) {
                 $scope.dateParam1 = date;
             } else {

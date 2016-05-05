@@ -1,48 +1,90 @@
-model.controller("permissionsCtrl", function ($scope,applicationService,className,$mdDialog) {
+model.controller("permissionsCtrl", function ($scope, applicationService, className) {//Данные для статического селектара
 
-    $scope.setCurrentItem = function (item) {
-        $scope.currentPermission = item;
-
-        applicationService.action($scope,"permissionUsers",className.permissions,"getUsersByPermission",{
-            permissionId : item.id
+    function permissionList() {
+        $scope.selectorData.list = [];
+        applicationService.list($scope , "permissions", className.permissions,function (item) {
+            $scope.selectorData.list.push(item);
         });
+    }
 
-        applicationService.action($scope,"permissionRoles",className.permissions,"getRolesByPermission",{
-            permissionId : item.id
-        });
+    $scope.selectorData = {
+        list        : [],
+        tableName   :   "permission_title",
+        filters      : [
+            {
+                title : "name",
+                type  : "text",
+                field : "permissionName",
+                default : true
+            }
+        ],
+        headerNames : [
+            {
+                name : "id",
+                orderBy : true
+            },
+            {
+                name : "permissionName",
+                title : "name",
+                orderBy : true
+            },
+            {
+                name : "note",
+                title : "permission_note"
+            }
+        ],
+        selectItemCallback : function (item) {
+            $scope.currentPermission = item;
+
+            applicationService.action($scope,"permissionUsers",className.permissions,"getUsersByPermission",{
+                permissionId : item.id
+            });
+
+            applicationService.action($scope,"permissionRoles",className.permissions,"getRolesByPermission",{
+                permissionId : item.id
+            });
+        },
+        actions : [
+            {
+                icon : "fa-plus",
+                color : "#46BE28",
+                tooltip : "permission_create_permission",
+                actionCallback : function (ev){
+                    $scope.showDialog(ev,$scope,"createPermission.html",function(answer){
+                        applicationService.create($scope,"createPermissionResult", className.permissions,answer,function(result){
+                            $scope.showToast($scope.getResultMessage(result));
+                            permissionList();
+                        });
+                    });
+                }
+            }
+        ],
+        deleteOptions : {
+            deleteCallback : function (ev,item) {
+                $scope.showConfirmDialog(
+                    ev,
+                    $scope.translate("permission_delete_message") + " " + item.permissionName,
+                    $scope.translate("permission_delete_content_message"),
+                    'Delete permission',
+                    $scope.translate("delete"),
+                    $scope.translate("cancel"),
+                    function () {
+                        applicationService.remove($scope, "", className.permissions, item.id, function (result) {
+                            $scope.showToast($scope.getResultMessage(result));
+                            permissionList();
+                        });
+                    }
+                )
+            },
+            deleteTitle : "permission_delete_permission"
+        }
     };
+
+    permissionList();
 
     $scope.updatePermission = function() {
-        applicationService.update($scope,"updateResult",className.permissions,$scope.currentPermission,function(result){
-            $scope.showToast(result);
-        });
-    };
-
-    applicationService.list($scope , "permissions", className.permissions);
-
-
-    $scope.showAdvanced = function(ev) {
-        $scope.showDialog(ev,$scope,"createPermission.html",function(answer){
-            applicationService.create($scope,"createPermissionResult", className.permissions,answer,function(result){
-                $scope.showToast(result);
-                applicationService.list($scope , "permissions", className.permissions);
-            });
-        });
-    };
-
-    $scope.showDeleteDialog = function(ev) {
-        var confirm = $mdDialog.confirm()
-            .title($scope.translate("permission_deleteMessage") + " " + $scope.currentPermission.permissionName)
-            .textContent($scope.translate("permission_deleteContentMessage"))
-            .targetEvent(ev)
-            .ariaLabel('Delete permission')
-            .ok($scope.translate("delete"))
-            .cancel($scope.translate("cancel"));
-        $mdDialog.show(confirm).then(function() {
-            applicationService.remove($scope,"",className.permissions,$scope.currentPermission.id,function (result) {
-                $scope.showToast(result);
-                applicationService.list($scope , "permissions", className.permissions);
-            });
+        applicationService.update($scope,"",className.permissions,$scope.currentPermission,function(result){
+            $scope.showToast($scope.getResultMessage(result));
         });
     };
 

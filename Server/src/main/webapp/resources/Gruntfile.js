@@ -84,8 +84,6 @@ module.exports = function(grunt){
                         'bower_components/angular-aria/angular-aria.js',
                         'bower_components/Chart.js/Chart.min.js',
                         'bower_components/clipboard/dist/clipboard.min.js',
-                        'bower_components/highlightjs/highlight.pack.min.js',
-                        'bower_components/angular-highlightjs/build/angular-highlightjs.min.js',
                         'bower_components/codemirror/lib/codemirror.js',
                         'bower_components/codemirror/addon/mode/loadmode.js',
                         'bower_components/codemirror/mode/meta.js',

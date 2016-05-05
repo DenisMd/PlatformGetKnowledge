@@ -12,6 +12,30 @@ public class CurrencyRepository extends BaseRepository<Currency> {
         return Currency.class;
     }
 
+    @Override
+    public void create(Currency object, boolean fromRequestApi) {
+        if (fromRequestApi) {
+            throw new RuntimeException("Error create currency from request api");
+        }
+        super.create(object, fromRequestApi);
+    }
+
+    @Override
+    public void update(Currency object, boolean fromRequestApi) {
+        if (fromRequestApi) {
+            throw new RuntimeException("Error update currency from request api");
+        }
+        super.update(object, fromRequestApi);
+    }
+
+    @Override
+    public void remove(Long id, boolean fromRequestApi) {
+        if (fromRequestApi) {
+            throw new RuntimeException("Error remove currency from request api");
+        }
+        super.remove(id, fromRequestApi);
+    }
+
     public void createCurrency(String charCode,String name,double value,boolean isBase){
         Currency currency = new Currency();
         currency.setBaseCurrency(isBase);

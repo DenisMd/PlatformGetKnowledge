@@ -3,10 +3,10 @@
     "permission_title" : "Permissions",
     "permission" : "Permission",
     "permission_note" : "Note",
-    "permission_updatePermission" : "Update permission",
-    "permission_createPermission" : "Create permission",
-    "permission_deletePermission" : "Delete permission",
-    "permission_deleteMessage" : "Would you like remove permission",
-    "permission_deleteContentMessage" : "All references on right will be remove"
+    "permission_update_permission" : "Update permission",
+    "permission_create_permission" : "Create permission",
+    "permission_delete_permission" : "Delete permission",
+    "permission_delete_message" : "Would you like remove permission",
+    "permission_delete_content_message" : "All references on right will be remove"
   }
 }

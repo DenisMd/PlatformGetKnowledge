@@ -28,6 +28,7 @@ model.controller("videoDialogController",function($scope,videoDialogService,appl
     $scope.showDeleteVideoDialog = function(ev,videoCommentId,index) {
         $scope.showConfirmDialog(ev,
                                 $scope.translate("video_comments_remove"),
+                                "",
                                 'Delete video comment',
                                 $scope.translate("delete"),
                                 null,

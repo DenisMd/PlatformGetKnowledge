@@ -1,100 +1,159 @@
-model.controller("usersCtrl", function ($scope, applicationService, className,$mdDialog) {
+model.controller("usersCtrl", function ($scope, applicationService, className) {
 
     //иницилизация
     $scope.showAutoCompleteForRight = false;
     $scope.showDeleteColumn = false;
-    $scope.users = [];
 
-    applicationService.count($scope,"countUsers",className.userInfo);
-    applicationService.list($scope,"listRoles",className.roles);
-
-    var filter = applicationService.createFilter(className.userInfo,0,10);
-
-    var addUsers = function(user){
-        $scope.users.push(user);
-    };
-
-    var doAction = function(){
-        applicationService.filterRequest($scope,"",filter,addUsers);
-    };
-
-    doAction();
-
-    var reverse = false;
-    $scope.setUserOrder = function(orderName) {
-        reverse = !reverse;
-
-        filter.clearOrder();
-        filter.setOrder(orderName,reverse);
-        filter.reload();
-        $scope.users = [];
-        doAction();
-    };
-
-    $scope.searchUsers = function(text) {
-        if (text) {
-            var splitArray = text.split(".");
-            if (splitArray.length > 1) {
-                filter.createSearchText(false);
-                filter.addSearchField("firstName",splitArray[0]);
-                filter.addSearchField("lastName",splitArray[1]);
-            } else {
-                filter.createSearchText(true);
-                filter.addSearchField("firstName",text);
-                filter.addSearchField("user.login",text);
-                filter.addSearchField("lastName",text);
+    $scope.selectorData = {
+        className   : className.userInfo,
+        tableName   :   "user_title",
+        loadMoreTitle : "user_load_more",
+        filters      : [
+            {
+                title : "email",
+                type  : "text",
+                field : "user.login",
+                default : true
+            },
+            {
+                title : "id",
+                type : "number",
+                field : "id"
+            },
+            {
+                title : "user_role",
+                type : "enum",
+                field : "user.role.roleName",
+                constants : []
+            },
+            {
+                title : "user_create_date",
+                type : "dateTime",
+                field : "user.createDate"
+            },{
+                title : "user_enabled",
+                type : "check_box",
+                field : "user.enabled"
+            },{
+                title : "user_blocked",
+                type : "check_box",
+                field : "user.blocked"
             }
-        }
-        $scope.users = [];
-        filter.reload();
-        doAction();
-    };
-
-    $scope.showDeleteDialog = function(ev) {
-        var confirm = $mdDialog.confirm()
-            .title($scope.translate("user_remove") + " " + $scope.currentUser.user.login)
-            .textContent()
-            .targetEvent(ev)
-            .ariaLabel('Delete user')
-            .ok($scope.translate("delete"))
-            .cancel($scope.translate("cancel"));
-        $mdDialog.show(confirm).then(function() {
-            applicationService.remove($scope,"",className.userInfo,$scope.currentUser.id,function (result) {
-                $scope.showToast(result);
-                doAction();
-            });
-        });
-    };
-
-
-    $scope.setCurrentItem = function (item) {
-        $scope.currentUser = item;
-        $scope.defaultRoleName = item.user.role.roleName;
-        $scope.showAutoCompleteForRight = false;
-        $scope.showDeleteColumn = false;
-    };
-
-    $scope.loadMore = function () {
-        filter.increase(10);
-        doAction();
+        ],
+        headerNames : [
+            {
+                name : "id",
+                orderBy : true
+            }, {
+                name : "user.role.roleName",
+                title : "user_role"
+            },
+            {
+                name : "user.login",
+                title : "email"
+            },
+            {
+                name : "fullName",
+                title : "name"
+            },{
+                name : "user.createDate",
+                title : "user_create_date",
+                filter : "date",
+                orderBy : true
+            },{
+                name : "user.enabled",
+                title : "user_enabled",
+                orderBy : true
+            },{
+                name : "user.blocked",
+                title : "user_blocked",
+                orderBy : true
+            }
+        ],
+        callBackForFilter : function(user) {
+            user.fullName = user.firstName + ' ' + user.lastName;
+        },
+        selectItemCallback : function (item) {
+            $scope.currentUser = item;
+            $scope.defaultRole = item.user.role;
+            $scope.showAutoCompleteForRight = false;
+            $scope.showDeleteColumn = false;
+        },
+        actionsForItem : [
+            {
+                icon : "fa-lock",
+                color : "#15206C",
+                tooltip : "user_block",
+                actionCallback : function (ev,item){
+                    $scope.showDialog(ev,$scope,"blockUser.html",function(answer){
+                        applicationService.action($scope,"",className.userInfo,"blockUser",{
+                            userId : item.id,
+                            blockMessage : answer
+                        },function(result){
+                            $scope.showToast($scope.getResultMessage(result));
+                        });
+                    });
+                }
+            },
+            {
+                icon : "fa-unlock",
+                color : "#15206C",
+                tooltip : "user_unblock",
+                actionCallback : function (ev,item){
+                    $scope.showConfirmDialog(
+                        ev,
+                        $scope.translate("user_unblock") + " " + item.user.login,
+                        "",
+                        'Unblock user',
+                        $scope.translate("unblock"),
+                        $scope.translate("cancel"),
+                        function () {
+                            applicationService.action($scope,"",className.userInfo,"unblockUser",{
+                                userId : item.id
+                            },function(result){
+                                $scope.showToast($scope.getResultMessage(result));
+                            });
+                        }
+                    );
+                }
+            }
+        ]
     };
 
     $scope.roleData = {
         "id" : "roles",
         "count" : 1,
-        "filter":"roleName",
-        "class" : "input-group-sm",
+        "titleField":"roleName",
+        "classForInput" : "input-group-sm",
         "listName" : "listRoles",
         "required" : true,
-        "defaultValue" : "defaultRoleName",
+        "defaultValue" : "defaultRole",
         "callback" : function (value){
             $scope.currentUser.user.role = value;
         }
     };
 
+    $scope.permissionsData = {
+        "id" : "permissions",
+        "count" : 1,
+        "titleField":"permissionName",
+        "classForInput" : "input-group-sm",
+        "listName" : "filterPermissions",
+        "required" : true,
+        "callback" : function (value){
+            $scope.currentUser.user.permissions.push(value);
+            $scope.showAutoCompleteForRight = false;
+        }
+    };
+
+    applicationService.list($scope,"listRoles",className.roles,function(item){
+        //2 - index enum role
+        $scope.selectorData.filters[2].constants.push(item.roleName);
+    });
+
     $scope.updateUser = function() {
         applicationService.update($scope,"",className.users,$scope.currentUser.user,function(result){
-            $scope.showToast(result);
+            $scope.showToast($scope.getResultMessage(result));
         });
     };
 
@@ -131,19 +190,6 @@ model.controller("usersCtrl", function ($scope, applicationService, className,$m
                 $scope.currentUser.user.permissions.splice(i,1);
                 return;
             }
-        }
-    };
-
-    $scope.permissionsData = {
-        "id" : "permissions",
-        "count" : 1,
-        "filter":"permissionName",
-        "class" : "input-group-sm",
-        "listName" : "filterPermissions",
-        "required" : true,
-        "callback" : function (value){
-            $scope.currentUser.user.permissions.push(value);
-            $scope.showAutoCompleteForRight = false;
         }
     };
 

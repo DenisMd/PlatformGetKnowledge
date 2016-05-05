@@ -1,62 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet" type="text/css" href="/resources/css/admin.css">
+<link rel="stylesheet" href="/resources/css/workflow/workflow.css">
 
-<div class="panel panel-default">
-    <div class="panel-body">
-        <span class="panel-item fa fa-3x fa-minus delete" tooltip-placement="bottom"
-              uib-tooltip="{{translate('user_remove')}}" ng-click="showDeleteDialog($event)" ng-if="currentUser != null">
-        </span>
-        <md-input-container>
-            <label>{{translate("user_findUser")}}</label>
-            <input ng-model="searchTextField">
-
-        </md-input-container>
-        <md-button ng-click="searchUsers(searchTextField)" class="md-raised">{{translate("search")}}</md-button>
-    </div>
+<div class="selector-zone">
+    <module-template name="selectors/serverSelector" data="selectorData"></module-template>
 </div>
 
-<div class="table-selector">
-    <table class="table table-hover ">
-        <caption>{{translate("user_title")}} : {{countUsers + ' ' + translate("ofRecords")}}</caption>
-        <thead>
-        <tr>
-            <th ng-click="setUserOrder('id')">
-                {{translate("id")}}
-            </th>
-            <th>
-                {{translate("user_role")}}
-            </th>
-            <th ng-click="setUserOrder('user.login')">
-                {{translate("email")}}
-            </th>
-            <th>
-                {{translate("name")}}
-            </th>
-            <th ng-click="setUserOrder('user.createDate')">
-                {{translate("user_createDate")}}
-            </th>
-            <th ng-click="setUserOrder('user.enabled')">
-                {{translate("user_enabled")}}
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="userInfo in users" ng-click="setCurrentItem(userInfo)">
-            <td>{{userInfo.id}}</td>
-            <td>{{userInfo.user.role.roleName}}</td>
-            <td>{{userInfo.user.login}}</td>
-            <td>{{userInfo.lastName + ' ' + userInfo.firstName}}</td>
-            <td>{{userInfo.user.createDate | date:'medium'}}</td>
-            <td>{{userInfo.user.enabled}}</td>
-        </tr>
-        <tr>
-            <td colspan="6" ng-click="loadMore()" class="loadMore">
-                {{translate("user_loadMore")}}
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
 
 <md-content>
     <md-tabs md-dynamic-height md-border-bottom>
@@ -66,11 +14,13 @@
                     {{translate('id')}} : {{currentUser.id}} <br/>
                     {{translate('name')}} : {{currentUser.lastName + ' ' + currentUser.firstName}} <br/>
                     {{translate("email")}} : {{currentUser.user.login}}<br/>
-                    {{translate("user_createDate")}} : {{currentUser.user.createDate | date:'medium'}}<br/>
-                    <module-template data="roleData" name="inputs/select"></module-template>
-                    <md-switch ng-model="currentUser.user.enabled">
-                        {{translate('user_enabled')}}
-                    </md-switch>
+                    {{translate("user_create_date")}} : {{currentUser.user.createDate | date:'medium'}}<br/>
+                    {{translate("user_blocked")}} : {{currentUser.user.blocked}}<br/>
+                    {{translate("user_enabled")}} : {{currentUser.user.enabled}}<br/>
+                    <span ng-if="currentUser.user.blockMessage">
+                        {{translate("user_block_message")}} : {{currentUser.user.blockMessage}}<br>
+                    </span>
+                    <module-template data="roleData" name="inputs/list"></module-template>
                 </p>
                 <md-button class="md-raised md-primary" ng-click="updateUser()" ng-disabled="!currentUser">{{translate("user_update")}}</md-button>
             </md-content>
@@ -78,31 +28,62 @@
         <md-tab label="{{translate('permissions')}}" ng-if="currentUser != null">
             <md-content>
                 <p>
-                    <a href="" ng-click="addNewPermission()">{{translate("user_addNewPermission")}}</a>
+                    <a href="" ng-click="addNewPermission()">{{translate("user_add_new_permission")}}</a>
                     |
-                    <a href="" ng-click="showDeleteColumn = !showDeleteColumn;">{{translate("user_removePermission")}}</a>
+                    <a href="" ng-click="showDeleteColumn = !showDeleteColumn;">{{translate("user_remove_permission")}}</a>
                 </p>
                 <div ng-show="showAutoCompleteForRight">
-                    <module-template data="permissionsData" name="inputs/select"></module-template>
+                    <module-template data="permissionsData" name="inputs/list"></module-template>
                 </div>
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th ng-show="showDeleteColumn">{{translate("user_removePermission")}}</th>
+                        <th ng-show="showDeleteColumn">{{translate("user_remove_permission")}}</th>
                         <th>{{translate("id")}}</th>
                         <th>{{translate("name")}}</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="permission in currentUser.user.permissions">
-                        <td ng-show="showDeleteColumn"><span class="fa fa-minus delete" ng-click="removePermission(permission.id)"></span></td>
+                        <td ng-show="showDeleteColumn"><span class="fa fa-times remove-icon" ng-click="removePermission(permission.id)"></span></td>
                         <td>{{permission.id}}</td>
                         <td>{{permission.permissionName}}</td>
                     </tr>
                     </tbody>
                 </table>
-                <md-button class="md-raised md-primary" ng-click="updateUser()" ng-disabled="!currentUser">{{translate("user_updatePermissions")}}</md-button>
+                <md-button class="md-raised md-primary" ng-click="updateUser()" ng-disabled="!currentUser">{{translate("user_update_permissions")}}</md-button>
             </md-content>
         </md-tab>
     </md-tabs>
 </md-content>
+
+<script type="text/ng-template" id="blockUser.html">
+    <md-dialog ng-cloak>
+        <form>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>{{parentScope.translate("user_block")}}</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="cancel()">
+                        <md-icon md-svg-src="resources/image/svg/close.svg" aria-label="Close dialog"></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <div class="md-dialog-content">
+                    <div>
+                        <md-input-container class="md-block">
+                            <label>{{parentScope.translate("user_block_message")}}</label>
+                            <textarea ng-model="blockMessage" md-maxlength="500" rows="5" md-select-on-focus></textarea>
+                        </md-input-container>
+                    </div>
+                </div>
+            </md-dialog-content>
+            <md-dialog-actions layout="row">
+                <md-button class="md-raised md-primary" ng-click="answer(blockMessage)" ng-disabled="!blockMessage">
+                    {{parentScope.translate("do_it")}}
+                </md-button>
+            </md-dialog-actions>
+        </form>
+    </md-dialog>
+</script>

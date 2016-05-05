@@ -1,17 +1,21 @@
 {
   "text" : {
     "user_title": "Пользователи",
-    "user_createDate" : "Дата создания",
+    "user_create_date" : "Дата регестрации",
     "user" : "Пользователь",
     "user_enabled" : "Доступный",
-    "user_loadMore" : "Загрузить больше пользователей...",
+    "user_blocked" : "Заблокированный",
+    "user_load_more" : "Загрузить больше пользователей...",
     "user_role" : "Роль",
-    "user_findUser" : "Поиск пользователя",
+    "user_find_user" : "Поиск пользователя",
     "user_update" : "Обновить пользователя",
     "user_remove" : "Удалить пользователя",
     "user_block" : "Блокирвка пользователя",
-    "user_addNewPermission" : "Добавить новое право",
-    "user_removePermission" : "Удалить право",
-    "user_updatePermissions" : "Обновить права"
+    "user_add_new_permission" : "Добавить новое право",
+    "user_remove_permission" : "Удалить право",
+    "user_update_permissions" : "Обновить права",
+    "user_block" : "Заблокировать пользователя",
+    "user_unblock" : "Разблокировать пользователя",
+    "user_block_message" : "Причина блокировки пользователя"
   }
 }

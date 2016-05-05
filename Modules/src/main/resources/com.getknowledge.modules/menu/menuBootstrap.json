@@ -120,6 +120,11 @@
               "imageUrl": "/resources/image/menu/icons/tasks.png"
             },
             {
+              "name" : "currency",
+              "url": "/currency",
+              "imageUrl" : "/resources/image/menu/icons/currency.png"
+            },
+            {
               "name": "info",
               "url": "/system_info",
               "imageUrl": "/resources/image/menu/icons/systemInfo.png"
