@@ -30,6 +30,14 @@ model.controller("usersCtrl", function ($scope, applicationService, className,$m
                 title : "user_create_date",
                 type : "dateTime",
                 field : "user.createDate"
+            },{
+                title : "user_enabled",
+                type : "check_box",
+                field : "user.enabled"
+            },{
+                title : "user_blocked",
+                type : "check_box",
+                field : "user.blocked"
             }
         ],
         headerNames : [

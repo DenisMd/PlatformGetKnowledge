@@ -231,11 +231,11 @@ public class FilterQuery<T> {
             return cal;
         }
 
-        if (clazz.getName().equals("java.lang.Integer")) {
+        if (clazz.getName().equals("java.lang.Integer") || clazz.getName().equals("int")) {
             return Integer.parseInt(str);
-        } else if (clazz.getName().equals("java.lang.Long")){
+        } else if (clazz.getName().equals("java.lang.Long") || clazz.getName().equals("long")){
             return Long.parseLong(str);
-        } else if (clazz.getName().equals("java.lang.Boolean")){
+        } else if (clazz.getName().equals("java.lang.Boolean") || clazz.getName().equals("boolean")){
             return Boolean.parseBoolean(str);
         }
 

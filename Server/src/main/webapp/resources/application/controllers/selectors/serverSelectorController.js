@@ -1,6 +1,6 @@
 model.controller("serverSelectorController" , function ($scope , customFilterService,applicationService) {
 
-    var filter = applicationService.createFilter($scope.getData().className,0,10);
+    $scope.filter = applicationService.createFilter($scope.getData().className,0,10);
 
     $scope.list = [];
     $scope.orderItem = "";
@@ -23,7 +23,7 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
     };
 
     var doAction = function(){
-        applicationService.filterRequest($scope,"listInfo",filter,addItem);
+        applicationService.filterRequest($scope,"listInfo",$scope.filter,addItem);
     };
 
     doAction();
@@ -32,16 +32,16 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
         if (header.orderBy === true) {
             $scope.orderItem = header.name;
             $scope.orderReverse = !$scope.orderReverse;
-            filter.clearOrder();
-            filter.setOrder(header.name,$scope.orderReverse);
-            filter.reload();
+            $scope.filter.clearOrder();
+            $scope.filter.setOrder(header.name,$scope.orderReverse);
+            $scope.filter.reload();
             $scope.list = [];
             doAction();
         }
     };
 
     $scope.loadMore = function () {
-        filter.increase(10);
+        $scope.filter.increase(10);
         doAction();
     };
 
@@ -68,9 +68,9 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
     });
 
     $scope.doFilters = function () {
-        filter.deleteFiltersInfo();
-        filter.createFiltersInfo();
-        filter.reload();
+        $scope.filter.deleteFiltersInfo();
+        $scope.filter.createFiltersInfo();
+        $scope.filter.reload();
         $scope.list = [];
 
         buildDefaultFilters();
@@ -85,13 +85,13 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
             if (filterData.model !== undefined) {
                 switch (filterData.type) {
                     case "text" :
-                        filter.like(filterData.field, "text", "%" + filterData.model + "%");
+                        $scope.filter.like(filterData.field, "text", "%" + filterData.model + "%");
                         break;
                     case "number":
-                        filter.equals(filterData.field, "number", filterData.model);
+                        $scope.filter.equals(filterData.field, "number", filterData.model);
                         break;
                     case "check_box":
-                        filter.equals(filterData.field, "boolean", filterData.model);
+                        $scope.filter.equals(filterData.field, "boolean", filterData.model);
                         break;
                 }
             }
@@ -99,40 +99,40 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
     }
 
     function buildCustomFilters() {
-        filter.setLogicalExpression($scope.customFilterInfo.logicalOperation);
+        $scope.filter.setLogicalExpression($scope.customFilterInfo.logicalOperation);
 
         for (var i=0; i < $scope.customFilterInfo.filterData.length; i++) {
             var filterItem = $scope.customFilterInfo.filterData[i];
             switch (filterItem.oper.info.name) {
                 case "equals" :
-                    filter.equals(filterItem.field.info.name,filterItem.field.info.type,filterItem.param.info.values[0]);
+                    $scope.filter.equals(filterItem.field.info.name,filterItem.field.info.type,filterItem.param.info.values[0]);
                     break;
                 case  "like" :
-                    filter.like(filterItem.field.info.name,"text",filterItem.param.info.values[0]);
+                    $scope.filter.like(filterItem.field.info.name,"text",filterItem.param.info.values[0]);
                     break;
                 case "great_than" :
-                    filter.greatThan(filterItem.field.info.name,"number",filterItem.param.info.values[0]);
+                    $scope.filter.greatThan(filterItem.field.info.name,"number",filterItem.param.info.values[0]);
                     break;
                 case "great_than_or_equal_to" :
-                    filter.greaterThanOrEqualTo(filterItem.field.info.name,"number",filterItem.param.info.values[0]);
+                    $scope.filter.greaterThanOrEqualTo(filterItem.field.info.name,"number",filterItem.param.info.values[0]);
                     break;
                 case "less_than" :
-                    filter.lessThan(filterItem.field.info.name,"number",filterItem.param.info.values[0]);
+                    $scope.filter.lessThan(filterItem.field.info.name,"number",filterItem.param.info.values[0]);
                     break;
                 case "less_than_or_equal" :
-                    filter.lessThanOrEqualTo(filterItem.field.info.name,"number",filterItem.param.info.values[0]);
+                    $scope.filter.lessThanOrEqualTo(filterItem.field.info.name,"number",filterItem.param.info.values[0]);
                     break;
                 case "between" :
-                    filter.between(filterItem.field.info.name,"number",filterItem.param.info.values[0],filterItem.param.info.values[1]);
+                    $scope.filter.between(filterItem.field.info.name,"number",filterItem.param.info.values[0],filterItem.param.info.values[1]);
                     break;
                 case "after" :
-                    filter.greaterThanOrEqualTo(filterItem.field.info.name,"date",filterItem.param.info.values[0]);
+                    $scope.filter.greaterThanOrEqualTo(filterItem.field.info.name,"date",filterItem.param.info.values[0]);
                     break;
                 case "before" :
-                    filter.lessThanOrEqualTo(filterItem.field.info.name,"date",filterItem.param.info.values[0]);
+                    $scope.filter.lessThanOrEqualTo(filterItem.field.info.name,"date",filterItem.param.info.values[0]);
                     break;
                 case "in" :
-                    filter.in(filterItem.field.info.name,filterItem.field.info.type,filterItem.param.info.values);
+                    $scope.filter.in(filterItem.field.info.name,filterItem.field.info.type,filterItem.param.info.values);
                     break;
             }
         }

@@ -67,7 +67,7 @@
                         <span ng-if="header.filter !== 'date'">{{getItemByName(item , header.name)}}</span>
                     </td>
                 </tr>
-                <tr>
+                <tr ng-show="listInfo.totalEntitiesCount > (filter.result.first + filter.max)">
                     <td colspan="{{getData().headerNames.length}}" ng-click="loadMore()" class="loadMore">
                         {{translate(getData().loadMoreTitle)}}
                     </td>
