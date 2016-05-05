@@ -14,6 +14,22 @@ model.controller("usersCtrl", function ($scope, applicationService, className,$m
                 type  : "text",
                 field : "user.login",
                 default : true
+            },
+            {
+                title : "id",
+                type : "number",
+                field : "id"
+            },
+            {
+                title : "user_role",
+                type : "enum",
+                field : "user.role.roleName",
+                constants : []
+            },
+            {
+                title : "user_create_date",
+                type : "dateTime",
+                field : "user.createDate"
             }
         ],
         headerNames : [
@@ -72,57 +88,10 @@ model.controller("usersCtrl", function ($scope, applicationService, className,$m
         ]
     };
 
-    applicationService.list($scope,"listRoles",className.roles);
-
-
-    //var filter = applicationService.createFilter(className.userInfo,0,10);
-    //
-    //var addUsers = function(user){
-    //    $scope.users.push(user);
-    //};
-    //
-    //var doAction = function(){
-    //    applicationService.filterRequest($scope,"",filter,addUsers);
-    //};
-    //
-    //doAction();
-
-    //var reverse = false;
-    //$scope.setUserOrder = function(orderName) {
-    //    reverse = !reverse;
-    //
-    //    filter.clearOrder();
-    //    filter.setOrder(orderName,reverse);
-    //    filter.reload();
-    //    $scope.users = [];
-    //    doAction();
-    //};
-
-    //$scope.searchUsers = function(text) {
-    //    if (text) {
-    //        var splitArray = text.split(".");
-    //        if (splitArray.length > 1) {
-    //            filter.createSearchText(false);
-    //            filter.addSearchField("firstName",splitArray[0]);
-    //            filter.addSearchField("lastName",splitArray[1]);
-    //        } else {
-    //            filter.createSearchText(true);
-    //            filter.addSearchField("firstName",text);
-    //            filter.addSearchField("user.login",text);
-    //            filter.addSearchField("lastName",text);
-    //        }
-    //    }
-    //    $scope.users = [];
-    //    filter.reload();
-    //    doAction();
-    //};
-
-
-
-    //$scope.loadMore = function () {
-    //    filter.increase(10);
-    //    doAction();
-    //};
+    applicationService.list($scope,"listRoles",className.roles,function(item){
+        //2 - index enum role
+        $scope.selectorData.filters[2].constants.push(item.roleName);
+    });
 
     $scope.roleData = {
         "id" : "roles",

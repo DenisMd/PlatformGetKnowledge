@@ -305,7 +305,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                 });
                 this.result.filtersInfo.filters.push(
                     {
-                        name : "between",
+                        name : "in",
                         field : field,
                         type : type,
                         values : resultValues

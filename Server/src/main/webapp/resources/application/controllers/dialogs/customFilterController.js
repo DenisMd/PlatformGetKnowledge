@@ -61,7 +61,7 @@ model.controller("customFilterController",function($scope,customFilterService){
                     symbol : "<"
                 },{
                     name : "less_than_or_equal",
-                    symbol : ">"
+                    symbol : "<="
                 },{
                     name : "between",
                     symbol : "between"
@@ -214,7 +214,6 @@ model.controller("customFilterController",function($scope,customFilterService){
         minView : 'minute' ,
         startView : 'year',
         onChange: function(date,isValid){
-            console.log(date);
             if (isValid) {
                 $scope.dateParam1 = date;
             } else {

@@ -58,9 +58,9 @@ public class FilterQuery<T> {
     public void equal(String field, String value ,String type) {
         Path path = parseField(field);
 
-        Object obj = convert(value,field,type);
+        Comparable obj = (Comparable)convert(value,field,type);
 
-        Predicate result = criteriaBuilder.equal(path,value);
+        Predicate result = criteriaBuilder.equal(path,obj);
 
         addPrevPredicate(result);
     }
@@ -76,9 +76,9 @@ public class FilterQuery<T> {
     public void greaterThan(String field, String value ,String type) {
         Path path = parseField(field);
 
-        Object obj = convert(value,field,type);
+        Comparable obj = (Comparable)convert(value,field,type);
 
-        Predicate result = criteriaBuilder.greaterThan(path, value);
+        Predicate result = criteriaBuilder.greaterThan(path, obj);
 
         addPrevPredicate(result);
     }
@@ -86,9 +86,9 @@ public class FilterQuery<T> {
     public void greaterThanOrEqualTo(String field, String value ,String type) {
         Path path = parseField(field);
 
-        Object obj = convert(value,field,type);
+        Comparable obj = (Comparable)convert(value,field,type);
 
-        Predicate result = criteriaBuilder.greaterThanOrEqualTo(path,value);
+        Predicate result = criteriaBuilder.greaterThanOrEqualTo(path,obj);
 
         addPrevPredicate(result);
     }
@@ -96,9 +96,9 @@ public class FilterQuery<T> {
     public void lessThan(String field, String value ,String type) {
         Path path = parseField(field);
 
-        Object obj = convert(value,field,type);
+        Comparable obj = (Comparable)convert(value,field,type);
 
-        Predicate result = criteriaBuilder.lessThan(path,value);
+        Predicate result = criteriaBuilder.lessThan(path,obj);
 
         addPrevPredicate(result);
     }
@@ -106,9 +106,9 @@ public class FilterQuery<T> {
     public void lessThanOrEqualTo(String field, String value ,String type) {
         Path path = parseField(field);
 
-        Object obj = convert(value,field,type);
+        Comparable obj = (Comparable)convert(value,field,type);
 
-        Predicate result = criteriaBuilder.lessThanOrEqualTo(path, value);
+        Predicate result = criteriaBuilder.lessThanOrEqualTo(path, obj);
 
         addPrevPredicate(result);
     }
@@ -138,7 +138,7 @@ public class FilterQuery<T> {
             objects.add(convert(value,field,type));
         }
 
-        Predicate result = path.in(values);
+        Predicate result = path.in(objects);
 
         addPrevPredicate(result);
     }
@@ -184,17 +184,33 @@ public class FilterQuery<T> {
         }
     }
 
+    private Field getField(String name , Class<?> type) throws NoSuchFieldException {
+
+        for (Field field : type.getDeclaredFields()) {
+            if (field.getName().equals(name)) {
+                return field;
+            }
+        }
+
+        if (type.getSuperclass() != null) {
+            return  getField(name,type.getSuperclass());
+        }
+
+        throw new NoSuchFieldException("Field is not exist " +name);
+    }
+
+
     private Class getType(String fieldName) {
         try {
             if (fieldName.contains(".")) {
                 String [] split = fieldName.split("\\.");
-                Class type = pClassEntity.getDeclaredField(split[0]).getType();
+                Class type = getField(split[0],pClassEntity).getType();
                 for (int i=1; i < split.length;i++) {
-                    type = type.getClass().getDeclaredField(split[i]).getType();
+                    type = getField(split[i],type).getType();
                 }
                 return type;
             }
-            Field result = pClassEntity.getDeclaredField(fieldName);
+            Field result =getField(fieldName, pClassEntity);
             return result.getType();
         } catch (NoSuchFieldException e) {
             return null;
