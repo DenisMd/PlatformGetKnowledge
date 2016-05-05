@@ -1,57 +1,63 @@
-model.controller("logsCtrl", function ($scope, $state,$http,applicationService,pageService,className) {
-
-    var filter = applicationService.createFilter(className.trace,0,10);
-    $scope.logs = [];
-
-    var addLog = function(log){
-        switch (log.traceLevel){
-            case "Error": log.iconClassName = "fa-exclamation-circle red-error"; break;
-            case "Critical": log.iconClassName = "fa-exclamation-triangle red-critical"; break;
-            case "Warning": log.iconClassName = "fa-exclamation color-warning"; break;
-            case "Event": log.iconClassName = "fa-eye color-event"; break;
-            case "Debug": log.iconClassName = "fa-circle-thin color-debug"; break;
-        }
-        $scope.logs.push(log);
-    };
-
-    var doAction = function(){
-        applicationService.filterRequest($scope,"",filter,addLog);
-    };
-
-    doAction();
-
-    var reverse = false;
-    $scope.setLogOrder = function(orderName) {
-        reverse = !reverse;
-        filter.clearOrder();
-        filter.setOrder(orderName,reverse);
-
-
-        filter.reload();
-        $scope.logs = [];
-        doAction();
-    };
-
-    $scope.searchLogs = function(traceLevel) {
-        if (!traceLevel) {
-            filter.clearIn();
-        } else {
-            filter.in("traceLevel" , [traceLevel]);
-        }
-        filter.reload();
-        $scope.logs = [];
-        doAction();
-    };
+model.controller("logsCtrl", function ($scope,className) {
 
     $scope.currentLog = null;
-    $scope.setCurrentItem = function(item){
-        $scope.currentLog = item;
+
+    //Информация для вывода stack trace при ошибке выполнения сервиса
+    $scope.stackTraceData = {
+        title : "log_stack_trace"
     };
 
-    $scope.loadMore = function () {
-        filter.increase(10);
-        doAction();
+    $scope.selectorData = {
+        className   : className.trace,
+        tableName   :   "logs",
+        loadMoreTitle : "log_load_more",
+        filters      : [
+            {
+                title : "log_message",
+                type  : "text",
+                field : "message"
+            },
+            {
+                title : "id",
+                type : "number",
+                field : "id"
+            },
+            {
+                title : "log_trace_level",
+                type : "enum",
+                field : "traceLevel",
+                constants : ["Debug", "Event", "Warning", "Error", "Critical"]
+            },
+            {
+                title : "log_date",
+                type : "dateTime",
+                field : "calendar"
+            }
+        ],
+        headerNames : [
+            {
+                name : "id",
+                orderBy : true
+            }, {
+                name : "message",
+                title : "log_message"
+            },{
+                name : "traceLevel",
+                title : "log_trace_level",
+                orderBy : true
+            },{
+                name : "calendar",
+                title : "log_date",
+                filter : "date",
+                orderBy : true
+            }
+        ],
+        selectItemCallback : function (item) {
+            $scope.currentLog = item;
+            if (item.stackTrace) {
+                $scope.stackTraceData.stack = item.stackTrace;
+            }
+        }
     };
 
-    applicationService.count($scope,"countLogs",className.trace);
 });

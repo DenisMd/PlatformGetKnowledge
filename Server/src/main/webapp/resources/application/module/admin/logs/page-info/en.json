@@ -1,16 +1,16 @@
 {
   "text" : {
-    "log_Event" : "Event",
-    "log_Error" : "Error",
-    "log_Warning" : "Warning",
-    "log_Critical" : "Critical",
-    "log_Debug" : "Debug",
+    "log_event" : "Event",
+    "log_error" : "Error",
+    "log_warning" : "Warning",
+    "log_critical" : "Critical",
+    "log_debug" : "Debug",
     "log_icon" : "Icon",
     "log_message" : "Message",
-    "log_traceLevel" : "Trace level",
+    "log_trace_level" : "Trace level",
     "log_date" : "Date",
-    "log_loadMore" : "Load more logs",
-    "log_stackTrace" : "Трасса стека"
+    "log_load_more" : "Load more logs",
+    "log_stack_trace" : "Трасса стека"
 
   }
 }

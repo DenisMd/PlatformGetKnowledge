@@ -58,7 +58,7 @@
             </tr>
             </thead>
             <tbody ng-repeat="item in list" ng-init="item.hideColumnInfo=true">
-            <tr ng-if="!item.hideColumnInfo" class="row-panel">
+            <tr ng-if="showRowPanel(item)" class="row-panel">
                 <td colspan="{{getData().headerNames.length}}">
                     <div class="item-panel" ng-show="!item.hideColumnInfo">
                         <i ng-if="getData().deleteOptions" class="fa fa-times filter-delete"
@@ -82,11 +82,13 @@
                     <span ng-if="header.filter !== 'date'">{{getItemByName(item , header.name)}}</span>
                 </td>
             </tr>
-            <tr ng-show="listInfo.totalEntitiesCount > (filter.result.first + filter.max)">
-                <td colspan="{{getData().headerNames.length}}" ng-click="loadMore()" class="loadMore">
-                    {{translate(getData().loadMoreTitle)}}
-                </td>
-            </tr>
+            </tbody>
+            <tbody>
+                <tr ng-show="listInfo.totalEntitiesCount > (filter.result.first + filter.max)">
+                    <td colspan="{{getData().headerNames.length}}" ng-click="loadMore()" class="loadMore">
+                        {{translate(getData().loadMoreTitle)}}
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

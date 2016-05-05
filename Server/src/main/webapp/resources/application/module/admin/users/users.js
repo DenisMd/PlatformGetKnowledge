@@ -1,4 +1,4 @@
-model.controller("usersCtrl", function ($scope, applicationService, className,$mdDialog) {
+model.controller("usersCtrl", function ($scope, applicationService, className) {
 
     //иницилизация
     $scope.showAutoCompleteForRight = false;

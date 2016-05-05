@@ -18,7 +18,9 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
     };
 
     var addItem = function(item){
-        $scope.getData().callBackForFilter(item);
+        if (angular.isFunction($scope.getData().callBackForFilter)) {
+            $scope.getData().callBackForFilter(item);
+        }
         $scope.list.push(item);
     };
 
@@ -31,6 +33,10 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
     $scope.selectItem = function (item) {
         $scope.getData().selectItemCallback(item);
         item.hideColumnInfo = !item.hideColumnInfo;
+    };
+
+    $scope.showRowPanel = function(item) {
+        return !item.hideColumnInfo && ($scope.getData().actionsForItem || $scope.getData().deleteOptions);
     };
 
     $scope.setOrder = function(header) {

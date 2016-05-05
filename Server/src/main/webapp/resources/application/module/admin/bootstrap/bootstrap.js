@@ -65,7 +65,7 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className)
         ],
         selectItemCallback : function (item) {
             $scope.currentService = item;
-            if ($scope.currentService != null && $scope.currentService.stackTrace != null) {
+            if ($scope.currentService.stackTrace) {
                 $scope.stackTraceData.stack = $scope.currentService.stackTrace;
             }
         },

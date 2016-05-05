@@ -1,15 +1,15 @@
 {
   "text" : {
-    "log_Event" : "Событие",
-    "log_Error" : "Ошибка",
-    "log_Warning" : "Предупреждение",
-    "log_Critical" : "Критическая ошибка",
-    "log_Debug" : "Отладка",
+    "log_event" : "Событие",
+    "log_error" : "Ошибка",
+    "log_warning" : "Предупреждение",
+    "log_critical" : "Критическая ошибка",
+    "log_debug" : "Отладка",
     "log_icon" : "Иконка",
     "log_message" : "Сообщение",
-    "log_traceLevel" : "Уровень трассировки",
+    "log_trace_level" : "Уровень трассировки",
     "log_date" : "Время",
-    "log_loadMore" : "Загрузить больше логов",
-    "log_stackTrace" : "Трасса стека"
+    "log_load_more" : "Загрузить больше логов",
+    "log_stack_trace" : "Трасса стека"
   }
 }

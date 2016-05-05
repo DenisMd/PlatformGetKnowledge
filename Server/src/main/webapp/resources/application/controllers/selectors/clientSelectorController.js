@@ -27,6 +27,10 @@ model.controller("clientSelectorController" , function ($scope , customFilterSer
         return result;
     };
 
+    $scope.showRowPanel = function(item) {
+        return !item.hideColumnInfo && ($scope.getData().actionsForItem || $scope.getData().deleteOptions);
+    };
+
     $scope.deleteAction = function () {
         $scope.showDeleteColumn = !$scope.showDeleteColumn;
     };
