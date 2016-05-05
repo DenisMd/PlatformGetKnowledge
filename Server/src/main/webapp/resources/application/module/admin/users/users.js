@@ -75,7 +75,7 @@ model.controller("usersCtrl", function ($scope, applicationService, className,$m
         },
         selectItemCallback : function (item) {
             $scope.currentUser = item;
-            $scope.defaultRoleName = item.user.role.roleName;
+            $scope.defaultRole = item.user.role;
             $scope.showAutoCompleteForRight = false;
             $scope.showDeleteColumn = false;
         },
@@ -96,27 +96,40 @@ model.controller("usersCtrl", function ($scope, applicationService, className,$m
         ]
     };
 
-    applicationService.list($scope,"listRoles",className.roles,function(item){
-        //2 - index enum role
-        $scope.selectorData.filters[2].constants.push(item.roleName);
-    });
-
     $scope.roleData = {
         "id" : "roles",
         "count" : 1,
-        "filter":"roleName",
-        "class" : "input-group-sm",
+        "titleField":"roleName",
+        "classForInput" : "input-group-sm",
         "listName" : "listRoles",
         "required" : true,
-        "defaultValue" : "defaultRoleName",
+        "defaultValue" : "defaultRole",
         "callback" : function (value){
             $scope.currentUser.user.role = value;
         }
     };
 
+    $scope.permissionsData = {
+        "id" : "permissions",
+        "count" : 1,
+        "titleField":"permissionName",
+        "classForInput" : "input-group-sm",
+        "listName" : "filterPermissions",
+        "required" : true,
+        "callback" : function (value){
+            $scope.currentUser.user.permissions.push(value);
+            $scope.showAutoCompleteForRight = false;
+        }
+    };
+
+    applicationService.list($scope,"listRoles",className.roles,function(item){
+        //2 - index enum role
+        $scope.selectorData.filters[2].constants.push(item.roleName);
+    });
+
     $scope.updateUser = function() {
         applicationService.update($scope,"",className.users,$scope.currentUser.user,function(result){
-            $scope.showToast(result);
+            $scope.showToast($scope.getResultMessage(result));
         });
     };
 
@@ -153,19 +166,6 @@ model.controller("usersCtrl", function ($scope, applicationService, className,$m
                 $scope.currentUser.user.permissions.splice(i,1);
                 return;
             }
-        }
-    };
-
-    $scope.permissionsData = {
-        "id" : "permissions",
-        "count" : 1,
-        "filter":"permissionName",
-        "class" : "input-group-sm",
-        "listName" : "filterPermissions",
-        "required" : true,
-        "callback" : function (value){
-            $scope.currentUser.user.permissions.push(value);
-            $scope.showAutoCompleteForRight = false;
         }
     };
 
