@@ -83,8 +83,6 @@
     <script src="/resources/bower_components/angular-aria/angular-aria.js" type="text/javascript" ></script>
     <script src="/resources/bower_components/Chart.js/Chart.min.js" type="text/javascript" ></script>
     <script src="/resources/bower_components/clipboard/dist/clipboard.min.js"></script>
-    <script src="/resources/bower_components/highlightjs/highlight.pack.min.js"></script>
-    <script src="/resources/bower_components/angular-highlightjs/build/angular-highlightjs.min.js"></script>
     <script src="/resources/bower_components/codemirror/lib/codemirror.js"></script>
     <script src="/resources/bower_components/codemirror/addon/mode/loadmode.js"></script>
     <script src="/resources/bower_components/codemirror/mode/meta.js"></script>

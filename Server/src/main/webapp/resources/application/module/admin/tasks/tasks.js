@@ -1,39 +1,82 @@
-model.controller("tasksCtrl", function ($scope, $state,$http,applicationService,pageService,className) {
+model.controller("tasksCtrl", function ($scope,className) {
 
-    var filter = applicationService.createFilter(className.tasks,0,10);
-    $scope.tasks = [];
-
-    var addTask = function(task){
-        $scope.tasks.push(task);
+    $scope.refreshForCodeMirror = false;
+    
+    $scope.codeMirroData = {
+        readOnly: true , 
+        lineNumbers: true,
+        theme:'twilight',
+        mode:'application/json'
+    };
+    
+    //Информация для вывода stack trace при ошибке выполнения сервиса
+    $scope.stackTraceData = {
+        title : "task_stack_trace"
     };
 
-    var doAction = function(){
-        applicationService.filterRequest($scope,"",filter,addTask);
+    $scope.selectorData = {
+        className   : className.tasks,
+        tableName   :   "tasks",
+        loadMoreTitle : "task_load_more",
+        filters      : [
+            {
+                title : "task_name",
+                type  : "text",
+                field : "taskName"
+            },
+            {
+                title : "task_service_name",
+                type : "text",
+                field : "serviceName"
+            },
+            {
+                title : "id",
+                type : "number",
+                field : "id"
+            },
+            {
+                title : "task_status",
+                type : "enum",
+                field : "taskStatus",
+                constants : ["Complete" , "Failed", "NotStarted" , "Runnable"]
+            },
+            {
+                title : "task_calendar",
+                type : "dateTime",
+                field : "startDate"
+            }
+        ],
+        headerNames : [
+            {
+                name : "id",
+                orderBy : true
+            }, {
+                name : "taskName",
+                title : "task_name"
+            },{
+                name : "serviceName",
+                title : "task_service_name"
+            },{
+                name : "taskStatus",
+                title : "task_status",
+                orderBy : true
+            },{
+                name : "startDate",
+                title : "task_calendar",
+                filter : "date",
+                orderBy : true
+            }
+        ],
+        selectItemCallback : function (item) {
+            $scope.currentTask = item;
+            if (item.stackTrace) {
+                $scope.stackTraceData.stack = item.stackTrace;
+            }
+            if (item.jsonData) {
+                $scope.codeMirroData.value = $scope.toPrettyJSON(item.jsonData,2);
+            }
+            $scope.refreshForCodeMirror = !$scope.refreshForCodeMirror;
+        }
     };
-
-    doAction();
-
-    $scope.setCurrentItem = function(item){
-        $scope.currentTask = item;
-    };
-
-    $scope.searchTasks = function(taskStatus) {
-        filter.reload();
-        $scope.tasks = [];
-        filter.equal("taskStatus",taskStatus);
-        doAction();
-    };
-
-    var reverse = false;
-    $scope.setTaskOrder = function(orderName) {
-        reverse = !reverse;
-        filter.clearOrder();
-        filter.setOrder(orderName,reverse);
-        filter.reload();
-        $scope.tasks = [];
-        doAction();
-    };
-
-    applicationService.count($scope,"countTasks",className.tasks);
 
 });

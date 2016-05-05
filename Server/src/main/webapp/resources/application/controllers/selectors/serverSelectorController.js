@@ -31,7 +31,9 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
     doAction();
 
     $scope.selectItem = function (item) {
-        $scope.getData().selectItemCallback(item);
+        if (angular.isFunction($scope.getData().selectItemCallback)){
+            $scope.getData().selectItemCallback(item);
+        }
         item.hideColumnInfo = !item.hideColumnInfo;
     };
 
