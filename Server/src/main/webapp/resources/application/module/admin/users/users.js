@@ -78,6 +78,7 @@ model.controller("usersCtrl", function ($scope, applicationService, className) {
             $scope.defaultRole = item.user.role;
             $scope.showAutoCompleteForRight = false;
             $scope.showDeleteColumn = false;
+            $scope.$broadcast('reset' + $scope.roleData.id.capitalizeFirstLetter() + 'Event');
         },
         deleteOptions:{},
         actionsForItem : [

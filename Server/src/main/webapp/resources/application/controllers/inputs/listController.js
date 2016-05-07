@@ -17,7 +17,7 @@ model.controller("listController",function($scope,listDialogService,$filter) {
     $scope.isShowSelectOptions  = false;
 
     //Выбранный объект из списка
-    $scope.selectedItem   = $scope[$scope.getData().defaultValue];
+    $scope.selectedItem = $scope.getData().defaultValue in $scope ? $scope[$scope.getData().defaultValue] : null;;
 
     //Класс для input-group
     $scope.classForInput         = $scope.getData().classForInput ? $scope.getData().classForInput : "input-group-lg";
@@ -35,7 +35,7 @@ model.controller("listController",function($scope,listDialogService,$filter) {
     //Сбрасывает состояние модели
     if ($scope.getData().id != null) {
         $scope.$on('reset' + $scope.getData().id.capitalizeFirstLetter() + 'Event', function (event, args) {
-            $scope.selectedItem = null;
+            $scope.selectedItem = $scope.getData().defaultValue in $scope ? $scope[$scope.getData().defaultValue] : null;
             $scope.isShowSelectOptions = false;
         });
     }
