@@ -34,7 +34,11 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
         if (angular.isFunction($scope.getData().selectItemCallback)){
             $scope.getData().selectItemCallback(item);
         }
-        item.hideColumnInfo = !item.hideColumnInfo;
+        var hideColumnForItem = item.hideColumnInfo;
+        $scope.list.forEach(function (item) {
+            item.hideColumnInfo = true;
+        });
+        item.hideColumnInfo = !hideColumnForItem;
     };
 
     $scope.showRowPanel = function(item) {

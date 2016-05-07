@@ -45,7 +45,11 @@ model.controller("clientSelectorController" , function ($scope , customFilterSer
 
     $scope.selectItem = function (item) {
         $scope.getData().selectItemCallback(item);
-        item.hideColumnInfo = !item.hideColumnInfo;
+        var hideColumnForItem = item.hideColumnInfo;
+        $scope.filterdList.forEach(function (item) {
+            item.hideColumnInfo = true;
+        });
+        item.hideColumnInfo = !hideColumnForItem;
     };
 
     $scope.filterSearch = function(item,index,allItems)
