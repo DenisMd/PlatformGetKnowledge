@@ -79,6 +79,7 @@ model.controller("usersCtrl", function ($scope, applicationService, className) {
             $scope.showAutoCompleteForRight = false;
             $scope.showDeleteColumn = false;
         },
+        deleteOptions:{},
         actionsForItem : [
             {
                 icon : "fa-lock",

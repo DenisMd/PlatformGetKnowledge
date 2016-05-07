@@ -94,6 +94,7 @@
 
     <%--Utils--%>
     <script src="/resources/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="/resources/bower_components/codemirror/mode/javascript/javascript.js"></script>
 
     <%--<script src="/resources/bower_components/videojs-hotkeys/videojs.hotkeys.min.js"></script>--%>
     <script src="/resources/application/platform.js"></script>
