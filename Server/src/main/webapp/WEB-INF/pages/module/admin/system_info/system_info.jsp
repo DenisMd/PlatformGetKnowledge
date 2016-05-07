@@ -21,6 +21,16 @@
                 <ul>
                     <li ng-repeat="systemService in systemServices">
                         {{systemService.name}}
+                        <ul>
+                            <li ng-repeat="actionInfo in systemService.actionInfos">
+                                {{actionInfo.type}} : {{actionInfo.name}}
+                                <ul>
+                                    <li ng-repeat="mandatoryFields in actionInfo.mandatoryFields">
+                                        {{mandatoryFields}}
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </md-content>
