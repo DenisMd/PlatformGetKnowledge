@@ -1320,12 +1320,6 @@ model.directive("showTag",['$compile','TagService',function ($compile,TagService
                 $scope.codeShown = !$scope.codeShown;
             };
             $scope.model = {};
-
-            $scope.$watch('tag',function(newValue){
-                if (newValue){
-                    $scope.model.code = newValue.getCode();
-                }
-            });
         },
         templateUrl:"showTag.html"
     }
@@ -1414,7 +1408,8 @@ function ProgramTag() {
 
     this.getReadOnlyOptions = function () {
         return angular.extend({
-            readOnly: 'true'
+            readOnly: 'true',
+            value : code
         }, options);
     };
 

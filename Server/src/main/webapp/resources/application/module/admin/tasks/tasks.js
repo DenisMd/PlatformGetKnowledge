@@ -1,12 +1,18 @@
 model.controller("tasksCtrl", function ($scope,className) {
-
-    $scope.refreshForCodeMirror = false;
     
     $scope.codeMirroData = {
         readOnly: true , 
         lineNumbers: true,
         theme:'twilight',
-        mode:'application/json'
+        mode:'application/json',
+        value : "{}",
+        onLoad: function(_editor){
+
+            // Load without click
+            setTimeout(function(){
+                _editor.refresh();
+            }, 0);
+        }
     };
     
     //Информация для вывода stack trace при ошибке выполнения сервиса
@@ -75,7 +81,6 @@ model.controller("tasksCtrl", function ($scope,className) {
             if (item.jsonData) {
                 $scope.codeMirroData.value = $scope.toPrettyJSON(item.jsonData,2);
             }
-            $scope.refreshForCodeMirror = !$scope.refreshForCodeMirror;
         }
     };
 
