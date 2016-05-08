@@ -39,3 +39,20 @@
     padding: 5px;
     border: 4px solid #0A3983;
 }
+
+.scroll-column-info .mCSB_container{
+    width: inherit !important;
+    overflow: visible !important;
+}
+
+.scroll-column-info  .datetimepicker{
+    width: inherit;
+}
+
+.scroll-column-info .table-condensed > tbody > tr > td{
+    padding: 2px 7px;
+}
+
+.scroll-column-info .datetimepicker .hour, .scroll-column-info .datetimepicker .minute{
+    height: 28px;
+}
