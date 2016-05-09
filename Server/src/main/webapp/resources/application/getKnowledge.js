@@ -214,17 +214,6 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
     applicationService.list($scope , "programmingStyles",className.programmingStyles);
 });
 
-model.controller("treeListCtrl" , function ($scope) {
-    $scope.setCurrentItem = function(item , level){
-        item.isOpen = !item.isOpen;
-        $scope.getData().callback(item);
-
-        if (level) {
-            $scope.currentMenuItem.level = level;
-        }
-    };
-});
-
 model.directive("hideOptions",function($document){
     return {
         restrict: 'A',

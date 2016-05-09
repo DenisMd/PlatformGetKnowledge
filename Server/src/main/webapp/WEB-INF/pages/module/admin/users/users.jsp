@@ -16,7 +16,10 @@
                     {{translate("email")}} : {{currentUser.user.login}}<br/>
                     {{translate("user_create_date")}} : {{currentUser.user.createDate | date:'medium'}}<br/>
                     {{translate("user_blocked")}} : {{currentUser.user.blocked}}<br/>
-                    {{translate("user_enabled")}} : {{currentUser.user.enabled}}<br/>
+                    <md-switch ng-model="currentUser.user.enabled">
+                        {{translate('user_enabled')}}
+                    </md-switch>
+                    <br/>
                     <span ng-if="currentUser.user.blockMessage">
                         {{translate("user_block_message")}} : {{currentUser.user.blockMessage}}<br>
                     </span>

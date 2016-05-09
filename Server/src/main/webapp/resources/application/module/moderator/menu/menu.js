@@ -4,12 +4,13 @@ model.controller("menuCtrl", function ($scope,applicationService,className) {
 
     $scope.treeViewListData = {
         dataList : [],
-        fieldTitle : "name",
+        topSubItems : "name",
         fieldSubItems : "items",
         subItemFieldTitle : "title",
         subItemFieldSubItems : "subItems",
-        callback : function(item) {
+        callback : function(item,level) {
             $scope.currentMenuItem = item;
+            $scope.currentMenuItem.level = level;
         }
     };
 

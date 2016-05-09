@@ -1,17 +1,21 @@
-.menu-name {
+.top-item {
     list-style-type: none;
     font-size: 24px;
     color : #49D054;
     font-weight: bold;
 }
 
-.menu-item  {
+.disabled-item {
+    color : #ccc;
+}
+
+.first-sub-item  {
     font-size: 18px;
     color : #3493fb;
     font-weight: bold;
 }
 
-.menu-subItem {
+.sub-items {
     font-size: 16px;
     color : #2844fb;
     font-weight: bold;
