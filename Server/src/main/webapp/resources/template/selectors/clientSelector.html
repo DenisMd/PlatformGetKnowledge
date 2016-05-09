@@ -1,36 +1,34 @@
 <link rel="stylesheet" href="/resources/css/selectors/selector.css">
 
 <div class="table-selector" ng-controller="clientSelectorController">
-    <div layout-gt-sm="row" layout-align="center">
-        <span ng-repeat="action in getData().actions" class="action">
+    <div layout-gt-sm="row" layout-align="center center">
+        <span ng-repeat="action in getData().actions" class="action" flex="none">
             <span class="fa fa-3x" ng-class="action.icon"  ng-click="action.actionCallback($event)" ng-style="{color : action.color}">
                 <md-tooltip>
                     <span class="tooltip-text">{{translate(action.tooltip)}}</span>
                 </md-tooltip>
             </span>
         </span>
-        <span class="filter-action">
+        <span class="filter-action" flex="none">
             <span class="fa fa-3x fa-filter"  ng-click="openCustomFilter()">
                 <md-tooltip>
                     <span class="tooltip-text">{{translate("custom_filter")}}</span>
                 </md-tooltip>
             </span>
         </span>
-        <span ng-repeat="filter in getData().filters | filter:{'default' : true}" ng-switch="filter.type">
+        <div ng-repeat="filter in getData().filters | filter:{'default' : true}" ng-switch="filter.type" flex="{{filter.type==='check_box'?'none':''}}">
 
             <div ng-switch-when="check_box">
-                <md-checkbox  ng-model="filter.model" >
+                <md-checkbox  ng-model="filter.model" class="filter-panel-item">
                     {{translate(filter.title)}}
                 </md-checkbox>
             </div>
 
             <div ng-switch-default>
-                <div class="form-group">
-                    <input type="{{filter.type}}" class="form-control" ng-model="filter.model" placeholder="{{translate(filter.title)}}">
-                </div>
+                 <input type="{{filter.type}}" class="form-control" ng-model="filter.model" placeholder="{{translate(filter.title)}}">
             </div>
 
-        </span>
+        </div>
     </div>
 
     <!--Модальное окно для показа пользовательских фильтров-->
