@@ -81,8 +81,11 @@
                     <i class="fa fa-times filter-delete"></i>
                 </td>
                 <td ng-repeat="header in getData().headerNames">
-                    <span ng-if="header.filter === 'date'">{{getItemByName(item , header.name) | date:'medium'}}</span>
-                    <span ng-if="header.filter !== 'date'">{{getItemByName(item , header.name)}}</span>
+                    <span ng-switch="header.filter">
+                        <span ng-switch-when="date">{{getItemByName(item , header.name) | date:'medium'}}</span>
+                        <span ng-switch-when="icon" class="fa fa-2x" ng-class="getItemByName(item , header.name).name" ng-style="{color : getItemByName(item , header.name).color}"></span>
+                        <span ng-switch-default>{{getItemByName(item , header.name)}}</span>
+                    </span>
                 </td>
             </tr>
             </tbody>
