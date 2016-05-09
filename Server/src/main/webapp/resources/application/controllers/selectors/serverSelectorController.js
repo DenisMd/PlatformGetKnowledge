@@ -17,6 +17,12 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
         }
     };
 
+    $scope.$on("updateServerSelector" , function (event, args) {
+        $scope.filter.reload();
+        $scope.list = [];
+        doAction();
+    });
+
     var addItem = function(item){
         if (angular.isFunction($scope.getData().callBackForFilter)) {
             $scope.getData().callBackForFilter(item);
@@ -82,6 +88,7 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
 
     customFilterService.setCallbackSave(function (filter) {
         $scope.customFilterInfo = filter;
+        $scope.doFilters();
     });
 
     $scope.doFilters = function () {
@@ -116,6 +123,7 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
     }
 
     function buildCustomFilters() {
+        if (!$scope.customFilterInfo) return;
         $scope.filter.setLogicalExpression($scope.customFilterInfo.logicalOperation);
 
         for (var i=0; i < $scope.customFilterInfo.filterData.length; i++) {
