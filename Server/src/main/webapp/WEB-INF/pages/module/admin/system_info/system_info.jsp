@@ -18,21 +18,7 @@
         </md-tab>
         <md-tab label="{{translate('system_services')}}">
             <md-content class="md-padding">
-                <ul>
-                    <li ng-repeat="systemService in systemServices">
-                        {{systemService.name}}
-                        <ul>
-                            <li ng-repeat="actionInfo in systemService.actionInfos">
-                                {{actionInfo.type}} : {{actionInfo.name}}
-                                <ul>
-                                    <li ng-repeat="mandatoryFields in actionInfo.mandatoryFields">
-                                        {{mandatoryFields}}
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+                <module-template data="treeViewListData" name="tree-view/treeList"></module-template>
             </md-content>
         </md-tab>
     </md-tabs>

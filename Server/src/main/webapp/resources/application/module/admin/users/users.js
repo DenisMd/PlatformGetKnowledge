@@ -80,7 +80,6 @@ model.controller("usersCtrl", function ($scope, applicationService, className) {
             $scope.showDeleteColumn = false;
             $scope.$broadcast('reset' + $scope.roleData.id.capitalizeFirstLetter() + 'Event');
         },
-        deleteOptions:{},
         actionsForItem : [
             {
                 icon : "fa-lock",
@@ -93,6 +92,7 @@ model.controller("usersCtrl", function ($scope, applicationService, className) {
                             blockMessage : answer
                         },function(result){
                             $scope.showToast($scope.getResultMessage(result));
+                            $scope.$broadcast("updateServerSelector");
                         });
                     });
                 }
@@ -114,6 +114,7 @@ model.controller("usersCtrl", function ($scope, applicationService, className) {
                                 userId : item.id
                             },function(result){
                                 $scope.showToast($scope.getResultMessage(result));
+                                $scope.$broadcast("updateServerSelector");
                             });
                         }
                     );
