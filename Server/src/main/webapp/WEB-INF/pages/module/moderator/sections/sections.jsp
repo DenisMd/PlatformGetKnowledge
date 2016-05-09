@@ -1,28 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet" type="text/css" href="/resources/css/admin.css">
+<link rel="stylesheet" href="/resources/css/workflow/workflow.css">
 
-<div class="table-selector">
-    <table class="table table-hover ">
-        <caption>{{translate("sections")}}</caption>
-        <thead>
-        <tr>
-            <th ng-click="setOrder('id')">
-                {{translate("id")}}
-            </th>
-            <th ng-click="setOrder('name')">
-                {{translate("name")}}
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="section in sections | orderBy:order" class="selected-row"
-            ng-click="setCurrentItem(section)">
-            <td>{{section.id}}</td>
-            <td>{{section.name}}</td>
-        </tr>
-        </tbody>
-    </table>
+<div class="selector-zone">
+    <module-template name="selectors/clientSelector" data="selectorData"></module-template>
 </div>
+
 <md-content>
     <md-tabs md-dynamic-height md-border-bottom>
         <md-tab ng-if="currentSection != null">

@@ -1,5 +1,50 @@
 model.controller("sectionsCtrl", function ($scope, $state,$http,applicationService,pageService,className) {
 
+    function updateSections(){
+        applicationService.list($scope , "sections",className.section,function(item){
+            if (!item.descriptionRu) {
+                item.descriptionRu = "";
+            }
+            if (!item.descriptionEn) {
+                item.descriptionEn = "";
+            }
+            $scope.selectorData.list.push(item);
+        });
+    }
+
+    updateSections();
+
+    $scope.selectorData = {
+        list        : [],
+        tableName   :   "section_info",
+        filters      : [
+            {
+                title : "name",
+                type  : "text",
+                field : "name",
+                default : true
+            },{
+                title : "id",
+                type  : "number",
+                field : "id",
+            }
+        ],
+        headerNames : [
+            {
+                name : "id",
+                orderBy : true
+            },
+            {
+                name : "name",
+                orderBy : true
+            }
+        ],
+        selectItemCallback : function (item) {
+            $scope.currentSection = item;
+            $scope.multiLanguageData.languages = {"ru":  item.descriptionRu, "en":  item.descriptionEn};
+        }
+    };
+
     $scope.updateSections = function() {
         $scope.currentSection.descriptionRu = $scope.multiLanguageData.languages.ru;
         $scope.currentSection.descriptionEn = $scope.multiLanguageData.languages.en;
@@ -11,21 +56,6 @@ model.controller("sectionsCtrl", function ($scope, $state,$http,applicationServi
 
     $scope.multiLanguageData = {
         label : $scope.translate("section_description")
-    };
-
-    applicationService.list($scope , "sections",className.section,function(item){
-        if (!item.descriptionRu) {
-            item.descriptionRu = "";
-        }
-        if (!item.descriptionEn) {
-            item.descriptionEn = "";
-        }
-    });
-
-
-    $scope.setCurrentItem = function (item) {
-        $scope.currentSection = item;
-        $scope.multiLanguageData.languages = {"ru":  item.descriptionRu, "en":  item.descriptionEn};
     };
 
     var croppedImg = {
@@ -42,6 +72,8 @@ model.controller("sectionsCtrl", function ($scope, $state,$http,applicationServi
     };
 
     var updateImage = function(file) {
-        applicationService.actionWithFile($scope,"cover",className.section,"updateCover",{id:$scope.currentSection.id},file);
+        applicationService.actionWithFile($scope,"cover",className.section,"updateCover",{id:$scope.currentSection.id},file,function (result) {
+            updateSections();
+        });
     };
 });
