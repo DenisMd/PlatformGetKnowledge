@@ -87,6 +87,7 @@
     "date"          : "Date",
     "block"         : "Block",
     "unblock"       : "Unblock",
+    "icon"          : "Icon",
 
 
     "failed"        : "Failed",
