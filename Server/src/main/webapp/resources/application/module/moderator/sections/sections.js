@@ -50,7 +50,7 @@ model.controller("sectionsCtrl", function ($scope, $state,$http,applicationServi
         $scope.currentSection.descriptionRu = $scope.multiLanguageData.languages.ru;
         $scope.currentSection.descriptionEn = $scope.multiLanguageData.languages.en;
         applicationService.update($scope,"",className.section,$scope.currentSection,function(result){
-            $scope.showToast(result);
+            $scope.showToast($scope.getResultMessage(result));
         });
         //выполнить update image
     };
