@@ -1,8 +1,14 @@
-<div>
-    <label for="descriptionArea">{{getData().label}}</label>
-    <uib-tabset>
-        <uib-tab ng-repeat="(key,l) in getData().languages" heading="{{key}}">
-            <textarea class="form-control" rows="5" id="descriptionArea" ng-model="getData().languages[key]"></textarea>
-        </uib-tab>
-    </uib-tabset>
+<div ng-cloak>
+    <md-content>
+        <label>{{getData().label}} : </label>
+        <md-tabs md-dynamic-height md-border-bottom>
+            <md-tab ng-repeat="(key,l) in getData().languages" label="{{translate(key)}}">
+                <md-content class="md-padding">
+                    <md-input-container class="md-block">
+                        <textarea ng-model="getData().languages[key]" md-select-on-focus></textarea>
+                    </md-input-container>
+                </md-content>
+            </md-tab>
+        </md-tabs>
+    </md-content>
 </div>

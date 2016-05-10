@@ -24,14 +24,16 @@
     <%--Наши css--%>
     <%--<link rel="stylesheet" type="text/css" , href="/resources/dist/css/main-min.css">--%>
     <link rel="stylesheet" type="text/css" href="/resources/css/main/index.css">
-    <link rel="stylesheet" type="text/css" href="/resources/css/main/loaderBar.css">
+    <link rel="stylesheet" type="text/css" href="/resources/css/main/loader-bar.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/main/menu.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/main/scroll.css">
-    <link rel="stylesheet" type="text/css" href="/resources/css/main/selectImage.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/main/video.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/main/graphics.css">
     <link rel="stylesheet" type="text/css"  href="/resources/css/main/editor.css">
-    <link rel="stylesheet" type="text/css"  href="/resources/css/main/listInput.css">
+
+    <%--Inputs--%>
+    <link rel="stylesheet" type="text/css" href="/resources/css/main/inputs/image/select-image.css">
+    <link rel="stylesheet" type="text/css"  href="/resources/css/main/inputs/list/list-input.css">
 
     <link rel="shortcut icon" type="image/x-icon" href="/resources/image/favicon.ico" />
     <meta charset="utf-8">
@@ -58,8 +60,6 @@
     <%--Important--%>
     <%--<script src="/resources/dist/js/bower.js" type="text/javascript"></script>--%>
     <%--<script src="/resources/dist/js/mainApplicationMin.js" type="text/javascript" ></script>--%>
-
-
 
     <script src="/resources/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="/resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
