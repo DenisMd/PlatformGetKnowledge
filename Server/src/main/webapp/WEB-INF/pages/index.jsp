@@ -54,16 +54,14 @@
         <div class="wrapper wrapper-main-content" id="wrapper">
             <div ui-view></div>
         </div>
-
-        <footer id="footer-page" class="footer-margin" ng-cloak>
-            © Марков Денис и Ежик 2016
-        </footer>
-
-        <%--Модальное окно для показа видео--%>
-        <module-template name="dialogs/videoDialog"></module-template>
-        <%--Модальное окно для показа списка--%>
-        <module-template name="dialogs/listDialog"></module-template>
     </md-content>
+    <%--<footer id="footer-page" class="footer-margin" ng-cloak>--%>
+        <%--© Марков Денис и Ежик 2016--%>
+    <%--</footer>--%>
+    <%--Модальное окно для показа видео--%>
+    <module-template name="dialogs/videoDialog"></module-template>
+    <%--Модальное окно для показа списка--%>
+    <module-template name="dialogs/listDialog"></module-template>
 
 <%--Important--%>
 <%--<script src="/resources/dist/js/bower.js" type="text/javascript"></script>--%>

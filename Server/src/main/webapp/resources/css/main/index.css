@@ -324,6 +324,9 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     font-size: 18px;
     color: white;
     transition: all linear 0.5s;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 
 .footer-margin{
