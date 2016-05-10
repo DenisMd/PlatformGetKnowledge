@@ -36,6 +36,7 @@ model.controller("sectionsCtrl", function ($scope, $state,$http,applicationServi
             },
             {
                 name : "name",
+                translate : true,
                 orderBy : true
             }
         ],
