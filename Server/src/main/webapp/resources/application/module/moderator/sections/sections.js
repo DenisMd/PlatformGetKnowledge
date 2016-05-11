@@ -26,7 +26,7 @@ model.controller("sectionsCtrl", function ($scope, $state,$http,applicationServi
             },{
                 title : "id",
                 type  : "number",
-                field : "id",
+                field : "id"
             }
         ],
         headerNames : [

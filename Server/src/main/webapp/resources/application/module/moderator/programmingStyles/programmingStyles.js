@@ -1,4 +1,4 @@
-model.controller("editorStylesCtrl", function ($scope,applicationService,className,$mdDialog,$mdMedia) {
+model.controller("programmingStylesCtrl", function ($scope,applicationService,className,$mdDialog,$mdMedia) {
 
     applicationService.list($scope , "editorStyles",className.programmingStyles);
 
