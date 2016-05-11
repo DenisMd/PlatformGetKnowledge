@@ -72,6 +72,7 @@ model.controller("permissionsCtrl", function ($scope, applicationService, classN
                         applicationService.remove($scope, "", className.permissions, item.id, function (result) {
                             $scope.showToast($scope.getResultMessage(result));
                             permissionList();
+                            $scope.currentPermission = null;
                         });
                     }
                 )

@@ -66,6 +66,7 @@ model.controller("rolesCtrl", function ($scope, applicationService, className) {
                         applicationService.remove($scope,"",className.roles,item.id,function (result) {
                             $scope.showToast($scope.getResultMessage(result));
                             roleList();
+                            $scope.currentRole = null;
                         });
                     }
                 )
