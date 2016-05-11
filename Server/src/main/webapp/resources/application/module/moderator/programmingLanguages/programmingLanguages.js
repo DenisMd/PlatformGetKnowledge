@@ -1,4 +1,4 @@
-model.controller("programmingLanguagesCtrl", function ($scope,applicationService,className,$mdDialog,$mdMedia) {
+model.controller("programmingLanguagesCtrl", function ($scope,applicationService,className) {
 
 
     function programmingLanguagesList() {
