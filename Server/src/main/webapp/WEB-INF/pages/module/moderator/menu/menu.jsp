@@ -21,19 +21,19 @@
             </div>
             <div>
                 <md-input-container>
-                    <label>{{translate("url")}}</label>
+                    <label>{{translate("menu_url")}}</label>
                     <input ng-model="currentMenuItem.url">
                 </md-input-container>
             </div>
             <div>
                 <md-input-container>
-                    <label>{{translate("icon_url")}}</label>
+                    <label>{{translate("menu_icon_url")}}</label>
                     <input ng-model="currentMenuItem.iconUrl">
                 </md-input-container>
             </div>
             <div>
                 <md-input-container>
-                    <label>{{translate("color")}}</label>
+                    <label>{{translate("menu_color")}}</label>
                     <input ng-model="currentMenuItem.color">
                 </md-input-container>
             </div>
