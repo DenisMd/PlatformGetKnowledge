@@ -1,6 +1,6 @@
 {
   "text" : {
-    "folder_loadMore" : "Load more group of courses",
+    "folder_loadMore" : "Load more group",
     "folder_info" : "Information about group",
     "folder__image" : "Group cover",
     "folder_description" : "Description",
@@ -9,7 +9,8 @@
     "folder_delete_confirmation" : "If folder contain entities delete impossible",
     "section" : "Section",
     "folder_type" : "Group type",
-    "groupBooks" : "Group books",
-    "groupPrograms" : "Group programs"
+    "folder_group_books" : "Group books",
+    "folder_group_programs" : "Group programs",
+    "folder_group_courses"  : "Group courses"
   }
 }

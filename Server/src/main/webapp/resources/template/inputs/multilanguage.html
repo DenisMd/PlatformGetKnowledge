@@ -5,7 +5,7 @@
             <md-tab ng-repeat="(key,l) in getData().languages" label="{{translate(key)}}">
                 <md-content class="md-padding">
                     <md-input-container class="md-block">
-                        <textarea ng-model="getData().languages[key]" md-select-on-focus></textarea>
+                        <textarea ng-model="getData().languages[key]" aria-label="multilanguage" md-select-on-focus></textarea>
                     </md-input-container>
                 </md-content>
             </md-tab>

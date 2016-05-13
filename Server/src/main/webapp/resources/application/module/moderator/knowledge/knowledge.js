@@ -1,7 +1,5 @@
 model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationService,pageService,className,$mdDialog) {
 
-
-
     $scope.selectorData = {
         className   : className.knowledge,
         tableName   :   "knowledge",
@@ -73,7 +71,7 @@ model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationServ
                     }
                 )
             },
-            deleteTitle : "permission_delete_permission"
+            deleteTitle : "knowledge_delete"
         }
     };
 
