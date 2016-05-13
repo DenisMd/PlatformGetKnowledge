@@ -5,7 +5,7 @@
     "knowledge_info" : "Knowledge info",
     "knowledge_create" : "Create knowledge",
     "knowledge_delete" : "Delete knowledge",
-    "knowledge_delete_confirmation" : "Delete can't be execute if knowledge use something",
+    "knowledge_delete_confirmation" : "Delete can't be execute if knowledge use somewhere",
     "knowledge_note" : "Note",
     "knowledge_image" : "Image"
   }

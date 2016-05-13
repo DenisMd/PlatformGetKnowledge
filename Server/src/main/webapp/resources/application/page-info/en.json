@@ -102,6 +102,7 @@
     "404_response"        : "Page not found!",
     "403_response"        : "Access for page denied!",
     "upload_avatar"       : "Upload your avatar",
+    "upload_image"        : "Upload image",
     "portal_sections"     : "Sections of portal",
     "copy_to_clipboard"   : "Copy to clipboard",
     "do_it"               : "Do it",
