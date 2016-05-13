@@ -148,7 +148,11 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
                     $scope.filter.lessThanOrEqualTo(filterItem.field.info.name,"number",filterItem.param.info.values[0]);
                     break;
                 case "between" :
-                    $scope.filter.between(filterItem.field.info.name,"number",filterItem.param.info.values[0],filterItem.param.info.values[1]);
+                    var type = "number";
+                    if (filterItem.field.info.type == "dateTime") {
+                        type = "date";
+                    }
+                    $scope.filter.between(filterItem.field.info.name,type,filterItem.param.info.values[0],filterItem.param.info.values[1]);
                     break;
                 case "after" :
                     $scope.filter.greaterThanOrEqualTo(filterItem.field.info.name,"date",filterItem.param.info.values[0]);
