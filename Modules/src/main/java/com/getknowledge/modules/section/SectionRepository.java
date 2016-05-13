@@ -1,12 +1,22 @@
 package com.getknowledge.modules.section;
 
 import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.base.repositories.enumerations.RepOperations;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository("SectionRepository")
 public class SectionRepository extends BaseRepository<Section> {
+
+    @Override
+    public List<RepOperations> restrictedOperations() {
+        List<RepOperations> operations = new ArrayList<>();
+        operations.add(RepOperations.Create);
+        operations.add(RepOperations.Remove);
+        return operations;
+    }
 
     @Override
     protected Class<Section> getClassEntity() {

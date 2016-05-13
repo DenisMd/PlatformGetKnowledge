@@ -1,6 +1,7 @@
 package com.getknowledge.platform.modules.bootstrapInfo;
 
 import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.base.repositories.enumerations.RepOperations;
 import com.getknowledge.platform.base.services.BootstrapService;
 import com.getknowledge.platform.modules.bootstrapInfo.states.BootstrapState;
 import com.getknowledge.platform.modules.trace.TraceService;
@@ -14,6 +15,14 @@ import java.util.*;
 
 @Repository("BootstrapInfoRepository")
 public class BootstrapInfoRepository extends BaseRepository<BootstrapInfo> {
+
+    @Override
+    public List<RepOperations> restrictedOperations() {
+        List<RepOperations> operations = new ArrayList<>();
+        operations.add(RepOperations.Create);
+        operations.add(RepOperations.Remove);
+        return operations;
+    }
 
     @Override
     protected Class<BootstrapInfo> getClassEntity() {
@@ -45,15 +54,6 @@ public class BootstrapInfoRepository extends BaseRepository<BootstrapInfo> {
     public void remove(BootstrapInfo entity) {
         //Удаление bootstrap сервисов не возможно
         throw new RuntimeException("Impossible remove bootstrap service");
-    }
-
-    @Override
-    public void create(BootstrapInfo object, boolean fromRequestApi) {
-        if (fromRequestApi) {
-            throw new RuntimeException("Impossible create bootstrap service from request Api");
-        } else {
-            super.create(object,fromRequestApi);
-        }
     }
 
     public void doBootstrap(BootstrapService bootstrapService, HashMap<String,Object> data) {

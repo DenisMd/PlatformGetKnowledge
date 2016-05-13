@@ -17,6 +17,7 @@ import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.entities.IUser;
 import com.getknowledge.platform.base.entities.CloneableEntity;
+import com.getknowledge.platform.base.repositories.enumerations.RepOperations;
 import com.getknowledge.platform.modules.user.User;
 
 import javax.persistence.*;
