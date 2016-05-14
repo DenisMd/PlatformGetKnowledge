@@ -9,15 +9,19 @@
     <md-tabs md-dynamic-height md-border-bottom>
         <md-tab label="{{translate('permission')}}" ng-if="currentPermission != null">
             <md-content class="md-padding">
-                <p>
-                    {{translate('id')}} : {{currentPermission.id}} <br/>
-                    {{translate('name')}} : {{currentPermission.permissionName}}       <br/>
-                    <div class="form-group">
-                        <label for="note">{{translate("permission_note")}}:</label>
-                        <textarea class="form-control" rows="5" id="note" ng-model="currentPermission.note"></textarea>
-                    </div>
-                    <md-button class="md-raised md-primary" ng-click="updatePermission()" ng-disabled="!currentPermission">{{translate("permission_update_permission")}}</md-button>
-                </p>
+                <div layout="row">
+                    <div flex-gt-sm="20" flex="auto">{{translate('id')}}</div>
+                    <div flex>{{currentPermission.id}}</div>
+                </div>
+                <div layout="row">
+                    <div flex-gt-sm="20" flex="auto">{{translate('name')}}</div>
+                    <div flex>{{currentPermission.permissionName}}</div>
+                </div>
+                <div class="form-group">
+                    <label for="note">{{translate("permission_note")}}:</label>
+                    <textarea class="form-control" rows="5" id="note" ng-model="currentPermission.note"></textarea>
+                </div>
+                <md-button class="md-raised md-primary md-btn" ng-click="updatePermission()" ng-disabled="!currentPermission">{{translate("permission_update_permission")}}</md-button>
             </md-content>
         </md-tab>
         <md-tab label="{{translate('users')}}" ng-if="permissionUsers != null && permissionUsers.length > 0">
