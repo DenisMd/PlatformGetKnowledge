@@ -20,7 +20,6 @@
     <link rel="stylesheet" href="/resources/bower_components/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="/resources/bower_components/angular-material/angular-material.min.css">
     <link rel="stylesheet" href="/resources/bower_components/angular-chart.js/dist/angular-chart.css">
-    <link rel="stylesheet" href="/resources/bower_components/highlightjs/styles/railscasts.css">
     <link rel="stylesheet" href="/resources/bower_components/ng-img-crop/compile/minified/ng-img-crop.css"
           type="text/css">
     <link rel="stylesheet" href="/resources/bower_components/codemirror/lib/codemirror.css" type="text/css">
@@ -46,7 +45,7 @@
 </head>
 <body layout-fill layout="column" ng-cloak>
 
-    <md-content>
+    <md-content class="main-content">
         <module-template name="components/header" data="headerData"></module-template>
 
         <module-template name="components/mainMenu" data="menuData"></module-template>
