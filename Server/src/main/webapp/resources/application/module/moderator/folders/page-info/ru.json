@@ -1,6 +1,6 @@
 {
   "text" : {
-    "folder_loadMore" : "Загрузить больше групп курсов",
+    "folder_loadMore" : "Загрузить больше групп",
     "folder_info" : "Инофрмация о группе",
     "folder_image" : "Изображение группы",
     "folder_description" : "Описание",
@@ -9,7 +9,8 @@
     "folder_delete_confirmation" : "Если каталог содержит сущности удаление будет не возможно",
     "section" : "Секция",
     "folder_type" : "Тип группы",
-    "groupBooks" : "Группа книг",
-    "groupPrograms" : "Грппа программ"
+    "folder_group_books" : "Группа книг",
+    "folder_group_programs" : "Грппа программ",
+    "folder_group_courses"  : "Группа курсов"
   }
 }

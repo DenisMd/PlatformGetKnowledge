@@ -35,8 +35,6 @@
         </div>
     </div>
 
-    <!--Модальное окно для показа пользовательских фильтров-->
-    <module-template name="dialogs/customFilter"></module-template>
     <div ng-scrollbars ng-scrollbars-config="tableScroll">
         <table class="table table-hover">
             <caption>{{translate(getData().tableName) + ' : ' + listInfo.totalEntitiesCount + ' ' +
@@ -80,8 +78,11 @@
                     <i class="fa fa-times filter-delete"></i>
                 </td>
                 <td ng-repeat="header in getData().headerNames">
-                    <span ng-if="header.filter === 'date'">{{getItemByName(item , header.name) | date:'medium'}}</span>
-                    <span ng-if="header.filter !== 'date'">{{getItemByName(item , header.name)}}</span>
+                    <span ng-switch="header.filter">
+                        <span ng-switch-when="date">{{getItemByName(item , header.name) | date:'medium'}}</span>
+                        <span ng-switch-when="icon" class="fa fa-2x" ng-class="getItemByName(item , header.name).name" ng-style="{color : getItemByName(item , header.name).color}"></span>
+                        <span ng-switch-default>{{header.translate ? translate(getItemByName(item , header.name)) : getItemByName(item , header.name)}}</span>
+                    </span>
                 </td>
             </tr>
             </tbody>

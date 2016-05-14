@@ -1,42 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet" type="text/css" href="/resources/css/admin.css">
+<link rel="stylesheet" href="/resources/css/workflow/workflow.css">
 
-<div class="panel panel-default">
-    <div class="panel-body">
-        <span class="panel-item fa fa-3x fa-plus create" tooltip-placement="bottom"
-              uib-tooltip="{{translate('pl_create')}}" ng-click="showAdvanced($event)">
-        </span>
-        <span class="panel-item fa fa-3x fa-minus delete" tooltip-placement="bottom"
-              uib-tooltip="{{translate('pl_delete')}}" ng-click="showDeleteDialog($event)" ng-if="currentPLanguage != null">
-        </span>
-    </div>
-</div>
-
-<div class="table-selector">
-    <table class="table table-hover ">
-        <caption>{{translate("pl_title")}}</caption>
-        <thead>
-        <tr>
-            <th ng-click="setOrder('id')">
-                {{translate("id")}}
-            </th>
-            <th ng-click="setOrder('name')">
-                {{translate("name")}}
-            </th>
-            <th ng-click="setOrder('mode')">
-                {{translate("pl_mode")}}
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="planguage in planguages | orderBy:order" class="selected-row"
-            ng-click="setCurrentItem(planguage)">
-            <td>{{planguage.id}}</td>
-            <td>{{planguage.name}}</td>
-            <td>{{planguage.mode}}</td>
-        </tr>
-        </tbody>
-    </table>
+<div class="selector-zone">
+    <module-template name="selectors/clientSelector" data="selectorData"></module-template>
 </div>
 
 <md-content>

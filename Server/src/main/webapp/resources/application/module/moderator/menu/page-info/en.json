@@ -1,7 +1,7 @@
 {
   "text" : {
-      "url" : "URL",
-      "icon_url" : "Icon url",
-      "color" : "Color"
+      "menu_url" : "URL",
+      "menu_icon_url" : "Icon url",
+      "menu_color" : "Color"
   }
 }

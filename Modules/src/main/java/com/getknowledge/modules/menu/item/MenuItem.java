@@ -75,7 +75,6 @@ public class MenuItem extends AbstractEntity {
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
         authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditMenu.getName()));
-        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.EditMenu.getName()));
         return authorizationList;
     }
 }

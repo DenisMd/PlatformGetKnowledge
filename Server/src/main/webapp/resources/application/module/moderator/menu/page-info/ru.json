@@ -1,7 +1,7 @@
 {
   "text" : {
-    "url" : "URL",
-    "icon_url" : "Url изображения",
-    "color" : "Цвет"
+    "menu_url" : "URL",
+    "menu_icon_url" : "Url изображения",
+    "menu_color" : "Цвет"
   }
 }

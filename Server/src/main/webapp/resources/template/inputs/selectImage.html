@@ -1,10 +1,10 @@
-<div ng-controller="selectImgCtrl">
+<div ng-controller="selectImgController">
     <div class="main-image-container">
         <div class="image-container">
             <img ng-src="{{getImage()}}" ng-class="getClass()" class="original-image">
         </div>
         <div class="fileUpload btn btn-img original-image-btn">
-            <span ng-show="showModal()">{{translate("uploadAvatar")}}</span>
+            <span ng-show="showModal()">{{translate("upload_image")}}</span>
             <span ng-hide="showModal()">{{translate("change_image")}}</span>
             <input type="file" id="fileInput" accept="image/*" class="upload" onchange="angular.element(this).scope().uploadFile(this.files[0],event);"/>
         </div>

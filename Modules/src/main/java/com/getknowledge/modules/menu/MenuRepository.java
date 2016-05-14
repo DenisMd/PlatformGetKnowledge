@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.getknowledge.modules.menu.item.MenuItem;
 import com.getknowledge.modules.menu.item.MenuItemsRepository;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
+import com.getknowledge.platform.base.repositories.enumerations.RepOperations;
 import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.role.RoleRepository;
 import com.getknowledge.platform.modules.trace.TraceService;
@@ -13,11 +14,21 @@ import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 @Repository("MenuRepository")
 public class MenuRepository extends ProtectedRepository<Menu> {
+
+    @Override
+    public List<RepOperations> restrictedOperations() {
+        List<RepOperations> operations = new ArrayList<>();
+        operations.add(RepOperations.Create);
+        operations.add(RepOperations.Remove);
+        return operations;
+    }
+
 
     @Autowired
     private RoleRepository roleRepository;

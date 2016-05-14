@@ -1,6 +1,7 @@
 package com.getknowledge.platform.modules.user;
 
 import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.base.repositories.enumerations.RepOperations;
 import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.role.RoleRepository;
@@ -8,10 +9,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Repository("UserRepository")
 public class UserRepository extends BaseRepository<User> {
+
+    @Override
+    public List<RepOperations> restrictedOperations() {
+        List<RepOperations> operations = new ArrayList<>();
+        operations.add(RepOperations.Create);
+        operations.add(RepOperations.Remove);
+        operations.add(RepOperations.Update);
+        return operations;
+    }
 
     @Override
     protected Class<User> getClassEntity() {

@@ -1,56 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet" href="/resources/css/admin.css">
+<link rel="stylesheet" href="/resources/css/workflow/workflow.css">
 
-<div class="panel panel-default">
-    <span class="panel-item fa fa-3x fa-plus create" tooltip-placement="bottom"
-          uib-tooltip="{{translate('knowledge_create')}}" ng-click="showAdvanced($event)">
-        </span>
-        <span class="panel-item fa fa-3x fa-minus delete" tooltip-placement="bottom"
-              uib-tooltip="{{translate('knowledge_delete')}}" ng-click="showDeleteDialog($event)" ng-if="currentKnowledge != null">
-        </span>
-    <div class="panel-body">
-        <md-input-container>
-            <label>{{translate("knowledge_type")}}</label>
-            <md-select ng-model="knType">
-                <md-option ng-repeat="type in knowledgeType" value="{{type}}">
-                    {{translate(type.toLowerCase())}}
-                </md-option>
-            </md-select>
-        </md-input-container>
-        <md-button ng-click="searchByType(knType)" class="md-raised">{{translate("search")}}</md-button>
-    </div>
-</div>
-
-
-<div class="table-selector">
-    <table class="table table-hover ">
-        <caption>{{translate("knowledge")}}</caption>
-        <thead>
-        <tr>
-            <th ng-click="setLogOrder('id')">
-                {{translate("id")}}
-            </th>
-            <th ng-click="setLogOrder('name')">
-                {{translate("name")}}
-            </th>
-            <th ng-click="setLogOrder('knowledgeType')">
-                {{translate("type")}}
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="knowledge in knowledges" ng-click="setCurrentItem(knowledge)">
-            <td>{{knowledge.id}}</td>
-            <td>{{knowledge.name}}</td>
-            <td>{{translate(knowledge.knowledgeType.toLowerCase())}}</td>
-        </tr>
-        <tr>
-            <td colspan="4" ng-click="loadMore()" class="loadMore">
-                {{translate("knowledge_loadMore")}}
-            </td>
-        </tr>
-        </tbody>
-    </table>
+<div class="selector-zone">
+    <module-template name="selectors/serverSelector" data="selectorData"></module-template>
 </div>
 
 <md-content>
@@ -67,7 +19,7 @@
                 <div>
                     <md-input-container>
                         <label>{{parentScope.translate("type")}}</label>
-                        <md-select ng-model="currentKnowledge.knowledgeType">
+                        <md-select ng-model="currentKnowledge.knowledgeType" aria-label="knowledgeType">
                             <md-option ng-repeat="type in knowledgeType" value="{{type}}">
                                 {{translate(type.toLowerCase())}}
                             </md-option>

@@ -84,12 +84,11 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
     $scope.openCustomFilter = function(){
         customFilterService.filtersInfo($scope.getData().filters);
         customFilterService.openDialog($scope.customFilterInfo);
+        customFilterService.setCallbackSave(function (filter) {
+            $scope.customFilterInfo = filter;
+            $scope.doFilters();
+        });
     };
-
-    customFilterService.setCallbackSave(function (filter) {
-        $scope.customFilterInfo = filter;
-        $scope.doFilters();
-    });
 
     $scope.doFilters = function () {
         $scope.filter.deleteFiltersInfo();
@@ -148,7 +147,11 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
                     $scope.filter.lessThanOrEqualTo(filterItem.field.info.name,"number",filterItem.param.info.values[0]);
                     break;
                 case "between" :
-                    $scope.filter.between(filterItem.field.info.name,"number",filterItem.param.info.values[0],filterItem.param.info.values[1]);
+                    var type = "number";
+                    if (filterItem.field.info.type == "dateTime") {
+                        type = "date";
+                    }
+                    $scope.filter.between(filterItem.field.info.name,type,filterItem.param.info.values[0],filterItem.param.info.values[1]);
                     break;
                 case "after" :
                     $scope.filter.greaterThanOrEqualTo(filterItem.field.info.name,"date",filterItem.param.info.values[0]);

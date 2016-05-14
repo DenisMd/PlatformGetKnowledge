@@ -71,7 +71,6 @@ public class Menu extends AbstractEntity implements CloneableEntity<Menu>{
         authorizationList.allowCreateEveryOne = false;
         authorizationList.allowReadEveryOne = true;
         authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditMenu.getName()));
-        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.EditMenu.getName()));
         return authorizationList;
     }
 }

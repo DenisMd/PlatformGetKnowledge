@@ -1,83 +1,85 @@
 model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationService,pageService,className,$mdDialog) {
 
-    var filter = applicationService.createFilter(className.knowledge,0,10);
-    $scope.knowledges = [];
+    $scope.selectorData = {
+        className   : className.knowledge,
+        tableName   :   "knowledge",
+        loadMoreTitle : "knowledge_loadMore",
+        filters      : [
+            {
+                title : "id",
+                type : "number",
+                field : "id"
+            },
+            {
+                title : "name",
+                type : "text",
+                field : "name",
+                default : true
+            },{
+                title : "type",
+                type : "enum",
+                field : "knowledgeType",
+                constants : ['Programming' , 'Design' , 'Math' , 'Physic']
+            }
+        ],
+        headerNames : [
+            {
+                name : "id",
+                orderBy : true
+            }, {
+                name : "name",
+                orderBy : true
+            },
+            {
+                name : "knowledgeType",
+                title : "type"
+            }
+        ],
+        selectItemCallback : function (item) {
+            $scope.currentKnowledge = item;
+        },
+        actions : [
+            {
+                icon : "fa-plus",
+                color : "#46BE28",
+                tooltip : "knowledge_create",
+                actionCallback : function (ev){
+                    $scope.showDialog(ev,$scope,"createKnowledge.html",function(answer){
+                        applicationService.create($scope,"", className.knowledge,answer,function(result){
+                            $scope.showToast($scope.getResultMessage(result));
+                            $scope.$broadcast("updateServerSelector");
+                        });
+                    });
+                }
+            }
+        ],
+        deleteOptions : {
+            deleteCallback : function (ev,item) {
+                $scope.showConfirmDialog(
+                    ev,
+                    $scope.translate("knowledge_delete") + " " + item.name,
+                    $scope.translate("knowledge_delete_confirmation"),
+                    'Delete knowledge',
+                    $scope.translate("delete"),
+                    $scope.translate("cancel"),
+                    function () {
+                        applicationService.remove($scope,"",className.knowledge,$scope.currentKnowledge.id,function (result) {
+                            $scope.showToast($scope.getResultMessage(result));
+                            $scope.currentKnowledge = null;
+                            $scope.$broadcast("updateServerSelector");
+                        });
+                    }
+                )
+            },
+            deleteTitle : "knowledge_delete"
+        }
+    };
 
     $scope.knowledgeType = ['Programming' , 'Design' , 'Math' , 'Physic'];
 
-    var addKnowledge = function(knowledge){
-        $scope.knowledges.push(knowledge);
-    };
-
-    var doAction = function(){
-        applicationService.filterRequest($scope,"",filter,addKnowledge);
-    };
-
-    doAction();
-
-    var reverse = false;
-    $scope.setLogOrder = function(orderName) {
-        reverse = !reverse;
-        filter.clearOrder();
-        filter.setOrder(orderName,reverse);
-
-
-        filter.reload();
-        $scope.knowledges = [];
-        doAction();
-    };
-
-    $scope.searchByType = function(type) {
-        if (!type) {
-            filter.clearIn();
-        } else {
-            filter.in("knowledgeType" , [type]);
-        }
-        filter.reload();
-        $scope.knowledges = [];
-        doAction();
-    };
-
-    $scope.currentKnowledge = null;
-    $scope.setCurrentItem = function(item){
-        $scope.currentKnowledge = item;
-    };
-
-    $scope.loadMore = function () {
-        filter.increase(10);
-        doAction();
-    };
-
     $scope.updateKnowledge = function () {
         applicationService.update($scope,"",className.knowledge,$scope.currentKnowledge,function(result){
-            $scope.showToast(result);
-        });
-    };
-
-    $scope.showDeleteDialog = function(ev) {
-        var confirm = $mdDialog.confirm()
-            .title($scope.translate("knowledge_delete") + " " + $scope.currentKnowledge.name)
-            .textContent($scope.translate("knowledge_delete_confirmation"))
-            .targetEvent(ev)
-            .ariaLabel('Delete knowledge')
-            .ok($scope.translate("delete"))
-            .cancel($scope.translate("cancel"));
-        $mdDialog.show(confirm).then(function() {
-            applicationService.remove($scope,"",className.knowledge,$scope.currentKnowledge.id,function (result) {
-                $scope.showToast(result);
-                $scope.knowledges = [];
-                doAction();
-            });
-        });
-    };
-
-    $scope.showAdvanced = function(ev) {
-        $scope.showDialog(ev,$scope,"createKnowledge.html",function(answer){
-            applicationService.create($scope,"", className.knowledge,answer,function(result){
-                $scope.showToast(result);
-                $scope.knowledges = [];
-                doAction();
-            });
+            $scope.showToast($scope.getResultMessage(result));
         });
     };
 
@@ -97,9 +99,7 @@ model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationServ
 
     var updateImage = function(file) {
         applicationService.actionWithFile($scope,"image",className.knowledge,"uploadImage",{knowledgeId:$scope.currentKnowledge.id},file,function(result){
-            $scope.showToast(result);
-            $scope.knowledges = [];
-            doAction();
+            $scope.showToast($scope.getResultMessage(result));
         });
     };
 });

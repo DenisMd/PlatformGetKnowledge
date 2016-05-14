@@ -36,6 +36,9 @@ model.controller("logsCtrl", function ($scope,className) {
         ],
         headerNames : [
             {
+                name : "icon",
+                filter : "icon"
+            }, {
                 name : "id",
                 orderBy : true
             }, {
@@ -52,6 +55,38 @@ model.controller("logsCtrl", function ($scope,className) {
                 orderBy : true
             }
         ],
+        callBackForFilter : function(log) {
+            switch (log.traceLevel) {
+                case "Debug":
+                    log.icon = {
+                        name : "fa-bug",
+                        color : "#AAFFB8"
+                    };
+                    break;
+                case "Event" :
+                    log.icon = {
+                        name : "fa-lightbulb-o",
+                        color : "#21BF4A"
+                    };
+                    break;
+                case "Warning" :
+                    log.icon = {
+                        name : "fa-exclamation",
+                        color : "#FFC620"
+                    };
+                    break;
+                case "Error" :
+                    log.icon = {
+                        name : "fa-exclamation-triangle",
+                        color : "#FF5B5D"
+                    };break;
+                case "Critical" :
+                    log.icon = {
+                        name : "fa-fire",
+                        color : "#FF050C"
+                    };break;
+            }
+        },
         selectItemCallback : function (item) {
             $scope.currentLog = item;
             if (item.stackTrace) {

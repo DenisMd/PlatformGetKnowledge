@@ -4,8 +4,8 @@ model.controller("menuCtrl", function ($scope,applicationService,className) {
 
     $scope.treeViewListData = {
         dataList : [],
-        topSubItems : "name",
-        fieldSubItems : "items",
+        topField : "name",
+        topSubItems : "items",
         subItemFieldTitle : "title",
         subItemFieldSubItems : "subItems",
         callback : function(item,level) {
@@ -24,7 +24,7 @@ model.controller("menuCtrl", function ($scope,applicationService,className) {
           tempClassName = className.menuItem;
       }
       applicationService.update($scope,"",tempClassName,$scope.currentMenuItem,function(result){
-          $scope.showToast(result);
+          $scope.showToast($scope.getResultMessage(result));
       });
     };
 });

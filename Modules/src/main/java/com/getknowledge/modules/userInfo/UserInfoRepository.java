@@ -12,6 +12,7 @@ import com.getknowledge.modules.userInfo.dialog.DialogRepository;
 import com.getknowledge.modules.userInfo.post.messages.PostMessage;
 import com.getknowledge.platform.annotations.ViewType;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
+import com.getknowledge.platform.base.repositories.enumerations.RepOperations;
 import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import com.getknowledge.platform.modules.user.UserRepository;
@@ -21,11 +22,21 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 @Repository("UserInfoRepository")
 public class UserInfoRepository extends ProtectedRepository<UserInfo> {
+
+    @Override
+    public List<RepOperations> restrictedOperations() {
+        List<RepOperations> operations = new ArrayList<>();
+        operations.add(RepOperations.Create);
+        operations.add(RepOperations.Remove);
+        operations.add(RepOperations.Update);
+        return operations;
+    }
 
     @Override
     protected Class<UserInfo> getClassEntity() {

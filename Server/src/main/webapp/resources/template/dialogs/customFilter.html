@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/resources/css/dialogs/customFilter.css">
+<link rel="stylesheet" href="/resources/css/dialogs/custom-filter.css">
 
 <div class="modal fade" id="customFilterDialogId" ng-controller="customFilterController">
     <div class="modal-dialog custom-filter-dialog">
@@ -214,7 +214,7 @@
                                                 <label>{{translate("parameter")}}</label>
                                                 <md-select ng-model="inParam.text">
                                                     <md-option ng-repeat="constant in currentFilterExpression.field.info.constants" value="{{constant}}">
-                                                        {{constant}}
+                                                        {{translate(constant)}}
                                                     </md-option>
                                                 </md-select>
                                             </md-input-container>

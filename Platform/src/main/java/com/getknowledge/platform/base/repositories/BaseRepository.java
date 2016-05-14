@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.getknowledge.platform.annotations.ModelView;
 import com.getknowledge.platform.annotations.ViewType;
 import com.getknowledge.platform.base.entities.AbstractEntity;
+import com.getknowledge.platform.base.repositories.enumerations.RepOperations;
 import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.utils.ModuleLocator;
@@ -21,6 +22,7 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,12 +46,12 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         return ENTITY_LIMIT;
     }
 
-    public void create(T object) {
-        entityManager.persist(object);
+    public List<RepOperations> restrictedOperations(){
+        return new ArrayList<>();
     }
 
-    public void create(T object, boolean fromRequestApi) {
-        create(object);
+    public void create(T object) {
+        entityManager.persist(object);
     }
 
     public void update(T object) {
@@ -76,20 +78,12 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         entityManager.merge(classicObject);
     }
 
-    public void update(T object, boolean fromRequestApi) {
-        update(object);
-    }
-
     public void merge(T object) {
         entityManager.merge(object);
     }
 
     public void remove(Long id) {
         remove(entityManager.find(getClassEntity(), id));
-    }
-
-    public void remove(Long id , boolean fromRequestApi) {
-        remove(id);
     }
 
     public void remove(T entity) {
@@ -101,17 +95,9 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         return result;
     }
 
-    public T read(Long id , boolean fromRequestApi) {
-        return read(id);
-    }
-
     public List<T> list() {
         List<T> list = (List<T>) entityManager.createQuery("Select t from " + getClassEntity().getSimpleName() + " t order by t.id").getResultList();
         return list;
-    }
-
-    public List<T> list(boolean fromRequestApi) {
-        return list();
     }
 
     public List<T> listPartial(int first, int max) {
