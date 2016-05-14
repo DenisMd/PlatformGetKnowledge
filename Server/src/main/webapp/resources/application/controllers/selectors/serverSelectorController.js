@@ -84,12 +84,11 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
     $scope.openCustomFilter = function(){
         customFilterService.filtersInfo($scope.getData().filters);
         customFilterService.openDialog($scope.customFilterInfo);
+        customFilterService.setCallbackSave(function (filter) {
+            $scope.customFilterInfo = filter;
+            $scope.doFilters();
+        });
     };
-
-    customFilterService.setCallbackSave(function (filter) {
-        $scope.customFilterInfo = filter;
-        $scope.doFilters();
-    });
 
     $scope.doFilters = function () {
         $scope.filter.deleteFiltersInfo();
