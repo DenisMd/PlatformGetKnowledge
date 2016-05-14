@@ -32,7 +32,17 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className)
                 title : "bootstrap_state",
                 type : "enum",
                 field : "bootstrapState",
-                constants : ["NotComplete" , "Completed" , "Failed"]
+                constants : [
+                    {
+                        key : "NotComplete",
+                        value : "bootstrap_not_complete"
+                    } , {
+                        key : "Completed",
+                        value : "bootstrap_completed"
+                    } , {
+                        key : "Failed",
+                        value: "bootstrap_failed"
+                    }]
             }
         ],
         headerNames : [
@@ -45,7 +55,7 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className)
                 orderBy : true
             },
             {
-                name : "bootstrapState",
+                name : "translatedState",
                 title : "bootstrap_state",
                 orderBy : true
             },
@@ -103,6 +113,17 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className)
         $scope.selectorData.list = [];
         //Список сервисов для которых выполняется bootstrap опции
         applicationService.list($scope , "bootstrap_services",className.bootstrap_services,function (service) {
+            switch (service.bootstrapState) {
+                case "NotComplete" :
+                    service.translatedState = $scope.translate("bootstrap_not_complete");
+                    break;
+                case "Completed" :
+                    service.translatedState = $scope.translate("bootstrap_completed");
+                    break;
+                case "Failed" :
+                    service.translatedState = $scope.translate("bootstrap_failed");
+                    break;
+            }
             $scope.selectorData.list.push(service);
         });
     }

@@ -11,6 +11,9 @@
     "bootstrap_serviceInfo"   : "Service information",
     "bootstrap_do_bootstrap"  : "Do bootstrap",
     "bootstrap_domain"        : "Domain",
-    "bootstrap_initPassword"  : "Password for init"
+    "bootstrap_initPassword"  : "Password for init",
+    "bootstrap_not_complete"  : "Not completed",
+    "bootstrap_completed"     : "Completed",
+    "bootstrap_failed"        : "Failed"
   }
 }

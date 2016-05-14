@@ -10,6 +10,9 @@
     "bootstrap_stackTrace"    : "Трасса стека",
     "bootstrap_serviceInfo"   : "Информация о сервисе",
     "bootstrap_do_bootstrap"  : "Выполнить инициализацию",
-    "bootstrap_domain"        : "Домен"
+    "bootstrap_domain"        : "Домен",
+    "bootstrap_not_complete"  : "Не завершен",
+    "bootstrap_completed"     : "Завершен",
+    "bootstrap_failed"        : "Провален"
   }
 }
