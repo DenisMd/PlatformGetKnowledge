@@ -60,7 +60,7 @@
             <tbody ng-repeat="item in list" ng-init="item.hideColumnInfo=true">
             <tr ng-if="showRowPanel(item)" class="row-panel">
                 <td colspan="{{getData().headerNames.length}}">
-                    <span class="item-panel">
+                    <div class="item-panel">
                         <span ng-show="!item.hideColumnInfo">
                             <i ng-if="getData().deleteOptions" class="fa fa-2x fa-times filter-delete"
                                 ng-click="getData().deleteOptions.deleteCallback($event,item)"></i>
@@ -72,8 +72,7 @@
                                 </md-tooltip>
                             </span>
                         </span>
-                    </span>
-
+                    </div>
                 </td>
             </tr>
             <tr class="selected-row" ng-click="selectItem(item)">

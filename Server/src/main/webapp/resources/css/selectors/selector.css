@@ -36,25 +36,29 @@
 .item-panel {
 }
 
-.row-panel.ng-enter, .row-panel.ng-leave {
-    -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    transition: all 0.5s ease;
+
+.row-panel,.row-panel td, .row-panel .item-panel{
+    -webkit-transition: all 0.5s linear;
+    -moz-transition: all 0.5s linear;
+    transition: all 0.5s linear;
 }
 
-.row-panel.ng-enter,
-.row-panel.ng-leave.ng-leave-active {
-    opacity:0;
-    line-height: 0;
-    max-height: 0;
+
+.row-panel.ng-enter td,
+.row-panel.ng-leave.ng-leave-active{
+/*.row-panel.ng-enter .item-panel,*/
+/*.row-panel.ng-leave.ng-leave-active .item-panel{*/
+    opacity: 0;
+    height: 0px;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
-.row-panel.ng-leave,
-.row-panel.ng-enter.ng-enter-active {
-    opacity: 1;
-    max-height: 200px;
-
-}
+/*.row-panel.ng-leave .item-panel,*/
+/*.row-panel.ng-enter.ng-enter-active .item-panel{*/
+    /*opacity: 1;*/
+    /*height: 30px;*/
+/*}*/
 
 .table-selector .filter-panel-item {
     margin-left: 20px;
