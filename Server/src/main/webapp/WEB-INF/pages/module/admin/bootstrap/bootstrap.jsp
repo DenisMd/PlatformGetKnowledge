@@ -10,14 +10,25 @@
         <md-tab label="{{translate('bootstrap_serviceInfo')}}" ng-if="currentService != null">
             <md-content class="md-padding">
                 <p>
+                    <div layout-gt-xs="row">
+                        <div flex="20">{{translate('id')}}: </div>
+                        <div flex>{{currentService.id}}</div>
+                    </div>
+                    <div layout-gt-xs="row">
+                        <div flex="20">{{translate('name')}}: </div>
+                        <div flex>{{currentService.name}}</div>
+                    </div>
+                    <div layout-gt-xs="row">
+                        <div flex="20">{{translate('bootstrap_order')}}: </div>
+                        <div flex>{{currentService.order}}</div>
+                    </div>
+                    <div layout-gt-xs="row">
+                        <span flex="20">{{translate('bootstrap_repeat')}}:</span>
+                        <span flex>
+                            <md-switch ng-model="currentService.repeat" class="switch-cell"></md-switch>
+                        </span>
+                    </div>
 
-                    {{translate('id')}}                 : {{currentService.id}}     <br/>
-                    {{translate('name')}}               : {{currentService.name}}   <br/>
-                    {{translate('bootstrap_order')}}    : {{currentService.order}}  <br/>
-
-                    <md-switch ng-model="currentService.repeat">
-                        {{translate('bootstrap_repeat')}}
-                    </md-switch>
                     <md-button class="md-raised md-primary" ng-click="updateService()" ng-disabled="!currentService">{{translate("update")}}</md-button>
                 </p>
             </md-content>
