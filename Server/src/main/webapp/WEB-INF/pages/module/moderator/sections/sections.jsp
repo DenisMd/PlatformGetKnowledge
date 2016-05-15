@@ -12,12 +12,16 @@
                 {{translate('section_info')}}
             </md-tab-label>
             <md-tab-body>
-                <p>
-                    {{translate('id')}} : {{currentSection.id}} <br/>
-                    {{translate('name')}} : {{currentSection.name}}<br/>
-                    <module-template name="inputs/multilanguage" data="multiLanguageData"></module-template>
-                    <md-button class="md-raised md-primary" ng-click="updateSections()" ng-disabled="!currentSection">{{translate("update")}}</md-button>
-                </p>
+                <div layout="row">
+                    <div flex-gt-sm="20" flex="auto">{{translate('id')}}</div>
+                    <div flex>{{currentSection.id}}</div>
+                </div>
+                <div layout="row">
+                    <div flex-gt-sm="20" flex="auto">{{translate('name')}}</div>
+                    <div flex>{{currentSection.name}}</div>
+                </div>
+                <module-template name="inputs/multilanguage" data="multiLanguageData"></module-template>
+                <md-button class="md-raised md-primary md-btn" ng-click="updateSections()" ng-disabled="!currentSection">{{translate("update")}}</md-button>
             </md-tab-body>
         </md-tab>
         <md-tab ng-if="currentSection != null">

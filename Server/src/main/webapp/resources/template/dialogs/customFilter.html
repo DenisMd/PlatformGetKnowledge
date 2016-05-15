@@ -213,8 +213,8 @@
                                             <md-input-container flex>
                                                 <label>{{translate("parameter")}}</label>
                                                 <md-select ng-model="inParam.text">
-                                                    <md-option ng-repeat="constant in currentFilterExpression.field.info.constants" value="{{constant}}">
-                                                        {{translate(constant)}}
+                                                    <md-option ng-repeat="constant in currentFilterExpression.field.info.constants" value="{{constant.key}}">
+                                                        {{translate(constant.value)}}
                                                     </md-option>
                                                 </md-select>
                                             </md-input-container>
@@ -232,8 +232,8 @@
                                             <md-input-container>
                                                 <label>{{translate("parameter")}}</label>
                                                 <md-select ng-model="params">
-                                                    <md-option ng-repeat="constant in currentFilterExpression.field.info.constants" value="{{constant}}">
-                                                        {{constant}}
+                                                    <md-option ng-repeat="constant in currentFilterExpression.field.info.constants" value="{{constant.key}}">
+                                                        {{translate(constant.value)}}
                                                     </md-option>
                                                 </md-select>
                                             </md-input-container>

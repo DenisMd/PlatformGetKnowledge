@@ -3,6 +3,12 @@ model.controller("rolesCtrl", function ($scope, applicationService, className) {
     function roleList() {
         $scope.selectorData.list = [];
         applicationService.list($scope, "roles", className.roles,function (item) {
+            $scope.selectorData.filters[0].constants.push(
+                {
+                    key : item.roleName,
+                    value : item.roleName
+                }
+            );
             $scope.selectorData.list.push(item);
         });
     }
@@ -13,9 +19,9 @@ model.controller("rolesCtrl", function ($scope, applicationService, className) {
         filters      : [
             {
                 title : "name",
-                type  : "text",
+                type  : "enum",
                 field : "roleName",
-                default : true
+                constants : []
             }
         ],
         headerNames : [

@@ -3,6 +3,7 @@
     "user_title": "Users",
     "user" : "User",
     "user_create_date" : "Register date",
+    "user_link" : "Link on user",
     "user_enabled" : "Enabled",
     "user_blocked" : "Blocked",
     "user_load_more" : "Load more users...",

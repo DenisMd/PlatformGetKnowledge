@@ -92,6 +92,7 @@ model.controller("usersCtrl", function ($scope, applicationService, className) {
                             blockMessage : answer
                         },function(result){
                             $scope.showToast($scope.getResultMessage(result));
+                            $scope.currentUser = null;
                             $scope.$broadcast("updateServerSelector");
                         });
                     });
@@ -114,6 +115,7 @@ model.controller("usersCtrl", function ($scope, applicationService, className) {
                                 userId : item.id
                             },function(result){
                                 $scope.showToast($scope.getResultMessage(result));
+                                $scope.currentUser = null;
                                 $scope.$broadcast("updateServerSelector");
                             });
                         }
@@ -151,7 +153,12 @@ model.controller("usersCtrl", function ($scope, applicationService, className) {
 
     applicationService.list($scope,"listRoles",className.roles,function(item){
         //2 - index enum role
-        $scope.selectorData.filters[2].constants.push(item.roleName);
+        $scope.selectorData.filters[2].constants.push(
+            {
+                key : item.roleName,
+                value : item.roleName
+            }
+        );
     });
 
     $scope.updateUser = function() {

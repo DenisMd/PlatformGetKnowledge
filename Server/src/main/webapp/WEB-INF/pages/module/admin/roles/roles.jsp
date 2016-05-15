@@ -9,15 +9,20 @@
     <md-tabs md-dynamic-height md-border-bottom>
         <md-tab label="{{translate('role')}}" ng-if="currentRole != null">
             <md-content class="md-padding">
-                <p>
-                    {{translate('id')}} : {{currentRole.id}} <br/>
-                    {{translate('name')}} : {{currentRole.roleName}}       <br/>
+                <div layout="row">
+                    <div flex-gt-sm="20" flex="auto">{{translate('id')}}</div>
+                    <div flex>{{currentRole.id}}</div>
+                </div>
+                <div layout="row">
+                    <div flex-gt-sm="20" flex="auto">{{translate('name')}}</div>
+                    <div flex>{{currentRole.roleName}}</div>
+                </div>
                 <div class="form-group">
                     <label for="note">{{translate("role_note")}}:</label>
                     <textarea class="form-control" rows="5" id="note" ng-model="currentRole.note"></textarea>
                 </div>
-                <md-button class="md-raised md-primary" ng-click="updateRole()" ng-disabled="!currentRole">{{translate("role_update_role")}}</md-button>
-                </p>
+                <md-button class="md-raised md-primary md-btn" ng-click="updateRole()" ng-disabled="!currentRole">{{translate("role_update_role")}}</md-button>
+
             </md-content>
         </md-tab>
         <md-tab label="{{translate('permissions')}}" ng-if="currentRole != null">

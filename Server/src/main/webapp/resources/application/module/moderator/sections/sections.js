@@ -73,7 +73,8 @@ model.controller("sectionsCtrl", function ($scope, $state,$http,applicationServi
 
     var updateImage = function(file) {
         applicationService.actionWithFile($scope,"cover",className.section,"updateCover",{id:$scope.currentSection.id},file,function (result) {
-            updateSections();
+            $scope.showToast($scope.getResultMessage(result));
+            $scope.currentSection.imageViewExist = true;
         });
     };
 });

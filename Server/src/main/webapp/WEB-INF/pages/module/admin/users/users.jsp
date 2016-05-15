@@ -10,22 +10,55 @@
     <md-tabs md-dynamic-height md-border-bottom>
         <md-tab label="{{translate('user')}}" ng-if="currentUser != null">
             <md-content class="md-padding">
-                <p>
-                    {{translate('id')}} : {{currentUser.id}} <br/>
-                    {{translate('name')}} : {{currentUser.lastName + ' ' + currentUser.firstName}} <br/>
-                    {{translate("email")}} : {{currentUser.user.login}}<br/>
-                    {{translate("user_create_date")}} : {{currentUser.user.createDate | date:'medium'}}<br/>
-                    {{translate("user_blocked")}} : {{currentUser.user.blocked}}<br/>
-                    <md-switch ng-model="currentUser.user.enabled">
-                        {{translate('user_enabled')}}
-                    </md-switch>
-                    <br/>
-                    <span ng-if="currentUser.user.blockMessage">
-                        {{translate("user_block_message")}} : {{currentUser.user.blockMessage}}<br>
-                    </span>
-                    <module-template data="roleData" name="inputs/list"></module-template>
-                </p>
-                <md-button class="md-raised md-primary" ng-click="updateUser()" ng-disabled="!currentUser">{{translate("user_update")}}</md-button>
+                <div layout="row">
+                    <div flex-gt-sm="20" flex="auto">
+                        <a ng-href="{{createUrl('/user/' + currentUser.id)}}">{{translate("user_link")}}</a>
+                    </div>
+                </div>
+                <div layout="row">
+                    <div flex-gt-sm="20" flex="auto">{{translate('id')}}</div>
+                    <div flex>{{currentUser.id}}</div>
+                </div>
+                <div layout="row">
+                    <div flex-gt-sm="20" flex="auto">{{translate('name')}}</div>
+                    <div flex>{{currentUser.lastName + ' ' + currentUser.firstName}}</div>
+                </div>
+                <div layout="row">
+                    <div flex-gt-sm="20" flex="auto">{{translate("email")}}</div>
+                    <div flex>{{currentUser.user.login}}</div>
+                </div>
+                <div layout="row">
+                    <div flex-gt-sm="20" flex="auto">{{translate("user_create_date")}}</div>
+                    <div flex>
+                        {{currentUser.user.createDate | date:'medium'}}
+                    </div>
+                </div>
+                <div layout="row">
+                    <div flex-gt-sm="20" flex="auto">{{translate("user_blocked")}}</div>
+                    <div flex>
+                        {{currentUser.user.blocked}}
+                    </div>
+                </div>
+                <div layout="row">
+                    <div flex-gt-sm="20" flex="auto">{{translate('user_enabled')}}</div>
+                    <div flex>
+                        <md-switch class="switch-cell" ng-model="currentUser.user.enabled"></md-switch>
+                    </div>
+                </div>
+                <div layout="row" ng-if="currentUser.user.blockMessage">
+                    <div flex-gt-sm="20" flex="auto">{{translate("user_block_message")}}</div>
+                    <div flex>
+                        {{currentUser.user.blockMessage}}
+                    </div>
+                </div>
+                <div layout="row">
+                    <div flex-gt-sm="20" flex="auto">{{translate("user_role")}}</div>
+                    <div flex>
+                        <module-template data="roleData" name="inputs/list"></module-template>
+                    </div>
+                </div>
+
+                <md-button class="md-raised md-primary md-btn" ng-click="updateUser()" ng-disabled="!currentUser">{{translate("user_update")}}</md-button>
             </md-content>
         </md-tab>
         <md-tab label="{{translate('permissions')}}" ng-if="currentUser != null">

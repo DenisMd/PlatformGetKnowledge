@@ -26,7 +26,22 @@ model.controller("logsCtrl", function ($scope,className) {
                 title : "log_trace_level",
                 type : "enum",
                 field : "traceLevel",
-                constants : ["Debug", "Event", "Warning", "Error", "Critical"]
+                constants : [{
+                    key : "Debug",
+                    value : "log_debug"
+                }, {
+                    key : "Event",
+                    value : "log_event"
+                }, {
+                    key : "Warning",
+                    value : "log_warning"
+                }, {
+                    key : "Error",
+                    value : "log_error"
+                }, {
+                    key : "Critical",
+                    value : "log_critical"
+                }]
             },
             {
                 title : "log_date",
@@ -45,8 +60,9 @@ model.controller("logsCtrl", function ($scope,className) {
                 name : "message",
                 title : "log_message"
             },{
-                name : "traceLevel",
+                name : "traceLevelTranslate",
                 title : "log_trace_level",
+                translate : true,
                 orderBy : true
             },{
                 name : "calendar",
@@ -58,29 +74,34 @@ model.controller("logsCtrl", function ($scope,className) {
         callBackForFilter : function(log) {
             switch (log.traceLevel) {
                 case "Debug":
+                    log.traceLevelTranslate = "log_debug";
                     log.icon = {
                         name : "fa-bug",
                         color : "#AAFFB8"
                     };
                     break;
                 case "Event" :
+                    log.traceLevelTranslate = "log_event";
                     log.icon = {
                         name : "fa-lightbulb-o",
                         color : "#21BF4A"
                     };
                     break;
                 case "Warning" :
+                    log.traceLevelTranslate = "log_warning";
                     log.icon = {
                         name : "fa-exclamation",
                         color : "#FFC620"
                     };
                     break;
                 case "Error" :
+                    log.traceLevelTranslate = "log_error";
                     log.icon = {
                         name : "fa-exclamation-triangle",
                         color : "#FF5B5D"
                     };break;
                 case "Critical" :
+                    log.traceLevelTranslate = "log_critical";
                     log.icon = {
                         name : "fa-fire",
                         color : "#FF050C"
