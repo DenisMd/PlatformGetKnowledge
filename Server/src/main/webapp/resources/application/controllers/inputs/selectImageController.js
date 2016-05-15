@@ -103,11 +103,11 @@ model.controller("selectImgController", function($scope){
     };
 
     $scope.getResultSize = function(){
-        return $scope.getData().resultSize;
+        return $scope.getData().resultSize ? $scope.getData().resultSize : 400;
     };
 
     $scope.getResultQuality = function(){
-        return $scope.getData().resultQuality;
+        return $scope.getData().resultQuality ? $scope.getData().resultQuality : 1.0;
     };
 
     function base64ToBlob(base64Data) {

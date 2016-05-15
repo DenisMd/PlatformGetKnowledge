@@ -88,6 +88,8 @@ model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationServ
             updateImage(file);
         },
         areaType:"circle",
+        resultQuality : 1.0,
+        resultSize : 500,
         isCrop : true
     };
 
