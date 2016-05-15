@@ -2,7 +2,7 @@
     <nav class="nav-menu animate-show" ng-show="toggelMenu" ng-scrollbars ng-scrollbars-config="menuScrollConfig">
         <div class="main-menu-info">
             <div class="user-info-card" ng-show="user">
-                <a ng-href="{{createUrl('/user/' + user.id)}}"><img ng-src="{{userImg(user.id)}}"
+                <a ng-href="{{createUrl('/user/' + user.id)}}"><img ng-src="{{user.avatarHref}}"
                                                                     class="main-image"/></a>
 
                 <p class="main-label">{{user.firstName}} {{user.lastName}}</p>

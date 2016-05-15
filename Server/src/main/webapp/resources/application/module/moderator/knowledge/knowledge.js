@@ -37,6 +37,7 @@ model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationServ
         ],
         selectItemCallback : function (item) {
             $scope.currentKnowledge = item;
+            updateCroppedImage();
         },
         actions : [
             {
@@ -83,7 +84,8 @@ model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationServ
         });
     };
 
-    var croppedImg = {
+    $scope.croppedImg = {
+        id : 'cover',
         save: function(file){
             updateImage(file);
         },
@@ -93,10 +95,10 @@ model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationServ
         isCrop : true
     };
 
-    $scope.getCropImageData  = function(){
-        croppedImg.src = applicationService.imageHref(className.knowledge,$scope.currentKnowledge.id);
-        croppedImg.notUseDefault = $scope.currentKnowledge.imageViewExist;
-        return croppedImg;
+    var updateCroppedImage  = function(){
+        $scope.croppedImg.src = applicationService.imageHref(className.knowledge, $scope.currentKnowledge.id);
+        $scope.croppedImg.notUseDefault = $scope.currentKnowledge.imageViewExist;
+        $scope.$broadcast("updateCropImage"+$scope.croppedImg.id+"Event");
     };
 
     var updateImage = function(file) {

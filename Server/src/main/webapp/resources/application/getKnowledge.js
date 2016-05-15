@@ -93,7 +93,9 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
     $scope.getAuthorizedUser = function(callback){
         applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {},callback);
     };
-    $scope.getAuthorizedUser();
+    $scope.getAuthorizedUser(function (user) {
+        user.avatarHref = $scope.userImg(user.id);
+    });
 
     //получения пользовательского изображения
     $scope.userImg = function(id){

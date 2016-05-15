@@ -4,7 +4,7 @@ model.controller("selectImgController", function($scope){
         return $scope.getData().src+"&" + new Date();
     };
 
-    $scope.originalImg = "";
+    var originalImg = "";
 
     var defaultImage = "/resources/image/default/camera.png";
 
@@ -18,8 +18,8 @@ model.controller("selectImgController", function($scope){
                 } else {
                     $scope.$apply(function($scope) {
                         oldImageSrc = getDataSrc();
-                        $scope.originalImg = image.target.result;
-                        $scope.onChange($scope.originalImg);
+                        originalImg = image.target.result;
+                        $scope.onChange(originalImg);
                     });
 
                 }
@@ -54,16 +54,16 @@ model.controller("selectImgController", function($scope){
 
     function initModalImage(image,event){
         $scope.$apply(function($scope) {
-            $scope.originalImg = image.target.result;
+            originalImg = image.target.result;
             $scope.item = {
-                original : $scope.originalImg,
+                original : originalImg,
                 cropImage:  ""
             };
             if (!dialogShown) {
                 $scope.showDialog(event, $scope, "cropModal.html",$scope.onChange,function(){
                     dialogShown = false;
                     oldImageSrc = getDataSrc();
-                    $scope.originalImg = $scope.item.cropImage;
+                    originalImg = $scope.item.cropImage;
                 });
                 dialogShown = true;
             }
@@ -80,27 +80,34 @@ model.controller("selectImgController", function($scope){
     $scope.getClass = function(){
         return $scope.getAreaType() === "circle" ? "img-circle" : "";
     };
+    
+    $scope.imageUrl = defaultImage;
 
-    $scope.getImage = function(){
+    function getImage(){
         var notUseDefault = $scope.getData().notUseDefault;
         if (notUseDefault || oldImageSrc) {
             var image = getDataSrc();
             if (image) {
                 if (!oldImageSrc) {
-                    $scope.originalImg = image;
+                    originalImg = image;
                 } else {
                     if (oldImageSrc !== image){
-                        $scope.originalImg =  image;
+                        originalImg =  image;
                         oldImageSrc = "";
                     }
                 }
-                return $scope.originalImg;
+                return originalImg;
             } else {
-                $scope.originalImg = "";
+                originalImg = "";
             }
         }
         return defaultImage;
-    };
+    }
+    
+    $scope.$on("updateCropImage"+$scope.getData().id+"Event",function (event,args) {
+        console.log("dsdsd");
+        $scope.imageUrl = getImage();
+    });
 
     $scope.getResultSize = function(){
         return $scope.getData().resultSize ? $scope.getData().resultSize : 400;
