@@ -42,16 +42,18 @@
     -moz-transition: all 0.5s linear;
     transition: all 0.5s linear;
 }
+.row-panel.ng-enter td{
+    padding:0;
+}
 
-
-.row-panel.ng-enter td,
-.row-panel.ng-leave.ng-leave-active{
-/*.row-panel.ng-enter .item-panel,*/
-/*.row-panel.ng-leave.ng-leave-active .item-panel{*/
+/*.row-panel.ng-enter td,*/
+/*.row-panel.ng-leave.ng-leave-active,*/
+.row-panel.ng-enter .item-panel,
+.row-panel.ng-leave.ng-leave-active .item-panel{
     opacity: 0;
     height: 0px;
     padding-top: 0;
-    padding-bottom: 0;
+    /*padding-bottom: 0;*/
 }
 
 /*.row-panel.ng-leave .item-panel,*/

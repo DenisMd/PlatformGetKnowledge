@@ -9,13 +9,26 @@
   <md-tabs md-dynamic-height md-border-bottom>
     <md-tab label="{{translate('currency_info')}}" ng-if="currentCurrency != null">
       <md-content class="md-padding">
-        <p>
-          {{translate('id')}}                     : {{currentCurrency.id}}             <br/>
-          {{translate('name')}}                   : {{currentCurrency.name}}           <br/>
-          {{translate('currency_char_code')}}     : {{currentCurrency.charCode}}       <br/>
-          {{translate('currency_is_base')}}       : {{currentCurrency.baseCurrency}}   <br/>
-          {{translate('currency_value')}}         : {{currentCurrency.value}}          <br/>
-        </p>
+        <div layout="row">
+          <div flex-gt-sm="20" flex="auto">{{translate('id')}}</div>
+          <div flex>{{currentCurrency.id}}</div>
+        </div>
+        <div layout="row">
+          <div flex-gt-sm="20" flex="auto">{{translate('name')}}</div>
+          <div flex>{{translate('name')}}</div>
+        </div>
+        <div layout="row">
+          <div flex-gt-sm="20" flex="auto">{{translate('currency_char_code')}}</div>
+          <div flex>{{currentCurrency.charCode}}</div>
+        </div>
+        <div layout="row">
+          <div flex-gt-sm="20" flex="auto">{{translate('currency_is_base')}}</div>
+          <div flex>{{currentCurrency.baseCurrency}}</div>
+        </div>
+        <div layout="row">
+          <div flex-gt-sm="20" flex="auto">{{translate('currency_value')}}</div>
+          <div flex>{{currentCurrency.value}}</div>
+        </div>
       </md-content>
     </md-tab>
   </md-tabs>
