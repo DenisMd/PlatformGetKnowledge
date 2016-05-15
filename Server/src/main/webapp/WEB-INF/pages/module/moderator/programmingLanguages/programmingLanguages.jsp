@@ -9,22 +9,23 @@
     <md-tabs md-dynamic-height md-border-bottom>
         <md-tab label="{{translate('pl_title')}}" ng-if="currentPLanguage != null">
             <md-content class="md-padding">
-                <p>
-                    {{translate('id')}} : {{currentPLanguage.id}} <br/>
-                    <div>
-                        <md-input-container>
-                            <label>{{translate('name')}}</label>
-                            <input ng-model="currentPLanguage.name">
-                        </md-input-container>
-                    </div>
-                    <div>
-                        <md-input-container>
-                            <label>{{translate("pl_mode")}}</label>
-                            <input ng-model="currentPLanguage.mode">
-                        </md-input-container>
-                    </div>
-                    <md-button class="md-raised md-primary" ng-click="updatePLanguage()" ng-disabled="!currentPLanguage">{{translate("update")}}</md-button>
-                </p>
+                <div layout="row">
+                    <div flex-gt-sm="20" flex="auto">{{translate('id')}}</div>
+                    <div flex>{{currentPLanguage.id}}</div>
+                </div>
+                <div layout="row">
+                    <md-input-container>
+                        <label>{{translate('name')}}</label>
+                        <input ng-model="currentPLanguage.name">
+                    </md-input-container>
+                </div>
+                <div layout="row">
+                    <md-input-container>
+                        <label>{{translate("pl_mode")}}</label>
+                        <input ng-model="currentPLanguage.mode">
+                    </md-input-container>
+                </div>
+                <md-button class="md-raised md-primary md-btn" ng-click="updatePLanguage()" ng-disabled="!currentPLanguage">{{translate("update")}}</md-button>
             </md-content>
         </md-tab>
     </md-tabs>

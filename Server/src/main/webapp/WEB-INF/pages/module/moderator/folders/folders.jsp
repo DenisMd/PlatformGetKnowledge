@@ -43,23 +43,24 @@
                 {{translate('folder_info')}}
             </md-tab-label>
             <md-tab-body>
-                <p>
-                    {{translate('id')}} : {{currentGroup.id}} <br/>
-                    <div>
-                        <md-input-container>
-                            <label>{{translate("name")}}</label>
-                            <input ng-model="currentGroup.title">
-                        </md-input-container>
-                    </div>
-                <div>
+                <div layout="row">
+                    <div flex-gt-sm="20" flex="auto">{{translate('id')}}</div>
+                    <div flex>{{currentGroup.id}}</div>
+                </div>
+                <div layout="row">
+                    <md-input-container>
+                        <label>{{translate("name")}}</label>
+                        <input ng-model="currentGroup.title">
+                    </md-input-container>
+                </div>
+                <div layout="row">
                     <md-input-container>
                         <label>{{translate("url")}}</label>
                         <input ng-model="currentGroup.url">
                     </md-input-container>
                 </div>
-                    <module-template name="inputs/multilanguage" data="multiLanguageData"></module-template>
-                    <md-button class="md-raised md-primary" ng-click="updateGroup()" ng-disabled="!currentGroup">{{translate("update")}}</md-button>
-                </p>
+                <module-template name="inputs/multilanguage" data="multiLanguageData"></module-template>
+                <md-button class="md-raised md-primary md-btn" ng-click="updateGroup()" ng-disabled="!currentGroup">{{translate("update")}}</md-button>
             </md-tab-body>
         </md-tab>
         <md-tab ng-if="currentGroup != null">

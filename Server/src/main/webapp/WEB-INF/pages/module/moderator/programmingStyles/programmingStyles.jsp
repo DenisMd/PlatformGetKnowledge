@@ -9,16 +9,17 @@
     <md-tabs md-dynamic-height md-border-bottom>
         <md-tab label="{{translate('ps_title')}}" ng-if="currentEStyle != null">
             <md-content class="md-padding">
-                <p>
-                    {{translate('id')}} : {{currentEStyle.id}} <br/>
-                <div>
+                <div layout="row">
+                    <div flex-gt-sm="20" flex="auto">{{translate('id')}}</div>
+                    <div flex>{{currentEStyle.id}}</div>
+                </div>
+                <div layout="row">
                     <md-input-container>
                         <label>{{translate('name')}}</label>
                         <input ng-model="currentEStyle.name">
                     </md-input-container>
                 </div>
-                <md-button class="md-raised md-primary" ng-click="updatePLanguage()" ng-disabled="!currentEStyle">{{translate("update")}}</md-button>
-                </p>
+                <md-button class="md-raised md-primary md-btn" ng-click="updatePLanguage()" ng-disabled="!currentEStyle">{{translate("update")}}</md-button>
             </md-content>
         </md-tab>
     </md-tabs>

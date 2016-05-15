@@ -237,6 +237,11 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
     };
 
     var updateImage = function(file) {
-        applicationService.actionWithFile($scope,"cover",$scope.currentClassName,"updateCover",{id:$scope.currentGroup.id},file);
+        applicationService.actionWithFile($scope,"cover",$scope.currentClassName,"updateCover",{id:$scope.currentGroup.id},file,function (result) {
+            $scope.showToast($scope.getResultMessage(result));
+            if (result.status === "Complete") {
+                $scope.currentGroup.imageViewExist = true;    
+            }
+        });
     };
 });
