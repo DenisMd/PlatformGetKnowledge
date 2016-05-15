@@ -100,6 +100,9 @@ model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationServ
     var updateImage = function(file) {
         applicationService.actionWithFile($scope,"image",className.knowledge,"uploadImage",{knowledgeId:$scope.currentKnowledge.id},file,function(result){
             $scope.showToast($scope.getResultMessage(result));
+            if (result.status === "Complete") {
+                $scope.currentKnowledge.imageViewExist = true;
+            }
         });
     };
 });
