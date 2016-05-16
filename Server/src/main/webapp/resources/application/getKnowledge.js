@@ -94,7 +94,10 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
         applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {},callback);
     };
     $scope.getAuthorizedUser(function (user) {
-        user.avatarHref = $scope.userImg(user.id);
+        if (user != null) {
+            user.imageSrc = $scope.userImg(user.id);
+            user.mainUrl = $scope.createUrl('/user/' + user.id);
+        }
     });
 
     //получения пользовательского изображения
@@ -107,7 +110,7 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
     //Возвращает корректный url с учетом языка
     $scope.createUrl = function (url) {
         if (!$scope.application) {
-            return;
+            return '#/' + 'ru' + url;
         }
         return '#/' + $scope.application.language + url;
     };
