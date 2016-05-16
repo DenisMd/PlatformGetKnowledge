@@ -12,22 +12,10 @@ model.controller("mainMenuController",function($scope,$state,$rootScope,applicat
             if (plUtils.isFunction(callback)){
                 callback(menu);
             }
-            for (var i=0;i < menu.items.length ; i++) {
-                var menuItem = menu.items[i];
-                menuItem.mainUrl = $scope.createUrl(menuItem.url);
-                if (menuItem.subItems) {
-                    for (var j = 0; j < menuItem.subItems.length; j++) {
-                        var subItem = menuItem.subItems[j];
-                        subItem.mainUrl = $scope.createUrl(menuItem.url+subItem.url);
-                    }
-                }
-            }
         });
     };
 
     loadMenu();
-
-    $scope.loginPage = $scope.createUrl('/login');
 
     //Разлогиниваемся
     $scope.logout = function(){

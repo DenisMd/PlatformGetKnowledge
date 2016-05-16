@@ -96,7 +96,6 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
     $scope.getAuthorizedUser(function (user) {
         if (user != null) {
             user.imageSrc = $scope.userImg(user.id);
-            user.mainUrl = $scope.createUrl('/user/' + user.id);
         }
     });
 
