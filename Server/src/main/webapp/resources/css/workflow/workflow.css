@@ -12,3 +12,8 @@
 .md-btn{
     margin-left: 0;
 }
+
+/*Все text area могуть растягиваться только вертикально*/
+textarea {
+    resize: vertical;
+}
