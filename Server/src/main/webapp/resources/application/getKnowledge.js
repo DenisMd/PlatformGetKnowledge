@@ -93,7 +93,11 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
     $scope.getAuthorizedUser = function(callback){
         applicationService.action($scope, "user", className.userInfo, "getAuthorizedUser", {},callback);
     };
-    $scope.getAuthorizedUser();
+    $scope.getAuthorizedUser(function (user) {
+        if (user != null) {
+            user.imageSrc = $scope.userImg(user.id);
+        }
+    });
 
     //получения пользовательского изображения
     $scope.userImg = function(id){
@@ -105,7 +109,7 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
     //Возвращает корректный url с учетом языка
     $scope.createUrl = function (url) {
         if (!$scope.application) {
-            return;
+            return '#/' + 'ru' + url;
         }
         return '#/' + $scope.application.language + url;
     };
@@ -319,28 +323,6 @@ model.controller("textareaCtrl",function($scope,$element){
 
     $scope.getMaxLength = function(){
         return $scope.getData().maxLength;
-    };
-});
-
-model.controller("sectionCard",function($scope,$state,applicationService,className){
-    applicationService.action($scope, "section" , className.section,"getSectionByNameAndLanguage" , {
-        language : $scope.application.language.capitalizeFirstLetter(),
-        name :  $scope.getData().sectionName
-    } , function(section){
-        //Нету секции
-        if (!section){
-            $state.go("404");
-        }
-        $scope.sectionCards = {
-            title : "categories",
-            cardsInRow : 3,
-            cards : section.menuItem.subItems,
-            prefix : section.menuItem.url
-        };
-    });
-
-    $scope.sectionImg = function(id){
-        return applicationService.imageHref(className.section,id);
     };
 });
 

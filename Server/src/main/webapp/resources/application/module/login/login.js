@@ -14,6 +14,8 @@ model.controller("loginCtrl", function ($scope,$rootScope,$state,$http,applicati
                             language = language.name.toLowerCase();
                         }
 
+                        $scope.user.imageSrc = $scope.userImg(user.id);
+
                         $rootScope.$emit('reloadMenu', function(menu){
                             $state.go($state.$current, {"language": language, path:"user/"+user.id});
                         });

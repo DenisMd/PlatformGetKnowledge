@@ -14,9 +14,6 @@ import java.util.List;
 @Repository("ProgramTagRepository")
 public class ProgramTagRepository extends BaseRepository<ProgramTag> implements ITagRepository<ProgramTag> {
 
-    @Autowired
-    private TraceService trace;
-
     @Override
     protected Class<ProgramTag> getClassEntity() {
         return ProgramTag.class;

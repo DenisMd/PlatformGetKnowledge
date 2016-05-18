@@ -37,6 +37,7 @@ model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationServ
         ],
         selectItemCallback : function (item) {
             $scope.currentKnowledge = item;
+            updateCroppedImage();
         },
         actions : [
             {
@@ -83,23 +84,35 @@ model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationServ
         });
     };
 
-    var croppedImg = {
+    $scope.croppedImg = {
+        id : 'cover',
         save: function(file){
             updateImage(file);
         },
         areaType:"circle",
+        resultQuality : 1.0,
+        resultSize : 500,
         isCrop : true
     };
 
-    $scope.getCropImageData  = function(){
-        croppedImg.src = applicationService.imageHref(className.knowledge,$scope.currentKnowledge.id);
-        croppedImg.notUseDefault = $scope.currentKnowledge.imageViewExist;
-        return croppedImg;
+    var updateCroppedImage  = function(){
+        $scope.croppedImg.src = applicationService.imageHref(className.knowledge, $scope.currentKnowledge.id);
+        $scope.croppedImg.notUseDefault = $scope.currentKnowledge.imageViewExist;
+
+        //Если изображение открывается первый раз событие не сработает так не зарегестрированно
+        //Поэтому добавляется проверка для открытия
+        $scope.croppedImg.setupImgae = true;
+
+        $scope.$broadcast("updateCropImage"+$scope.croppedImg.id+"Event");
     };
 
     var updateImage = function(file) {
         applicationService.actionWithFile($scope,"image",className.knowledge,"uploadImage",{knowledgeId:$scope.currentKnowledge.id},file,function(result){
             $scope.showToast($scope.getResultMessage(result));
+            if (result.status === "Complete") {
+                $scope.currentKnowledge.imageViewExist = true;
+                $scope.$broadcast("updateCropImage"+$scope.croppedImg.id+"Event");
+            }
         });
     };
 });

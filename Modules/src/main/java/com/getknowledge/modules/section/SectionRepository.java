@@ -23,7 +23,7 @@ public class SectionRepository extends BaseRepository<Section> {
         return Section.class;
     }
 
-    public Section getSectionByNameAndLanguage(String name , String language) {
+    public Section getSectionByNameAndLanguage(String name) {
         List<Section> section = (List<Section>) entityManager.createQuery("select sec from Section sec where sec.name = :name")
                 .setParameter("name" , name).getResultList();
         return section.isEmpty() ? null : section.get(0);

@@ -1,0 +1,15 @@
+<link rel="stylesheet" type="text/css" href="/resources/css/components/section.css">
+
+<div ng-controller="sectionController">
+
+    <h1 class="text-center">{{translate(section.name)}}</h1>
+
+    <img ng-src="{{section.coverImg}}"
+         class="cover-img">
+
+    <p class="description">
+        {{application.language == 'ru' ? section.descriptionRu : section.descriptionEn}}
+    </p>
+
+    <module-template name="cards/cards" data="sectionCards"></module-template>
+</div>

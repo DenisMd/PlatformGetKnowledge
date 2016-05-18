@@ -6,11 +6,12 @@
     "folder_description" : "Описание",
     "folder_create" : "Создать каталог",
     "folder_delete" : "Удалить каталог",
+    "folder_url" : "URL папки",
     "folder_delete_confirmation" : "Если каталог содержит сущности удаление будет не возможно",
     "section" : "Секция",
     "folder_type" : "Тип группы",
     "folder_group_books" : "Группа книг",
-    "folder_group_programs" : "Грппа программ",
+    "folder_group_programs" : "Группа программ",
     "folder_group_courses"  : "Группа курсов"
   }
 }

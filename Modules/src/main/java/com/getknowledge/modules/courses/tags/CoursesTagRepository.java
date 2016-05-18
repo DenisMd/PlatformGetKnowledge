@@ -18,9 +18,6 @@ public class CoursesTagRepository extends BaseRepository<CoursesTag> implements 
         return CoursesTag.class;
     }
 
-    @Autowired
-    private TraceService trace;
-
     @Override
     public void removeTagsFromEntity(EntityWithTags<CoursesTag> entity) {
         for (CoursesTag coursesTag : entity.getTags()) {

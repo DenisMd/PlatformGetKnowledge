@@ -27,7 +27,14 @@ model.controller("videoCtrl",function($scope,videoDialogService,className,applic
         return "/data/readVideo?className="+className.video+"&id="+id;
     }
 
-    applicationService.read($scope,"video",className.video,$scope.getData().id);
+    //Получения обложки для видео
+    function videoImg(id){
+        return applicationService.imageHref(className.video,id);
+    }
+
+    applicationService.read($scope,"video",className.video,$scope.getData().id,function(video){
+        video.coverSrc = videoImg(video.id);
+    });
 
     $scope.open = function() {
         var videoUrl = getVideoUrl($scope.video.id);
@@ -47,10 +54,7 @@ model.controller("videoCtrl",function($scope,videoDialogService,className,applic
         }
     };
 
-    //Получения обложки для видео
-    $scope.videoImg = function(id){
-        return applicationService.imageHref(className.video,id);
-    };
+
 
     $('#videoModal').on("hidden.bs.modal",function(){
         $scope.close();

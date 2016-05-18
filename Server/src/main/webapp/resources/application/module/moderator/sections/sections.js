@@ -42,6 +42,7 @@ model.controller("sectionsCtrl", function ($scope, $state,$http,applicationServi
         selectItemCallback : function (item) {
             $scope.currentSection = item;
             $scope.multiLanguageData.languages = {"ru":  item.descriptionRu, "en":  item.descriptionEn};
+            updateCroppedImage();
         }
     };
 
@@ -58,23 +59,32 @@ model.controller("sectionsCtrl", function ($scope, $state,$http,applicationServi
         label : $scope.translate("section_description")
     };
 
-    var croppedImg = {
+    $scope.croppedImg = {
+        id : 'cover',
         save: function(file){
             updateImage(file);
         },
         areaType:"square"
     };
 
-    $scope.getCropImageData  = function(){
-        croppedImg.src = applicationService.imageHref(className.section,$scope.currentSection.id);
-        croppedImg.notUseDefault = $scope.currentSection.imageViewExist;
-        return croppedImg;
-    };
+    function updateCroppedImage(){
+        $scope.croppedImg.src = applicationService.imageHref(className.section,$scope.currentSection.id);
+        $scope.croppedImg.notUseDefault = $scope.currentSection.imageViewExist;
+
+        //Если изображение открывается первый раз событие не сработает так не зарегестрированно
+        //Поэтому добавляется проверка для открытия
+        $scope.croppedImg.setupImgae = true;
+
+        $scope.$broadcast("updateCropImage"+$scope.croppedImg.id+"Event");
+    }
 
     var updateImage = function(file) {
         applicationService.actionWithFile($scope,"cover",className.section,"updateCover",{id:$scope.currentSection.id},file,function (result) {
             $scope.showToast($scope.getResultMessage(result));
-            $scope.currentSection.imageViewExist = true;
+            if (result.status === "Complete") {
+                $scope.currentSection.imageViewExist = true;
+                $scope.$broadcast("updateCropImage"+$scope.croppedImg.id+"Event");
+            }
         });
     };
 });

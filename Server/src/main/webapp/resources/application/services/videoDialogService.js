@@ -2,6 +2,7 @@ model.factory('videoDialogService', function(applicationService,className) {
     var videoInfo = {};
     var mainScope;
     var callbackFunction = function (videoComment) {
+        videoComment.sender.imageSrc = mainScope.userImg(videoComment.sender.id);
         mainScope.videoComments.push(videoComment);
     };
     return {

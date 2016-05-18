@@ -7,11 +7,8 @@
 
 <md-content>
     <md-tabs md-dynamic-height md-border-bottom>
-        <md-tab ng-if="currentSection != null">
-            <md-tab-label>
-                {{translate('section_info')}}
-            </md-tab-label>
-            <md-tab-body>
+        <md-tab label="{{translate('section_info')}}" ng-if="currentSection != null">
+            <md-content class="md-padding">
                 <div layout="row">
                     <div flex-gt-sm="20" flex="auto">{{translate('id')}}</div>
                     <div flex>{{currentSection.id}}</div>
@@ -22,17 +19,14 @@
                 </div>
                 <module-template name="inputs/multilanguage" data="multiLanguageData"></module-template>
                 <md-button class="md-raised md-primary md-btn" ng-click="updateSections()" ng-disabled="!currentSection">{{translate("update")}}</md-button>
-            </md-tab-body>
+            </md-content>
         </md-tab>
-        <md-tab ng-if="currentSection != null">
-            <md-tab-label>
-                {{translate('section_image')}}
-            </md-tab-label>
-            <md-tab-body>
+        <md-tab label="{{translate('section_image')}}" ng-if="currentSection != null">
+            <md-content class="md-padding">
                 <md-content class="md-padding">
-                    <module-template name="inputs/selectImage" data="getCropImageData()"></module-template>
+                    <module-template name="inputs/selectImage" data="croppedImg"></module-template>
                 </md-content>
-            </md-tab-body>
+            </md-content>
         </md-tab>
     </md-tabs>
 </md-content>

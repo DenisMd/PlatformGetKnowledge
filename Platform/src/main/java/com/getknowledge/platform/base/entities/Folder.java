@@ -1,6 +1,8 @@
 package com.getknowledge.platform.base.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.platform.modules.permission.Permission;
+import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
 import javax.persistence.*;
 
@@ -64,5 +66,16 @@ public abstract class Folder extends AbstractEntity {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Override
+    public AuthorizationList getAuthorizationList() {
+        AuthorizationList al = new AuthorizationList();
+        al.allowCreateEveryOne = false;
+        al.allowReadEveryOne = true;
+        al.getPermissionsForCreate().add(new Permission(PermissionNames.EditFolders.getName()));
+        al.getPermissionsForEdit().add(new Permission(PermissionNames.EditFolders.getName()));
+        al.getPermissionsForRemove().add(new Permission(PermissionNames.EditFolders.getName()));
+        return al;
     }
 }

@@ -162,7 +162,11 @@ model.controller("usersCtrl", function ($scope, applicationService, className) {
     });
 
     $scope.updateUser = function() {
-        applicationService.update($scope,"",className.users,$scope.currentUser.user,function(result){
+        applicationService.action($scope,"",className.users,"updateUser" , {
+            userId : $scope.currentUser.user.id,
+            roleName : $scope.currentUser.user.role.roleName,
+            enabled : $scope.currentUser.user.enabled
+        },function(result){
             $scope.showToast($scope.getResultMessage(result));
         });
     };
