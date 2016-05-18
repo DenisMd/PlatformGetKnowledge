@@ -67,10 +67,10 @@ public class SectionService extends AbstractService implements BootstrapService,
         return bootstrapInfo;
     }
 
-    @Action(name = "getSectionByNameAndLanguage" , mandatoryFields = {"name" , "language"})
+    @Action(name = "getSectionByName" , mandatoryFields = {"name"})
     @Transactional
     public Section getSectionByNameAndLangugae(HashMap<String, Object> data) {
-        return sectionRepository.getSectionByNameAndLanguage((String)data.get("name") , (String)data.get("language"));
+        return sectionRepository.getSectionByNameAndLanguage((String)data.get("name"));
     }
 
 

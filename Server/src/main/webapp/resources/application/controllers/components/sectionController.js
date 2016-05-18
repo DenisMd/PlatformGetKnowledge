@@ -2,8 +2,7 @@ model.controller("sectionController",function($scope,$state,applicationService,c
 
     $scope.sectionCards = {};
 
-    applicationService.action($scope, "section" , className.section,"getSectionByNameAndLanguage" , {
-        language : $scope.application.language.capitalizeFirstLetter(),
+    applicationService.action($scope, "section" , className.section,"getSectionByName" , {
         name :  $scope.getData().sectionName
     } , function(section){
         //Нету секции
