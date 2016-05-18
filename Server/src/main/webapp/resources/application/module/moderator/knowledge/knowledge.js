@@ -98,6 +98,11 @@ model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationServ
     var updateCroppedImage  = function(){
         $scope.croppedImg.src = applicationService.imageHref(className.knowledge, $scope.currentKnowledge.id);
         $scope.croppedImg.notUseDefault = $scope.currentKnowledge.imageViewExist;
+
+        //Если изображение открывается первый раз событие не сработает так не зарегестрированно
+        //Поэтому добавляется проверка для открытия
+        $scope.croppedImg.setupImgae = true;
+
         $scope.$broadcast("updateCropImage"+$scope.croppedImg.id+"Event");
     };
 
@@ -106,6 +111,7 @@ model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationServ
             $scope.showToast($scope.getResultMessage(result));
             if (result.status === "Complete") {
                 $scope.currentKnowledge.imageViewExist = true;
+                $scope.$broadcast("updateCropImage"+$scope.croppedImg.id+"Event");
             }
         });
     };

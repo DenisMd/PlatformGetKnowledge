@@ -103,9 +103,13 @@ model.controller("selectImgController", function($scope){
         }
         return defaultImage;
     }
-    
+
+    //При иницализации если задано изображение сразу установить его
+    if ($scope.getData().setupImgae) {
+        $scope.imageUrl = getImage();
+    }
+
     $scope.$on("updateCropImage"+$scope.getData().id+"Event",function (event,args) {
-        console.log("dsdsd");
         $scope.imageUrl = getImage();
     });
 
