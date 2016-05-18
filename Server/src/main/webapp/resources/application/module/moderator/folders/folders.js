@@ -26,6 +26,9 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 name : "title",
                 title : "name",
                 orderBy : true
+            },{
+                name : "url",
+                title : "folder_url"
             }
         ],
         selectItemCallback : function (item) {
@@ -96,6 +99,9 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 name : "title",
                 title : "name",
                 orderBy : true
+            },{
+                name : "url",
+                title : "folder_url"
             }
         ],
         selectItemCallback : function (item) {
@@ -166,6 +172,9 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 name : "title",
                 title : "name",
                 orderBy : true
+            },{
+                name : "url",
+                title : "folder_url"
             }
         ],
         selectItemCallback : function (item) {

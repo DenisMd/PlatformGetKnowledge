@@ -2,10 +2,11 @@
   "text" : {
     "folder_loadMore" : "Load more group",
     "folder_info" : "Information about group",
-    "folder__image" : "Group cover",
+    "folder_image" : "Group cover",
     "folder_description" : "Description",
     "folder_create" : "Create folder",
     "folder_delete" : "Delete folder",
+    "folder_url" : "Folder URL",
     "folder_delete_confirmation" : "If folder contain entities delete impossible",
     "section" : "Section",
     "folder_type" : "Group type",

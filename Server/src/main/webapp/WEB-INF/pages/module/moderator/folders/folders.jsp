@@ -38,40 +38,34 @@
 
 <md-content>
     <md-tabs md-dynamic-height md-border-bottom>
-        <md-tab ng-if="currentGroup != null">
-            <md-tab-label>
-                {{translate('folder_info')}}
-            </md-tab-label>
-            <md-tab-body>
-                <div layout="row">
+        <md-tab label="{{translate('folder_info')}}" ng-if="currentGroup != null">
+            <md-content class="md-padding">
+                <div layout="row" class="field">
                     <div flex-gt-sm="20" flex="auto">{{translate('id')}}</div>
                     <div flex>{{currentGroup.id}}</div>
                 </div>
-                <div layout="row">
-                    <md-input-container>
-                        <label>{{translate("name")}}</label>
-                        <input ng-model="currentGroup.title">
-                    </md-input-container>
+                <div layout="row" class="field">
+                    <div flex-gt-sm="20" flex="auto">{{translate('name')}}</div>
+                    <div flex>
+                        <input type="text" class="form-control" ng-model="currentGroup.title">
+                    </div>
                 </div>
-                <div layout="row">
-                    <md-input-container>
-                        <label>{{translate("url")}}</label>
-                        <input ng-model="currentGroup.url">
-                    </md-input-container>
+                <div layout="row" class="field">
+                    <div flex-gt-sm="20" flex="auto">{{translate("folder_url")}}</div>
+                    <div flex>
+                        <input type="text" class="form-control" ng-model="currentGroup.url">
+                    </div>
                 </div>
                 <module-template name="inputs/multilanguage" data="multiLanguageData"></module-template>
                 <md-button class="md-raised md-primary md-btn" ng-click="updateGroup()" ng-disabled="!currentGroup">{{translate("update")}}</md-button>
-            </md-tab-body>
+            </md-content>
         </md-tab>
-        <md-tab ng-if="currentGroup != null">
-            <md-tab-label>
-                {{translate('folder_image')}}
-            </md-tab-label>
-            <md-tab-body>
+        <md-tab label="{{translate('folder_image')}}" ng-if="currentGroup != null">
+            <md-content class="md-padding">
                 <md-content class="md-padding">
                     <module-template name="inputs/selectImage" data="croppedImg"></module-template>
                 </md-content>
-            </md-tab-body>
+            </md-content>
         </md-tab>
     </md-tabs>
 </md-content>

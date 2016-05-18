@@ -6,6 +6,7 @@
     "folder_description" : "Описание",
     "folder_create" : "Создать каталог",
     "folder_delete" : "Удалить каталог",
+    "folder_url" : "URL папки",
     "folder_delete_confirmation" : "Если каталог содержит сущности удаление будет не возможно",
     "section" : "Секция",
     "folder_type" : "Тип группы",
