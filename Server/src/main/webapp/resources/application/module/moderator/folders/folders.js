@@ -32,6 +32,7 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
             $scope.currentGroup = item;
             $scope.currentClassName = className.groupBooks;
             $scope.multiLanguageData.languages = {"ru":  item.descriptionRu, "en":  item.descriptionEn};
+            updateCroppedImage();
         },
         actions : [
             {
@@ -101,6 +102,7 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
             $scope.currentGroup = item;
             $scope.currentClassName = className.groupPrograms;
             $scope.multiLanguageData.languages = {"ru":  item.descriptionRu, "en":  item.descriptionEn};
+            updateCroppedImage();
         },
         actions : [
             {
@@ -170,6 +172,7 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
             $scope.currentGroup = item;
             $scope.currentClassName = className.groupCourses;
             $scope.multiLanguageData.languages = {"ru":  item.descriptionRu, "en":  item.descriptionEn};
+            updateCroppedImage();
         },
         actions : [
             {
@@ -223,24 +226,32 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
         });
     };
 
-    var croppedImg = {
+    $scope.croppedImg = {
+        id : 'cover',
         save: function(file){
             updateImage(file);
         },
         areaType:"square"
     };
 
-    $scope.getCropImageData  = function(){
-        croppedImg.src = applicationService.imageHref($scope.currentClassName,$scope.currentGroup.id);
-        croppedImg.notUseDefault = $scope.currentGroup.imageViewExist;
-        return croppedImg;
-    };
+    function updateCroppedImage(){
+        $scope.croppedImg.src = applicationService.imageHref($scope.currentClassName,$scope.currentGroup.id);
+        console.log($scope.croppedImg.src);
+        $scope.croppedImg.notUseDefault = $scope.currentGroup.imageViewExist;
+
+        //Если изображение открывается первый раз событие не сработает так не зарегестрированно
+        //Поэтому добавляется проверка для открытия
+        $scope.croppedImg.setupImgae = true;
+
+        $scope.$broadcast("updateCropImage"+$scope.croppedImg.id+"Event");
+    }
 
     var updateImage = function(file) {
         applicationService.actionWithFile($scope,"cover",$scope.currentClassName,"updateCover",{id:$scope.currentGroup.id},file,function (result) {
             $scope.showToast($scope.getResultMessage(result));
             if (result.status === "Complete") {
-                $scope.currentGroup.imageViewExist = true;    
+                $scope.currentGroup.imageViewExist = true;
+                $scope.$broadcast("updateCropImage"+$scope.croppedImg.id+"Event");
             }
         });
     };

@@ -30,7 +30,7 @@
             </md-tab-label>
             <md-tab-body>
                 <md-content class="md-padding">
-                    <module-template name="inputs/selectImage" data="getCropImageData()"></module-template>
+                    <module-template name="inputs/selectImage" data="croppedImg"></module-template>
                 </md-content>
             </md-tab-body>
         </md-tab>
