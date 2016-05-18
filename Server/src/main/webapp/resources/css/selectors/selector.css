@@ -34,38 +34,52 @@
 }
 
 .item-panel {
+    overflow: hidden;
 }
 
 
-.row-panel,.row-panel td, .row-panel .item-panel{
-    -webkit-transition: all 0.5s linear;
-    -moz-transition: all 0.5s linear;
-    transition: all 0.5s linear;
-}
-.row-panel.ng-enter td{
-    padding:0;
-}
+/*.row-panel.ng-enter, .row-panel.ng-enter .item-panel{*/
+/*!*.row-panel.ng-leave, .row-panel.ng-leave .item-panel{*!*/
+    /*-webkit-transition: all 0.5s linear;*/
+    /*-moz-transition: all 0.5s linear;*/
+    /*transition: all 0.5s linear;*/
 
-/*.row-panel.ng-enter td,*/
-/*.row-panel.ng-leave.ng-leave-active,*/
-.row-panel.ng-enter .item-panel,
-.row-panel.ng-leave.ng-leave-active .item-panel{
-    opacity: 0;
-    height: 0px;
-    padding-top: 0;
+    /*opacity: 0;*/
+    /*height: 0px;*/
+    /*background: transparent;*/
+/*}*/
+
+/*.table>tbody>.row-panel>td{*/
+    /*padding-top: 0;*/
     /*padding-bottom: 0;*/
-}
+/*}*/
 
-/*.row-panel.ng-leave .item-panel,*/
+/*.row-panel .item-panel{*/
+    /*!*padding-top: 7px;*!*/
+    /*!*padding-bottom: 7px;*!*/
+/*}*/
+
+/*!*.row-panel.ng-enter .item-panel,*!*/
+/*!*.row-panel.ng-leave.ng-leave-active .item-panel{*!*/
+    /*!*opacity: 0;*!*/
+    /*!*height: 0px;*!*/
+    /*!*padding-top: 0;*!*/
+    /*!*padding-bottom: 0;*!*/
+    /*!*background: transparent;*!*/
+/*!*}*!*/
+
+/*!*.row-panel.ng-leave .item-panel,*!*/
 /*.row-panel.ng-enter.ng-enter-active .item-panel{*/
     /*opacity: 1;*/
     /*height: 30px;*/
+    /*padding-top: 7px;*/
+    /*padding-bottom: 7px;*/
 /*}*/
 
-.table-selector .filter-panel-item {
-    margin-left: 20px;
-    margin-bottom: 0;
-}
+/*.table-selector .filter-panel-item {*/
+    /*margin-left: 20px;*/
+    /*margin-bottom: 0;*/
+/*}*/
 
 .table-selector [layout-gt-sm] > [flex] {
     margin-bottom: 10px;

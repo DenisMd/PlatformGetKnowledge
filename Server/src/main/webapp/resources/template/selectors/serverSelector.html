@@ -56,9 +56,10 @@
             </tr>
             </thead>
             <tbody ng-repeat="item in list" ng-init="item.hideColumnInfo=true">
-            <tr ng-if="showRowPanel(item)" class="row-panel">
+            <tr ng-if="showRowPanel(item)" class="row-panel trSlide">
                 <td colspan="{{getData().headerNames.length}}">
                     <div class="item-panel">
+                        <div>
                         <span ng-show="!item.hideColumnInfo">
                             <i ng-if="getData().deleteOptions" class="fa fa-2x fa-times filter-delete"
                                 ng-click="getData().deleteOptions.deleteCallback($event,item)"></i>
@@ -70,6 +71,7 @@
                                 </md-tooltip>
                             </span>
                         </span>
+                            </div>
                     </div>
                 </td>
             </tr>
