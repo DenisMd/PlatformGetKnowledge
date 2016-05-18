@@ -44,18 +44,23 @@
             </tr>
             </thead>
             <tbody ng-repeat="item in filterdList = (getData().list | filter:filterSearch | orderBy:orderItem:orderReverse)" ng-init="item.hideColumnInfo = true">
-                <tr ng-if="showRowPanel(item)" class="row-panel">
+                <tr ng-if="showRowPanel(item)" class="row-panel trSlide">
                     <td colspan="{{getData().headerNames.length}}">
-                        <div class="item-panel" ng-show="!item.hideColumnInfo">
-                            <i  ng-if="getData().deleteOptions" class="fa fa-2x fa-times filter-delete" ng-click="getData().deleteOptions.deleteCallback($event,item)"></i>
+                        <div class="item-panel">
+                            <!--animation div-->
+                            <div>
+                                <span ng-show="!item.hideColumnInfo">
+                                    <i  ng-if="getData().deleteOptions" class="fa fa-2x fa-times filter-delete" ng-click="getData().deleteOptions.deleteCallback($event,item)"></i>
+                                </span>
+                                <span ng-repeat="action in getData().actionsForItem" class="action">
+                                    <span class="fa fa-2x" ng-class="action.icon" ng-click="action.actionCallback($event,item)" ng-style="{color : action.color}">
+                                        <md-tooltip md-direction="bottom">
+                                            <span class="tooltip-text">{{translate(action.tooltip)}}</span>
+                                        </md-tooltip>
+                                    </span>
+                                </span>
+                            </div>
                         </div>
-                        <span ng-repeat="action in getData().actionsForItem" class="action">
-                            <span class="fa fa-2x" ng-class="action.icon" ng-click="action.actionCallback($event,item)" ng-style="{color : action.color}">
-                                <md-tooltip md-direction="bottom">
-                                    <span class="tooltip-text">{{translate(action.tooltip)}}</span>
-                                </md-tooltip>
-                            </span>
-                        </span>
                     </td>
                 </tr>
                 <tr class="selected-row" ng-click="selectItem(item)">

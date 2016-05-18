@@ -1,4 +1,4 @@
-model.controller("permissionsCtrl", function ($scope, applicationService, className) {//Данные для статического селектара
+model.controller("permissionsCtrl", function ($scope,$timeout, applicationService, className) {//Данные для статического селектара
 
     function permissionList() {
         $scope.selectorData.list = [];
@@ -35,14 +35,15 @@ model.controller("permissionsCtrl", function ($scope, applicationService, classN
         ],
         selectItemCallback : function (item) {
             $scope.currentPermission = item;
+            $timeout(function () {
+                applicationService.action($scope,"permissionUsers",className.permissions,"getUsersByPermission",{
+                    permissionId : item.id
+                });
 
-            applicationService.action($scope,"permissionUsers",className.permissions,"getUsersByPermission",{
-                permissionId : item.id
-            });
-
-            applicationService.action($scope,"permissionRoles",className.permissions,"getRolesByPermission",{
-                permissionId : item.id
-            });
+                applicationService.action($scope,"permissionRoles",className.permissions,"getRolesByPermission",{
+                    permissionId : item.id
+                });
+            },1000);
         },
         actions : [
             {
