@@ -326,28 +326,6 @@ model.controller("textareaCtrl",function($scope,$element){
     };
 });
 
-model.controller("sectionCard",function($scope,$state,applicationService,className){
-    applicationService.action($scope, "section" , className.section,"getSectionByNameAndLanguage" , {
-        language : $scope.application.language.capitalizeFirstLetter(),
-        name :  $scope.getData().sectionName
-    } , function(section){
-        //Нету секции
-        if (!section){
-            $state.go("404");
-        }
-        $scope.sectionCards = {
-            title : "categories",
-            cardsInRow : 3,
-            cards : section.menuItem.subItems,
-            prefix : section.menuItem.url
-        };
-    });
-
-    $scope.sectionImg = function(id){
-        return applicationService.imageHref(className.section,id);
-    };
-});
-
 model.controller("postController",['$scope','$timeout','$state','codemirrorURL','TagService','className','applicationService','pageService',
     function($scope,$timeout,$state,codemirrorURL,TagService,className,applicationService,pageService){
     var loadString = function(string,isInit){
