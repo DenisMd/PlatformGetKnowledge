@@ -26,15 +26,4 @@ public class GroupCourses extends Folder {
     public void setSection(Section section) {
         this.section = section;
     }
-
-    @Override
-    public AuthorizationList getAuthorizationList() {
-        AuthorizationList al = new AuthorizationList();
-        al.allowCreateEveryOne = false;
-        al.allowReadEveryOne = true;
-        al.getPermissionsForCreate().add(new Permission(PermissionNames.EditFolders.getName()));
-        al.getPermissionsForEdit().add(new Permission(PermissionNames.EditFolders.getName()));
-        al.getPermissionsForRemove().add(new Permission(PermissionNames.EditFolders.getName()));
-        return al;
-    }
 }
