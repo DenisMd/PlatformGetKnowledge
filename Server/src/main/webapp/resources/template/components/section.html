@@ -4,12 +4,14 @@
 
     <h1 class="text-center">{{translate(section.name)}}</h1>
 
-    <img ng-src="{{section.coverImg}}"
-         class="cover-img">
-
-    <p class="description">
-        {{application.language == 'ru' ? section.descriptionRu : section.descriptionEn}}
-    </p>
+    <div class="clearfix">
+        <div class="text-center section-div">
+            <img ng-src="{{section.coverImg}}" class="section-cover">
+        </div>
+        <div class="section-description" ng-scrollbars ng-scrollbars-config="descriptionScroll">
+            {{application.language == 'ru' ? section.descriptionRu : section.descriptionEn}}
+        </div>
+    </div>
 
     <module-template name="cards/cards" data="sectionCards"></module-template>
 </div>

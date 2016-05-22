@@ -2,6 +2,15 @@ model.controller("sectionController",function($scope,$state,applicationService,c
 
     $scope.sectionCards = {};
 
+    $scope.descriptionScroll = {
+        theme: 'dark-3',
+        setHeight: 370,
+        advanced: {
+            updateOnContentResize: true,
+            updateOnSelectorChange: true
+        }
+    };
+
     applicationService.action($scope, "section" , className.section,"getSectionByName" , {
         name :  $scope.getData().sectionName
     } , function(section){
