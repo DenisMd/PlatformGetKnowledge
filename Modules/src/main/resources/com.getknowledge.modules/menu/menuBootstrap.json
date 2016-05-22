@@ -202,37 +202,37 @@
             {
               "name": "sections",
               "url": "/sections",
-              "imageUrl": ""
+              "imageUrl": "/resources/image/menu/icons/sections.png"
             },
             {
               "name": "menu",
               "url": "/menu",
-              "imageUrl": ""
+              "imageUrl": "/resources/image/menu/icons/menu.png"
             },
             {
               "name": "folders",
               "url": "/folders",
-              "imageUrl": ""
+              "imageUrl": "/resources/image/menu/icons/folders.png"
             },
             {
               "name": "knowledge",
               "url": "/knowledge",
-              "imageUrl": ""
+              "imageUrl": "/resources/image/menu/icons/knowledge.png"
             },
             {
               "name": "socialLinks",
               "url": "/socialLinks",
-              "imageUrl": ""
+              "imageUrl": "/resources/image/menu/icons/links.png"
             },
             {
               "name": "programmingLanguages",
               "url": "/programmingLanguages",
-              "imageUrl": ""
+              "imageUrl": "/resources/image/menu/icons/programmingLanguage.png"
             },
             {
               "name": "programmingStyles",
               "url": "/programmingStyles",
-              "imageUrl": ""
+              "imageUrl": "/resources/image/menu/icons/programmingStyle.png"
             }
           ]
         }
