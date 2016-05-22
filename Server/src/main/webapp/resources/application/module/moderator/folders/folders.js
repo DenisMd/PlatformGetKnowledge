@@ -16,6 +16,11 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 type : "text",
                 field : "title",
                 default : true
+            },{
+                title : "section",
+                type : "enum",
+                field : "section.name",
+                constants : []
             }
         ],
         headerNames : [
@@ -89,6 +94,11 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 type : "text",
                 field : "title",
                 default : true
+            },{
+                title : "section",
+                type : "enum",
+                field : "section.name",
+                constants : []
             }
         ],
         headerNames : [
@@ -162,6 +172,11 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 type : "text",
                 field : "title",
                 default : true
+            },{
+                title : "section",
+                type : "enum",
+                field : "section.name",
+                constants : []
             }
         ],
         headerNames : [
@@ -221,7 +236,24 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
         }
     };
 
-    applicationService.list($scope,"sections",className.section);
+    $scope.sections = [];
+    applicationService.list($scope,"",className.section,function (section) {
+        if (section.name == "programming" || section.name == "math" || section.name == "physic" || section.name == "design") {
+            $scope.sections.push(section);
+            $scope.selectorData1.filters[2].constants.push({
+                key : section.name,
+                value : section.name
+            });
+            $scope.selectorData2.filters[2].constants.push({
+                key : section.name,
+                value : section.name
+            });
+            $scope.selectorData3.filters[2].constants.push({
+                key : section.name,
+                value : section.name
+            });
+        }
+    });
 
     $scope.multiLanguageData = {
         label : $scope.translate("folder_description")
