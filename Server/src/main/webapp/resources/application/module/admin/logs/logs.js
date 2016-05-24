@@ -41,7 +41,8 @@ model.controller("logsCtrl", function ($scope,className) {
                 }, {
                     key : "Critical",
                     value : "log_critical"
-                }]
+                }],
+                default:true
             },
             {
                 title : "log_date",
@@ -62,8 +63,7 @@ model.controller("logsCtrl", function ($scope,className) {
             },{
                 name : "traceLevelTranslate",
                 title : "log_trace_level",
-                translate : true,
-                orderBy : true
+                translate : true
             },{
                 name : "calendar",
                 title : "log_date",

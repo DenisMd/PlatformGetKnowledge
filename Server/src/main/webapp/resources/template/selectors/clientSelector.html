@@ -16,7 +16,7 @@
                 </md-tooltip>
             </span>
         </span>
-        <div ng-repeat="filter in getData().filters | filter:{'default' : true}" ng-switch="filter.type" flex="{{filter.type==='check_box'?'none':''}}">
+        <div ng-repeat="filter in getData().filters | filter:{'default' : true}" ng-switch="filter.type" layout-margin flex="{{filter.type==='check_box'?'none':''}}">
 
             <div ng-switch-when="check_box">
                 <md-checkbox  ng-model="filter.model" class="filter-panel-item">

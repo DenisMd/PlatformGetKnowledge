@@ -85,6 +85,16 @@
     margin-bottom: 10px;
 }
 
+.table-selector [layout-margin]{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.table-selector [layout-margin] div>md-checkbox{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
 @media (max-width: 960px){
     .filter-panel-item {
         margin-left: 0;
