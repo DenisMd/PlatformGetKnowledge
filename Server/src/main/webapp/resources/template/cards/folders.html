@@ -1,4 +1,6 @@
-<div ng-controller="folderCardsCtrl">
+<link rel="stylesheet" href="/resources/css/components/folders.css">
+
+<div ng-controller="foldersController">
     <md-content class="md-padding" layout-xs="column" layout="row">
         <div flex-xs flex-gt-xs="50" layout="column">
             <md-card ng-repeat="folder in splitArray(folders,true)">
