@@ -45,6 +45,12 @@
                     <div flex>{{currentGroup.id}}</div>
                 </div>
                 <div layout="row" class="field">
+                    <div flex-gt-sm="20" flex="auto">{{translate('section')}}</div>
+                    <div flex>
+                        {{translate(currentGroup.section.name)}}
+                    </div>
+                </div>
+                <div layout="row" class="field">
                     <div flex-gt-sm="20" flex="auto">{{translate('name')}}</div>
                     <div flex>
                         <input type="text" class="form-control" ng-model="currentGroup.title">

@@ -16,7 +16,6 @@ import javax.persistence.*;
 public class GroupCourses extends Folder {
 
     @ManyToOne(optional = false)
-    @JsonIgnore
     private Section section;
 
     public Section getSection() {

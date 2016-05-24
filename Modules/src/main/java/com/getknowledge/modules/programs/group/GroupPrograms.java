@@ -19,7 +19,6 @@ import javax.persistence.Table;
 public class GroupPrograms extends Folder {
 
     @ManyToOne(optional = false)
-    @JsonIgnore
     private Section section;
 
     public Section getSection() {

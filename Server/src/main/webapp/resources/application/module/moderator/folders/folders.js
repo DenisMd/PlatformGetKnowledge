@@ -20,12 +20,18 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 title : "section",
                 type : "enum",
                 field : "section.name",
-                constants : []
+                constants : [],
+                default : true
             }
         ],
         headerNames : [
             {
                 name : "id",
+                orderBy : true
+            },{
+                name : "section.name",
+                title : "section",
+                translate : true,
                 orderBy : true
             }, {
                 name : "title",
@@ -98,12 +104,18 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 title : "section",
                 type : "enum",
                 field : "section.name",
-                constants : []
+                constants : [],
+                default : true
             }
         ],
         headerNames : [
             {
                 name : "id",
+                orderBy : true
+            },{
+                name : "section.name",
+                title : "section",
+                translate : true,
                 orderBy : true
             }, {
                 name : "title",
@@ -176,12 +188,18 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 title : "section",
                 type : "enum",
                 field : "section.name",
-                constants : []
+                constants : [],
+                default : true
             }
         ],
         headerNames : [
             {
                 name : "id",
+                orderBy : true
+            },{
+                name : "section.name",
+                title : "section",
+                translate : true,
                 orderBy : true
             }, {
                 name : "title",
@@ -277,7 +295,6 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
 
     function updateCroppedImage(){
         $scope.croppedImg.src = applicationService.imageHref($scope.currentClassName,$scope.currentGroup.id);
-        console.log($scope.croppedImg.src);
         $scope.croppedImg.notUseDefault = $scope.currentGroup.imageViewExist;
 
         //Если изображение открывается первый раз событие не сработает так не зарегестрированно

@@ -19,7 +19,6 @@ import javax.persistence.Table;
 public class GroupBooks extends Folder {
 
     @ManyToOne(optional = false)
-    @JsonIgnore
     private Section section;
 
     public Section getSection() {

@@ -25,6 +25,15 @@
                 </md-checkbox>
             </div>
 
+            <div ng-switch-when="enum">
+                <label>{{translate(filter.title)}}</label>
+                <md-select aria-label="enum-select" ng-model="filter.model">
+                    <md-option ng-repeat="constant in filter.constants" value="{{constant.key}}">
+                        {{translate(constant.value)}}
+                    </md-option>
+                </md-select>
+            </div>
+
             <div ng-switch-default>
                     <input type="{{filter.type}}" class="form-control" ng-model="filter.model"
                            placeholder="{{translate(filter.title)}}">
