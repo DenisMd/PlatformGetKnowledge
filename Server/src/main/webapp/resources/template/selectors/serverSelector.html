@@ -28,6 +28,7 @@
             <div ng-switch-when="enum">
                 <label>{{translate(filter.title)}}</label>
                 <md-select aria-label="enum-select" ng-model="filter.model">
+                    <md-option value="<any>">{{translate("any")}}</md-option>
                     <md-option ng-repeat="constant in filter.constants" value="{{constant.key}}">
                         {{translate(constant.value)}}
                     </md-option>

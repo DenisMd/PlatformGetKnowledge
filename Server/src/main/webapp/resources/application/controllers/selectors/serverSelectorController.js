@@ -114,7 +114,9 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
                         $scope.filter.equals(filterData.field, "number", filterData.model);
                         break;
                     case "enum":
-                        $scope.filter.equals(filterData.field, "text", filterData.model);
+                        if (filterData.model != "<any>") {
+                            $scope.filter.equals(filterData.field, "text", filterData.model);
+                        }
                         break;
                     case "check_box":
                         $scope.filter.equals(filterData.field, "boolean", filterData.model);
