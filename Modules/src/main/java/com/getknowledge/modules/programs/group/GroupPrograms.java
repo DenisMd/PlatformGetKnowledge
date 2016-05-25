@@ -21,6 +21,16 @@ public class GroupPrograms extends Folder {
     @ManyToOne(optional = false)
     private Section section;
 
+    private long programsCount = 0;
+
+    public long getProgramsCount() {
+        return programsCount;
+    }
+
+    public void setProgramsCount(long programsCount) {
+        this.programsCount = programsCount;
+    }
+
     public Section getSection() {
         return section;
     }
