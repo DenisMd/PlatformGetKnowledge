@@ -17,7 +17,7 @@
                 </md-tooltip>
             </span>
         </span >
-        <div ng-repeat="filter in getData().filters | filter:{'default' : true}" ng-switch="filter.type" flex>
+        <div ng-repeat="filter in getData().filters | filter:{'default' : true}" ng-switch="filter.type" layout-margin flex>
 
             <div ng-switch-when="check_box">
                 <md-checkbox ng-model="filter.model">
@@ -25,14 +25,13 @@
                 </md-checkbox>
             </div>
 
-            <div ng-switch-when="enum">
-                <label>{{translate(filter.title)}}</label>
-                <md-select aria-label="enum-select" ng-model="filter.model">
-                    <md-option value="<any>">{{translate("any")}}</md-option>
-                    <md-option ng-repeat="constant in filter.constants" value="{{constant.key}}">
+            <div ng-switch-when="enum" ng-init="filter.model='<any>'">
+                <select ng-model="filter.model" class="form-control">
+                    <option value="<any>">{{translate(filter.title)}}</option>
+                    <option ng-repeat="constant in filter.constants" value="{{constant.key}}">
                         {{translate(constant.value)}}
-                    </md-option>
-                </md-select>
+                    </option>
+                </select>
             </div>
 
             <div ng-switch-default>
@@ -40,7 +39,7 @@
                            placeholder="{{translate(filter.title)}}">
             </div>
         </div>
-        <div  flex="none">
+        <div  flex="none" >
             <button class="btn btn-default filter-panel-item" ng-click="doFilters()">{{translate("do_filter")}}</button>
         </div>
     </div>

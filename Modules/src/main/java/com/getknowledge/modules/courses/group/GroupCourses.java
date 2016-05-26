@@ -18,6 +18,17 @@ public class GroupCourses extends Folder {
     @ManyToOne(optional = false)
     private Section section;
 
+    @Transient
+    private long coursesCount = 0;
+
+    public long getCoursesCount() {
+        return coursesCount;
+    }
+
+    public void setCoursesCount(long coursesCount) {
+        this.coursesCount = coursesCount;
+    }
+
     public Section getSection() {
         return section;
     }

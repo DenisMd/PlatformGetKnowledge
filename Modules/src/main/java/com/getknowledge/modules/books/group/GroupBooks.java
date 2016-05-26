@@ -8,10 +8,7 @@ import com.getknowledge.platform.base.entities.Folder;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "books_group")
@@ -20,6 +17,17 @@ public class GroupBooks extends Folder {
 
     @ManyToOne(optional = false)
     private Section section;
+
+    @Transient
+    private long booksCount = 0;
+
+    public long getBooksCount() {
+        return booksCount;
+    }
+
+    public void setBooksCount(long booksCount) {
+        this.booksCount = booksCount;
+    }
 
     public Section getSection() {
         return section;
