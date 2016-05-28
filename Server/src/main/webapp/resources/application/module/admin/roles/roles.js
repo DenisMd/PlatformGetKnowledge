@@ -2,6 +2,7 @@ model.controller("rolesCtrl", function ($scope, applicationService, className) {
 
     function roleList() {
         $scope.selectorData.list = [];
+        $scope.selectorData.filters[0].constants = [];
         applicationService.list($scope, "roles", className.roles,function (item) {
             $scope.selectorData.filters[0].constants.push(
                 {
