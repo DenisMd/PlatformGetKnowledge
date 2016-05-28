@@ -1,6 +1,13 @@
 <link rel="stylesheet" href="/resources/css/components/folders.css">
 
 <div ng-controller="foldersController">
+    <md-content class="folders-toolbar">
+        <md-input-container class="md-block">
+            <label>Search</label>
+            <input class="folders-toolbar-input">
+        </md-input-container>
+    </md-content>
+    <div><h1 class="title">{{data.title}}</h1></div>
     <md-content class="md-padding" layout-xs="column" layout="row">
         <div flex-xs flex-gt-xs="50" layout="column">
             <md-card ng-repeat="folder in splitArray(folders,true)">
