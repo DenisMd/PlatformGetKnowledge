@@ -9,6 +9,7 @@ import com.getknowledge.platform.base.repositories.enumerations.RepOperations;
 import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.utils.ModuleLocator;
+import com.getknowledge.platform.utils.RepositoryUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class BaseRepository<T extends AbstractEntity> {
+public abstract class BaseRepository<T extends AbstractEntity> implements PrepareEntity<T> {
 
     protected ObjectMapper objectMapper = new ObjectMapper();
 
@@ -192,5 +193,9 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         return entity;
     }
 
-
+    @Override
+    public T prepare(T entity, User currentUser, List<ViewType> viewTypes) {
+        RepositoryUtils.prepareViewFields(viewTypes, entity);
+        return entity;
+    }
 }

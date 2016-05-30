@@ -10,13 +10,14 @@ import com.getknowledge.platform.base.entities.IUser;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.user.User;
+import com.getknowledge.platform.utils.RepositoryUtils;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class ProtectedRepository <T extends AbstractEntity> extends BaseRepository<T> implements PrepareEntity<T>  {
+public abstract class ProtectedRepository <T extends AbstractEntity> extends BaseRepository<T>   {
 
     @Override
     public T prepare(T entity,User currentUser,List<ViewType> viewTypes) {
@@ -38,6 +39,8 @@ public abstract class ProtectedRepository <T extends AbstractEntity> extends Bas
             CloneableEntity cloneableEntity = (CloneableEntity) entity;
             entity = (T) cloneableEntity.clone();
         }
+
+        super.prepare(entity,currentUser,viewTypes);
 
         for (Field field : entity.getClass().getDeclaredFields()) {
             field.setAccessible(true);
@@ -85,27 +88,6 @@ public abstract class ProtectedRepository <T extends AbstractEntity> extends Bas
                     logger.error(e.getMessage(), e);
                 }
             }
-
-            if (viewTypes != null) {
-                boolean viewAvail = false;
-                for (ModelView modelView : field.getAnnotationsByType(ModelView.class)) {
-                    if (!Collections.disjoint(Arrays.asList(modelView.type()), viewTypes)) {
-                        viewAvail = true;
-                        break;
-                    }
-                }
-                if (!viewAvail) {
-                    try {
-                        field.setAccessible(true);
-                        field.set(entity, null);
-                    } catch (IllegalAccessException | IllegalArgumentException e) {
-                        //Невозможно сбросить примитивный тип в null
-                        logger.error(e.getMessage(), e);
-                    }
-                }
-            }
-
-
         }
         return entity;
     }

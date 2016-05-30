@@ -2,7 +2,9 @@ package com.getknowledge.modules.courses.group;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.section.Section;
+import com.getknowledge.platform.annotations.ModelView;
 import com.getknowledge.platform.annotations.ModuleInfo;
+import com.getknowledge.platform.annotations.ViewType;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.entities.Folder;
 import com.getknowledge.platform.modules.permission.Permission;
@@ -16,6 +18,7 @@ import javax.persistence.*;
 public class GroupCourses extends Folder {
 
     @ManyToOne(optional = false)
+    @ModelView(type = {ViewType.Public})
     private Section section;
 
     @Transient

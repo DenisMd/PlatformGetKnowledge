@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.courses.group.GroupCourses;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.menu.item.MenuItem;
+import com.getknowledge.platform.annotations.ModelView;
 import com.getknowledge.platform.annotations.ModuleInfo;
+import com.getknowledge.platform.annotations.ViewType;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.modules.permission.Permission;
@@ -21,6 +23,7 @@ import java.util.List;
 public class Section extends AbstractEntity {
 
     @Column(nullable = false)
+    @ModelView(type = {ViewType.Public})
     private String name;
 
     @Column(columnDefinition = "Text" , name = "description_ru")
