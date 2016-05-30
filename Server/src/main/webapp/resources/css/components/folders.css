@@ -1,0 +1,15 @@
+.folders-toolbar{
+    border-bottom: #d6d6d6;
+}
+
+.folders-toolbar-input{
+    padding-left: 10px;
+}
+
+md-input-container label{
+    font-style: italic;
+}
+
+md-input-container .md-input{
+    border-width: 0 0 2px;
+}
