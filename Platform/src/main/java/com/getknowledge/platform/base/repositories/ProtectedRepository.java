@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class ProtectedRepository <T extends AbstractEntity> extends BaseRepository<T>   {
+public abstract class ProtectedRepository <T extends AbstractEntity> extends BaseRepository<T>  implements PrepareEntity<T> {
 
     @Override
     public T prepare(T entity,User currentUser,List<ViewType> viewTypes) {
@@ -40,7 +40,7 @@ public abstract class ProtectedRepository <T extends AbstractEntity> extends Bas
             entity = (T) cloneableEntity.clone();
         }
 
-        super.prepare(entity,currentUser,viewTypes);
+        RepositoryUtils.prepareViewFields(viewTypes, entity);
 
         for (Field field : entity.getClass().getDeclaredFields()) {
             field.setAccessible(true);

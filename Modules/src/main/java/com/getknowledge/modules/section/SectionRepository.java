@@ -1,6 +1,7 @@
 package com.getknowledge.modules.section;
 
 import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.base.repositories.enumerations.RepOperations;
 import org.springframework.stereotype.Repository;
 
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository("SectionRepository")
-public class SectionRepository extends BaseRepository<Section> {
+public class SectionRepository extends ProtectedRepository<Section> {
 
     @Override
     public List<RepOperations> restrictedOperations() {

@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class BaseRepository<T extends AbstractEntity> implements PrepareEntity<T> {
+public abstract class BaseRepository<T extends AbstractEntity> {
 
     protected ObjectMapper objectMapper = new ObjectMapper();
 
@@ -190,12 +190,6 @@ public abstract class BaseRepository<T extends AbstractEntity> implements Prepar
 
             return ((PrepareEntity) repository).prepare(entity, currentUser, viewTypes);
         }
-        return entity;
-    }
-
-    @Override
-    public T prepare(T entity, User currentUser, List<ViewType> viewTypes) {
-        RepositoryUtils.prepareViewFields(viewTypes, entity);
         return entity;
     }
 }
