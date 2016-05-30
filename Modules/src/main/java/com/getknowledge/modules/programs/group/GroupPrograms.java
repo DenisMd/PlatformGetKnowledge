@@ -8,10 +8,7 @@ import com.getknowledge.platform.base.entities.Folder;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "program_groups",indexes = {@Index(name = "index_by_title",  columnList="title", unique = true)})
@@ -21,6 +18,7 @@ public class GroupPrograms extends Folder {
     @ManyToOne(optional = false)
     private Section section;
 
+    @Transient
     private long programsCount = 0;
 
     public long getProgramsCount() {
