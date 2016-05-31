@@ -167,6 +167,14 @@ public class FilterQuery<T> {
         return criteriaQuery;
     }
 
+    public Root<T> getRoot() {
+        return root;
+    }
+
+    public CriteriaBuilder getCriteriaBuilder() {
+        return criteriaBuilder;
+    }
+
     private Enum convertStringToEnum(String fieldName , String value) {
         try {
             if (fieldName.contains(".")) {
