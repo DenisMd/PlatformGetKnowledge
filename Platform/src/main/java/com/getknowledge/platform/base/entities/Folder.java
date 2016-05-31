@@ -1,18 +1,23 @@
 package com.getknowledge.platform.base.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.platform.annotations.ModelView;
+import com.getknowledge.platform.annotations.ViewType;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
 import javax.persistence.*;
+import java.util.Calendar;
 
 @MappedSuperclass
 public abstract class Folder extends AbstractEntity {
 
     @Column(nullable = false)
+    @ModelView(type = {ViewType.Public})
     private String title;
 
     @Column(name = "url" , unique = true)
+    @ModelView(type = {ViewType.Public})
     private String url;
 
     @Column(name = "description_en" , columnDefinition = "Text")
@@ -26,6 +31,18 @@ public abstract class Folder extends AbstractEntity {
     @Column(name="cover")
     @JsonIgnore
     private byte[] cover;
+
+    @Column(name = "create_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar createDate;
+
+    public Calendar getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Calendar createDate) {
+        this.createDate = createDate;
+    }
 
     public String getUrl() {
         return url;

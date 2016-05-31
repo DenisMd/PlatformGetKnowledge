@@ -12,6 +12,7 @@
     "folder_type" : "Group type",
     "folder_group_books" : "Group books",
     "folder_group_programs" : "Group programs",
-    "folder_group_courses"  : "Group courses"
+    "folder_group_courses"  : "Group courses",
+    "folder_create_date" : "Create time"
   }
 }

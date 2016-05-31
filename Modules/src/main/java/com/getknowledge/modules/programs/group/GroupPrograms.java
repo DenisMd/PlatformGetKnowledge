@@ -2,25 +2,27 @@ package com.getknowledge.modules.programs.group;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.section.Section;
+import com.getknowledge.platform.annotations.ModelView;
 import com.getknowledge.platform.annotations.ModuleInfo;
+import com.getknowledge.platform.annotations.ViewType;
 import com.getknowledge.platform.base.entities.AuthorizationList;
+import com.getknowledge.platform.base.entities.CloneableEntity;
 import com.getknowledge.platform.base.entities.Folder;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "program_groups",indexes = {@Index(name = "index_by_title",  columnList="title", unique = true)})
 @ModuleInfo(repositoryName = "GroupProgramsRepository" , serviceName = "GroupProgramsService")
-public class GroupPrograms extends Folder {
+public class GroupPrograms extends Folder implements CloneableEntity<GroupPrograms> {
 
     @ManyToOne(optional = false)
+    @ModelView(type = {ViewType.Public})
     private Section section;
 
+    @Transient
     private long programsCount = 0;
 
     public long getProgramsCount() {
@@ -37,5 +39,21 @@ public class GroupPrograms extends Folder {
 
     public void setSection(Section section) {
         this.section = section;
+    }
+
+    @Override
+    public GroupPrograms clone() {
+        GroupPrograms groupPrograms = new GroupPrograms();
+        groupPrograms.setUrl(getUrl());
+        groupPrograms.setTitle(getTitle());
+        groupPrograms.setId(getId());
+        groupPrograms.setObjectVersion(getObjectVersion());
+        groupPrograms.setSection(getSection());
+        groupPrograms.setCover(getCover());
+        groupPrograms.setDescriptionEn(getDescriptionEn());
+        groupPrograms.setDescriptionRu(getDescriptionRu());
+        groupPrograms.setProgramsCount(getProgramsCount());
+        groupPrograms.setCreateDate(getCreateDate());
+        return groupPrograms;
     }
 }

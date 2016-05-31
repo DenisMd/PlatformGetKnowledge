@@ -9,6 +9,7 @@ import com.getknowledge.platform.base.repositories.enumerations.RepOperations;
 import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.utils.ModuleLocator;
+import com.getknowledge.platform.utils.RepositoryUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -191,6 +192,4 @@ public abstract class BaseRepository<T extends AbstractEntity> {
         }
         return entity;
     }
-
-
 }
