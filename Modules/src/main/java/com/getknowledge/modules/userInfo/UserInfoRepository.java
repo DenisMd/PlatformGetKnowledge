@@ -65,19 +65,19 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
         long userId         = entity.getUser().getId();
         String userLogin    = entity.getUser().getLogin();
 
-        UserInfo userInfo = super.prepare(entity,currentUser,viewTypes);
-
         if (currentUser != null && currentUser.getId().equals(userId)) {
-            userInfo.setUserMenu(menuRepository.getSingleEntityByFieldAndValue("name", MenuNames.AuthorizedUser.name()));
+            entity.setUserMenu(menuRepository.getSingleEntityByFieldAndValue("name", MenuNames.AuthorizedUser.name()));
         } else {
-            userInfo.setUserMenu(menuRepository.getSingleEntityByFieldAndValue("name", MenuNames.NotAuthorizedUser.name()));
+            entity.setUserMenu(menuRepository.getSingleEntityByFieldAndValue("name", MenuNames.NotAuthorizedUser.name()));
         }
 
         List<User> list = ((List<User>)(List<?>)sessionRegistry.getAllPrincipals());
-        userInfo.setOnline(list.stream().filter(
+        entity.setOnline(list.stream().filter(
                 userDetail -> userDetail.getUsername().equals(userLogin)
         ).findFirst().isPresent());
-        return userInfo;
+
+
+        return super.prepare(entity,currentUser,viewTypes);
     }
 
     @Override

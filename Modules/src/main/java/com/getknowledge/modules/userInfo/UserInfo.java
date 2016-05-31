@@ -93,6 +93,7 @@ public class UserInfo extends AbstractEntity implements CloneableEntity<UserInfo
     private List<Course> studiedCourses = new ArrayList<>();
 
     @Transient
+    @ModelView(type = ViewType.CompactPublic)
     private Boolean online = false;
 
     @ManyToMany
