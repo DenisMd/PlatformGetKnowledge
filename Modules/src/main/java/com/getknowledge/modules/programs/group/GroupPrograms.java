@@ -53,6 +53,7 @@ public class GroupPrograms extends Folder implements CloneableEntity<GroupProgra
         groupPrograms.setDescriptionEn(getDescriptionEn());
         groupPrograms.setDescriptionRu(getDescriptionRu());
         groupPrograms.setProgramsCount(getProgramsCount());
+        groupPrograms.setCreateDate(getCreateDate());
         return groupPrograms;
     }
 }

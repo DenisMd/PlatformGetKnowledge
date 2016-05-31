@@ -53,6 +53,7 @@ public class GroupCourses extends Folder implements CloneableEntity<GroupCourses
         groupCourses.setDescriptionEn(getDescriptionEn());
         groupCourses.setDescriptionRu(getDescriptionRu());
         groupCourses.setCoursesCount(getCoursesCount());
+        groupCourses.setCreateDate(getCreateDate());
         return groupCourses;
     }
 }

@@ -12,6 +12,7 @@
     "folder_type" : "Тип группы",
     "folder_group_books" : "Группа книг",
     "folder_group_programs" : "Группа программ",
-    "folder_group_courses"  : "Группа курсов"
+    "folder_group_courses"  : "Группа курсов",
+    "folder_create_date" : "Дата создания папки"
   }
 }

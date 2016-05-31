@@ -2,6 +2,7 @@ model.controller("foldersController" , function ($scope,applicationService) {
     var filter = applicationService.createFilter($scope.getData().className,0,10);
     filter.createFiltersInfo();
     filter.equals("section.name","text",$scope.getData().sectionName);
+    filter.addCustomFilter("orderByCount" , {});
     $scope.folders = [];
 
     var addLog = function(folder){

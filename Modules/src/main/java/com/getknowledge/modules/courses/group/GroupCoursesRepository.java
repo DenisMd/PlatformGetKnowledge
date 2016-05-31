@@ -11,6 +11,7 @@ import com.getknowledge.platform.utils.RepositoryUtils;
 import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.Field;
+import java.util.Calendar;
 import java.util.List;
 
 @Repository("GroupCoursesRepository")
@@ -33,6 +34,7 @@ public class GroupCoursesRepository extends ProtectedRepository<GroupCourses> {
         groupCourses.setTitle(title);
         groupCourses.setSection(section);
         groupCourses.setUrl(url);
+        groupCourses.setCreateDate(Calendar.getInstance());
         create(groupCourses);
         return groupCourses;
     }

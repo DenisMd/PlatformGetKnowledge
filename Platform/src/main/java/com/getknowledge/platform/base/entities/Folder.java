@@ -7,6 +7,7 @@ import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
 import javax.persistence.*;
+import java.util.Calendar;
 
 @MappedSuperclass
 public abstract class Folder extends AbstractEntity {
@@ -30,6 +31,18 @@ public abstract class Folder extends AbstractEntity {
     @Column(name="cover")
     @JsonIgnore
     private byte[] cover;
+
+    @Column(name = "create_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar createDate;
+
+    public Calendar getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Calendar createDate) {
+        this.createDate = createDate;
+    }
 
     public String getUrl() {
         return url;

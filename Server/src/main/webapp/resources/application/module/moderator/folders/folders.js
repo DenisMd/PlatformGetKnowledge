@@ -22,6 +22,10 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 field : "section.name",
                 constants : [],
                 default : true
+            },{
+                title : "folder_create_date",
+                type : "date",
+                field : "createDate"
             }
         ],
         headerNames : [
@@ -40,6 +44,11 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
             },{
                 name : "url",
                 title : "folder_url"
+            },{
+                name : "createDate",
+                title : "folder_create_date",
+                orderBy : true,
+                filter : "date"
             }
         ],
         selectItemCallback : function (item) {
@@ -106,6 +115,10 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 field : "section.name",
                 constants : [],
                 default : true
+            },{
+                title : "folder_create_date",
+                type : "date",
+                field : "createDate"
             }
         ],
         headerNames : [
@@ -124,6 +137,11 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
             },{
                 name : "url",
                 title : "folder_url"
+            },{
+                name : "createDate",
+                title : "folder_create_date",
+                orderBy : true,
+                filter : "date"
             }
         ],
         selectItemCallback : function (item) {
@@ -190,6 +208,10 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 field : "section.name",
                 constants : [],
                 default : true
+            },{
+                title : "folder_create_date",
+                type : "date",
+                field : "createDate"
             }
         ],
         headerNames : [
@@ -208,6 +230,11 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
             },{
                 name : "url",
                 title : "folder_url"
+            },{
+                name : "createDate",
+                title : "folder_create_date",
+                orderBy : true,
+                filter : "date"
             }
         ],
         selectItemCallback : function (item) {

@@ -51,6 +51,7 @@ public class GroupBooks extends Folder implements CloneableEntity<GroupBooks> {
         groupBooks.setDescriptionEn(getDescriptionEn());
         groupBooks.setDescriptionRu(getDescriptionRu());
         groupBooks.setBooksCount(getBooksCount());
+        groupBooks.setCreateDate(getCreateDate());
         return groupBooks;
     }
 }
