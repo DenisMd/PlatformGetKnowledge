@@ -47,7 +47,7 @@ width:600px;
 
 .original-image{
 width: 100%;
-height: auto;
+height: inherit;
 }
 
 .main-image-container{

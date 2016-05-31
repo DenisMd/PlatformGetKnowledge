@@ -1,9 +1,22 @@
-.folders-toolbar{
-    border-bottom: #d6d6d6;
+.content-body{
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
-.folders-toolbar-input{
-    padding-left: 10px;
+.folders-toolbar{
+    border-bottom: 1px solid #d6d6d6;
+    margin-top: -10px;
+}
+
+md-input-container.folders-toolbar-input-container{
+    margin-bottom: 0;
+}
+
+md-input-container .folders-toolbar-item,
+md-input-container>label:not(.md-no-float):not(.md-container-ignore).folders-toolbar-label{
+    padding-left: 30px;
 }
 
 md-input-container label{
@@ -12,4 +25,38 @@ md-input-container label{
 
 md-input-container .md-input{
     border-width: 0 0 2px;
+}
+
+.folders-toolbar-icon{
+    position: absolute;
+    left: 0;
+    color: #d6d6d6;
+}
+
+.folders-body{
+    background: #f5f5f5;
+}
+
+.folders-body .title{
+    margin: 0;
+}
+
+.folders-orderBy{
+    color:#777777;
+    margin:20px;
+}
+
+.folders-orderBy .active{
+    color:#0E76B7;
+}
+
+.folders-orderBy span{
+    margin: 0 10px;
+    vertical-align: middle;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.folders-orderBy span:hover{
+    transform: scale(1.2);
 }
