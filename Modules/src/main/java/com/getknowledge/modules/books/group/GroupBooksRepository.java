@@ -2,12 +2,15 @@ package com.getknowledge.modules.books.group;
 
 import com.getknowledge.modules.courses.group.GroupCourses;
 import com.getknowledge.modules.section.Section;
+import com.getknowledge.platform.annotations.Filter;
 import com.getknowledge.platform.annotations.ViewType;
 import com.getknowledge.platform.base.repositories.BaseRepository;
+import com.getknowledge.platform.base.repositories.FilterQuery;
 import com.getknowledge.platform.base.repositories.PrepareEntity;
 import com.getknowledge.platform.modules.user.User;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Repository("GroupBooksRepository")
@@ -33,5 +36,10 @@ public class GroupBooksRepository extends BaseRepository<GroupBooks> implements 
         groupBooks.setUrl(url);
         create(groupBooks);
         return groupBooks;
+    }
+
+    @Filter(name = "orderByCount")
+    public void orderByCountBooks(HashMap<String,Object> data , FilterQuery<GroupBooks> query) {
+        query.getCriteriaQuery().
     }
 }

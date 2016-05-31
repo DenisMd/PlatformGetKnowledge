@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
+import com.getknowledge.platform.annotations.Filter;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.repositories.BaseRepository;
@@ -450,7 +451,12 @@ public class DataController {
     //              type : "" number/text/logical/date/enum
     //              values : ["aaa", "bbb"]
     //          }]
+    //  },
+    // customFilters : [{
+    //      name : 'someName',
+    //      data : {...}
     //  }
+    //  }]
     // }
     @RequestMapping(value = "/filter" , method = RequestMethod.POST)
     public @ResponseBody String filterMethod(@RequestParam("properties") String properties, @RequestParam("className") String className, Principal principal) throws PlatformException {
@@ -532,6 +538,22 @@ public class DataController {
                             filterCountQuery.in(fieldName,values,type);
                             break;
                         default: new ParseException("Error filter type : " + name, trace , TraceLevel.Event);
+                    }
+                }
+            }
+
+            if (data.containsKey("customFilters")) {
+                List<HashMap<String, Object>> customFilters = (List<HashMap<String, Object>>) data.get("customFilters");
+                for (HashMap<String,Object> customFilter : customFilters) {
+                    String customFilterName = (String) customFilter.get("name");
+                    HashMap<String,Object> customFilterData = (HashMap<String, Object>) customFilter.get("data");
+                    for (Method method : repository.getClass().getMethods()) {
+                        Filter filter = AnnotationUtils.findAnnotation(method, Filter.class);
+                        if(filter == null || !filter.name().equals(customFilterName)) {
+                            continue;
+                        }
+                        method.invoke(repository, customFilterData , filterQuery);
+                        break;
                     }
                 }
             }

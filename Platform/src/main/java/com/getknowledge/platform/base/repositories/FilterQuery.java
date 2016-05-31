@@ -163,8 +163,8 @@ public class FilterQuery<T> {
         return query;
     }
 
-    public Root<T> getRoot() {
-        return root;
+    public CriteriaQuery getCriteriaQuery() {
+        return criteriaQuery;
     }
 
     private Enum convertStringToEnum(String fieldName , String value) {
@@ -242,7 +242,7 @@ public class FilterQuery<T> {
         return str;
     }
 
-    private void addPrevPredicate(Predicate result) {
+    public void addPrevPredicate(Predicate result) {
         if (previousPredicate != null) {
             if (isConj)
                 result = criteriaBuilder.and(previousPredicate, result);

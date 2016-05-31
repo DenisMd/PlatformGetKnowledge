@@ -173,6 +173,33 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             };
 
             /**
+             * @param {String} name - имя пользовательского фильтра
+             * @param {Object} data - информация для фильтра
+             *
+             * @description добавляет в массив пользовательский фильтр
+             *
+             * */
+            this.addCustomFilter = function (name , data) {
+                if (!("customFilters" in this.result)) {
+                    this.result.customFilters = [];
+                }
+                this.result.customFilters.push(
+                    {
+                        name : name,
+                        data : data
+                    }
+                );
+            };
+
+            /**
+             * @description Убирает пользовательские фильтры
+             *
+             * */
+            this.clearCustomFilters = function () {
+                this.result.customFilters = [];
+            };
+
+            /**
              * @param {String} fieldName - имя поля по кторому будет идти сортировка
              * @param {Boolean} desc - в обратном порядке или нет
              *
@@ -321,6 +348,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             this.clearAll = function(){
                 this.clearOrder();
                 this.deleteFiltersInfo();
+                this.clearCustomFilters();
             };
         }
 
