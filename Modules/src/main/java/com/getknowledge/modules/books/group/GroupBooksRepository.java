@@ -9,6 +9,7 @@ import com.getknowledge.platform.modules.user.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -41,8 +42,8 @@ public class GroupBooksRepository extends ProtectedRepository<GroupBooks> {
 
     @Filter(name = "orderByCount")
     public void orderByCountBooks(HashMap<String,Object> data , FilterQuery<GroupBooks> query) {
-        Join join = query.getRoot().join("books");
+        Join join = query.getRoot().join("books", JoinType.LEFT);
         query.getCriteriaQuery().groupBy(query.getRoot().get("id"));
-        query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().asc(query.getCriteriaBuilder().count(join)));
+        query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().desc(query.getCriteriaBuilder().count(join)));
     }
 }
