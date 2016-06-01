@@ -39,6 +39,7 @@ md-input-container .md-input{
 
 .folders-body{
     background: #f5f5f5;
+    margin-bottom: -30px;
 }
 
 .folders-body .title{
