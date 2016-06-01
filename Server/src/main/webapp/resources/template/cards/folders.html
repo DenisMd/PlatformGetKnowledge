@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/resources/css/components/folders.css">
 
 <div ng-controller="foldersController">
-    <md-content class="content-body folders-toolbar">
+    <md-content class="content-body folders-toolbar" layout-align-sm="center">
         <md-input-container class="folders-toolbar-input-container">
             <span class="folders-toolbar-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
             <label class="folders-toolbar-label">
@@ -12,14 +12,14 @@
         <button class="btn btn-default filter-panel-item folder-toolbar-btn" ng-click="searchFilter(searchText)">{{translate("do_filter")}}</button>
     </md-content>
     <md-content class="content-body folders-body">
-        <div layout-gt-xs="row" layout-align="center center">
-            <h1 class="title" flex="40">{{data.title}} ({{foldersInfo.totalEntitiesCount + " " + translate("of_records")}})</h1>
-            <div layout-align="center center" flex class="folders-orderBy">
+        <div layout-gt-sm="row" layout-align="center center">
+            <h1 class="title text-center" flex-gt-sm="none">{{data.title}} ({{foldersInfo.totalEntitiesCount + " " + translate("of_records")}})</h1>
+            <div flex class="folders-orderBy text-center">
                 <span class="{{!currentFilterByDate ? 'active' : ''}}" ng-click="by_count()">{{translate("by_count")}}</span> / <span class="{{currentFilterByDate ? 'active' : ''}}" ng-click="by_date()">{{translate("by_date")}}</span>
             </div>
         </div>
-        <div class="row" ng-repeat="folders in foldersGroup">
-            <div class="col-lg-4" ng-repeat="folder in folders">
+        <div layout="row" layout-wrap layout-align="left" layout-align-sm="center">
+            <div flex="none" ng-repeat="folder in folders">
                 <div class="folder">
                     <div>
                         <img class="folder-img" ng-src="{{folder.imgSrc}}">

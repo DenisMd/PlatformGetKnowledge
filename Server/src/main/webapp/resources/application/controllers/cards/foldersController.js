@@ -1,8 +1,5 @@
 model.controller("foldersController" , function ($scope,applicationService) {
 
-    var numberFoldersInRow = 3;
-    var tempArr = [];
-
     $scope.currentFilterByDate = true;
 
     $scope.filter = applicationService.createFilter($scope.getData().className,0,10);
@@ -15,8 +12,7 @@ model.controller("foldersController" , function ($scope,applicationService) {
         $scope.filter.clearCustomFilters();
         $scope.filter.setOrder("createDate" , true);
 
-        tempArr = [];
-        $scope.foldersGroup = [tempArr];
+        $scope.folders = [];
 
         doAction();
     };
@@ -27,8 +23,7 @@ model.controller("foldersController" , function ($scope,applicationService) {
         $scope.filter.clearCustomFilters();
         $scope.filter.addCustomFilter("orderByCount" , {});
 
-        tempArr = [];
-        $scope.foldersGroup = [tempArr];
+        $scope.folders = [];
 
         doAction();
     };
@@ -41,20 +36,14 @@ model.controller("foldersController" , function ($scope,applicationService) {
             likeIndex = $scope.filter.like("title", "text", "%" + text + "%");
         }
 
-        tempArr = [];
-        $scope.foldersGroup = [tempArr];
+        $scope.folders = [];
 
         doAction();
     };
 
     var addLog = function(folder){
         folder.imgSrc = applicationService.imageHref($scope.getData().className,folder.id);
-        if (tempArr.length == numberFoldersInRow) {
-            tempArr = [];
-            $scope.foldersGroup.push(tempArr);
-        }
-
-        tempArr.push(folder);
+        $scope.folders.push(folder);
     };
 
     var doAction = function(){
