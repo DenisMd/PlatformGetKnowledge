@@ -14,6 +14,10 @@ md-input-container.folders-toolbar-input-container{
     margin-bottom: 0;
 }
 
+.folder-toolbar-btn{
+    margin-top:-8px;
+}
+
 md-input-container .folders-toolbar-item,
 md-input-container>label:not(.md-no-float):not(.md-container-ignore).folders-toolbar-label{
     padding-left: 30px;

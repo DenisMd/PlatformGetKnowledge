@@ -8,10 +8,8 @@
                 {{translate("search")}}
             </label>
             <input class="folders-toolbar-item" ng-model="searchText">
-
-            <button class="btn btn-default filter-panel-item" ng-click="searchFilter(searchText)">{{translate("do_filter")}}</button>
-
         </md-input-container>
+        <button class="btn btn-default filter-panel-item folder-toolbar-btn" ng-click="searchFilter(searchText)">{{translate("do_filter")}}</button>
     </md-content>
     <md-content class="content-body folders-body">
         <div layout-gt-xs="row" layout-align="center center">
