@@ -155,6 +155,8 @@
     "do_filter"     : "Filtering",
     "clear_filter"  : "Clear filter",
     "filter_join_by": "Join filters by: ",
+    "by_count"      : "By count",
+    "by_date"       : "By creation date",
 
     "text_field"          : "Text field",
     "number_field"        : "Number field",

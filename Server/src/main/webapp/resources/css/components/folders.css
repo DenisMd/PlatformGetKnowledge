@@ -55,10 +55,11 @@ md-input-container .md-input{
     vertical-align: middle;
     display: inline-block;
     cursor: pointer;
+    font-size: 17px;
 }
 
 .folders-orderBy span:hover{
-    transform: scale(1.2);
+    transform: scale(1.05);
 }
 
 .folder {

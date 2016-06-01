@@ -7,14 +7,17 @@
             <label class="folders-toolbar-label">
                 {{translate("search")}}
             </label>
-            <input class="folders-toolbar-item">
+            <input class="folders-toolbar-item" ng-model="searchText">
+
+            <button class="btn btn-default filter-panel-item" ng-click="searchFilter(searchText)">{{translate("do_filter")}}</button>
+
         </md-input-container>
     </md-content>
     <md-content class="content-body folders-body">
         <div layout-gt-xs="row" layout-align="center center">
             <h1 class="title" flex="40">{{data.title}} ({{foldersInfo.totalEntitiesCount + " " + translate("of_records")}})</h1>
             <div layout-align="center center" flex class="folders-orderBy">
-                <span>По количеству</span> / <span class="active">По дате создания</span>
+                <span class="{{!currentFilterByDate ? 'active' : ''}}" ng-click="by_count()">{{translate("by_count")}}</span> / <span class="{{currentFilterByDate ? 'active' : ''}}" ng-click="by_date()">{{translate("by_date")}}</span>
             </div>
         </div>
         <div class="row" ng-repeat="folders in foldersGroup">
