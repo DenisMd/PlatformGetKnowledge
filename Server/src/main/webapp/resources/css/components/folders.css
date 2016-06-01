@@ -64,7 +64,7 @@ md-input-container .md-input{
 
 .folder {
     width: 270px;
-    height: 450px;
+    height: 410px;
     box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
     margin: 20px;
     background: white;
@@ -78,11 +78,10 @@ md-input-container .md-input{
 .folder-title {
     text-align: center;
     color: rgba(123, 123, 123, 0.94);
-    font-size: 30px;
+    font-size: 20px;
     width: 100%;
     margin-top: 15px;
-    height: 120px;
-    word-break: break-all;
+    height: 80px;
 }
 
 .folder-stat {
@@ -98,7 +97,7 @@ md-input-container .md-input{
     background-color: #069ec2;
     text-align: center;
     color: white;
-    font-size: 20px;
+    font-size: 18px;
     padding: 5px;
     cursor: pointer;
 }

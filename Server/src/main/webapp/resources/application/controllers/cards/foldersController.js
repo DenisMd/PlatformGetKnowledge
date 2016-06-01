@@ -1,6 +1,6 @@
 model.controller("foldersController" , function ($scope,applicationService) {
 
-    var numberFoldersInRow = 4;
+    var numberFoldersInRow = 3;
     var tempArr = [];
 
     $scope.currentFilterByDate = true;
