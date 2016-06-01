@@ -12,6 +12,7 @@ model.controller("foldersController" , function ($scope,applicationService) {
         $scope.filter.clearCustomFilters();
         $scope.filter.setOrder("createDate" , true);
 
+        $scope.filter.result.first = 0;
         $scope.folders = [];
 
         doAction();
@@ -23,6 +24,7 @@ model.controller("foldersController" , function ($scope,applicationService) {
         $scope.filter.clearCustomFilters();
         $scope.filter.addCustomFilter("orderByCount" , {});
 
+        $scope.filter.result.first = 0;
         $scope.folders = [];
 
         doAction();
@@ -36,6 +38,7 @@ model.controller("foldersController" , function ($scope,applicationService) {
             likeIndex = $scope.filter.like("title", "text", "%" + text + "%");
         }
 
+        $scope.filter.result.first = 0;
         $scope.folders = [];
 
         doAction();
