@@ -7,7 +7,8 @@ model.controller("groupCoursesCtrl", function ($scope,applicationService,classNa
         $scope.folderData = {
             sectionName: sectionName,
             className: className.groupCourses,
-            title: $scope.translate("courses_title")
+            title: $scope.translate("courses_title"),
+            totalCountFieldName : "coursesCount"
         };
     } else {
         $scope.coursesData = {

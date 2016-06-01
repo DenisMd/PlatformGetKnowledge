@@ -1,40 +1,35 @@
 model.controller("foldersController" , function ($scope,applicationService) {
-    var filter = applicationService.createFilter($scope.getData().className,0,10);
-    filter.createFiltersInfo();
-    filter.equals("section.name","text",$scope.getData().sectionName);
-    filter.addCustomFilter("orderByCount" , {});
-    $scope.folders = [];
+
+    var numberFoldersInRow = 4;
+
+    $scope.filter = applicationService.createFilter($scope.getData().className,0,10);
+    $scope.filter.createFiltersInfo();
+    $scope.filter.equals("section.name","text",$scope.getData().sectionName);
+
+    //filter.addCustomFilter("orderByCount" , {});
+
+    var tempArr = [];
+    $scope.foldersGroup = [tempArr];
+
 
     var addLog = function(folder){
-        $scope.folders.push(folder);
+        folder.imgSrc = applicationService.imageHref($scope.getData().className,folder.id);
+        if (tempArr.length == numberFoldersInRow) {
+            tempArr = [];
+            $scope.foldersGroup.push(tempArr);
+        }
+
+        tempArr.push(folder);
     };
 
     var doAction = function(){
-        applicationService.filterRequest($scope,"",filter,addLog);
+        applicationService.filterRequest($scope,"foldersInfo",$scope.filter,addLog);
     };
 
     doAction();
 
     $scope.loadMore = function () {
-        filter.increase(10);
+        $scope.filter.increase(10);
         doAction();
-    };
-
-    $scope.folderImg = function(id){
-        return applicationService.imageHref($scope.getData().className,id);
-    };
-
-    //TODO: убрать
-    $scope.splitArray = function(array,even) {
-        var tempArr = [];
-        for (var i = 0; i < array.length; i++) {
-            if(i % 2 === 0 && even) { // index is even
-                tempArr.push(array[i]);
-            }
-            if(i % 2 === 1 && !even) { // index is onn
-                tempArr.push(array[i]);
-            }
-        }
-        return tempArr;
     };
 });

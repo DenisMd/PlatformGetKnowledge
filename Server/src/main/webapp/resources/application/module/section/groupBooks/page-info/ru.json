@@ -1,5 +1,7 @@
 {
   "text" : {
-    "books_title" : "Каталоги книг"
+    "books_title" : "Каталоги книг",
+    "folder_in" : "Перейти в каталог книг",
+    "folder_totals_count" : "Количество книг"
   }
 }

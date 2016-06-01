@@ -1,6 +1,7 @@
 {
   "text" : {
     "courses_title" : "Группы курсов",
-    "courses_load_more" : "Загрузить больше групп"
+    "folder_in" : "Перейти в каталог курсов",
+    "folder_totals_count" : "Количество курсов"
   }
 }

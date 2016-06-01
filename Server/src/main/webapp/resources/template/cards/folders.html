@@ -5,76 +5,43 @@
         <md-input-container class="folders-toolbar-input-container">
             <span class="folders-toolbar-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
             <label class="folders-toolbar-label">
-                Search
+                {{translate("search")}}
             </label>
             <input class="folders-toolbar-item">
         </md-input-container>
     </md-content>
     <md-content class="content-body folders-body">
         <div layout-gt-xs="row" layout-align="center center">
-            <h1 class="title" flex="50">{{data.title}}</h1>
+            <h1 class="title" flex="40">{{data.title}} ({{foldersInfo.totalEntitiesCount + " " + translate("of_records")}})</h1>
             <div layout-align="center center" flex class="folders-orderBy">
                 <span>По количеству</span> / <span class="active">По дате создания</span>
             </div>
         </div>
-        <div class="md-padding" layout-xs="column" layout="row" layout-wrap>
-            <md-card ng-repeat="folder in folders" flex="33">
-                <img ng-src="{{folderImg(folder.id)}}" class="md-card-image" alt="Washed Out">
-                <md-card-title>
-                    <md-card-title-text>
-                         <span class="md-headline">{{folder.title}}</span>
-                    </md-card-title-text>
-                </md-card-title>
-                <md-card-content>
-                    <p>
-                        {{folder["description"+application.language.capitalizeFirstLetter()]}}
-                    </p>
-                </md-card-content>
-                <md-card-actions layout="row" layout-align="end center">
-                    <md-button ng-disabled="!folder.url" ng-click="goTo(folder.url)">{{translate("move")}}</md-button>
-                </md-card-actions>
-            </md-card>
-        </div>
-        <div class="md-padding" layout-xs="column" layout="row">
-            <div flex-xs flex-gt-xs="50" layout="column">
-                <md-card ng-repeat="folder in splitArray(folders,true)">
-                    <img ng-src="{{folderImg(folder.id)}}" class="md-card-image" alt="Washed Out">
-                    <md-card-title>
-                        <md-card-title-text>
-                            <span class="md-headline">{{folder.title}}</span>
-                        </md-card-title-text>
-                    </md-card-title>
-                    <md-card-content>
-                        <p>
-                            {{folder["description"+application.language.capitalizeFirstLetter()]}}
-                        </p>
-                    </md-card-content>
-                    <md-card-actions layout="row" layout-align="end center">
-                        <md-button ng-disabled="!folder.url" ng-click="goTo(folder.url)">{{translate("move")}}</md-button>
-                    </md-card-actions>
-                </md-card>
-            </div>
-            <div flex-xs flex-gt-xs="50" layout="column">
-                <md-card ng-repeat="folder in splitArray(folders,false)">
-                    <img ng-src="{{folderImg(folder.id)}}" class="md-card-image" alt="Washed Out">
-                    <md-card-title>
-                        <md-card-title-text>
-                            <span class="md-headline">{{folder.title}}</span>
-                        </md-card-title-text>
-                    </md-card-title>
-                    <md-card-content>
-                        <p>
-                            {{folder["description"+application.language.capitalizeFirstLetter()]}}
-                        </p>
-                    </md-card-content>
-                    <md-card-actions layout="row" layout-align="end center">
-                        <md-button><a ng-href="{{folder.url}}">{{translate("move")}}</a></md-button>
-                    </md-card-actions>
-                </md-card>
+        <div class="row" ng-repeat="folders in foldersGroup">
+            <div class="col-lg-3" ng-repeat="folder in folders">
+                <div class="folder">
+                    <div>
+                        <img class="folder-img" ng-src="{{folder.imgSrc}}">
+                    </div>
+                    <div class="folder-title">
+                        {{folder.title}}
+                    </div>
+                    <div class="folder-stat">
+                        <div class="text-center">
+                            {{folder[getData().totalCountFieldName]}}
+                        </div>
+                        <div class="text-center">
+                            {{translate("folder_totals_count")}}
+                        </div>
+                    </div>
+                    <div class="folder-btn" ng-click="goTo(folder.url)">
+                        {{translate("folder_in")}}
+                    </div>
+                </div>
             </div>
         </div>
     </md-content>
-    <md-content layout="row" layout-align="center center">
+    <md-content layout="row" layout-align="center center" ng-show="foldersInfo.totalEntitiesCount > (filter.result.first + filter.max)">
         <span ng-click="loadMore()" class="loadMore">{{translate("load_more")}}</span>
     </md-content>
 </div>

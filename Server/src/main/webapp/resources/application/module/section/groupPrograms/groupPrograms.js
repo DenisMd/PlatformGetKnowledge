@@ -6,7 +6,9 @@ model.controller("groupProgramsCtrl", function ($scope,applicationService,classN
     if (!$scope.groupProgram) {
         $scope.folderData = {
             sectionName: sectionName,
-            className: className.groupPrograms
+            className: className.groupPrograms,
+            title : $scope.translate("programs_title"),
+            totalCountFieldName : "programsCount"
         };
     } else {
         $scope.programData = {

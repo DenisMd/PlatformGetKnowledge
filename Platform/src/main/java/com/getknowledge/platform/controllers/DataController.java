@@ -553,6 +553,7 @@ public class DataController {
                             continue;
                         }
                         method.invoke(repository, customFilterData , filterQuery);
+                        method.invoke(repository, customFilterData , filterCountQuery);
                         break;
                     }
                 }

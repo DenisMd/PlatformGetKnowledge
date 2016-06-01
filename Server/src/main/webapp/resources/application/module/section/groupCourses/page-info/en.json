@@ -1,6 +1,7 @@
 {
   "text" : {
     "courses_title" : "Group courses",
-    "courses_load_more" : "Load more groups courses"
+    "folder_in" : "Go to courses folder",
+    "folder_totals_count" : "Courses totals count"
   }
 }

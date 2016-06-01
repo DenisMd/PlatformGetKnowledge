@@ -1,5 +1,7 @@
 {
   "text" : {
-    "programs_title" : "Каталоги программ"
+    "programs_title" : "Каталоги программ",
+    "folder_in" : "Перейти в каталог програм",
+    "folder_totals_count" : "Количество программ"
   }
 }

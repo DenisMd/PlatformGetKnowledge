@@ -1,5 +1,7 @@
 {
   "text" : {
-    "books_title" : "Books catalogs"
+    "books_title" : "Books catalogs",
+    "folder_in" : "Go to books folder",
+    "folder_totals_count" : "Books totals count"
   }
 }
