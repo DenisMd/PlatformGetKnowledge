@@ -1,6 +1,7 @@
 package com.getknowledge.modules.courses.group;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.modules.courses.Course;
 import com.getknowledge.modules.section.Section;
 import com.getknowledge.platform.annotations.ModelView;
 import com.getknowledge.platform.annotations.ModuleInfo;
@@ -12,6 +13,7 @@ import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "courses_group")
@@ -24,6 +26,18 @@ public class GroupCourses extends Folder implements CloneableEntity<GroupCourses
 
     @Transient
     private long coursesCount = 0;
+
+    @OneToMany(mappedBy = "groupCourses")
+    @JsonIgnore
+    private List<Course> courses;
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
 
     public long getCoursesCount() {
         return coursesCount;
