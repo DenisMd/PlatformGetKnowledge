@@ -9,6 +9,7 @@ import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Calendar;
 import java.util.List;
 
 @Repository("BookRepository")
@@ -42,6 +43,7 @@ public class BookRepository extends ProtectedRepository<Book> {
         if (tags != null)
             booksTagRepository.createTags(tags,book);
 
+        book.setCreateDate(Calendar.getInstance());
         create(book);
         addBookToTag(book);
         return book;

@@ -19,9 +19,11 @@ public class GroupBooksRepository extends ProtectedRepository<GroupBooks> {
 
     @Override
     public GroupBooks prepare(GroupBooks entity, User currentUser, List<ViewType> viewTypes) {
-        Long booksCount = (Long) entityManager.createQuery("select count(b) from Book b where b.groupBooks.id = :groupBooksId")
-                .setParameter("groupBooksId" , entity.getId()).getSingleResult();
-        entity.setBooksCount(booksCount);
+        if (viewTypes == null || viewTypes.isEmpty()) {
+            Long booksCount = (Long) entityManager.createQuery("select count(b) from Book b where b.groupBooks.id = :groupBooksId")
+                    .setParameter("groupBooksId", entity.getId()).getSingleResult();
+            entity.setBooksCount(booksCount);
+        }
         return super.prepare(entity,currentUser,viewTypes);
     }
 

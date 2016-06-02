@@ -1,91 +1,98 @@
+<link rel="stylesheet" href="/resources/css/components/books.css">
+
 <div ng-controller="booksController">
-    <div>
-        <md-button class="md-raised md-primary" ng-click="showAdvanced($event)" ng-show="booksData.creatable">{{translate("create")}}</md-button>
-    </div>
-    <md-content class="md-padding" layout-xs="column" layout="row">
-        <div flex-xs flex-gt-xs="50" layout="column">
-            <md-card ng-repeat="book in splitArray(books,true)">
-                <img ng-src="{{folderImg(book.id)}}" class="md-card-image" alt="Washed Out">
-                <md-card-title>
-                    <md-card-title-text>
-                        <span class="md-headline">{{book.name}}</span>
-                    </md-card-title-text>
-                </md-card-title>
-                <md-card-content>
-                    <p>
-                        {{book.description}}
-                    </p>
-                </md-card-content>
-                <md-card-actions layout="row" layout-align="end center">
-                    <md-button ng-click="goTo('book/' + book.id)">{{translate("move")}}</md-button>
-                </md-card-actions>
-            </md-card>
+    <md-content class="content-body folders-toolbar" layout-align-sm="center">
+    <md-input-container class="folders-toolbar-input-container">
+        <span class="folders-toolbar-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
+        <label class="folders-toolbar-label">
+            {{translate("search")}}
+        </label>
+        <input class="folders-toolbar-item" ng-model="searchText">
+    </md-input-container>
+    <button class="btn btn-default filter-panel-item folder-toolbar-btn" ng-click="searchBook(searchText)">
+        {{translate("do_filter")}}
+    </button>
+    </md-content>
+    <md-content class="content-body folders-body">
+        <div layout-gt-sm="row" layout-align="center center">
+            <h1 class="title text-center" flex-gt-sm="none">{{translate("books")}} ({{booksInfo.totalEntitiesCount + " " +
+                translate("of_records")}})</h1>
+
+            <div flex class="folders-orderBy text-center">
+                <span class="{{!currentFilterByDate ? 'active' : ''}}"
+                      ng-click="by_name()">{{translate("by_name")}}</span> / <span
+                    class="{{currentFilterByDate ? 'active' : ''}}" ng-click="by_date()">{{translate("by_date")}}</span>
+            </div>
+            <div>
+                <md-button class="md-raised md-primary" ng-click="" ng-show="booksInfo.creatable">
+                    {{translate("create")}}
+                </md-button>
+            </div>
         </div>
-        <div flex-xs flex-gt-xs="50" layout="column">
-            <md-card ng-repeat="book in splitArray(books,false)">
-                <img ng-src="{{folderImg(book.id)}}" class="md-card-image" alt="Washed Out">
-                <md-card-title>
-                    <md-card-title-text>
-                        <span class="md-headline">{{book.name}}</span>
-                    </md-card-title-text>
-                </md-card-title>
-                <md-card-content>
-                    <p>
-                        {{book.description}}
-                    </p>
-                </md-card-content>
-                <md-card-actions layout="row" layout-align="end center">
-                    <md-button ng-click="goTo('book/' + book.id)">{{translate("move")}}</md-button>
-                </md-card-actions>
-            </md-card>
+        <div layout="row" layout-wrap layout-align="left" layout-align-sm="center">
+            <div flex="none" ng-repeat="book in books">
+                <div class="folder">
+                    <div>
+                        <img class="folder-img" ng-src="{{book.imageSrc}}">
+                    </div>
+                    <div class="folder-title">
+                        {{book.name}}
+                    </div>
+                    <div class="folder-btn" ng-click="goTo(book.url)">
+                        {{translate("folder_in")}}
+                    </div>
+                </div>
+            </div>
         </div>
     </md-content>
-    <md-content layout="row" layout-align="center center">
+    <md-content layout="row" layout-align="center center"
+                ng-show="booksInfo.totalEntitiesCount > (filter.result.first + filter.max)">
         <span ng-click="loadMore()" class="loadMore">{{translate("load_more")}}</span>
     </md-content>
 </div>
-<script type="text/ng-template" id="createBook.html">
-    <md-dialog  ng-cloak>
-        <form>
-            <md-toolbar>
-                <div class="md-toolbar-tools">
-                    <h2>{{parentScope.translate("create")}}</h2>
-                    <span flex></span>
-                    <md-button class="md-icon-button" ng-click="cancel()">
-                        <md-icon md-svg-src="resources/image/svg/close.svg" aria-label="Close dialog"></md-icon>
-                    </md-button>
-                </div>
-            </md-toolbar>
-            <md-dialog-content>
-                <div class="md-dialog-content">
-                    <div>
-                        <md-input-container>
-                            <label>{{parentScope.translate("name")}}</label>
-                            <input ng-model="book.name">
-                        </md-input-container>
-                    </div>
-                    <div>
-                        <md-input-container>
-                            <md-select ng-model="book.language" placeholder="Выберите язык">
-                                <md-option ng-value="opt.name" ng-repeat="opt in parentScope.langs">{{ opt.title }}</md-option>
-                            </md-select>
-                        </md-input-container>
-                    </div>
-                    <h2 class="md-title">Тэги</h2>
-                    <div ng-init="book.tags = []">
-                        <md-chips ng-model="book.tags" readonly="false"></md-chips>
-                    </div>
-                    <div>
-                        <label for="description">{{parentScope.translate("description")}}</label>
-                        <textarea class="form-control" rows="5" id="description" ng-model="book.description"></textarea>
-                    </div>
-                </div>
-            </md-dialog-content>
-            <md-dialog-actions layout="row">
-                <md-button class="md-raised md-primary" ng-click="answer(book)">
-                    {{parentScope.translate("create")}}
-                </md-button>
-            </md-dialog-actions>
-        </form>
-    </md-dialog>
-</script>
+<!-- -->
+<!--<script type="text/ng-template" id="createBook.html">-->
+<!--<md-dialog  ng-cloak>-->
+<!--<form>-->
+<!--<md-toolbar>-->
+<!--<div class="md-toolbar-tools">-->
+<!--<h2>{{parentScope.translate("create")}}</h2>-->
+<!--<span flex></span>-->
+<!--<md-button class="md-icon-button" ng-click="cancel()">-->
+<!--<md-icon md-svg-src="resources/image/svg/close.svg" aria-label="Close dialog"></md-icon>-->
+<!--</md-button>-->
+<!--</div>-->
+<!--</md-toolbar>-->
+<!--<md-dialog-content>-->
+<!--<div class="md-dialog-content">-->
+<!--<div>-->
+<!--<md-input-container>-->
+<!--<label>{{parentScope.translate("name")}}</label>-->
+<!--<input ng-model="book.name">-->
+<!--</md-input-container>-->
+<!--</div>-->
+<!--<div>-->
+<!--<md-input-container>-->
+<!--<md-select ng-model="book.language" placeholder="Выберите язык">-->
+<!--<md-option ng-value="opt.name" ng-repeat="opt in parentScope.langs">{{ opt.title }}</md-option>-->
+<!--</md-select>-->
+<!--</md-input-container>-->
+<!--</div>-->
+<!--<h2 class="md-title">Тэги</h2>-->
+<!--<div ng-init="book.tags = []">-->
+<!--<md-chips ng-model="book.tags" readonly="false"></md-chips>-->
+<!--</div>-->
+<!--<div>-->
+<!--<label for="description">{{parentScope.translate("description")}}</label>-->
+<!--<textarea class="form-control" rows="5" id="description" ng-model="book.description"></textarea>-->
+<!--</div>-->
+<!--</div>-->
+<!--</md-dialog-content>-->
+<!--<md-dialog-actions layout="row">-->
+<!--<md-button class="md-raised md-primary" ng-click="answer(book)">-->
+<!--{{parentScope.translate("create")}}-->
+<!--</md-button>-->
+<!--</md-dialog-actions>-->
+<!--</form>-->
+<!--</md-dialog>-->
+<!--</script>-->

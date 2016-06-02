@@ -5,7 +5,9 @@ import com.getknowledge.modules.books.group.GroupBooks;
 import com.getknowledge.modules.books.tags.BooksTag;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.userInfo.UserInfo;
+import com.getknowledge.platform.annotations.ModelView;
 import com.getknowledge.platform.annotations.ModuleInfo;
+import com.getknowledge.platform.annotations.ViewType;
 import com.getknowledge.platform.base.entities.*;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
@@ -13,6 +15,7 @@ import com.getknowledge.platform.modules.user.User;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Entity
@@ -27,12 +30,14 @@ public class Book extends AbstractEntity implements CloneableEntity<Book>,IUser,
     private String description;
 
     @ManyToOne(optional = false)
+    @ModelView(type = {ViewType.Public})
     private GroupBooks groupBooks;
 
     @ManyToOne(optional = false)
     private Language language;
 
     @ManyToOne(optional = false)
+    @ModelView(type = {ViewType.CompactPublic})
     private UserInfo owner;
 
     @ManyToMany(mappedBy = "books", cascade = {CascadeType.PERSIST})
@@ -43,6 +48,9 @@ public class Book extends AbstractEntity implements CloneableEntity<Book>,IUser,
     @Column(name = "links")
     private List<String> links = new ArrayList<>();
 
+    @Column(name = "create_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar createDate;
 
     @Basic(fetch=FetchType.LAZY)
     @Lob @Column(name="cover")
@@ -57,6 +65,14 @@ public class Book extends AbstractEntity implements CloneableEntity<Book>,IUser,
     @Column(name = "file_name")
     @JsonIgnore
     private String fileName;
+
+    public Calendar getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Calendar createDate) {
+        this.createDate = createDate;
+    }
 
     public String getFileName() {
         return fileName;
@@ -171,6 +187,7 @@ public class Book extends AbstractEntity implements CloneableEntity<Book>,IUser,
         cloneBook.setLinks(this.getLinks());
         cloneBook.setOwner(this.getOwner());
         cloneBook.setTags(this.getTags());
+        cloneBook.setCreateDate(this.createDate);
         cloneBook.setObjectVersion(this.getObjectVersion());
         return cloneBook;
     }
