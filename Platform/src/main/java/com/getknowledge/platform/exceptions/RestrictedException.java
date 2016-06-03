@@ -12,10 +12,6 @@ public class RestrictedException extends PlatformException {
         return false;
     }
 
-    public RestrictedException(String message) {
-        super(message);
-        super.errorResource.setStatus( HttpStatus.FORBIDDEN);
-    }
 
     public RestrictedException(String message, TraceService traceService) {
         super(message, traceService, TraceLevel.Warning);

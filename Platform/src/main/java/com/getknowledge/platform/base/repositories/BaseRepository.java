@@ -7,6 +7,8 @@ import com.getknowledge.platform.annotations.ViewType;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.repositories.enumerations.RepOperations;
 import com.getknowledge.platform.exceptions.PlatformException;
+import com.getknowledge.platform.modules.trace.TraceService;
+import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.utils.ModuleLocator;
 import com.getknowledge.platform.utils.RepositoryUtils;
@@ -31,12 +33,13 @@ public abstract class BaseRepository<T extends AbstractEntity> {
 
     protected ObjectMapper objectMapper = new ObjectMapper();
 
-    protected Logger logger = LoggerFactory.getLogger(BaseRepository.class);
-
     protected abstract Class<T> getClassEntity();
 
     @Autowired
     private ModuleLocator moduleLocator;
+
+    @Autowired
+    protected TraceService traceService;
 
     @PersistenceContext
     public EntityManager entityManager;
@@ -72,7 +75,7 @@ public abstract class BaseRepository<T extends AbstractEntity> {
                 }
             }
         } catch (Exception e) {
-            logger.error("Error update entity : " + e.getMessage(), e);
+            traceService.logException("Error update entity : " + e.getMessage(), e, TraceLevel.Error,true);
             return;
         }
 

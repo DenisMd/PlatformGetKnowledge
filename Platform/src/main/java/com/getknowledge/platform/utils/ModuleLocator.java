@@ -26,7 +26,7 @@ public class  ModuleLocator {
         if (classEntity == null) return null;
         ModuleInfo moduleInfo = (ModuleInfo) classEntity.getAnnotation(ModuleInfo.class);
         if(moduleInfo == null) {
-            throw new ModuleNotFound("module info not found for entity : " + classEntity.getName(),trace);
+            throw new ModuleNotFound("Annotation \"ModuleInfo\" not found for entity : " + classEntity.getName(),trace);
         }
         BaseRepository baseRepository = (BaseRepository) ac.getBean(moduleInfo.repositoryName());
         return baseRepository;
@@ -36,7 +36,7 @@ public class  ModuleLocator {
         if (classEntity == null) return null;
         ModuleInfo moduleInfo = (ModuleInfo) classEntity.getAnnotation(ModuleInfo.class);
         if(moduleInfo == null) {
-            throw new ModuleNotFound("module info not found for entity : " + classEntity.getName(),trace);
+            throw new ModuleNotFound("Annotation \"ModuleInfo\" not found for entity : " + classEntity.getName(),trace);
         }
         AbstractService abstractRepository = (AbstractService) ac.getBean(moduleInfo.serviceName());
         return abstractRepository;

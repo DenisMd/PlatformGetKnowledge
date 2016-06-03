@@ -9,6 +9,7 @@ import com.getknowledge.platform.base.entities.IOwner;
 import com.getknowledge.platform.base.entities.IUser;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.role.Role;
+import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.utils.RepositoryUtils;
 
@@ -85,7 +86,7 @@ public abstract class ProtectedRepository <T extends AbstractEntity> extends Bas
                     field.set(entity, null);
                 } catch (IllegalAccessException | IllegalArgumentException e) {
                     //Невозможно сбросить примитивный тип в null
-                    logger.error(e.getMessage(), e);
+                    traceService.logException(e.getMessage(), e, TraceLevel.Error,false);
                 }
             }
         }

@@ -239,6 +239,7 @@ public class DataController {
     public @ResponseBody String read(@RequestParam(value = "id" ,required = true) Long id,
                                      @RequestParam(value ="className" , required = true) String className, Principal principal) throws PlatformException {
         try {
+            trace.log(String.format("------> Received \"READ\" request with parameters {id : %d , className : %s} from user \"%s\"",id,className,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
             Class classEntity = Class.forName(className);
             BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
 
@@ -258,7 +259,11 @@ public class DataController {
             boolean isCreatable = isAccessCreate(user,entity);
             entity = crudService.prepare(entity,repository,user);
 
-            return prepareJson(entity,isEditable,isCreatable,classEntity).toString();
+            String resultJson = prepareJson(entity,isEditable,isCreatable,classEntity).toString();
+
+            trace.log(String.format("<------ Send \"READ\" request with parameters {id : %d , className : %s} from user \"%s\" result : %s",id,className,principal==null?"guest":principal.getName(),resultJson),TraceLevel.Debug,false);
+
+            return resultJson;
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
         } catch (PlatformException p) {
@@ -271,6 +276,7 @@ public class DataController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public @ResponseBody String list(@RequestParam("className") String className, Principal principal) throws PlatformException {
         try {
+            trace.log(String.format("------> Received \"LIST\" request with parameters {className : %s} from user \"%s\"",className,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
             Class classEntity = Class.forName(className);
             BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
 
@@ -281,10 +287,15 @@ public class DataController {
             List<AbstractEntity> list = crudService.list(repository);
 
             if (list == null) {
+                trace.log(String.format("<------ Send \"LIST\" request with parameters {className : %s} from user \"%s\" result : %s",className,principal==null?"guest":principal.getName(),""),TraceLevel.Debug,false);
                 return null;
             }
 
-            return listToJsonString(list,getCurrentUser(principal),repository,classEntity,true).toString();
+            String resultJson = listToJsonString(list,getCurrentUser(principal),repository,classEntity,true).toString();
+
+            trace.log(String.format("<------ Send \"LIST\" request with parameters {className : %s} from user \"%s\" result : %s",className,principal==null?"guest":principal.getName(),resultJson),TraceLevel.Debug,false);
+
+            return resultJson;
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
         } catch (PlatformException p) {
