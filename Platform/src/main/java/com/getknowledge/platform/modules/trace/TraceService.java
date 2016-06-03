@@ -13,9 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("TraceService")
 public class TraceService extends AbstractService {
 
-    @Autowired
-    private UserRepository userRepository;
-
     Logger logger = LoggerFactory.getLogger(TraceService.class);
 
     @Autowired
