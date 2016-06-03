@@ -66,7 +66,7 @@ public class PermissionService extends AbstractService implements BootstrapServi
             return null;
 
         if (!isAccessToRead(data,permission)) {
-            throw new NotAuthorized("not authorized for read users for permission" , traceService , TraceLevel.Warning);
+            throw new NotAuthorized("not authorized for read users for permission" , traceService);
         }
 
         return permission.getUsers();
@@ -83,7 +83,7 @@ public class PermissionService extends AbstractService implements BootstrapServi
             return null;
 
         if (!isAccessToRead(data,permission)) {
-            throw new NotAuthorized("not authorized for read users for permission" , traceService , TraceLevel.Warning);
+            throw new NotAuthorized("not authorized for read users for permission" , traceService);
         }
 
         return permission.getRoles();

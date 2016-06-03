@@ -65,7 +65,7 @@ public class GroupBooksService extends AbstractService implements ImageService{
             books.setCover(files.get(0).getBytes());
             repository.merge(books);
         } catch (IOException e) {
-            trace.logException("Error set cover for group book" , e , TraceLevel.Error);
+            trace.logException("Error set cover for group book" , e , TraceLevel.Error,true);
             return Result.Failed();
         }
 

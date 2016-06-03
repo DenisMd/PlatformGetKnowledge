@@ -8,8 +8,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 public class SystemError extends PlatformException {
 
-    public SystemError(String message, TraceService traceService, TraceLevel traceLevel,Exception cause) {
-        super(message, traceService, traceLevel,cause);
+    @Override
+    public boolean isSaveToDataBase() {
+        return true;
+    }
+
+    public SystemError(String message, TraceService traceService,Exception cause) {
+        super(message, traceService, TraceLevel.Error,cause);
         super.errorResource.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

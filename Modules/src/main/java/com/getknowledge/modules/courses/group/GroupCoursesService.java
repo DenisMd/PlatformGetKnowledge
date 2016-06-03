@@ -62,7 +62,7 @@ public class GroupCoursesService extends AbstractService implements ImageService
         try {
             section.setCover(files.get(0).getBytes());
         } catch (IOException e) {
-            trace.logException("Error set cover for group section" , e , TraceLevel.Error);
+            trace.logException("Error set cover for group section" , e , TraceLevel.Error,true);
             return Result.Failed();
         }
         repository.merge(section);

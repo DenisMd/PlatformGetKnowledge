@@ -6,18 +6,24 @@ import org.springframework.http.HttpStatus;
 
 
 public class RestrictedException extends PlatformException {
+
+    @Override
+    public boolean isSaveToDataBase() {
+        return false;
+    }
+
     public RestrictedException(String message) {
         super(message);
         super.errorResource.setStatus( HttpStatus.FORBIDDEN);
     }
 
-    public RestrictedException(String message, TraceService traceService, TraceLevel traceLevel) {
-        super(message, traceService, traceLevel);
+    public RestrictedException(String message, TraceService traceService) {
+        super(message, traceService, TraceLevel.Warning);
         super.errorResource.setStatus(HttpStatus.FORBIDDEN);
     }
 
-    public RestrictedException(String message, TraceService traceService, TraceLevel traceLevel, Exception e) {
-        super(message, traceService, traceLevel, e);
+    public RestrictedException(String message, TraceService traceService, Exception e) {
+        super(message, traceService, TraceLevel.Warning, e);
         super.errorResource.setStatus(HttpStatus.FORBIDDEN);
     }
 }

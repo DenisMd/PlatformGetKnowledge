@@ -7,6 +7,7 @@ import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.role.names.RoleName;
+import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ import java.util.Map;
 public class ViewController {
 
     @Autowired
-    private UserRepository userRepository;
+    private TraceService traceService;
 
     @Autowired
     private UserInfoService userInfoService;
@@ -133,11 +134,11 @@ public class ViewController {
         File dir = new File(servletContext.getRealPath(prefix + path + ".jsp"));
         if (dir.exists()) {
             if (path.equals("404")){
-                throw new ModuleNotFound("Not found!");
+                throw new ModuleNotFound("Not found!",traceService);
             }
             return new ModelAndView(path);
         } else {
-            throw new ModuleNotFound("Not found!");
+            throw new ModuleNotFound("Not found!",traceService);
         }
     }
 

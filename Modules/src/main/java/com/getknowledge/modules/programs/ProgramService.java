@@ -82,7 +82,7 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
 
         GroupPrograms groupPrograms =  groupProgramsRepository.read(groupBookId);
         if (groupPrograms == null) {
-            trace.log("Group program id is incorrect" , TraceLevel.Warning);
+            trace.log("Group program is not found" , TraceLevel.Warning,false);
             return Result.Failed();
         }
 
@@ -162,7 +162,7 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
         try {
             program.setCover(files.get(0).getBytes());
         } catch (IOException e) {
-            trace.logException("Error read cover for program" , e, TraceLevel.Warning);
+            trace.logException("Error upload vocer for program" , e, TraceLevel.Warning,true);
             return Result.Failed();
         }
 
@@ -185,7 +185,7 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
             program.setBookData(files.get(0).getBytes());
             program.setFileName(files.get(0).getOriginalFilename());
         } catch (IOException e) {
-            trace.logException("Error read data for program" , e, TraceLevel.Warning);
+            trace.logException("Error upload data for program" , e, TraceLevel.Warning,true);
             return Result.Failed();
         }
 

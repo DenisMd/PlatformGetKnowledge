@@ -7,13 +7,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
 public class ModuleNotFound extends PlatformException {
-    public ModuleNotFound(String message) {
-        super(message);
-        super.errorResource.setStatus(HttpStatus.NOT_FOUND);
+
+    @Override
+    public boolean isSaveToDataBase() {
+        return false;
     }
 
-    public ModuleNotFound(String message, TraceService traceService, TraceLevel traceLevel) {
-        super(message, traceService, traceLevel);
+    public ModuleNotFound(String message, TraceService traceService) {
+        super(message, traceService, TraceLevel.Error);
         super.errorResource.setStatus(HttpStatus.NOT_FOUND);
     }
 }

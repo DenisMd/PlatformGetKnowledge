@@ -59,7 +59,7 @@ public class SystemEventService extends AbstractService {
             return;
         }
         if (!registerInfo.getUserInfo().getUser().isEnabled()) {
-            trace.log("Cancel registration for user " + registerInfo.getUserInfo().getUser().getLogin() , TraceLevel.Event);
+            trace.log("Cancel registration for user " + registerInfo.getUserInfo().getUser().getLogin() , TraceLevel.Event,true);
             systemEventRepository.removeWithUser(registerInfo.getId());
         } else {
             systemEventRepository.remove(registerInfo.getId());
@@ -91,7 +91,7 @@ public class SystemEventService extends AbstractService {
     public void removeRestorePasswordInfo(HashMap<String , Object> data) throws PlatformException {
         SystemEvent restorePasswordInfo = systemEventRepository.getSingleEntityByFieldAndValue("uuid", data.get("uuid").toString());
         if (restorePasswordInfo == null) return;
-        trace.log("Remove old restore password" + restorePasswordInfo.getUuid() , TraceLevel.Event);
+        trace.log("Remove old restore password" + restorePasswordInfo.getUuid() , TraceLevel.Event,true);
         systemEventRepository.remove(restorePasswordInfo.getId());
     }
 

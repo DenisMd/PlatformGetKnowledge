@@ -112,7 +112,7 @@ public class CurrencyService extends AbstractService implements BootstrapService
         try {
             parseXmlFromCbr(false);
         } catch (Exception e) {
-            trace.logException("Error update currency : " + e.getMessage(),e,TraceLevel.Error);
+            trace.logException("Error update currency : " + e.getMessage(),e,TraceLevel.Error,true);
         }
     }
 }

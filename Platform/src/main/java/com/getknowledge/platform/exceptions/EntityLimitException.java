@@ -7,13 +7,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE)
 public class EntityLimitException  extends PlatformException {
-    public EntityLimitException(String message) {
-        super(message);
-        super.errorResource.setStatus(HttpStatus.NOT_FOUND);
+
+    @Override
+    public boolean isSaveToDataBase() {
+        return false;
     }
 
-    public EntityLimitException(String message, TraceService traceService, TraceLevel traceLevel) {
-        super(message, traceService, traceLevel);
+    public EntityLimitException(String message, TraceService traceService) {
+        super(message, traceService, TraceLevel.Warning);
         super.errorResource.setStatus(HttpStatus.NOT_FOUND);
     }
 }

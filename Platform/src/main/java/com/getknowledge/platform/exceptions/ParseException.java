@@ -5,18 +5,24 @@ import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import org.springframework.http.HttpStatus;
 
 public class ParseException extends PlatformException {
+
+    @Override
+    public boolean isSaveToDataBase() {
+        return false;
+    }
+
     public ParseException(String message) {
         super(message);
         super.errorResource.setStatus( HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
-    public ParseException(String message, TraceService traceService, TraceLevel traceLevel) {
-        super(message, traceService, traceLevel);
+    public ParseException(String message, TraceService traceService) {
+        super(message, traceService, TraceLevel.Warning);
         super.errorResource.setStatus(HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
-    public ParseException(String message, TraceService traceService, TraceLevel traceLevel, Exception e) {
-        super(message, traceService, traceLevel, e);
+    public ParseException(String message, TraceService traceService, Exception e) {
+        super(message, traceService, TraceLevel.Warning, e);
         super.errorResource.setStatus(HttpStatus.UNPROCESSABLE_ENTITY);
     }
 }

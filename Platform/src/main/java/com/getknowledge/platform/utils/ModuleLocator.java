@@ -5,6 +5,7 @@ import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.BootstrapService;
 import com.getknowledge.platform.exceptions.ModuleNotFound;
+import com.getknowledge.platform.modules.trace.TraceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -18,11 +19,14 @@ public class  ModuleLocator {
     @Autowired
     private ApplicationContext ac;
 
+    @Autowired
+    private TraceService trace;
+
     public BaseRepository findRepository(Class classEntity) throws ModuleNotFound {
         if (classEntity == null) return null;
         ModuleInfo moduleInfo = (ModuleInfo) classEntity.getAnnotation(ModuleInfo.class);
         if(moduleInfo == null) {
-            throw new ModuleNotFound("module info not found for entity : " + classEntity.getName());
+            throw new ModuleNotFound("module info not found for entity : " + classEntity.getName(),trace);
         }
         BaseRepository baseRepository = (BaseRepository) ac.getBean(moduleInfo.repositoryName());
         return baseRepository;
@@ -32,7 +36,7 @@ public class  ModuleLocator {
         if (classEntity == null) return null;
         ModuleInfo moduleInfo = (ModuleInfo) classEntity.getAnnotation(ModuleInfo.class);
         if(moduleInfo == null) {
-            throw new ModuleNotFound("module info not found for entity : " + classEntity.getName());
+            throw new ModuleNotFound("module info not found for entity : " + classEntity.getName(),trace);
         }
         AbstractService abstractRepository = (AbstractService) ac.getBean(moduleInfo.serviceName());
         return abstractRepository;

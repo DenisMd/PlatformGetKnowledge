@@ -213,7 +213,7 @@ public class TutorialService extends AbstractService {
             tutorialRepository.merge(tutorial);
 
         } catch (IOException e) {
-            trace.logException("Error read cover for program" , e, TraceLevel.Warning);
+            trace.logException("Error upload video tutorial  for tutorial with id : " + tutorial.getId() , e, TraceLevel.Error,true);
             return Result.Failed();
         }
 

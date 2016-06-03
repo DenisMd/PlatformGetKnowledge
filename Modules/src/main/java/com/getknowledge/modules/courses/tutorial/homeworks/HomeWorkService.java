@@ -158,7 +158,7 @@ public class HomeWorkService extends AbstractService {
             homeWorkRepository.merge(homeWork);
 
         } catch (IOException e) {
-            trace.logException("Error read cover for program", e, TraceLevel.Warning);
+            trace.logException("Error read cover for program", e, TraceLevel.Warning,true);
             return Result.Failed();
         }
 

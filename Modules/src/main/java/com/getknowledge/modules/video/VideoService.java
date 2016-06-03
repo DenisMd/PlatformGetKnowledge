@@ -15,6 +15,7 @@ import com.getknowledge.platform.exceptions.AccessDeniedException;
 import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
+import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.user.User;
 import org.apache.commons.io.IOUtils;
 import org.ini4j.Ini;
@@ -43,6 +44,9 @@ public class VideoService extends AuthorizedService<Video> implements BootstrapS
 
     @Autowired
     private VideoCommentRepository videoCommentRepository;
+
+    @Autowired
+    private TraceService traceService;
 
     @Override
     public void bootstrap(HashMap<String, Object> map) throws Exception {
@@ -102,7 +106,7 @@ public class VideoService extends AuthorizedService<Video> implements BootstrapS
         Video video = videoRepository.read(videoId);
         UserInfo currentUser = userInfoRepository.getCurrentUser(data);
         if (!isAccessForRead(currentUser == null ? null : currentUser.getUser(),video)){
-            throw new AccessDeniedException("Access denied for read comments");
+            throw new AccessDeniedException("Access denied for read comments",traceService);
         }
         if (video != null)
             return videoRepository.getComments(video, first, max);
@@ -118,7 +122,7 @@ public class VideoService extends AuthorizedService<Video> implements BootstrapS
         Video video = videoRepository.read(videoId);
         UserInfo currentUser = userInfoRepository.getCurrentUser(data);
         if (!isAccessForRead(currentUser == null ? null : currentUser.getUser(),video)){
-            throw new AccessDeniedException("Access denied for read comments count");
+            throw new AccessDeniedException("Access denied for read comments count",traceService);
         }
         if (video != null)
             return videoRepository.countComments(video);

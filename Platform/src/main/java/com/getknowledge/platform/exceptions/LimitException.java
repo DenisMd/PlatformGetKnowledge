@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(value = HttpStatus.LENGTH_REQUIRED)
 public class LimitException extends PlatformException {
 
-    public LimitException(String message, TraceService traceService, TraceLevel traceLevel) {
-        super(message, traceService, traceLevel);
-        super.errorResource.setStatus(HttpStatus.LENGTH_REQUIRED);
+    @Override
+    public boolean isSaveToDataBase() {
+        return false;
     }
 
-    public LimitException(String message) {
-        super(message);
+    public LimitException(String message, TraceService traceService) {
+        super(message, traceService, TraceLevel.Warning);
         super.errorResource.setStatus(HttpStatus.LENGTH_REQUIRED);
     }
 }

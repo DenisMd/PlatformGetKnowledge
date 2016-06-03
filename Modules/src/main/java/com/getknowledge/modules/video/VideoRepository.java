@@ -89,7 +89,7 @@ public class VideoRepository extends BaseRepository<Video> {
         File file = new File(pathToVideo + separator + userInfo.getId());
 
         if (!file.exists()) {
-            trace.log("Create dir for author videos : " + file.getAbsolutePath(), TraceLevel.Event);
+            trace.log("Create dir for author videos : " + file.getAbsolutePath(), TraceLevel.Event,true);
             file.mkdir();
         }
 
@@ -110,7 +110,7 @@ public class VideoRepository extends BaseRepository<Video> {
             try {
                 videoFile.createNewFile();
             } catch (IOException e) {
-                trace.logException("Error upload video file" , e,TraceLevel.Error);
+                trace.logException("Error upload video file" , e,TraceLevel.Error,true);
             }
         }
 
@@ -121,13 +121,13 @@ public class VideoRepository extends BaseRepository<Video> {
             fos = new FileOutputStream(videoFile);
             fos.write(multipartFile.getBytes());
         } catch (IOException e) {
-            trace.logException("Error upload video file" , e,TraceLevel.Error);
+            trace.logException("Error upload video file" , e,TraceLevel.Error,true);
         } finally {
             if (fos != null) {
                 try {
                     fos.close();
                 } catch (IOException e) {
-                    trace.logException("Error upload video file" , e,TraceLevel.Error);
+                    trace.logException("Error upload video file" , e,TraceLevel.Error,true);
                 }
             }
         }
@@ -135,7 +135,7 @@ public class VideoRepository extends BaseRepository<Video> {
         video.setLink(link);
         video.setUploadTime(Calendar.getInstance());
         merge(video);
-        trace.log("Video file successfully upload + " + videoFile.getAbsolutePath() , TraceLevel.Event);
+        trace.log("Video file successfully upload + " + videoFile.getAbsolutePath() , TraceLevel.Event,true);
     }
 
     public String getVideoPath(Long id){

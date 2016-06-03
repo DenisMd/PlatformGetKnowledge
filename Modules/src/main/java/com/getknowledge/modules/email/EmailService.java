@@ -45,7 +45,7 @@ public class EmailService {
             helper.setSubject(subject);
             helper.setText(getMessageFromTemplate(template.getName() , args),true);
         } catch (MessagingException | IOException e) {
-            trace.logException("Can not receive email for " + toAddress,e, TraceLevel.Warning);
+            trace.logException("Can not receive email for " + toAddress,e, TraceLevel.Warning,true);
         }
         mailSender.send(msg);
     }

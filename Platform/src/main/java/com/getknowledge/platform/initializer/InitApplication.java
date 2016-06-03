@@ -36,7 +36,7 @@ public class InitApplication {
 
     @Transactional
     public void init () {
-        traceService.log("Application start", TraceLevel.Event);
+        traceService.log("Application start", TraceLevel.Event,true);
 
         services = context.getBeansWithAnnotation(Service.class);
 

@@ -109,7 +109,7 @@ public class DataController {
                     if (abstractEntity.isContinueIfNotEnoughRights()) {
                         continue;
                     }
-                    throw new NotAuthorized(String.format("Access denied for read entity (%s) from list", classEntity.getName()), trace, TraceLevel.Warning);
+                    throw new NotAuthorized(String.format("Access denied for read entity (%s) from list", classEntity.getName()), trace);
                 }
             }
 
@@ -251,7 +251,7 @@ public class DataController {
             User user = getCurrentUser(principal);
 
             if (!isAccessRead(user, entity)) {
-                throw new NotAuthorized(String.format("Access denied for read entity (%s) by id : %d",className,id), trace , TraceLevel.Warning);
+                throw new NotAuthorized(String.format("Access denied for read entity (%s) by id : %d",className,id), trace);
             }
 
             boolean isEditable = isAccessEdit(user,entity);
@@ -264,7 +264,7 @@ public class DataController {
         } catch (PlatformException p) {
             throw p;
         } catch (Exception e) {
-            throw new SystemError("Unhandled exception : " + e.getMessage(),trace,TraceLevel.Error,e);
+            throw new SystemError("Unhandled exception : " + e.getMessage(),trace,e);
         }
     }
 
@@ -275,7 +275,7 @@ public class DataController {
             BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
 
             if (repository.count() > repository.getMaxCountsEntities()) {
-                throw new EntityLimitException(String.format("Violated limit entity %d for className : %s ",repository.getMaxCountsEntities(),className));
+                throw new EntityLimitException(String.format("Violated limit entity %d for className : %s ",repository.getMaxCountsEntities(),className),trace);
             }
 
             List<AbstractEntity> list = crudService.list(repository);
@@ -290,7 +290,7 @@ public class DataController {
         } catch (PlatformException p) {
             throw p;
         } catch (Exception e) {
-            throw new SystemError("Unhandled exception : " + e.getMessage(),trace,TraceLevel.Error,e);
+            throw new SystemError("Unhandled exception : " + e.getMessage(),trace,e);
         }
     }
 
@@ -302,7 +302,7 @@ public class DataController {
             BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
 
             if (max > repository.getMaxCountsEntities()) {
-                throw new EntityLimitException(String.format("Violated limit entity %d for className : %s ",repository.getMaxCountsEntities(),className));
+                throw new EntityLimitException(String.format("Violated limit entity %d for className : %s ",repository.getMaxCountsEntities(),className),trace);
             }
 
             List<AbstractEntity> list = crudService.list(repository,first,max);
@@ -315,7 +315,7 @@ public class DataController {
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
         } catch (Exception e) {
-            throw new SystemError("Unhandled exception : " + e.getMessage(),trace,TraceLevel.Error,e);
+            throw new SystemError("Unhandled exception : " + e.getMessage(),trace,e);
         }
     }
 
@@ -334,7 +334,7 @@ public class DataController {
                 }
 
                 if (!isAccessRead(getCurrentUser(principal), video)) {
-                    throw new NotAuthorized("Access denied for read video" , trace, TraceLevel.Warning);
+                    throw new NotAuthorized("Access denied for read video" , trace);
                 }
 
                 String videoUrl = videoLinkService.getVideoLink(id);
@@ -355,7 +355,7 @@ public class DataController {
             if (e.getCause() instanceof SocketException) {
                 //Ничего не даелаем так пользователь просто выключил видео
             } else {
-                throw new SystemError("Unhandled exception : " + e.getMessage(),trace,TraceLevel.Error,e);
+                throw new SystemError("Unhandled exception : " + e.getMessage(),trace,e);
             }
 
         }
@@ -374,7 +374,7 @@ public class DataController {
 
             User user = getCurrentUser(principal);
             if (!isAccessRead(user, entity)) {
-                throw new NotAuthorized("Access denied for read image" , trace, TraceLevel.Warning);
+                throw new NotAuthorized("Access denied for read image" , trace);
             }
             AbstractService abstractService = moduleLocator.findService(classEntity);
             if (abstractService instanceof ImageService) {
@@ -390,7 +390,7 @@ public class DataController {
         } catch (PlatformException p) {
             throw p;
         } catch (Exception e) {
-            throw new SystemError("Unhandled exception : " + e.getMessage(),trace,TraceLevel.Error,e);
+            throw new SystemError("Unhandled exception : " + e.getMessage(),trace,e);
         }
     }
 
@@ -408,7 +408,7 @@ public class DataController {
             User user = getCurrentUser(principal);
 
             if (!isAccessRead(user, entity)) {
-                throw new NotAuthorized("Access denied for read image" , trace, TraceLevel.Warning);
+                throw new NotAuthorized("Access denied for read image" , trace);
             }
             AbstractService abstractService = moduleLocator.findService(classEntity);
             if (abstractService instanceof FileService) {
@@ -424,7 +424,7 @@ public class DataController {
         } catch (PlatformException p) {
             throw p;
         } catch (Exception e) {
-            throw new SystemError("Unhandled exception : " + e.getMessage(),trace,TraceLevel.Error,e);
+            throw new SystemError("Unhandled exception : " + e.getMessage(),trace,e);
         }
     }
 
@@ -537,7 +537,7 @@ public class DataController {
                             filterQuery.in(fieldName,values,type);
                             filterCountQuery.in(fieldName,values,type);
                             break;
-                        default: new ParseException("Error filter type : " + name, trace , TraceLevel.Event);
+                        default: new ParseException("Error filter type : " + name, trace);
                     }
                 }
             }
@@ -578,7 +578,7 @@ public class DataController {
         } catch (PlatformException p) {
             throw p;
         } catch (Exception e) {
-            throw new SystemError("Unhandled exception : " + e.getMessage(),trace,TraceLevel.Error,e);
+            throw new SystemError("Unhandled exception : " + e.getMessage(),trace,e);
         }
     }
     
@@ -590,14 +590,14 @@ public class DataController {
             AbstractEntity abstractEntity = (AbstractEntity) objectMapper.readValue(jsonObject, classEntity);
             User user = getCurrentUser(principal);
             if (!isAccessCreate(user, abstractEntity) ) {
-                throw new NotAuthorized(String.format("Access denied for create entity (%s)",className) , trace, TraceLevel.Warning);
+                throw new NotAuthorized(String.format("Access denied for create entity (%s)",className) , trace);
             }
             crudService.create(moduleLocator.findRepository(classEntity),abstractEntity);
             return Result.Complete();
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
         } catch (IOException e) {
-            throw new ParseException("Can't parse entities for create " + className , trace, TraceLevel.Warning, e);
+            throw new ParseException("Can't parse entities for create " + className , trace, e);
         }
     }
 
@@ -608,12 +608,12 @@ public class DataController {
             AbstractEntity abstractEntity = (AbstractEntity) objectMapper.readValue(jsonObject, classEntity);
             User user = getCurrentUser(principal);
             if (!isAccessEdit(user, abstractEntity) ) {
-                throw new NotAuthorized(String.format("Access denied for update entity (%s)",className) , trace, TraceLevel.Warning);
+                throw new NotAuthorized(String.format("Access denied for update entity (%s)",className) , trace);
             }
             crudService.update(moduleLocator.findRepository(classEntity),abstractEntity);
             return Result.Complete();
         } catch (IOException e) {
-            throw new ParseException("Can't parse entities for update " + className,trace,TraceLevel.Warning,e);
+            throw new ParseException("Can't parse entities for update " + className,trace,e);
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
         }
@@ -626,7 +626,7 @@ public class DataController {
 
             AbstractEntity abstractEntity = crudService.read(moduleLocator.findRepository(classEntity),id);
             if (!isAccessRemove(getCurrentUser(principal), abstractEntity) ) {
-                throw new NotAuthorized(String.format("Access denied for remove entity (%s)",className) , trace, TraceLevel.Warning);
+                throw new NotAuthorized(String.format("Access denied for remove entity (%s)",className) , trace);
             }
             crudService.remove(moduleLocator.findRepository(classEntity),id);
             return Result.Complete();
@@ -677,22 +677,20 @@ public class DataController {
                 }
             }
 
-            trace.log("Action : " + actionName + " not found" , TraceLevel.Warning);
+            trace.log("Action : " + actionName + " not found" , TraceLevel.Warning,false);
             return null;
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
         } catch (IOException e) {
-            throw new ParseException("Can't parse result for action " + className,trace,TraceLevel.Warning,e);
+            throw new ParseException("Can't parse result for action " + className,trace,e);
         } catch (InvocationTargetException e) {
-            trace.logException("InvocationTargetException", e, TraceLevel.Warning);
-            throw new InvokeException("InvocationTargetException");
+            throw new InvokeException("InvocationTargetException", trace, e);
         } catch (IllegalAccessException e) {
-            trace.logException("IllegalAccessException", e, TraceLevel.Warning);
-            throw new InvokeException("IllegalAccessException");
+            throw new InvokeException("IllegalAccessException", trace, e);
         } catch (PlatformException pl){
           throw pl;
         } catch (Exception e) {
-            throw new SystemError("Unhandled exception : " + e.getMessage(),trace,TraceLevel.Error,e);
+            throw new SystemError("Unhandled exception : " + e.getMessage(),trace,e);
         }
     }
 
@@ -703,7 +701,7 @@ public class DataController {
         try {
 
             if (files.size() > 20) {
-                throw new LimitException("Files limit for one request is 20");
+                throw new LimitException("Files limit for one request is 20",trace);
             }
 
             Class classEntity = Class.forName(className);
@@ -723,21 +721,21 @@ public class DataController {
                 }
             }
 
-            trace.log("Action with file : " + actionName + " not found" , TraceLevel.Warning);
+            trace.log("Action with file : " + actionName + " not found" , TraceLevel.Warning,false);
             return null;
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
         } catch (IOException e) {
-            trace.logException("Parse result exception ", e, TraceLevel.Warning);
+            trace.logException("Parse result exception ", e, TraceLevel.Warning,false);
             throw new ParseException("Parse result exception");
         } catch (InvocationTargetException e) {
-            throw new InvokeException("InvocationTargetException", trace , TraceLevel.Warning , e);
+            throw new InvokeException("InvocationTargetException", trace, e);
         } catch (IllegalAccessException e) {
-            throw new InvokeException("IllegalAccessException", trace , TraceLevel.Warning , e);
+            throw new InvokeException("IllegalAccessException", trace, e);
         } catch (PlatformException pl) {
             throw pl;
         } catch (Exception e) {
-            throw new SystemError("Unhandled exception : " + e.getMessage(),trace,TraceLevel.Error,e);
+            throw new SystemError("Unhandled exception : " + e.getMessage(),trace,e);
         }
     }
 

@@ -73,7 +73,7 @@ public class BootstrapInfoRepository extends BaseRepository<BootstrapInfo> {
                 bootstrapInfo.setBootstrapState(BootstrapState.Failed);
                 bootstrapInfo.setErrorMessage(e.getMessage());
                 bootstrapInfo.setStackTrace(ExceptionUtils.getStackTrace(e));
-                trace.logException("Bootstrap service : " + bootstrapInfo.getName(),e,TraceLevel.Error);
+                trace.logException("Bootstrap service : " + bootstrapInfo.getName(),e,TraceLevel.Error,false);
                 merge(bootstrapInfo);
             }
         }

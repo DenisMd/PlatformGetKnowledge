@@ -58,7 +58,7 @@ public class TutorialQuestionsService extends AbstractService {
             tutorialQuestion.getImages().add(attachmentImage);
             tutorialQuestionRepository.merge(tutorialQuestion);
         } catch (IOException e) {
-            traceService.logException("Error upload image for post : " + e.getMessage(),e,TraceLevel.Error);
+            traceService.logException("Error upload image for post : " + e.getMessage(),e,TraceLevel.Error,true);
             return Result.Failed();
         }
         return Result.Complete();

@@ -65,7 +65,7 @@ public class GroupProgramsService extends AbstractService implements ImageServic
             programs.setCover(files.get(0).getBytes());
             repository.merge(programs);
         } catch (IOException e) {
-            trace.logException("Error set cover for group of programs" , e , TraceLevel.Error);
+            trace.logException("Error set cover for group of programs" , e , TraceLevel.Error,true);
             return Result.Failed();
         }
 

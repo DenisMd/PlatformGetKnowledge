@@ -19,29 +19,33 @@ public class TraceService extends AbstractService {
     private TraceRepository traceRepository;
 
     @Transactional
-    public void log(String message, TraceLevel traceLevel) {
-        logException(message,null,traceLevel);
+    public void log(String message, TraceLevel traceLevel, boolean isSaveToDB) {
+        logException(message,null,traceLevel,isSaveToDB);
     }
 
     @Transactional
-    public void logException(String message, Exception e, TraceLevel traceLevel) {
+    public void logException(String message, Exception e, TraceLevel traceLevel , boolean isSaveToDB) {
         if (message == null) message = "";
         if (traceLevel == null) traceLevel = TraceLevel.Debug;
 
         switch (traceLevel) {
             case Debug:
+                if (!logger.isDebugEnabled()) break;
                 if (e == null) logger.debug(message);
                 else logger.debug(message,e);
                 break;
             case Event:
+                if (!logger.isInfoEnabled()) break;
                 if (e == null) logger.info(message);
                 else logger.info(message,e);
                 break;
             case Warning:
+                if (!logger.isWarnEnabled()) break;
                 if (e == null) logger.warn(message);
                 else logger.warn(message,e);
                 break;
             case Error:
+                if (!logger.isErrorEnabled()) break;
                 if (e == null) logger.error(message);
                 else logger.error(message,e);
                 break;
@@ -51,11 +55,13 @@ public class TraceService extends AbstractService {
                 break;
         }
 
-        Trace trace = new Trace();
-        trace.setMessage(message);
-        trace.setTraceLevel(traceLevel);
-        if (e != null)
-            trace.setStackTrace(ExceptionUtils.getStackTrace(e));
-        traceRepository.create(trace);
+        if (isSaveToDB) {
+            Trace trace = new Trace();
+            trace.setMessage(message);
+            trace.setTraceLevel(traceLevel);
+            if (e != null)
+                trace.setStackTrace(ExceptionUtils.getStackTrace(e));
+            traceRepository.create(trace);
+        }
     }
 }

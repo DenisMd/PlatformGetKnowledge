@@ -128,7 +128,7 @@ public class CourseService extends AbstractService implements ImageService {
 
         GroupCourses groupCourses =  groupCoursesRepository.read(groupCourseId);
         if (groupCourses == null) {
-            trace.log("Group courses not found" , TraceLevel.Warning);
+            trace.log("Group courses not found" , TraceLevel.Warning,false);
             return Result.NotFound();
         }
 
@@ -193,7 +193,7 @@ public class CourseService extends AbstractService implements ImageService {
             course.setCover(files.get(0).getBytes());
             courseRepository.merge(course);
         } catch (IOException e) {
-            trace.logException("Error read cover for program" , e, TraceLevel.Warning);
+            trace.logException("Error upload cover for course : " + course.getId() , e, TraceLevel.Warning,true);
             return Result.Failed();
         }
 
@@ -221,7 +221,7 @@ public class CourseService extends AbstractService implements ImageService {
             }
 
         } catch (IOException e) {
-            trace.logException("Error read cover for program" , e, TraceLevel.Warning);
+            trace.logException("Error uplaod vide intro for cours : " + course.getId() , e, TraceLevel.Error,true);
             return Result.Failed();
         }
 

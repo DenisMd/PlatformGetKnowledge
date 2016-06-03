@@ -54,7 +54,7 @@ public class TaskService extends AbstractService {
                         for (Task task : tasks) {
                             executorService.execute(() -> {
                                 try {
-                                    traceService.log("Start task " + task.toString() , TraceLevel.Event);
+                                    traceService.log("Start task " + task.toString() , TraceLevel.Event,false);
                                     AbstractService abstractService = moduleLocator.findService(task.getServiceName());
                                     for (Method method : abstractService.getClass().getMethods()) {
                                         com.getknowledge.platform.annotations.Task taskAnnotation = AnnotationUtils.findAnnotation(method, com.getknowledge.platform.annotations.Task.class);
@@ -70,19 +70,19 @@ public class TaskService extends AbstractService {
                                             method.invoke(abstractService, data);
                                             task.setTaskStatus(TaskStatus.Complete);
                                             crudService.merge(task,taskRepository);
-                                            traceService.log("Task " + task.toString() + " complete", TraceLevel.Event);
+                                            traceService.log("Task " + task.toString() + " complete", TraceLevel.Event,false);
                                             return;
                                         }
                                     }
                                 } catch (Exception e) {
-                                    traceService.logException("Exception for task : " + task.toString(), e, TraceLevel.Warning);
+                                    traceService.logException("Exception for task : " + task.toString(), e, TraceLevel.Error,false);
                                     task.setTaskStatus(TaskStatus.Failed);
                                     task.setStackTrace(ExceptionUtils.getStackTrace(e));
                                     crudService.merge(task,taskRepository);
                                     return;
                                 }
 
-                                traceService.log("Task " + task.toString() + " not found", TraceLevel.Error);
+                                traceService.log("Task " + task.toString() + " not found", TraceLevel.Error,true);
                             });
                         }
                         executorService.awaitTermination(2, TimeUnit.MINUTES);
@@ -106,7 +106,7 @@ public class TaskService extends AbstractService {
                 } catch (InterruptedException e) {
                     continue;
                 } catch (Exception e) {
-                    traceService.logException("Exception for task service", e, TraceLevel.Warning);
+                    traceService.logException("Exception for task service", e, TraceLevel.Error,true);
                 }
             }
         });

@@ -57,7 +57,7 @@ public class HPMessageService extends AbstractService implements FileService {
             hpRepository.create(hpMessage);
 
         } catch (Exception e) {
-            trace.logException("Exception for sendHpMessage" , e, TraceLevel.Warning);
+            trace.logException("Exception for sendHpMessage" , e, TraceLevel.Warning,true);
             return Result.Failed();
         }
         return Result.Complete();
@@ -78,7 +78,7 @@ public class HPMessageService extends AbstractService implements FileService {
                 entityManager.persist(fileAttachment);
                 entityManager.flush();
             } catch (IOException e) {
-                trace.logException("Error get attach file",e,TraceLevel.Warning);
+                trace.logException("Error get attach file",e,TraceLevel.Warning,true);
                 return Result.Failed();
             }
         }

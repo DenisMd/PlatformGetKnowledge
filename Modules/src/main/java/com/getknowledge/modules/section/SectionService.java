@@ -94,7 +94,7 @@ public class SectionService extends AbstractService implements BootstrapService,
             section.setCover(files.get(0).getBytes());
             sectionRepository.merge(section);
         } catch (IOException e) {
-            trace.logException("Error set cover for section",e,TraceLevel.Error);
+            trace.logException("Error set cover for section",e,TraceLevel.Error,true);
             return Result.Failed();
         }
 

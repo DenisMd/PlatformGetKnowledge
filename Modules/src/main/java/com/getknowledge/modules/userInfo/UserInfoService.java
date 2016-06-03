@@ -133,7 +133,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
             try (InputStream is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/image/adminAvatar.png");) {
                 profileImage = org.apache.commons.io.IOUtils.toByteArray(is);
             } catch (IOException e) {
-                trace.logException("Error load file: " + e.getMessage(), e, TraceLevel.Warning);
+                trace.logException("Error load file: " + e.getMessage(), e, TraceLevel.Error,true);
             }
 
             userInfoRepository.createUserInfo(user,firstName,lastName,languageRepository.getLanguage(Languages.Ru),true,profileImage);
@@ -160,20 +160,20 @@ public class UserInfoService extends AbstractService implements BootstrapService
         String login = (String) data.get("email");
         String password = (String) data.get("password");
         if (password.length() < 6) {
-            trace.log("Password less than 6 character for user " + login, TraceLevel.Event);
+            trace.log("Password less than 6 character for user " + login, TraceLevel.Event,false);
             return RegisterResult.PasswordLessThan6;
         }
 
         Language language = languageRepository.getSingleEntityByFieldAndValue("name" , data.get("language"));
         if (language==null) {
-            trace.log("Language not supported " + data.get("language"), TraceLevel.Event);
+            trace.log("Language not supported " + data.get("language"), TraceLevel.Event,false);
             return RegisterResult.LanguageNotSupported;
         }
         String firstName = (String) data.get("firstName");
         String lastName = (String) data.get("lastName");
         Boolean sex = (Boolean) data.get("sex");
         if (userRepository.getSingleEntityByFieldAndValue("login", login) != null) {
-            trace.log("User with email already register " + login, TraceLevel.Event);
+            trace.log("User with email already register " + login, TraceLevel.Event,false);
             return RegisterResult.UserAlreadyCreated;
         }
 
@@ -185,7 +185,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
             emailService.sendTemplate(login,settings.getEmail(), "Регистрация на getKnowledge();",
                     EmailTemplates.Register,new String[] {settingsRepository.getSettings().getDomain(),url});
         } catch (Exception e) {
-            trace.logException("Error send register email to " + login , e , TraceLevel.Error);
+            trace.logException("Error send register email to " + login , e , TraceLevel.Error,true);
             return RegisterResult.EmailNotSend;
         }
 
@@ -202,7 +202,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
             }
             profileImage = org.apache.commons.io.IOUtils.toByteArray(is);
         } catch (IOException e) {
-            trace.logException("Error load file: " + e.getMessage(), e, TraceLevel.Warning);
+            trace.logException("Error load file: " + e.getMessage(), e, TraceLevel.Warning,true);
         } finally {
             if (is != null) {
                 is.close();
@@ -216,7 +216,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
         RegisterResult registerResult = RegisterResult.Complete;
         registerResult.setUserInfoId(userInfo.getId());
-        trace.log("Registration complete for user " + login, TraceLevel.Event);
+        trace.log("Registration complete for user " + login, TraceLevel.Event,true);
 
         try {
             String jsonData = objectMapper.writeValueAsString(systemEvent);
@@ -225,7 +225,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
             calendar.add(Calendar.DATE , 1);
             taskRepository.createTask("SystemEventService","cancelRegistration",jsonData,calendar);
         } catch (JsonProcessingException e) {
-            trace.logException("Can't parse register info to json" , e , TraceLevel.Warning);
+            trace.logException("Can't parse register info to json" , e , TraceLevel.Warning,true);
         }
 
         return registerResult;
@@ -241,7 +241,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
         try {
             userInfo.setProfileImage(files.get(0).getBytes());
         } catch (IOException e) {
-            trace.logException("Error get bytes for image", e, TraceLevel.Error);
+            trace.logException("Error get bytes for image", e, TraceLevel.Error,true);
         }
 
         userInfoRepository.merge(userInfo);
@@ -421,7 +421,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
             emailService.sendTemplate(userInfo.getUser().getLogin(),settings.getEmail(), "Востановление пароля на getKnowledge();",
                     EmailTemplates.ForgotPassword,new String[] {settingsRepository.getSettings().getDomain(),url});
         } catch (Exception e) {
-            trace.logException("Error send register email to " + userInfo.getUser().getLogin() , e , TraceLevel.Error);
+            trace.logException("Error send register email to " + userInfo.getUser().getLogin() , e , TraceLevel.Error,true);
             return Result.EmailNotSend();
         }
 
@@ -434,7 +434,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
             String jsonData = objectMapper.writeValueAsString(systemEvent);
             taskRepository.createTask("SystemEventService","removeRestorePasswordInfo",jsonData,calendar);
         } catch (JsonProcessingException e) {
-            trace.logException("Can't parse restore password info to json" , e , TraceLevel.Warning);
+            trace.logException("Can't parse restore password info to json" , e , TraceLevel.Warning,true);
         }
 
         return Result.Complete();

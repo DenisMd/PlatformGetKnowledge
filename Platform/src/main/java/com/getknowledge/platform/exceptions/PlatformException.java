@@ -3,7 +3,7 @@ package com.getknowledge.platform.exceptions;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 
-public class PlatformException extends Exception {
+public abstract class PlatformException extends Exception {
 
     ErrorResource errorResource = new ErrorResource();
 
@@ -16,15 +16,18 @@ public class PlatformException extends Exception {
         errorResource.setMessage(message);
     }
 
+    public abstract boolean isSaveToDataBase();
+
+
     public PlatformException(String message , TraceService traceService , TraceLevel traceLevel) {
         super(message);
-        traceService.logException(message, this, traceLevel);
+        traceService.logException(message, this, traceLevel,isSaveToDataBase());
         errorResource.setMessage(message);
     }
 
     public PlatformException(String message , TraceService traceService , TraceLevel traceLevel , Exception e) {
         super(message);
-        traceService.logException(message ,e, traceLevel);
+        traceService.logException(message ,e, traceLevel,isSaveToDataBase());
         errorResource.setMessage(message);
     }
 }

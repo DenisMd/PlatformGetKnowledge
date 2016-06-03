@@ -7,13 +7,19 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.FORBIDDEN)
 public class NotAuthorized extends PlatformException {
+
+    @Override
+    public boolean isSaveToDataBase() {
+        return false;
+    }
+
     public NotAuthorized(String message) {
         super(message);
         super.errorResource.setStatus( HttpStatus.FORBIDDEN);
     }
 
-    public NotAuthorized(String message, TraceService traceService, TraceLevel traceLevel) {
-        super(message, traceService, traceLevel);
+    public NotAuthorized(String message, TraceService traceService) {
+        super(message, traceService, TraceLevel.Warning);
         super.errorResource.setStatus(HttpStatus.FORBIDDEN);
     }
 }

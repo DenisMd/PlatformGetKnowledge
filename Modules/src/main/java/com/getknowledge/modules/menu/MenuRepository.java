@@ -124,7 +124,7 @@ public class MenuRepository extends ProtectedRepository<Menu> {
 
             }
         } catch (IOException e) {
-            trace.logException("Error read json from file" , e, TraceLevel.Error);
+            trace.logException("Error read json from file" , e, TraceLevel.Error,true);
         }
     }
 }

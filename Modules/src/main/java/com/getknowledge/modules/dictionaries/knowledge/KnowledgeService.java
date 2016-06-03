@@ -47,7 +47,7 @@ public class KnowledgeService extends AbstractService implements ImageService {
         try {
             knowledge.setImage(files.get(0).getBytes());
         } catch (IOException e) {
-            trace.logException("Error upload image for knowledge" , e, TraceLevel.Error);
+            trace.logException("Error upload image for knowledge" , e, TraceLevel.Error,true);
             return Result.Failed();
         }
 

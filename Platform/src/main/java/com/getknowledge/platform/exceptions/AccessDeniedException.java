@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(value = HttpStatus.FORBIDDEN)
 public class AccessDeniedException extends PlatformException {
 
-    public AccessDeniedException(String message) {
-        super(message);
-        super.errorResource.setStatus( HttpStatus.FORBIDDEN);
+    @Override
+    public boolean isSaveToDataBase() {
+        return false;
     }
 
-    public AccessDeniedException(String message, TraceService traceService, TraceLevel traceLevel) {
-        super(message, traceService, traceLevel);
+    public AccessDeniedException(String message, TraceService traceService) {
+        super(message, traceService, TraceLevel.Warning);
         super.errorResource.setStatus(HttpStatus.FORBIDDEN);
     }
 }

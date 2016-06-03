@@ -81,7 +81,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
 
         GroupBooks groupBooks =  groupBooksRepository.read(groupBookId);
         if (groupBooks == null) {
-            trace.log("Group book id is incorrect" , TraceLevel.Warning);
+            trace.log("Group book id is incorrect" , TraceLevel.Warning,true);
             return Result.Failed();
         }
 
@@ -158,7 +158,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
         try {
             book.setCover(files.get(0).getBytes());
         } catch (IOException e) {
-            trace.logException("Error read cover for book" , e, TraceLevel.Warning);
+            trace.logException("Error read cover for book" , e, TraceLevel.Warning,true);
             return Result.Failed();
         }
 
@@ -181,7 +181,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
             book.setBookData(files.get(0).getBytes());
             book.setFileName(files.get(0).getOriginalFilename());
         } catch (IOException e) {
-            trace.logException("Error read data for book" , e, TraceLevel.Warning);
+            trace.logException("Error read data for book" , e, TraceLevel.Warning,true);
             return Result.Failed();
         }
 
