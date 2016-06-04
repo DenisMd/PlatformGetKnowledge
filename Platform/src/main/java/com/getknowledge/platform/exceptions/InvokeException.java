@@ -8,7 +8,7 @@ public class InvokeException extends PlatformException {
 
     @Override
     public boolean isSaveToDataBase() {
-        return false;
+        return true;
     }
 
     public InvokeException(String message) {
