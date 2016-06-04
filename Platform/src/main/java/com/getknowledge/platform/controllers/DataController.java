@@ -261,7 +261,7 @@ public class DataController {
 
             String resultJson = prepareJson(entity,isEditable,isCreatable,classEntity).toString();
 
-            trace.log(String.format("<------ Send \"READ\" request with parameters {id : %d , className : %s} from user \"%s\" result : %s",id,className,principal==null?"guest":principal.getName(),resultJson),TraceLevel.Debug,false);
+            trace.log(String.format("<------ Send \"READ\" response with parameters {id : %d , className : %s} from user \"%s\" result : %s",id,className,principal==null?"guest":principal.getName(),resultJson),TraceLevel.Debug,false);
 
             return resultJson;
         } catch (ClassNotFoundException e) {
@@ -287,13 +287,13 @@ public class DataController {
             List<AbstractEntity> list = crudService.list(repository);
 
             if (list == null) {
-                trace.log(String.format("<------ Send \"LIST\" request with parameters {className : %s} from user \"%s\" result : %s",className,principal==null?"guest":principal.getName(),""),TraceLevel.Debug,false);
+                trace.log(String.format("<------ Send \"LIST\" response with parameters {className : %s} from user \"%s\" result : %s",className,principal==null?"guest":principal.getName(),""),TraceLevel.Debug,false);
                 return null;
             }
 
             String resultJson = listToJsonString(list,getCurrentUser(principal),repository,classEntity,true).toString();
 
-            trace.log(String.format("<------ Send \"LIST\" request with parameters {className : %s} from user \"%s\" result : %s",className,principal==null?"guest":principal.getName(),resultJson),TraceLevel.Debug,false);
+            trace.log(String.format("<------ Send \"LIST\" response with parameters {className : %s} from user \"%s\" result : %s",className,principal==null?"guest":principal.getName(),resultJson),TraceLevel.Debug,false);
 
             return resultJson;
         } catch (ClassNotFoundException e) {
@@ -309,6 +309,7 @@ public class DataController {
     public @ResponseBody String listPartial(@RequestParam("className") String className,
                                             @RequestParam("first") Integer first, @RequestParam("max") Integer max, Principal principal) throws PlatformException {
         try {
+            trace.log(String.format("------> Received \"LIST Partial\" request with parameters {className : %s , first : %d , max : %d} from user \"%s\"",className,first,max,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
             Class classEntity = Class.forName(className);
             BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
 
@@ -322,7 +323,11 @@ public class DataController {
                 return null;
             }
 
-            return listToJsonString(list,getCurrentUser(principal),repository,classEntity,true).toString();
+            String result = listToJsonString(list,getCurrentUser(principal),repository,classEntity,true).toString();
+
+            trace.log(String.format("<------ Send \"LIST Partial\" response with parameters {className : %s , first : %d , max : %d} from user \"%s\" result : %s",className,first,max,principal==null?"guest":principal.getName(),result),TraceLevel.Debug,false);
+
+            return result;
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
         } catch (Exception e) {
@@ -334,6 +339,7 @@ public class DataController {
     public void readVideoFile(@RequestParam(value = "id" ,required = true) Long id,
                               @RequestParam(value ="className" , required = true) String className, Principal principal, HttpServletRequest request, HttpServletResponse response) throws PlatformException {
         try {
+            trace.log(String.format("------> Received \"Read Video\" request with parameters {className : %s , id : %d} from user \"%s\"",className,id,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
             Class classEntity = Class.forName(className);
             AbstractService abstractService = moduleLocator.findService(classEntity);
             if (abstractService instanceof VideoLinkService) {
@@ -376,6 +382,8 @@ public class DataController {
     public ResponseEntity<byte[]> getImage(@RequestParam(value = "id" ,required = true) Long id,
                               @RequestParam(value ="className" , required = true) String className, Principal principal, HttpServletRequest request, HttpServletResponse response) throws PlatformException {
         try {
+            trace.log(String.format("------> Received \"Read Image\" request with parameters {className : %s , id : %d} from user \"%s\"",className,id,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
+
             Class classEntity = Class.forName(className);
             BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
             AbstractEntity entity = crudService.read(repository,id);
@@ -409,6 +417,8 @@ public class DataController {
     public ResponseEntity<byte[]> readFile(@RequestParam(value = "id" ,required = true) Long id,
                                            @RequestParam(value ="className" , required = true) String className,@RequestParam(value = "key") String key, Principal principal, HttpServletRequest request, HttpServletResponse response) throws PlatformException {
         try {
+            trace.log(String.format("------> Received \"Read File\" request with parameters {className : %s , id : %d} from user \"%s\"",className,id,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
+
             Class classEntity = Class.forName(className);
             BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
             AbstractEntity entity = crudService.read(repository,id);
@@ -442,6 +452,7 @@ public class DataController {
     @RequestMapping(value = "/count", method = RequestMethod.GET)
     public @ResponseBody String count(@RequestParam(value = "className" , required = true) String className) throws PlatformException {
         try {
+            trace.log(String.format("------> Received \"Count\" request with parameters {className : %s }",className),TraceLevel.Debug,false);
             Class classEntity = Class.forName(className);
             return moduleLocator.findRepository(classEntity).count().toString();
         } catch (ClassNotFoundException e) {
@@ -472,6 +483,7 @@ public class DataController {
     @RequestMapping(value = "/filter" , method = RequestMethod.POST)
     public @ResponseBody String filterMethod(@RequestParam("properties") String properties, @RequestParam("className") String className, Principal principal) throws PlatformException {
         try {
+            trace.log(String.format("------> Received \"Filter\" request with parameters {className : %s , properties : %s} from user \"%s\"",className,properties,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
             Class classEntity = Class.forName(className);
             BaseRepository<AbstractEntity> repository = moduleLocator.findRepository(classEntity);
 
@@ -583,7 +595,9 @@ public class DataController {
             AbstractEntity abstractEntity = (AbstractEntity) cos.newInstance();
             objectNode.put("creatable" , isAccessCreate(user, abstractEntity));
 
-            return objectNode.toString();
+            String jsonResult = objectNode.toString();
+            trace.log(String.format("<------ Send \"Filter\" response with parameters {className : %s , properties : %s} result : %s from user \"%s\"",className,properties,jsonResult,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
+            return jsonResult;
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
         } catch (PlatformException p) {
@@ -597,6 +611,7 @@ public class DataController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public @ResponseBody Result create(@RequestParam("object") String jsonObject, @RequestParam("className") String className, Principal principal) throws PlatformException {
         try {
+            trace.log(String.format("------> Received \"Create\" request with parameters {className : %s , object : %s} from user \"%s\"",className,jsonObject,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
             Class classEntity = Class.forName(className);
             AbstractEntity abstractEntity = (AbstractEntity) objectMapper.readValue(jsonObject, classEntity);
             User user = getCurrentUser(principal);
@@ -615,6 +630,7 @@ public class DataController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public @ResponseBody Result update(@RequestParam("object") String jsonObject, @RequestParam("className") String className, Principal principal) throws PlatformException {
         try {
+            trace.log(String.format("------> Received \"Update\" request with parameters {className : %s , object : %s} from user \"%s\"",className,jsonObject,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
             Class classEntity = Class.forName(className);
             AbstractEntity abstractEntity = (AbstractEntity) objectMapper.readValue(jsonObject, classEntity);
             User user = getCurrentUser(principal);
@@ -633,6 +649,7 @@ public class DataController {
     @RequestMapping(value = "/remove", method = RequestMethod.GET)
     public @ResponseBody Result remove(@RequestParam("id") Long id, @RequestParam("className") String className, Principal principal) throws PlatformException {
         try {
+            trace.log(String.format("------> Received \"Remove\" request with parameters {className : %s , id : %d} from user \"%s\"",className,id,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
             Class classEntity = Class.forName(className);
 
             AbstractEntity abstractEntity = crudService.read(moduleLocator.findRepository(classEntity),id);
@@ -651,6 +668,8 @@ public class DataController {
     String action(@RequestParam("className") String className, @RequestParam("actionName") String actionName, @RequestParam("data") String jsonData
             ,Principal principal) throws PlatformException {
         try {
+            trace.log(String.format("------> Received \"Action\" request with parameters {className : %s , actionName : %s , data : %s} from user \"%s\"",className,actionName,jsonData,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
+            String  jsonResult = null;
             Class classEntity = Class.forName(className);
             AbstractService abstractService = moduleLocator.findService(classEntity);
 
@@ -676,19 +695,24 @@ public class DataController {
                             boolean isEditable = isAccessEdit(currentUser,entity);
                             boolean isCreatable = isAccessCreate(currentUser,entity);
                             entity = crudService.prepare(entity,baseRepository,getCurrentUser(principal));
-                            return prepareJson(entity,isEditable,isCreatable,classEntity).toString();
+                            jsonResult = prepareJson(entity,isEditable,isCreatable,classEntity).toString();
+                            trace.log(String.format("<------ Send \"Action\" response with parameters {className : %s , actionName : %s , data : %s} result : %s from user \"%s\"",className,actionName,jsonData,jsonResult,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
+                            return jsonResult;
                         } else if(result instanceof List) {
-                            return listToJsonString((List<AbstractEntity>) result,currentUser,baseRepository,classEntity,false).toString();
+                            jsonResult = listToJsonString((List<AbstractEntity>) result,currentUser,baseRepository,classEntity,false).toString();
+                            trace.log(String.format("<------ Send \"Action\" response with parameters {className : %s , actionName : %s , data : %s} result : %s from user \"%s\"",className,actionName,jsonData,jsonResult,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
+                            return jsonResult;
                         }
                     }
                     //TODO: обработать result
                     if (result instanceof Result){
                     }
-                    return objectMapper.writeValueAsString(result);
+                    jsonResult = objectMapper.writeValueAsString(result);
+                    trace.log(String.format("<------ Send \"Action\" response with parameters {className : %s , actionName : %s , data : %s} result : %s from user \"%s\"",className,actionName,jsonData,jsonResult,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
+                    return jsonResult;
                 }
             }
 
-            trace.log("Action : " + actionName + " not found" , TraceLevel.Warning,false);
             return null;
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
@@ -710,7 +734,7 @@ public class DataController {
                                                @RequestParam("data") String jsonData, @RequestParam("file") List<MultipartFile> files,
                                                Principal principal) throws PlatformException {
         try {
-
+            trace.log(String.format("------> Received \"Action with files\" request with parameters {className : %s , actionName : %s , data : %s} from user \"%s\"",className,actionName,jsonData,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
             if (files.size() > 20) {
                 throw new LimitException("Files limit for one request is 20",trace);
             }
@@ -728,11 +752,12 @@ public class DataController {
 
                 if (data != null) {
                     Object result = method.invoke(abstractService, data, files);
-                    return objectMapper.writeValueAsString(result);
+                    String jsonResult = objectMapper.writeValueAsString(result);
+                    trace.log(String.format("<------ Send \"Action\" response with parameters {className : %s , actionName : %s , data : %s} result : %s from user \"%s\"",className,actionName,jsonData,jsonResult,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
+                    return jsonResult;
                 }
             }
 
-            trace.log("Action with file : " + actionName + " not found" , TraceLevel.Warning,false);
             return null;
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
