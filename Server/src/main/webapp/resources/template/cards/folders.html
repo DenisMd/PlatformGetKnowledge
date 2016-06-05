@@ -1,13 +1,17 @@
 <div ng-controller="foldersController">
-    <md-content class="content-body folders-toolbar" layout-align-sm="center">
-        <md-input-container class="folders-toolbar-input-container">
-            <span class="folders-toolbar-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
-            <label class="folders-toolbar-label">
-                {{translate("search")}}
-            </label>
-            <input class="folders-toolbar-item" ng-model="searchText">
-        </md-input-container>
-        <button class="btn btn-default filter-panel-item folder-toolbar-btn" ng-click="searchFilter(searchText)">{{translate("do_filter")}}</button>
+    <md-content class="content-body folders-toolbar">
+        <div layout="row" layout-align="center center">
+            <md-input-container flex class="folders-toolbar-input-container">
+                <span class="folders-toolbar-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
+                <label class="folders-toolbar-label">
+                    {{translate("search")}}
+                </label>
+                <input class="folders-toolbar-item" ng-model="searchText">
+            </md-input-container>
+            <button flex="none" class="btn btn-default filter-panel-item folder-toolbar-btn" ng-click="searchFilter(searchText)">
+                {{translate("do_filter")}}
+            </button>
+        </div>
     </md-content>
     <md-content class="content-body folders-body">
         <div layout-gt-sm="row" layout-align="center center">
@@ -39,8 +43,8 @@
                 </div>
             </div>
         </div>
-    </md-content>
-    <md-content layout="row" layout-align="center center" ng-show="foldersInfo.totalEntitiesCount > (filter.result.first + filter.max)">
-        <span ng-click="loadMore()" class="loadMore">{{translate("load_more")}}</span>
+        <div layout="row" class="load-more-div" layout-align="center center" ng-show="foldersInfo.totalEntitiesCount > (filter.result.first + filter.max)">
+            <span ng-click="loadMore()" class="loadMore">{{translate("load_more")}}</span>
+        </div>
     </md-content>
 </div>

@@ -1,6 +1,8 @@
 model.controller("booksController" , function($scope,applicationService,className){
 
     $scope.currentFilterByDate = true;
+    
+    $scope.showCreateArea = false;
 
     $scope.filter = applicationService.createFilter($scope.getData().className,0,10);
     $scope.filter.createFiltersInfo();

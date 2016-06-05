@@ -88,6 +88,7 @@
     "unblock"       : "Unblock",
     "icon"          : "Icon",
     "any"           : "Any",
+    "description"   : "Description",
 
 
     "failed"        : "Failed",
@@ -119,6 +120,7 @@
     "search_for"          : "Search in ...",
     "add_param"           : "Add parameter",
     "remove_param"        : "Remove parameter",
+    "choose_language"     : "Choose language",
 
     "video1_title"  : "Почему getKnowlege() ?",
     "video2_title"  : "Что значит быть программистом сегодня?",
