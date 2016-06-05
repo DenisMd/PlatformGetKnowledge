@@ -8,6 +8,7 @@
 .folders-toolbar{
     border-bottom: 1px solid #d6d6d6;
     margin-top: -10px;
+    min-width: 408px;
 }
 
 md-input-container.folders-toolbar-input-container{

@@ -51,3 +51,15 @@
 }
 
 .book img { vertical-align: middle; }
+
+/*-------------------*/
+.create-book-btn {
+    color: #6EBCD6;
+    border-color: #21A8CB;
+}
+
+.create-book-btn:hover{
+    color: #4A859D;
+    border-color: #217CCB;
+    background: white;
+}

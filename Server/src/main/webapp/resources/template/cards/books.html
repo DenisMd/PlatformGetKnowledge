@@ -1,17 +1,17 @@
 <link rel="stylesheet" href="/resources/css/components/books.css">
 
 <div ng-controller="booksController">
-    <md-content class="content-body folders-toolbar" layout-align-sm="center">
-    <md-input-container class="folders-toolbar-input-container">
-        <span class="folders-toolbar-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
-        <label class="folders-toolbar-label">
-            {{translate("search")}}
-        </label>
-        <input class="folders-toolbar-item" ng-model="searchText">
-    </md-input-container>
-    <button class="btn btn-default filter-panel-item folder-toolbar-btn" ng-click="searchBook(searchText)">
-        {{translate("do_filter")}}
-    </button>
+    <md-content class="content-body folders-toolbar" layout-sm="row" layout-align-sm="center center">
+        <md-input-container flex="none" class="folders-toolbar-input-container">
+            <span class="folders-toolbar-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
+            <label class="folders-toolbar-label">
+                {{translate("search")}}
+            </label>
+            <input class="folders-toolbar-item" ng-model="searchText">
+        </md-input-container>
+        <button flex="none" class="btn btn-default filter-panel-item folder-toolbar-btn" ng-click="searchBook(searchText)">
+            {{translate("do_filter")}}
+        </button>
     </md-content>
     <md-content class="content-body folders-body">
         <div layout-gt-sm="row" layout-align="center center">
@@ -23,10 +23,8 @@
                       ng-click="by_name()">{{translate("by_name")}}</span> / <span
                     class="{{currentFilterByDate ? 'active' : ''}}" ng-click="by_date()">{{translate("by_date")}}</span>
             </div>
-            <div>
-                <md-button class="md-raised md-primary" ng-click="" ng-show="booksInfo.creatable">
-                    {{translate("create")}}
-                </md-button>
+            <div ng-show="booksInfo.creatable || true" flex-gt-sm="none" class="text-center" layout-margin-gt-sm>
+                <button class="btn btn-default create-book-btn" ng-click="">{{translate("create")}}</button>
             </div>
         </div>
         <div layout="row" layout-wrap layout-align="left" layout-align-sm="center" class="books">

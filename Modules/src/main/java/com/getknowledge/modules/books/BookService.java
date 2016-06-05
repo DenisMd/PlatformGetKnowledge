@@ -64,7 +64,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
     }
 
 
-    @Action(name = "createBooks" , mandatoryFields = {"name","groupBookId","description","language"})
+    @Action(name = "createBook" , mandatoryFields = {"name","groupBookId","description","language"})
     @Transactional
     public Result createBook(HashMap<String,Object> data) {
         if (!data.containsKey("principalName"))
