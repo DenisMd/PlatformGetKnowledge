@@ -64,7 +64,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
     }
 
 
-    @Action(name = "createBook" , mandatoryFields = {"name","groupBookId","description","language"})
+    @Action(name = "createBook" , mandatoryFields = {"name","groupBookUrl","description","language"})
     @Transactional
     public Result createBook(HashMap<String,Object> data) {
         if (!data.containsKey("principalName"))
@@ -77,9 +77,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
             return Result.AccessDenied();
         }
 
-        Long groupBookId = longFromField("groupBookId",data);
-
-        GroupBooks groupBooks =  groupBooksRepository.read(groupBookId);
+        GroupBooks groupBooks =  groupBooksRepository.getSingleEntityByFieldAndValue("url", data.get("groupBookUrl"));
         if (groupBooks == null) {
             trace.log("Group book id is incorrect" , TraceLevel.Warning,true);
             return Result.Failed();
@@ -108,7 +106,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
         }
 
 
-        bookRepository.createBook(groupBooks,userInfo,name,description,language,links,tags);
+        book = bookRepository.createBook(groupBooks,userInfo,name,description,language,links,tags);
 
         Result result = Result.Complete();
         result.setObject(book.getId());

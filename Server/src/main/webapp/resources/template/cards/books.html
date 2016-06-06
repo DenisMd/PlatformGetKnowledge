@@ -18,11 +18,11 @@
             <div layout-gt-sm="row" flex>
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>{{translate("name")}}</label>
-                    <input ng-model="book.name">
+                    <input ng-model="newBook.name">
                 </md-input-container>
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>{{translate("choose_language")}}</label>
-                    <md-select ng-model="book.language">
+                    <md-select ng-model="newBook.language">
                         <md-option ng-value="opt.name" ng-repeat="opt in langs">{{ opt.title }}</md-option>
                     </md-select>
                 </md-input-container>
@@ -30,15 +30,15 @@
             <div layout="row" flex>
                 <md-input-container class="md-block" flex>
                     <label>{{translate("description")}}</label>
-                    <textarea ng-model="book.description" md-maxlength="500" rows="3" md-select-on-focus></textarea>
+                    <textarea ng-model="newBook.description" md-maxlength="500" rows="3" md-select-on-focus></textarea>
                 </md-input-container>
             </div>
-            <div layout="column" class="book-tags" flex ng-init="book.tags = []">
+            <div layout="column" class="book-tags" flex ng-init="newBook.tags = []">
                 <div class="md-title" flex>Тэги</div>
-                <md-chips ng-model="book.tags" readonly="false" flex></md-chips>
+                <md-chips ng-model="newBook.tags" readonly="false" flex></md-chips>
             </div>
             <div layout="row" class="create-div" layout-align="center">
-                <button flex="20" class="btn btn-default create-book-btn" ng-click="showCreateArea = !showCreateArea">{{translate("books_create")}}</button>
+                <button flex="20" class="btn btn-default create-book-btn" ng-click="createBook(newBook)">{{translate("books_create")}}</button>
             </div>
         </div>
     </md-content>

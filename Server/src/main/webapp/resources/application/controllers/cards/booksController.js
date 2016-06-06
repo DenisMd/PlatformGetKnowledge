@@ -29,4 +29,14 @@ model.controller("booksController" , function($scope,applicationService,classNam
     applicationService.list($scope,"langs",className.language, function (item) {
         item.title = $scope.translate(item.name.toLowerCase());
     });
+
+    $scope.createBook = function(newBook) {
+        newBook.groupBookUrl = $scope.getData().groupBooks;
+        applicationService.action($scope,"",className.book,"createBook",newBook,function(result){
+            $scope.showToast($scope.getResultMessage(result));
+            if (result.status == "Complete") {
+                $scope.goTo("book/" + result.object);
+            }
+        });
+    }
 });
