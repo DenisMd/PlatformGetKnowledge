@@ -56,11 +56,18 @@
                 <button class="btn btn-default create-book-btn" ng-click="showCreateArea = !showCreateArea">{{translate("create")}}</button>
             </div>
         </div>
-        <!--<div layout="row" layout-wrap layout-align="left" layout-align-sm="center" class="books">-->
-            <!--<div flex="none" ng-repeat="book in books" id="book1" class="book">-->
-                <!--<img  ng-src="{{book.imageSrc}}"/>-->
-            <!--</div>-->
-        <!--</div>-->
+        <div layout="row" layout-wrap layout-align="left" layout-align-sm="center" class="books">
+            <div flex="none" ng-repeat="book in books" class="text-center book-wrap">
+                <div class="book-title" ng-click="goTo('book/'+book.id)">
+                    {{book.name}}
+                </div>
+                <div class="book">
+                    <a ng-href="{{book.href}}">
+                        <img ng-src="{{book.imageSrc}}"/>
+                    </a>
+                </div>
+            </div>
+        </div>
         <div layout="row" class="load-more-div" layout-align="center center" ng-show="booksInfo.totalEntitiesCount > (filter.result.first + filter.max)">
             <span ng-click="loadMore()" class="loadMore">{{translate("load_more")}}</span>
         </div>

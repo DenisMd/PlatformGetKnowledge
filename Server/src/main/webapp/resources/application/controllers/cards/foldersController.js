@@ -44,13 +44,13 @@ model.controller("foldersController" , function ($scope,applicationService) {
         doAction();
     };
 
-    var addLog = function(folder){
+    var addFolder = function(folder){
         folder.imgSrc = applicationService.imageHref($scope.getData().className,folder.id);
         $scope.folders.push(folder);
     };
 
     var doAction = function(){
-        applicationService.filterRequest($scope,"foldersInfo",$scope.filter,addLog);
+        applicationService.filterRequest($scope,"foldersInfo",$scope.filter,addFolder);
     };
 
     $scope.by_date();

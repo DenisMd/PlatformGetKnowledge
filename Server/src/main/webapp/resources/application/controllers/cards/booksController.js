@@ -1,7 +1,8 @@
 model.controller("booksController" , function($scope,applicationService,className){
 
+    var maxCharactersInName = 36;
+
     $scope.currentFilterByDate = true;
-    
     $scope.showCreateArea = false;
 
     $scope.filter = applicationService.createFilter($scope.getData().className,0,10);
@@ -12,6 +13,10 @@ model.controller("booksController" , function($scope,applicationService,classNam
 
     var addBook = function(book){
         book.imageSrc = applicationService.imageHref($scope.getData().className,book.id);
+        book.href = $scope.addUrlToPath("/book/" + book.id);
+        if (book.name.length > maxCharactersInName) {
+            book.name = book.name.substr(0,maxCharactersInName) + "...";
+        }
         $scope.books.push(book);
     };
 
