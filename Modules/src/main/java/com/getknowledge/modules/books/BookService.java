@@ -105,8 +105,14 @@ public class BookService extends AbstractService implements ImageService,FileSer
             return result;
         }
 
+        byte [] cover = null;
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/image/nocover.jpg")) {
+            cover = org.apache.commons.io.IOUtils.toByteArray(is);
+        } catch (IOException e) {
+            trace.logException("Error load file: " + e.getMessage(), e, TraceLevel.Error,true);
+        }
 
-        book = bookRepository.createBook(groupBooks,userInfo,name,description,language,links,tags);
+        book = bookRepository.createBook(groupBooks,userInfo,name,description,language,links,tags,cover);
 
         Result result = Result.Complete();
         result.setObject(book.getId());

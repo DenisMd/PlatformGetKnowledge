@@ -31,7 +31,7 @@ public class BookRepository extends ProtectedRepository<Book> {
         }
     }
 
-    public Book createBook(GroupBooks groupBooks,UserInfo owner, String name,String description,Language language,List<String> links,List<String> tags) {
+    public Book createBook(GroupBooks groupBooks,UserInfo owner, String name,String description,Language language,List<String> links,List<String> tags,byte [] cover) {
         Book book = new Book();
         book.setGroupBooks(groupBooks);
         book.setName(name);
@@ -43,6 +43,7 @@ public class BookRepository extends ProtectedRepository<Book> {
         if (tags != null)
             booksTagRepository.createTags(tags,book);
 
+        book.setCover(cover);
         book.setCreateDate(Calendar.getInstance());
         create(book);
         addBookToTag(book);
