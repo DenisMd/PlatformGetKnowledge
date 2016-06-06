@@ -94,7 +94,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
         }
 
         if (data.containsKey("tags")){
-            links = (List<String>) data.get("tags");
+            tags = (List<String>) data.get("tags");
         }
 
         try {
