@@ -24,7 +24,7 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 default : true
             },{
                 title : "folder_create_date",
-                type : "date",
+                type : "dateTime",
                 field : "createDate"
             }
         ],
@@ -210,7 +210,7 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 default : true
             },{
                 title : "folder_create_date",
-                type : "date",
+                type : "dateTime",
                 field : "createDate"
             }
         ],
@@ -234,7 +234,7 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 name : "createDate",
                 title : "folder_create_date",
                 orderBy : true,
-                filter : "date"
+                filter : "dateTime"
             }
         ],
         selectItemCallback : function (item) {
