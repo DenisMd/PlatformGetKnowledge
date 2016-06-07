@@ -35,7 +35,6 @@ model.controller("booksController" , function($scope,$state,applicationService,c
         doAction();
     };
 
-
     var likeIndex;
     $scope.searchBook = function(text) {
         if (likeIndex != undefined) {
@@ -94,6 +93,6 @@ model.controller("booksController" , function($scope,$state,applicationService,c
             $state.go("404");
         }
 
-        doAction();
+        $scope.by_date();
     });
 });
