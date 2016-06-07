@@ -39,12 +39,12 @@ model.controller("booksController" , function($scope,$state,applicationService,c
     var likeIndex;
     $scope.searchBook = function(text) {
         if (likeIndex != undefined) {
-            $scope.filter.result.filtersInfo.filters.splice(likeIndex,1);
+            $scope.filter.result.customFilters.splice(likeIndex,1);
         }
         if (text) {
-            $scope.filter.setLogicalExpression("or");
-            likeIndex = $scope.filter.like("name", "text", "%" + text + "%");
-            $scope.filter.like("tags.tagName", "text", "%" + text + "%");
+            likeIndex  = $scope.filter.addCustomFilter("searchBooks",{
+                textValue : text
+            });
         }
 
         $scope.filter.result.first = 0;

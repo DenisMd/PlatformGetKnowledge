@@ -189,6 +189,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                         data : data
                     }
                 );
+                return this.result.customFilters.length - 1;
             };
 
             /**

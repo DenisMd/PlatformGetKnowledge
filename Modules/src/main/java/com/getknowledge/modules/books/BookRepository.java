@@ -5,11 +5,17 @@ import com.getknowledge.modules.books.tags.BooksTag;
 import com.getknowledge.modules.books.tags.BooksTagRepository;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.userInfo.UserInfo;
+import com.getknowledge.platform.annotations.Filter;
+import com.getknowledge.platform.base.repositories.FilterQuery;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 @Repository("BookRepository")
@@ -18,6 +24,14 @@ public class BookRepository extends ProtectedRepository<Book> {
     @Autowired
     private BooksTagRepository booksTagRepository;
 
+    @Filter(name = "searchBooks")
+    public void searchBook(HashMap<String,Object> data , FilterQuery<GroupBooks> query) {
+        Join join = query.getRoot().join("tags", JoinType.INNER);
+        String value = (String) data.get("textValue");
+        Predicate name = query.getCriteriaBuilder().like(query.getRoot().get("name"),"%"+value+"%");
+        Predicate tags = query.getCriteriaBuilder().like(join.get("tagName"),"%"+value+"%");
+        query.addPrevPredicate(query.getCriteriaBuilder().or(name,tags));
+    }
 
     @Override
     protected Class<Book> getClassEntity() {
