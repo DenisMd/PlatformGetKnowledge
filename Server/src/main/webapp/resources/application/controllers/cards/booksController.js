@@ -11,6 +11,30 @@ model.controller("booksController" , function($scope,$state,applicationService,c
     $scope.filter.equals("groupBooks.section.name","text",$scope.getData().sectionName);
     $scope.books = [];
 
+    $scope.by_date = function() {
+        $scope.currentFilterByDate = true;
+        $scope.filter.clearOrder();
+        $scope.filter.clearCustomFilters();
+        $scope.filter.setOrder("createDate" , true);
+
+        $scope.filter.result.first = 0;
+        $scope.books = [];
+
+        doAction();
+    };
+
+    $scope.by_name = function() {
+        $scope.currentFilterByDate = false;
+        $scope.filter.clearOrder();
+        $scope.filter.clearCustomFilters();
+        $scope.filter.setOrder("name" , false);
+
+        $scope.filter.result.first = 0;
+        $scope.books = [];
+
+        doAction();
+    };
+
     var addBook = function(book){
         book.imageSrc = applicationService.imageHref($scope.getData().className,book.id);
         book.href = $scope.addUrlToPath("/book/" + book.id);
