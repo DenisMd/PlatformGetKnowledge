@@ -35,6 +35,24 @@ model.controller("booksController" , function($scope,$state,applicationService,c
         doAction();
     };
 
+
+    var likeIndex;
+    $scope.searchBook = function(text) {
+        if (likeIndex != undefined) {
+            $scope.filter.result.filtersInfo.filters.splice(likeIndex,1);
+        }
+        if (text) {
+            $scope.filter.setLogicalExpression("or");
+            likeIndex = $scope.filter.like("name", "text", "%" + text + "%");
+            $scope.filter.like("tags.tagName", "text", "%" + text + "%");
+        }
+
+        $scope.filter.result.first = 0;
+        $scope.books = [];
+
+        doAction();
+    };
+
     var addBook = function(book){
         book.imageSrc = applicationService.imageHref($scope.getData().className,book.id);
         book.href = $scope.addUrlToPath("/book/" + book.id);
