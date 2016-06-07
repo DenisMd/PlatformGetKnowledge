@@ -24,9 +24,13 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
     });
 
     var addItem = function(item){
+        if (item == null)
+            return;
+
         if (angular.isFunction($scope.getData().callBackForFilter)) {
             $scope.getData().callBackForFilter(item);
         }
+
         $scope.list.push(item);
     };
 

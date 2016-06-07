@@ -1,4 +1,4 @@
-model.controller("booksController" , function($scope,applicationService,className){
+model.controller("booksController" , function($scope,$state,applicationService,className){
 
     var maxCharactersInName = 36;
 
@@ -24,8 +24,6 @@ model.controller("booksController" , function($scope,applicationService,classNam
         applicationService.filterRequest($scope,"booksInfo", $scope.filter,addBook);
     };
 
-    doAction();
-
     $scope.loadMore = function () {
         $scope.filter.increase(10);
         doAction();
@@ -43,5 +41,17 @@ model.controller("booksController" , function($scope,applicationService,classNam
                 $scope.goTo("book/" + result.object);
             }
         });
-    }
+    };
+
+    //Проверка на существование выбранной группы книг
+    var groupBookFilter = applicationService.createFilter(className.groupBooks,0,10);
+    groupBookFilter.createFiltersInfo();
+    groupBookFilter.equals("url","text",$scope.getData().groupBooks);
+    applicationService.filterRequest($scope,"groupBookInfo", groupBookFilter,function(groupBook){
+        if (groupBook == null) {
+            $state.go("404");
+        }
+
+        doAction();
+    });
 });

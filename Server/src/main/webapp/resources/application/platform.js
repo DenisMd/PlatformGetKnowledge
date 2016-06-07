@@ -393,10 +393,12 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                     $scope[name] = data;
                 }
                 if (isCallbackFunction && data){
-                    if (angular.isArray(data.list)) {
+                    if (angular.isArray(data.list) && data.list.length > 0) {
                         data.list.forEach(function(item,i,array){
                             callback(item,i,array,data.creatable);
                         });
+                    } else {
+                        callback(null);
                     }
                 }
             }).error(function(error, status){

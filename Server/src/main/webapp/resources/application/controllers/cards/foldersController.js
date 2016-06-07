@@ -45,6 +45,9 @@ model.controller("foldersController" , function ($scope,applicationService) {
     };
 
     var addFolder = function(folder){
+        if (folder == null) {
+            return;
+        }
         folder.imgSrc = applicationService.imageHref($scope.getData().className,folder.id);
         $scope.folders.push(folder);
     };
