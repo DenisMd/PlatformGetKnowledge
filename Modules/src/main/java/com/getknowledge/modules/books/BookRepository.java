@@ -6,6 +6,7 @@ import com.getknowledge.modules.books.tags.BooksTagRepository;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.annotations.Filter;
+import com.getknowledge.platform.base.repositories.FilterCountQuery;
 import com.getknowledge.platform.base.repositories.FilterQuery;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +26,18 @@ public class BookRepository extends ProtectedRepository<Book> {
     private BooksTagRepository booksTagRepository;
 
     @Filter(name = "searchBooks")
-    public void searchBook(HashMap<String,Object> data , FilterQuery<GroupBooks> query) {
-        Join join = query.getRoot().join("tags", JoinType.INNER);
+    public void searchBook(HashMap<String,Object> data , FilterQuery<Book> query, FilterCountQuery<Book> countQuery) {
+        Join join = query.getJoin(new String[]{"tags"},0,null,JoinType.LEFT);
         String value = (String) data.get("textValue");
         Predicate name = query.getCriteriaBuilder().like(query.getRoot().get("name"),"%"+value+"%");
         Predicate tags = query.getCriteriaBuilder().like(join.get("tagName"),"%"+value+"%");
         query.addPrevPredicate(query.getCriteriaBuilder().or(name,tags));
+
+
+        Join join2 = countQuery.getJoin(new String[]{"tags"}, 0, null, JoinType.LEFT);
+        Predicate name2 = countQuery.getCriteriaBuilder().like(countQuery.getRoot().get("name"),"%"+value+"%");
+        Predicate tags2 = countQuery.getCriteriaBuilder().like(join2.get("tagName"),"%"+value+"%");
+        countQuery.addPrevPredicate(countQuery.getCriteriaBuilder().or(name2,tags2));
     }
 
     @Override

@@ -4,10 +4,7 @@ import com.getknowledge.modules.books.group.GroupBooks;
 import com.getknowledge.modules.section.Section;
 import com.getknowledge.platform.annotations.Filter;
 import com.getknowledge.platform.annotations.ViewType;
-import com.getknowledge.platform.base.repositories.BaseRepository;
-import com.getknowledge.platform.base.repositories.FilterQuery;
-import com.getknowledge.platform.base.repositories.PrepareEntity;
-import com.getknowledge.platform.base.repositories.ProtectedRepository;
+import com.getknowledge.platform.base.repositories.*;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.utils.RepositoryUtils;
 import org.springframework.stereotype.Repository;
@@ -45,7 +42,7 @@ public class GroupProgramsRepository extends ProtectedRepository<GroupPrograms> 
     }
 
     @Filter(name = "orderByCount")
-    public void orderByCountPrograms(HashMap<String,Object> data , FilterQuery<GroupBooks> query) {
+    public void orderByCountPrograms(HashMap<String,Object> data , FilterQuery<GroupBooks> query, FilterCountQuery<GroupPrograms> countQuery) {
         Join join = query.getRoot().join("programs", JoinType.LEFT);
         query.getCriteriaQuery().groupBy(query.getRoot().get("id"));
         query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().desc(query.getCriteriaBuilder().count(join)));

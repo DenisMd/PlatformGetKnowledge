@@ -3,6 +3,7 @@ package com.getknowledge.modules.books.group;
 import com.getknowledge.modules.section.Section;
 import com.getknowledge.platform.annotations.Filter;
 import com.getknowledge.platform.annotations.ViewType;
+import com.getknowledge.platform.base.repositories.FilterCountQuery;
 import com.getknowledge.platform.base.repositories.FilterQuery;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.modules.user.User;
@@ -43,7 +44,7 @@ public class GroupBooksRepository extends ProtectedRepository<GroupBooks> {
     }
 
     @Filter(name = "orderByCount")
-    public void orderByCountBooks(HashMap<String,Object> data , FilterQuery<GroupBooks> query) {
+    public void orderByCountBooks(HashMap<String,Object> data , FilterQuery<GroupBooks> query, FilterCountQuery<GroupBooks> countQuery) {
         Join join = query.getRoot().join("books", JoinType.LEFT);
         query.getCriteriaQuery().groupBy(query.getRoot().get("id"));
         query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().desc(query.getCriteriaBuilder().count(join)));

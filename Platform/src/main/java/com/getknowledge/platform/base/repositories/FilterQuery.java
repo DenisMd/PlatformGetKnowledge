@@ -3,6 +3,7 @@ package com.getknowledge.platform.base.repositories;
 import com.getknowledge.platform.base.repositories.enumerations.OrderRoute;
 
 import javax.persistence.EntityManager;
+import javax.persistence.JoinColumn;
 import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.lang.reflect.Field;
@@ -18,6 +19,7 @@ public class FilterQuery<T> {
     protected EntityManager entityManager;
     protected Class<T>  pClassEntity = null;
     private  boolean isConj = false;
+    private Map<String,Join> joins = new HashMap<>();
 
     public FilterQuery(){
 
@@ -147,6 +149,8 @@ public class FilterQuery<T> {
 
     public Query getQuery(int first , int max) {
 
+        criteriaQuery.distinct(true);
+
         if (!orders.isEmpty()) {
             criteriaQuery.orderBy(orders);
         }
@@ -261,16 +265,40 @@ public class FilterQuery<T> {
         previousPredicate = result;
     }
 
+    public Join getJoin(String [] splitName, int index , Join parent , JoinType type) {
+        String name = "";
+        for (int i=0; i < index; i++) {
+            name += splitName[i] + ".";
+        }
+        name += splitName[index];
+
+        Join result = null;
+
+        if (joins.containsKey(name)) {
+            result = joins.get(name);
+        } else {
+            if (index == 0) {
+                result = root.join(splitName[index],type);
+            } else {
+                result = parent.join(splitName[index],type);
+            }
+            joins.put(name,result);
+        }
+
+        return result;
+    }
+
     private Path parseField(String field) {
         Path path = null;
 
         if (field.contains(".")) {
 
             String [] split = field.split("\\.");
-            Join join = root.join(split[0],JoinType.INNER);
+
+            Join join = getJoin(split,0,null,JoinType.INNER);
 
             for (int i =1; i < split.length-1; i++) {
-                join = join.join(split[i],JoinType.INNER);
+                join = getJoin(split,i,join,JoinType.INNER);
             }
 
             path = join.get(split[split.length-1]);

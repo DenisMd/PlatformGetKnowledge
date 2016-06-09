@@ -575,7 +575,7 @@ public class DataController {
                         if(filter == null || !filter.name().equals(customFilterName)) {
                             continue;
                         }
-                        method.invoke(repository, customFilterData , filterQuery);
+                        method.invoke(repository, customFilterData , filterQuery,filterCountQuery);
                         break;
                     }
                 }

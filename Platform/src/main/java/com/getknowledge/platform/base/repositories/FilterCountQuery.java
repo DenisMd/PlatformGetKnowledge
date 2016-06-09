@@ -14,6 +14,7 @@ public class FilterCountQuery<T> extends FilterQuery<T> {
     }
 
     public Long getCount() {
+        criteriaQuery.distinct(true);
         CriteriaQuery<Long> temp = criteriaQuery.select(criteriaBuilder.count(root)).where(previousPredicate);
         return entityManager.createQuery(temp).getSingleResult();
     }

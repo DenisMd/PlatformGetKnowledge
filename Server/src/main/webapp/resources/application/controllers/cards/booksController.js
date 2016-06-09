@@ -46,6 +46,8 @@ model.controller("booksController" , function($scope,$state,applicationService,c
             });
         }
 
+        //$scope.filter.like("tags.tagName","text","%"+text+"%");
+
         $scope.filter.result.first = 0;
         $scope.books = [];
 
@@ -53,12 +55,14 @@ model.controller("booksController" , function($scope,$state,applicationService,c
     };
 
     var addBook = function(book){
-        book.imageSrc = applicationService.imageHref($scope.getData().className,book.id);
-        book.href = $scope.addUrlToPath("/book/" + book.id);
-        if (book.name.length > maxCharactersInName) {
-            book.name = book.name.substr(0,maxCharactersInName) + "...";
+        if(book) {
+            book.imageSrc = applicationService.imageHref($scope.getData().className, book.id);
+            book.href = $scope.addUrlToPath("/book/" + book.id);
+            if (book.name.length > maxCharactersInName) {
+                book.name = book.name.substr(0, maxCharactersInName) + "...";
+            }
+            $scope.books.push(book);
         }
-        $scope.books.push(book);
     };
 
     var doAction = function(){
