@@ -21,6 +21,10 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
                     name : item
                 });
             });
+            
+            if (book.owner){
+                book.owner.imageSrc = $scope.userImg(book.owner.id);
+            }
         });
     }
 
