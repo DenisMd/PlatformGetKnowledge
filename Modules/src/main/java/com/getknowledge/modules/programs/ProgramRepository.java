@@ -51,13 +51,16 @@ public class ProgramRepository extends BaseRepository<Program> {
         program.setDescription(description);
         if (links != null)
             program.setLinks(links);
-        if (tags != null) {
-            programTagRepository.removeTagsFromEntity(program);
+
+        programTagRepository.removeTagsFromEntity(program);
+        if (tags != null  && !tags.isEmpty()) {
             programTagRepository.createTags(tags, program);
         }
 
         merge(program);
-        addProgramToTag(program);
+        if (tags != null  && !tags.isEmpty()) {
+            addProgramToTag(program);
+        }
         programTagRepository.removeUnusedTags();
         return program;
     }

@@ -76,13 +76,15 @@ public class BookRepository extends ProtectedRepository<Book> {
         book.setDescription(description);
         if (links != null)
             book.setLinks(links);
-        if (tags != null) {
-            booksTagRepository.removeTagsFromEntity(book);
+        booksTagRepository.removeTagsFromEntity(book);
+        if (tags != null && !tags.isEmpty()) {
             booksTagRepository.createTags(tags, book);
         }
 
         merge(book);
-        addBookToTag(book);
+        if (tags != null  && !tags.isEmpty()) {
+            addBookToTag(book);
+        }
         booksTagRepository.removeUnusedTags();
         return book;
     }
