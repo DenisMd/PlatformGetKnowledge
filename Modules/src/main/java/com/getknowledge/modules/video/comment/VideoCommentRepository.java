@@ -1,5 +1,6 @@
 package com.getknowledge.modules.video.comment;
 
+import com.getknowledge.modules.interfaces.repos.ICommentRepository;
 import com.getknowledge.modules.messages.CommentStatus;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.video.Video;
@@ -11,7 +12,7 @@ import java.util.Calendar;
 import java.util.List;
 
 @Repository("VideoCommentRepository")
-public class VideoCommentRepository extends ProtectedRepository<VideoComment> {
+public class VideoCommentRepository extends ProtectedRepository<VideoComment> implements ICommentRepository<VideoComment> {
     @Override
     protected Class<VideoComment> getClassEntity() {
         return VideoComment.class;
@@ -27,13 +28,15 @@ public class VideoCommentRepository extends ProtectedRepository<VideoComment> {
         create(videoComment);
     }
 
+    @Override
     public void blockComment(VideoComment videoComment,CommentStatus commentStatus){
         videoComment.setMessage("");
         videoComment.setCommentStatus(commentStatus);
         merge(videoComment);
     }
 
-    public VideoComment lastVideoComment() {
+    @Override
+    public VideoComment getLastComment() {
         List<VideoComment> videoCommentList = entityManager.createQuery(
                 "select vc from VideoComment vc " +
                         "where vc.createTime = (select max(vc2.createTime) from VideoComment vc2)"

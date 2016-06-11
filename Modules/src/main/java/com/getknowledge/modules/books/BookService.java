@@ -1,5 +1,6 @@
 package com.getknowledge.modules.books;
 
+import com.getknowledge.modules.books.comment.BookComment;
 import com.getknowledge.modules.books.group.GroupBooks;
 import com.getknowledge.modules.books.group.GroupBooksRepository;
 import com.getknowledge.modules.books.tags.BooksTag;
@@ -9,12 +10,16 @@ import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoService;
+import com.getknowledge.modules.video.Video;
+import com.getknowledge.modules.video.comment.VideoComment;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.serializers.FileResponse;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.FileService;
 import com.getknowledge.platform.base.services.ImageService;
+import com.getknowledge.platform.exceptions.AccessDeniedException;
+import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
@@ -24,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 

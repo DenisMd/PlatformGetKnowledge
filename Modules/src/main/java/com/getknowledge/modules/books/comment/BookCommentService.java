@@ -1,11 +1,13 @@
-package com.getknowledge.modules.video.comment;
+package com.getknowledge.modules.books.comment;
 
+import com.getknowledge.modules.books.Book;
+import com.getknowledge.modules.books.BookRepository;
 import com.getknowledge.modules.messages.CommentStatus;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoRepository;
 import com.getknowledge.modules.video.Video;
-import com.getknowledge.modules.video.VideoRepository;
-import com.getknowledge.modules.video.VideoService;
+import com.getknowledge.modules.video.comment.VideoComment;
+import com.getknowledge.modules.video.comment.VideoCommentRepository;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.exceptions.NotAuthorized;
@@ -17,32 +19,28 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Calendar;
 import java.util.HashMap;
 
-@Service("VideoCommentService")
-public class VideoCommentService extends AbstractService {
-
+@Service("BookCommentService")
+public class BookCommentService extends AbstractService {
     @Autowired
-    private VideoCommentRepository videoCommentRepository;
+    private BookCommentRepository bookCommentRepository;
 
     @Autowired
     private UserInfoRepository userInfoRepository;
 
     @Autowired
-    private VideoRepository videoRepository;
-
-    @Autowired
-    private VideoService videoService;
+    private BookRepository bookRepository;
 
     @Action(name = "blockComment", mandatoryFields = {"commentId","status"})
     @Transactional
     public Result blockComment(HashMap<String,Object> data){
 
         Long commentId = longFromField("commentId" , data);
-        VideoComment videoComment = videoCommentRepository.read(commentId);
+        BookComment bookComment = bookCommentRepository.read(commentId);
 
-        if (videoComment == null)
+        if (bookComment == null)
             return Result.NotFound();
 
-        if (!isAccessToEdit(data,videoComment)){
+        if (!isAccessToEdit(data,bookComment)){
             return Result.AccessDenied();
         }
 
@@ -50,7 +48,7 @@ public class VideoCommentService extends AbstractService {
         if (commentStatus == CommentStatus.Normal) {
             return Result.Failed();
         }
-        videoCommentRepository.blockComment(videoComment, commentStatus);
+        bookCommentRepository.blockComment(bookComment, commentStatus);
 
         return Result.Complete();
     }
@@ -64,21 +62,21 @@ public class VideoCommentService extends AbstractService {
         }
 
         Long videoCommentId = longFromField("commentId",data);
-        VideoComment videoComment = videoCommentRepository.read(videoCommentId);
-        if (videoComment == null) {
+        BookComment bookComment = bookCommentRepository.read(videoCommentId);
+        if (bookComment == null) {
             return Result.NotFound();
         }
 
-        if (!videoComment.getSender().getId().equals(userInfo.getId())) {
+        if (!bookComment.getSender().getId().equals(userInfo.getId())) {
             return Result.AccessDenied();
         }
 
-        videoCommentRepository.remove(videoComment);
+        bookCommentRepository.remove(bookComment);
 
         return Result.Complete();
     }
 
-    @Action(name = "addComment" , mandatoryFields = {"videoId","text"})
+    @Action(name = "addComment" , mandatoryFields = {"bookId","text"})
     @Transactional
     public Result addComment(HashMap<String,Object> data) throws NotAuthorized {
         UserInfo userInfo = userInfoRepository.getCurrentUser(data);
@@ -86,15 +84,11 @@ public class VideoCommentService extends AbstractService {
             return Result.NotAuthorized();
         }
 
-        Long videoId = longFromField("videoId",data);
-        Video video = videoRepository.read(videoId);
+        Long bookId = longFromField("bookId",data);
+        Book book = bookRepository.read(bookId);
 
-        if (video == null){
+        if (book == null){
             return Result.NotFound();
-        }
-
-        if (!videoService.isAccessForRead(userInfo.getUser(),video)){
-            return Result.AccessDenied();
         }
 
         String text = (String) data.get("text");
@@ -102,7 +96,7 @@ public class VideoCommentService extends AbstractService {
             return Result.Failed("max_length");
         }
 
-        VideoComment last = videoCommentRepository.getLastComment();
+        BookComment last = bookCommentRepository.getLastComment();
 
         //Если один и тот же пользователь в течении 30 сек пытается отправить еще одно сообщение отклоняем его как спам
         if (last!= null && last.getSender().getId().equals(userInfo.getId())) {
@@ -113,7 +107,7 @@ public class VideoCommentService extends AbstractService {
             }
         }
 
-        videoCommentRepository.createComment(text,video,userInfo);
+        bookCommentRepository.createComment(text,book,userInfo);
         return Result.Complete();
     }
 }
