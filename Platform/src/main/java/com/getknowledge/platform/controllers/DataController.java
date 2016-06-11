@@ -464,6 +464,7 @@ public class DataController {
     //Формат для фильтров
     //{
     //  order : [{route : Asc , field : name1} , {route : Desc , field : name2}],
+    //  distinct : true
     //  filtersInfo : {
     //      logicalExpression : "and/or",
     //      filters : [
@@ -579,6 +580,12 @@ public class DataController {
                         break;
                     }
                 }
+            }
+
+            if (data.containsKey("distinct")) {
+                boolean distinct = (boolean)data.get("distinct");
+                filterQuery.setDistinct(distinct);
+                filterCountQuery.setDistinct(distinct);
             }
 
             int first = (int) data.get("first");

@@ -19,7 +19,16 @@ public class FilterQuery<T> {
     protected EntityManager entityManager;
     protected Class<T>  pClassEntity = null;
     private  boolean isConj = false;
+    private  boolean isDistinct = true;
     private Map<String,Join> joins = new HashMap<>();
+
+    public boolean isDistinct() {
+        return isDistinct;
+    }
+
+    public void setDistinct(boolean distinct) {
+        isDistinct = distinct;
+    }
 
     public FilterQuery(){
 
@@ -146,17 +155,17 @@ public class FilterQuery<T> {
     }
 
 
-
     public Query getQuery(int first , int max) {
-
-        criteriaQuery.distinct(true);
-
         if (!orders.isEmpty()) {
             criteriaQuery.orderBy(orders);
         }
 
         if (previousPredicate != null)
             criteriaQuery.where(previousPredicate);
+
+        if (isDistinct()) {
+            criteriaQuery.distinct(true);
+        }
 
         Query query = entityManager.createQuery(criteriaQuery);
         if (max > 0) {

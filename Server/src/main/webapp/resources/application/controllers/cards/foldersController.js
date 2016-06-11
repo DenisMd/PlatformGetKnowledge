@@ -3,6 +3,7 @@ model.controller("foldersController" , function ($scope,applicationService) {
     $scope.currentFilterByDate = true;
 
     $scope.filter = applicationService.createFilter($scope.getData().className,0,10);
+    $scope.filter.setDistinct(false);
     $scope.filter.createFiltersInfo();
     $scope.filter.equals("section.name","text",$scope.getData().sectionName);
 

@@ -223,6 +223,24 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                 this.result.order = [];
             };
 
+            /**
+             * @param {Boolean} isDistinct - ограничить по уникальности
+             *
+             * @description устанавливает уникальность выбираемых записей
+             *
+             * */
+            this.setDistinct = function (isDistinct) {
+                this.result.distinct = isDistinct;
+            };
+
+            /**
+             * @description Убирает distinct
+             *
+             * */
+            this.clearDistinct = function () {
+                delete this.result.distinct;
+            };
+
             this.createFiltersInfo = function () {
                 this.result.filtersInfo = {
                     logicalExpression : "and",
@@ -350,6 +368,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                 this.clearOrder();
                 this.deleteFiltersInfo();
                 this.clearCustomFilters();
+                this.clearDistinct();
             };
         }
 
