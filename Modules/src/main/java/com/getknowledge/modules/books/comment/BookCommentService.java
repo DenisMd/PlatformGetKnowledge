@@ -76,7 +76,7 @@ public class BookCommentService extends AbstractService {
         return Result.Complete();
     }
 
-    @Action(name = "addComment" , mandatoryFields = {"bookId","text"})
+    @Action(name = "addComment" , mandatoryFields = {"objectId","text"})
     @Transactional
     public Result addComment(HashMap<String,Object> data) throws NotAuthorized {
         UserInfo userInfo = userInfoRepository.getCurrentUser(data);
@@ -84,7 +84,7 @@ public class BookCommentService extends AbstractService {
             return Result.NotAuthorized();
         }
 
-        Long bookId = longFromField("bookId",data);
+        Long bookId = longFromField("objectId",data);
         Book book = bookRepository.read(bookId);
 
         if (book == null){

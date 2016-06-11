@@ -160,12 +160,23 @@ public class DataController {
             return true;
         }
 
+        if (al != null && al.readFromAuthorizedService) {
+            try {
+                AbstractService abstractService = moduleLocator.findService(abstractEntity.getClass());
+                if (abstractService instanceof AuthorizedService) {
+                    AuthorizedService authorizedService = (AuthorizedService) abstractService;
+                    return authorizedService.isAccessForRead(user,abstractEntity);
+                }
+            } catch (ModuleNotFound moduleNotFound) {
+                trace.logException("Cannot find service for entity" , moduleNotFound,TraceLevel.Warning,false);
+            }
+        }
+
         if (user == null) return false;
 
         if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
             return true;
         }
-
 
         return al != null && (al.isAccessRead(user) || isAccessFromService(user,abstractEntity,1,al.allowUseAuthorizedService));
 
@@ -174,6 +185,18 @@ public class DataController {
     private boolean isAccessCreate(User user, AbstractEntity abstractEntity) {
         AuthorizationList al = abstractEntity.getAuthorizationList();
         if (al != null && al.allowCreateEveryOne) return true;
+
+        if (al != null && al.createFromAuthorizedService) {
+            try {
+                AbstractService abstractService = moduleLocator.findService(abstractEntity.getClass());
+                if (abstractService instanceof AuthorizedService) {
+                    AuthorizedService authorizedService = (AuthorizedService) abstractService;
+                    return authorizedService.isAccessForCreate(user,abstractEntity);
+                }
+            } catch (ModuleNotFound moduleNotFound) {
+                trace.logException("Cannot find service for entity" , moduleNotFound,TraceLevel.Warning,false);
+            }
+        }
 
         if (user == null) return false;
 
@@ -187,6 +210,19 @@ public class DataController {
 
     private boolean isAccessEdit(User user, AbstractEntity abstractEntity) {
         AuthorizationList al = abstractEntity.getAuthorizationList();
+
+        if (al != null && al.editFromAuthorizedService) {
+            try {
+                AbstractService abstractService = moduleLocator.findService(abstractEntity.getClass());
+                if (abstractService instanceof AuthorizedService) {
+                    AuthorizedService authorizedService = (AuthorizedService) abstractService;
+                    return authorizedService.isAccessForEdit(user,abstractEntity);
+                }
+            } catch (ModuleNotFound moduleNotFound) {
+                trace.logException("Cannot find service for entity" , moduleNotFound,TraceLevel.Warning,false);
+            }
+        }
+
         if (user == null) return false;
 
         if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
@@ -199,6 +235,19 @@ public class DataController {
 
     private boolean isAccessRemove(User user, AbstractEntity abstractEntity) {
         AuthorizationList al = abstractEntity.getAuthorizationList();
+
+        if (al != null && al.removeFromAuthorizedService) {
+            try {
+                AbstractService abstractService = moduleLocator.findService(abstractEntity.getClass());
+                if (abstractService instanceof AuthorizedService) {
+                    AuthorizedService authorizedService = (AuthorizedService) abstractService;
+                    return authorizedService.isAccessForRemove(user,abstractEntity);
+                }
+            } catch (ModuleNotFound moduleNotFound) {
+                trace.logException("Cannot find service for entity" , moduleNotFound,TraceLevel.Warning,false);
+            }
+        }
+
         if (user == null) return false;
 
         if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {

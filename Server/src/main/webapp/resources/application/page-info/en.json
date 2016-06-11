@@ -145,11 +145,11 @@
     "news_card"         : "Последние новсти на нашем портале. Какие были добавлены курсы? Или какие курсы сейчас разрабатываются? А также прогресс готовности курса!",
     "contactUs_card"    : "Возник вопрос? Или обноружили баг на сайте? А может хотите поделиться идеями или замечаниями? Пишите, сам активным в подарок курсы!",
 
-    "video_dialog_not_authorized" : "Для отпарвки кооментария необходимо авторизироваться в системе",
-    "video_comments_count" : "Количество кооментариев : ",
-    "video_comments_remove" : "Remove video comment",
-    "block_video_comment"   : "Block video comment",
-    "block_status"          : "Block status",
+    "comment_not_authorized"  : "Для отпарвки кооментария необходимо авторизироваться на портале",
+    "comment_count"           : "Количество кооментариев : ",
+    "comment_remove"          : "Remove comment",
+    "comment_block"           : "Block comment",
+    "block_status"            : "Block status",
 
     "page_404"  : "Page not found. Error : 404",
     "page_403"  : "Access denied. Error : 403",

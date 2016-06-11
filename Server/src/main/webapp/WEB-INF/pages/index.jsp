@@ -35,6 +35,7 @@
     <link rel="stylesheet" type="text/css" href="/resources/css/main/video.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/main/graphics.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/main/editor.css">
+    <link rel="stylesheet" type="text/css" href="/resources/css/comments/simple-comment.css">
 
     <%--Inputs--%>
     <link rel="stylesheet" type="text/css" href="/resources/css/main/inputs/image/select-image.css">
