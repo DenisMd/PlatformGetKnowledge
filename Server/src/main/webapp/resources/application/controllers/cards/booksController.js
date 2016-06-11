@@ -14,7 +14,6 @@ model.controller("booksController" , function($scope,$state,applicationService,c
     $scope.by_date = function() {
         $scope.currentFilterByDate = true;
         $scope.filter.clearOrder();
-        $scope.filter.clearCustomFilters();
         $scope.filter.setOrder("createDate" , true);
 
         $scope.filter.result.first = 0;
@@ -26,7 +25,6 @@ model.controller("booksController" , function($scope,$state,applicationService,c
     $scope.by_name = function() {
         $scope.currentFilterByDate = false;
         $scope.filter.clearOrder();
-        $scope.filter.clearCustomFilters();
         $scope.filter.setOrder("name" , false);
 
         $scope.filter.result.first = 0;

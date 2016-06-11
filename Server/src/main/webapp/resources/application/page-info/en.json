@@ -89,6 +89,7 @@
     "icon"          : "Icon",
     "any"           : "Any",
     "description"   : "Description",
+    "tags"          : "Tags",
 
 
     "failed"        : "Failed",
