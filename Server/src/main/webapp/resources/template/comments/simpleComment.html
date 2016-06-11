@@ -1,0 +1,90 @@
+<div class="simple-comments" ng-controller="simpleCommentController">
+    <div layout="row" layout-align="start center">
+        <div flex="30"></div>
+        <div flex="50">
+            <module-template name="components/infoMessage" data="commentErrorMessage"></module-template>
+        </div>
+        <div flex="20"></div>
+    </div>
+    <div ng-show="user" layout="row" layout-align="start center" class="comment-edit">
+        <div flex="30" class="text-center user-name">
+            <img ng-src="{{user.imageSrc}}">
+            <br>
+            {{translate("i")}}
+        </div>
+        <div flex="50">
+            <div class="bubble">
+                <div  ng-model="commentMessage" class="post-editarea" contenteditable>
+                </div>
+            </div>
+        </div>
+        <div flex="20">
+            <md-button class="md-raised md-primary" ng-click="sendMessage(commentMessage)">{{translate("send")}}</md-button>
+        </div>
+    </div>
+
+    <div class="not-authorized-text text-center" ng-show="!user">{{translate("comment_not_authorized")}}</div>
+    <!--Comments-->
+    <hr>
+    <div class="video_comments_count">
+        {{translate("comment_count") + totalVideoCommentsCount}}
+    </div>
+    <div class="simple-comment" ng-repeat="comment in comments">
+        <div layout="row" layout-align="start center">
+            <div flex="30" class="text-center user-name">
+                <img ng-src="{{comment.sender.imageSrc}}">
+                <br>
+                {{comment.sender.lastName + ' ' + comment.sender.firstName}}
+                <br>
+                {{comment.sender.speciality}}
+            </div>
+            <div flex="60">
+                <i class="fa fa-times right-icon" aria-hidden="true" ng-click="showDeleteCommentDialog($event,comment.id,$index)" ng-hide="!user || user.id !== comment.sender.id"></i>
+                <i class="fa fa-lock right-icon" aria-hidden="true" ng-click="showDeleteCommentDialog($event,comment.id,$index)" ng-show="comment.editable && comment.commentStatus === 'Normal'""></i>
+                <div class="bubble video-comment-message">
+                    <div ng-bind-html="comment.message" ng-show="comment.commentStatus === 'Normal'"></div>
+                    <div ng-show="comment.commentStatus !== 'Normal'" class="video-comment-blocked-message">
+                        {{translate(comment.commentStatus.toLowercaseFirstLetter())}}
+                    </div>
+                </div>
+                <div class="comment-time">{{comment.createTime | date : 'medium'}}</div>
+            </div>
+            <div flex="10">
+            </div>
+        </div>
+    </div>
+    <!--<div class="text-center loadMore video-comments-padding" ng-show="videoCommentsCount < totalVideoCommentsCount" ng-click="loadMoreComments()">{{translate("load_more")}}</div>-->
+</div>  <!--Video comments-->
+
+<script type="text/ng-template" id="blockVideoComment.html">
+    <md-dialog ng-cloak>
+        <form>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <h2>{{parentScope.translate("block_video_comment")}}</h2>
+                    <span flex></span>
+                    <md-button class="md-icon-button" ng-click="cancel()">
+                        <md-icon md-svg-src="resources/image/svg/close.svg" aria-label="Close dialog"></md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+            <md-dialog-content>
+                <div class="md-dialog-content">
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>{{parentScope.translate("block_status")}}</label>
+                        <md-select ng-model="blockStatus">
+                            <md-option ng-repeat="bSt in parentScope.blockStatuses" value="{{bSt}}">
+                                {{parentScope.translate(bSt)}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </md-dialog-content>
+            <md-dialog-actions layout="row">
+                <md-button class="md-raised md-primary" ng-click="answer(blockStatus)">
+                    {{parentScope.translate("block")}}
+                </md-button>
+            </md-dialog-actions>
+        </form>
+    </md-dialog>
+</script>

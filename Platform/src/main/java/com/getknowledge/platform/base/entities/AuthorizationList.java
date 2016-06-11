@@ -16,6 +16,10 @@ public class AuthorizationList {
     private List<Permission> permissionsForEdit = new ArrayList<>();
     private List<Permission> permissionsForCreate = new ArrayList<>();
     private List<Permission> permissionsForRemove = new ArrayList<>();
+    public boolean readFromAuthorizedService = false;
+    public boolean editFromAuthorizedService = false;
+    public boolean createFromAuthorizedService = false;
+    public boolean removeFromAuthorizedService = false;
     public boolean allowCreateEveryOne = false;
     public boolean allowReadEveryOne = false;
     public boolean allowUseAuthorizedService = false;

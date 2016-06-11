@@ -33,6 +33,7 @@ public class BookComment extends Comment {
     @Override
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
+        authorizationList.allowReadEveryOne = true;
         authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.BlockComments));
         return authorizationList;
     }

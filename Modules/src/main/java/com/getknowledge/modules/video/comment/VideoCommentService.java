@@ -8,8 +8,10 @@ import com.getknowledge.modules.video.VideoRepository;
 import com.getknowledge.modules.video.VideoService;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.base.services.AbstractService;
+import com.getknowledge.platform.base.services.AuthorizedService;
 import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.modules.Result;
+import com.getknowledge.platform.modules.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +20,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 @Service("VideoCommentService")
-public class VideoCommentService extends AbstractService {
+public class VideoCommentService extends AuthorizedService<VideoComment> {
 
     @Autowired
     private VideoCommentRepository videoCommentRepository;
@@ -78,7 +80,7 @@ public class VideoCommentService extends AbstractService {
         return Result.Complete();
     }
 
-    @Action(name = "addComment" , mandatoryFields = {"videoId","text"})
+    @Action(name = "addComment" , mandatoryFields = {"objectId","text"})
     @Transactional
     public Result addComment(HashMap<String,Object> data) throws NotAuthorized {
         UserInfo userInfo = userInfoRepository.getCurrentUser(data);
@@ -86,7 +88,7 @@ public class VideoCommentService extends AbstractService {
             return Result.NotAuthorized();
         }
 
-        Long videoId = longFromField("videoId",data);
+        Long videoId = longFromField("objectId",data);
         Video video = videoRepository.read(videoId);
 
         if (video == null){
@@ -115,5 +117,11 @@ public class VideoCommentService extends AbstractService {
 
         videoCommentRepository.createComment(text,video,userInfo);
         return Result.Complete();
+    }
+
+    @Override
+    public boolean isAccessForRead(User currentUser, VideoComment entity) {
+        if (entity == null) return false;
+        return videoService.isAccessForRead(currentUser,entity.getVideo());
     }
 }

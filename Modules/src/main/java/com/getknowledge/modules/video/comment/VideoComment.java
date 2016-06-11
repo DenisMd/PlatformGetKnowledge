@@ -35,6 +35,7 @@ public class VideoComment extends Comment {
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
         authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.BlockComments));
+        authorizationList.readFromAuthorizedService = true;
         return authorizationList;
     }
 
