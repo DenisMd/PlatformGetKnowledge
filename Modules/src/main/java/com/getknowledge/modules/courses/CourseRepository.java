@@ -140,8 +140,9 @@ public class CourseRepository extends ProtectedRepository<Course> {
             course.setName(name);
         if (description != null)
             course.setDescription(description);
-        if (tags != null) {
-            coursesTagRepository.removeTagsFromEntity(course);
+
+        coursesTagRepository.removeTagsFromEntity(course);
+        if (tags != null  && !tags.isEmpty()) {
             coursesTagRepository.createTags(tags,course);
         }
 
@@ -160,7 +161,9 @@ public class CourseRepository extends ProtectedRepository<Course> {
         }
 
         merge(course);
-        addCourseToTag(course);
+        if (tags != null  && !tags.isEmpty()) {
+            addCourseToTag(course);
+        }
         coursesTagRepository.removeUnusedTags();
 
         return course;

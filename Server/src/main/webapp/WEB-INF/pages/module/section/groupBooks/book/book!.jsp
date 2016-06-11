@@ -71,9 +71,9 @@
           {{book.description}}
       </p>
   </div>
-  <div flex layout="column">
+  <div flex layout="column" layout-align="center center">
       <div>
-          <md-button class="md-raised md-primary" ng-click="showEditableContent = !showEditableContent" ng-show="book.editable">{{translate("change")}}</md-button>
+          <button class="btn btn-default" ng-click="showEditableContent = !showEditableContent" ng-show="book.editable">{{translate("change")}}</button>
       </div>
       <div>
           <h3>{{translate("author")}}</h3>
