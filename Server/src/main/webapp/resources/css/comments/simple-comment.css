@@ -9,11 +9,11 @@
     text-align: right;
 }
 
-.video-comments-padding {
+.comments-padding {
     padding: 15px 0;
 }
 
-.video-comments-count {
+.comments-count {
     font-size: 15px;
     padding-left: 10px;
     font-weight: bold;
@@ -28,7 +28,7 @@
 }
 
 
-.video-comment-message {
+.comment-message {
     word-break: break-all;
 }
 
@@ -47,7 +47,7 @@
     color: #6d6d6d;
 }
 
-.video-comment-blocked-message {
+.comment-blocked-message {
     color: #9e9e9e;
 }
 

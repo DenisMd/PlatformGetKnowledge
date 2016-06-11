@@ -26,8 +26,8 @@
     <div class="not-authorized-text text-center" ng-show="!user">{{translate("comment_not_authorized")}}</div>
     <!--Comments-->
     <hr>
-    <div class="video_comments_count">
-        {{translate("comment_count") + totalVideoCommentsCount}}
+    <div class="comments-count">
+        {{translate("comment_count") + commentsInfo.totalEntitiesCount}}
     </div>
     <div class="simple-comment" ng-repeat="comment in comments">
         <div layout="row" layout-align="start center">
@@ -40,10 +40,10 @@
             </div>
             <div flex="60">
                 <i class="fa fa-times right-icon" aria-hidden="true" ng-click="showDeleteCommentDialog($event,comment.id,$index)" ng-hide="!user || user.id !== comment.sender.id"></i>
-                <i class="fa fa-lock right-icon" aria-hidden="true" ng-click="showDeleteCommentDialog($event,comment.id,$index)" ng-show="comment.editable && comment.commentStatus === 'Normal'""></i>
-                <div class="bubble video-comment-message">
+                <i class="fa fa-lock right-icon" aria-hidden="true" ng-click="showBlockCommentDialog($event,comment.id,$index)" ng-show="comment.editable && comment.commentStatus === 'Normal'""></i>
+                <div class="bubble comment-message">
                     <div ng-bind-html="comment.message" ng-show="comment.commentStatus === 'Normal'"></div>
-                    <div ng-show="comment.commentStatus !== 'Normal'" class="video-comment-blocked-message">
+                    <div ng-show="comment.commentStatus !== 'Normal'" class="comment-blocked-message">
                         {{translate(comment.commentStatus.toLowercaseFirstLetter())}}
                     </div>
                 </div>
@@ -53,15 +53,17 @@
             </div>
         </div>
     </div>
-    <!--<div class="text-center loadMore video-comments-padding" ng-show="videoCommentsCount < totalVideoCommentsCount" ng-click="loadMoreComments()">{{translate("load_more")}}</div>-->
-</div>  <!--Video comments-->
+    <div class="text-center loadMore comments-padding" ng-show="commentsInfo.totalEntitiesCount > (filter.result.first + filter.max)" ng-click="loadMore()">
+        {{translate("load_more")}}
+    </div>
+</div>  <!--comments-->
 
-<script type="text/ng-template" id="blockVideoComment.html">
+<script type="text/ng-template" id="blockComment.html">
     <md-dialog ng-cloak>
         <form>
             <md-toolbar>
                 <div class="md-toolbar-tools">
-                    <h2>{{parentScope.translate("block_video_comment")}}</h2>
+                    <h2>{{parentScope.translate("comment_block")}}</h2>
                     <span flex></span>
                     <md-button class="md-icon-button" ng-click="cancel()">
                         <md-icon md-svg-src="resources/image/svg/close.svg" aria-label="Close dialog"></md-icon>
