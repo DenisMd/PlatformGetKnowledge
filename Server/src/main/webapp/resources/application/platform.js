@@ -62,6 +62,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             "programmingLanguages" :  "com.getknowledge.modules.dictionaries.programming.languages.ProgrammingLanguage",
             "programmingStyles" : "com.getknowledge.modules.dictionaries.programming.styles.ProgrammingStyle",
             "book" : "com.getknowledge.modules.books.Book",
+            "bookComment" : "com.getknowledge.modules.books.comment.BookComment",
             "program" : "com.getknowledge.modules.programs.Program",
             "course" : "com.getknowledge.modules.courses.Course",
             "tutorial" : "com.getknowledge.modules.courses.tutorial.Tutorial",

@@ -18,11 +18,18 @@ model.controller("simpleCommentController" , function($scope,$state,applicationS
         applicationService.filterRequest($scope,"commentsInfo", $scope.filter,addComment);
     };
 
-    $scope.$on("showSimpleComments" , function () {
+    if (!$scope.getData().withoutEvent) {
+        var eventName = $scope.getData().id ? "showSimpleComments" + $scope.getData().id : "showSimpleComments";
+        $scope.$on(eventName, function () {
+            $scope.comments = [];
+            $scope.filter.equals($scope.getData().filedName, "number", $scope.getData().objectId);
+            doAction();
+        });
+    } else {
         $scope.comments = [];
-        $scope.filter.equals($scope.getData().filedName,"number",$scope.getData().objectId);
+        $scope.filter.equals($scope.getData().filedName, "number", $scope.getData().objectId);
         doAction();
-    });
+    }
     
     $scope.sendMessage = function(message) {
         var messageInfo = {

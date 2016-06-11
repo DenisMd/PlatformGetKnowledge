@@ -84,6 +84,14 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
     $scope.bookData = function(){
         return applicationService.fileByKeyHref(className.book,bookId,"key");
     };
-
+    
+    //Кооментарии к книгам
+    $scope.commentData = {
+        id : "Book",
+        commentClassName : className.bookComment,
+        filedName : "book.id",
+        objectId : parseInt(bookId),
+        withoutEvent : true
+    };
 
 });

@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet" href="/resources/css/section.css">
 
 
 <div ng-show="showEditableContent">
@@ -104,4 +103,8 @@
   <div>
     <a ng-href="{{bookData()}}" download>{{"data_link"}}</a>
   </div>
+</div>
+
+<div>
+    <module-template name="comments/simpleComment" data="commentData"></module-template>
 </div>
