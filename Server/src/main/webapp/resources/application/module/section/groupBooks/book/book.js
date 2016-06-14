@@ -26,6 +26,7 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
             
             if (book.owner){
                 book.owner.imageSrc = $scope.userImg(book.owner.id);
+                book.owner.userUrl = $scope.createUrl("/user/"+book.owner.id);
             }
         });
     }

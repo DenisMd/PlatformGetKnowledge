@@ -15,7 +15,9 @@
     </md-content>
     <md-content class="content-body folders-body">
         <div layout-gt-sm="row" layout-align="center center">
-            <h1 class="title text-center" flex-gt-sm="none">{{data.title}} ({{foldersInfo.totalEntitiesCount + " " + translate("of_records")}})</h1>
+            <p class="title text-center" flex-gt-sm="none">
+                {{data.title}} ({{foldersInfo.totalEntitiesCount + " " + translate("of_records")}})
+            </p>
             <div flex class="folders-orderBy text-center">
                 <span class="{{!currentFilterByDate ? 'active' : ''}}" ng-click="by_count()">{{translate("by_count")}}</span> / <span class="{{currentFilterByDate ? 'active' : ''}}" ng-click="by_date()">{{translate("by_date")}}</span>
             </div>

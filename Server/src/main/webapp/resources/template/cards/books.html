@@ -14,7 +14,7 @@
                 {{translate("do_filter")}}
             </button>
         </div>
-        <div layout="column" class="create-area" ng-show="showCreateArea">
+        <div layout="column" ng-show="showCreateArea">
             <div layout-gt-sm="row" flex>
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>{{translate("name")}}</label>
@@ -44,9 +44,9 @@
     </md-content>
     <md-content class="content-body folders-body">
         <div layout-gt-sm="row" layout-align="center">
-            <h1 class="title text-center" flex-gt-sm="none">
+            <p class="title text-center" flex-gt-sm="none">
                 {{translate("books")}} ({{booksInfo.totalEntitiesCount + " " + translate("of_records")}})
-            </h1>
+            </p>
         </div>
         <div layout-gt-sm="row" layout-align="center center" class="group-info">
             <h1 class="title text-center" flex-gt-sm="none">{{groupBookInfo.list[0].title}}</h1>

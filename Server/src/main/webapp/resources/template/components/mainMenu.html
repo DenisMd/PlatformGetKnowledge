@@ -4,10 +4,8 @@
             <div class="user-info-card" ng-show="user">
                 <a ng-href="{{'#/' +application.language+'/user/' + user.id}}"><img ng-src="{{user.imageSrc}}"
                                                                     class="main-image"/></a>
-
                 <p class="main-label">{{user.firstName}} {{user.lastName}}</p>
-
-                <p class="info-about-user">{{user.specialty}}</p>
+                <p class="info-about-user">{{user.speciality}}</p>
                 <a class="logout" ng-click="logout()">({{translate('logout')}})</a>
             </div>
 

@@ -15,7 +15,7 @@
                     </div>
                     <h2 class="md-title">{{translate("tags")}}</h2>
                     <div>
-                        <md-chips ng-model="book.tagsName" readonly="false"></md-chips>
+                        <md-chips ng-model="book.tagsName"></md-chips>
                     </div>
                     <div>
                         <label for="description">{{translate("description")}}</label>
@@ -61,36 +61,33 @@
     </md-content>
 </div>
 
+
+<div layout="row" class="book-change-row">
+    <button class="btn btn-default" ng-click="showEditableContent = !showEditableContent" ng-show="book.editable" flex="30">
+        {{translate("book_change")}}
+    </button>
+</div>
+
 <div layout="row">
-  <div flex>
+  <div flex="none">
       <img ng-src="{{book.coverUrl}}" class="book-cover">
   </div>
-  <div flex>
+  <div flex="65" class="book-title">
       <h1 class="text-center">{{book.name}}</h1>
       <p class="description text-justify">
           {{book.description}}
       </p>
+      <p class="book-date">{{translate("book_create_date")}} : {{book.createDate|date:"medium"}}</p>
+      <md-chips ng-model="book.tagsName" readonly="true"></md-chips>
   </div>
-  <div flex layout="column" layout-align="center center">
-      <div>
-          <button class="btn btn-default" ng-click="showEditableContent = !showEditableContent" ng-show="book.editable">{{translate("change")}}</button>
-      </div>
-      <div>
-          <h3>{{translate("author")}}</h3>
-          <a ng-href="#/' +application.language+'/user/' + book.owner.id">
-              <img ng-src="{{book.owner.imageSrc}}" class="main-image"/>
-              <p class="main-label">{{user.firstName}} {{user.lastName}}</p>
-          </a>
-      </div>
-      <div>
-          <h3>{{translate("book_create_date")}}</h3>
-          <p>{{book.createDate|date:"medium"}}</p>
-      </div>
+  <div flex="35" layout="column" layout-align="start center">
 
-      <div>
-          <h3>{{translate("tags")}}</h3>
-          <md-chips ng-model="book.tagsName" readonly="true"></md-chips>
-      </div>
+      <p class="text-center book-author-title">{{translate("author")}}<p>
+      <a ng-href="{{book.owner.userUrl}}" class="book-author-name">
+          <img ng-src="{{book.owner.imageSrc}}" class="main-image"/>
+          <p class="main-label">{{book.owner.firstName}} {{book.owner.lastName}}</p>
+      </a>
+      <p>{{book.owner.speciality}}</p>
   </div>
 </div>
 

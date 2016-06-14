@@ -2,3 +2,27 @@
     width: 252px;
     height: 378px;
 }
+
+.book-title {
+    margin: 0 25px;
+}
+
+.book-title h1 {
+    margin: 0;
+}
+
+.book-change-row {
+    margin: 15px 0;
+}
+
+.book-author-title {
+    font-size: 18px;
+}
+
+.book-author-name , .book-author-name:hover, .book-author-name:visited {
+    color : black;
+}
+
+.book-date {
+    color: #1B3FC5;
+}

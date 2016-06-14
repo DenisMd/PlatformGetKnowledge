@@ -58,3 +58,11 @@
 .sender-image , .sender-image:hover, .sender-image:visited {
     color: black;
 }
+
+.sender-speciality {
+    font-weight: normal;
+}
+
+.without-default-margin {
+    margin: 0;
+}

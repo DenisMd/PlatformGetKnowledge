@@ -90,6 +90,7 @@
     "any"           : "Any",
     "description"   : "Description",
     "tags"          : "Tags",
+    "change"        : "Change",
 
 
     "failed"        : "Failed",

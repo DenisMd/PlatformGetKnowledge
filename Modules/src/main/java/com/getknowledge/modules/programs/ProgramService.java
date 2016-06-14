@@ -107,7 +107,7 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
         }
 
         if (data.containsKey("tags")){
-            links = (List<String>) data.get("tags");
+            tags = (List<String>) data.get("tags");
         }
 
 

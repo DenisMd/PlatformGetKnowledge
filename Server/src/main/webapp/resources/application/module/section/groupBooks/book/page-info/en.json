@@ -1,5 +1,6 @@
 {
   "text" : {
-    "book_create_date":"Book upload date"
+    "book_create_date":"Book upload date",
+    "book_change" : "Change book info"
   }
 }

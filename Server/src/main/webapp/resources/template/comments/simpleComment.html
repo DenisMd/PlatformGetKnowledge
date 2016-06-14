@@ -40,10 +40,9 @@
             <div flex="30" class="text-center user-name">
                 <a ng-href="{{comment.sender.userUrl}}" class="sender-image">
                     <img ng-src="{{comment.sender.imageSrc}}">
-                    <p>{{comment.sender.lastName + ' ' + comment.sender.firstName}}</p>
+                    <p class="without-default-margin">{{comment.sender.lastName + ' ' + comment.sender.firstName}}</p>
                 </a>
-                <br>
-                {{comment.sender.speciality}}
+                <p class="sender-speciality">{{comment.sender.speciality}}</p>
             </div>
             <div flex="60">
                 <i class="fa fa-times right-icon" aria-hidden="true" ng-click="showDeleteCommentDialog($event,comment.id,$index)" ng-hide="!user || user.id !== comment.sender.id"></i>

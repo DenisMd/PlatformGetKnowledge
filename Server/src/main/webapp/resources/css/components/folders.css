@@ -45,6 +45,7 @@ md-input-container.folders-toolbar-input-container .md-input{
 
 .folders-body .title{
     margin: 0;
+    font-size: 2em;
 }
 
 .folders-orderBy{
@@ -115,8 +116,4 @@ md-input-container.folders-toolbar-input-container .md-input{
 .load-more-div {
     height: 60px;
     font-size: 23px;
-}
-
-.create-area {
-
 }
