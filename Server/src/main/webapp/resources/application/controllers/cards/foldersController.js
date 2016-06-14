@@ -1,6 +1,6 @@
 model.controller("foldersController" , function ($scope,applicationService) {
 
-    $scope.currentFilterByDate = true;
+    $scope.currentFilterByDate = false;
 
     $scope.filter = applicationService.createFilter($scope.getData().className,0,10);
     $scope.filter.setDistinct(false);
@@ -57,7 +57,7 @@ model.controller("foldersController" , function ($scope,applicationService) {
         applicationService.filterRequest($scope,"foldersInfo",$scope.filter,addFolder);
     };
 
-    $scope.by_date();
+    $scope.by_count();
 
     $scope.loadMore = function () {
         $scope.filter.increase(10);

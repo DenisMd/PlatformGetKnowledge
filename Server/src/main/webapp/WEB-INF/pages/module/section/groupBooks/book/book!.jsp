@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<link rel="stylesheet" href="/resources/css/book-page/book.css">
 
 
 <div ng-show="showEditableContent">
@@ -62,7 +63,7 @@
 
 <div layout="row">
   <div flex>
-      <img ng-src="{{bookImg()}}" class="cover-img">
+      <img ng-src="{{book.coverUrl}}" class="book-cover">
   </div>
   <div flex>
       <h1 class="text-center">{{book.name}}</h1>

@@ -18,23 +18,30 @@
                 </div>
             </div>
         </div>
-        <div flex="20">
-            <md-button class="md-raised md-primary" ng-click="sendMessage(commentMessage)">{{translate("send")}}</md-button>
+        <div flex="20" layout-margin>
+            <button class="btn btn-primary"  ng-click="sendMessage(commentMessage)">{{translate("send")}}</button>
+            <!--<md-button class="md-raised md-primary" ng-click="sendMessage(commentMessage)">{{translate("send")}}</md-button>-->
         </div>
     </div>
 
-    <div class="not-authorized-text text-center" ng-show="!user">{{translate("comment_not_authorized")}}</div>
-    <!--Comments-->
-    <hr>
-    <div class="comments-count">
-        {{translate("comment_count") + commentsInfo.totalEntitiesCount}}
+    <div layout="column">
+        <div class="not-authorized-text text-center" ng-show="!user" flex>{{translate("comment_not_authorized")}}</div>
+        <span layout="row" layout-align="start center">
+            <hr flex="80"/>
+        </span>
+        <div class="comments-count text-center" flex>
+            {{translate("comment_count") + commentsInfo.totalEntitiesCount}}
+        </div>
     </div>
+
+
     <div class="simple-comment" ng-repeat="comment in comments">
         <div layout="row" layout-align="start center">
             <div flex="30" class="text-center user-name">
-                <img ng-src="{{comment.sender.imageSrc}}">
-                <br>
-                {{comment.sender.lastName + ' ' + comment.sender.firstName}}
+                <a ng-href="{{comment.sender.userUrl}}" class="sender-image">
+                    <img ng-src="{{comment.sender.imageSrc}}">
+                    <p>{{comment.sender.lastName + ' ' + comment.sender.firstName}}</p>
+                </a>
                 <br>
                 {{comment.sender.speciality}}
             </div>

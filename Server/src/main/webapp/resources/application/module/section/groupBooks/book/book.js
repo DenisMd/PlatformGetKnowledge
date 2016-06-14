@@ -22,6 +22,8 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
                 });
             });
             
+            book.coverUrl = applicationService.imageHref(className.book,book.id);
+            
             if (book.owner){
                 book.owner.imageSrc = $scope.userImg(book.owner.id);
             }
@@ -29,9 +31,6 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
     }
 
     readBook();
-    $scope.bookImg = function(){
-        return applicationService.imageHref(className.book,bookId);
-    };
 
     $scope.addUrl = function() {
         $scope.book.urls.push({

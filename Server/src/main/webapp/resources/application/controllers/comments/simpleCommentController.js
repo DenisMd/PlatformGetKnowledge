@@ -6,6 +6,7 @@ model.controller("simpleCommentController" , function($scope,$state,applicationS
     var addComment = function (comment) {
         if (comment) {
             comment.sender.imageSrc = $scope.userImg(comment.sender.id);
+            comment.sender.userUrl = $scope.createUrl("/user/" + comment.sender.id);
             $scope.comments.push(comment);
         }
     };
