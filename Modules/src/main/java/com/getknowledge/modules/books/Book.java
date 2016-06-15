@@ -63,7 +63,6 @@ public class Book extends AbstractEntity implements CloneableEntity<Book>,IUser,
     private byte[] bookData;
 
     @Column(name = "file_name")
-    @JsonIgnore
     private String fileName;
 
     public Calendar getCreateDate() {
@@ -189,6 +188,7 @@ public class Book extends AbstractEntity implements CloneableEntity<Book>,IUser,
         cloneBook.setTags(this.getTags());
         cloneBook.setCreateDate(this.createDate);
         cloneBook.setObjectVersion(this.getObjectVersion());
+        cloneBook.setFileName(this.getFileName());
         return cloneBook;
     }
 }

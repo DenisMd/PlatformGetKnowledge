@@ -57,7 +57,6 @@ public class Program extends AbstractEntity implements CloneableEntity<Program>,
     private byte[] bookData;
 
     @Column(name = "file_name")
-    @JsonIgnore
     private String fileName;
 
     public String getFileName() {
@@ -176,6 +175,7 @@ public class Program extends AbstractEntity implements CloneableEntity<Program>,
         cloneProgram.setOwner(this.getOwner());
         cloneProgram.setTags(this.getTags());
         cloneProgram.setObjectVersion(this.getObjectVersion());
+        cloneProgram.setFileName(this.getFileName());
         return cloneProgram;
     }
 }

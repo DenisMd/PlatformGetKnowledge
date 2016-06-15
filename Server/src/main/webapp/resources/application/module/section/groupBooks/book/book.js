@@ -23,11 +23,14 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
             });
             
             book.coverUrl = applicationService.imageHref(className.book,book.id);
+            book.downloadUrl = applicationService.fileByKeyHref(className.book,book.id,"key");;
             
             if (book.owner){
                 book.owner.imageSrc = $scope.userImg(book.owner.id);
                 book.owner.userUrl = $scope.createUrl("/user/"+book.owner.id);
             }
+
+            updateCroppedImage(book);
         });
     }
 
@@ -62,28 +65,36 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
         });
     };
 
-    var croppedImg = {
+    $scope.croppedImg = {
+        id : 'book-cover',
         save: function(file){
             updateImage(file);
         },
         areaType:"square"
     };
 
-    $scope.getCropImageData  = function(){
-        croppedImg.src = applicationService.imageHref(className.book,$scope.book.id);
-        croppedImg.notUseDefault = $scope.book.imageViewExist;
-        return croppedImg;
+    var updateImage = function(file) {
+        applicationService.actionWithFile($scope,"cover",className.book,"uploadCover",{bookId:$scope.book.id},file,function (result) {
+            $scope.showToast($scope.getResultMessage(result));
+            if (result.status === "Complete") {
+                $scope.book.imageViewExist = true;
+                $scope.$broadcast("updateCropImage"+$scope.croppedImg.id+"Event");
+            }
+        });
     };
 
-    var updateImage = function(file) {
-        applicationService.actionWithFile($scope,"",className.book,"uploadCover",{bookId:$scope.book.id},file);
-    };
+    function updateCroppedImage(book){
+        $scope.croppedImg.src = applicationService.imageHref(className.book,book.id);
+        $scope.croppedImg.notUseDefault = book.imageViewExist;
+
+        //Если изображение открывается первый раз событие не сработает так не зарегестрированно
+        //Поэтому добавляется проверка для открытия
+        $scope.croppedImg.setupImgae = true;
+
+        $scope.$broadcast("updateCropImage"+$scope.croppedImg.id+"Event");
+    }
 
     $scope.uploader = applicationService.createUploader($scope,"",className.book,"uploadData",{bookId:+bookId});
-
-    $scope.bookData = function(){
-        return applicationService.fileByKeyHref(className.book,bookId,"key");
-    };
     
     //Кооментарии к книгам
     $scope.commentData = {

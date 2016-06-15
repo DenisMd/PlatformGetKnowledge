@@ -1,6 +1,12 @@
 {
   "text" : {
     "book_create_date":"Book upload date",
-    "book_change" : "Change book info"
+    "book_change" : "Change book info",
+    "book_links" : "Links to get book",
+    "book_download_link" : "Download book from getKnowledge()",
+    "book_info" : "Book information",
+    "book_add_url" : "Add book url",
+    "book_cover"  : "Book cover",
+    "book_data"   : "Load book on server"
   }
 }

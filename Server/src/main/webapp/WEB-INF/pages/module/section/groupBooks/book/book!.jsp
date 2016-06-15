@@ -26,7 +26,7 @@
                         <div>
                             <div ng-repeat="url in book.urls">
                                 <md-input-container>
-                                    <label>{{translate("url") + ($index+1)}}</label>
+                                    <label>{{translate("url") + " " + ($index+1)}}</label>
                                     <input ng-model="url.name"> (<a href="" ng-click="removeUrl($index)">X</a>)
                                 </md-input-container>
                             </div>
@@ -41,7 +41,7 @@
                 <md-content class="md-padding">
                     <md-tab-body>
                         <md-content class="md-padding">
-                            <module-template name="inputs/selectImage" data="getCropImageData()"></module-template>
+                            <module-template name="inputs/selectImage" data="croppedImg"></module-template>
                         </md-content>
                     </md-tab-body>
                 </md-content>
@@ -91,16 +91,16 @@
   </div>
 </div>
 
-<div>
-  {{translate("links")}}
-  <ul>
-    <li ng-repeat="url in book.links">
-      <a ng-href="{{url}}">{{url}}</a>
-    </li>
-  </ul>
-  <div>
-    <a ng-href="{{bookData()}}" download>{{"data_link"}}</a>
-  </div>
+<div layout="column" layout-align="center">
+    {{translate("book_links")}}
+
+    <div ng-repeat="url in book.links">
+        <a ng-href="{{url}}">{{url}}</a>
+    </div>
+
+    <div ng-if="book.fileName">
+        <a ng-href="{{book.downloadUrl}}" download>{{translate("book_download_link")}} ---> '{{book.fileName}}'</a>
+    </div>
 </div>
 
 <div>

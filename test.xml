@@ -1,0 +1,32 @@
+XML ответ:
+<xml-fragment>
+    <tpt:Header xmlns:tpt="http://schemas.tranzaxis.com/tptpResponse.xsd">
+        <tpt:DeviceType>9.</tpt:DeviceType>
+        <tpt:TransmissionNumber>30</tpt:TransmissionNumber>
+        <tpt:TerminalId>TEST_EXP</tpt:TerminalId>
+        <tpt:EmployeeId>ADMIN</tpt:EmployeeId>
+        <tpt:DateTime>2016-06-09T16:52:49.000</tpt:DateTime>
+        <tpt:MessageType>A</tpt:MessageType>
+        <tpt:MessageSubType>O</tpt:MessageSubType>
+        <tpt:TransactionCode>90</tpt:TransactionCode>
+        <tpt:ProcessingFlag1>0</tpt:ProcessingFlag1>
+        <tpt:ProcessingFlag2>0</tpt:ProcessingFlag2>
+        <tpt:ProcessingFlag3>0</tpt:ProcessingFlag3>
+        <tpt:ResponseCode>881</tpt:ResponseCode>
+    </tpt:Header>
+    <tpt:Body xmlns:tpt="http://schemas.tranzaxis.com/tptpResponse.xsd">
+        <tpt:DownloadKey>
+            <tpt:Category>00</tpt:Category>
+            <tpt:AccessCode>2</tpt:AccessCode>
+            <tpt:ProcessingFlag>p</tpt:ProcessingFlag>
+            <tpt:Filler>0000000000</tpt:Filler>
+        </tpt:DownloadKey>
+        <tpt:DownloadData>
+            <tpt:Did>0</tpt:Did>
+            <tpt:Did>H Русский язык????</tpt:Did>
+            <tpt:Did>a TEST_EXP</tpt:Did>
+            <tpt:Did>h 00000000</tpt:Did>
+            <tpt:Did>p 000011010000011010000000010000</tpt:Did>
+        </tpt:DownloadData>
+    </tpt:Body>
+</xml-fragment>
