@@ -95,10 +95,12 @@
     {{translate("book_links")}}
 
     <div ng-repeat="url in book.links">
+        <i class="fa fa-external-link" aria-hidden="true"></i>
         <a ng-href="{{url}}">{{url}}</a>
     </div>
 
     <div ng-if="book.fileName">
+        <i class="fa fa-cloud-download" aria-hidden="true"></i>
         <a ng-href="{{book.downloadUrl}}" download>{{translate("book_download_link")}} ---> '{{book.fileName}}'</a>
     </div>
 </div>
