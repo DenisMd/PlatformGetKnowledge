@@ -62,14 +62,14 @@
 </div>
 
 
-<div layout="row" class="book-change-row">
-    <button class="btn btn-default" ng-click="showEditableContent = !showEditableContent" ng-show="book.editable" flex="30">
+<div layout="row" class="book-change-row" layout-align-gt-sm="start start" layout-align="center center">
+    <button class="btn btn-default" ng-click="showEditableContent = !showEditableContent" ng-show="book.editable" flex="none">
         {{translate("book_change")}}
     </button>
 </div>
 
-<div layout="row">
-  <div flex="none">
+<div layout-gt-sm="row"  layout-align-gt-sm="start start" layout-align="start center" layout="column">
+  <div flex="none" >
       <img ng-src="{{book.coverUrl}}" class="book-cover">
   </div>
   <div flex="65" class="book-title">
@@ -81,7 +81,6 @@
       <md-chips ng-model="book.tagsName" readonly="true"></md-chips>
   </div>
   <div flex="35" layout="column" layout-align="start center">
-
       <p class="text-center book-author-title">{{translate("author")}}<p>
       <a ng-href="{{book.owner.userUrl}}" class="book-author-name">
           <img ng-src="{{book.owner.imageSrc}}" class="main-image"/>
@@ -91,12 +90,15 @@
   </div>
 </div>
 
-<div layout="column" layout-align="center">
-    {{translate("book_links")}}
+<div layout="column" layout-align="start center" class="book-links">
+
+    <div class="book-links-title">
+        {{translate("book_links")}}
+    </div>
 
     <div ng-repeat="url in book.links">
         <i class="fa fa-external-link" aria-hidden="true"></i>
-        <a ng-href="{{url}}">{{url}}</a>
+        <a ng-href="{{url}}" target="_blank">{{url}}</a>
     </div>
 
     <div ng-if="book.fileName">

@@ -26,3 +26,15 @@
 .book-date {
     color: #1B3FC5;
 }
+
+.book-links {
+    margin : 15px 0;
+    padding: 20px;
+    border : 1px dashed black;
+}
+
+.book-links-title {
+    font-size: 25px;
+    font-style: italic;
+    color : #32ae23;
+}
