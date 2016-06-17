@@ -8,14 +8,18 @@
 
 .book-wrap {
     margin: 0 15px;
-    width: 400px;
+    width: 240px;
 }
 
 .book-title {
-    font-size: 20px;
+    font-size: 18px;
     color: black;
     text-align: center;
     cursor: pointer;
+}
+
+.book-wrap:hover {
+    text-decoration: underline;
 }
 
 .csstransforms3d  .books {

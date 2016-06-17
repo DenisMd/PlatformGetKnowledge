@@ -1,6 +1,6 @@
 model.controller("booksController" , function($scope,$state,applicationService,className){
 
-    var maxCharactersInName = 36;
+    var maxCharactersInName = 21;
 
     $scope.currentFilterByDate = true;
     $scope.showCreateArea = false;
