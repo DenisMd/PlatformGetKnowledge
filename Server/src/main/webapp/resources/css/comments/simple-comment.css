@@ -57,6 +57,7 @@
 
 .sender-image , .sender-image:hover, .sender-image:visited {
     color: black;
+    cursor: pointer;
 }
 
 .sender-speciality {
