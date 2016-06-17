@@ -2,7 +2,10 @@ model.controller("videoDialogController",function($scope,videoDialogService,appl
     
     $scope.commentData = {
         commentClassName : className.videoComments,
-        filedName : "video.id"
+        filedName : "video.id",
+        callbackBeforeGoToUserPage : function() {
+            $('#videoModal').modal('hide');
+        }
     };
     
     videoDialogService.init($scope);

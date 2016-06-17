@@ -38,7 +38,7 @@
     <div class="simple-comment" ng-repeat="comment in comments">
         <div layout="row" layout-align="start center">
             <div flex="30" class="text-center user-name">
-                <a ng-href="{{comment.sender.userUrl}}" class="sender-image">
+                <a ng-click="goToUserPage(comment)" n class="sender-image">
                     <img ng-src="{{comment.sender.imageSrc}}">
                     <p class="without-default-margin">{{comment.sender.lastName + ' ' + comment.sender.firstName}}</p>
                 </a>

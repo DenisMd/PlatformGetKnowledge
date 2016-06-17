@@ -100,4 +100,11 @@ model.controller("simpleCommentController" , function($scope,$state,applicationS
             });
         });
     };
+
+    $scope.goToUserPage = function(comment) {
+        if ($scope.getData().callbackBeforeGoToUserPage){
+            $scope.getData().callbackBeforeGoToUserPage();
+        }
+        $scope.goTo(comment.sender.userUrl,true);
+    };
 });
