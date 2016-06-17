@@ -15,6 +15,7 @@ import com.getknowledge.platform.modules.user.User;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Entity
@@ -37,6 +38,10 @@ public class Program extends AbstractEntity implements CloneableEntity<Program>,
     @ManyToOne(optional = false)
     private UserInfo owner;
 
+    @Column(name = "create_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar createDate;
+
     @ManyToMany(mappedBy = "programs", cascade = {CascadeType.PERSIST})
     private List<ProgramTag> tags = new ArrayList<>();
 
@@ -58,6 +63,14 @@ public class Program extends AbstractEntity implements CloneableEntity<Program>,
 
     @Column(name = "file_name")
     private String fileName;
+
+    public Calendar getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Calendar createDate) {
+        this.createDate = createDate;
+    }
 
     public String getFileName() {
         return fileName;
@@ -176,6 +189,7 @@ public class Program extends AbstractEntity implements CloneableEntity<Program>,
         cloneProgram.setTags(this.getTags());
         cloneProgram.setObjectVersion(this.getObjectVersion());
         cloneProgram.setFileName(this.getFileName());
+        cloneProgram.setCreateDate(this.getCreateDate());
         return cloneProgram;
     }
 }

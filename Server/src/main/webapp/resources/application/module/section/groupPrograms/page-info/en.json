@@ -2,6 +2,7 @@
   "text" : {
     "programs_title" : "Programs catalogs",
     "folder_in" : "Go to programs folder",
-    "folder_totals_count" : "Programs totals count"
+    "folder_totals_count" : "Programs totals count",
+    "program_create" : "Create program"
   }
 }

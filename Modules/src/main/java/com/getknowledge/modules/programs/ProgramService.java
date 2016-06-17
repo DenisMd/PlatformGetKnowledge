@@ -63,7 +63,7 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
     }
 
 
-    @Action(name = "createProgram" , mandatoryFields = {"name","groupProgramId","description","language"})
+    @Action(name = "createProgram" , mandatoryFields = {"name","groupProgramUrl","description","language"})
     @Transactional
     public Result createProgram(HashMap<String,Object> data) {
         if (!data.containsKey("principalName"))
@@ -78,11 +78,10 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
             return Result.AccessDenied();
         }
 
-        Long groupBookId = new Long((Integer)data.get("groupProgramId"));
+        GroupPrograms groupPrograms =  groupProgramsRepository.getSingleEntityByFieldAndValue("url", data.get("groupProgramUrl"));
 
-        GroupPrograms groupPrograms =  groupProgramsRepository.read(groupBookId);
         if (groupPrograms == null) {
-            trace.log("Group program is not found" , TraceLevel.Warning,false);
+            trace.log("Group programs is not found" , TraceLevel.Warning,false);
             return Result.Failed();
         }
 

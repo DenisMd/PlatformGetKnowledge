@@ -422,50 +422,6 @@ model.controller("postController",['$scope','$timeout','$state','codemirrorURL',
 
 }]);
 
-model.controller("programCardCtrl" , function($scope,applicationService,className){
-    var filter = applicationService.createFilter($scope.getData().className,0,10);
-    filter.equal("groupPrograms.url",$scope.getData().groupProgram);
-    filter.equal("groupPrograms.section.name",$scope.getData().sectionName);
-    $scope.programs = [];
-
-    var filter2 = applicationService.createFilter(className.groupPrograms,0,1);
-    filter2.equal("url" , $scope.getData().groupProgram);
-    applicationService.filterRequest($scope,"groupPrograms",filter2);
-
-    var addProgram = function(program){
-        $scope.programs.push(program);
-    };
-
-    var doAction = function(){
-        applicationService.filterRequest($scope,"programData",filter,addProgram);
-    };
-
-    doAction();
-
-    $scope.loadMore = function () {
-        filter.increase(10);
-        doAction();
-    };
-
-    $scope.folderImg = function(id){
-        return applicationService.imageHref($scope.getData().className,id);
-    };
-
-    $scope.showAdvanced = function(ev) {
-        $scope.showDialog(ev,$scope,"createProgram.html",function(answer){
-            answer.groupProgramId = $scope.groupPrograms.list[0].id;
-            applicationService.action($scope,"" , className.program,"createProgram",answer,function(result){
-                $scope.showToast(result);
-                $scope.goTo("program/"+result.object);
-            });
-        });
-    };
-
-    applicationService.list($scope,"langs",className.language, function (item) {
-        item.title = $scope.translate(item.name.toLowerCase());
-    });
-});
-
 model.controller("coursesCtrl", function($scope,applicationService,className){
     var filter = applicationService.createFilter(className.course,0,10);
     filter.equal("groupCourses.url",$scope.getData().groupName);

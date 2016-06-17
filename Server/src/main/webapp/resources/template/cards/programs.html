@@ -1,91 +1,79 @@
-<div ng-controller="programCardCtrl">
-    <div>
-        <md-button class="md-raised md-primary" ng-click="showAdvanced($event)" ng-show="programData.creatable">{{translate("create")}}</md-button>
-    </div>
-    <md-content class="md-padding" layout-xs="column" layout="row">
-        <div flex-xs flex-gt-xs="50" layout="column">
-            <md-card ng-repeat="program in splitArray(programs,true)">
-                <img ng-src="{{folderImg(program.id)}}" class="md-card-image" alt="Washed Out">
-                <md-card-title>
-                    <md-card-title-text>
-                        <span class="md-headline">{{program.name}}</span>
-                    </md-card-title-text>
-                </md-card-title>
-                <md-card-content>
-                    <p>
-                        {{program.description}}
-                    </p>
-                </md-card-content>
-                <md-card-actions layout="row" layout-align="end center">
-                    <md-button ng-click="goTo('program/' + program.id)">{{translate("move")}}</md-button>
-                </md-card-actions>
-            </md-card>
+<link rel="stylesheet" href="/resources/css/components/programs.css">
+
+<div ng-controller="programsController">
+    <md-content class="content-body folders-toolbar" >
+        <div layout="row" layout-align="center center">
+            <md-input-container flex class="folders-toolbar-input-container">
+                <span class="folders-toolbar-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
+                <label class="folders-toolbar-label">
+                    {{translate("search")}}
+                </label>
+                <input class="folders-toolbar-item" ng-model="searchText">
+            </md-input-container>
+            <button flex="none" class="btn btn-default filter-panel-item folder-toolbar-btn" ng-click="searchPrograms(searchText)">
+                {{translate("do_filter")}}
+            </button>
         </div>
-        <div flex-xs flex-gt-xs="50" layout="column">
-            <md-card ng-repeat="program in splitArray(programs,false)">
-                <img ng-src="{{folderImg(program.id)}}" class="md-card-image" alt="Washed Out">
-                <md-card-title>
-                    <md-card-title-text>
-                        <span class="md-headline">{{program.name}}</span>
-                    </md-card-title-text>
-                </md-card-title>
-                <md-card-content>
-                    <p>
-                        {{program.description}}
-                    </p>
-                </md-card-content>
-                <md-card-actions layout="row" layout-align="end center">
-                    <md-button ng-click="goTo('program/' + program.id)">{{translate("move")}}</md-button>
-                </md-card-actions>
-            </md-card>
+        <div layout="column" ng-show="showCreateArea">
+            <div layout-gt-sm="row" flex>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>{{translate("name")}}</label>
+                    <input ng-model="newProgram.name">
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>{{translate("choose_language")}}</label>
+                    <md-select ng-model="newProgram.language">
+                        <md-option ng-value="opt.name" ng-repeat="opt in langs">{{ opt.title }}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <div layout="row" flex>
+                <md-input-container class="md-block" flex>
+                    <label>{{translate("description")}}</label>
+                    <textarea ng-model="newProgram.description" md-maxlength="500" rows="3" md-select-on-focus></textarea>
+                </md-input-container>
+            </div>
+            <div layout="column" class="book-tags" flex ng-init="newProgram.tags = []">
+                <div class="md-title" flex>{{translate("tags")}}</div>
+                <md-chips ng-model="newProgram.tags" readonly="false" flex></md-chips>
+            </div>
+            <div layout="row" class="create-div" layout-align="center">
+                <button flex="20" class="btn btn-default create-book-btn" ng-click="createProgram(newProgram)">{{translate("program_create")}}</button>
+            </div>
         </div>
     </md-content>
-    <md-content layout="row" layout-align="center center">
-        <span ng-click="loadMore()" class="loadMore">{{translate("load_more")}}</span>
+    <md-content class="content-body folders-body">
+        <div layout-gt-sm="row" layout-align="center">
+            <p class="title text-center" flex-gt-sm="none">
+                {{translate("programs")}} ({{programsInfo.totalEntitiesCount + " " + translate("of_records")}})
+            </p>
+        </div>
+        <div layout-gt-sm="row" layout-align="center center" class="group-info">
+            <h1 class="title text-center" flex-gt-sm="none">{{groupProgramInfo.list[0].title}}</h1>
+
+            <div flex class="folders-orderBy text-center">
+                <span class="{{!currentFilterByDate ? 'active' : ''}}"
+                      ng-click="by_name()">{{translate("by_name")}}</span> / <span
+                    class="{{currentFilterByDate ? 'active' : ''}}" ng-click="by_date()">{{translate("by_date")}}</span>
+            </div>
+            <div ng-show="programsInfo.creatable" flex-gt-sm="none" class="text-center" layout-margin-gt-sm>
+                <button class="btn btn-default create-book-btn" ng-click="showCreateArea = !showCreateArea">{{translate("create")}}</button>
+            </div>
+        </div>
+        <div layout="row" layout-wrap layout-align="left" layout-align-md="center">
+            <div flex="none" ng-repeat="program in programs" class="text-center book-wrap">
+                <div class="book-title" ng-click="goTo('program/'+program.id)">
+                    {{program.name}}
+                </div>
+                <div class="book">
+                    <a ng-href="{{program.href}}">
+                        <img ng-src="{{program.imageSrc}}"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div layout="row" class="load-more-div" layout-align="center center" ng-show="programsInfo.totalEntitiesCount > (filter.result.first + filter.max)">
+            <span ng-click="loadMore()" class="loadMore">{{translate("load_more")}}</span>
+        </div>
     </md-content>
 </div>
-<script type="text/ng-template" id="createProgram.html">
-    <md-dialog  ng-cloak>
-        <form>
-            <md-toolbar>
-                <div class="md-toolbar-tools">
-                    <h2>{{parentScope.translate("create")}}</h2>
-                    <span flex></span>
-                    <md-button class="md-icon-button" ng-click="cancel()">
-                        <md-icon md-svg-src="resources/image/svg/close.svg" aria-label="Close dialog"></md-icon>
-                    </md-button>
-                </div>
-            </md-toolbar>
-            <md-dialog-content>
-                <div class="md-dialog-content">
-                    <div>
-                        <md-input-container>
-                            <label>{{parentScope.translate("name")}}</label>
-                            <input ng-model="program.name">
-                        </md-input-container>
-                    </div>
-                    <div>
-                        <md-input-container>
-                            <md-select ng-model="program.language" placeholder="Выберите язык">
-                                <md-option ng-value="opt.name" ng-repeat="opt in parentScope.langs">{{ opt.title }}</md-option>
-                            </md-select>
-                        </md-input-container>
-                    </div>
-                    <h2 class="md-title">Тэги</h2>
-                    <div ng-init="program.tags = []">
-                        <md-chips ng-model="program.tags" readonly="false"></md-chips>
-                    </div>
-                    <div>
-                        <label for="description">{{parentScope.translate("description")}}</label>
-                        <textarea class="form-control" rows="5" id="description" ng-model="program.description"></textarea>
-                    </div>
-                </div>
-            </md-dialog-content>
-            <md-dialog-actions layout="row">
-                <md-button class="md-raised md-primary" ng-click="answer(program)">
-                    {{parentScope.translate("create")}}
-                </md-button>
-            </md-dialog-actions>
-        </form>
-    </md-dialog>
-</script>
