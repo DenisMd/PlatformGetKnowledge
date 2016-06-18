@@ -60,6 +60,11 @@
     cursor: pointer;
 }
 
+.sender-avatar {
+    width: 100px;
+    height: 100px;
+}
+
 .sender-speciality {
     font-weight: normal;
 }

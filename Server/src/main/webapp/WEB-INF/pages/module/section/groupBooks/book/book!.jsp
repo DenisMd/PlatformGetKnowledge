@@ -7,33 +7,32 @@
         <md-tabs md-dynamic-height md-border-bottom>
             <md-tab label="{{translate('book_info')}}">
                 <md-content class="md-padding">
-                    <div>
-                        <md-input-container>
+                    <div layout="row">
+                        <md-input-container flex>
                             <label>{{translate("name")}}</label>
                             <input ng-model="book.name">
                         </md-input-container>
                     </div>
-                    <h2 class="md-title">{{translate("tags")}}</h2>
                     <div>
-                        <md-chips ng-model="book.tagsName"></md-chips>
+                        <label for="description" class="md-title">{{translate("description")}}</label>
+                        <textarea class="form-control book-description" rows="5" id="description" ng-model="book.description"></textarea>
                     </div>
                     <div>
-                        <label for="description">{{translate("description")}}</label>
-                        <textarea class="form-control" rows="5" id="description" ng-model="book.description"></textarea>
-                    </div>
-                    <div>
-                        <a href="" ng-click="addUrl()">{{translate("book_add_url")}}</a>
-                        <div>
-                            <div ng-repeat="url in book.urls">
-                                <md-input-container>
-                                    <label>{{translate("url") + " " + ($index+1)}}</label>
-                                    <input ng-model="url.name"> (<a href="" ng-click="removeUrl($index)">X</a>)
-                                </md-input-container>
-                            </div>
+                        <p class="book-add-url" ng-click="addUrl()">{{translate("book_add_url")}}</p>
+                        <div ng-repeat="url in book.urls" layout="row">
+                            <md-input-container flex>
+                                <label>{{translate("url") + " " + ($index+1)}}</label>
+                                <md-icon class="fa fa-times remove-url" ng-click="removeUrl($index)"></md-icon>
+                                <input ng-model="url.name">
+                            </md-input-container>
                         </div>
                     </div>
-                    <div>
-                        <md-button class="md-raised md-primary" ng-click="updateBook(book)">{{translate("update")}}</md-button>
+                    <div layout="column" class="book-tags" flex ng-init="newBook.tags = []">
+                        <div class="md-title" flex>{{translate("tags")}}</div>
+                        <md-chips ng-model="book.tagsName" flex></md-chips>
+                    </div>
+                    <div layout="row" class="update-btn-container" layout-align="center">
+                        <button flex="none" class="btn btn-default update-book-btn" ng-click="updateBook(book)">{{translate("update")}}</button>
                     </div>
                 </md-content>
             </md-tab>
@@ -63,7 +62,7 @@
 
 
 <div layout="row" class="book-change-row" layout-align-gt-sm="start start" layout-align="center center">
-    <button class="btn btn-default" ng-click="showEditableContent = !showEditableContent" ng-show="book.editable" flex="none">
+    <button class="btn btn-default update-book-btn" ng-click="showEditableContent = !showEditableContent" ng-show="book.editable" flex="none">
         {{translate("book_change")}}
     </button>
 </div>
@@ -96,7 +95,7 @@
         {{translate("book_links")}}
     </div>
 
-    <div ng-repeat="url in book.links">
+    <div ng-repeat="url in book.links track by $index">
         <i class="fa fa-external-link" aria-hidden="true"></i>
         <a ng-href="{{url}}" target="_blank">{{url}}</a>
     </div>

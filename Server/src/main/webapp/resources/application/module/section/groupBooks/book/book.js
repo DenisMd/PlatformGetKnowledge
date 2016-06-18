@@ -15,9 +15,9 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
                 });
             }
 
-            $scope.book.urls = [];
+            book.urls = [];
             book.links.forEach(function (item) {
-                $scope.book.urls.push({
+                book.urls.push({
                     name : item
                 });
             });
@@ -60,7 +60,7 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
 
         result.tags = book.tagsName;
         applicationService.action($scope,"",className.book,"updateBookInformation",result,function(result){
-            $scope.showToast(result);
+            $scope.showToast($scope.getResultMessage(result));
             readBook();
         });
     };
