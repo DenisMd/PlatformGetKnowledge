@@ -46,7 +46,6 @@
 
 .logout{
     color: inherit;
-    font-size: 14px;
     display: inline-block;
     margin-bottom: 10px;
     cursor: pointer;
@@ -57,13 +56,13 @@
 }
 
 .main-label {
-    font: 400 22px Corbel;
+    font: 400 1.3em Corbel;
     margin-top: 2px;
     margin-bottom: 0;
 }
 
 .info-about-user{
-    font: 400 16px / 12px Corbel;
+    font: 400 1em / 0.75em Corbel;
 }
 
 /*Link*/
@@ -115,7 +114,7 @@
 /*menu items*/
 .first-menu-items{
     list-style: none;
-    font: 400 20px Corbel;
+    font: 400 1.2em Corbel;
     padding-left: 0;
 }
 
@@ -142,7 +141,7 @@
 }
 
 .second-menu-items{
-    font: 400 18px Corbel;
+    font: 400 1.1em Corbel;
     list-style: none;
     padding: 5px 0;
     margin: 0;

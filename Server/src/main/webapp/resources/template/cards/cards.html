@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" href="/resources/css/components/cards.css">
 
 <div class="site-info-card" ng-controller="cardsController">
-    <h2 class="text-center">{{translate(getData().title)}}</h2>
+    <div class="text-center general-card-title">{{translate(getData().title)}}</div>
     <div class="row thumbnail-card" ng-repeat="items in cardsItem">
         <div class="col-lg-{{colLg}} col-info" ng-repeat="card in items">
             <div class="thumbnail thumbnail-height-300">

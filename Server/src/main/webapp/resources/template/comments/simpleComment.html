@@ -6,22 +6,21 @@
         </div>
         <div flex="20"></div>
     </div>
-    <div ng-show="user" layout="row" layout-align="start center" class="comment-edit">
-        <div flex="30" class="text-center user-name">
+    <div ng-show="user" layout="row" layout-align="center center" layout-margin layout-align-gt-sm="start center" class="comment-edit">
+        <div flex-gt-sm="30" flex="none" class="text-center user-name">
             <img ng-src="{{user.imageSrc}}" class="sender-avatar">
             <br>
             {{translate("i")}}
         </div>
-        <div flex="50">
+        <div flex>
             <div class="bubble">
                 <div  ng-model="commentMessage" class="post-editarea" contenteditable>
                 </div>
             </div>
         </div>
-        <div flex="20" layout-margin>
-            <button class="btn btn-primary"  ng-click="sendMessage(commentMessage)">{{translate("send")}}</button>
-            <!--<md-button class="md-raised md-primary" ng-click="sendMessage(commentMessage)">{{translate("send")}}</md-button>-->
-        </div>
+    </div>
+    <div layout="row" layout-align="center center" ng-show="user" >
+        <button class="btn btn-primary"  ng-click="sendMessage(commentMessage)" flex="none" layout-margin>{{translate("send")}}</button>
     </div>
 
     <div layout="column">
@@ -36,15 +35,15 @@
 
 
     <div class="simple-comment" ng-repeat="comment in comments">
-        <div layout="row" layout-align="start center">
-            <div flex="30" class="text-center user-name">
+        <div layout="row" layout-align="start center" layout-margin>
+            <div flex-gt-sm="30" flex="none" class="text-center user-name">
                 <a ng-click="goToUserPage(comment)" n class="sender-image">
                     <img ng-src="{{comment.sender.imageSrc}}" class="sender-avatar">
                     <p class="without-default-margin">{{comment.sender.lastName + ' ' + comment.sender.firstName}}</p>
                 </a>
                 <p class="sender-speciality">{{comment.sender.speciality}}</p>
             </div>
-            <div flex="60">
+            <div flex-gt-sm="60" flex>
                 <i class="fa fa-times right-icon" aria-hidden="true" ng-click="showDeleteCommentDialog($event,comment.id,$index)" ng-hide="!user || user.id !== comment.sender.id"></i>
                 <i class="fa fa-lock right-icon" aria-hidden="true" ng-click="showBlockCommentDialog($event,comment.id,$index)" ng-show="comment.editable && comment.commentStatus === 'Normal'""></i>
                 <div class="bubble comment-message">
@@ -54,8 +53,6 @@
                     </div>
                 </div>
                 <div class="comment-time">{{comment.createTime | date : 'medium'}}</div>
-            </div>
-            <div flex="10">
             </div>
         </div>
     </div>

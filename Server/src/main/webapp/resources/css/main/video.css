@@ -9,13 +9,13 @@
 }
 
 .video-text {
-    font-size: 22px;
+    font-size: 1.3em;
 }
 
 .video-text-title {
     color : #899b9f;
     font-weight: 300;
-    font-size: 150%;
+    font-size: 1.5em;
 }
 
 .video-image {
@@ -37,7 +37,7 @@
 }
 .video-play span{
     font-size: 70px;
-    font-size: 10vmax;
+    font-size: 25vmax;
     color: #000000;
 }
 .video-play span:hover{

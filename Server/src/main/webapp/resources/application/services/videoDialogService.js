@@ -5,8 +5,9 @@ model.factory('videoDialogService', function(applicationService,className) {
             mainScope = $scope;
         },
 
-        afterOpen : function(videoId) {
-            mainScope.commentData.objectId = videoId;
+        afterOpen : function(video) {
+            mainScope.commentData.objectId = video.id;
+            mainScope.video = video;
             mainScope.$broadcast("showSimpleComments");
         }
     }

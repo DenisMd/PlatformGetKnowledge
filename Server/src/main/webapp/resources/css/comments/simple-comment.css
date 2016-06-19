@@ -1,5 +1,4 @@
 .not-authorized-text {
-    font-size: 15px;
     color: #989898;
     padding: 15px 0;
 }
@@ -14,7 +13,6 @@
 }
 
 .comments-count {
-    font-size: 15px;
     padding-left: 10px;
 }
 
@@ -33,7 +31,6 @@
 
 .simple-comments {
     margin-top: 10px;
-    min-width: 400px;
 }
 
 .right-icon {

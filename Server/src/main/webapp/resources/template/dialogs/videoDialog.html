@@ -4,6 +4,10 @@
 <div ng-controller="videoDialogController" class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog video" role="document">
         <div class="modal-content modal-center">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{{video.videoName}}</h4>
+            </div>
             <video id="main-video" class="video-js vjs-default-skin vjs-big-play-centered">
             </video>
             <module-template name="comments/simpleComment" data="commentData"></module-template>
