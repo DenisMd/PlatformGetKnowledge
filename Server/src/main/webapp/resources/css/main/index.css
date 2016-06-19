@@ -4,33 +4,13 @@ html {
 body{
     min-height: 100%;
     font-family: 'PT Sans', sans-serif;
-    font-size: 14px;
-    line-height: 1.5;
     top:0 !important;
     overflow-y: hidden !important;
 }
-
-.main-content{
-    margin-top: 45px !important;
-}
-
-:focus {
-    outline: 0;
-}
-
-.btn[disabled], fieldset[disabled] .btn{
-    cursor: default;
-}
-
-.md-select-menu-container {
-    z-index: 1005;
-}
-
 p {
     font-size: 1em;
     line-height: 1.5em;
 }
-
 h1 {
     font-size:  2em; /* эквивалентно 24px */
     line-height: 1.5em;
@@ -40,7 +20,6 @@ h2 {
     font-size:  1.8333em; /* эквивалентно 22px */
     line-height: 1.6364em;
 }
-
 h3 {
     font-size:  1.6667em; /* эквивалентно 20px */
     line-height: 1.8em;
@@ -56,6 +35,18 @@ h5 {
 h6 {
     font-size:  1.1667em; /* эквивалентно 14px */
     line-height:  1.2857em;
+}
+
+:focus {
+    outline: 0;
+}
+
+.btn[disabled], fieldset[disabled] .btn{
+    cursor: default;
+}
+
+.md-select-menu-container {
+    z-index: 1005;
 }
 
 button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {

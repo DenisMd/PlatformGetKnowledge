@@ -4,10 +4,31 @@ new Clipboard('.clipboard');
 var model = angular.module("mainApp", ["backend.service", "ngImgCrop" , "ngMaterial","ui.codemirror",'ui.bootstrap.datetimepicker','ui.dateTimeInput']);
 model.constant("codemirrorURL", "/resources/bower_components/codemirror/");
 
-model.config(function (codemirrorURL) {
+model.config(function (codemirrorURL,$mdThemingProvider) {
     CodeMirror.modeURL = codemirrorURL+ "mode/%N/%N.js";
+    $mdThemingProvider.definePalette('primaryPalette', {
+        '50': '11171c',
+        '100': '11171c',
+        '200': '11171c',
+        '300': '11171c',
+        '400': '11171c',
+        '500': '11171c',
+        '600': '11171c',
+        '700': '11171c',
+        '800': '11171c',
+        '900': '11171c',
+        'A100': '11171c',
+        'A200': '11171c',
+        'A400': '11171c',
+        'A700': '11171c',
+        'contrastDefaultColor': 'light',
+        'contrastDarkColors': ['50', '100',
+            '200', '300', '400', 'A100'],
+        'contrastLightColors': undefined
+    });
+    $mdThemingProvider.theme('default')
+        .primaryPalette('primaryPalette');
 });
-
 
 //Главный контроллер
 model.controller("mainController", function ($scope,$http,$state,$languages,applicationService,pageService,className,$mdToast,$mdDialog, $mdMedia,$parse) {

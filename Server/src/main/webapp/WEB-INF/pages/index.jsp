@@ -44,12 +44,12 @@
 
     <link rel="shortcut icon" type="image/x-icon" href="/resources/image/favicon.ico"/>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body layout-fill layout="column" ng-cloak>
 
-    <md-content class="main-content">
-        <module-template name="components/header" data="headerData"></module-template>
-
+<module-template name="components/header" data="headerData"></module-template>
+    <md-content>
         <module-template name="components/mainMenu" data="menuData"></module-template>
 
         <div class="wrapper wrapper-main-content" id="wrapper">

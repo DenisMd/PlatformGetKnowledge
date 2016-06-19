@@ -1,13 +1,17 @@
 /*header*/
 .header-info{
-    background-color: #11171c;
-    height: 45px;
+    /*Перекрываем свойства material*/
+    height: 45px !important;
+    min-height: 45px !important;
+
+    /*Свойства заголовка*/
     width: 100%;
-    position: fixed;
-    top:0;
-    left: 0;
     min-width: 340px;
     z-index: 30;
+}
+
+.no-padding {
+    padding: 0 !important;
 }
 
 .header-item{

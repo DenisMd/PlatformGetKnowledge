@@ -1,21 +1,24 @@
 <link rel="stylesheet" href="/resources/css/main/header.css">
 
-<header class="header-info" ng-controller="headerController">
-    <div class="header-item header-left">
-        <button class="menu-toggle" ng-click="toggelClick()">
-            <span class="hamburger">&#9776;</span>
-        </button>
-        <div class="site-title">
-            <a ng-href="{{'#/' +application.language}}">getKnowledge();</a>
+<md-toolbar class="header-info" ng-controller="headerController">
+    <div class="md-toolbar-tools no-padding">
+        <div class="header-item header-left">
+            <button class="menu-toggle" ng-click="toggelClick()">
+                <span class="hamburger">&#9776;</span>
+            </button>
+            <div class="site-title">
+                <a ng-href="{{'#/' +application.language}}">getKnowledge();</a>
+            </div>
         </div>
-    </div>
-    <div class="header-item header-right">
-        <div class="header-item language-panel">
+        <span flex></span>
+        <div class="header-item header-right">
+            <div class="header-item language-panel">
             <span ng-repeat="l in getData().languages">
                 <a ng-class="application.language===l?'selected':''" ng-click="changeLanguage(l)">{{l.capitalizeFirstLetter()}}</a>
                 {{$last ? '' : ' / '}}
             </span>
+            </div>
         </div>
+        <div class="header-item header-center"></div>
     </div>
-    <div class="header-item header-center"></div>
-</header>
+</md-toolbar>
