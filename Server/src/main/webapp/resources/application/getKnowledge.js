@@ -3,6 +3,7 @@ new Clipboard('.clipboard');
 
 var model = angular.module("mainApp", ["backend.service", "ngImgCrop" , "ngMaterial","ui.codemirror",'ui.bootstrap.datetimepicker','ui.dateTimeInput']);
 model.constant("codemirrorURL", "/resources/bower_components/codemirror/");
+model.constant("maxMobileWidth" , 570);
 
 model.config(function (codemirrorURL,$mdThemingProvider) {
     CodeMirror.modeURL = codemirrorURL+ "mode/%N/%N.js";
@@ -31,19 +32,30 @@ model.config(function (codemirrorURL,$mdThemingProvider) {
 });
 
 //Главный контроллер
-model.controller("mainController", function ($scope,$http,$state,$languages,applicationService,pageService,className,$mdToast,$mdDialog, $mdMedia,$parse) {
+model.controller("mainController", function ($scope,$http,$state,$languages,maxMobileWidth,applicationService,pageService,className,$mdToast,$mdDialog, $mdMedia,$parse) {
 
     //----------------------------------------------------- инициализация клиентской информации
     $scope.mainScope = $scope;
 
     //информация о заголовке страници
     $scope.toggelMenu = true;
-    
+
+    //Сварачивает и разварачивает меню
+    $scope.toggelClick = function () {
+        $scope.toggelMenu = !$scope.toggelMenu;
+        var wrapper = angular.element("#wrapper");
+        wrapper.toggleClass("wrapper-main-content");
+
+        var siteFooter = angular.element("#footer-page");
+        siteFooter.toggleClass("footer-margin");
+    };
+
+    if (screen.width <= maxMobileWidth) {
+        $scope.toggelClick();
+    }
+
     $scope.headerData = {
-        languages : $languages.languages,
-        toggelClickCallback : function(){
-            $scope.toggelMenu = !$scope.toggelMenu;
-        }
+        languages : $languages.languages
     };
 
     //информация о главном меню на странице

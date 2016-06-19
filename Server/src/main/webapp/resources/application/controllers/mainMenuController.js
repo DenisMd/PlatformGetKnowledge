@@ -1,4 +1,4 @@
-model.controller("mainMenuController",function($scope,$state,$rootScope,applicationService,$http,className){
+model.controller("mainMenuController",function($scope,$state,$rootScope,applicationService,$http,className,maxMobileWidth){
 
     //Загружаем ссылки на стороние ресурсы
     applicationService.list($scope,"mainLinks",className.socialLinks);
@@ -49,4 +49,11 @@ model.controller("mainMenuController",function($scope,$state,$rootScope,applicat
     $rootScope.$on('reloadMenu', function (event, callback) {
         loadMenu(callback);
     });
+    
+    //Так как меню для смартфонов открывается на весь экран при нажатии необходимо его закрыть
+    $scope.hideMenuForMobile = function () {
+        if (screen.width < maxMobileWidth) {
+            $scope.toggelClick();
+        }
+    }
 });
