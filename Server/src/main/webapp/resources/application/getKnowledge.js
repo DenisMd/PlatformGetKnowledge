@@ -38,7 +38,7 @@ model.controller("mainController", function ($scope,$http,$state,$languages,appl
 
     //информация о заголовке страници
     $scope.toggelMenu = true;
-
+    
     $scope.headerData = {
         languages : $languages.languages,
         toggelClickCallback : function(){

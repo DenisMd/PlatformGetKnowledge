@@ -172,3 +172,10 @@
     opacity: 0;
     left:-250px;
 }
+
+/*320 - Iphone 5 , 250 - width menu*/
+@media (max-width: 570px) {
+    .nav-menu {
+        width: 100%;
+    }
+}

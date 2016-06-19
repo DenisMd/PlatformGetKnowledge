@@ -48,10 +48,10 @@
 </head>
 <body layout-fill layout="column" ng-cloak>
 
-<module-template name="components/header" data="headerData"></module-template>
-    <md-content>
-        <module-template name="components/mainMenu" data="menuData"></module-template>
+    <module-template name="components/header" data="headerData"></module-template>
+    <module-template name="components/mainMenu" data="menuData"></module-template>
 
+    <md-content>
         <div class="wrapper wrapper-main-content" id="wrapper">
             <div ui-view></div>
         </div>

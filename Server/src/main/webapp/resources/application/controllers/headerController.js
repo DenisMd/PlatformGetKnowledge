@@ -14,4 +14,9 @@ model.controller("headerController",function($scope){
         }
     };
 
+    
+    if (screen.width <= 570) {
+        $scope.toggelClick();
+    }
+
 });
