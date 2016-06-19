@@ -6,7 +6,7 @@
 
     /*Свойства заголовка*/
     width: 100%;
-    min-width: 340px;
+    min-width: 320px;
     z-index: 30;
 }
 
@@ -93,4 +93,14 @@
 
 .language-panel>span>a.selected{
     color:white;
+}
+
+/*Iphone 5*/
+@media (max-width: 320px) {
+    .site-title {
+        font-size: 20px;
+    }
+    .language-panel>span>a {
+        font-size: 15px;
+    }
 }
