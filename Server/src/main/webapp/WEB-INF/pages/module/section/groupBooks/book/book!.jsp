@@ -47,13 +47,14 @@
             </md-tab>
             <md-tab label="{{translate('book_data')}}">
                 <md-content class="md-padding">
-                    <input type="file" nv-file-select uploader="uploader"/><br/>
-                    <ul>
-                        <li ng-repeat="item in uploader.queue">
-                            Name: <span ng-bind="item.file.name"></span><br/>
-                            <button ng-click="item.upload()">{{translate("upload")}}</button>
-                        </li>
-                    </ul>
+                    <module-template name="inputs/uploadFiles" data="uploadData"></module-template>
+                    <%--<input type="file" nv-file-select uploader="uploader"/><br/>--%>
+                    <%--<ul>--%>
+                        <%--<li ng-repeat="item in uploader.queue">--%>
+                            <%--Name: <span ng-bind="item.file.name"></span><br/>--%>
+                            <%--<button ng-click="item.upload()">{{translate("upload")}}</button>--%>
+                        <%--</li>--%>
+                    <%--</ul>--%>
                 </md-content>
             </md-tab>
         </md-tabs>

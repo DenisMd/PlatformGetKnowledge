@@ -178,6 +178,11 @@
     "operation_between"                 : "Between",
     "operation_after"                   : "After",
     "operation_before"                  : "Before",
-    "operation_in"                      : "One of ..."
+    "operation_in"                      : "One of ...",
+
+    "file_uploader"               : "Files uploader",
+    "file_drop_zone"              : "Drop zone",
+    "file_select_single_file"     : "Choose single file to upload",
+    "file_select_multiply_files"  : "Choose multiply files to upload "
   }
 }

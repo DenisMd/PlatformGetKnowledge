@@ -1,0 +1,20 @@
+.file-drop-zone {
+    border: dotted 3px lightgray;
+    margin-top: 20px;
+    height: 100px;
+    font-size: 22px;
+    color: #9c9c9c;
+}
+
+/* Default class applied to drop zones on over */
+.file-over-class {
+    border: dotted 3px green;
+}
+
+.file-zone-upload {
+    margin: 20px;
+}
+
+.file-select-zone {
+    margin-top: 20px;
+}

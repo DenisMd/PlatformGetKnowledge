@@ -14,7 +14,7 @@ String.prototype.like = function(search) {
     search = search.replace(/%/g, '.*').replace(/_/g, '.');
     // Check matches
     return RegExp('^' + search + '$', 'gi').test(this);
-}
+};
 
 
 function PlatformUtils(){
@@ -26,6 +26,21 @@ function PlatformUtils(){
         return val !== null ? val.toString() : val;
     };
 
+    this.base64ToBlob = function (base64Data) {
+        var byteString;
+        if (base64Data.split(',')[0].indexOf('base64') >= 0) {
+            byteString = atob(base64Data.split(',')[1]);
+        } else {
+            byteString = decodeURI(base64Data.split(',')[1]);
+        }
+        var mimeString = base64Data.split(',')[0].split(':')[1].split(';')[0];
+        var array = [];
+        for(var i = 0; i < byteString.length; i++) {
+            array.push(byteString.charCodeAt(i));
+        }
+        var  byteArrays = [new Uint8Array(array)];
+        return new Blob(byteArrays, { type: mimeString });
+    }
 }
 
 //Глобальные утилиты

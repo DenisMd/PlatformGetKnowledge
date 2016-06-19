@@ -177,7 +177,12 @@
     "operation_between"                 : "Между",
     "operation_after"                   : "После",
     "operation_before"                  : "До",
-    "operation_in"                      : "Одно из ..."
+    "operation_in"                      : "Одно из ...",
+
+    "file_uploader"               : "Загрузчик файлов",
+    "file_drop_zone"              : "Перетащите файлы сюда",
+    "file_select_single_file"     : "Выбирите один файл для загрузки",
+    "file_select_multiply_files"  : "Выбирите файлы для загрузки"
 
   }
 }

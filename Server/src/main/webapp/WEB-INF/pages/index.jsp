@@ -39,6 +39,7 @@
 
     <%--Inputs--%>
     <link rel="stylesheet" type="text/css" href="/resources/css/main/inputs/image/select-image.css">
+    <link rel="stylesheet" type="text/css" href="/resources/css/main/inputs/files/select-files.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/main/inputs/list/list-input.css">
 
     <link rel="shortcut icon" type="image/x-icon" href="/resources/image/favicon.ico"/>

@@ -47,7 +47,7 @@ model.controller("selectImgController", function($scope){
         }
 
         if (angular.isFunction($scope.getData().save)) {
-            var file = base64ToBlob(element);
+            var file = plUtils.base64ToBlob(element);
             $scope.getData().save(file);
         }
     };
@@ -120,22 +120,6 @@ model.controller("selectImgController", function($scope){
     $scope.getResultQuality = function(){
         return $scope.getData().resultQuality ? $scope.getData().resultQuality : 1.0;
     };
-
-    function base64ToBlob(base64Data) {
-        var byteString;
-        if (base64Data.split(',')[0].indexOf('base64') >= 0) {
-            byteString = atob(base64Data.split(',')[1]);
-        } else {
-            byteString = decodeURI(base64Data.split(',')[1]);
-        }
-        var mimeString = base64Data.split(',')[0].split(':')[1].split(';')[0];
-        var array = [];
-        for(var i = 0; i < byteString.length; i++) {
-            array.push(byteString.charCodeAt(i));
-        }
-        var  byteArrays = [new Uint8Array(array)];
-        return new Blob(byteArrays, { type: mimeString });
-    }
     var oldImageSrc = "";
     var dialogShown = false;
 });

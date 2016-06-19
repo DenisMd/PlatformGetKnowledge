@@ -94,7 +94,13 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
         $scope.$broadcast("updateCropImage"+$scope.croppedImg.id+"Event");
     }
 
-    $scope.uploader = applicationService.createUploader($scope,"",className.book,"uploadData",{bookId:+bookId});
+    $scope.uploadData = {
+        btnTitle : "book_data",
+        multiplyFiles : false,
+        className : className.book,
+        actionName : "uploadData",
+        parameters : {bookId:+bookId}
+    };
     
     //Кооментарии к книгам
     $scope.commentData = {
