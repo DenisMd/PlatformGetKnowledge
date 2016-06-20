@@ -277,14 +277,14 @@
                     </md-radio-group>
                 </div>
             </div>
-            <div class="modal-footer modal-find" layout="column" layout-gt-sm="row" layout-padding>
-                <button flex="none" type="button" class="btn btn-default" ng-disabled="!(filterRequest.length > 0)"
+            <div class="modal-footer modal-find" layout="column" layout-gt-sm="row">
+                <button flex type="button" class="btn btn-default" ng-disabled="!(filterRequest.length > 0)"
                         ng-click="clearFilter()">{{translate("clear_filter")}}
                 </button>
-                <button flex="none" type="button" class="btn btn-primary" ng-disabled="currentFilterExpression.field"
+                <button flex type="button" class="btn btn-primary" ng-disabled="currentFilterExpression.field"
                         ng-click="saveFilter()">{{translate("do_filter")}}
                 </button>
-                <button flex="none" type="button" class="btn btn-danger" ng-click="closeModal()">{{translate("close")}}</button>
+                <button flex type="button" class="btn btn-danger" ng-click="closeModal()">{{translate("close")}}</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

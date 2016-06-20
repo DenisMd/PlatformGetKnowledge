@@ -55,3 +55,7 @@
 .scroll-column-info .datetimepicker .hour, .scroll-column-info .datetimepicker .minute{
     height: 28px;
 }
+
+.modal-footer.modal-find .btn {
+    margin: 5px;
+}
