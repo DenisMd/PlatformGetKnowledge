@@ -10,19 +10,19 @@
         <md-tab label="{{translate('bootstrap_serviceInfo')}}" ng-if="currentService != null">
             <md-content class="md-padding">
                     <div layout="row">
-                        <div flex-gt-sm="20" flex="auto">{{translate('id')}}</div>
+                        <div flex="55" flex-gt-sm="20">{{translate('id')}}</div>
                         <div flex>{{currentService.id}}</div>
                     </div>
                     <div layout="row">
-                        <div flex-gt-sm="20" flex="auto">{{translate('name')}}</div>
+                        <div flex="55" flex-gt-sm="20">{{translate('name')}}</div>
                         <div flex>{{currentService.name}}</div>
                     </div>
                     <div layout="row">
-                        <div flex-gt-sm="20" flex="auto">{{translate('bootstrap_order')}}</div>
+                        <div flex="55" flex-gt-sm="20">{{translate('bootstrap_order')}}</div>
                         <div flex>{{currentService.order}}</div>
                     </div>
                     <div layout="row">
-                        <div flex-gt-sm="20" flex="auto">{{translate('bootstrap_repeat')}}</div>
+                        <div flex="55" flex-gt-sm="20">{{translate('bootstrap_repeat')}}</div>
                         <div flex>
                             <md-switch ng-model="currentService.repeat" class="switch-cell"></md-switch>
                         </div>
@@ -51,32 +51,32 @@
             </md-toolbar>
             <md-dialog-content>
                 <div class="md-dialog-content">
-                    <div>
-                        <md-input-container>
+                    <div layout="row">
+                        <md-input-container flex>
                             <label>{{parentScope.translate("bootstrap_domain")}}</label>
                             <input ng-model="bootstrap.domain">
                         </md-input-container>
                     </div>
-                    <div>
-                        <md-input-container>
+                    <div layout="row">
+                        <md-input-container flex>
                             <label>{{parentScope.translate("email")}}</label>
                             <input ng-model="bootstrap.email">
                         </md-input-container>
                     </div>
-                    <div>
-                        <md-input-container>
+                    <div layout="row">
+                        <md-input-container flex>
                             <label>{{parentScope.translate("password")}}</label>
                             <input ng-model="bootstrap.password">
                         </md-input-container>
                     </div>
-                    <div>
-                        <md-input-container>
+                    <div layout="row">
+                        <md-input-container flex>
                             <label>{{parentScope.translate("first_name")}}</label>
                             <input ng-model="bootstrap.firstName">
                         </md-input-container>
                     </div>
-                    <div>
-                        <md-input-container>
+                    <div layout="row">
+                        <md-input-container flex>
                             <label>{{parentScope.translate("last_name")}}</label>
                             <input ng-model="bootstrap.lastName">
                         </md-input-container>

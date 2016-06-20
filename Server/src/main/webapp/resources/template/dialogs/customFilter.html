@@ -2,11 +2,18 @@
 
 <div class="modal fade" id="customFilterDialogId" ng-controller="customFilterController">
     <div class="modal-dialog custom-filter-dialog">
-        <div class="modal-content">
-            <div class="modal-header modal-find">
-                <div ng-repeat="element in filterRequest" class="current-filter-expression">
-                    <div class="filter-part">
-                        {{element.field.info.name}} {{element.oper.info.symbol}}
+        <div class="modal-content  modal-center">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">{{translate("custom_filter")}}</h4>
+            </div><!-- /.modal-header -->
+            <div class="modal-body modal-find">
+                <div layout="row">
+                    <div ng-repeat="element in filterRequest" class="current-filter-expression">
+                        <div class="filter-part">
+                            {{element.field.info.name}} {{element.oper.info.symbol}}
                         <span ng-if="element.oper.info.name !== 'in'">
                             <span ng-if="element.field.info.type === 'dateTime'">{{element.param.info.values[0] | date:'medium'}}</span>
                             <span ng-if="element.field.info.type !== 'dateTime'">{{element.param.info.values[0]}}</span>
@@ -26,17 +33,16 @@
                         </span>
 
 
-                        <i class="fa fa-times" aria-hidden="true" ng-click="removeFromRequest($index)"></i>
+                            <i class="fa fa-times" aria-hidden="true" ng-click="removeFromRequest($index)"></i>
+                        </div>
+                        <span ng-if="!$last">{{translate(logicalExpression)}}</span>
                     </div>
-                    <span ng-if="!$last">{{translate(logicalExpression)}}</span>
+                    <div ng-if="currentFilterExpression.field" class="current-filter-expression">
+                        {{currentFilterExpression.field.info.name}} {{currentFilterExpression.oper.info.symbol}}
+                        {{currentFilterExpression.param.info.values[0]}}
+                        <span ng-if="typeWithMultiplyParams(currentFilterExpression.oper.info.name)"> , {{currentFilterExpression.param.info.values[1]}}</span>
+                    </div>
                 </div>
-                <div ng-if="currentFilterExpression.field" class="current-filter-expression">
-                    {{currentFilterExpression.field.info.name}} {{currentFilterExpression.oper.info.symbol}}
-                    {{currentFilterExpression.param.info.values[0]}}
-                    <span ng-if="typeWithMultiplyParams(currentFilterExpression.oper.info.name)"> , {{currentFilterExpression.param.info.values[1]}}</span>
-                </div>
-            </div><!-- /.modal-header -->
-            <div class="modal-body modal-find">
                 <div class="filter-body" layout="row">
                     <div flex="70">
                         <table class="table table-hover">
@@ -263,7 +269,7 @@
 
                     </div>
                 </div>  <!--.row-->
-                <div>
+                <div layout="row">
                     <md-radio-group ng-model="logicalExpression" layout="row" layout-align="center">
                         <p class="filter-logical-operation">{{translate("filter_join_by")}}</p>
                         <md-radio-button value="and" class="md-primary">{{translate("and")}}</md-radio-button>
@@ -271,14 +277,14 @@
                     </md-radio-group>
                 </div>
             </div>
-            <div class="modal-footer modal-find">
-                <button type="button" class="btn btn-default" ng-disabled="!(filterRequest.length > 0)"
+            <div class="modal-footer modal-find" layout="column" layout-gt-sm="row" layout-padding>
+                <button flex="none" type="button" class="btn btn-default" ng-disabled="!(filterRequest.length > 0)"
                         ng-click="clearFilter()">{{translate("clear_filter")}}
                 </button>
-                <button type="button" class="btn btn-primary" ng-disabled="currentFilterExpression.field"
+                <button flex="none" type="button" class="btn btn-primary" ng-disabled="currentFilterExpression.field"
                         ng-click="saveFilter()">{{translate("do_filter")}}
                 </button>
-                <button type="button" class="btn btn-danger" ng-click="closeModal()">{{translate("close")}}</button>
+                <button flex="none" type="button" class="btn btn-danger" ng-click="closeModal()">{{translate("close")}}</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
