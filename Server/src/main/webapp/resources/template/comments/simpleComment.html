@@ -20,14 +20,14 @@
         </div>
     </div>
     <div layout="row" layout-align="center center" ng-show="user" >
-        <button class="btn btn-primary"  ng-click="sendMessage(commentMessage)" flex="none" layout-margin>{{translate("send")}}</button>
+        <button class="btn btn-primary"  ng-click="sendMessage(commentMessage)" flex="95" flex-gt-sm="30" layout-margin>{{translate("send")}}</button>
     </div>
 
     <div layout="column">
         <div class="not-authorized-text text-center" ng-show="!user" flex>{{translate("comment_not_authorized")}}</div>
-        <span layout="row" layout-align="start center">
-            <hr flex="80"/>
-        </span>
+        <div layout="row" layout-align="start center">
+            <hr flex="100"/>
+        </div>
         <div class="comments-count text-center" flex>
             {{translate("comment_count") + commentsInfo.totalEntitiesCount}}
         </div>
@@ -37,7 +37,7 @@
     <div class="simple-comment" ng-repeat="comment in comments">
         <div layout="row" layout-align="start center" layout-margin>
             <div flex-gt-sm="30" flex="none" class="text-center user-name">
-                <a ng-click="goToUserPage(comment)" n class="sender-image">
+                <a ng-click="goToUserPage(comment)" class="sender-image">
                     <img ng-src="{{comment.sender.imageSrc}}" class="sender-avatar">
                     <p class="without-default-margin">{{comment.sender.lastName + ' ' + comment.sender.firstName}}</p>
                 </a>
@@ -45,7 +45,7 @@
             </div>
             <div flex-gt-sm="60" flex>
                 <i class="fa fa-times right-icon" aria-hidden="true" ng-click="showDeleteCommentDialog($event,comment.id,$index)" ng-hide="!user || user.id !== comment.sender.id"></i>
-                <i class="fa fa-lock right-icon" aria-hidden="true" ng-click="showBlockCommentDialog($event,comment.id,$index)" ng-show="comment.editable && comment.commentStatus === 'Normal'""></i>
+                <i class="fa fa-lock right-icon" aria-hidden="true" ng-click="showBlockCommentDialog($event,comment.id,$index)" ng-show="comment.editable && comment.commentStatus === 'Normal'"></i>
                 <div class="bubble comment-message">
                     <div ng-bind-html="comment.message" ng-show="comment.commentStatus === 'Normal'"></div>
                     <div ng-show="comment.commentStatus !== 'Normal'" class="comment-blocked-message">
@@ -63,7 +63,7 @@
 
 <script type="text/ng-template" id="blockComment.html">
     <md-dialog ng-cloak>
-        <form>
+        <form ng-init="blockStatus = {}">
             <md-toolbar>
                 <div class="md-toolbar-tools">
                     <h2>{{parentScope.translate("comment_block")}}</h2>

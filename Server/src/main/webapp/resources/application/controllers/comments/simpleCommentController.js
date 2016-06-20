@@ -2,6 +2,9 @@ model.controller("simpleCommentController" , function($scope,$state,applicationS
 
     $scope.commentErrorMessage = {};
     $scope.comments = [];
+    $scope.commentsInfo = {
+        totalEntitiesCount : 0
+    };
 
     var addComment = function (comment) {
         if (comment) {
