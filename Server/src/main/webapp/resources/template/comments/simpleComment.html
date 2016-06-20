@@ -43,7 +43,7 @@
                 </a>
                 <p class="sender-speciality">{{comment.sender.speciality}}</p>
             </div>
-            <div flex-gt-sm="60" flex>
+            <div flex>
                 <i class="fa fa-times right-icon" aria-hidden="true" ng-click="showDeleteCommentDialog($event,comment.id,$index)" ng-hide="!user || user.id !== comment.sender.id"></i>
                 <i class="fa fa-lock right-icon" aria-hidden="true" ng-click="showBlockCommentDialog($event,comment.id,$index)" ng-show="comment.editable && comment.commentStatus === 'Normal'"></i>
                 <div class="bubble comment-message">
