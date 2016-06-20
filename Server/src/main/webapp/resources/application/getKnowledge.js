@@ -29,6 +29,29 @@ model.config(function (codemirrorURL,$mdThemingProvider) {
     });
     $mdThemingProvider.theme('default')
         .primaryPalette('primaryPalette');
+
+    var darkPallette = {
+        '50': '#11171c',
+        '100': '#11171c',
+        '200': '#11171c',
+        '300': '#11171c',
+        '400': '#11171c',
+        '500': '#11171c',
+        '600': '#11171c',
+        '700': '#11171c',
+        '800': '#11171c',
+        '900': '#11171c',
+        'A100': '#11171c',
+        'A200': '#11171c',
+        'A400': '#11171c',
+        'A700': '#11171c'
+    };
+    $mdThemingProvider
+        .definePalette('darkPallette', darkPallette);
+
+    $mdThemingProvider.theme('darkTheme')
+        .primaryPalette('primaryPalette')
+        .accentPalette('darkPallette');
 });
 
 //Главный контроллер
