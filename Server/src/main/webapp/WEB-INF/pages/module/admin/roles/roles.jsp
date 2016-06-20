@@ -10,11 +10,11 @@
         <md-tab label="{{translate('role')}}" ng-if="currentRole != null">
             <md-content class="md-padding">
                 <div layout="row">
-                    <div flex-gt-sm="20" flex="auto">{{translate('id')}}</div>
+                    <div flex="55" flex-gt-sm="20">{{translate('id')}}</div>
                     <div flex>{{currentRole.id}}</div>
                 </div>
                 <div layout="row">
-                    <div flex-gt-sm="20" flex="auto">{{translate('name')}}</div>
+                    <div flex="55" flex-gt-sm="20">{{translate('name')}}</div>
                     <div flex>{{currentRole.roleName}}</div>
                 </div>
                 <div class="form-group">
@@ -72,14 +72,14 @@
             </md-toolbar>
             <md-dialog-content>
                 <div class="md-dialog-content">
-                    <div>
-                        <md-input-container>
+                    <div layout="row">
+                        <md-input-container flex>
                             <label>{{parentScope.translate("name")}}</label>
                             <input ng-model="role.roleName">
                         </md-input-container>
                     </div>
-                    <div>
-                        <md-input-container>
+                    <div layout="row">
+                        <md-input-container flex>
                             <label>{{parentScope.translate("role_note")}}</label>
                             <input ng-model="role.note">
                         </md-input-container>

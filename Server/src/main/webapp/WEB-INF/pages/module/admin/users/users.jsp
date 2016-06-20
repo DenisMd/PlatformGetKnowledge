@@ -6,53 +6,53 @@
 </div>
 
 
-<md-content>
+<md-content md-theme="darkTheme">
     <md-tabs md-dynamic-height md-border-bottom>
         <md-tab label="{{translate('user')}}" ng-if="currentUser != null">
             <md-content class="md-padding">
                 <div layout="row">
-                    <div flex-gt-sm="20" flex="auto">
+                    <div flex="55" flex-gt-sm="20">
                         <a ng-href="{{createUrl('/user/' + currentUser.id)}}">{{translate("user_link")}}</a>
                     </div>
                 </div>
                 <div layout="row">
-                    <div flex-gt-sm="20" flex="auto">{{translate('id')}}</div>
+                    <div fflex="55" flex-gt-sm="20">{{translate('id')}}</div>
                     <div flex>{{currentUser.id}}</div>
                 </div>
                 <div layout="row">
-                    <div flex-gt-sm="20" flex="auto">{{translate('name')}}</div>
+                    <div flex="55" flex-gt-sm="20">{{translate('name')}}</div>
                     <div flex>{{currentUser.lastName + ' ' + currentUser.firstName}}</div>
                 </div>
                 <div layout="row">
-                    <div flex-gt-sm="20" flex="auto">{{translate("email")}}</div>
+                    <div flex="55" flex-gt-sm="20">{{translate("email")}}</div>
                     <div flex>{{currentUser.user.login}}</div>
                 </div>
                 <div layout="row">
-                    <div flex-gt-sm="20" flex="auto">{{translate("user_create_date")}}</div>
+                    <div flex="55" flex-gt-sm="20">{{translate("user_create_date")}}</div>
                     <div flex>
                         {{currentUser.user.createDate | date:'medium'}}
                     </div>
                 </div>
                 <div layout="row">
-                    <div flex-gt-sm="20" flex="auto">{{translate("user_blocked")}}</div>
+                    <div flex="55" flex-gt-sm="20">{{translate("user_blocked")}}</div>
                     <div flex>
                         {{currentUser.user.blocked}}
                     </div>
                 </div>
                 <div layout="row">
-                    <div flex-gt-sm="20" flex="auto">{{translate('user_enabled')}}</div>
+                    <div flex="55" flex-gt-sm="20">{{translate('user_enabled')}}</div>
                     <div flex>
                         <md-switch class="switch-cell" ng-model="currentUser.user.enabled"></md-switch>
                     </div>
                 </div>
                 <div layout="row" ng-if="currentUser.user.blockMessage">
-                    <div flex-gt-sm="20" flex="auto">{{translate("user_block_message")}}</div>
+                    <div flex="55" flex-gt-sm="20">{{translate("user_block_message")}}</div>
                     <div flex>
                         {{currentUser.user.blockMessage}}
                     </div>
                 </div>
                 <div layout="row">
-                    <div flex-gt-sm="20" flex="auto">{{translate("user_role")}}</div>
+                    <div flex="55" flex-gt-sm="20">{{translate("user_role")}}</div>
                     <div flex>
                         <module-template data="roleData" name="inputs/list"></module-template>
                     </div>

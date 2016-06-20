@@ -10,11 +10,11 @@
         <md-tab label="{{translate('permission')}}" ng-if="currentPermission != null">
             <md-content class="md-padding">
                 <div layout="row">
-                    <div flex-gt-sm="20" flex="auto">{{translate('id')}}</div>
+                    <div flex="55" flex-gt-sm="20">{{translate('id')}}</div>
                     <div flex>{{currentPermission.id}}</div>
                 </div>
                 <div layout="row">
-                    <div flex-gt-sm="20" flex="auto">{{translate('name')}}</div>
+                    <div flex="55" flex-gt-sm="20">{{translate('name')}}</div>
                     <div flex>{{currentPermission.permissionName}}</div>
                 </div>
                 <div class="form-group">
@@ -73,14 +73,14 @@
             </md-toolbar>
             <md-dialog-content>
                 <div class="md-dialog-content">
-                    <div>
-                        <md-input-container>
+                    <div layout="row">
+                        <md-input-container flex>
                             <label>{{parentScope.translate("name")}}</label>
                             <input ng-model="permission.permissionName">
                         </md-input-container>
                     </div>
-                    <div>
-                        <md-input-container>
+                    <div layout="row">
+                        <md-input-container flex>
                             <label>{{parentScope.translate("permission_note")}}</label>
                             <input ng-model="permission.note">
                         </md-input-container>

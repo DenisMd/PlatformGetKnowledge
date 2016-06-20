@@ -43,8 +43,8 @@
                         <span ng-if="typeWithMultiplyParams(currentFilterExpression.oper.info.name)"> , {{currentFilterExpression.param.info.values[1]}}</span>
                     </div>
                 </div>
-                <div class="filter-body" layout="row">
-                    <div flex="70">
+                <div class="filter-body" layout="row" layout-wrap>
+                    <div flex flex-gt-sm="60">
                         <table class="table table-hover">
                             <thead>
                             <tr>
@@ -63,7 +63,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="scroll-column-info" flex="30"  layout-margin ng-scrollbars ng-scrollbars-config="selectScrollConfig">
+                    <div class="scroll-column-info" flex="100" flex-gt-sm layout-margin ng-scrollbars ng-scrollbars-config="selectScrollConfig">
                         <div ng-if="currentFilterExpression.field && !isParamsInput"
                              ng-switch="currentFilterExpression.field.info.type">
                             <div ng-switch-when="text">
@@ -269,7 +269,7 @@
 
                     </div>
                 </div>  <!--.row-->
-                <div layout="row">
+                <div layout="row" layout-align="center">
                     <md-radio-group ng-model="logicalExpression" layout="row" layout-align="center">
                         <p class="filter-logical-operation">{{translate("filter_join_by")}}</p>
                         <md-radio-button value="and" class="md-primary">{{translate("and")}}</md-radio-button>
