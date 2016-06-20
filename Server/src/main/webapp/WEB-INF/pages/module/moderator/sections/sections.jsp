@@ -5,16 +5,16 @@
     <module-template name="selectors/clientSelector" data="selectorData"></module-template>
 </div>
 
-<md-content>
+<md-content md-theme="darkTheme">
     <md-tabs md-dynamic-height md-border-bottom>
         <md-tab label="{{translate('section_info')}}" ng-if="currentSection != null">
             <md-content class="md-padding">
                 <div layout="row">
-                    <div flex-gt-sm="20" flex="auto">{{translate('id')}}</div>
+                    <div flex="55" flex-gt-sm="20">{{translate('id')}}</div>
                     <div flex>{{currentSection.id}}</div>
                 </div>
                 <div layout="row">
-                    <div flex-gt-sm="20" flex="auto">{{translate('name')}}</div>
+                    <div flex="55" flex-gt-sm="20">{{translate('name')}}</div>
                     <div flex>{{currentSection.name}}</div>
                 </div>
                 <module-template name="inputs/multilanguage" data="multiLanguageData"></module-template>

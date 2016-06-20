@@ -6,16 +6,16 @@
 </div>
 
 
-<md-content>
+<md-content md-theme="darkTheme">
   <md-tabs md-dynamic-height md-border-bottom>
     <md-tab label="{{translate('socialLinks')}}" ng-if="currentLink != null">
       <md-content class="md-padding">
         <div layout="row">
-          <div flex-gt-sm="20" flex="auto">{{translate('id')}}</div>
+          <div flex="55" flex-gt-sm="20">{{translate('id')}}</div>
           <div flex>{{currentLink.id}}</div>
         </div>
         <div layout="row">
-          <div flex-gt-sm="20" flex="auto">{{translate('name')}}</div>
+          <div flex="55" flex-gt-sm="20">{{translate('name')}}</div>
           <div flex>{{currentLink.name}}</div>
         </div>
         <div layout="row">

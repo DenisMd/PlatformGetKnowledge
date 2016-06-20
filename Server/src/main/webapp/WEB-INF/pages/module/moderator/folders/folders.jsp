@@ -36,28 +36,28 @@
     </md-tabs>
 </md-content>
 
-<md-content>
+<md-content md-theme="darkTheme">
     <md-tabs md-dynamic-height md-border-bottom>
         <md-tab label="{{translate('folder_info')}}" ng-if="currentGroup != null">
             <md-content class="md-padding">
                 <div layout="row" class="field">
-                    <div flex-gt-sm="20" flex="auto">{{translate('id')}}</div>
+                    <div flex="55" flex-gt-sm="20">{{translate('id')}}</div>
                     <div flex>{{currentGroup.id}}</div>
                 </div>
                 <div layout="row" class="field">
-                    <div flex-gt-sm="20" flex="auto">{{translate('section')}}</div>
+                    <div flex="55" flex-gt-sm="20">{{translate('section')}}</div>
                     <div flex>
                         {{translate(currentGroup.section.name)}}
                     </div>
                 </div>
                 <div layout="row" class="field">
-                    <div flex-gt-sm="20" flex="auto">{{translate('name')}}</div>
+                    <div flex="55" flex-gt-sm="20">{{translate('name')}}</div>
                     <div flex>
                         <input type="text" class="form-control" ng-model="currentGroup.title">
                     </div>
                 </div>
                 <div layout="row" class="field">
-                    <div flex-gt-sm="20" flex="auto">{{translate("folder_url")}}</div>
+                    <div flex="55" flex-gt-sm="20">{{translate("folder_url")}}</div>
                     <div flex>
                         <input type="text" class="form-control" ng-model="currentGroup.url">
                     </div>
@@ -90,14 +90,14 @@
             </md-toolbar>
             <md-dialog-content  layout-padding>
                 <div class="md-dialog-content">
-                    <div>
-                        <md-input-container>
+                    <div layout="row">
+                        <md-input-container flex>
                             <label>{{parentScope.translate("name")}}</label>
                             <input ng-model="group.title">
                         </md-input-container>
                     </div>
-                    <div>
-                        <md-input-container>
+                    <div layout="row">
+                        <md-input-container flex>
                             <label>{{parentScope.translate("Url")}}</label>
                             <input ng-model="group.url">
                         </md-input-container>
@@ -132,14 +132,14 @@
         </md-toolbar>
         <md-dialog-content  layout-padding>
             <div class="md-dialog-content">
-                <div>
-                    <md-input-container>
+                <div layout="row">
+                    <md-input-container flex>
                         <label>{{parentScope.translate("name")}}</label>
                         <input ng-model="group.title">
                     </md-input-container>
                 </div>
-                <div>
-                    <md-input-container>
+                <div layout="row">
+                    <md-input-container flex>
                         <label>{{parentScope.translate("Url")}}</label>
                         <input ng-model="group.url">
                     </md-input-container>
@@ -174,14 +174,14 @@
         </md-toolbar>
         <md-dialog-content  layout-padding>
             <div class="md-dialog-content">
-                <div>
-                    <md-input-container>
+                <div layout="row">
+                    <md-input-container flex>
                         <label>{{parentScope.translate("name")}}</label>
                         <input ng-model="group.title">
                     </md-input-container>
                 </div>
-                <div>
-                    <md-input-container>
+                <div layout="row">
+                    <md-input-container flex>
                         <label>{{parentScope.translate("Url")}}</label>
                         <input ng-model="group.url">
                     </md-input-container>

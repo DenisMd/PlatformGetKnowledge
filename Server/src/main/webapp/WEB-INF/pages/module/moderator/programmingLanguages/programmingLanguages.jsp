@@ -5,22 +5,22 @@
     <module-template name="selectors/clientSelector" data="selectorData"></module-template>
 </div>
 
-<md-content>
+<md-content md-theme="darkTheme">
     <md-tabs md-dynamic-height md-border-bottom>
         <md-tab label="{{translate('pl_title')}}" ng-if="currentPLanguage != null">
             <md-content class="md-padding">
                 <div layout="row">
-                    <div flex-gt-sm="20" flex="auto">{{translate('id')}}</div>
+                    <div flex="55" flex-gt-sm="20">{{translate('id')}}</div>
                     <div flex>{{currentPLanguage.id}}</div>
                 </div>
                 <div layout="row">
-                    <md-input-container>
+                    <md-input-container flex>
                         <label>{{translate('name')}}</label>
                         <input ng-model="currentPLanguage.name">
                     </md-input-container>
                 </div>
                 <div layout="row">
-                    <md-input-container>
+                    <md-input-container flex>
                         <label>{{translate("pl_mode")}}</label>
                         <input ng-model="currentPLanguage.mode">
                     </md-input-container>
@@ -45,14 +45,14 @@
             </md-toolbar>
             <md-dialog-content>
                 <div class="md-dialog-content">
-                    <div>
-                        <md-input-container>
+                    <div layout="row">
+                        <md-input-container flex>
                             <label>{{parentScope.translate("name")}}</label>
                             <input ng-model="pl.name">
                         </md-input-container>
                     </div>
-                    <div>
-                        <md-input-container>
+                    <div layout="row">
+                        <md-input-container flex>
                             <label>{{parentScope.translate("pl_mode")}}</label>
                             <input ng-model="pl.mode">
                         </md-input-container>

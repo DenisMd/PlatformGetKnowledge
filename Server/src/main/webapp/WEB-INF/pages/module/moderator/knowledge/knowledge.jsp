@@ -5,22 +5,22 @@
     <module-template name="selectors/serverSelector" data="selectorData"></module-template>
 </div>
 
-<md-content>
+<md-content md-theme="darkTheme">
     <md-tabs md-dynamic-height md-border-bottom>
         <md-tab label="{{translate('knowledge_info')}}" ng-if="currentKnowledge != null">
             <md-content flex layout-padding>
                 <div layout="row">
-                    <div flex-gt-sm="20" flex="auto">{{translate('id')}}</div>
+                    <div flex="55" flex-gt-sm="20">{{translate('id')}}</div>
                     <div flex>{{currentKnowledge.id}}</div>
                 </div>
                 <div layout="row">
-                    <md-input-container>
+                    <md-input-container flex>
                         <label>{{translate("name")}}</label>
                         <input ng-model="currentKnowledge.name">
                     </md-input-container>
                 </div>
                 <div layout="row">
-                    <md-input-container>
+                    <md-input-container flex>
                         <label>{{parentScope.translate("type")}}</label>
                         <md-select ng-model="currentKnowledge.knowledgeType" aria-label="knowledgeType">
                             <md-option ng-repeat="type in knowledgeType" value="{{type}}">
@@ -63,20 +63,22 @@
         </md-toolbar>
         <md-dialog-content  layout-padding>
             <div class="md-dialog-content">
-                <div>
-                    <md-input-container>
+                <div layout="row">
+                    <md-input-container flex>
                         <label>{{parentScope.translate("name")}}</label>
                         <input ng-model="knowledge.name">
                     </md-input-container>
                 </div>
-                <md-input-container>
-                    <label>{{parentScope.translate("type")}}</label>
-                    <md-select ng-model="knowledge.knowledgeType">
-                        <md-option ng-repeat="type in parentScope.knowledgeType" value="{{type}}">
-                            {{parentScope.translate(type.toLowerCase())}}
-                        </md-option>
-                    </md-select>
-                </md-input-container>
+                <div layout="row">
+                    <md-input-container flex>
+                        <label>{{parentScope.translate("type")}}</label>
+                        <md-select ng-model="knowledge.knowledgeType">
+                            <md-option ng-repeat="type in parentScope.knowledgeType" value="{{type}}">
+                                {{parentScope.translate(type.toLowerCase())}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
             </div>
         </md-dialog-content>
         <md-dialog-actions layout="row">

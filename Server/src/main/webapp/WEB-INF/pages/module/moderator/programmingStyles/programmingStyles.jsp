@@ -5,16 +5,16 @@
     <module-template name="selectors/clientSelector" data="selectorData"></module-template>
 </div>
 
-<md-content>
+<md-content md-theme="darkTheme">
     <md-tabs md-dynamic-height md-border-bottom>
         <md-tab label="{{translate('ps_title')}}" ng-if="currentEStyle != null">
             <md-content class="md-padding">
                 <div layout="row">
-                    <div flex-gt-sm="20" flex="auto">{{translate('id')}}</div>
+                    <div flex="55" flex-gt-sm="20">{{translate('id')}}</div>
                     <div flex>{{currentEStyle.id}}</div>
                 </div>
                 <div layout="row">
-                    <md-input-container>
+                    <md-input-container flex>
                         <label>{{translate('name')}}</label>
                         <input ng-model="currentEStyle.name">
                     </md-input-container>
@@ -39,8 +39,8 @@
             </md-toolbar>
             <md-dialog-content>
                 <div class="md-dialog-content">
-                    <div>
-                        <md-input-container>
+                    <div layout="row">
+                        <md-input-container flex>
                             <label>{{parentScope.translate("name")}}</label>
                             <input ng-model="es.name">
                         </md-input-container>

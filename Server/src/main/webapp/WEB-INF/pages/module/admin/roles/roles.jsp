@@ -5,7 +5,7 @@
     <module-template name="selectors/clientSelector" data="selectorData"></module-template>
 </div>
 
-<md-content>
+<md-content md-theme="darkTheme">
     <md-tabs md-dynamic-height md-border-bottom>
         <md-tab label="{{translate('role')}}" ng-if="currentRole != null">
             <md-content class="md-padding">
