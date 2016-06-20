@@ -3,7 +3,8 @@
 .center-form {
     text-align: justify;
     margin: 10% auto 0 auto;
-    width:280px;
+    font-size: 1.2em;
+    width:320px;
 }
 
 .without-margin-top {
@@ -29,7 +30,7 @@
     /*border-radius: 100px;*/
     font-family: "Open Sans",Helvetica,Arial,sans-serif;
     font-weight: 600;
-    min-width: 19.45em;
+    min-width: 320px;
     height: 40px;
 }
 
@@ -61,4 +62,14 @@
 
 label.label-block {
     display: block;
+}
+
+@media (max-width: 350px) {
+    .center-form {
+        width: 280px;
+        font-size: 1em;
+    }
+    .login-btn {
+        min-width: 280px;
+    }
 }
