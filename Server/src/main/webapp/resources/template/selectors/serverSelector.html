@@ -1,23 +1,22 @@
 <link rel="stylesheet" href="/resources/css/selectors/selector.css">
 
 <md-content class="table-selector" ng-controller="serverSelectorController">
-    <div layout-gt-sm="row" layout-margin layout-align="center center">
+    <div layout-gt-sm="row" layout-align="center center">
         <span ng-repeat="action in getData().actions" class="action" flex="none">
-            <span class="fa fa-3x" ng-class="action.icon" ng-click="action.actionCallback($event)"
-                  ng-style="{color : action.color}">
-                <md-tooltip md-direction="bottom" class="tooltip-text">
+            <span class="fa fa-3x" ng-class="action.icon" ng-click="action.actionCallback($event)" ng-style="{color : action.color}">
+                <md-tooltip class="tooltip-text" md-direction="bottom">
                     {{translate(action.tooltip)}}
                 </md-tooltip>
             </span>
         </span>
         <span class="filter-action" flex="none">
-            <span class="fa fa-3x fa-filter" ng-click="openCustomFilter()" aria-hidden="true">
-                <md-tooltip md-direction="bottom">
-                    <span class="tooltip-text">{{translate("custom_filter")}}</span>
+            <span class="fa fa-3x fa-filter" ng-click="openCustomFilter()">
+                <md-tooltip class="tooltip-text" md-direction="bottom">
+                    {{translate("custom_filter")}}
                 </md-tooltip>
             </span>
         </span>
-        <div ng-repeat="filter in getData().filters | filter:{'default' : true}" ng-switch="filter.type" layout="column" layout-gt-sm="row" layout-margin flex>
+        <div ng-repeat="filter in getData().filters | filter:{'default' : true}" ng-switch="filter.type" layout="column" layout-gt-sm="row" flex>
 
             <div ng-switch-when="check_box" flex>
                 <md-checkbox ng-model="filter.model">
@@ -75,7 +74,7 @@
                                 <i ng-if="getData().deleteOptions" class="fa fa-2x fa-times filter-delete"
                                    ng-click="getData().deleteOptions.deleteCallback($event,item)"></i>
                             </span>
-                            <span ng-repeat="action in getData().actionsForItem" class="action-for-item">
+                            <span ng-repeat="action in getData().actionsForItem" class="action">
                                 <span class="fa fa-2x" ng-class="action.icon" ng-click="action.actionCallback($event,item)"
                                       ng-style="{color : action.color}">
                                     <md-tooltip md-direction="bottom">

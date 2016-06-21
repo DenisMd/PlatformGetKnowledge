@@ -1,6 +1,6 @@
 <div ng-cloak>
     <md-content>
-        <label>{{getData().label}} : </label>
+        <label style="font-weight: normal">{{getData().label}} : </label>
         <md-tabs md-dynamic-height md-border-bottom>
             <md-tab ng-repeat="(key,l) in getData().languages" label="{{translate(key)}}">
                 <md-content class="md-padding">

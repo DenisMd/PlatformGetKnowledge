@@ -266,11 +266,10 @@
                             </div>
 
                         </div>
-
                     </div>
                 </div>  <!--.row-->
-                <div layout="row" layout-align="center">
-                    <md-radio-group ng-model="logicalExpression" layout="row" layout-align="center">
+                <div>
+                    <md-radio-group ng-model="logicalExpression" layout="row" layout-align="center center">
                         <p class="filter-logical-operation">{{translate("filter_join_by")}}</p>
                         <md-radio-button value="and" class="md-primary">{{translate("and")}}</md-radio-button>
                         <md-radio-button value="or">{{translate("or")}}</md-radio-button>
