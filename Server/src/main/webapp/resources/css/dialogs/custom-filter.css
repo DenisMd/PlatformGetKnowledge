@@ -4,6 +4,7 @@
 
 .modal-find{
     padding: 6px;
+    position:relative;
 }
 
 .modal-body.modal-find{
@@ -15,7 +16,6 @@
 }
 
 .filter-body {
-    height: 300px;
 }
 
 .left-block {

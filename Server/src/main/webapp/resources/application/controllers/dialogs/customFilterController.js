@@ -27,6 +27,83 @@ function filterExpression(field,oper,param) {
 
 model.controller("customFilterController",function($scope,customFilterService){
 
+    var STATE = {
+        FIELD : 0,
+        OPERATION : 1,
+        SET_VALUE : 2
+    };
+
+    $scope.state = STATE.FIELD;
+    $scope.isUpdate = false;
+    $scope.currentValue = null;
+    
+    $scope.setCurrentValue = function (value) {
+        $scope.currentValue = value;
+    };
+    
+
+    //Возврат по состаянию
+    $scope.back = function () {
+        switch ($scope.state){
+            case STATE.FIELD :
+                return;
+            case STATE.OPERATION :
+                backToFiled();
+                break;
+            case STATE.SET_VALUE:
+                backToOperation();
+                break;
+        }
+        $scope.state = --$scope.state % Object.keys(STATE).length;
+    };
+
+    $scope.$watch("selectedOperation.value" , function (newValue) {
+        if (newValue) {
+            $scope.currentValue = newValue;
+        }
+    });
+
+    //Следующие состаяние
+    $scope.next = function () {
+        $scope.isUpdate = true;
+        switch ($scope.state){
+            case STATE.FIELD :
+                addField($scope.currentValue);
+                break;
+            case STATE.OPERATION :
+                addOperation();
+                switch (currentFilterExpression.field.info.type){
+                    case "text" :
+                        if (selectedOperation.value.name  === 'in'){
+                            $scope.inParams = [{}];
+                        } else {
+                            $scope.params = "";
+                        }
+                    case "number" :
+                        if (selectedOperation.value.name === 'between'){
+                            $scope.params = undefined;
+                            $scope.params2 = undefined;
+                        } else {
+                            if (selectedOperation.value.name === 'in'){
+                                $scope.inParams = [{}];
+                            } else {
+                                $scope.params = undefined;
+                            }
+                        }
+                    case "dateTime" :
+                        if (selectedOperation.value.name === 'between'){
+                            
+                        }
+                }
+                break;
+            case STATE.SET_VALUE:
+
+                break;
+        }
+        $scope.currentValue = null;
+        $scope.state = ++$scope.state % Object.keys(STATE).length;
+        $scope.isUpdate = false;
+    };
 
     $scope.logicalExpression = "and";
 
@@ -119,22 +196,27 @@ model.controller("customFilterController",function($scope,customFilterService){
     $scope.currentFilterExpression = new filterExpression(null,null,null);
 
     //Добавление поля в фильтр
-    $scope.addField = function(field){
+     function addField(field){
         if (!$scope.isParamsInput) {
             $scope.currentFilterExpression.field = new filterItem(TYPES.Field, {name: field.field, type: field.type , constants : field.constants});
             $scope.selectedOperation = {};
         }
     };
 
+    //Возврат к выбору поля
+    function backToFiled() {
+        $scope.currentFilterExpression.field = null;
+    };
+
     //Добовление операции в фильтр
-    $scope.addOperation = function () {
+     function addOperation() {
         $scope.currentFilterExpression.oper = new filterItem(TYPES.Operation,{
             name : $scope.selectedOperation.value.name,
             symbol : $scope.selectedOperation.value.symbol});
         $scope.isParamsInput = true;
     };
 
-    $scope.backToOperation = function(){
+    function backToOperation() {
         $scope.currentFilterExpression.oper = null;
         $scope.isParamsInput = false;
     };
@@ -236,5 +318,5 @@ model.controller("customFilterController",function($scope,customFilterService){
         }
     };
 
-    $scope.selectScrollConfig = angular.merge({setHeight: 440}, $scope.modalScrollConfig);
+    $scope.selectScrollConfig = angular.merge({setHeight: 300}, $scope.modalScrollConfig);
 });
