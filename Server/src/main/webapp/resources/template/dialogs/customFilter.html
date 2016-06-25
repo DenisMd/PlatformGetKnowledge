@@ -43,8 +43,8 @@
                         <span ng-if="typeWithMultiplyParams(currentFilterExpression.oper.info.name)"> , {{currentFilterExpression.param.info.values[1]}}</span>
                     </div>
                 </div>
-                <div class="filter-body" layout="row" layout-wrap>
-                    <div flex flex-gt-sm="60">
+                <div class="filter-body" ng-scrollbars ng-scrollbars-config="selectScrollConfig">
+                    <div data-ng-if="!currentFilterExpression.field">
                         <table class="table table-hover">
                             <thead>
                             <tr>
@@ -55,15 +55,16 @@
                             </thead>
                             <tbody>
                             <tr ng-repeat="filterInfo in filtersInfo" class="selected-row"
-                                ng-click="addField(filterInfo)">
+                                ng-click="setCurrentValue(filterInfo)">
                                 <td>{{translate(filterInfo.title)}}</td>
                                 <td>{{filterInfo.field}}</td>
                                 <td>{{translate(filterInfo.type+"_field")}}</td>
+                                <td></td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="scroll-column-info" flex="100" flex-gt-sm layout-margin ng-scrollbars ng-scrollbars-config="selectScrollConfig">
+                    <div class="scroll-column-info">
                         <div ng-if="currentFilterExpression.field && !isParamsInput"
                              ng-switch="currentFilterExpression.field.info.type">
                             <div ng-switch-when="text">
@@ -101,11 +102,6 @@
                                     </md-radio-button>
                                 </md-radio-group>
                             </div>
-                            <div>
-                                <button class="btn btn-default" ng-if="selectedOperation.value"
-                                        ng-click="addOperation()">{{translate("next")}}
-                                </button>
-                            </div>
                         </div>
                         <div ng-if="isParamsInput">
                             <div ng-switch="currentFilterExpression.field.info.type">
@@ -116,9 +112,6 @@
                                             <input type="text" class="form-control" ng-model="inParam.text" placeholder="{{translate('parameter') + ' ' + ($index+1)}}">
                                             <span flex="10" class="text-center" ng-if="inParams.length > 1"><i class="fa fa-times" aria-hidden="true" ng-click="inParams.splice($index,1)"></i></span>
                                         </div>
-                                        <button class="btn btn-default" ng-click="backToOperation()">
-                                            {{translate("back")}}
-                                        </button>
                                         <button class="btn btn-primary" ng-click="createFilterExpressionFromArray(inParams)">
                                             {{translate("add")}}
                                         </button>
@@ -128,9 +121,6 @@
                                             <label for="text-param">{{translate("parameter")}}</label>
                                             <input type="text" class="form-control" id="text-param" ng-model="params">
                                         </div>
-                                        <button class="btn btn-default" ng-click="backToOperation()">
-                                            {{translate("back")}}
-                                        </button>
                                         <button class="btn btn-primary" ng-click="createFilterExpression(params)"  ng-disabled="params === undefined">
                                             {{translate("add")}}
                                         </button>
@@ -148,9 +138,6 @@
                                             <input type="number" class="form-control" id="between-param2"
                                                    ng-model="params2">
                                         </div>
-                                        <button class="btn btn-default" ng-click="backToOperation()">
-                                            {{translate("back")}}
-                                        </button>
                                         <button class="btn btn-primary" ng-click="createFilterExpression(params,params2)"  ng-disabled="params === undefined || params2 === undefined || params >= params2">
                                             {{translate("add")}}
                                         </button>
@@ -161,9 +148,6 @@
                                             <input type="number" class="form-control" ng-model="inParam.text" placeholder="{{translate('parameter') + ' ' + ($index+1)}}">
                                             <span flex="10" class="text-center" ng-if="inParams.length > 1"><i class="fa fa-times" aria-hidden="true" ng-click="inParams.splice($index,1)"></i></span>
                                         </div>
-                                        <button class="btn btn-default" ng-click="backToOperation()">
-                                            {{translate("back")}}
-                                        </button>
                                         <button class="btn btn-primary" ng-click="createFilterExpressionFromArray(inParams)">
                                             {{translate("add")}}
                                         </button>
@@ -174,9 +158,6 @@
                                             <input type="number" class="form-control" id="number-param"
                                                    ng-model="params">
                                         </div>
-                                        <button class="btn btn-default" ng-click="backToOperation()">
-                                            {{translate("back")}}
-                                        </button>
                                         <button class="btn btn-primary" ng-click="createFilterExpression(params)"  ng-disabled="params === undefined">
                                             {{translate("add")}}
                                         </button>
@@ -192,9 +173,6 @@
                                             <label for="between-param2">{{translate("to")}}</label>
                                             <module-template name="inputs/dateTimePicker" data="dateTimeOptions2"></module-template>
                                         </div>
-                                        <button class="btn btn-default" ng-click="backToOperation()">
-                                            {{translate("back")}}
-                                        </button>
                                         <button class="btn btn-primary" ng-click="createDateExpression()"  ng-disabled="dateParam1 === undefined || dateParam2 === undefined">
                                             {{translate("add")}}
                                         </button>
@@ -204,9 +182,6 @@
                                             <label for="number-param">{{translate("date")}}</label>
                                             <module-template name="inputs/dateTimePicker" data="dateTimeOptions1"></module-template>
                                         </div>
-                                        <button class="btn btn-default" ng-click="backToOperation()">
-                                            {{translate("back")}}
-                                        </button>
                                         <button class="btn btn-primary" ng-click="createDateExpression()"  ng-disabled="dateParam1 === undefined">
                                             {{translate("add")}}
                                         </button>
@@ -226,9 +201,6 @@
                                             </md-input-container>
                                             <span flex="10" class="text-center" ng-if="inParams.length > 1"><i class="fa fa-times" aria-hidden="true" ng-click="inParams.splice($index,1)"></i></span>
                                         </div>
-                                        <button class="btn btn-default" ng-click="backToOperation()">
-                                            {{translate("back")}}
-                                        </button>
                                         <button class="btn btn-primary" ng-click="createFilterExpressionFromArray(inParams)">
                                             {{translate("add")}}
                                         </button>
@@ -244,9 +216,6 @@
                                                 </md-select>
                                             </md-input-container>
                                         </div>
-                                        <button class="btn btn-default" ng-click="backToOperation()">
-                                            {{translate("back")}}
-                                        </button>
                                         <button class="btn btn-primary" ng-click="createFilterExpression(params)"  ng-disabled="params === undefined">
                                             {{translate("add")}}
                                         </button>
@@ -256,18 +225,22 @@
                                     <md-switch ng-model="params" aria-label="Switch params">
                                         {{translate("parameter")}} : {{ params }}
                                     </md-switch>
-                                    <button class="btn btn-default" ng-click="backToOperation()">
-                                        {{translate("back")}}
-                                    </button>
                                     <button class="btn btn-primary" ng-click="createFilterExpression(params)" ng-disabled="params === undefined">
                                         {{translate("add")}}
                                     </button>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>  <!--.row-->
+                <div layout="row" layout-align="center end">
+                    <button ng-if="state > 0" layout-margin flex="none" class="btn btn-default" ng-click="back()">
+                        {{translate("back")}}
+                    </button>
+                    <button layout-margin flex="none" class="btn btn-default" ng-disabled="isUpdate || currentValue == null"
+                            ng-click="next()">{{translate("next")}}
+                    </button>
+                </div>
                 <div>
                     <md-radio-group ng-model="logicalExpression" layout="row" layout-align="center center">
                         <p class="filter-logical-operation">{{translate("filter_join_by")}}</p>
