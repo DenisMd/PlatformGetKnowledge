@@ -5,7 +5,7 @@ model.controller("booksController" , function($scope,$state,applicationService,c
     $scope.currentFilterByDate = true;
     $scope.showCreateArea = false;
 
-    $scope.filter = applicationService.createFilter($scope.getData().className,0,10);
+    $scope.filter = applicationService.createFilter($scope.getData().className,0,12);
     $scope.filter.createFiltersInfo();
     $scope.filter.equals("groupBooks.url","text",$scope.getData().groupBooks);
     $scope.filter.equals("groupBooks.section.name","text",$scope.getData().sectionName);
@@ -68,7 +68,7 @@ model.controller("booksController" , function($scope,$state,applicationService,c
     };
 
     $scope.loadMore = function () {
-        $scope.filter.increase(10);
+        $scope.filter.increase(12);
         doAction();
     };
 
