@@ -1,4 +1,4 @@
-model.controller("clientSelectorController" , function ($scope , customFilterService) {
+model.controller("clientSelectorController" , function ($scope , customFilterService,maxMobileHeight) {
 
     $scope.customFilterInfo;
 
@@ -6,9 +6,11 @@ model.controller("clientSelectorController" , function ($scope , customFilterSer
     
     $scope.filterdList = [];
 
+    var height = screen.height > maxMobileHeight ? 400 : 280;
+
     $scope.tableScroll = {
         theme: 'dark-3',
-        setHeight: 400,
+        setHeight: height,
         advanced: {
             updateOnContentResize: true,
             updateOnSelectorChange: true
@@ -99,7 +101,7 @@ model.controller("clientSelectorController" , function ($scope , customFilterSer
                     }
                     break;
                 case "enum":
-                    if (filter.model !== "<any>") {
+                    if (filter.model !== "") {
                         if (item[filter.field] === filter.model) {
                             filtersResult.push(true);
                         } else {
