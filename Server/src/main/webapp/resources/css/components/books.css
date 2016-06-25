@@ -12,7 +12,8 @@
 }
 
 .book-title {
-    font-size: 18px;
+    font-size: 1.5em;
+    font-weight: bold;
     color: black;
     text-align: center;
     cursor: pointer;

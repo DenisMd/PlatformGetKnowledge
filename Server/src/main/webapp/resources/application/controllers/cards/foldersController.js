@@ -2,7 +2,7 @@ model.controller("foldersController" , function ($scope,applicationService) {
 
     $scope.currentFilterByDate = false;
 
-    $scope.filter = applicationService.createFilter($scope.getData().className,0,10);
+    $scope.filter = applicationService.createFilter($scope.getData().className,0,12);
     $scope.filter.setDistinct(false);
     $scope.filter.createFiltersInfo();
     $scope.filter.equals("section.name","text",$scope.getData().sectionName);
@@ -60,7 +60,7 @@ model.controller("foldersController" , function ($scope,applicationService) {
     $scope.by_count();
 
     $scope.loadMore = function () {
-        $scope.filter.increase(10);
+        $scope.filter.increase(12);
         doAction();
     };
 });
