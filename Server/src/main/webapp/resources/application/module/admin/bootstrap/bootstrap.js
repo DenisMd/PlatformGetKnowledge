@@ -19,16 +19,6 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className)
                 field : "id"
             },
             {
-                title : "bootstrap_repeat",
-                type : "check_box",
-                field : "repeat"
-            },
-            {
-                title : "bootstrap_start_time",
-                type : "dateTime",
-                field : "startTime"
-            },
-            {
                 title : "bootstrap_state",
                 type : "enum",
                 field : "bootstrapState",
@@ -42,7 +32,19 @@ model.controller("bootstrapCtrl", function ($scope,applicationService,className)
                     } , {
                         key : "Failed",
                         value: "bootstrap_failed"
-                    }]
+                    }],
+                default : true
+            },
+            {
+                title : "bootstrap_repeat",
+                type : "check_box",
+                field : "repeat",
+                default : true
+            },
+            {
+                title : "bootstrap_start_time",
+                type : "dateTime",
+                field : "startTime"
             }
         ],
         headerNames : [

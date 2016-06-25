@@ -2,20 +2,20 @@
 
 <md-content class="table-selector" ng-controller="serverSelectorController">
     <div layout-gt-sm="row" layout-align="center center">
-        <span ng-repeat="action in getData().actions" class="action" flex="none">
-            <span class="fa fa-3x" ng-class="action.icon" ng-click="action.actionCallback($event)" ng-style="{color : action.color}">
+        <div ng-repeat="action in getData().actions" class="action" flex="none">
+            <div class="fa fa-3x" ng-class="action.icon" ng-click="action.actionCallback($event)" ng-style="{color : action.color}">
                 <md-tooltip class="tooltip-text" md-direction="bottom">
                     {{translate(action.tooltip)}}
                 </md-tooltip>
-            </span>
-        </span>
-        <span class="filter-action" flex="none">
+            </div>
+        </div>
+        <div class="filter-action" flex="none">
             <span class="fa fa-3x fa-filter" ng-click="openCustomFilter()">
                 <md-tooltip class="tooltip-text" md-direction="bottom">
                     {{translate("custom_filter")}}
                 </md-tooltip>
             </span>
-        </span>
+        </div>
         <div ng-repeat="filter in getData().filters | filter:{'default' : true}" ng-switch="filter.type" layout="column" layout-gt-sm="row" flex>
 
             <div ng-switch-when="check_box" flex>

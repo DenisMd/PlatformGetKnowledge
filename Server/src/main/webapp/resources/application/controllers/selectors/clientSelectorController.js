@@ -98,6 +98,15 @@ model.controller("clientSelectorController" , function ($scope , customFilterSer
                         }
                     }
                     break;
+                case "enum":
+                    if (filter.model !== "<any>") {
+                        if (item[filter.field] === filter.model) {
+                            filtersResult.push(true);
+                        } else {
+                            filtersResult.push(false);
+                        }
+                    }
+                    break;
             }
         }
         for (i=0; i<filtersResult.length; i++) {

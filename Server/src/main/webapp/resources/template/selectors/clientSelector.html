@@ -1,27 +1,39 @@
 <link rel="stylesheet" href="/resources/css/selectors/selector.css">
 
 <md-content class="table-selector" ng-controller="clientSelectorController">
-    <div layout-gt-sm="row" layout-align="center center" layout-wrap>
-        <span ng-repeat="action in getData().actions" class="action" flex="none">
-            <span class="fa fa-3x" ng-class="action.icon" ng-click="action.actionCallback($event)" ng-style="{color : action.color}">
+    <div layout-gt-sm="row" layout-align="center center" layout-wrap layout-margin>
+        <div flex="none" layout="row" layout-wrap>
+            <div ng-repeat="action in getData().actions" class="action" flex="none">
+            <span class="fa fa-3x" ng-class="action.icon" ng-click="action.actionCallback($event)"
+                  ng-style="{color : action.color}">
                 <md-tooltip class="tooltip-text" md-direction="bottom">
                     {{translate(action.tooltip)}}
                 </md-tooltip>
             </span>
-        </span>
-        <span class="filter-action" flex="none">
+            </div>
+            <div class="filter-action" flex="none">
             <span class="fa fa-3x fa-filter" ng-click="openCustomFilter()">
                 <md-tooltip class="tooltip-text" md-direction="bottom">
                     {{translate("custom_filter")}}
                 </md-tooltip>
             </span>
-        </span>
+            </div>
+        </div>
         <div ng-repeat="filter in getData().filters | filter:{'default' : true}" ng-switch="filter.type" flex="{{filter.type==='check_box'?'none':''}}">
 
             <div ng-switch-when="check_box">
                 <md-checkbox  ng-model="filter.model" class="filter-panel-item">
                     {{translate(filter.title)}}
                 </md-checkbox>
+            </div>
+
+            <div ng-switch-when="enum" ng-init="filter.model='<any>'" flex>
+                <select ng-model="filter.model" class="form-control">
+                    <option value="<any>">{{translate(filter.title)}}</option>
+                    <option ng-repeat="constant in filter.constants" value="{{constant.key}}">
+                        {{translate(constant.value)}}
+                    </option>
+                </select>
             </div>
 
             <div ng-switch-default>
