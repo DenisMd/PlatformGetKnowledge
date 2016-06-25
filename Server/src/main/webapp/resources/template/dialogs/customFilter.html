@@ -106,15 +106,12 @@
                         <div ng-if="isParamsInput">
                             <div ng-switch="currentFilterExpression.field.info.type">
                                 <div ng-switch-when="text">
-                                    <div ng-if="selectedOperation.value.name === 'in'" ng-init="inParams = [{}]">
+                                    <div ng-if="selectedOperation.value.name === 'in'">
                                         <a href="" ng-click="inParams.push({})">{{translate("add_param")}}</a>
                                         <div class="form-group" ng-repeat="inParam in inParams" layout="row"  layout-align="center center">
                                             <input type="text" class="form-control" ng-model="inParam.text" placeholder="{{translate('parameter') + ' ' + ($index+1)}}">
                                             <span flex="10" class="text-center" ng-if="inParams.length > 1"><i class="fa fa-times" aria-hidden="true" ng-click="inParams.splice($index,1)"></i></span>
                                         </div>
-                                        <button class="btn btn-primary" ng-click="createFilterExpressionFromArray(inParams)">
-                                            {{translate("add")}}
-                                        </button>
                                     </div>
                                     <div ng-if="selectedOperation.value.name !== 'in'">
                                         <div class="form-group">
@@ -142,7 +139,7 @@
                                             {{translate("add")}}
                                         </button>
                                     </div>
-                                    <div ng-if="selectedOperation.value.name === 'in'" ng-init="inParams = [{}]">
+                                    <div ng-if="selectedOperation.value.name === 'in'">
                                         <a href="" ng-click="inParams.push({})">{{translate("add_param")}}</a>
                                         <div class="form-group" ng-repeat="inParam in inParams" layout="row"  layout-align="center center">
                                             <input type="number" class="form-control" ng-model="inParam.text" placeholder="{{translate('parameter') + ' ' + ($index+1)}}">
@@ -188,7 +185,7 @@
                                     </div>
                                 </div>
                                 <div ng-switch-when="enum">
-                                    <div ng-if="selectedOperation.value.name === 'in'" ng-init="inParams = [{}]">
+                                    <div ng-if="selectedOperation.value.name === 'in'">
                                         <a href="" ng-click="inParams.push({})">{{translate("add_param")}}</a>
                                         <div class="form-group" ng-repeat="inParam in inParams" layout="row" layout-align="center center">
                                             <md-input-container flex>
@@ -221,13 +218,10 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div ng-switch-when="check_box" ng-init="params = false">
+                                <div ng-switch-when="check_box">
                                     <md-switch ng-model="params" aria-label="Switch params">
                                         {{translate("parameter")}} : {{ params }}
                                     </md-switch>
-                                    <button class="btn btn-primary" ng-click="createFilterExpression(params)" ng-disabled="params === undefined">
-                                        {{translate("add")}}
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -237,8 +231,11 @@
                     <button ng-if="state > 0" layout-margin flex="none" class="btn btn-default" ng-click="back()">
                         {{translate("back")}}
                     </button>
-                    <button layout-margin flex="none" class="btn btn-default" ng-disabled="isUpdate || currentValue == null"
+                    <button ng-if="state < 2" layout-margin flex="none" class="btn btn-default" ng-disabled="isUpdate || currentValue == null"
                             ng-click="next()">{{translate("next")}}
+                    </button>
+                    <button ng-if="state >= 2" layout-margin class="btn btn-primary" ng-click="next()" ng-disabled="isDisabled()">
+                        {{translate("add")}}
                     </button>
                 </div>
                 <div>
