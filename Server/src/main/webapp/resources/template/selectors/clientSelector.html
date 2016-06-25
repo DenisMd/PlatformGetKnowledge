@@ -4,19 +4,19 @@
     <div layout-gt-sm="row" layout-align="center center" layout-wrap layout-margin>
         <div flex="none" layout="row" layout-wrap>
             <div ng-repeat="action in getData().actions" class="action" flex="none">
-            <span class="fa fa-3x" ng-class="action.icon" ng-click="action.actionCallback($event)"
-                  ng-style="{color : action.color}">
-                <md-tooltip class="tooltip-text" md-direction="bottom">
-                    {{translate(action.tooltip)}}
-                </md-tooltip>
-            </span>
+                <div class="fa fa-3x" ng-class="action.icon" ng-click="action.actionCallback($event)"
+                      ng-style="{color : action.color}">
+                    <md-tooltip class="tooltip-text" md-direction="bottom">
+                        {{translate(action.tooltip)}}
+                    </md-tooltip>
+                </div>
             </div>
             <div class="filter-action" flex="none">
-            <span class="fa fa-3x fa-filter" ng-click="openCustomFilter()">
-                <md-tooltip class="tooltip-text" md-direction="bottom">
-                    {{translate("custom_filter")}}
-                </md-tooltip>
-            </span>
+                <div class="fa fa-3x fa-filter" ng-click="openCustomFilter()">
+                    <md-tooltip class="tooltip-text" md-direction="bottom">
+                        {{translate("custom_filter")}}
+                    </md-tooltip>
+                </div>
             </div>
         </div>
         <div ng-repeat="filter in getData().filters | filter:{'default' : true}" ng-switch="filter.type" flex="{{filter.type==='check_box'?'none':''}}">
@@ -27,7 +27,7 @@
                 </md-checkbox>
             </div>
 
-            <div ng-switch-when="enum" ng-init="filter.model='<any>'" flex>
+            <div ng-switch-when="enum" ng-init="filter.model='<any>'">
                 <select ng-model="filter.model" class="form-control">
                     <option value="<any>">{{translate(filter.title)}}</option>
                     <option ng-repeat="constant in filter.constants" value="{{constant.key}}">

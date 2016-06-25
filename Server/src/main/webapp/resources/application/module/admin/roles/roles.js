@@ -22,7 +22,8 @@ model.controller("rolesCtrl", function ($scope, applicationService, className) {
                 title : "name",
                 type  : "enum",
                 field : "roleName",
-                constants : []
+                constants : [],
+                default : true
             }
         ],
         headerNames : [

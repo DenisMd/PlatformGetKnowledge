@@ -19,7 +19,24 @@ model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationServ
                 title : "type",
                 type : "enum",
                 field : "knowledgeType",
-                constants : ['Programming' , 'Design' , 'Math' , 'Physic']
+                constants : [
+                    {
+                        key : 'Programming',
+                        value : "programming"
+                    } ,
+                    {
+                        key : 'Design',
+                        value : "design"
+                    } ,
+                    {
+                        key : 'Math',
+                        value : "math"
+                    } ,
+                    {
+                        key : 'Physic',
+                        value : "physic"
+                    }],
+                default : true
             }
         ],
         headerNames : [

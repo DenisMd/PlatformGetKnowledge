@@ -95,6 +95,7 @@
 
     "failed"        : "Ошибка выполнения",
     "complete"      : "Завершено",
+    "runnable"      : "Исполняется",
     "sessionFailed" : "Ошибка в сессии",
     "emailNotSend"  : "Email не отправлен",
     "notAuthorized" : "Не авторизирован",
@@ -122,6 +123,8 @@
     "add_param"           : "Добавить праметр",
     "remove_param"        : "Удалить параметр",
     "choose_language"     : "Выберите язык",
+    "not_started"         : "Не начат",
+
 
     "video1_title"  : "Почему getKnowlege() ?",
     "video2_title"  : "Что значит быть программистом сегодня?",

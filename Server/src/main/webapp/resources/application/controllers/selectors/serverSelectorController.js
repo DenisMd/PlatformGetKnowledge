@@ -1,4 +1,4 @@
-model.controller("serverSelectorController" , function ($scope , customFilterService,applicationService) {
+model.controller("serverSelectorController" , function ($scope , customFilterService,applicationService,maxMobileHeight) {
 
     $scope.filter = applicationService.createFilter($scope.getData().className,0,10);
 
@@ -8,9 +8,11 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
     $scope.customFilterInfo;
     $scope.showDeleteColumn = false;
 
+    var height = screen.height > maxMobileHeight ? 400 : 280;
+
     $scope.tableScroll = {
         theme: 'dark-3',
-        setHeight: 400,
+        setHeight: height,
         advanced: {
             updateOnContentResize: true,
             updateOnSelectorChange: true

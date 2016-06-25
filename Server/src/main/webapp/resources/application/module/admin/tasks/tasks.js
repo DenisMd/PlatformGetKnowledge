@@ -28,12 +28,14 @@ model.controller("tasksCtrl", function ($scope,className) {
             {
                 title : "task_name",
                 type  : "text",
-                field : "taskName"
+                field : "taskName",
+                default : true
             },
             {
                 title : "task_service_name",
                 type : "text",
-                field : "serviceName"
+                field : "serviceName",
+                default : true
             },
             {
                 title : "id",
@@ -44,7 +46,20 @@ model.controller("tasksCtrl", function ($scope,className) {
                 title : "task_status",
                 type : "enum",
                 field : "taskStatus",
-                constants : ["Complete" , "Failed", "NotStarted" , "Runnable"]
+                constants : [{
+                    key : "Complete",
+                    value : "complete"
+                } , {
+                    key : "Failed",
+                    value : "failed"
+                } , {
+                    key : "NotStarted",
+                    value: "not_started"
+                },{
+                    key : "Runnable",
+                    value : "runnable"
+                }],
+                default : true
             },
             {
                 title : "task_calendar",

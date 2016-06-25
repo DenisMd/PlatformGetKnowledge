@@ -24,7 +24,8 @@ model.controller("usersCtrl", function ($scope, applicationService, className) {
                 title : "user_role",
                 type : "enum",
                 field : "user.role.roleName",
-                constants : []
+                constants : [],
+                default : true
             },
             {
                 title : "user_create_date",
