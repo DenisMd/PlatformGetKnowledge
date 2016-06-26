@@ -91,6 +91,9 @@
     "description"   : "Description",
     "tags"          : "Tags",
     "change"        : "Change",
+    "mb"            : "MByte",
+    "remove"        : "Remove",
+    "upload"        : "Upload",
 
 
     "failed"        : "Failed",
@@ -123,6 +126,10 @@
     "add_param"           : "Add parameter",
     "remove_param"        : "Remove parameter",
     "choose_language"     : "Choose language",
+    "not_started"         : "Not started",
+    "upload_all"          : "Upload all",
+    "cancel_all"          : "Cancel all",
+    "remove_all"          : "Remove all",
 
     "video1_title"  : "Почему getKnowlege() ?",
     "video2_title"  : "Что значит быть программистом сегодня?",
@@ -183,6 +190,12 @@
     "file_uploader"               : "Files uploader",
     "file_drop_zone"              : "Drop zone",
     "file_select_single_file"     : "Choose single file to upload",
-    "file_select_multiply_files"  : "Choose multiply files to upload "
+    "file_name"                   : "File name",
+    "file_select_multiply_files"  : "Choose multiply files to upload ",
+    "file_queue_length"           : "Queue length",
+    "file_size"                   : "File size",
+    "file_progress"               : "Progress bar",
+    "file_status"                 : "Status",
+    "file_actions"                : "Actions"
   }
 }

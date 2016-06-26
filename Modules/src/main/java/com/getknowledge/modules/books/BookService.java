@@ -8,6 +8,8 @@ import com.getknowledge.modules.books.tags.BooksTagRepository;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
+import com.getknowledge.modules.help.desc.attachements.FileAttachment;
+import com.getknowledge.modules.help.desc.attachements.FileAttachmentRepository;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoService;
 import com.getknowledge.modules.video.Video;
@@ -50,6 +52,9 @@ public class BookService extends AbstractService implements ImageService,FileSer
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private FileAttachmentRepository fileAttachmentRepository;
 
     private Result checkBookRight(HashMap<String,Object> data) {
         Long bookId = longFromField("bookId",data);
@@ -176,7 +181,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
         return Result.Complete();
     }
 
-    @ActionWithFile(name = "uploadData" , mandatoryFields = {"bookId"})
+    @ActionWithFile(name = "uploadData" , mandatoryFields = {"bookId"}, maxSize = 250_200)
     @Transactional
     public Result uploadData(HashMap<String,Object> data, List<MultipartFile> files) {
         Result result = checkBookRight(data);
@@ -188,7 +193,11 @@ public class BookService extends AbstractService implements ImageService,FileSer
         }
 
         try {
-            book.setBookData(files.get(0).getBytes());
+            FileAttachment fileAttachment = new FileAttachment();
+            fileAttachment.setFileName(files.get(0).getOriginalFilename());
+            fileAttachment.setData(files.get(0).getBytes());
+            fileAttachmentRepository.create(fileAttachment);
+            book.setFileAttachment(fileAttachment);
             book.setFileName(files.get(0).getOriginalFilename());
         } catch (IOException e) {
             trace.logException("Error read data for book" , e, TraceLevel.Warning,true);
@@ -206,11 +215,12 @@ public class BookService extends AbstractService implements ImageService,FileSer
     }
 
     @Override
+    @Transactional
     public FileResponse getFile(long id, Object key) {
         FileResponse fileResponse = new FileResponse();
         Book book = bookRepository.read(id);
-        if (book != null)  {
-            fileResponse.setData(book.getBookData());
+        if (book != null && book.getFileAttachment() != null)  {
+            fileResponse.setData(book.getFileAttachment().getData());
             fileResponse.setFileName(book.getFileName());
         }
         return fileResponse;

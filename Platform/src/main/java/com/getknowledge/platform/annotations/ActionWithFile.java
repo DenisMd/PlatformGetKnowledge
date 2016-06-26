@@ -11,4 +11,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface ActionWithFile {
     String name() default "";
     String[] mandatoryFields() default "";
+    int maxSize() default 4096; //4 Mb
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.books.group.GroupBooks;
 import com.getknowledge.modules.books.tags.BooksTag;
 import com.getknowledge.modules.dictionaries.language.Language;
+import com.getknowledge.modules.help.desc.attachements.FileAttachment;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.annotations.ModelView;
 import com.getknowledge.platform.annotations.ModuleInfo;
@@ -57,10 +58,9 @@ public class Book extends AbstractEntity implements CloneableEntity<Book>,IUser,
     @JsonIgnore
     private byte[] cover;
 
-    @Basic(fetch=FetchType.LAZY)
-    @Lob @Column(name="data")
+    @OneToOne(optional = true , fetch = FetchType.LAZY)
     @JsonIgnore
-    private byte[] bookData;
+    private FileAttachment fileAttachment;
 
     @Column(name = "file_name")
     private String fileName;
@@ -97,12 +97,12 @@ public class Book extends AbstractEntity implements CloneableEntity<Book>,IUser,
         this.cover = cover;
     }
 
-    public byte[] getBookData() {
-        return bookData;
+    public FileAttachment getFileAttachment() {
+        return fileAttachment;
     }
 
-    public void setBookData(byte[] bookData) {
-        this.bookData = bookData;
+    public void setFileAttachment(FileAttachment fileAttachment) {
+        this.fileAttachment = fileAttachment;
     }
 
     public String getDescription() {
@@ -179,7 +179,6 @@ public class Book extends AbstractEntity implements CloneableEntity<Book>,IUser,
         cloneBook.setId(this.getId());
         cloneBook.setGroupBooks(this.getGroupBooks());
         cloneBook.setName(this.getName());
-        cloneBook.setBookData(this.getBookData());
         cloneBook.setCover(this.getCover());
         cloneBook.setDescription(this.getDescription());
         cloneBook.setLanguage(this.getLanguage());

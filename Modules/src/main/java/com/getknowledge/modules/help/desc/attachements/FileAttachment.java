@@ -3,17 +3,15 @@ package com.getknowledge.modules.help.desc.attachements;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.help.desc.HpMessage;
+import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
+import com.getknowledge.platform.base.entities.AuthorizationList;
 
 import javax.persistence.*;
 
 @Entity
-public class FileAttachment {
-
-    @ManyToOne(optional = false)
-    @JsonIgnore
-    private HpMessage message;
-
+@ModuleInfo(repositoryName = "FileAttachmentRepository")
+public class FileAttachment extends AbstractEntity{
     @Basic(fetch= FetchType.LAZY)
     @Column(name = "attach_files")
     @Lob
@@ -39,23 +37,8 @@ public class FileAttachment {
         this.data = data;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public HpMessage getMessage() {
-        return message;
-    }
-
-    public void setMessage(HpMessage message) {
-        this.message = message;
+    @Override
+    public AuthorizationList getAuthorizationList() {
+        return null;
     }
 }

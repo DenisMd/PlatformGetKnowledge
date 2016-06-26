@@ -74,7 +74,6 @@ public class HPMessageService extends AbstractService implements FileService {
             try {
                 FileAttachment fileAttachment = new FileAttachment();
                 fileAttachment.setData(file.getBytes());
-                fileAttachment.setMessage(hpMessage);
                 entityManager.persist(fileAttachment);
                 entityManager.flush();
             } catch (IOException e) {

@@ -35,7 +35,7 @@ public class HpMessage extends AbstractEntity{
     @JoinColumn(nullable = true)
     private User user;
 
-    @OneToMany(mappedBy = "message")
+    @OneToMany
     @JsonIgnore
     private List<FileAttachment> files = new ArrayList<>();
 

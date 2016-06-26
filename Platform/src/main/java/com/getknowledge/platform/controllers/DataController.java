@@ -807,6 +807,10 @@ public class DataController {
                 HashMap<String,Object> data = getDataForAction(actionName, action.name(), action.mandatoryFields(), jsonData, principal);
 
                 if (data != null) {
+                    long maxSize = files.stream().mapToLong(f -> f.getSize()).sum();
+                    if ((action.maxSize() * 1024) < maxSize) {
+                        throw new MaxSizeException("Files is too big, max size for files is " + (action.maxSize() * 1024) + " bytes" , trace);
+                    }
                     Object result = method.invoke(abstractService, data, files);
                     String jsonResult = objectMapper.writeValueAsString(result);
                     trace.log(String.format("<------ Send \"Action\" response with parameters {className : %s , actionName : %s , data : %s} result : %s from user \"%s\"",className,actionName,jsonData,jsonResult,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);

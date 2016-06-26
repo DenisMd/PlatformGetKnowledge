@@ -99,6 +99,7 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
         multiplyFiles : false,
         className : className.book,
         actionName : "uploadData",
+        title : "book_data",
         parameters : {bookId:+bookId}
     };
     

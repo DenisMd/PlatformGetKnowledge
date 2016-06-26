@@ -77,7 +77,8 @@ public class VideoService extends AuthorizedService<Video> implements BootstrapS
         return bootstrapInfo;
     }
 
-    @ActionWithFile(name = "uploadVideo" , mandatoryFields = {"videoId"})
+    //Максимальный размер файла 500 мб
+    @ActionWithFile(name = "uploadVideo" , mandatoryFields = {"videoId"} , maxSize = 512_000)
     @Transactional
     public Result uploadVideo(HashMap<String,Object> data, List<MultipartFile> fileList) {
         Long videoId = longFromField("videoId",data);
