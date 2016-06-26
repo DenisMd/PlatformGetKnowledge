@@ -72,37 +72,124 @@ model.controller("customFilterController",function($scope,customFilterService){
                 break;
             case STATE.OPERATION :
                 addOperation();
-                switch (currentFilterExpression.field.info.type){
+                switch ($scope.currentFilterExpression.field.info.type){
                     case "text" :
-                        if (selectedOperation.value.name  === 'in'){
+                        if ($scope.selectedOperation.value.name  === 'in'){
                             $scope.inParams = [{}];
                         } else {
                             $scope.params = "";
                         }
+                        break;
                     case "number" :
-                        if (selectedOperation.value.name === 'between'){
+                        if ($scope.selectedOperation.value.name === 'between'){
                             $scope.params = undefined;
                             $scope.params2 = undefined;
                         } else {
-                            if (selectedOperation.value.name === 'in'){
+                            if ($scope.selectedOperation.value.name === 'in'){
                                 $scope.inParams = [{}];
                             } else {
                                 $scope.params = undefined;
                             }
                         }
+                        break;
                     case "dateTime" :
-                        if (selectedOperation.value.name === 'between'){
-                            
+                        break;
+                    case "enum" :
+                        if ($scope.selectedOperation.value.name === 'in'){
+                            $scope.inParams = [{}];
+                        } else {
+                            $scope.params = undefined;
                         }
+                        break;
+                    case "check_box" :
+                        $scope.params = false;
                 }
                 break;
             case STATE.SET_VALUE:
-
+                console.log($scope.currentFilterExpression.field.info.type);
+                switch ($scope.currentFilterExpression.field.info.type){
+                    case "text" :
+                        if ($scope.selectedOperation.value.name  === 'in'){
+                            $scope.createFilterExpressionFromArray($scope.inParams);
+                            delete $scope.inParams;
+                        } else {
+                            $scope.createFilterExpression($scope.params);
+                            delete $scope.params;
+                        }
+                        break;
+                    case "number" :
+                        if ($scope.selectedOperation.value.name === 'between'){
+                            $scope.createFilterExpression($scope.params, $scope.params2);
+                            delete $scope.params;
+                            delete $scope.params2;
+                        } else {
+                            if ($scope.selectedOperation.value.name === 'in'){
+                                $scope.createFilterExpressionFromArray($scope.inParams);
+                                delete $scope.inParams;
+                            } else {
+                                $scope.createFilterExpression($scope.params);
+                                delete $scope.params;
+                            }
+                        }
+                        break;
+                    case "dateTime" :
+                        $scope.createDateExpression();
+                        break;
+                    case "enum" :
+                        if ($scope.selectedOperation.value.name === 'in'){
+                            $scope.createFilterExpressionFromArray($scope.inParams);
+                            delete $scope.inParams;
+                        } else {
+                            $scope.createFilterExpression($scope.params);
+                            delete $scope.params;
+                        }
+                        break;
+                    case "check_box" :
+                        $scope.createFilterExpression($scope.params);
+                        delete $scope.params;
+                }
                 break;
         }
         $scope.currentValue = null;
         $scope.state = ++$scope.state % Object.keys(STATE).length;
         $scope.isUpdate = false;
+    };
+
+
+    $scope.isDisabled = function () {
+        if ($scope.state == STATE.SET_VALUE){
+            switch ($scope.currentFilterExpression.field && $scope.currentFilterExpression.field.info.type){
+                case "text" :
+                    if ($scope.selectedOperation.value.name  !== 'in'){
+                        return angular.isUndefined($scope.params);
+                    }
+                    break;
+                case "number" :
+                    if ($scope.selectedOperation.value.name === 'between'){
+                        return angular.isUndefined($scope.params) || angular.isUndefined($scope.params2) || params >= params2
+                    } else {
+                        if ($scope.selectedOperation.value.name !== 'in'){
+                            return angular.isUndefined($scope.params);
+                        }
+                    }
+                    break;
+                case "dateTime" :
+                    if ($scope.selectedOperation.value.name === 'between'){
+                       return angular.isUndefined(dateParam1) || angular.isUndefined(dateParam2);
+                    } else {
+                        return angular.isUndefined(dateParam1);
+                    }
+                    break;
+                case "enum" :
+                    if ($scope.selectedOperation.value.name !== 'in'){
+                        return angular.isUndefined($scope.params);
+                    }
+                    break;
+                case "check_box" :
+                    return angular.isUndefined($scope.params);
+            }
+        }
+        return false;
     };
 
     $scope.logicalExpression = "and";
