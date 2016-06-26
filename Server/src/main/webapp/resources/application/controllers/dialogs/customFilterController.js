@@ -103,39 +103,45 @@ model.controller("customFilterController",function($scope,customFilterService){
                         break;
                     case "check_box" :
                         $scope.params = false;
-                        
                 }
                 break;
-                console.log($scope.state);
             case STATE.SET_VALUE:
                 console.log($scope.currentFilterExpression.field.info.type);
                 switch ($scope.currentFilterExpression.field.info.type){
                     case "text" :
                         if ($scope.selectedOperation.value.name  === 'in'){
-                            $scope.createFilterExpressionFromArray(inParams);
+                            $scope.createFilterExpressionFromArray($scope.inParams);
+                            delete $scope.inParams;
                         } else {
-                            $scope.params = "";
+                            $scope.createFilterExpression($scope.params);
+                            delete $scope.params;
                         }
                         break;
                     case "number" :
                         if ($scope.selectedOperation.value.name === 'between'){
-                            $scope.params = undefined;
-                            $scope.params2 = undefined;
+                            $scope.createFilterExpression($scope.params, $scope.params2);
+                            delete $scope.params;
+                            delete $scope.params2;
                         } else {
                             if ($scope.selectedOperation.value.name === 'in'){
-                                $scope.inParams = [{}];
+                                $scope.createFilterExpressionFromArray($scope.inParams);
+                                delete $scope.inParams;
                             } else {
-                                $scope.params = undefined;
+                                $scope.createFilterExpression($scope.params);
+                                delete $scope.params;
                             }
                         }
                         break;
                     case "dateTime" :
+                        $scope.createDateExpression();
                         break;
                     case "enum" :
                         if ($scope.selectedOperation.value.name === 'in'){
-                            $scope.inParams = [{}];
+                            $scope.createFilterExpressionFromArray($scope.inParams);
+                            delete $scope.inParams;
                         } else {
-                            $scope.params = undefined;
+                            $scope.createFilterExpression($scope.params);
+                            delete $scope.params;
                         }
                         break;
                     case "check_box" :
@@ -152,14 +158,35 @@ model.controller("customFilterController",function($scope,customFilterService){
 
     $scope.isDisabled = function () {
         if ($scope.state == STATE.SET_VALUE){
-            switch ($scope.currentFilterExpression.field.info.type){
+            switch ($scope.currentFilterExpression.field && $scope.currentFilterExpression.field.info.type){
                 case "text" :
                     if ($scope.selectedOperation.value.name  !== 'in'){
-
+                        return angular.isUndefined($scope.params);
+                    }
+                    break;
+                case "number" :
+                    if ($scope.selectedOperation.value.name === 'between'){
+                        return angular.isUndefined($scope.params) || angular.isUndefined($scope.params2) || params >= params2
+                    } else {
+                        if ($scope.selectedOperation.value.name !== 'in'){
+                            return angular.isUndefined($scope.params);
+                        }
+                    }
+                    break;
+                case "dateTime" :
+                    if ($scope.selectedOperation.value.name === 'between'){
+                       return angular.isUndefined(dateParam1) || angular.isUndefined(dateParam2);
+                    } else {
+                        return angular.isUndefined(dateParam1);
+                    }
+                    break;
+                case "enum" :
+                    if ($scope.selectedOperation.value.name !== 'in'){
+                        return angular.isUndefined($scope.params);
                     }
                     break;
                 case "check_box" :
-                    return angular.isUndefined(params);
+                    return angular.isUndefined($scope.params);
             }
         }
         return false;
