@@ -96,9 +96,9 @@
         {{translate("book_links")}}
     </div>
 
-    <div ng-repeat="url in book.links track by $index">
+    <div ng-repeat="url in book.links track by $index" class="book-link-margin">
         <i class="fa fa-external-link" aria-hidden="true"></i>
-        <a ng-href="{{url}}" target="_blank">{{url}}</a>
+        <a ng-href="{{url}}" class="book-link" target="_blank">{{url}}</a>
     </div>
 
     <div ng-if="book.fileName">

@@ -8,7 +8,8 @@
 .folders-toolbar{
     border-bottom: 1px solid #d6d6d6;
     margin-top: -10px;
-    min-width: 408px;
+    /*Iphone 5 width*/
+    min-width: 320px;
 }
 
 md-input-container.folders-toolbar-input-container{
@@ -50,7 +51,8 @@ md-input-container.folders-toolbar-input-container .md-input{
 
 .folders-orderBy{
     color:#777777;
-    margin:20px 0px;
+    font-size: 1.1em;
+    margin:20px 0;
 }
 
 .folders-orderBy .active{
@@ -62,7 +64,6 @@ md-input-container.folders-toolbar-input-container .md-input{
     vertical-align: middle;
     display: inline-block;
     cursor: pointer;
-    font-size: 17px;
 }
 
 .folders-orderBy span:hover{
@@ -85,7 +86,7 @@ md-input-container.folders-toolbar-input-container .md-input{
 .folder-title {
     text-align: center;
     color: rgba(123, 123, 123, 0.94);
-    font-size: 20px;
+    font-size: 1.3em;
     width: 100%;
     margin-top: 15px;
     height: 80px;
@@ -94,7 +95,7 @@ md-input-container.folders-toolbar-input-container .md-input{
 .folder-stat {
     width: 100%;
     height: 70px;
-    font-size: 18px;
+    font-size: 1.2em;
     color: rgba(123, 123, 123, 0.94);
 }
 
@@ -104,8 +105,8 @@ md-input-container.folders-toolbar-input-container .md-input{
     background-color: #069ec2;
     text-align: center;
     color: white;
-    font-size: 18px;
-    padding: 5px;
+    font-size: 1.1em;
+    padding: 11px;
     cursor: pointer;
 }
 
@@ -115,5 +116,11 @@ md-input-container.folders-toolbar-input-container .md-input{
 
 .load-more-div {
     height: 60px;
-    font-size: 23px;
+    font-size: 1.2em;
+}
+
+@media (max-width: 959px) {
+    .folder-toolbar-btn {
+        margin-bottom: 10px;
+    }
 }

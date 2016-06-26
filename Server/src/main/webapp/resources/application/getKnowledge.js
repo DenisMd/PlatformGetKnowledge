@@ -5,6 +5,7 @@ var model = angular.module("mainApp", ["backend.service", "ngImgCrop" , "ngMater
 model.constant("codemirrorURL", "/resources/bower_components/codemirror/");
 model.constant("maxMobileWidth" , 570);
 model.constant("maxMobileHeight" , 700);
+model.constant("minMobileWidth", 320);
 
 model.config(function (codemirrorURL,$mdThemingProvider) {
     CodeMirror.modeURL = codemirrorURL+ "mode/%N/%N.js";

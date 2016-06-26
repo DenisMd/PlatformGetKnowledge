@@ -43,6 +43,14 @@
     margin: 20px 0;
 }
 
+.book-link {
+    word-break: break-all;
+}
+
+.book-link-margin {
+    margin: 10px 0;
+}
+
 .book-description {
     resize: vertical;
 }
