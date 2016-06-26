@@ -181,7 +181,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
         return Result.Complete();
     }
 
-    @ActionWithFile(name = "uploadData" , mandatoryFields = {"bookId"}, maxSize = 250_200)
+    @ActionWithFile(name = "uploadData" , mandatoryFields = {"bookId"}, maxSize = 50_104)
     @Transactional
     public Result uploadData(HashMap<String,Object> data, List<MultipartFile> files) {
         Result result = checkBookRight(data);
