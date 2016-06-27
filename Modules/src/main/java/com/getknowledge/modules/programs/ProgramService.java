@@ -160,7 +160,7 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
         return Result.Complete();
     }
 
-    @ActionWithFile(name = "uploadCover" , mandatoryFields = {"programId"})
+    @ActionWithFile(name = "uploadCover" , mandatoryFields = {"programId"},maxSize = 204_800)
     @Transactional
     public Result uploadCover(HashMap<String,Object> data, List<MultipartFile> files) {
         Result result = checkProgramRight(data);
