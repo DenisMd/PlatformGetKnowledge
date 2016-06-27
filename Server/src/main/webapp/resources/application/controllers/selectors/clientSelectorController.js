@@ -101,7 +101,7 @@ model.controller("clientSelectorController" , function ($scope , customFilterSer
                     }
                     break;
                 case "enum":
-                    if (filter.model !== "") {
+                    if (filter.model !== undefined && filter.model !== "<any>") {
                         if (item[filter.field] === filter.model) {
                             filtersResult.push(true);
                         } else {

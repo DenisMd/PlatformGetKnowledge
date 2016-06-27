@@ -54,30 +54,6 @@ model.config(function (codemirrorURL,$mdThemingProvider) {
     $mdThemingProvider.theme('darkTheme')
         .primaryPalette('primaryPalette')
         .accentPalette('darkPallette');
-
-    var greenPallete = {
-        '50': '#449d44',
-        '100': '#449d44',
-        '200': '#449d44',
-        '300': '#449d44',
-        '400': '#449d44',
-        '500': '#449d44',
-        '600': '#449d44',
-        '700': '#449d44',
-        '800': '#449d44',
-        '900': '#449d44',
-        'A100': '#449d44',
-        'A200': '#449d44',
-        'A400': '#449d44',
-        'A700': '#449d44'
-    };
-    
-    $mdThemingProvider
-        .definePalette('greenPallete', greenPallete);
-
-    $mdThemingProvider.theme('greenTheme')
-        .primaryPalette('primaryPalette')
-        .accentPalette('greenPallete');
     
     
 });

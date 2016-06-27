@@ -1,0 +1,23 @@
+/*-------------------*/
+.create-program-btn {
+    color: #6EBCD6;
+    border-color: #21A8CB;
+}
+
+.create-program-btn:hover{
+    color: #4A859D;
+    border-color: #217CCB;
+    background: white;
+}
+
+.program-tags {
+    margin-bottom: 20px;
+}
+
+.create-div {
+    margin-bottom: 20px;
+}
+
+.group-info {
+    margin-bottom: 60px;
+}
