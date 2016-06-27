@@ -1,5 +1,7 @@
 package com.getknowledge.modules.programs;
 
+import com.getknowledge.modules.attachements.FileAttachment;
+import com.getknowledge.modules.attachements.FileAttachmentRepository;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
@@ -40,6 +42,9 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
 
     @Autowired
     private TraceService trace;
+
+    @Autowired
+    private FileAttachmentRepository fileAttachmentRepository;
 
     @Autowired
     private ProgramRepository programRepository;
@@ -181,7 +186,11 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
         }
 
         try {
-            program.setBookData(files.get(0).getBytes());
+            FileAttachment fileAttachment = new FileAttachment();
+            fileAttachment.setFileName(files.get(0).getOriginalFilename());
+            fileAttachment.setData(files.get(0).getBytes());
+            fileAttachmentRepository.create(fileAttachment);
+            program.setFileAttachment(fileAttachment);
             program.setFileName(files.get(0).getOriginalFilename());
         } catch (IOException e) {
             trace.logException("Error upload data for program" , e, TraceLevel.Warning,true);
@@ -199,11 +208,12 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
     }
 
     @Override
+    @Transactional
     public FileResponse getFile(long id, Object key) {
         FileResponse fileResponse = new FileResponse();
         Program program = programRepository.read(id);
-        if (program != null)  {
-            fileResponse.setData(program.getBookData());
+        if (program != null && program.getFileAttachment() != null)  {
+            fileResponse.setData(program.getFileAttachment().getData());
             fileResponse.setFileName(program.getFileName());
         }
         return fileResponse;

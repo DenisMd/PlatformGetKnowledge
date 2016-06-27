@@ -1,8 +1,7 @@
-package com.getknowledge.modules.help.desc.attachements;
+package com.getknowledge.modules.attachements;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.getknowledge.modules.help.desc.HpMessage;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;

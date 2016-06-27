@@ -1,4 +1,4 @@
-package com.getknowledge.modules.help.desc.attachements;
+package com.getknowledge.modules.attachements;
 
 
 import com.getknowledge.platform.base.repositories.BaseRepository;

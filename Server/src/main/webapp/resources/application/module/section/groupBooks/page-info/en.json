@@ -2,6 +2,7 @@
   "text" : {
     "books_title" : "Books catalogs",
     "books_create" : "Create book",
+    "books_author_name" : "Author name",
     "folder_in" : "Go to books folder",
     "folder_totals_count" : "Books totals count"
   }

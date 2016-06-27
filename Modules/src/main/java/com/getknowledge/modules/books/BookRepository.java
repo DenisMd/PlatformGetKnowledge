@@ -52,11 +52,12 @@ public class BookRepository extends ProtectedRepository<Book> {
         }
     }
 
-    public Book createBook(GroupBooks groupBooks,UserInfo owner, String name,String description,Language language,List<String> links,List<String> tags,byte [] cover) {
+    public Book createBook(GroupBooks groupBooks,UserInfo owner, String name,String authorName,String description,Language language,List<String> links,List<String> tags,byte [] cover) {
         Book book = new Book();
         book.setGroupBooks(groupBooks);
         book.setName(name);
         book.setDescription(description);
+        book.setAuthorName(authorName);
         book.setLanguage(language);
         book.setOwner(owner);
         if (links != null)
@@ -71,9 +72,13 @@ public class BookRepository extends ProtectedRepository<Book> {
         return book;
     }
 
-    public Book updateBook(Book book,String name,String description,List<String> links,List<String> tags) {
-        book.setName(name);
-        book.setDescription(description);
+    public Book updateBook(Book book,String name,String authorName,String description,List<String> links,List<String> tags) {
+        if (name != null)
+            book.setName(name);
+        if (authorName != null)
+            book.setAuthorName(authorName);
+        if (description != null)
+            book.setDescription(description);
         if (links != null)
             book.setLinks(links);
         booksTagRepository.removeTagsFromEntity(book);

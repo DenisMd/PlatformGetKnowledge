@@ -1,27 +1,20 @@
 package com.getknowledge.modules.books;
 
-import com.getknowledge.modules.books.comment.BookComment;
 import com.getknowledge.modules.books.group.GroupBooks;
 import com.getknowledge.modules.books.group.GroupBooksRepository;
-import com.getknowledge.modules.books.tags.BooksTag;
-import com.getknowledge.modules.books.tags.BooksTagRepository;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
-import com.getknowledge.modules.help.desc.attachements.FileAttachment;
-import com.getknowledge.modules.help.desc.attachements.FileAttachmentRepository;
+import com.getknowledge.modules.attachements.FileAttachment;
+import com.getknowledge.modules.attachements.FileAttachmentRepository;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoService;
-import com.getknowledge.modules.video.Video;
-import com.getknowledge.modules.video.comment.VideoComment;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.serializers.FileResponse;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.FileService;
 import com.getknowledge.platform.base.services.ImageService;
-import com.getknowledge.platform.exceptions.AccessDeniedException;
-import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
@@ -31,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -75,7 +67,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
     }
 
 
-    @Action(name = "createBook" , mandatoryFields = {"name","groupBookUrl","description","language"})
+    @Action(name = "createBook" , mandatoryFields = {"name","groupBookUrl","authorName","description","language"})
     @Transactional
     public Result createBook(HashMap<String,Object> data) {
         if (!data.containsKey("principalName"))
@@ -95,6 +87,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
         }
 
         String name = (String) data.get("name");
+        String authorName = (String) data.get("authorName");
         String description = (String) data.get("description");
         Language language = null;
         List<String> links = null;
@@ -123,7 +116,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
             trace.logException("Error load file: " + e.getMessage(), e, TraceLevel.Error,true);
         }
 
-        book = bookRepository.createBook(groupBooks,userInfo,name,description,language,links,tags,cover);
+        book = bookRepository.createBook(groupBooks,userInfo,name,authorName,description,language,links,tags,cover);
 
         Result result = Result.Complete();
         result.setObject(book.getId());
@@ -142,8 +135,19 @@ public class BookService extends AbstractService implements ImageService,FileSer
             return result;
         }
 
-        String name = (String) data.get("name");
-        String description = (String) data.get("description");
+        String name = null;
+        if (data.containsKey("name")) {
+           name =(String) data.get("name");
+        }
+
+        String description = null;
+        if (data.containsKey("description")) {
+            description = (String) data.get("description");
+        }
+        String authorName = null;
+        if (data.containsKey("authorName")) {
+            authorName = (String) data.get("authorName");
+        }
         List<String> links = null;
         List<String> tags = null;
 
@@ -155,7 +159,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
             tags = (List<String>) data.get("tags");
         }
 
-        bookRepository.updateBook(book, name, description, links, tags);
+        bookRepository.updateBook(book, name, authorName, description, links, tags);
         return Result.Complete();
     }
 

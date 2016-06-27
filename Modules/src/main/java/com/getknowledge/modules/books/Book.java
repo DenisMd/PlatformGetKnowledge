@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.books.group.GroupBooks;
 import com.getknowledge.modules.books.tags.BooksTag;
 import com.getknowledge.modules.dictionaries.language.Language;
-import com.getknowledge.modules.help.desc.attachements.FileAttachment;
+import com.getknowledge.modules.attachements.FileAttachment;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.annotations.ModelView;
 import com.getknowledge.platform.annotations.ModuleInfo;
@@ -64,6 +64,17 @@ public class Book extends AbstractEntity implements CloneableEntity<Book>,IUser,
 
     @Column(name = "file_name")
     private String fileName;
+
+    @Column(name = "author_name")
+    private String authorName;
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
 
     public Calendar getCreateDate() {
         return createDate;
@@ -178,6 +189,7 @@ public class Book extends AbstractEntity implements CloneableEntity<Book>,IUser,
         Book cloneBook = new Book();
         cloneBook.setId(this.getId());
         cloneBook.setGroupBooks(this.getGroupBooks());
+        cloneBook.setAuthorName(this.getAuthorName());
         cloneBook.setName(this.getName());
         cloneBook.setCover(this.getCover());
         cloneBook.setDescription(this.getDescription());

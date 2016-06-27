@@ -1,9 +1,8 @@
 package com.getknowledge.modules.programs;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.getknowledge.modules.books.group.GroupBooks;
-import com.getknowledge.modules.books.tags.BooksTag;
 import com.getknowledge.modules.dictionaries.language.Language;
+import com.getknowledge.modules.attachements.FileAttachment;
 import com.getknowledge.modules.programs.group.GroupPrograms;
 import com.getknowledge.modules.programs.tags.ProgramTag;
 import com.getknowledge.modules.userInfo.UserInfo;
@@ -56,10 +55,8 @@ public class Program extends AbstractEntity implements CloneableEntity<Program>,
     @JsonIgnore
     private byte[] cover;
 
-    @Basic(fetch=FetchType.LAZY)
-    @Lob @Column(name="data")
-    @JsonIgnore
-    private byte[] bookData;
+    @OneToOne(optional = true,fetch = FetchType.LAZY)
+    private FileAttachment fileAttachment;
 
     @Column(name = "file_name")
     private String fileName;
@@ -87,14 +84,6 @@ public class Program extends AbstractEntity implements CloneableEntity<Program>,
 
     public void setCover(byte[] cover) {
         this.cover = cover;
-    }
-
-    public byte[] getBookData() {
-        return bookData;
-    }
-
-    public void setBookData(byte[] bookData) {
-        this.bookData = bookData;
     }
 
     public String getDescription() {
@@ -137,6 +126,13 @@ public class Program extends AbstractEntity implements CloneableEntity<Program>,
         this.owner = owner;
     }
 
+    public FileAttachment getFileAttachment() {
+        return fileAttachment;
+    }
+
+    public void setFileAttachment(FileAttachment fileAttachment) {
+        this.fileAttachment = fileAttachment;
+    }
 
     public GroupPrograms getGroupPrograms() {
         return groupPrograms;
@@ -180,7 +176,6 @@ public class Program extends AbstractEntity implements CloneableEntity<Program>,
         cloneProgram.setId(this.getId());
         cloneProgram.setGroupPrograms(this.getGroupPrograms());
         cloneProgram.setName(this.getName());
-        cloneProgram.setBookData(this.getBookData());
         cloneProgram.setCover(this.getCover());
         cloneProgram.setDescription(this.getDescription());
         cloneProgram.setLanguage(this.getLanguage());
