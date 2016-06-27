@@ -70,8 +70,10 @@ public class ProgramRepository extends BaseRepository<Program> {
     }
 
     public Program updateProgram(Program program,String name,String description,List<String> links,List<String> tags) {
-        program.setName(name);
-        program.setDescription(description);
+        if (name != null)
+            program.setName(name);
+        if (description != null)
+            program.setDescription(description);
         if (links != null)
             program.setLinks(links);
 

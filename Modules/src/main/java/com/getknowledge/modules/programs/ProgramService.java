@@ -134,8 +134,16 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
             return result;
         }
 
-        String name = (String) data.get("name");
-        String description = (String) data.get("description");
+        String name = null;
+        if (data.containsKey("name")) {
+           name = (String) data.get("name");
+        }
+
+        String description = null;
+        if (data.containsKey("description")) {
+            description = (String) data.get("description");
+        }
+
         List<String> links = null;
         List<String> tags = null;
 
