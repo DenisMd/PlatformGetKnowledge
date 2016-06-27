@@ -78,6 +78,7 @@
   </div>
   <div flex="65" class="book-title">
       <h1 class="text-center">{{book.name}}</h1>
+      <h4 class="text-center">{{book.authorName}}</h4>
       <p class="description text-justify">
           {{book.description}}
       </p>

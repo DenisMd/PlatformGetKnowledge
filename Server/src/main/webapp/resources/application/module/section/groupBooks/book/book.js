@@ -52,6 +52,7 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
         var result = {};
         result.bookId = book.id;
         result.name = book.name;
+        result.authorName = book.authorName;
         result.description = book.description;
         result.links = [];
         book.urls.forEach(function(element){
