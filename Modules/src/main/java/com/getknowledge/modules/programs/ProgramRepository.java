@@ -89,13 +89,15 @@ public class ProgramRepository extends BaseRepository<Program> {
         return program;
     }
 
-    public Program updateProgram(Program program,String name,String description,List<String> links,List<String> tags) {
+    public Program updateProgram(Program program,String name,String description,Language language,List<String> links,List<String> tags) {
         if (name != null)
             program.setName(name);
         if (description != null)
             program.setDescription(description);
         if (links != null)
             program.setLinks(links);
+        if (language != null)
+            program.setLanguage(language);
 
         programTagRepository.removeTagsFromEntity(program);
         if (tags != null  && !tags.isEmpty()) {

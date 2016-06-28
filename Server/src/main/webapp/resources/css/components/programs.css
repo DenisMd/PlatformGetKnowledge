@@ -26,3 +26,7 @@
     width: 112px;
     height: 112px;
 }
+
+.program-description {
+    word-break: break-all;
+}

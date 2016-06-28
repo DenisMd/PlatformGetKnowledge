@@ -101,12 +101,11 @@ public class BookService extends AbstractService implements ImageService,FileSer
             tags = (List<String>) data.get("tags");
         }
 
-        try {
-            language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
-        } catch (Exception exception) {
-            Result result = Result.Failed();
-            result.setObject("Language not found");
-            return result;
+
+        language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
+        if (language == null) {
+            Result failed = Result.Failed("language_not_found");
+            return failed;
         }
 
         byte [] cover = null;
@@ -145,13 +144,10 @@ public class BookService extends AbstractService implements ImageService,FileSer
         if (data.containsKey("description")) {
             description = (String) data.get("description");
         }
-        try {
+        if (data.containsKey("language")) {
             language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
-        } catch (Exception exception) {
-            Result failed = Result.Failed();
-            failed.setObject("Language not found");
-            return failed;
         }
+
         String authorName = null;
         if (data.containsKey("authorName")) {
             authorName = (String) data.get("authorName");
@@ -167,7 +163,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
             tags = (List<String>) data.get("tags");
         }
 
-        bookRepository.updateBook(book, name, authorName, description, links, tags);
+        bookRepository.updateBook(book, name,language, authorName, description, links, tags);
         return Result.Complete();
     }
 
