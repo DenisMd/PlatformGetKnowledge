@@ -23,7 +23,8 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
             });
             
             book.coverUrl = applicationService.imageHref(className.book,book.id);
-            book.downloadUrl = applicationService.fileByKeyHref(className.book,book.id,"key");;
+            book.downloadUrl = applicationService.fileByKeyHref(className.book,book.id,"key");
+            book.language = book.language.name.toLowerCase();
             
             if (book.owner){
                 book.owner.imageSrc = $scope.userImg(book.owner.id);
