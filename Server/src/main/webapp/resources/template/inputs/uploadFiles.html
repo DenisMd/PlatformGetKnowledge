@@ -100,7 +100,11 @@
                             <tr ng-repeat="item in parentScope.uploader.queue">
                                 <td>{{ item.file.name }}</td>
                                 <td ng-show="parentScope.uploader.isHTML5" nowrap>
-                                    {{ item.file.size/1024/1024|number:2}} {{parentScope.translate("mb")}}
+                                   <span ng-class="{
+                                        'is-too-big' : (item.file.size/1024 > parentScope.getData().maxFileSize)
+                                   }">
+                                       {{ item.file.size/1024/1024|number:2}} {{parentScope.translate("mb")}}
+                                   </span>
                                 </td>
                                 <td ng-show="parentScope.uploader.isHTML5">
                                     <div class="progress" style="margin-bottom: 0;">
@@ -115,7 +119,7 @@
                                 </td>
                                 <td nowrap>
                                     <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()"
-                                            ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                            ng-disabled="item.isReady || item.isUploading || item.isSuccess || (item.file.size/1024 > parentScope.getData().maxFileSize)">
                                         <span class="glyphicon glyphicon-upload"></span> {{parentScope.translate("upload")}}
                                     </button>
                                     <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()"
