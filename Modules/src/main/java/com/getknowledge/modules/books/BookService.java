@@ -217,6 +217,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
     }
 
     @Override
+    @Transactional
     public byte[] getImageById(long id) {
         Book book = bookRepository.read(id);
         return book == null ? null : book.getCover();

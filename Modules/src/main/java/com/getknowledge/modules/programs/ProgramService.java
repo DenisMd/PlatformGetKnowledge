@@ -209,6 +209,7 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
     }
 
     @Override
+    @Transactional
     public byte[] getImageById(long id) {
         Program program = programRepository.read(id);
         return program == null ? null : program.getCover();

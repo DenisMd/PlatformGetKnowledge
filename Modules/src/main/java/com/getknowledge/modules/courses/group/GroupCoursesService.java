@@ -70,6 +70,7 @@ public class GroupCoursesService extends AbstractService implements ImageService
     }
 
     @Override
+    @Transactional
     public byte[] getImageById(long id) {
         GroupCourses groupCourses = repository.read(id);
         if (groupCourses != null)
