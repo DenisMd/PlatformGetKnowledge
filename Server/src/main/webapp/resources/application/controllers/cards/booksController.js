@@ -103,6 +103,7 @@ model.controller("booksController" , function($scope,$state,$languages,applicati
     var groupBookFilter = applicationService.createFilter(className.groupBooks,0,10);
     groupBookFilter.createFiltersInfo();
     groupBookFilter.equals("url","text",$scope.getData().groupBooks);
+    groupBookFilter.equals("section.name","text",$scope.getData().sectionName);
     applicationService.filterRequest($scope,"groupBookInfo", groupBookFilter,function(groupBook){
         if (groupBook == null) {
             $state.go("404");

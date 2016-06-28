@@ -103,6 +103,7 @@ model.controller("programsController" , function($scope,$state,$languages,applic
     var groupProgramFilter = applicationService.createFilter(className.groupPrograms,0,10);
     groupProgramFilter.createFiltersInfo();
     groupProgramFilter.equals("url","text",$scope.getData().groupProgram);
+    groupProgramFilter.equals("section.name","text",$scope.getData().sectionName);
     applicationService.filterRequest($scope,"groupProgramInfo", groupProgramFilter,function(groupProgram){
         if (groupProgram == null) {
             $state.go("404");

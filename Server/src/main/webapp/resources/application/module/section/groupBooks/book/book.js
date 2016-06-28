@@ -6,6 +6,9 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
 
     function readBook(){
         applicationService.read($scope,"book",className.book,bookId,function(book){
+            if (!book) {
+                $state.go("404");
+            }
             if (!("tags" in book)) {
                 book.tagsName = [];
             } else {
@@ -30,6 +33,15 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
                 book.owner.imageSrc = $scope.userImg(book.owner.id);
                 book.owner.userUrl = $scope.createUrl("/user/"+book.owner.id);
             }
+
+            //Кооментарии к книгам
+            $scope.commentData = {
+                id : "Book",
+                commentClassName : className.bookComment,
+                filedName : "book.id",
+                objectId : parseInt(bookId),
+                withoutEvent : true
+            };
 
             updateCroppedImage(book);
         });
@@ -106,15 +118,6 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
         actionName : "uploadData",
         title : "book_data",
         parameters : {bookId:+bookId}
-    };
-    
-    //Кооментарии к книгам
-    $scope.commentData = {
-        id : "Book",
-        commentClassName : className.bookComment,
-        filedName : "book.id",
-        objectId : parseInt(bookId),
-        withoutEvent : true
     };
 
     $scope.showDeleteDialog = function(ev) {
