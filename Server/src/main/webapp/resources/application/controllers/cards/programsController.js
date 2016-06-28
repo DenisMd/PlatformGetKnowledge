@@ -1,4 +1,4 @@
-model.controller("programsController" , function($scope,$state,applicationService,className){
+model.controller("programsController" , function($scope,$state,$languages,applicationService,className){
     var maxCharactersInName = 40;
     var maxCharacterDescription = 250;
 
@@ -34,7 +34,8 @@ model.controller("programsController" , function($scope,$state,applicationServic
     };
 
     var likeIndex;
-    $scope.searchPrograms = function(text) {
+    var equalIndex;
+    $scope.searchPrograms = function(text,language) {
         if (likeIndex != undefined) {
             $scope.filter.result.customFilters.splice(likeIndex,1);
         }
@@ -42,6 +43,16 @@ model.controller("programsController" , function($scope,$state,applicationServic
             likeIndex  = $scope.filter.addCustomFilter("searchPrograms",{
                 textValue : text
             });
+        }
+
+        if (equalIndex !== undefined) {
+            $scope.filter.result.filtersInfo.filters.splice(equalIndex, 1);
+        }
+
+        if (language != "any") {
+            equalIndex = $scope.filter.equals("language.name", "str",language.capitalizeFirstLetter());
+        } else {
+            equalIndex = undefined;
         }
 
         //$scope.filter.like("tags.tagName","text","%"+text+"%");
@@ -75,12 +86,11 @@ model.controller("programsController" , function($scope,$state,applicationServic
         doAction();
     };
 
-    applicationService.list($scope,"langs",className.language, function (item) {
-        item.title = $scope.translate(item.name.toLowerCase());
-    });
+    $scope.langs = $languages.languages;
 
     $scope.createProgram = function(newProgram) {
         newProgram.groupProgramUrl = $scope.getData().groupProgram;
+        newProgram.language = newProgram.language.capitalizeFirstLetter();
         applicationService.action($scope,"",className.program,"createProgram",newProgram,function(result){
             $scope.showToast($scope.getResultMessage(result));
             if (result.status == "Complete") {
