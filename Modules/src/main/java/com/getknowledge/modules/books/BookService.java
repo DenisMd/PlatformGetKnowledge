@@ -141,8 +141,16 @@ public class BookService extends AbstractService implements ImageService,FileSer
         }
 
         String description = null;
+        Language language = null;
         if (data.containsKey("description")) {
             description = (String) data.get("description");
+        }
+        try {
+            language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
+        } catch (Exception exception) {
+            Result failed = Result.Failed();
+            failed.setObject("Language not found");
+            return failed;
         }
         String authorName = null;
         if (data.containsKey("authorName")) {

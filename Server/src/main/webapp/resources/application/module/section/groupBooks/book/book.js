@@ -1,4 +1,4 @@
-model.controller("bookCtrl", function ($scope,applicationService,className,pageService,$state,FileUploader) {
+model.controller("bookCtrl", function ($scope,applicationService,className,pageService,$state,$languages) {
     var bookId = pageService.getPathVariable("book",$state.params.path);
     $scope.book = {
         tagsName : []
@@ -54,6 +54,7 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
         result.name = book.name;
         result.authorName = book.authorName;
         result.description = book.description;
+        result.language = book.language.capitalizeFirstLetter();
         result.links = [];
         book.urls.forEach(function(element){
             result.links.push(element.name);
@@ -94,6 +95,8 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
 
         $scope.$broadcast("updateCropImage"+$scope.croppedImg.id+"Event");
     }
+
+    $scope.langs = $languages.languages;
 
     $scope.uploadData = {
         btnTitle : "book_data",

@@ -1,5 +1,7 @@
 package com.getknowledge.modules.books;
 
+import com.getknowledge.modules.attachements.FileAttachmentRepository;
+import com.getknowledge.modules.books.comment.BookCommentRepository;
 import com.getknowledge.modules.books.group.GroupBooks;
 import com.getknowledge.modules.books.tags.BooksTag;
 import com.getknowledge.modules.books.tags.BooksTagRepository;
@@ -25,6 +27,12 @@ public class BookRepository extends ProtectedRepository<Book> {
     @Autowired
     private BooksTagRepository booksTagRepository;
 
+    @Autowired
+    private FileAttachmentRepository attachmentRepository;
+
+    @Autowired
+    private BookCommentRepository bookCommentRepository;
+
     @Filter(name = "searchBooks")
     public void searchBook(HashMap<String,Object> data , FilterQuery<Book> query, FilterCountQuery<Book> countQuery) {
         Join join = query.getJoin(new String[]{"tags"},0,null,JoinType.LEFT);
@@ -38,6 +46,21 @@ public class BookRepository extends ProtectedRepository<Book> {
         Predicate name2 = countQuery.getCriteriaBuilder().like(countQuery.getRoot().get("name"),"%"+value+"%");
         Predicate tags2 = countQuery.getCriteriaBuilder().like(join2.get("tagName"),"%"+value+"%");
         countQuery.addPrevPredicate(countQuery.getCriteriaBuilder().or(name2,tags2));
+    }
+
+    @Override
+    public void remove(Book entity) {
+        //Удаляем кооментарии
+        entityManager.createQuery("delete from  BookComment bc where bc.book.id = :id")
+                .setParameter("id",entity.getId())
+                .executeUpdate();
+        //Удаляем файл
+        if (entity.getFileAttachment() != null)
+            attachmentRepository.remove(entity.getFileAttachment());
+        //Удаляем тэги
+        booksTagRepository.removeTagsFromEntity(entity);
+        booksTagRepository.removeUnusedTags();
+        super.remove(entity);
     }
 
     @Override

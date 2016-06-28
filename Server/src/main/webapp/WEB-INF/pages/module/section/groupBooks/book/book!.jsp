@@ -17,6 +17,14 @@
                             <input ng-model="book.authorName">
                         </md-input-container>
                     </div>
+                    <div flex layout="row">
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>{{translate("choose_language")}}</label>
+                            <md-select ng-model="book.language">
+                                <md-option ng-value="lang" ng-repeat="lang in langs">{{ translate(lang) }}</md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
                     <div flex>
                         <label for="description" class="md-title">{{translate("description")}}</label>
                         <textarea class="form-control book-description" rows="5" id="description" ng-model="book.description"></textarea>
