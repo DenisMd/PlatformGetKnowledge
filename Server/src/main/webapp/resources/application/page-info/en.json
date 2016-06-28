@@ -118,7 +118,7 @@
     "no_item"             : "Not founds",
     "source_code"         : "Source code",
     "group_courses"       : "Group courses",
-    "go_to_course"        : "Go to course",
+    "go_to"               : "Go to",
     "max_length"          : "Length is too big",
     "first_name"          : "First name",
     "last_name"           : "Last name",

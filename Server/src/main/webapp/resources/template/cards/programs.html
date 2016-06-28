@@ -60,8 +60,8 @@
                 <button class="btn btn-default create-program-btn" ng-click="showCreateArea = !showCreateArea">{{translate("create")}}</button>
             </div>
         </div>
-        <div layout="row" layout-wrap layout-align="left" layout-align-md="center">
-            <div flex="none" ng-repeat="program in programs" class="text-center book-wrap">
+        <div  flex-sm flex-gt-sm="50" layout="column">
+            <div ng-repeat="program in programs" class="text-center book-wrap">
                 <md-card>
                     <md-card-title>
                         <md-card-title-text>
@@ -69,15 +69,17 @@
                             <span class="md-subhead">{{program.description}}</span>
                         </md-card-title-text>
                         <md-card-title-media>
-                            <div class="md-media-md">
-                                <a ng-href="{{program.href}}">
-                                    <img ng-src="{{program.imageSrc}}"/>
-                                </a>
-                            </div>
+                            <a ng-href="{{program.href}}">
+                                <img class="md-media-md" ng-src="{{program.imageSrc}}"/>
+                            </a>
                         </md-card-title-media>
                     </md-card-title>
                     <md-card-actions layout="row" layout-align="end center">
-                        <md-button>Перейти</md-button>
+                        <md-button>
+                            <a ng-href="{{program.href}}" class="link-without-style">
+                                {{translate("go_to")}}
+                            </a>
+                        </md-button>
                     </md-card-actions>
                 </md-card>
             </div>

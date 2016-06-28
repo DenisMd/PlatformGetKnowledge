@@ -1,5 +1,6 @@
 model.controller("programsController" , function($scope,$state,applicationService,className){
-    var maxCharactersInName = 21;
+    var maxCharactersInName = 40;
+    var maxCharacterDescription = 250;
 
     $scope.currentFilterByDate = true;
     $scope.showCreateArea = false;
@@ -57,6 +58,9 @@ model.controller("programsController" , function($scope,$state,applicationServic
             program.href = $scope.addUrlToPath("/program/" + program.id);
             if (program.name.length > maxCharactersInName) {
                 program.name = program.name.substr(0, maxCharactersInName) + "...";
+            }
+            if (program.description.length > maxCharacterDescription) {
+                program.description = program.description.substr(0,maxCharacterDescription) + "...";
             }
             $scope.programs.push(program);
         }
