@@ -9,6 +9,8 @@
     "book_cover"  : "Book cover",
     "book_data"   : "Load book on server",
     "book_uploader" : "Uploader",
-    "book_author_name" : "Author name"
+    "book_author_name" : "Author name",
+    "book_delete" : "Delete book",
+    "book_delete_dialog_title" : "Are you sure want to delete book : "
   }
 }

@@ -50,6 +50,11 @@ public class BookRepository extends ProtectedRepository<Book> {
 
     @Override
     public void remove(Book entity) {
+        booksTagRepository.removeTagsFromEntity(entity);
+        booksTagRepository.removeUnusedTags();
+
+        super.remove(entity);
+
         //Удаляем кооментарии
         entityManager.createQuery("delete from  BookComment bc where bc.book.id = :id")
                 .setParameter("id",entity.getId())
@@ -57,10 +62,6 @@ public class BookRepository extends ProtectedRepository<Book> {
         //Удаляем файл
         if (entity.getFileAttachment() != null)
             attachmentRepository.remove(entity.getFileAttachment());
-        //Удаляем тэги
-        booksTagRepository.removeTagsFromEntity(entity);
-        booksTagRepository.removeUnusedTags();
-        super.remove(entity);
     }
 
     @Override

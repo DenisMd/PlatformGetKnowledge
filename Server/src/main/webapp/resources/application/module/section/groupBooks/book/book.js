@@ -116,4 +116,20 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
         withoutEvent : true
     };
 
+    $scope.showDeleteDialog = function(ev) {
+        $scope.showConfirmDialog(
+            ev,
+            $scope.translate("book_delete_dialog_title") + " " + $scope.book.name,
+            "",
+            'Delete book',
+            $scope.translate("delete"),
+            $scope.translate("cancel"),
+            function () {
+                applicationService.remove($scope,"",className.book,$scope.book.id,function (result) {
+                    $scope.showToast($scope.getResultMessage(result));
+                });
+            }
+        )
+    }
+
 });

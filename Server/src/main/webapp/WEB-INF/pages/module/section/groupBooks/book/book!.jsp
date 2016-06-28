@@ -69,6 +69,13 @@
                     <%--</ul>--%>
                 </md-content>
             </md-tab>
+            <md-tab label="{{translate('book_delete')}}">
+                <md-content class="md-padding">
+                    <div>
+                        <button type="button" class="btn btn-danger" ng-click="showDeleteDialog(event)">{{translate("book_delete")}}</button>
+                    </div>
+                </md-content>
+            </md-tab>
         </md-tabs>
     </md-content>
 </div>
