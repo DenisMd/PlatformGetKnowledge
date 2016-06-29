@@ -65,7 +65,8 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 actionCallback : function (ev){
                     $scope.showDialog(ev,$scope,"createGroupBooks.html",function(answer){
                         answer.sectionId = parseInt(answer.sectionId);
-                        applicationService.action($scope,"", className.groupBooks,"createGroupBooks",answer,function(result){
+                        answer.type = "book";
+                        applicationService.action($scope,"", className.folder,"createFolder",answer,function(result){
                             $scope.showToast($scope.getResultMessage(result));
                             $scope.$broadcast("updateServerSelector");
                         });
@@ -158,7 +159,8 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 actionCallback : function (ev){
                     $scope.showDialog(ev,$scope,"createGroupPrograms.html",function(answer){
                         answer.sectionId = parseInt(answer.sectionId);
-                        applicationService.action($scope,"", className.groupPrograms,"createGroupPrograms",answer,function(result){
+                        answer.type = "program";
+                        applicationService.action($scope,"", className.folder,"createFolder",answer,function(result){
                             $scope.showToast($scope.getResultMessage(result));
                             $scope.$broadcast("updateServerSelector");
                         });
@@ -251,7 +253,8 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 actionCallback : function (ev){
                     $scope.showDialog(ev,$scope,"createGroupCourses.html",function(answer){
                         answer.sectionId = parseInt(answer.sectionId);
-                        applicationService.action($scope,"", className.groupCourses,"createGroupCourses",answer,function(result){
+                        answer.type = "course";
+                        applicationService.action($scope,"", className.folder,"createFolder",answer,function(result){
                             $scope.showToast($scope.getResultMessage(result));
                             $scope.$broadcast("updateServerSelector");
                         });
@@ -321,7 +324,7 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
     };
 
     function updateCroppedImage(){
-        $scope.croppedImg.src = applicationService.imageHref($scope.currentClassName,$scope.currentGroup.id);
+        $scope.croppedImg.src = applicationService.imageHref(className.folder,$scope.currentGroup.id);
         $scope.croppedImg.notUseDefault = $scope.currentGroup.imageViewExist;
 
         //Если изображение открывается первый раз событие не сработает так не зарегестрированно
@@ -332,7 +335,7 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
     }
 
     var updateImage = function(file) {
-        applicationService.actionWithFile($scope,"cover",$scope.currentClassName,"updateCover",{id:$scope.currentGroup.id},file,function (result) {
+        applicationService.actionWithFile($scope,"cover",$scope.folder,"updateCover",{id:$scope.currentGroup.id},file,function (result) {
             $scope.showToast($scope.getResultMessage(result));
             if (result.status === "Complete") {
                 $scope.currentGroup.imageViewExist = true;

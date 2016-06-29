@@ -1,8 +1,9 @@
-package com.getknowledge.modules.abs.entities;
+package com.getknowledge.modules.folder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.section.Section;
 import com.getknowledge.platform.annotations.ModelView;
+import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.annotations.ViewType;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
@@ -17,6 +18,7 @@ import java.util.Calendar;
 @Table(name = "folders")
 @Inheritance( strategy = InheritanceType.SINGLE_TABLE )
 @DiscriminatorColumn( name = "type" )
+@ModuleInfo(serviceName = "FolderService" , repositoryName = "FolderRepository")
 public abstract class Folder extends AbstractEntity implements CloneableEntity<Folder> {
 
     @ManyToOne(optional = false)

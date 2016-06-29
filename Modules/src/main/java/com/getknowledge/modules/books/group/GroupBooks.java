@@ -2,19 +2,15 @@ package com.getknowledge.modules.books.group;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.books.Book;
-import com.getknowledge.modules.section.Section;
-import com.getknowledge.platform.annotations.ModelView;
 import com.getknowledge.platform.annotations.ModuleInfo;
-import com.getknowledge.platform.annotations.ViewType;
-import com.getknowledge.platform.base.entities.CloneableEntity;
-import com.getknowledge.modules.abs.entities.Folder;
+import com.getknowledge.modules.folder.Folder;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @DiscriminatorValue("books")
-@ModuleInfo(repositoryName = "GroupBooksRepository" , serviceName = "GroupBooksService")
+@ModuleInfo(repositoryName = "GroupBooksRepository" , serviceName = "FolderService")
 public class GroupBooks extends Folder {
 
     @Transient
