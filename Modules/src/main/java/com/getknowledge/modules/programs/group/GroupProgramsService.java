@@ -73,6 +73,7 @@ public class GroupProgramsService extends AbstractService implements ImageServic
     }
 
     @Override
+    @Transactional
     public byte[] getImageById(long id) {
         GroupPrograms programs = repository.read(id);
         return programs == null ? null : programs.getCover();

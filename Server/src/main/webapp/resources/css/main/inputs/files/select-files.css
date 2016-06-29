@@ -23,3 +23,7 @@
     font-size: 1.5em;
     font-weight: bold;
 }
+
+.is-too-big {
+    color : red;
+}

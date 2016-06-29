@@ -77,7 +77,6 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
         UserInfo userInfo = userInfoService.getAuthorizedUser(data);
 
         Program program = new Program();
-        program.setOwner(userInfo);
 
         if (!program.getAuthorizationList().isAccessCreate(userInfo.getUser())) {
             return Result.AccessDenied();
@@ -90,15 +89,10 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
             return Result.Failed();
         }
 
-        Language language = null;
-
-        try {
-            language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
-            program.setLanguage(language);
-        } catch (Exception exception) {
-            Result result = Result.Failed();
-            result.setObject("Language not found");
-            return result;
+        Language language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
+        if (language == null) {
+            Result failed = Result.Failed("language_not_found");
+            return failed;
         }
 
         String name = (String) data.get("name");
@@ -115,7 +109,7 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
         }
 
 
-        programRepository.createProgram(groupPrograms,userInfo,name,description,language,links,tags);
+        program = programRepository.createProgram(groupPrograms,userInfo,name,description,language,links,tags);
 
         Result result = Result.Complete();
         result.setObject(program.getId());
@@ -155,7 +149,12 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
             links = (List<String>) data.get("tags");
         }
 
-        programRepository.updateProgram(program, name, description, links, tags);
+        Language language = null;
+        if (data.containsKey("language")) {
+            language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
+        }
+
+        programRepository.updateProgram(program, name, description,language, links, tags);
 
         return Result.Complete();
     }
@@ -210,6 +209,7 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
     }
 
     @Override
+    @Transactional
     public byte[] getImageById(long id) {
         Program program = programRepository.read(id);
         return program == null ? null : program.getCover();

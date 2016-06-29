@@ -34,15 +34,6 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
                 book.owner.userUrl = $scope.createUrl("/user/"+book.owner.id);
             }
 
-            //Кооментарии к книгам
-            $scope.commentData = {
-                id : "Book",
-                commentClassName : className.bookComment,
-                filedName : "book.id",
-                objectId : parseInt(bookId),
-                withoutEvent : true
-            };
-
             updateCroppedImage(book);
         });
     }
@@ -117,7 +108,8 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
         className : className.book,
         actionName : "uploadData",
         title : "book_data",
-        parameters : {bookId:+bookId}
+        parameters : {bookId:+bookId},
+        maxFileSize : 50104
     };
 
     $scope.showDeleteDialog = function(ev) {
@@ -135,5 +127,14 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
             }
         )
     }
+
+    //Кооментарии к книгам
+    $scope.commentData = {
+        id : "Book",
+        commentClassName : className.bookComment,
+        filedName : "book.id",
+        objectId : parseInt(bookId),
+        withoutEvent : true
+    };
 
 });

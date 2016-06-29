@@ -96,7 +96,7 @@ public class BookRepository extends ProtectedRepository<Book> {
         return book;
     }
 
-    public Book updateBook(Book book,String name,String authorName,String description,List<String> links,List<String> tags) {
+    public Book updateBook(Book book,String name,Language language,String authorName,String description,List<String> links,List<String> tags) {
         if (name != null)
             book.setName(name);
         if (authorName != null)
@@ -105,6 +105,8 @@ public class BookRepository extends ProtectedRepository<Book> {
             book.setDescription(description);
         if (links != null)
             book.setLinks(links);
+        if (language != null)
+            book.setLanguage(language);
         booksTagRepository.removeTagsFromEntity(book);
         if (tags != null && !tags.isEmpty()) {
             booksTagRepository.createTags(tags, book);

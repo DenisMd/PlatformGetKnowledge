@@ -73,6 +73,7 @@ public class GroupBooksService extends AbstractService implements ImageService{
     }
 
     @Override
+    @Transactional
     public byte[] getImageById(long id) {
         GroupBooks books = repository.read(id);
         return books == null ? null :books.getCover() ;

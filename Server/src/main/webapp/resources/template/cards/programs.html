@@ -67,13 +67,13 @@
                 <button class="btn btn-default create-program-btn" ng-click="showCreateArea = !showCreateArea">{{translate("create")}}</button>
             </div>
         </div>
-        <div  flex-sm flex-gt-sm="50" layout="column">
-            <div ng-repeat="program in programs" class="text-center book-wrap">
+        <div layout-wrap layout="row">
+            <div flex-sm flex-gt-sm="50" ng-repeat="program in programs" class="text-center book-wrap">
                 <md-card>
                     <md-card-title>
                         <md-card-title-text>
                             <span class="md-headline">{{program.name}}</span>
-                            <span class="md-subhead">{{program.description}}</span>
+                            <span class="md-subhead program-description">{{program.description}}</span>
                         </md-card-title-text>
                         <md-card-title-media>
                             <a ng-href="{{program.href}}">
