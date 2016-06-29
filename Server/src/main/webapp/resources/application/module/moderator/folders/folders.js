@@ -335,7 +335,7 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
     }
 
     var updateImage = function(file) {
-        applicationService.actionWithFile($scope,"cover",$scope.folder,"updateCover",{id:$scope.currentGroup.id},file,function (result) {
+        applicationService.actionWithFile($scope,"cover",className.folder,"updateCover",{id:$scope.currentGroup.id},file,function (result) {
             $scope.showToast($scope.getResultMessage(result));
             if (result.status === "Complete") {
                 $scope.currentGroup.imageViewExist = true;
