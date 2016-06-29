@@ -39,6 +39,10 @@
     border: 4px solid #0A3983;
 }
 
+.scroll-column-info{
+    margin: 5px;
+}
+
 .scroll-column-info .mCSB_container{
     width: inherit !important;
     overflow: visible !important;

@@ -10,7 +10,7 @@
                 <h4 class="modal-title">{{translate("custom_filter")}}</h4>
             </div><!-- /.modal-header -->
             <div class="modal-body modal-find">
-                <div layout="row">
+                <div layout="row" layout-align="start center" layout-wrap>
                     <div ng-repeat="element in filterRequest" class="current-filter-expression">
                         <div class="filter-part">
                             {{element.field.info.name}} {{element.oper.info.symbol}}
@@ -195,15 +195,14 @@
                                     </div>
                                 </div>
                                 <div ng-switch-when="check_box">
-                                    <md-switch ng-model="params" aria-label="Switch params">
-                                        {{translate("parameter")}} : {{ params }}
+                                    <md-switch ng-model="params.check" aria-label="Switch params">
+                                        {{translate("parameter")}} : {{ params.check }}
                                     </md-switch>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>  <!--.row-->
-                {{params}}
                 <div layout="row" layout-align="center end">
                     <button ng-if="state > 0" layout-margin flex="none" class="btn btn-default" ng-click="back()">
                         {{translate("back")}}

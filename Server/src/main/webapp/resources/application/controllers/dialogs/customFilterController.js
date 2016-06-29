@@ -102,11 +102,14 @@ model.controller("customFilterController",function($scope,customFilterService){
                         }
                         break;
                     case "check_box" :
-                        $scope.params = false;
+                        $scope.params = {
+                            check : false
+                        };
+                        break;
                 }
                 break;
             case STATE.SET_VALUE:
-                console.log($scope.currentFilterExpression.field.info.type);
+
                 switch ($scope.currentFilterExpression.field.info.type){
                     case "text" :
                         if ($scope.selectedOperation.value.name  === 'in'){
@@ -145,7 +148,7 @@ model.controller("customFilterController",function($scope,customFilterService){
                         }
                         break;
                     case "check_box" :
-                        $scope.createFilterExpression($scope.params);
+                        $scope.createFilterExpression($scope.params.check);
                         delete $scope.params;
                 }
                 break;
@@ -175,9 +178,9 @@ model.controller("customFilterController",function($scope,customFilterService){
                     break;
                 case "dateTime" :
                     if ($scope.selectedOperation.value.name === 'between'){
-                       return angular.isUndefined(dateParam1) || angular.isUndefined(dateParam2);
+                       return angular.isUndefined($scope.dateParam1) || angular.isUndefined($scope.dateParam2);
                     } else {
-                        return angular.isUndefined(dateParam1);
+                        return angular.isUndefined($scope.dateParam1);
                     }
                     break;
                 case "enum" :
