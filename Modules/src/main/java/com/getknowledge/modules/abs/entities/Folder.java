@@ -1,16 +1,27 @@
-package com.getknowledge.platform.base.entities;
+package com.getknowledge.modules.abs.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.modules.section.Section;
 import com.getknowledge.platform.annotations.ModelView;
 import com.getknowledge.platform.annotations.ViewType;
+import com.getknowledge.platform.base.entities.AbstractEntity;
+import com.getknowledge.platform.base.entities.AuthorizationList;
+import com.getknowledge.platform.base.entities.CloneableEntity;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
 import javax.persistence.*;
 import java.util.Calendar;
 
-@MappedSuperclass
-public abstract class Folder extends AbstractEntity {
+@Entity
+@Table(name = "folders")
+@Inheritance( strategy = InheritanceType.SINGLE_TABLE )
+@DiscriminatorColumn( name = "type" )
+public abstract class Folder extends AbstractEntity implements CloneableEntity<Folder> {
+
+    @ManyToOne(optional = false)
+    @ModelView(type = {ViewType.Public})
+    private Section section;
 
     @Column(nullable = false)
     @ModelView(type = {ViewType.Public})
@@ -35,6 +46,14 @@ public abstract class Folder extends AbstractEntity {
     @Column(name = "create_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar createDate;
+
+    public Section getSection() {
+        return section;
+    }
+
+    public void setSection(Section section) {
+        this.section = section;
+    }
 
     public Calendar getCreateDate() {
         return createDate;
@@ -95,4 +114,22 @@ public abstract class Folder extends AbstractEntity {
         al.getPermissionsForRemove().add(new Permission(PermissionNames.EditFolders.getName()));
         return al;
     }
+
+    public abstract Folder cloneFolder();
+
+    @Override
+    public Folder clone() {
+        Folder groupBooks = cloneFolder();
+        groupBooks.setUrl(getUrl());
+        groupBooks.setTitle(getTitle());
+        groupBooks.setId(getId());
+        groupBooks.setObjectVersion(getObjectVersion());
+        groupBooks.setSection(getSection());
+        groupBooks.setCover(getCover());
+        groupBooks.setDescriptionEn(getDescriptionEn());
+        groupBooks.setDescriptionRu(getDescriptionRu());
+        groupBooks.setCreateDate(getCreateDate());
+        return groupBooks;
+    }
+
 }
