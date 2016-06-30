@@ -59,7 +59,7 @@ public class Book extends AbstractEntity implements CloneableEntity<Book>,IUser,
     @JsonIgnore
     private byte[] cover;
 
-    @OneToOne(optional = true , fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private FileAttachment fileAttachment;
 
