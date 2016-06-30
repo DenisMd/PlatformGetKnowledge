@@ -5,6 +5,7 @@ import com.getknowledge.modules.books.group.GroupBooks;
 import com.getknowledge.modules.books.tags.BooksTag;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.attachements.FileAttachment;
+import com.getknowledge.modules.tags.EntityWithTags;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.annotations.ModelView;
 import com.getknowledge.platform.annotations.ModuleInfo;
@@ -22,7 +23,7 @@ import java.util.List;
 @Entity
 @Table(name = "book")
 @ModuleInfo(repositoryName = "BookRepository" , serviceName = "BookService")
-public class Book extends AbstractEntity implements CloneableEntity<Book>,IUser, EntityWithTags<BooksTag>{
+public class Book extends AbstractEntity implements CloneableEntity<Book>,IUser, EntityWithTags<BooksTag> {
 
     @Column(nullable = false)
     private String name;
@@ -153,7 +154,6 @@ public class Book extends AbstractEntity implements CloneableEntity<Book>,IUser,
         return tags;
     }
 
-    @Override
     public void setTags(List<BooksTag> tags) {
         this.tags = tags;
     }

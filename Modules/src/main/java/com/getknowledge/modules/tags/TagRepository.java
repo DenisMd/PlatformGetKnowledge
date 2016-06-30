@@ -1,37 +1,35 @@
 package com.getknowledge.modules.tags;
 
 import com.getknowledge.modules.programs.tags.ProgramTag;
-import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.repositories.BaseRepository;
 
-import java.util.AbstractCollection;
 import java.util.List;
 
 public abstract class TagRepository<T extends Tag> extends BaseRepository<T> {
 
-    public void removeTagsFromEntity(EntityWithTag<T> entity) {
+    public void removeTagsFromEntity(EntityWithTags<T> entity) {
         for (T tag : entity.getTags()) {
             tag.getEntities().remove(entity);
-            merge(programTag);
+            merge(tag);
         }
 
         entity.getTags().clear();
     }
 
 
-    public void createTags(List<String> tags, EntityWithTags<ProgramTag> entity) {
+    public void createTags(List<String> tags, EntityWithTags<T> entity) {
         for (String tag : tags) {
-            ProgramTag programTag = createIfNotExist(tag);
-            entity.getTags().add(programTag);
+            T result = createIfNotExist(tag);
+            entity.getTags().add(result);
         }
     }
 
 
-    public ProgramTag createIfNotExist(String tag) {
-        ProgramTag result = getSingleEntityByFieldAndValue("tagName" , tag.toLowerCase());
+    public T createIfNotExist(String tag) {
+        T result = getSingleEntityByFieldAndValue("tagName" , tag.toLowerCase());
 
         if (result == null) {
-            result = new ProgramTag();
+            result =createTag();
             result.setTagName(tag.toLowerCase());
             create(result);
         }
@@ -39,10 +37,7 @@ public abstract class TagRepository<T extends Tag> extends BaseRepository<T> {
         return result;
     }
 
-    public void removeUnusedTags() {
-        List<ProgramTag> list = entityManager.createQuery("select t from ProgramTag  t where t.programs is empty").getResultList();
-        list.forEach((tag -> {
-            remove(tag.getId());
-        }));
-    }
+    public abstract void removeUnusedTags();
+
+    protected abstract T createTag();
 }

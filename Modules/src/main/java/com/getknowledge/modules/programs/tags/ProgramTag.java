@@ -2,6 +2,7 @@ package com.getknowledge.modules.programs.tags;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.programs.Program;
+import com.getknowledge.modules.tags.EntityWithTags;
 import com.getknowledge.modules.tags.Tag;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
@@ -17,6 +18,11 @@ public class ProgramTag extends Tag {
     @JoinTable(name = "tags_programs")
     @JsonIgnore
     private List<Program> programs = new ArrayList<>();
+
+    @Override
+    public List<EntityWithTags> getEntities() {
+        return (List<EntityWithTags>)(List<?>)programs;
+    }
 
     public List<Program> getPrograms() {
         return programs;

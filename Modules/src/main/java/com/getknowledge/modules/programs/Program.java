@@ -5,6 +5,7 @@ import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.attachements.FileAttachment;
 import com.getknowledge.modules.programs.group.GroupPrograms;
 import com.getknowledge.modules.programs.tags.ProgramTag;
+import com.getknowledge.modules.tags.EntityWithTags;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.*;
@@ -147,7 +148,6 @@ public class Program extends AbstractEntity implements CloneableEntity<Program>,
         return tags;
     }
 
-    @Override
     public void setTags(List<ProgramTag> tags) {
         this.tags = tags;
     }

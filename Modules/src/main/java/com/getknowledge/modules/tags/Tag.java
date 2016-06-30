@@ -1,6 +1,7 @@
 package com.getknowledge.modules.tags;
 
-import com.getknowledge.platform.annotations.ModuleInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.modules.books.Book;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 
@@ -24,7 +25,8 @@ public abstract class Tag extends AbstractEntity {
         this.tagName = tagName.toLowerCase();
     }
 
-    public abstract List<EntityWithTag> getEntities();
+    @JsonIgnore
+    public abstract List<EntityWithTags> getEntities();
 
     @Override
     public AuthorizationList getAuthorizationList() {
