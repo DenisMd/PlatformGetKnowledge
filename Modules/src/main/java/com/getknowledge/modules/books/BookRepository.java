@@ -30,9 +30,6 @@ public class BookRepository extends ProtectedRepository<Book> {
     @Autowired
     private FileAttachmentRepository attachmentRepository;
 
-    @Autowired
-    private BookCommentRepository bookCommentRepository;
-
     @Filter(name = "searchBooks")
     public void searchBook(HashMap<String,Object> data , FilterQuery<Book> query, FilterCountQuery<Book> countQuery) {
         Join join = query.getJoin(new String[]{"tags"},0,null,JoinType.LEFT);
