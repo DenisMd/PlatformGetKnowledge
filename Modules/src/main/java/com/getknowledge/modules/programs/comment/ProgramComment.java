@@ -32,22 +32,7 @@ public class ProgramComment extends Comment {
     }
 
     @Override
-    public AuthorizationList getAuthorizationList() {
-        AuthorizationList authorizationList = new AuthorizationList();
-        authorizationList.allowReadEveryOne = true;
-        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.BlockComments));
-        return authorizationList;
-    }
-
-    @Override
-    public AbstractEntity clone() {
-        ProgramComment bookComment = new ProgramComment();
-        bookComment.setCommentStatus(this.getCommentStatus());
-        bookComment.setCreateTime(this.getCreateTime());
-        bookComment.setMessage(this.getMessage());
-        bookComment.setSender(this.getSender());
-        bookComment.setId(this.getId());
-        bookComment.setObjectVersion(this.getObjectVersion());
-        return bookComment;
+    protected Comment createComment() {
+        return new ProgramComment();
     }
 }

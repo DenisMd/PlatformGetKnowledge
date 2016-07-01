@@ -80,22 +80,18 @@ public class TutorialQuestion extends Comment {
         this.tutorial = tutorial;
     }
 
+
     @Override
-    public AbstractEntity clone() {
+    protected Comment createComment() {
         TutorialQuestion tutorialQuestion = new TutorialQuestion();
         tutorialQuestion.setComment(this.isComment());
-        tutorialQuestion.setCreateTime(this.getCreateTime());
-        tutorialQuestion.setMessage(this.getMessage());
-        tutorialQuestion.setSender(this.getSender());
-        tutorialQuestion.setId(this.getId());
-        tutorialQuestion.setObjectVersion(this.getObjectVersion());
         return tutorialQuestion;
     }
 
     @Override
     public AuthorizationList getAuthorizationList() {
-        AuthorizationList authorizationList = new AuthorizationList();
-        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.BlockComments));
+        AuthorizationList authorizationList = super.getAuthorizationList();
+        authorizationList.allowReadEveryOne = false;
         return authorizationList;
     }
 }

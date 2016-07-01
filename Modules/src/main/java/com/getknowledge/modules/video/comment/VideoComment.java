@@ -32,22 +32,7 @@ public class VideoComment extends Comment {
     }
 
     @Override
-    public AuthorizationList getAuthorizationList() {
-        AuthorizationList authorizationList = new AuthorizationList();
-        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.BlockComments));
-        authorizationList.readFromAuthorizedService = true;
-        return authorizationList;
-    }
-
-    @Override
-    public AbstractEntity clone() {
-        VideoComment videoComment = new VideoComment();
-        videoComment.setCommentStatus(this.getCommentStatus());
-        videoComment.setCreateTime(this.getCreateTime());
-        videoComment.setMessage(this.getMessage());
-        videoComment.setSender(this.getSender());
-        videoComment.setId(this.getId());
-        videoComment.setObjectVersion(this.getObjectVersion());
-        return videoComment;
+    protected Comment createComment() {
+        return new VideoComment();
     }
 }

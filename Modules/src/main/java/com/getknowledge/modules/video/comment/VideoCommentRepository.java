@@ -1,10 +1,9 @@
 package com.getknowledge.modules.video.comment;
 
-import com.getknowledge.modules.interfaces.repos.ICommentRepository;
+import com.getknowledge.modules.messages.CommentRepository;
 import com.getknowledge.modules.messages.CommentStatus;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.video.Video;
-import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,36 +11,22 @@ import java.util.Calendar;
 import java.util.List;
 
 @Repository("VideoCommentRepository")
-public class VideoCommentRepository extends ProtectedRepository<VideoComment> implements ICommentRepository<VideoComment> {
+public class VideoCommentRepository extends CommentRepository<VideoComment> {
     @Override
     protected Class<VideoComment> getClassEntity() {
         return VideoComment.class;
     }
 
+    @Override
+    protected String getEntityName() {
+        return VideoComment.class.getSimpleName();
+    }
+
     public void createComment(String text, Video video, UserInfo userInfo) {
         VideoComment videoComment = new VideoComment();
         videoComment.setVideo(video);
-        videoComment.setCreateTime(Calendar.getInstance());
         videoComment.setMessage(text);
-        videoComment.setCommentStatus(CommentStatus.Normal);
         videoComment.setSender(userInfo);
         create(videoComment);
-    }
-
-    @Override
-    public void blockComment(VideoComment videoComment,CommentStatus commentStatus){
-        videoComment.setMessage("");
-        videoComment.setCommentStatus(commentStatus);
-        merge(videoComment);
-    }
-
-    @Override
-    public VideoComment getLastComment() {
-        List<VideoComment> videoCommentList = entityManager.createQuery(
-                "select vc from VideoComment vc " +
-                        "where vc.createTime = (select max(vc2.createTime) from VideoComment vc2)"
-        ).getResultList();
-
-        return videoCommentList.isEmpty() ? null : videoCommentList.get(0);
     }
 }
