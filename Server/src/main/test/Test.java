@@ -5,24 +5,27 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
 
 public class Test {
 
     @org.junit.Test
     public void getProgrammingLanguage() throws IOException, ParseException {
-        File utf8File = new File("C:\\Users\\dmarkov\\Desktop\\Trx\\dmarkov_resources\\exceptional\\ExceptionalCards\\recover\\MasterCardFull");
-        BufferedReader reader = new BufferedReader( new InputStreamReader(new FileInputStream(utf8File), StandardCharsets.UTF_8));
-        String test = reader.readLine();
-        System.err.println(test);
-        System.err.println(test.charAt(0) == 0xFEFF);
-        test = test.substring(1);
-        System.err.println(test);
-        System.err.println(test.charAt(0) == 0xFEFF);
+        StringBuilder stringBuilder = new StringBuilder();
+        Locale ruL  = new Locale("ru");
+        Formatter formatter = new Formatter(stringBuilder, Locale.US);
 
-        String test2 = "A".substring(1);
-        System.err.println(test2);
+        int a = 1;
+        double b = Math.PI;
+        char c = 'g';
+        String str = "ttt";
+
+        //System.out.println(formatter.format("Hello : %4$s , %3$c , %2$f , %1$d" , a,b,c,str).toString());
+        //System.out.println(formatter.format("Char c : %1s%1s%1s" , str,str,str).toString());
+
+        //System.out.println(formatter.format(Locale.FRANCE,"Math pi : %+40.20f" ,b).toString());
+
+        System.out.format(ruL,"Local time: %tc", Calendar.getInstance());
     }
 
 

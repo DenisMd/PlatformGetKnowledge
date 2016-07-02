@@ -1,8 +1,9 @@
-package com.getknowledge.modules.books.comment;
+package com.getknowledge.modules.programs.comment;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.books.Book;
 import com.getknowledge.modules.messages.Comment;
+import com.getknowledge.modules.programs.Program;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
@@ -14,24 +15,24 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "book_comment")
-@ModuleInfo(repositoryName = "BookCommentRepository" , serviceName = "BookCommentService")
-public class BookComment extends Comment {
+@Table(name = "program_comment")
+@ModuleInfo(repositoryName = "ProgramCommentRepository" , serviceName = "ProgramCommentService")
+public class ProgramComment extends Comment {
 
     @ManyToOne(optional = false)
     @JsonIgnore
-    private Book book;
+    private Program program;
 
-    public Book getBook() {
-        return book;
+    public Program getProgram() {
+        return program;
     }
 
-    public void setBook(Book book) {
-        this.book = book;
+    public void setProgram(Program program) {
+        this.program = program;
     }
 
     @Override
     protected Comment createComment() {
-        return new BookComment();
+        return new ProgramComment();
     }
 }

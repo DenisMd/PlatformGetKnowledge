@@ -10,6 +10,7 @@ import com.getknowledge.modules.courses.version.Version;
 import com.getknowledge.modules.dictionaries.knowledge.Knowledge;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.shop.item.Item;
+import com.getknowledge.modules.tags.EntityWithTags;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.video.Video;
 import com.getknowledge.platform.annotations.*;
@@ -27,7 +28,7 @@ import java.util.List;
 @Entity
 @Table(name = "course")
 @ModuleInfo(repositoryName = "CourseRepository" ,serviceName = "CourseService")
-public class Course extends AbstractEntity implements CloneableEntity<Course>,IUser,EntityWithTags<CoursesTag>{
+public class Course extends AbstractEntity implements CloneableEntity<Course>,IUser,EntityWithTags<CoursesTag> {
 
     @Column(nullable = false)
     private String name;
@@ -177,6 +178,7 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
         this.author = author;
     }
 
+    @Override
     public List<CoursesTag> getTags() {
         return tags;
     }

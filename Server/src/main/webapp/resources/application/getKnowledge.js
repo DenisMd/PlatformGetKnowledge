@@ -50,10 +50,12 @@ model.config(function (codemirrorURL,$mdThemingProvider) {
     };
     $mdThemingProvider
         .definePalette('darkPallette', darkPallette);
-
+    
     $mdThemingProvider.theme('darkTheme')
         .primaryPalette('primaryPalette')
         .accentPalette('darkPallette');
+    
+    
 });
 
 //Главный контроллер

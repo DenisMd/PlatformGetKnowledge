@@ -92,6 +92,9 @@
     "description"   : "Описание",
     "tags"          : "Тэги",
     "change"        : "Изменить",
+    "mb"            : "Мбайт",
+    "remove"        : "Удалить",
+    "upload"        : "Загрузиить",
 
     "failed"        : "Ошибка выполнения",
     "complete"      : "Завершено",
@@ -115,7 +118,7 @@
     "no_item"             : "Элементы не найдены",
     "source_code"         : "Исходный код",
     "group_courses"       : "Группы курсов",
-    "go_to_course"        : "Перейти",
+    "go_to"               : "Перейти",
     "max_length"          : "Длина сообщения превышает максимальный допустимый размер",
     "first_name"          : "Имя",
     "last_name"           : "Фамилия",
@@ -124,6 +127,9 @@
     "remove_param"        : "Удалить параметр",
     "choose_language"     : "Выберите язык",
     "not_started"         : "Не начат",
+    "upload_all"          : "Загрузить все",
+    "cancel_all"          : "Отменить все",
+    "remove_all"          : "Удалить все",
 
 
     "video1_title"  : "Почему getKnowlege() ?",
@@ -185,7 +191,12 @@
     "file_uploader"               : "Загрузчик файлов",
     "file_drop_zone"              : "Перетащите файлы сюда",
     "file_select_single_file"     : "Выбирите один файл для загрузки",
-    "file_select_multiply_files"  : "Выбирите файлы для загрузки"
-
+    "file_select_multiply_files"  : "Выбирите файлы для загрузки",
+    "file_queue_length"           : "Количество выбранных файлов",
+    "file_name"                   : "Имя файла",
+    "file_size"                   : "Размер файла",
+    "file_progress"               : "Прогресс загрузки",
+    "file_status"                 : "Статус",
+    "file_actions"                : "Действия"
   }
 }

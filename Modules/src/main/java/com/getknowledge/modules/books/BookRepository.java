@@ -1,5 +1,7 @@
 package com.getknowledge.modules.books;
 
+import com.getknowledge.modules.attachements.FileAttachmentRepository;
+import com.getknowledge.modules.books.comment.BookCommentRepository;
 import com.getknowledge.modules.books.group.GroupBooks;
 import com.getknowledge.modules.books.tags.BooksTag;
 import com.getknowledge.modules.books.tags.BooksTagRepository;
@@ -25,6 +27,9 @@ public class BookRepository extends ProtectedRepository<Book> {
     @Autowired
     private BooksTagRepository booksTagRepository;
 
+    @Autowired
+    private FileAttachmentRepository attachmentRepository;
+
     @Filter(name = "searchBooks")
     public void searchBook(HashMap<String,Object> data , FilterQuery<Book> query, FilterCountQuery<Book> countQuery) {
         Join join = query.getJoin(new String[]{"tags"},0,null,JoinType.LEFT);
@@ -41,6 +46,22 @@ public class BookRepository extends ProtectedRepository<Book> {
     }
 
     @Override
+    public void remove(Book entity) {
+        booksTagRepository.removeTagsFromEntity(entity);
+        booksTagRepository.removeUnusedTags();
+
+        super.remove(entity);
+
+        //Удаляем кооментарии
+        entityManager.createQuery("delete from  BookComment bc where bc.book.id = :id")
+                .setParameter("id",entity.getId())
+                .executeUpdate();
+        //Удаляем файл
+        if (entity.getFileAttachment() != null)
+            attachmentRepository.remove(entity.getFileAttachment());
+    }
+
+    @Override
     protected Class<Book> getClassEntity() {
         return Book.class;
     }
@@ -52,11 +73,12 @@ public class BookRepository extends ProtectedRepository<Book> {
         }
     }
 
-    public Book createBook(GroupBooks groupBooks,UserInfo owner, String name,String description,Language language,List<String> links,List<String> tags,byte [] cover) {
+    public Book createBook(GroupBooks groupBooks,UserInfo owner, String name,String authorName,String description,Language language,List<String> links,List<String> tags,byte [] cover) {
         Book book = new Book();
         book.setGroupBooks(groupBooks);
         book.setName(name);
         book.setDescription(description);
+        book.setAuthorName(authorName);
         book.setLanguage(language);
         book.setOwner(owner);
         if (links != null)
@@ -71,11 +93,17 @@ public class BookRepository extends ProtectedRepository<Book> {
         return book;
     }
 
-    public Book updateBook(Book book,String name,String description,List<String> links,List<String> tags) {
-        book.setName(name);
-        book.setDescription(description);
+    public Book updateBook(Book book,String name,Language language,String authorName,String description,List<String> links,List<String> tags) {
+        if (name != null)
+            book.setName(name);
+        if (authorName != null)
+            book.setAuthorName(authorName);
+        if (description != null)
+            book.setDescription(description);
         if (links != null)
             book.setLinks(links);
+        if (language != null)
+            book.setLanguage(language);
         booksTagRepository.removeTagsFromEntity(book);
         if (tags != null && !tags.isEmpty()) {
             booksTagRepository.createTags(tags, book);

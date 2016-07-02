@@ -1,7 +1,7 @@
 package com.getknowledge.modules.help.desc;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.getknowledge.modules.help.desc.attachements.FileAttachment;
+import com.getknowledge.modules.attachements.FileAttachment;
 import com.getknowledge.modules.help.desc.type.HpMessageType;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
@@ -9,8 +9,6 @@ import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import com.getknowledge.platform.modules.user.User;
-import org.hibernate.annotations.CollectionId;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -35,7 +33,7 @@ public class HpMessage extends AbstractEntity{
     @JoinColumn(nullable = true)
     private User user;
 
-    @OneToMany(mappedBy = "message")
+    @OneToMany
     @JsonIgnore
     private List<FileAttachment> files = new ArrayList<>();
 

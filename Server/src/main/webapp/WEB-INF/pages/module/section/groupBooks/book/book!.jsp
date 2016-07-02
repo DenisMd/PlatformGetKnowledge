@@ -6,18 +6,30 @@
     <md-content>
         <md-tabs md-dynamic-height md-border-bottom>
             <md-tab label="{{translate('book_info')}}">
-                <md-content class="md-padding">
-                    <div layout="row">
-                        <md-input-container flex>
+                <md-content class="md-padding" layout="column">
+                    <div layout-gt-sm="row" flex>
+                        <md-input-container flex-gt-sm>
                             <label>{{translate("name")}}</label>
                             <input ng-model="book.name">
                         </md-input-container>
+                        <md-input-container flex-gt-sm>
+                            <label>{{translate("book_author_name")}}</label>
+                            <input ng-model="book.authorName">
+                        </md-input-container>
                     </div>
-                    <div>
+                    <div flex layout="row">
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>{{translate("choose_language")}}</label>
+                            <md-select ng-model="book.language">
+                                <md-option ng-value="lang" ng-repeat="lang in langs">{{ translate(lang) }}</md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div flex>
                         <label for="description" class="md-title">{{translate("description")}}</label>
                         <textarea class="form-control book-description" rows="5" id="description" ng-model="book.description"></textarea>
                     </div>
-                    <div>
+                    <div flex>
                         <p class="book-add-url" ng-click="addUrl()">{{translate("book_add_url")}}</p>
                         <div ng-repeat="url in book.urls" layout="row">
                             <md-input-container flex>
@@ -27,11 +39,11 @@
                             </md-input-container>
                         </div>
                     </div>
-                    <div layout="column" class="book-tags" flex ng-init="newBook.tags = []">
+                    <div layout="column" class="book-tags" flex ng-init="newBook.tags = []" flex>
                         <div class="md-title" flex>{{translate("tags")}}</div>
                         <md-chips ng-model="book.tagsName" flex></md-chips>
                     </div>
-                    <div layout="row" class="update-btn-container" layout-align="center">
+                    <div layout="row" class="update-btn-container" layout-align="center" flex>
                         <button flex="none" class="btn btn-default update-book-btn" ng-click="updateBook(book)">{{translate("update")}}</button>
                     </div>
                 </md-content>
@@ -57,6 +69,13 @@
                     <%--</ul>--%>
                 </md-content>
             </md-tab>
+            <md-tab label="{{translate('book_delete')}}">
+                <md-content class="md-padding">
+                    <div>
+                        <button type="button" class="btn btn-danger" ng-click="showDeleteDialog(event)">{{translate("book_delete")}}</button>
+                    </div>
+                </md-content>
+            </md-tab>
         </md-tabs>
     </md-content>
 </div>
@@ -74,6 +93,7 @@
   </div>
   <div flex="65" class="book-title">
       <h1 class="text-center">{{book.name}}</h1>
+      <h4 class="text-center">{{book.authorName}}</h4>
       <p class="description text-justify">
           {{book.description}}
       </p>
@@ -81,7 +101,7 @@
       <md-chips ng-model="book.tagsName" readonly="true"></md-chips>
   </div>
   <div flex="35" layout="column" layout-align="start center">
-      <p class="text-center book-author-title">{{translate("author")}}<p>
+      <p class="text-center book-author-title">{{translate("book_uploader")}}<p>
       <a ng-href="{{book.owner.userUrl}}" class="book-author-name">
           <img ng-src="{{book.owner.imageSrc}}" class="main-image"/>
           <p class="main-label">{{book.owner.firstName}} {{book.owner.lastName}}</p>

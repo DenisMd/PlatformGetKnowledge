@@ -1,5 +1,6 @@
 <div ng-controller="uploadFilesController">
-    <button type="button" class="btn btn-success" ng-click="showFileDialog(event)">{{translate(getData().btnTitle)}}</button>
+    <button type="button" class="btn btn-success" ng-click="showFileDialog(event)">{{translate(getData().btnTitle)}}
+    </button>
 
     <script type="text/ng-template" id="uploadFileDialog.html">
         <md-dialog aria-label="Upload image" ng-cloak>
@@ -15,10 +16,12 @@
                 </md-toolbar>
 
                 <md-dialog-content>
-                    <div layout="column" class="file-zone-upload" layout-margin layout-align="center center" layout-gt-sm="row">
+                    <div layout="column" class="file-zone-upload" layout-margin layout-align="center">
                         <div ng-show="parentScope.uploader.isHTML5" flex>
                             <div nv-file-drop="" uploader="parentScope.uploader">
-                                <div layout="row" layout-align="center center" nv-file-over="" uploader="parentScope.uploader" over-class="file-over-class" class="file-drop-zone text-center">
+                                <div layout="row" layout-align="center center" nv-file-over=""
+                                     uploader="parentScope.uploader" over-class="file-over-class"
+                                     class="file-drop-zone text-center">
                                     <span flex>
                                         <i class="fa fa-file-text-o" aria-hidden="true"></i>
                                         {{parentScope.translate("file_drop_zone")}}
@@ -32,7 +35,8 @@
 
                                 <label class="btn btn-default btn-file">
                                     {{parentScope.translate("file_select_multiply_files")}}
-                                    <input type="file" style="display: none;" nv-file-select="" uploader="parentScope.uploader" multiple/>
+                                    <input type="file" style="display: none;" nv-file-select=""
+                                           uploader="parentScope.uploader" multiple/>
                                 </label>
 
                             </div>
@@ -42,72 +46,93 @@
                             <div class="file-select-zone">
                                 <label class="btn btn-default btn-file">
                                     {{parentScope.translate("file_select_single_file")}}
-                                    <input type="file" style="display: none;" nv-file-select="" uploader="parentScope.uploader"/>
+                                    <input type="file" style="display: none;" nv-file-select=""
+                                           uploader="parentScope.uploader"/>
                                 </label>
                             </div>
                         </div>
                     </div>
-                    <div layout="row">
-                        <h3>Upload queue</h3>
-                        <p>Queue length: {{parentScope.uploader.queue.length }}</p>
+                    <div>
+                        <div layout="column" layout-align="center" layout-margin>
+                            <p class="file-title">{{parentScope.translate(parentScope.getData().title)}}</p>
+                            <p>{{parentScope.translate("file_queue_length")}} : {{parentScope.uploader.queue.length }}</p>
+                        </div>
+
+                        <div ng-if="parentScope.getData().multiplyFiles">
+                            <div>
+                                {{parentScope.translate("file_progress")}}
+                                <div class="progress" style="">
+                                    <div class="progress-bar" role="progressbar"
+                                         ng-style="{ 'width': parentScope.uploader.progress + '%' }"></div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-success btn-s"
+                                    ng-click="parentScope.uploader.uploadAll()"
+                                    ng-disabled="!parentScope.uploader.getNotUploadedItems().length">
+                                <span class="glyphicon glyphicon-upload"></span>
+                                {{parentScope.translate("upload_all")}}
+                            </button>
+                            <button type="button" class="btn btn-warning btn-s"
+                                    ng-click="parentScope.uploader.cancelAll()"
+                                    ng-disabled="!parentScope.uploader.isUploading">
+                                <span class="glyphicon glyphicon-ban-circle"></span>
+                                {{parentScope.translate("cancel_all")}}
+                            </button>
+                            <button type="button" class="btn btn-danger btn-s"
+                                    ng-click="parentScope.uploader.clearQueue()"
+                                    ng-disabled="!parentScope.uploader.queue.length">
+                                <span class="glyphicon glyphicon-trash"></span>
+                                {{parentScope.translate("remove_all")}}
+                            </button>
+                        </div>
 
                         <table class="table">
                             <thead>
-                            <tr>
-                                <th width="50%">Name</th>
-                                <th ng-show="parentScope.uploader.isHTML5">Size</th>
-                                <th ng-show="parentScope.uploader.isHTML5">Progress</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
+                                <tr>
+                                    <th >{{parentScope.translate("file_name")}}</th>
+                                    <th ng-show="parentScope.uploader.isHTML5">{{parentScope.translate("file_size")}}</th>
+                                    <th ng-show="parentScope.uploader.isHTML5">{{parentScope.translate("file_progress")}}</th>
+                                    <th>{{parentScope.translate("file_status")}}</th>
+                                    <th>{{parentScope.translate("file_actions")}}</th>
+                                </tr>
                             </thead>
                             <tbody>
                             <tr ng-repeat="item in parentScope.uploader.queue">
-                                <td><strong>{{ item.file.name }}</strong></td>
-                                <td ng-show="parentScope.uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                                <td>{{ item.file.name }}</td>
+                                <td ng-show="parentScope.uploader.isHTML5" nowrap>
+                                   <span ng-class="{
+                                        'is-too-big' : (item.file.size/1024 > parentScope.getData().maxFileSize)
+                                   }">
+                                       {{ item.file.size/1024/1024|number:2}} {{parentScope.translate("mb")}}
+                                   </span>
+                                </td>
                                 <td ng-show="parentScope.uploader.isHTML5">
                                     <div class="progress" style="margin-bottom: 0;">
-                                        <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                                        <div class="progress-bar" role="progressbar"
+                                             ng-style="{ 'width': item.progress + '%' }"></div>
                                     </div>
                                 </td>
                                 <td class="text-center">
-                                    <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
-                                    <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
-                                    <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                    <span ng-show="item.isSuccess"><i class="fa fa-check" aria-hidden="true"></i></span>
+                                    <span ng-show="item.isCancel"><i class="fa fa-ban" aria-hidden="true"></i></span>
+                                    <span ng-show="item.isError"><i class="fa fa-trash" aria-hidden="true"></i></span>
                                 </td>
                                 <td nowrap>
-                                    <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
-                                        <span class="glyphicon glyphicon-upload"></span> Upload
+                                    <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()"
+                                            ng-disabled="item.isReady || item.isUploading || item.isSuccess || (item.file.size/1024 > parentScope.getData().maxFileSize)">
+                                        <span class="glyphicon glyphicon-upload"></span> {{parentScope.translate("upload")}}
                                     </button>
-                                    <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
-                                        <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                                    <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()"
+                                            ng-disabled="!item.isUploading">
+                                        <span class="glyphicon glyphicon-ban-circle"></span> {{parentScope.translate("cancel")}}
                                     </button>
                                     <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
-                                        <span class="glyphicon glyphicon-trash"></span> Remove
+                                        <span class="glyphicon glyphicon-trash"></span> {{parentScope.translate("remove")}}
                                     </button>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
-
-                        <div>
-                            <div>
-                                Queue progress:
-                                <div class="progress" style="">
-                                    <div class="progress-bar" role="progressbar" ng-style="{ 'width': parentScope.uploader.progress + '%' }"></div>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-success btn-s" ng-click="parentScope.uploader.uploadAll()" ng-disabled="!parentScope.uploader.getNotUploadedItems().length">
-                                <span class="glyphicon glyphicon-upload"></span> Upload all
-                            </button>
-                            <button type="button" class="btn btn-warning btn-s" ng-click="parentScope.uploader.cancelAll()" ng-disabled="!parentScope.uploader.isUploading">
-                                <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
-                            </button>
-                            <button type="button" class="btn btn-danger btn-s" ng-click="parentScope.uploader.clearQueue()" ng-disabled="!parentScope.uploader.queue.length">
-                                <span class="glyphicon glyphicon-trash"></span> Remove all
-                            </button>
-                        </div>
-
                     </div>
 
                 </md-dialog-content>

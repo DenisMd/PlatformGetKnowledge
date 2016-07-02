@@ -10,7 +10,14 @@
                 </label>
                 <input class="folders-toolbar-item" ng-model="searchText">
             </md-input-container>
-            <button flex="none" class="btn btn-default filter-panel-item folder-toolbar-btn" ng-click="searchBook(searchText)">
+            <md-input-container  flex="grow" flex-gt-sm>
+                <label>{{translate("language")}}</label>
+                <md-select ng-model="selectedLanguage">
+                    <md-option ng-value="'any'">{{translate("language")}}</md-option>
+                    <md-option ng-value="lang" ng-repeat="lang in langs">{{ translate(lang) }}</md-option>
+                </md-select>
+            </md-input-container>
+            <button flex="none" class="btn btn-default filter-panel-item folder-toolbar-btn" ng-click="searchBook(searchText,selectedLanguage)">
                 {{translate("do_filter")}}
             </button>
         </div>
@@ -21,9 +28,15 @@
                     <input ng-model="newBook.name">
                 </md-input-container>
                 <md-input-container class="md-block" flex-gt-sm>
+                    <label>{{translate("books_author_name")}}</label>
+                    <input ng-model="newBook.authorName">
+                </md-input-container>
+            </div>
+            <div flex layout="row">
+                <md-input-container class="md-block" flex-gt-sm>
                     <label>{{translate("choose_language")}}</label>
                     <md-select ng-model="newBook.language">
-                        <md-option ng-value="opt.name" ng-repeat="opt in langs">{{ opt.title }}</md-option>
+                        <md-option ng-value="lang" ng-repeat="lang in langs">{{ translate(lang) }}</md-option>
                     </md-select>
                 </md-input-container>
             </div>
@@ -77,6 +90,7 @@
         </div>
     </md-content>
 </div>
+
 <script>
     /* Modernizr 2.5.3 (Custom Build) | MIT & BSD
      * Build: http://www.modernizr.com/download/#-csstransforms3d-shiv-cssclasses-teststyles-testprop-testallprops-prefixes-domprefixes-load

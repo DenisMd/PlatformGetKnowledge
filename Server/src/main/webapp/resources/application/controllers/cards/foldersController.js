@@ -1,4 +1,4 @@
-model.controller("foldersController" , function ($scope,applicationService) {
+model.controller("foldersController" , function ($scope,className,applicationService,$state) {
 
     $scope.currentFilterByDate = false;
 
@@ -57,7 +57,17 @@ model.controller("foldersController" , function ($scope,applicationService) {
         applicationService.filterRequest($scope,"foldersInfo",$scope.filter,addFolder);
     };
 
-    $scope.by_count();
+    //Проверка на существование секции
+    var folderInfo = applicationService.createFilter(className.section,0,10);
+    folderInfo.createFiltersInfo();
+    folderInfo.equals("name","text",$scope.getData().sectionName);
+    applicationService.filterRequest($scope,"sectionInfo", folderInfo,function(section){
+        if (section == null) {
+            $state.go("404");
+        }
+
+        $scope.by_count();
+    });
 
     $scope.loadMore = function () {
         $scope.filter.increase(12);

@@ -1,4 +1,4 @@
-model.controller("bookCtrl", function ($scope,applicationService,className,pageService,$state,FileUploader) {
+model.controller("bookCtrl", function ($scope,applicationService,className,pageService,$state,$languages) {
     var bookId = pageService.getPathVariable("book",$state.params.path);
     $scope.book = {
         tagsName : []
@@ -6,6 +6,9 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
 
     function readBook(){
         applicationService.read($scope,"book",className.book,bookId,function(book){
+            if (!book) {
+                $state.go("404");
+            }
             if (!("tags" in book)) {
                 book.tagsName = [];
             } else {
@@ -23,7 +26,8 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
             });
             
             book.coverUrl = applicationService.imageHref(className.book,book.id);
-            book.downloadUrl = applicationService.fileByKeyHref(className.book,book.id,"key");;
+            book.downloadUrl = applicationService.fileByKeyHref(className.book,book.id,"key");
+            book.language = book.language.name.toLowerCase();
             
             if (book.owner){
                 book.owner.imageSrc = $scope.userImg(book.owner.id);
@@ -52,7 +56,9 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
         var result = {};
         result.bookId = book.id;
         result.name = book.name;
+        result.authorName = book.authorName;
         result.description = book.description;
+        result.language = book.language.capitalizeFirstLetter();
         result.links = [];
         book.urls.forEach(function(element){
             result.links.push(element.name);
@@ -94,14 +100,34 @@ model.controller("bookCtrl", function ($scope,applicationService,className,pageS
         $scope.$broadcast("updateCropImage"+$scope.croppedImg.id+"Event");
     }
 
+    $scope.langs = $languages.languages;
+
     $scope.uploadData = {
         btnTitle : "book_data",
         multiplyFiles : false,
         className : className.book,
         actionName : "uploadData",
-        parameters : {bookId:+bookId}
+        title : "book_data",
+        parameters : {bookId:+bookId},
+        maxFileSize : 50104
     };
-    
+
+    $scope.showDeleteDialog = function(ev) {
+        $scope.showConfirmDialog(
+            ev,
+            $scope.translate("book_delete_dialog_title") + " " + $scope.book.name,
+            "",
+            'Delete book',
+            $scope.translate("delete"),
+            $scope.translate("cancel"),
+            function () {
+                applicationService.remove($scope,"",className.book,$scope.book.id,function (result) {
+                    $scope.showToast($scope.getResultMessage(result));
+                });
+            }
+        )
+    }
+
     //Кооментарии к книгам
     $scope.commentData = {
         id : "Book",

@@ -1,4 +1,4 @@
-model.controller("booksController" , function($scope,$state,applicationService,className){
+model.controller("booksController" , function($scope,$state,$languages,applicationService,className){
 
     var maxCharactersInName = 21;
 
@@ -34,14 +34,28 @@ model.controller("booksController" , function($scope,$state,applicationService,c
     };
 
     var likeIndex;
-    $scope.searchBook = function(text) {
-        if (likeIndex != undefined) {
+    var equalIndex;
+    $scope.searchBook = function(text,language) {
+        if (likeIndex !== undefined) {
             $scope.filter.result.customFilters.splice(likeIndex,1);
         }
+
         if (text) {
             likeIndex  = $scope.filter.addCustomFilter("searchBooks",{
                 textValue : text
             });
+        } else {
+            likeIndex = undefined;
+        }
+
+        if (equalIndex !== undefined) {
+            $scope.filter.result.filtersInfo.filters.splice(equalIndex, 1);
+        }
+
+        if (language != "any") {
+            equalIndex = $scope.filter.equals("language.name", "str",language.capitalizeFirstLetter());
+        } else {
+            equalIndex = undefined;
         }
 
         //$scope.filter.like("tags.tagName","text","%"+text+"%");
@@ -72,12 +86,11 @@ model.controller("booksController" , function($scope,$state,applicationService,c
         doAction();
     };
 
-    applicationService.list($scope,"langs",className.language, function (item) {
-        item.title = $scope.translate(item.name.toLowerCase());
-    });
+    $scope.langs = $languages.languages;
 
     $scope.createBook = function(newBook) {
         newBook.groupBookUrl = $scope.getData().groupBooks;
+        newBook.language = newBook.language.capitalizeFirstLetter();
         applicationService.action($scope,"",className.book,"createBook",newBook,function(result){
             $scope.showToast($scope.getResultMessage(result));
             if (result.status == "Complete") {
@@ -90,6 +103,7 @@ model.controller("booksController" , function($scope,$state,applicationService,c
     var groupBookFilter = applicationService.createFilter(className.groupBooks,0,10);
     groupBookFilter.createFiltersInfo();
     groupBookFilter.equals("url","text",$scope.getData().groupBooks);
+    groupBookFilter.equals("section.name","text",$scope.getData().sectionName);
     applicationService.filterRequest($scope,"groupBookInfo", groupBookFilter,function(groupBook){
         if (groupBook == null) {
             $state.go("404");

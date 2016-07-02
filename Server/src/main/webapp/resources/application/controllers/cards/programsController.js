@@ -1,5 +1,6 @@
-model.controller("programsController" , function($scope,$state,applicationService,className){
-    var maxCharactersInName = 21;
+model.controller("programsController" , function($scope,$state,$languages,applicationService,className){
+    var maxCharactersInName = 40;
+    var maxCharacterDescription = 250;
 
     $scope.currentFilterByDate = true;
     $scope.showCreateArea = false;
@@ -33,7 +34,8 @@ model.controller("programsController" , function($scope,$state,applicationServic
     };
 
     var likeIndex;
-    $scope.searchPrograms = function(text) {
+    var equalIndex;
+    $scope.searchPrograms = function(text,language) {
         if (likeIndex != undefined) {
             $scope.filter.result.customFilters.splice(likeIndex,1);
         }
@@ -41,6 +43,16 @@ model.controller("programsController" , function($scope,$state,applicationServic
             likeIndex  = $scope.filter.addCustomFilter("searchPrograms",{
                 textValue : text
             });
+        }
+
+        if (equalIndex !== undefined) {
+            $scope.filter.result.filtersInfo.filters.splice(equalIndex, 1);
+        }
+
+        if (language != "any") {
+            equalIndex = $scope.filter.equals("language.name", "str",language.capitalizeFirstLetter());
+        } else {
+            equalIndex = undefined;
         }
 
         //$scope.filter.like("tags.tagName","text","%"+text+"%");
@@ -58,6 +70,9 @@ model.controller("programsController" , function($scope,$state,applicationServic
             if (program.name.length > maxCharactersInName) {
                 program.name = program.name.substr(0, maxCharactersInName) + "...";
             }
+            if (program.description.length > maxCharacterDescription) {
+                program.description = program.description.substr(0,maxCharacterDescription) + "...";
+            }
             $scope.programs.push(program);
         }
     };
@@ -71,12 +86,11 @@ model.controller("programsController" , function($scope,$state,applicationServic
         doAction();
     };
 
-    applicationService.list($scope,"langs",className.language, function (item) {
-        item.title = $scope.translate(item.name.toLowerCase());
-    });
+    $scope.langs = $languages.languages;
 
     $scope.createProgram = function(newProgram) {
         newProgram.groupProgramUrl = $scope.getData().groupProgram;
+        newProgram.language = newProgram.language.capitalizeFirstLetter();
         applicationService.action($scope,"",className.program,"createProgram",newProgram,function(result){
             $scope.showToast($scope.getResultMessage(result));
             if (result.status == "Complete") {
@@ -89,6 +103,7 @@ model.controller("programsController" , function($scope,$state,applicationServic
     var groupProgramFilter = applicationService.createFilter(className.groupPrograms,0,10);
     groupProgramFilter.createFiltersInfo();
     groupProgramFilter.equals("url","text",$scope.getData().groupProgram);
+    groupProgramFilter.equals("section.name","text",$scope.getData().sectionName);
     applicationService.filterRequest($scope,"groupProgramInfo", groupProgramFilter,function(groupProgram){
         if (groupProgram == null) {
             $state.go("404");

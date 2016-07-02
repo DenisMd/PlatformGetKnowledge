@@ -10,7 +10,14 @@
                 </label>
                 <input class="folders-toolbar-item" ng-model="searchText">
             </md-input-container>
-            <button flex="none" class="btn btn-default filter-panel-item folder-toolbar-btn" ng-click="searchPrograms(searchText)">
+            <md-input-container  flex="grow" flex-gt-sm>
+                <label>{{translate("language")}}</label>
+                <md-select ng-model="selectedLanguage">
+                    <md-option ng-value="'any'">{{translate("language")}}</md-option>
+                    <md-option ng-value="lang" ng-repeat="lang in langs">{{ translate(lang) }}</md-option>
+                </md-select>
+            </md-input-container>
+            <button flex="none" class="btn btn-default filter-panel-item folder-toolbar-btn" ng-click="searchPrograms(searchText,selectedLanguage)">
                 {{translate("do_filter")}}
             </button>
         </div>
@@ -23,7 +30,7 @@
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>{{translate("choose_language")}}</label>
                     <md-select ng-model="newProgram.language">
-                        <md-option ng-value="opt.name" ng-repeat="opt in langs">{{ opt.title }}</md-option>
+                        <md-option ng-value="lang" ng-repeat="lang in langs">{{ translate(lang)}}</md-option>
                     </md-select>
                 </md-input-container>
             </div>
@@ -33,12 +40,12 @@
                     <textarea ng-model="newProgram.description" md-maxlength="500" rows="3" md-select-on-focus></textarea>
                 </md-input-container>
             </div>
-            <div layout="column" class="book-tags" flex ng-init="newProgram.tags = []">
+            <div layout="column" class="program-tags" flex ng-init="newProgram.tags = []">
                 <div class="md-title" flex>{{translate("tags")}}</div>
                 <md-chips ng-model="newProgram.tags" readonly="false" flex></md-chips>
             </div>
             <div layout="row" class="create-div" layout-align="center">
-                <button flex="20" class="btn btn-default create-book-btn" ng-click="createProgram(newProgram)">{{translate("program_create")}}</button>
+                <button flex="20" class="btn btn-default create-program-btn" ng-click="createProgram(newProgram)">{{translate("program_create")}}</button>
             </div>
         </div>
     </md-content>
@@ -57,19 +64,31 @@
                     class="{{currentFilterByDate ? 'active' : ''}}" ng-click="by_date()">{{translate("by_date")}}</span>
             </div>
             <div ng-show="programsInfo.creatable" flex-gt-sm="none" class="text-center" layout-margin-gt-sm>
-                <button class="btn btn-default create-book-btn" ng-click="showCreateArea = !showCreateArea">{{translate("create")}}</button>
+                <button class="btn btn-default create-program-btn" ng-click="showCreateArea = !showCreateArea">{{translate("create")}}</button>
             </div>
         </div>
-        <div layout="row" layout-wrap layout-align="left" layout-align-md="center">
-            <div flex="none" ng-repeat="program in programs" class="text-center book-wrap">
-                <div class="book-title" ng-click="goTo('program/'+program.id)">
-                    {{program.name}}
-                </div>
-                <div class="book">
-                    <a ng-href="{{program.href}}">
-                        <img ng-src="{{program.imageSrc}}"/>
-                    </a>
-                </div>
+        <div layout-wrap layout="row">
+            <div flex-sm flex-gt-sm="50" ng-repeat="program in programs" class="text-center book-wrap">
+                <md-card>
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline">{{program.name}}</span>
+                            <span class="md-subhead program-description">{{program.description}}</span>
+                        </md-card-title-text>
+                        <md-card-title-media>
+                            <a ng-href="{{program.href}}">
+                                <img class="md-media-md" ng-src="{{program.imageSrc}}"/>
+                            </a>
+                        </md-card-title-media>
+                    </md-card-title>
+                    <md-card-actions layout="row" layout-align="end center">
+                        <md-button>
+                            <a ng-href="{{program.href}}" class="link-without-style">
+                                {{translate("go_to")}}
+                            </a>
+                        </md-button>
+                    </md-card-actions>
+                </md-card>
             </div>
         </div>
         <div layout="row" class="load-more-div" layout-align="center center" ng-show="programsInfo.totalEntitiesCount > (filter.result.first + filter.max)">

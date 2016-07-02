@@ -1,5 +1,6 @@
 package com.getknowledge.modules.programs;
 
+import com.getknowledge.modules.attachements.FileAttachmentRepository;
 import com.getknowledge.modules.books.Book;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.programs.group.GroupPrograms;
@@ -25,6 +26,9 @@ public class ProgramRepository extends BaseRepository<Program> {
     @Autowired
     private ProgramTagRepository programTagRepository;
 
+    @Autowired
+    private FileAttachmentRepository fileAttachmentRepository;
+
     @Override
     protected Class<Program> getClassEntity() {
         return Program.class;
@@ -43,6 +47,22 @@ public class ProgramRepository extends BaseRepository<Program> {
         Predicate name2 = countQuery.getCriteriaBuilder().like(countQuery.getRoot().get("name"),"%"+value+"%");
         Predicate tags2 = countQuery.getCriteriaBuilder().like(join2.get("tagName"),"%"+value+"%");
         countQuery.addPrevPredicate(countQuery.getCriteriaBuilder().or(name2,tags2));
+    }
+
+    @Override
+    public void remove(Program entity) {
+        programTagRepository.removeTagsFromEntity(entity);
+        programTagRepository.removeUnusedTags();
+
+        super.remove(entity);
+
+        //Удаляем кооментарии
+        entityManager.createQuery("delete from  ProgramComment pc where pc.program.id = :id")
+                .setParameter("id",entity.getId())
+                .executeUpdate();
+        //Удаляем файл
+        if (entity.getFileAttachment() != null)
+            fileAttachmentRepository.remove(entity.getFileAttachment());
     }
 
     private void addProgramToTag(Program program) {
@@ -69,11 +89,15 @@ public class ProgramRepository extends BaseRepository<Program> {
         return program;
     }
 
-    public Program updateProgram(Program program,String name,String description,List<String> links,List<String> tags) {
-        program.setName(name);
-        program.setDescription(description);
+    public Program updateProgram(Program program,String name,String description,Language language,List<String> links,List<String> tags) {
+        if (name != null)
+            program.setName(name);
+        if (description != null)
+            program.setDescription(description);
         if (links != null)
             program.setLinks(links);
+        if (language != null)
+            program.setLanguage(language);
 
         programTagRepository.removeTagsFromEntity(program);
         if (tags != null  && !tags.isEmpty()) {

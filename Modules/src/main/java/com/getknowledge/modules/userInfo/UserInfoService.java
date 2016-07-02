@@ -603,6 +603,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
     }
 
     @Override
+    @Transactional
     public byte[] getImageById(long id) {
         UserInfo userInfo = userInfoRepository.read(id);
         return userInfo == null ? null : userInfo.getProfileImage();

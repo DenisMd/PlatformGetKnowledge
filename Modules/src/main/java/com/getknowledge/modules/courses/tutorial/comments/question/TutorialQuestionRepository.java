@@ -2,6 +2,7 @@ package com.getknowledge.modules.courses.tutorial.comments.question;
 
 
 import com.getknowledge.modules.courses.tutorial.Tutorial;
+import com.getknowledge.modules.messages.CommentRepository;
 import com.getknowledge.modules.messages.CommentStatus;
 import com.getknowledge.modules.messages.attachments.AttachmentImage;
 import com.getknowledge.modules.messages.attachments.AttachmentImageRepository;
@@ -14,7 +15,13 @@ import org.springframework.stereotype.Repository;
 import java.util.Calendar;
 
 @Repository("TutorialQuestionRepository")
-public class TutorialQuestionRepository extends ProtectedRepository<TutorialQuestion> {
+public class TutorialQuestionRepository extends CommentRepository<TutorialQuestion> {
+
+    @Override
+    protected String getEntityName() {
+        return TutorialQuestion.class.getSimpleName();
+    }
+
     @Override
     protected Class<TutorialQuestion> getClassEntity() {
         return TutorialQuestion.class;
@@ -25,7 +32,6 @@ public class TutorialQuestionRepository extends ProtectedRepository<TutorialQues
 
     public TutorialQuestion createMessage(UserInfo sender,Tutorial tutorial, String text) {
         TutorialQuestion tutorialQuestion = new TutorialQuestion();
-        tutorialQuestion.setCreateTime(Calendar.getInstance());
         tutorialQuestion.setMessage(text);
         tutorialQuestion.setSender(sender);
         tutorialQuestion.setTutorial(tutorial);
@@ -55,9 +61,4 @@ public class TutorialQuestionRepository extends ProtectedRepository<TutorialQues
         super.remove(tutorialQuestion);
     }
 
-    public void blockComment(TutorialQuestion tutorialQuestion, CommentStatus commentStatus) {
-        tutorialQuestion.setMessage(null);
-        tutorialQuestion.setCommentStatus(commentStatus);
-        merge(tutorialQuestion);
-    }
 }

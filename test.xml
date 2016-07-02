@@ -1,32 +1,133 @@
-XML ответ:
+XML запрос:
 <xml-fragment>
-    <tpt:Header xmlns:tpt="http://schemas.tranzaxis.com/tptpResponse.xsd">
+    <tpt:Header xmlns:tpt="http://schemas.tranzaxis.com/tptpRequest.xsd">
         <tpt:DeviceType>9.</tpt:DeviceType>
-        <tpt:TransmissionNumber>30</tpt:TransmissionNumber>
-        <tpt:TerminalId>TEST_EXP</tpt:TerminalId>
-        <tpt:EmployeeId>ADMIN</tpt:EmployeeId>
-        <tpt:DateTime>2016-06-09T16:52:49.000</tpt:DateTime>
+        <tpt:TransmissionNumber>13</tpt:TransmissionNumber>
+        <tpt:TerminalId>K0180032</tpt:TerminalId>
+        <tpt:EmployeeId/>
+        <tpt:DateTime>2016-06-14T17:20:56+03:00</tpt:DateTime>
         <tpt:MessageType>A</tpt:MessageType>
         <tpt:MessageSubType>O</tpt:MessageSubType>
-        <tpt:TransactionCode>90</tpt:TransactionCode>
+        <tpt:TransactionCode>60</tpt:TransactionCode>
         <tpt:ProcessingFlag1>0</tpt:ProcessingFlag1>
         <tpt:ProcessingFlag2>0</tpt:ProcessingFlag2>
         <tpt:ProcessingFlag3>0</tpt:ProcessingFlag3>
-        <tpt:ResponseCode>881</tpt:ResponseCode>
+        <tpt:ResponseCode>0</tpt:ResponseCode>
     </tpt:Header>
-    <tpt:Body xmlns:tpt="http://schemas.tranzaxis.com/tptpResponse.xsd">
-        <tpt:DownloadKey>
-            <tpt:Category>00</tpt:Category>
-            <tpt:AccessCode>2</tpt:AccessCode>
-            <tpt:ProcessingFlag>p</tpt:ProcessingFlag>
-            <tpt:Filler>0000000000</tpt:Filler>
-        </tpt:DownloadKey>
-        <tpt:DownloadData>
-            <tpt:Did>0</tpt:Did>
-            <tpt:Did>H Русский язык????</tpt:Did>
-            <tpt:Did>a TEST_EXP</tpt:Did>
-            <tpt:Did>h 00000000</tpt:Did>
-            <tpt:Did>p 000011010000011010000000010000</tpt:Did>
-        </tpt:DownloadData>
+    <tpt:Body xmlns:tpt="http://schemas.tranzaxis.com/tptpRequest.xsd">
+        <tpt:TotalsBatch>
+            <tpt:ShiftNumber>1</tpt:ShiftNumber>
+            <tpt:BatchNumber>1</tpt:BatchNumber>
+            <tpt:DebTranCnt>78</tpt:DebTranCnt>
+            <tpt:DebTranAmount>29121000</tpt:DebTranAmount>
+            <tpt:CrdTranCnt>0</tpt:CrdTranCnt>
+            <tpt:CrdTranAmount>0</tpt:CrdTranAmount>
+            <tpt:AdjustTranCnt>0</tpt:AdjustTranCnt>
+            <tpt:AdjustTranAmount>0</tpt:AdjustTranAmount>
+        </tpt:TotalsBatch>
+        <tpt:SeqNumber>
+            <tpt:ShiftNumber>1</tpt:ShiftNumber>
+            <tpt:BatchNumber>1</tpt:BatchNumber>
+            <tpt:TranNumber>155</tpt:TranNumber>
+            <tpt:ResetFlag>1</tpt:ResetFlag>
+        </tpt:SeqNumber>
     </tpt:Body>
 </xml-fragment>
+
+
+<xml-fragment>
+<tpt:Header xmlns:tpt="http://schemas.tranzaxis.com/tptpResponse.xsd">
+    <tpt:DeviceType>9.</tpt:DeviceType>
+    <tpt:TransmissionNumber>13</tpt:TransmissionNumber>
+    <tpt:TerminalId>K0180032</tpt:TerminalId>
+    <tpt:EmployeeId/>
+    <tpt:DateTime>2016-06-14T17:20:56.000</tpt:DateTime>
+    <tpt:MessageType>A</tpt:MessageType>
+    <tpt:MessageSubType>O</tpt:MessageSubType>
+    <tpt:TransactionCode>60</tpt:TransactionCode>
+    <tpt:ProcessingFlag1>0</tpt:ProcessingFlag1>
+    <tpt:ProcessingFlag2>1</tpt:ProcessingFlag2>
+    <tpt:ProcessingFlag3>0</tpt:ProcessingFlag3>
+    <tpt:ResponseCode>7</tpt:ResponseCode>
+</tpt:Header>
+<tpt:Body xmlns:tpt="http://schemas.tranzaxis.com/tptpResponse.xsd">
+    <tpt:TotalsBatch>
+        <tpt:ShiftNumber>1</tpt:ShiftNumber>
+        <tpt:BatchNumber>2</tpt:BatchNumber>
+        <tpt:DebTranCnt>75</tpt:DebTranCnt>
+        <tpt:DebTranAmount>29121000</tpt:DebTranAmount>
+        <tpt:CrdTranCnt>0</tpt:CrdTranCnt>
+        <tpt:CrdTranAmount>0</tpt:CrdTranAmount>
+        <tpt:AdjustTranCnt>0</tpt:AdjustTranCnt>
+        <tpt:AdjustTranAmount>0</tpt:AdjustTranAmount>
+    </tpt:TotalsBatch>
+</tpt:Body>
+</xml-fragment>
+
+
+        XML запрос: <xml-fragment>
+<tpt:Header xmlns:tpt="http://schemas.tranzaxis.com/tptpRequest.xsd">
+    <tpt:DeviceType>9.</tpt:DeviceType>
+    <tpt:TransmissionNumber>14</tpt:TransmissionNumber>
+    <tpt:TerminalId>K0180032</tpt:TerminalId>
+    <tpt:EmployeeId/>
+    <tpt:DateTime>2016-06-14T17:20:58+03:00</tpt:DateTime>
+    <tpt:MessageType>A</tpt:MessageType>
+    <tpt:MessageSubType>O</tpt:MessageSubType>
+    <tpt:TransactionCode>61</tpt:TransactionCode>
+    <tpt:ProcessingFlag1>0</tpt:ProcessingFlag1>
+    <tpt:ProcessingFlag2>0</tpt:ProcessingFlag2>
+    <tpt:ProcessingFlag3>0</tpt:ProcessingFlag3>
+    <tpt:ResponseCode>0</tpt:ResponseCode>
+</tpt:Header>
+<tpt:Body xmlns:tpt="http://schemas.tranzaxis.com/tptpRequest.xsd">
+    <tpt:TotalsShift>
+        <tpt:ShiftCnt>1</tpt:ShiftCnt>
+        <tpt:BatchCntInShift>1</tpt:BatchCntInShift>
+        <tpt:DebTranCnt>78</tpt:DebTranCnt>
+        <tpt:DebTranAmount>29121000</tpt:DebTranAmount>
+        <tpt:CrdTranCnt>0</tpt:CrdTranCnt>
+        <tpt:CrdTranAmount>0</tpt:CrdTranAmount>
+        <tpt:AdjustTranCnt>0</tpt:AdjustTranCnt>
+        <tpt:AdjustTranAmount>0</tpt:AdjustTranAmount>
+    </tpt:TotalsShift>
+    <tpt:SeqNumber>
+        <tpt:ShiftNumber>1</tpt:ShiftNumber>
+        <tpt:BatchNumber>1</tpt:BatchNumber>
+        <tpt:TranNumber>155</tpt:TranNumber>
+        <tpt:ResetFlag>1</tpt:ResetFlag>
+    </tpt:SeqNumber>
+</tpt:Body>
+</xml-fragment>
+
+
+        XML ответ: <xml-fragment>
+<tpt:Header xmlns:tpt="http://schemas.tranzaxis.com/tptpResponse.xsd">
+    <tpt:DeviceType>9.</tpt:DeviceType>
+    <tpt:TransmissionNumber>14</tpt:TransmissionNumber>
+    <tpt:TerminalId>K0180032</tpt:TerminalId>
+    <tpt:EmployeeId/>
+    <tpt:DateTime>2016-06-14T17:20:58.000</tpt:DateTime>
+    <tpt:MessageType>A</tpt:MessageType>
+    <tpt:MessageSubType>O</tpt:MessageSubType>
+    <tpt:TransactionCode>61</tpt:TransactionCode>
+    <tpt:ProcessingFlag1>0</tpt:ProcessingFlag1>
+    <tpt:ProcessingFlag2>1</tpt:ProcessingFlag2>
+    <tpt:ProcessingFlag3>0</tpt:ProcessingFlag3>
+    <tpt:ResponseCode>7</tpt:ResponseCode>
+</tpt:Header>
+<tpt:Body xmlns:tpt="http://schemas.tranzaxis.com/tptpResponse.xsd">
+    <tpt:TotalsShift>
+        <tpt:ShiftCnt>2</tpt:ShiftCnt>
+        <tpt:BatchCntInShift>1</tpt:BatchCntInShift>
+        <tpt:DebTranCnt>75</tpt:DebTranCnt>
+        <tpt:DebTranAmount>29121000</tpt:DebTranAmount>
+        <tpt:CrdTranCnt>0</tpt:CrdTranCnt>
+        <tpt:CrdTranAmount>0</tpt:CrdTranAmount>
+        <tpt:AdjustTranCnt>0</tpt:AdjustTranCnt>
+        <tpt:AdjustTranAmount>0</tpt:AdjustTranAmount>
+    </tpt:TotalsShift>
+</tpt:Body>
+</xml-fragment>
+
+

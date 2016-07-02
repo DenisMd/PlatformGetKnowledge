@@ -1,5 +1,6 @@
 package com.getknowledge.modules.courses.tutorial.comments.review;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.courses.raiting.Rating;
 import com.getknowledge.modules.courses.tutorial.Tutorial;
 import com.getknowledge.modules.messages.Comment;
@@ -19,6 +20,7 @@ import javax.persistence.*;
 public class TutorialReview extends Comment {
 
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Tutorial tutorial;
 
     @OneToOne(optional = false)
@@ -41,21 +43,16 @@ public class TutorialReview extends Comment {
     }
 
     @Override
-    public AbstractEntity clone() {
+    protected Comment createComment() {
         TutorialReview tutorialReview = new TutorialReview();
-        tutorialReview.setRating(this.getRating());
-        tutorialReview.setCreateTime(this.getCreateTime());
-        tutorialReview.setMessage(this.getMessage());
-        tutorialReview.setSender(this.getSender());
-        tutorialReview.setId(this.getId());
-        tutorialReview.setObjectVersion(this.getObjectVersion());
+        tutorialReview.setRating(getRating());
         return tutorialReview;
     }
 
     @Override
     public AuthorizationList getAuthorizationList() {
-        AuthorizationList authorizationList = new AuthorizationList();
-        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.BlockComments));
+        AuthorizationList authorizationList = super.getAuthorizationList();
+        authorizationList.allowReadEveryOne = false;
         return authorizationList;
     }
 }

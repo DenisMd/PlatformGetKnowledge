@@ -42,6 +42,11 @@ public class VideoRepository extends BaseRepository<Video> {
         }
 
         super.remove(video);
+
+        //Удаляем кооментарии
+        entityManager.createQuery("delete from  VideoComment vc where vc.video.id = :id")
+                .setParameter("id",video.getId())
+                .executeUpdate();
     }
 
     public Course findCourseByVideo(Video video) {

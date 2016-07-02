@@ -1,5 +1,7 @@
 package com.getknowledge.modules.programs;
 
+import com.getknowledge.modules.attachements.FileAttachment;
+import com.getknowledge.modules.attachements.FileAttachmentRepository;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
@@ -42,6 +44,9 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
     private TraceService trace;
 
     @Autowired
+    private FileAttachmentRepository fileAttachmentRepository;
+
+    @Autowired
     private ProgramRepository programRepository;
 
     private Result checkProgramRight(HashMap<String,Object> data) {
@@ -72,7 +77,6 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
         UserInfo userInfo = userInfoService.getAuthorizedUser(data);
 
         Program program = new Program();
-        program.setOwner(userInfo);
 
         if (!program.getAuthorizationList().isAccessCreate(userInfo.getUser())) {
             return Result.AccessDenied();
@@ -85,15 +89,10 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
             return Result.Failed();
         }
 
-        Language language = null;
-
-        try {
-            language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
-            program.setLanguage(language);
-        } catch (Exception exception) {
-            Result result = Result.Failed();
-            result.setObject("Language not found");
-            return result;
+        Language language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
+        if (language == null) {
+            Result failed = Result.Failed("language_not_found");
+            return failed;
         }
 
         String name = (String) data.get("name");
@@ -110,7 +109,7 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
         }
 
 
-        programRepository.createProgram(groupPrograms,userInfo,name,description,language,links,tags);
+        program = programRepository.createProgram(groupPrograms,userInfo,name,description,language,links,tags);
 
         Result result = Result.Complete();
         result.setObject(program.getId());
@@ -129,8 +128,16 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
             return result;
         }
 
-        String name = (String) data.get("name");
-        String description = (String) data.get("description");
+        String name = null;
+        if (data.containsKey("name")) {
+           name = (String) data.get("name");
+        }
+
+        String description = null;
+        if (data.containsKey("description")) {
+            description = (String) data.get("description");
+        }
+
         List<String> links = null;
         List<String> tags = null;
 
@@ -142,12 +149,17 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
             links = (List<String>) data.get("tags");
         }
 
-        programRepository.updateProgram(program, name, description, links, tags);
+        Language language = null;
+        if (data.containsKey("language")) {
+            language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
+        }
+
+        programRepository.updateProgram(program, name, description,language, links, tags);
 
         return Result.Complete();
     }
 
-    @ActionWithFile(name = "uploadCover" , mandatoryFields = {"programId"})
+    @ActionWithFile(name = "uploadCover" , mandatoryFields = {"programId"},maxSize = 204_800)
     @Transactional
     public Result uploadCover(HashMap<String,Object> data, List<MultipartFile> files) {
         Result result = checkProgramRight(data);
@@ -181,7 +193,11 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
         }
 
         try {
-            program.setBookData(files.get(0).getBytes());
+            FileAttachment fileAttachment = new FileAttachment();
+            fileAttachment.setFileName(files.get(0).getOriginalFilename());
+            fileAttachment.setData(files.get(0).getBytes());
+            fileAttachmentRepository.create(fileAttachment);
+            program.setFileAttachment(fileAttachment);
             program.setFileName(files.get(0).getOriginalFilename());
         } catch (IOException e) {
             trace.logException("Error upload data for program" , e, TraceLevel.Warning,true);
@@ -193,17 +209,19 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
     }
 
     @Override
+    @Transactional
     public byte[] getImageById(long id) {
         Program program = programRepository.read(id);
         return program == null ? null : program.getCover();
     }
 
     @Override
+    @Transactional
     public FileResponse getFile(long id, Object key) {
         FileResponse fileResponse = new FileResponse();
         Program program = programRepository.read(id);
-        if (program != null)  {
-            fileResponse.setData(program.getBookData());
+        if (program != null && program.getFileAttachment() != null)  {
+            fileResponse.setData(program.getFileAttachment().getData());
             fileResponse.setFileName(program.getFileName());
         }
         return fileResponse;

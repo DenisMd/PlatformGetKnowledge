@@ -2,7 +2,7 @@ package com.getknowledge.modules.help.desc;
 
 import com.getknowledge.platform.base.serializers.FileResponse;
 import com.getknowledge.platform.modules.Result;
-import com.getknowledge.modules.help.desc.attachements.FileAttachment;
+import com.getknowledge.modules.attachements.FileAttachment;
 import com.getknowledge.modules.help.desc.type.HpMessageType;
 import com.getknowledge.modules.userInfo.UserInfoService;
 import com.getknowledge.platform.annotations.Action;
@@ -74,7 +74,6 @@ public class HPMessageService extends AbstractService implements FileService {
             try {
                 FileAttachment fileAttachment = new FileAttachment();
                 fileAttachment.setData(file.getBytes());
-                fileAttachment.setMessage(hpMessage);
                 entityManager.persist(fileAttachment);
                 entityManager.flush();
             } catch (IOException e) {
