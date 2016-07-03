@@ -14,7 +14,7 @@ model.controller("programsController" , function($scope,$state,$languages,applic
     $scope.by_date = function() {
         $scope.currentFilterByDate = true;
         $scope.filter.clearOrder();
-        $scope.filter.setOrder("createDate" , true);
+        $scope.filter.setOrder("createDate" , false);
 
         $scope.filter.result.first = 0;
         $scope.programs = [];
@@ -49,7 +49,7 @@ model.controller("programsController" , function($scope,$state,$languages,applic
             $scope.filter.result.filtersInfo.filters.splice(equalIndex, 1);
         }
 
-        if (language != "any") {
+        if (language && language != "any") {
             equalIndex = $scope.filter.equals("language.name", "str",language.capitalizeFirstLetter());
         } else {
             equalIndex = undefined;

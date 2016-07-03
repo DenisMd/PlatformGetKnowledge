@@ -80,14 +80,14 @@ public class BookRepository extends ProtectedRepository<Book> {
         book.setDescription(description);
         book.setAuthorName(authorName);
         book.setLanguage(language);
+        book.setCreateDate(Calendar.getInstance());
+        book.setCover(cover);
         book.setOwner(owner);
         if (links != null)
             book.setLinks(links);
         if (tags != null)
             booksTagRepository.createTags(tags,book);
 
-        book.setCover(cover);
-        book.setCreateDate(Calendar.getInstance());
         create(book);
         addBookToTag(book);
         return book;

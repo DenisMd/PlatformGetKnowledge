@@ -30,3 +30,7 @@
 .program-description {
     word-break: break-all;
 }
+
+.image-padding {
+    padding: 10px;
+}
