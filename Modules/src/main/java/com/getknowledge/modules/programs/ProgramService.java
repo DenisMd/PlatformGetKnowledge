@@ -159,7 +159,7 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
         return Result.Complete();
     }
 
-    @ActionWithFile(name = "uploadCover" , mandatoryFields = {"programId"},maxSize = 204_800)
+    @ActionWithFile(name = "uploadCover" , mandatoryFields = {"programId"})
     @Transactional
     public Result uploadCover(HashMap<String,Object> data, List<MultipartFile> files) {
         Result result = checkProgramRight(data);
@@ -173,7 +173,7 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
         try {
             program.setCover(files.get(0).getBytes());
         } catch (IOException e) {
-            trace.logException("Error upload vocer for program" , e, TraceLevel.Warning,true);
+            trace.logException("Error upload cover for program" , e, TraceLevel.Warning,true);
             return Result.Failed();
         }
 
@@ -181,7 +181,7 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
         return Result.Complete();
     }
 
-    @ActionWithFile(name = "uploadData" , mandatoryFields = {"programId"})
+    @ActionWithFile(name = "uploadData" ,  mandatoryFields = {"programId"},maxSize = 204_800)
     @Transactional
     public Result uploadData(HashMap<String,Object> data, List<MultipartFile> files) {
         Result result = checkProgramRight(data);
