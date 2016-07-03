@@ -57,6 +57,7 @@ public class Program extends AbstractEntity implements CloneableEntity<Program>,
     private byte[] cover;
 
     @OneToOne(optional = true,fetch = FetchType.LAZY)
+    @JsonIgnore
     private FileAttachment fileAttachment;
 
     @Column(name = "file_name")

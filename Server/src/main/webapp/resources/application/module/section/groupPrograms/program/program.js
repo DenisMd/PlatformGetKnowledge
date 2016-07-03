@@ -56,7 +56,6 @@ model.controller("programCtrl", function ($scope,applicationService,className,pa
         var result = {};
         result.programId = program.id;
         result.name = program.name;
-        result.authorName = program.authorName;
         result.description = program.description;
         result.language = program.language.capitalizeFirstLetter();
         result.links = [];

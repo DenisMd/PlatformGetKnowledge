@@ -12,10 +12,6 @@
                             <label>{{translate("name")}}</label>
                             <input ng-model="program.name">
                         </md-input-container>
-                        <md-input-container flex-gt-sm>
-                            <label>{{translate("program_author_name")}}</label>
-                            <input ng-model="program.authorName">
-                        </md-input-container>
                     </div>
                     <div flex layout="row">
                         <md-input-container class="md-block" flex-gt-sm>
