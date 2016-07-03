@@ -21,14 +21,14 @@ import java.util.List;
 @ModuleInfo(serviceName = "TutorialQuestionsService")
 public class TutorialQuestion extends Comment {
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.REMOVE})
     @JsonIgnore
     private List<AttachmentImage> images = new ArrayList<>();
 
     @Column(nullable = false)
     private Boolean comment = false;
 
-    @OneToMany(mappedBy = "base")
+    @OneToMany(mappedBy = "base" , cascade = {CascadeType.REMOVE})
     @JsonIgnore
     private List<TutorialQuestion> comments = new ArrayList<>();
 
