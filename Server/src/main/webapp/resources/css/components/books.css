@@ -11,7 +11,7 @@
     width: 290px;
 }
 
-.program-title {
+.book-title {
     font-size: 1.5em;
     font-weight: bold;
     color: black;
@@ -87,7 +87,7 @@
     background: white;
 }
 
-.program-tags {
+.book-tags {
     margin-bottom: 20px;
 }
 
