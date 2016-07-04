@@ -1,57 +1,57 @@
-.program-cover {
+.book-cover {
     width: 252px;
     height: 378px;
 }
 
-.program-title {
+.book-title {
     margin: 0 25px;
 }
 
-.program-title h1 {
+.book-title h1 {
     margin: 0;
 }
 
-.program-change-row {
+.book-change-row {
     margin: 15px 0;
 }
 
-.program-author-title {
+.book-author-title {
     font-size: 18px;
 }
 
-.program-author-name, .program-author-name:hover, .program-author-name:visited {
+.book-author-name, .book-author-name:hover, .book-author-name:visited {
     color : black;
 }
 
-.program-date {
+.book-date {
     color: #1B3FC5;
 }
 
-.program-links {
+.book-links {
     margin : 15px 0;
     padding: 20px;
     border : 1px dashed black;
 }
 
-.program-links-title {
+.book-links-title {
     font-size: 25px;
     font-style: italic;
     color : #32ae23;
 }
 
-.program-tags {
+.book-tags {
     margin: 20px 0;
 }
 
-.program-link {
+.book-link {
     word-break: break-all;
 }
 
-.program-link-margin {
+.book-link-margin {
     margin: 10px 0;
 }
 
-.program-description {
+.book-description {
     resize: vertical;
 }
 
@@ -59,13 +59,13 @@
     color : #cd4142 !important;
 }
 
-.program-add-url {
+.book-add-url {
     margin: 10px 0;
     color : #0E76B7;
     font-size: 18px;
 }
 
-.program-add-url:hover{
+.book-add-url:hover{
     text-decoration: underline;
 }
 
@@ -73,12 +73,12 @@
     margin-bottom: 20px;
 }
 
-.update-program-btn {
+.update-book-btn {
     color: #6EBCD6;
     border-color: #21A8CB;
 }
 
-.update-program-btn:hover{
+.update-book-btn:hover{
     color: #4A859D;
     border-color: #217CCB;
     background: white;
