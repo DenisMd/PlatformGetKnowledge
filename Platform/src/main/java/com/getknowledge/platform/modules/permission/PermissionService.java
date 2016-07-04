@@ -19,41 +19,13 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service("PermissionService")
-public class PermissionService extends AbstractService implements BootstrapService{
+public class PermissionService extends AbstractService {
 
     @Autowired
     private PermissionRepository permissionRepository;
 
     @Autowired
     private TraceService traceService;
-
-    @Override
-    public void bootstrap(HashMap<String, Object> map) throws ParseException {
-        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditSections.getName()));
-        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditMenu.getName()));
-        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditSocialLinks.getName()));
-        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditFolders.getName()));
-        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.ReadHpMessage.getName()));
-        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditBooks.getName()));
-        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.CreateBooks.getName()));
-        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.CreatePrograms.getName()));
-        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditPrograms.getName()));
-        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditProgrammingDictionaries.getName()));
-        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.CreateCourse.getName()));
-        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditCourse.getName()));
-        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditKnowledge.getName()));
-        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.UploadVideos.getName()));
-        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditNews.getName()));
-        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.BlockComments.getName()));
-    }
-
-    @Override
-    public BootstrapInfo getBootstrapInfo() {
-        BootstrapInfo bootstrapInfo = new BootstrapInfo();
-        bootstrapInfo.setName("Permission service");
-        bootstrapInfo.setRepeat(true);
-        return bootstrapInfo;
-    }
 
     @Action(name = "getUsersByPermission" , mandatoryFields = {"permissionId"})
     @Transactional
