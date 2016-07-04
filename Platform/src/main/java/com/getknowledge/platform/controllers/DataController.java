@@ -1,7 +1,6 @@
 package com.getknowledge.platform.controllers;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,13 +15,12 @@ import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.base.repositories.FilterCountQuery;
 import com.getknowledge.platform.base.repositories.FilterQuery;
-import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.base.repositories.enumerations.OrderRoute;
 import com.getknowledge.platform.base.serializers.FileResponse;
 import com.getknowledge.platform.base.services.*;
 import com.getknowledge.platform.exceptions.*;
 import com.getknowledge.platform.modules.Result;
-import com.getknowledge.platform.modules.role.names.RoleName;
+import com.getknowledge.platform.modules.role.names.BaseRoleName;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
@@ -42,7 +40,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -174,7 +171,7 @@ public class DataController {
 
         if (user == null) return false;
 
-        if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+        if (user.getRole().getRoleName().equals(BaseRoleName.ROLE_ADMIN())) {
             return true;
         }
 
@@ -200,7 +197,7 @@ public class DataController {
 
         if (user == null) return false;
 
-        if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+        if (user.getRole().getRoleName().equals(BaseRoleName.ROLE_ADMIN())) {
             return true;
         }
 
@@ -225,7 +222,7 @@ public class DataController {
 
         if (user == null) return false;
 
-        if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+        if (user.getRole().getRoleName().equals(BaseRoleName.ROLE_ADMIN())) {
             return true;
         }
 
@@ -250,7 +247,7 @@ public class DataController {
 
         if (user == null) return false;
 
-        if (user.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+        if (user.getRole().getRoleName().equals(BaseRoleName.ROLE_ADMIN())) {
             return true;
         }
 

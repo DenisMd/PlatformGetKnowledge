@@ -1,5 +1,6 @@
 package com.getknowledge.modules.platform.bootstrap;
 
+import com.getknowledge.modules.platform.auth.ModuleRoleName;
 import com.getknowledge.modules.platform.auth.PermissionNames;
 import com.getknowledge.platform.base.services.BootstrapService;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
@@ -7,7 +8,7 @@ import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.permission.PermissionRepository;
 import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.role.RoleRepository;
-import com.getknowledge.platform.modules.role.names.RoleName;
+import com.getknowledge.platform.modules.role.names.BaseRoleName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,20 +48,20 @@ public class PlatformBootstrapService implements BootstrapService {
         if (roleRepository.count() == 0) {
             if(roleRepository.count() == 0) {
                 Role roleAdmin = new Role();
-                roleAdmin.setRoleName(RoleName.ROLE_ADMIN.name());
+                roleAdmin.setRoleName(ModuleRoleName.ROLE_ADMIN());
                 roleRepository.create(roleAdmin);
 
                 Role roleUser = new Role();
-                roleUser.setRoleName(RoleName.ROLE_USER.name());
+                roleUser.setRoleName(ModuleRoleName.ROLE_USER());
                 roleRepository.create(roleUser);
 
                 Role roleHelpDesk = new Role();
-                roleHelpDesk.setRoleName(RoleName.ROLE_HELPDESK.name());
+                roleHelpDesk.setRoleName(ModuleRoleName.ROLE_HELPDESK());
                 roleHelpDesk.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.ReadHpMessage()));
                 roleRepository.create(roleHelpDesk);
 
                 Role author = new Role();
-                author.setRoleName(RoleName.ROLE_AUTHOR.name());
+                author.setRoleName(ModuleRoleName.ROLE_AUTHOR());
                 author.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.CreateBooks()));
                 author.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.CreatePrograms()));
                 author.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.CreateCourse()));
@@ -68,7 +69,7 @@ public class PlatformBootstrapService implements BootstrapService {
                 roleRepository.create(author);
 
                 Role moderator = new Role();
-                moderator.setRoleName(RoleName.ROLE_MODERATOR.name());
+                moderator.setRoleName(ModuleRoleName.ROLE_MODERATOR());
                 moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.EditSections()));
                 moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.EditMenu()));
                 moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.EditSocialLinks()));

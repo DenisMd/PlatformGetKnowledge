@@ -1,15 +1,15 @@
 package com.getknowledge.server.controllers;
 
+import com.getknowledge.modules.platform.auth.ModuleRoleName;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoService;
 import com.getknowledge.platform.exceptions.ModuleNotFound;
 import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.role.Role;
-import com.getknowledge.platform.modules.role.names.RoleName;
+import com.getknowledge.platform.modules.role.names.BaseRoleName;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.user.User;
-import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,10 +44,10 @@ public class ViewController {
 
     private void fillMarshalling() {
         if (marshalling.isEmpty()) {
-            marshalling.put("admin/" , RoleName.ROLE_ADMIN.name());
-            marshalling.put("helpdesk/" , RoleName.ROLE_HELPDESK.name());
-            marshalling.put("author/" , RoleName.ROLE_AUTHOR.name());
-            marshalling.put("moderator/" , RoleName.ROLE_MODERATOR.name());
+            marshalling.put("admin/" , ModuleRoleName.ROLE_ADMIN());
+            marshalling.put("helpdesk/" , ModuleRoleName.ROLE_HELPDESK());
+            marshalling.put("author/" , ModuleRoleName.ROLE_AUTHOR());
+            marshalling.put("moderator/" , ModuleRoleName.ROLE_MODERATOR());
         }
     }
 
