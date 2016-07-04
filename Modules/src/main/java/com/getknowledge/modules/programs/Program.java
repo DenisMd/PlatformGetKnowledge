@@ -3,6 +3,7 @@ package com.getknowledge.modules.programs;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.attachements.FileAttachment;
+import com.getknowledge.modules.platform.auth.PermissionNames;
 import com.getknowledge.modules.programs.group.GroupPrograms;
 import com.getknowledge.modules.programs.tags.ProgramTag;
 import com.getknowledge.modules.tags.EntityWithTags;
@@ -10,7 +11,6 @@ import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.*;
 import com.getknowledge.platform.modules.permission.Permission;
-import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import com.getknowledge.platform.modules.user.User;
 
 import javax.persistence.*;
@@ -165,9 +165,9 @@ public class Program extends AbstractEntity implements CloneableEntity<Program>,
 
         if (owner != null)
             authorizationList.getUserList().add(owner.getUser());
-        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.CreatePrograms.getName()));
-        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditPrograms.getName()));
-        authorizationList.getPermissionsForRemove().add(new Permission(PermissionNames.EditPrograms.getName()));
+        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.CreatePrograms()));
+        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditPrograms()));
+        authorizationList.getPermissionsForRemove().add(new Permission(PermissionNames.EditPrograms()));
         return authorizationList;
     }
 

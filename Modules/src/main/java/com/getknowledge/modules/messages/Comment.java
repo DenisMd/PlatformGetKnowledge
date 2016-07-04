@@ -1,14 +1,15 @@
 package com.getknowledge.modules.messages;
 
-import com.getknowledge.modules.userInfo.UserInfo;
+import com.getknowledge.modules.platform.auth.PermissionNames;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.modules.permission.Permission;
-import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
-import javax.persistence.*;
-import java.util.Calendar;
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 @ModuleInfo(repositoryName = "CommentRepository" , serviceName = "CommentService")
@@ -31,7 +32,7 @@ public abstract class Comment extends Message {
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
         authorizationList.allowReadEveryOne = true;
-        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.BlockComments));
+        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.BlockComments()));
         return authorizationList;
     }
 

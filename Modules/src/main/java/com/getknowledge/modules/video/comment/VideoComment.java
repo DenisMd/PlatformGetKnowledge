@@ -4,11 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.messages.Comment;
 import com.getknowledge.modules.video.Video;
 import com.getknowledge.platform.annotations.ModuleInfo;
-import com.getknowledge.platform.base.entities.AbstractEntity;
-import com.getknowledge.platform.base.entities.AuthorizationList;
-import com.getknowledge.platform.base.entities.CloneableEntity;
-import com.getknowledge.platform.modules.permission.Permission;
-import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;

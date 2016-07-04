@@ -1,9 +1,8 @@
 package com.getknowledge.modules.section;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.getknowledge.modules.courses.group.GroupCourses;
-import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.menu.item.MenuItem;
+import com.getknowledge.modules.platform.auth.PermissionNames;
 import com.getknowledge.platform.annotations.ModelView;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.annotations.ViewType;
@@ -11,12 +10,8 @@ import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.entities.CloneableEntity;
 import com.getknowledge.platform.modules.permission.Permission;
-import com.getknowledge.platform.modules.permission.PermissionRepository;
-import com.getknowledge.platform.modules.permission.names.PermissionNames;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "section")
@@ -86,7 +81,7 @@ public class Section extends AbstractEntity implements CloneableEntity<Section> 
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
         authorizationList.allowReadEveryOne = true;
-        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditSections.getName()));
+        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditSections()));
         return authorizationList;
     }
 

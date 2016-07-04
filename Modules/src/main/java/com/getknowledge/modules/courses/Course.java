@@ -9,6 +9,7 @@ import com.getknowledge.modules.courses.tutorial.Tutorial;
 import com.getknowledge.modules.courses.version.Version;
 import com.getknowledge.modules.dictionaries.knowledge.Knowledge;
 import com.getknowledge.modules.dictionaries.language.Language;
+import com.getknowledge.modules.platform.auth.PermissionNames;
 import com.getknowledge.modules.shop.item.Item;
 import com.getknowledge.modules.tags.EntityWithTags;
 import com.getknowledge.modules.userInfo.UserInfo;
@@ -16,9 +17,7 @@ import com.getknowledge.modules.video.Video;
 import com.getknowledge.platform.annotations.*;
 import com.getknowledge.platform.base.entities.*;
 import com.getknowledge.platform.modules.permission.Permission;
-import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import com.getknowledge.platform.modules.user.User;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -319,12 +318,12 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
             authorizationList.allowReadEveryOne = true;
 
         authorizationList.allowCreateEveryOne = false;
-        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.CreateCourse));
-        authorizationList.getPermissionsForRemove().add(new Permission(PermissionNames.EditCourse));
+        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.CreateCourse()));
+        authorizationList.getPermissionsForRemove().add(new Permission(PermissionNames.EditCourse()));
 
         //Если курс имеет состояние release даже автор его не может редоктировать
         if (!release)
-            authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditCourse));
+            authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditCourse()));
 
         if (author != null && !release)
             authorizationList.getUserList().add(author.getUser());
