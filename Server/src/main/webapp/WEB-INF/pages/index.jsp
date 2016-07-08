@@ -17,26 +17,29 @@
     <link rel="stylesheet" href="/resources/bower_components/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="/resources/bower_components/angular-material/angular-material.min.css">
     <link rel="stylesheet" href="/resources/bower_components/angular-chart.js/dist/angular-chart.min.css">
-    <link rel="stylesheet" href="/resources/bower_components/ng-img-crop/compile/minified/ng-img-crop.css"
-          type="text/css">
+    <link rel="stylesheet" href="/resources/bower_components/ng-img-crop/compile/minified/ng-img-crop.css" type="text/css">
     <link rel="stylesheet" href="/resources/bower_components/codemirror/lib/codemirror.css" type="text/css">
-    <link rel="stylesheet" href="/resources/node_modules/angular-bootstrap-datetimepicker/src/css/datetimepicker.css"
-          type="text/css">
+    <link rel="stylesheet" href="/resources/node_modules/angular-bootstrap-datetimepicker/src/css/datetimepicker.css" type="text/css">
 
     <%--Наши css--%>
-    <link rel="stylesheet" type="text/css" href="/resources/css/main/index.css">
-    <link rel="stylesheet" type="text/css" href="/resources/css/main/loader-bar.css">
-    <link rel="stylesheet" type="text/css" href="/resources/css/main/menu.css">
-    <link rel="stylesheet" type="text/css" href="/resources/css/main/scroll.css">
-    <link rel="stylesheet" type="text/css" href="/resources/css/main/video.css">
-    <link rel="stylesheet" type="text/css" href="/resources/css/main/graphics.css">
-    <link rel="stylesheet" type="text/css" href="/resources/css/main/editor.css">
-    <link rel="stylesheet" type="text/css" href="/resources/css/comments/simple-comment.css">
+    <%--<link rel="stylesheet" type="text/css" href="/resources/css/main/index.css">--%>
+    <%--<link rel="stylesheet" type="text/css" href="/resources/css/main/loader-bar.css">--%>
+    <%--<link rel="stylesheet" type="text/css" href="/resources/css/main/menu.css">--%>
+    <%--<link rel="stylesheet" type="text/css" href="/resources/css/main/scroll.css">--%>
+    <%--<link rel="stylesheet" type="text/css" href="/resources/css/main/video.css">--%>
+    <%--<link rel="stylesheet" type="text/css" href="/resources/css/main/graphics.css">--%>
+    <%--<link rel="stylesheet" type="text/css" href="/resources/css/main/editor.css">--%>
 
     <%--Inputs--%>
-    <link rel="stylesheet" type="text/css" href="/resources/css/main/inputs/image/select-image.css">
-    <link rel="stylesheet" type="text/css" href="/resources/css/main/inputs/files/select-files.css">
-    <link rel="stylesheet" type="text/css" href="/resources/css/main/inputs/list/list-input.css">
+    <%--<link rel="stylesheet" type="text/css" href="/resources/css/main/inputs/image/select-image.css">--%>
+    <%--<link rel="stylesheet" type="text/css" href="/resources/css/main/inputs/files/select-files.css">--%>
+    <%--<link rel="stylesheet" type="text/css" href="/resources/css/main/inputs/list/list-input.css">--%>
+
+    <%--Dist css for production--%>
+    <link rel="stylesheet" type="text/css" href="/resources/dist/css/main.min.css">
+
+    <%--Simple comments--%>
+    <link rel="stylesheet" type="text/css" href="/resources/css/comments/simple-comment.css">
 
     <%--Beatu--%>
     <link rel="stylesheet" type="text/css" href="/resources/css/beauty/btns/btns.css">
@@ -67,14 +70,16 @@
     <module-template name="dialogs/customFilter"></module-template>
 
 
-<script src="/resources/dist/js/ext/external-libs.min.js" type="text/javascript"></script>
+    <script src="/resources/dist/js/ext/external-libs.min.js" type="text/javascript"></script>
+    <script src="/resources/dist/js/main-application.min.js" type="text/javascript"></script>
 
-<script src="/resources/application/platform.js"></script>
-<script src="/resources/application/getKnowledge.js"></script>
+    <%--For debug--%>
+    <%--<script src="/resources/application/platform.js"></script>--%>
+    <%--<script src="/resources/application/getKnowledge.js"></script>--%>
 
-<c:forEach items="${scripts}" var="src">
-    <script src="<c:out value="${src}"></c:out>"></script>
-</c:forEach>
+    <%--<c:forEach items="${scripts}" var="src">--%>
+        <%--<script src="<c:out value="${src}"></c:out>"></script>--%>
+    <%--</c:forEach>--%>
 
 </body>
 </html>

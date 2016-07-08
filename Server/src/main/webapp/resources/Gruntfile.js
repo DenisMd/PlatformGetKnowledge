@@ -6,24 +6,20 @@ module.exports = function(grunt){
             options : {},
             set1: {
                 files : ['application/**/*.js'],
-                tasks : ['process']
+                tasks : ['link-my-js']
             },
             set2: {
-                files : ['css/**/*.css'],
-                tasks : ['process2']
+                files : ['css/main/**/*.css'],
+                tasks : ['link-my-css']
             }
         },
         concat : {
-            options: {
-                stripBanners: true,
-                banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-                '<%= grunt.template.today("yyyy-mm-dd") %> \n*/'
+            options: {},
+            myJs: {
+                src: ['application/platform.js','application/getKnowledge.js','application/classes/**/*.js','application/controllers/**/*.js','application/services/**/*.js','application/animation/**/*.js','application/module/**/*.js'],
+                dest: 'dist/js/main-application.js'
             },
-            dist1: {
-                src: ['application/platform.js','application/getKnowledge.js','application/classes/**/*.js','application/controllers/**/*.js','application/animation/**/*.js','application/module/**/*.js'],
-                dest: 'dist/js/mainApplication.js'
-            },
-            dist2: {
+            myCss: {
                 src: ['css/main/*.css'],
                 dest: 'dist/css/main.css'
             },
@@ -71,9 +67,9 @@ module.exports = function(grunt){
                 mangle: false,
                 preserveComments: 'all'
             },
-            dist: {
+            myJs: {
                 files:{
-                    'dist/js/main-application.min.js' : ['dist/js/mainApplication.js']
+                    'dist/js/main-application.min.js' : ['dist/js/main-application.js']
                 }
             },
             extLibs: {
@@ -95,7 +91,7 @@ module.exports = function(grunt){
             },
             target: {
                 files: {
-                    'dist/css/main-min.css': ['dist/css/main.css']
+                    'dist/css/main.min.css': ['dist/css/main.css']
                 }
             }
         }
@@ -110,5 +106,9 @@ module.exports = function(grunt){
     grunt.loadNpmTasks("grunt-bower-concat");
 
     //Регестрируем задачу по умолчанию
-    grunt.registerTask("link-all", ["uglify:extLibs","concat:extLibs"]);
+    grunt.registerTask("link-ext", ["uglify:extLibs","concat:extLibs"]);
+    grunt.registerTask("link-my-css",["concat:myCss","cssmin"]);
+    grunt.registerTask("link-my-js",["concat:myJs","uglify:myJs"]);
+    grunt.registerTask("link-my",  ["link-my-css","link-my-js"]);
+    grunt.registerTask("link-all",  ["link-ext","link-my"]);
 };
