@@ -59,9 +59,7 @@
             <div ui-view></div>
         </div>
     </md-content>
-    <%--<footer id="footer-page" class="footer-margin" ng-cloak>--%>
-        <%--© Марков Денис и Ежик 2016--%>
-    <%--</footer>--%>
+
     <%--Модальное окно для показа видео--%>
     <module-template name="dialogs/videoDialog"></module-template>
     <%--Модальное окно для показа списка--%>
