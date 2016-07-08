@@ -9,17 +9,14 @@
     <link href='https://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,cyrillic' rel='stylesheet'
           type='text/css'>
 
-    <%--Customize css--%>
-    <link rel="stylesheet" href="/resources/bower_components/bootstrap/dist/css/bootstrap.css" type="text/css">
-    <link rel="stylesheet"
-          href="/resources/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css"
-          type="text/css"/>
+    <%--External css--%>
+    <link rel="stylesheet" href="/resources/bower_components/bootstrap/dist/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/resources/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css" type="text/css"/>
     <link rel="stylesheet" href="/resources/bower_components/video.js/dist/video-js.min.css" type="text/css"/>
-    <link rel="stylesheet" href="/resources/bower_components/angular-loading-bar/build/loading-bar.css"
-          type="text/css"/>
+    <link rel="stylesheet" href="/resources/bower_components/angular-loading-bar/build/loading-bar.min.css" type="text/css"/>
     <link rel="stylesheet" href="/resources/bower_components/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="/resources/bower_components/angular-material/angular-material.min.css">
-    <link rel="stylesheet" href="/resources/bower_components/angular-chart.js/dist/angular-chart.css">
+    <link rel="stylesheet" href="/resources/bower_components/angular-chart.js/dist/angular-chart.min.css">
     <link rel="stylesheet" href="/resources/bower_components/ng-img-crop/compile/minified/ng-img-crop.css"
           type="text/css">
     <link rel="stylesheet" href="/resources/bower_components/codemirror/lib/codemirror.css" type="text/css">
