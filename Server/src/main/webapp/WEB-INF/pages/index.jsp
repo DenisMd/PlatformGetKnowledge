@@ -69,7 +69,6 @@
     <!--Модальное окно для показа пользовательских фильтров-->
     <module-template name="dialogs/customFilter"></module-template>
 
-
     <script src="/resources/dist/js/ext/external-libs.min.js" type="text/javascript"></script>
     <script src="/resources/dist/js/main-application.min.js" type="text/javascript"></script>
 
