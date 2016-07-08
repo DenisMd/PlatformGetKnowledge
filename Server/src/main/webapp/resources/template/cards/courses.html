@@ -33,6 +33,11 @@
                         <md-option ng-value="lang" ng-repeat="lang in langs">{{ translate(lang)}}</md-option>
                     </md-select>
                 </md-input-container>
+                <div flex-gt-sm>
+                    <md-checkbox ng-model="newCourse.base" aria-label="Base checkbox">
+                        {{translate("courses_is_base")}} : {{ newCourse.base }}
+                    </md-checkbox>
+                </div>
             </div>
             <div layout="row" flex>
                 <md-input-container class="md-block" flex>
