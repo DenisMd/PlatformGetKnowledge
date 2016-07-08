@@ -73,7 +73,6 @@
     <script src="/resources/dist/js/ext/external-libs.min.js" type="text/javascript"></script>
     <script src="/resources/dist/js/main-application.min.js" type="text/javascript"></script>
 
-    <%--For debug--%>
     <%--<script src="/resources/application/platform.js"></script>--%>
     <%--<script src="/resources/application/getKnowledge.js"></script>--%>
 
