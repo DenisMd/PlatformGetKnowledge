@@ -24,7 +24,6 @@
           type="text/css">
 
     <%--Наши css--%>
-    <%--<link rel="stylesheet" type="text/css" , href="/resources/dist/css/main-min.css">--%>
     <link rel="stylesheet" type="text/css" href="/resources/css/main/index.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/main/loader-bar.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/main/menu.css">
@@ -43,6 +42,7 @@
     <link rel="stylesheet" type="text/css" href="/resources/css/beauty/btns/btns.css">
 
     <link rel="shortcut icon" type="image/x-icon" href="/resources/image/favicon.ico"/>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
