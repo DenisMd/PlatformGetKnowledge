@@ -72,14 +72,3 @@
 .update-btn-container {
     margin-bottom: 20px;
 }
-
-.update-book-btn {
-    color: #6EBCD6;
-    border-color: #21A8CB;
-}
-
-.update-book-btn:hover{
-    color: #4A859D;
-    border-color: #217CCB;
-    background: white;
-}

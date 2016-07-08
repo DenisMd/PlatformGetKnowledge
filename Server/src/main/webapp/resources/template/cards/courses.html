@@ -50,7 +50,7 @@
                 <md-chips ng-model="newCourse.tags" readonly="false" flex></md-chips>
             </div>
             <div layout="row" class="create-div" layout-align="center">
-                <button flex="20" class="btn btn-default create-course-btn" ng-click="createCourse(newCourse)">{{translate("course_create")}}</button>
+                <button flex="20" class="btn btn-default blue-btn" ng-click="createCourse(newCourse)">{{translate("course_create")}}</button>
             </div>
         </div>
     </md-content>
@@ -69,7 +69,7 @@
                     class="{{currentFilterByDate ? 'active' : ''}}" ng-click="by_date()">{{translate("by_date")}}</span>
             </div>
             <div ng-show="coursesInfo.creatable" flex-gt-sm="none" class="text-center" layout-margin-gt-sm>
-                <button class="btn btn-default create-course-btn" ng-click="showCreateArea = !showCreateArea">{{translate("create")}}</button>
+                <button class="btn btn-default blue-btn" ng-click="showCreateArea = !showCreateArea">{{translate("create")}}</button>
             </div>
         </div>
         <div layout-wrap layout="row">

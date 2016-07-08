@@ -1,133 +1,25 @@
 XML запрос:
-<xml-fragment>
-    <tpt:Header xmlns:tpt="http://schemas.tranzaxis.com/tptpRequest.xsd">
-        <tpt:DeviceType>9.</tpt:DeviceType>
-        <tpt:TransmissionNumber>13</tpt:TransmissionNumber>
-        <tpt:TerminalId>K0180032</tpt:TerminalId>
-        <tpt:EmployeeId/>
-        <tpt:DateTime>2016-06-14T17:20:56+03:00</tpt:DateTime>
-        <tpt:MessageType>A</tpt:MessageType>
-        <tpt:MessageSubType>O</tpt:MessageSubType>
-        <tpt:TransactionCode>60</tpt:TransactionCode>
-        <tpt:ProcessingFlag1>0</tpt:ProcessingFlag1>
-        <tpt:ProcessingFlag2>0</tpt:ProcessingFlag2>
-        <tpt:ProcessingFlag3>0</tpt:ProcessingFlag3>
-        <tpt:ResponseCode>0</tpt:ResponseCode>
-    </tpt:Header>
-    <tpt:Body xmlns:tpt="http://schemas.tranzaxis.com/tptpRequest.xsd">
-        <tpt:TotalsBatch>
-            <tpt:ShiftNumber>1</tpt:ShiftNumber>
-            <tpt:BatchNumber>1</tpt:BatchNumber>
-            <tpt:DebTranCnt>78</tpt:DebTranCnt>
-            <tpt:DebTranAmount>29121000</tpt:DebTranAmount>
-            <tpt:CrdTranCnt>0</tpt:CrdTranCnt>
-            <tpt:CrdTranAmount>0</tpt:CrdTranAmount>
-            <tpt:AdjustTranCnt>0</tpt:AdjustTranCnt>
-            <tpt:AdjustTranAmount>0</tpt:AdjustTranAmount>
-        </tpt:TotalsBatch>
-        <tpt:SeqNumber>
-            <tpt:ShiftNumber>1</tpt:ShiftNumber>
-            <tpt:BatchNumber>1</tpt:BatchNumber>
-            <tpt:TranNumber>155</tpt:TranNumber>
-            <tpt:ResetFlag>1</tpt:ResetFlag>
-        </tpt:SeqNumber>
-    </tpt:Body>
+<xml-fragment tit:Bitmap="2020010000C00012" xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">
+    <tit:H1>96</tit:H1>
+    <tit:H2>272</tit:H2>
+    <tit:H3>33219</tit:H3>
+    <tit:H4>500</tit:H4>
+    <tit:F3>
+        <tit:SF1>96</tit:SF1>
+        <tit:SF2>0</tit:SF2>
+        <tit:SF3>0</tit:SF3>
+    </tit:F3>
+    <tit:F11>150</tit:F11>
+    <tit:F24>110</tit:F24>
+    <tit:F41>01158251</tit:F41>
+    <tit:F42>8251001</tit:F42>
+    <tit:F60>000007</tit:F60>
+    <tit:F63>
+        001
+        000000000111
+        000
+        000000000000
+        000
+        000000000000
+        000000000000000000000000000000000000000000000</tit:F63>
 </xml-fragment>
-
-
-<xml-fragment>
-<tpt:Header xmlns:tpt="http://schemas.tranzaxis.com/tptpResponse.xsd">
-    <tpt:DeviceType>9.</tpt:DeviceType>
-    <tpt:TransmissionNumber>13</tpt:TransmissionNumber>
-    <tpt:TerminalId>K0180032</tpt:TerminalId>
-    <tpt:EmployeeId/>
-    <tpt:DateTime>2016-06-14T17:20:56.000</tpt:DateTime>
-    <tpt:MessageType>A</tpt:MessageType>
-    <tpt:MessageSubType>O</tpt:MessageSubType>
-    <tpt:TransactionCode>60</tpt:TransactionCode>
-    <tpt:ProcessingFlag1>0</tpt:ProcessingFlag1>
-    <tpt:ProcessingFlag2>1</tpt:ProcessingFlag2>
-    <tpt:ProcessingFlag3>0</tpt:ProcessingFlag3>
-    <tpt:ResponseCode>7</tpt:ResponseCode>
-</tpt:Header>
-<tpt:Body xmlns:tpt="http://schemas.tranzaxis.com/tptpResponse.xsd">
-    <tpt:TotalsBatch>
-        <tpt:ShiftNumber>1</tpt:ShiftNumber>
-        <tpt:BatchNumber>2</tpt:BatchNumber>
-        <tpt:DebTranCnt>75</tpt:DebTranCnt>
-        <tpt:DebTranAmount>29121000</tpt:DebTranAmount>
-        <tpt:CrdTranCnt>0</tpt:CrdTranCnt>
-        <tpt:CrdTranAmount>0</tpt:CrdTranAmount>
-        <tpt:AdjustTranCnt>0</tpt:AdjustTranCnt>
-        <tpt:AdjustTranAmount>0</tpt:AdjustTranAmount>
-    </tpt:TotalsBatch>
-</tpt:Body>
-</xml-fragment>
-
-
-        XML запрос: <xml-fragment>
-<tpt:Header xmlns:tpt="http://schemas.tranzaxis.com/tptpRequest.xsd">
-    <tpt:DeviceType>9.</tpt:DeviceType>
-    <tpt:TransmissionNumber>14</tpt:TransmissionNumber>
-    <tpt:TerminalId>K0180032</tpt:TerminalId>
-    <tpt:EmployeeId/>
-    <tpt:DateTime>2016-06-14T17:20:58+03:00</tpt:DateTime>
-    <tpt:MessageType>A</tpt:MessageType>
-    <tpt:MessageSubType>O</tpt:MessageSubType>
-    <tpt:TransactionCode>61</tpt:TransactionCode>
-    <tpt:ProcessingFlag1>0</tpt:ProcessingFlag1>
-    <tpt:ProcessingFlag2>0</tpt:ProcessingFlag2>
-    <tpt:ProcessingFlag3>0</tpt:ProcessingFlag3>
-    <tpt:ResponseCode>0</tpt:ResponseCode>
-</tpt:Header>
-<tpt:Body xmlns:tpt="http://schemas.tranzaxis.com/tptpRequest.xsd">
-    <tpt:TotalsShift>
-        <tpt:ShiftCnt>1</tpt:ShiftCnt>
-        <tpt:BatchCntInShift>1</tpt:BatchCntInShift>
-        <tpt:DebTranCnt>78</tpt:DebTranCnt>
-        <tpt:DebTranAmount>29121000</tpt:DebTranAmount>
-        <tpt:CrdTranCnt>0</tpt:CrdTranCnt>
-        <tpt:CrdTranAmount>0</tpt:CrdTranAmount>
-        <tpt:AdjustTranCnt>0</tpt:AdjustTranCnt>
-        <tpt:AdjustTranAmount>0</tpt:AdjustTranAmount>
-    </tpt:TotalsShift>
-    <tpt:SeqNumber>
-        <tpt:ShiftNumber>1</tpt:ShiftNumber>
-        <tpt:BatchNumber>1</tpt:BatchNumber>
-        <tpt:TranNumber>155</tpt:TranNumber>
-        <tpt:ResetFlag>1</tpt:ResetFlag>
-    </tpt:SeqNumber>
-</tpt:Body>
-</xml-fragment>
-
-
-        XML ответ: <xml-fragment>
-<tpt:Header xmlns:tpt="http://schemas.tranzaxis.com/tptpResponse.xsd">
-    <tpt:DeviceType>9.</tpt:DeviceType>
-    <tpt:TransmissionNumber>14</tpt:TransmissionNumber>
-    <tpt:TerminalId>K0180032</tpt:TerminalId>
-    <tpt:EmployeeId/>
-    <tpt:DateTime>2016-06-14T17:20:58.000</tpt:DateTime>
-    <tpt:MessageType>A</tpt:MessageType>
-    <tpt:MessageSubType>O</tpt:MessageSubType>
-    <tpt:TransactionCode>61</tpt:TransactionCode>
-    <tpt:ProcessingFlag1>0</tpt:ProcessingFlag1>
-    <tpt:ProcessingFlag2>1</tpt:ProcessingFlag2>
-    <tpt:ProcessingFlag3>0</tpt:ProcessingFlag3>
-    <tpt:ResponseCode>7</tpt:ResponseCode>
-</tpt:Header>
-<tpt:Body xmlns:tpt="http://schemas.tranzaxis.com/tptpResponse.xsd">
-    <tpt:TotalsShift>
-        <tpt:ShiftCnt>2</tpt:ShiftCnt>
-        <tpt:BatchCntInShift>1</tpt:BatchCntInShift>
-        <tpt:DebTranCnt>75</tpt:DebTranCnt>
-        <tpt:DebTranAmount>29121000</tpt:DebTranAmount>
-        <tpt:CrdTranCnt>0</tpt:CrdTranCnt>
-        <tpt:CrdTranAmount>0</tpt:CrdTranAmount>
-        <tpt:AdjustTranCnt>0</tpt:AdjustTranCnt>
-        <tpt:AdjustTranAmount>0</tpt:AdjustTranAmount>
-    </tpt:TotalsShift>
-</tpt:Body>
-</xml-fragment>
-
-
