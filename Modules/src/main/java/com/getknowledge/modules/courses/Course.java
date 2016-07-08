@@ -41,6 +41,7 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
     private Language language;
 
     @ManyToOne(optional = false)
+    @ModelView(type = ViewType.CompactPublic)
     private UserInfo author;
 
     @ManyToMany(mappedBy = "courses", cascade = {CascadeType.PERSIST})
@@ -62,7 +63,6 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
     private Boolean release = false;
 
     @OneToOne
-    @com.getknowledge.platform.annotations.Access(myself = true)
     @JsonIgnore
     private Course baseCourse;
 
@@ -313,10 +313,7 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
     @Override
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
-
-        if (base)
-            authorizationList.allowReadEveryOne = true;
-
+        authorizationList.allowReadEveryOne = true;
         authorizationList.allowCreateEveryOne = false;
         authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.CreateCourse()));
         authorizationList.getPermissionsForRemove().add(new Permission(PermissionNames.EditCourse()));

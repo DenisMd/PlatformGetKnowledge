@@ -1,0 +1,36 @@
+/*-------------------*/
+.create-course-btn {
+    color: #6EBCD6;
+    border-color: #21A8CB;
+}
+
+.create-course-btn:hover{
+    color: #4A859D;
+    border-color: #217CCB;
+    background: white;
+}
+
+.course-tags {
+    margin-bottom: 20px;
+}
+
+.create-div {
+    margin-bottom: 20px;
+}
+
+.group-info {
+    margin-bottom: 60px;
+}
+
+.course-image {
+    width: 112px;
+    height: 112px;
+}
+
+.course-description {
+    word-break: break-all;
+}
+
+.image-padding {
+    padding: 10px;
+}

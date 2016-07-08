@@ -8,9 +8,9 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
 
     $scope.filter = applicationService.createFilter($scope.getData().className,0,10);
     $scope.filter.createFiltersInfo();
-    $scope.filter.equals("groupCourses.url","text",$scope.getData().groupProgram);
+    $scope.filter.equals("groupCourses.url","text",$scope.getData().groupCourse);
     $scope.filter.equals("groupCourses.section.name","text",$scope.getData().sectionName);
-    $scope.programs = [];
+    $scope.courses = [];
 
     $scope.by_date = function() {
         $scope.currentFilterByDate = true;
@@ -18,7 +18,7 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
         $scope.filter.setOrder("createDate" , false);
 
         $scope.filter.result.first = 0;
-        $scope.programs = [];
+        $scope.courses = [];
 
         doAction();
     };
@@ -29,19 +29,19 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
         $scope.filter.setOrder("name" , false);
 
         $scope.filter.result.first = 0;
-        $scope.programs = [];
+        $scope.courses = [];
 
         doAction();
     };
 
     var likeIndex;
     var equalIndex;
-    $scope.searchPrograms = function(text,language) {
+    $scope.searchCourse = function(text,language) {
         if (likeIndex != undefined) {
             $scope.filter.result.customFilters.splice(likeIndex,1);
         }
         if (text) {
-            likeIndex  = $scope.filter.addCustomFilter("searchPrograms",{
+            likeIndex  = $scope.filter.addCustomFilter("searchCourses",{
                 textValue : text
             });
         }
@@ -64,22 +64,22 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
         doAction();
     };
 
-    var addProgram = function(program){
-        if(program) {
-            program.imageSrc = applicationService.imageHref($scope.getData().className, program.id);
-            program.href = $scope.addUrlToPath("/program/" + program.id);
-            if (program.name.length > maxCharactersInName) {
-                program.name = program.name.substr(0, maxCharactersInName) + "...";
+    var addCourse = function(course){
+        if(course) {
+            course.imageSrc = applicationService.imageHref($scope.getData().className, course.id);
+            course.href = $scope.addUrlToPath("/course/" + course.id);
+            if (course.name.length > maxCharactersInName) {
+                course.name = course.name.substr(0, maxCharactersInName) + "...";
             }
-            if (program.description.length > maxCharacterDescription) {
-                program.description = program.description.substr(0,maxCharacterDescription) + "...";
+            if (course.description.length > maxCharacterDescription) {
+                course.description = course.description.substr(0,maxCharacterDescription) + "...";
             }
-            $scope.programs.push(program);
+            $scope.courses.push(course);
         }
     };
 
     var doAction = function(){
-        applicationService.filterRequest($scope,"programsInfo", $scope.filter,addProgram);
+        applicationService.filterRequest($scope,"coursesInfo", $scope.filter,addCourse);
     };
 
     $scope.loadMore = function () {
@@ -89,24 +89,24 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
 
     $scope.langs = $languages.languages;
 
-    $scope.createProgram = function(newProgram) {
-        newProgram.groupProgramUrl = $scope.getData().groupProgram;
-        newProgram.language = newProgram.language.capitalizeFirstLetter();
-        applicationService.action($scope,"",className.program,"createProgram",newProgram,function(result){
+    $scope.createCourse = function(newCourse) {
+        newCourse.groupCourseId = $scope.getData().groupCourse;
+        newCourse.language = newCourse.language.capitalizeFirstLetter();
+        applicationService.action($scope,"",className.course,"createCourse",newCourse,function(result){
             $scope.showToast($scope.getResultMessage(result));
             if (result.status == "Complete") {
-                $scope.goTo("program/" + result.object);
+                $scope.goTo("course/" + result.object);
             }
         });
     };
 
     //Проверка на существование выбранной группы книг
-    var groupProgramFilter = applicationService.createFilter(className.groupPrograms,0,10);
-    groupProgramFilter.createFiltersInfo();
-    groupProgramFilter.equals("url","text",$scope.getData().groupProgram);
-    groupProgramFilter.equals("section.name","text",$scope.getData().sectionName);
-    applicationService.filterRequest($scope,"groupProgramInfo", groupProgramFilter,function(groupProgram){
-        if (groupProgram == null) {
+    var groupCourseFilter = applicationService.createFilter(className.groupCourses,0,10);
+    groupCourseFilter.createFiltersInfo();
+    groupCourseFilter.equals("url","text",$scope.getData().groupCourse);
+    groupCourseFilter.equals("section.name","text",$scope.getData().sectionName);
+    applicationService.filterRequest($scope,"groupCourseInfo", groupCourseFilter,function(groupCourse){
+        if (groupCourse == null) {
             $state.go("404");
         }
 
