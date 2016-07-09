@@ -13,7 +13,8 @@ model.controller("groupCoursesCtrl", function ($scope,applicationService,classNa
     } else {
         $scope.coursesData = {
             sectionName : sectionName,
-            groupName : $scope.groupCourses
+            groupCourse : $scope.groupCourses,
+            className: className.course
         };
     }
 

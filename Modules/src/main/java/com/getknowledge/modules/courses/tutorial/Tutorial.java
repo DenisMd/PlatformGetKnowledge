@@ -153,9 +153,15 @@ public class Tutorial  extends AbstractEntity implements CloneableEntity<Tutoria
 
     @Override
     public AuthorizationList getAuthorizationList() {
+        AuthorizationList authorizationList = null;
         if (course != null)
-            return course.getAuthorizationList();
-        return null;
+            authorizationList = course.getAuthorizationList();
+        if (authorizationList != null) {
+            if (!course.isBase()) {
+                authorizationList.allowReadEveryOne = false;
+            }
+        }
+        return authorizationList;
     }
 
     @Override

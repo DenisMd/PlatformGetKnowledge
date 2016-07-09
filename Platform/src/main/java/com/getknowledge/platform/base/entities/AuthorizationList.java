@@ -1,9 +1,8 @@
 package com.getknowledge.platform.base.entities;
 
 
-import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.modules.permission.Permission;
-import com.getknowledge.platform.modules.role.names.RoleName;
+import com.getknowledge.platform.modules.role.names.BaseRoleName;
 import com.getknowledge.platform.modules.user.User;
 
 import java.util.ArrayList;
@@ -66,7 +65,7 @@ public class AuthorizationList {
     public boolean isAccessRead (User currentUser) {
         if (currentUser == null) return false;
 
-        if (currentUser.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+        if (currentUser.getRole().getRoleName().equals(BaseRoleName.ROLE_ADMIN())) {
             return true;
         }
 
@@ -76,7 +75,7 @@ public class AuthorizationList {
     public boolean isAccessCreate (User currentUser) {
         if (currentUser == null) return false;
 
-        if (currentUser.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+        if (currentUser.getRole().getRoleName().equals(BaseRoleName.ROLE_ADMIN())) {
             return true;
         }
 
@@ -86,7 +85,7 @@ public class AuthorizationList {
     public boolean isAccessEdit (User currentUser) {
         if (currentUser == null) return false;
 
-        if (currentUser.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+        if (currentUser.getRole().getRoleName().equals(BaseRoleName.ROLE_ADMIN())) {
             return true;
         }
 
@@ -96,7 +95,7 @@ public class AuthorizationList {
     public boolean isAccessRemove (User currentUser) {
         if (currentUser == null) return false;
 
-        if (currentUser.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+        if (currentUser.getRole().getRoleName().equals(BaseRoleName.ROLE_ADMIN())) {
             return true;
         }
 

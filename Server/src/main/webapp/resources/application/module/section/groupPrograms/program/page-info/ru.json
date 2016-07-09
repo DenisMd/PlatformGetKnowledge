@@ -1,4 +1,14 @@
 {
   "text" : {
+    "program_change" : "Изменить информацию о программе",
+    "program_uploader"  : "Программу загрузил:",
+    "program_create_date" : "Дата загрузки",
+    "program_links" : "Ссылки на загрузку программы:",
+    "program_add_url"   : "Добавить ссылку на загрузку",
+    "program_info" : "Информация о программе",
+    "program_cover" : "Обложка программы",
+    "program_data"  : "Загрузить программу на сервер",
+    "program_delete" : "Удалить программу",
+    "program_delete_dialog_title" : "Удалить : "
   }
 }

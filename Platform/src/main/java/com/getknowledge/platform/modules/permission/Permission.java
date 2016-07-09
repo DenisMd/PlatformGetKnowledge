@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
-import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.user.User;
 
@@ -52,10 +51,6 @@ public class Permission extends AbstractEntity{
 
     public Permission() {
         permissionName = "";
-    }
-
-    public Permission(PermissionNames permissionNames) {
-        this.permissionName = permissionNames.getName();
     }
 
     public Permission(String permissionName) {

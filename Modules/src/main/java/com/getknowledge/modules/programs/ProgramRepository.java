@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -77,6 +78,7 @@ public class ProgramRepository extends BaseRepository<Program> {
         program.setGroupPrograms(groupPrograms);
         program.setName(name);
         program.setOwner(owner);
+        program.setCreateDate(Calendar.getInstance());
         program.setDescription(description);
         program.setLanguage(language);
         if (links != null)

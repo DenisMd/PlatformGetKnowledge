@@ -5,6 +5,7 @@ import com.getknowledge.modules.books.group.GroupBooks;
 import com.getknowledge.modules.books.tags.BooksTag;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.attachements.FileAttachment;
+import com.getknowledge.modules.platform.auth.PermissionNames;
 import com.getknowledge.modules.tags.EntityWithTags;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.annotations.ModelView;
@@ -12,7 +13,6 @@ import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.annotations.ViewType;
 import com.getknowledge.platform.base.entities.*;
 import com.getknowledge.platform.modules.permission.Permission;
-import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import com.getknowledge.platform.modules.user.User;
 
 import javax.persistence.*;
@@ -178,9 +178,9 @@ public class Book extends AbstractEntity implements CloneableEntity<Book>,IUser,
 
         if (owner != null)
             authorizationList.getUserList().add(owner.getUser());
-        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.CreateBooks.getName()));
-        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditBooks.getName()));
-        authorizationList.getPermissionsForRemove().add(new Permission(PermissionNames.EditBooks.getName()));
+        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.CreateBooks()));
+        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditBooks()));
+        authorizationList.getPermissionsForRemove().add(new Permission(PermissionNames.EditBooks()));
         return authorizationList;
     }
 

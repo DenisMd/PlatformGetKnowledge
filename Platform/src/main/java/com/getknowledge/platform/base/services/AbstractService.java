@@ -2,9 +2,7 @@ package com.getknowledge.platform.base.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.getknowledge.platform.base.entities.AbstractEntity;
-import com.getknowledge.platform.exceptions.NotAuthorized;
-import com.getknowledge.platform.modules.role.names.RoleName;
-import com.getknowledge.platform.modules.trace.TraceService;
+import com.getknowledge.platform.modules.role.names.BaseRoleName;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +28,7 @@ public abstract class AbstractService {
 
         User currentUser = userRepository.getSingleEntityByFieldAndValue("login" , principalName);
 
-        if (currentUser.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+        if (currentUser.getRole().getRoleName().equals(BaseRoleName.ROLE_ADMIN())) {
             return true;
         }
 
@@ -46,7 +44,7 @@ public abstract class AbstractService {
 
         User currentUser = userRepository.getSingleEntityByFieldAndValue("login" , principalName);
 
-        if (currentUser.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+        if (currentUser.getRole().getRoleName().equals(BaseRoleName.ROLE_ADMIN())) {
             return true;
         }
 
@@ -62,7 +60,7 @@ public abstract class AbstractService {
 
         User currentUser = userRepository.getSingleEntityByFieldAndValue("login" , principalName);
 
-        if (currentUser.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+        if (currentUser.getRole().getRoleName().equals(BaseRoleName.ROLE_ADMIN())) {
             return true;
         }
 
@@ -78,7 +76,7 @@ public abstract class AbstractService {
 
         User currentUser = userRepository.getSingleEntityByFieldAndValue("login" , principalName);
 
-        if (currentUser.getRole().getRoleName().equals(RoleName.ROLE_ADMIN.name())) {
+        if (currentUser.getRole().getRoleName().equals(BaseRoleName.ROLE_ADMIN())) {
             return true;
         }
 

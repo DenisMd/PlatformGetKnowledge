@@ -1,10 +1,10 @@
 package com.getknowledge.modules.news;
 
+import com.getknowledge.modules.platform.auth.PermissionNames;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.modules.permission.Permission;
-import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
 import javax.persistence.*;
 import java.util.Calendar;
@@ -48,17 +48,13 @@ public class News extends AbstractEntity {
         this.postDate = postDate;
     }
 
-
-
-
-
     @Override
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
         authorizationList.allowReadEveryOne = true;
-        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.EditNews));
-        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditNews));
-        authorizationList.getPermissionsForRemove().add(new Permission(PermissionNames.EditNews));
+        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.EditNews()));
+        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditNews()));
+        authorizationList.getPermissionsForRemove().add(new Permission(PermissionNames.EditNews()));
 
         return authorizationList;
     }

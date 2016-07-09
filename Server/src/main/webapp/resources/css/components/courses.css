@@ -1,4 +1,4 @@
-.program-tags {
+.course-tags {
     margin-bottom: 20px;
 }
 
@@ -10,12 +10,12 @@
     margin-bottom: 60px;
 }
 
-.program-image {
+.course-image {
     width: 112px;
     height: 112px;
 }
 
-.program-description {
+.course-description {
     word-break: break-all;
 }
 

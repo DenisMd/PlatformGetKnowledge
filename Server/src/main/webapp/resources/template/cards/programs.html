@@ -45,7 +45,7 @@
                 <md-chips ng-model="newProgram.tags" readonly="false" flex></md-chips>
             </div>
             <div layout="row" class="create-div" layout-align="center">
-                <button flex="20" class="btn btn-default create-program-btn" ng-click="createProgram(newProgram)">{{translate("program_create")}}</button>
+                <button flex="20" class="btn btn-default blue-btn" ng-click="createProgram(newProgram)">{{translate("program_create")}}</button>
             </div>
         </div>
     </md-content>
@@ -64,18 +64,18 @@
                     class="{{currentFilterByDate ? 'active' : ''}}" ng-click="by_date()">{{translate("by_date")}}</span>
             </div>
             <div ng-show="programsInfo.creatable" flex-gt-sm="none" class="text-center" layout-margin-gt-sm>
-                <button class="btn btn-default create-program-btn" ng-click="showCreateArea = !showCreateArea">{{translate("create")}}</button>
+                <button class="btn btn-default blue-btn" ng-click="showCreateArea = !showCreateArea">{{translate("create")}}</button>
             </div>
         </div>
         <div layout-wrap layout="row">
-            <div flex-sm flex-gt-sm="50" ng-repeat="program in programs" class="text-center book-wrap">
+            <div flex-sm flex-gt-sm="50" ng-repeat="program in programs" class="text-center">
                 <md-card>
                     <md-card-title>
                         <md-card-title-text>
                             <span class="md-headline">{{program.name}}</span>
                             <span class="md-subhead program-description">{{program.description}}</span>
                         </md-card-title-text>
-                        <md-card-title-media>
+                        <md-card-title-media class="image-padding">
                             <a ng-href="{{program.href}}">
                                 <img class="md-media-md" ng-src="{{program.imageSrc}}"/>
                             </a>

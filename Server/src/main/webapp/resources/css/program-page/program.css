@@ -1,57 +1,57 @@
-.book-cover {
-    width: 252px;
-    height: 378px;
+.program-cover {
+    width: 224px;
+    height: 224px;
 }
 
-.book-title {
+.program-title {
     margin: 0 25px;
 }
 
-.book-title h1 {
+.program-title h1 {
     margin: 0;
 }
 
-.book-change-row {
+.program-change-row {
     margin: 15px 0;
 }
 
-.book-author-title {
+.program-author-title {
     font-size: 18px;
 }
 
-.book-author-name, .book-author-name:hover, .book-author-name:visited {
+.program-author-name, .program-author-name:hover, .program-author-name:visited {
     color : black;
 }
 
-.book-date {
+.program-date {
     color: #1B3FC5;
 }
 
-.book-links {
+.program-links {
     margin : 15px 0;
     padding: 20px;
     border : 1px dashed black;
 }
 
-.book-links-title {
+.program-links-title {
     font-size: 25px;
     font-style: italic;
     color : #32ae23;
 }
 
-.book-tags {
+.program-tags {
     margin: 20px 0;
 }
 
-.book-link {
+.program-link {
     word-break: break-all;
 }
 
-.book-link-margin {
+.program-link-margin {
     margin: 10px 0;
 }
 
-.book-description {
+.program-description {
     resize: vertical;
 }
 
@@ -59,13 +59,13 @@
     color : #cd4142 !important;
 }
 
-.book-add-url {
+.program-add-url {
     margin: 10px 0;
     color : #0E76B7;
     font-size: 18px;
 }
 
-.book-add-url:hover{
+.program-add-url:hover{
     text-decoration: underline;
 }
 

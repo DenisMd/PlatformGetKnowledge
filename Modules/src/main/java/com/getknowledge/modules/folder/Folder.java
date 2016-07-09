@@ -1,6 +1,7 @@
 package com.getknowledge.modules.folder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.modules.platform.auth.PermissionNames;
 import com.getknowledge.modules.section.Section;
 import com.getknowledge.platform.annotations.ModelView;
 import com.getknowledge.platform.annotations.ModuleInfo;
@@ -9,7 +10,6 @@ import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.entities.CloneableEntity;
 import com.getknowledge.platform.modules.permission.Permission;
-import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
 import javax.persistence.*;
 import java.util.Calendar;
@@ -111,9 +111,9 @@ public abstract class Folder extends AbstractEntity implements CloneableEntity<F
         AuthorizationList al = new AuthorizationList();
         al.allowCreateEveryOne = false;
         al.allowReadEveryOne = true;
-        al.getPermissionsForCreate().add(new Permission(PermissionNames.EditFolders.getName()));
-        al.getPermissionsForEdit().add(new Permission(PermissionNames.EditFolders.getName()));
-        al.getPermissionsForRemove().add(new Permission(PermissionNames.EditFolders.getName()));
+        al.getPermissionsForCreate().add(new Permission(PermissionNames.EditFolders()));
+        al.getPermissionsForEdit().add(new Permission(PermissionNames.EditFolders()));
+        al.getPermissionsForRemove().add(new Permission(PermissionNames.EditFolders()));
         return al;
     }
 

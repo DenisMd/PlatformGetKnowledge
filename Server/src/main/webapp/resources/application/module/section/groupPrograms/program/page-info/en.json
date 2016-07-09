@@ -1,5 +1,14 @@
 {
   "text" : {
-
+    "program_change" : "Change program information",
+    "program_uploader"  : "Program uploader:",
+    "program_create_date" : "Create date",
+    "program_links" : "Program download links : ",
+    "program_add_url"   : "Add url for upload",
+    "program_info" : "Program information",
+    "program_cover" : "Program cover",
+    "program_data"  : "Program data",
+    "program_delete" : "Delete program",
+    "program_delete_dialog_title" : "Delete : "
   }
 }

@@ -1,11 +1,11 @@
 package com.getknowledge.modules.video;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.modules.platform.auth.PermissionNames;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.modules.permission.Permission;
-import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
 import javax.persistence.*;
 import java.util.Calendar;
@@ -82,7 +82,7 @@ public class Video extends AbstractEntity{
         if (allowEveryOne) {
             authorizationList.allowReadEveryOne = true;
         }
-        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.UploadVideos));
+        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.UploadVideos()));
         authorizationList.allowUseAuthorizedService = true;
         return authorizationList;
     }

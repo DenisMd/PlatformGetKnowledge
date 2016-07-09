@@ -30,20 +30,16 @@ import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.BootstrapService;
 import com.getknowledge.platform.base.services.ImageService;
-import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
 import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.role.RoleRepository;
-import com.getknowledge.platform.modules.role.names.RoleName;
-import com.getknowledge.platform.modules.task.Task;
+import com.getknowledge.platform.modules.role.names.BaseRoleName;
 import com.getknowledge.platform.modules.task.TaskRepository;
-import com.getknowledge.platform.modules.task.enumerations.TaskStatus;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
-import com.getknowledge.platform.utils.ModuleLocator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,9 +47,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.Principal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service("UserInfoService")
@@ -124,7 +117,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
                 firstName = (String) map.get("firstName");
             }
 
-            Role role = roleRepository.getRole(RoleName.ROLE_ADMIN);
+            Role role = roleRepository.getRoleByName(BaseRoleName.ROLE_ADMIN());
 
             User user = userRepository.createUser(login,password,role,true);
 
@@ -190,7 +183,7 @@ public class UserInfoService extends AbstractService implements BootstrapService
         }
 
 
-        User user = userRepository.createUser(login,password,roleRepository.getRole(RoleName.ROLE_USER),false);
+        User user = userRepository.createUser(login,password,roleRepository.getRoleByName(BaseRoleName.ROLE_USER()),false);
         byte [] profileImage = null;
 
         InputStream is = null;

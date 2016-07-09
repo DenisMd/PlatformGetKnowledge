@@ -44,7 +44,7 @@
                         <md-chips ng-model="book.tagsName" flex></md-chips>
                     </div>
                     <div layout="row" class="update-btn-container" layout-align="center" flex>
-                        <button flex="none" class="btn btn-default update-book-btn" ng-click="updateBook(book)">{{translate("update")}}</button>
+                        <button flex="none" class="btn btn-default blue-btn" ng-click="updateBook(book)">{{translate("update")}}</button>
                     </div>
                 </md-content>
             </md-tab>
@@ -82,7 +82,7 @@
 
 
 <div layout="row" class="book-change-row" layout-align-gt-sm="start start" layout-align="center center">
-    <button class="btn btn-default update-book-btn" ng-click="showEditableContent = !showEditableContent" ng-show="book.editable" flex="none">
+    <button class="btn btn-default blue-btn" ng-click="showEditableContent = !showEditableContent" ng-show="book.editable" flex="none">
         {{translate("book_change")}}
     </button>
 </div>

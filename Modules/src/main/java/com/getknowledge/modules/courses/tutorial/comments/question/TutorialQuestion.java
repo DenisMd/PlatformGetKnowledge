@@ -3,14 +3,9 @@ package com.getknowledge.modules.courses.tutorial.comments.question;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.courses.tutorial.Tutorial;
 import com.getknowledge.modules.messages.Comment;
-import com.getknowledge.modules.messages.Message;
 import com.getknowledge.modules.messages.attachments.AttachmentImage;
-import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.platform.annotations.ModuleInfo;
-import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
-import com.getknowledge.platform.modules.permission.Permission;
-import com.getknowledge.platform.modules.permission.names.PermissionNames;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -21,14 +16,14 @@ import java.util.List;
 @ModuleInfo(serviceName = "TutorialQuestionsService")
 public class TutorialQuestion extends Comment {
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.REMOVE})
     @JsonIgnore
     private List<AttachmentImage> images = new ArrayList<>();
 
     @Column(nullable = false)
     private Boolean comment = false;
 
-    @OneToMany(mappedBy = "base")
+    @OneToMany(mappedBy = "base" , cascade = {CascadeType.REMOVE})
     @JsonIgnore
     private List<TutorialQuestion> comments = new ArrayList<>();
 

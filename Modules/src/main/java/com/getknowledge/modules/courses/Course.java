@@ -9,6 +9,7 @@ import com.getknowledge.modules.courses.tutorial.Tutorial;
 import com.getknowledge.modules.courses.version.Version;
 import com.getknowledge.modules.dictionaries.knowledge.Knowledge;
 import com.getknowledge.modules.dictionaries.language.Language;
+import com.getknowledge.modules.platform.auth.PermissionNames;
 import com.getknowledge.modules.shop.item.Item;
 import com.getknowledge.modules.tags.EntityWithTags;
 import com.getknowledge.modules.userInfo.UserInfo;
@@ -16,9 +17,7 @@ import com.getknowledge.modules.video.Video;
 import com.getknowledge.platform.annotations.*;
 import com.getknowledge.platform.base.entities.*;
 import com.getknowledge.platform.modules.permission.Permission;
-import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import com.getknowledge.platform.modules.user.User;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -42,6 +41,7 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
     private Language language;
 
     @ManyToOne(optional = false)
+    @ModelView(type = ViewType.CompactPublic)
     private UserInfo author;
 
     @ManyToMany(mappedBy = "courses", cascade = {CascadeType.PERSIST})
@@ -63,7 +63,6 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
     private Boolean release = false;
 
     @OneToOne
-    @com.getknowledge.platform.annotations.Access(myself = true)
     @JsonIgnore
     private Course baseCourse;
 
@@ -314,17 +313,14 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
     @Override
     public AuthorizationList getAuthorizationList() {
         AuthorizationList authorizationList = new AuthorizationList();
-
-        if (base)
-            authorizationList.allowReadEveryOne = true;
-
+        authorizationList.allowReadEveryOne = true;
         authorizationList.allowCreateEveryOne = false;
-        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.CreateCourse));
-        authorizationList.getPermissionsForRemove().add(new Permission(PermissionNames.EditCourse));
+        authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.CreateCourse()));
+        authorizationList.getPermissionsForRemove().add(new Permission(PermissionNames.EditCourse()));
 
         //Если курс имеет состояние release даже автор его не может редоктировать
         if (!release)
-            authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditCourse));
+            authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditCourse()));
 
         if (author != null && !release)
             authorizationList.getUserList().add(author.getUser());

@@ -52,7 +52,7 @@ model.controller("booksController" , function($scope,$state,$languages,applicati
             $scope.filter.result.filtersInfo.filters.splice(equalIndex, 1);
         }
 
-        if (language != "any") {
+        if (language && language != "any") {
             equalIndex = $scope.filter.equals("language.name", "str",language.capitalizeFirstLetter());
         } else {
             equalIndex = undefined;

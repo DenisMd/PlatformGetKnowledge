@@ -1,13 +1,12 @@
 package com.getknowledge.modules.menu;
 
 import com.getknowledge.modules.menu.item.MenuItem;
+import com.getknowledge.modules.platform.auth.PermissionNames;
 import com.getknowledge.platform.annotations.*;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 import com.getknowledge.platform.base.entities.CloneableEntity;
-import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import com.getknowledge.platform.modules.permission.Permission;
-import com.getknowledge.platform.modules.permission.names.PermissionNames;
 import com.getknowledge.platform.modules.role.Role;
 
 import javax.persistence.*;
@@ -70,7 +69,7 @@ public class Menu extends AbstractEntity implements CloneableEntity<Menu>{
         AuthorizationList authorizationList = new AuthorizationList();
         authorizationList.allowCreateEveryOne = false;
         authorizationList.allowReadEveryOne = true;
-        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditMenu.getName()));
+        authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditMenu()));
         return authorizationList;
     }
 }
