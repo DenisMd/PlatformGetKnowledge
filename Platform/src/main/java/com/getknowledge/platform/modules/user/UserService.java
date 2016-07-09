@@ -2,6 +2,7 @@ package com.getknowledge.platform.modules.user;
 
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.base.services.AbstractService;
+import com.getknowledge.platform.exceptions.NotFound;
 import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.role.RoleRepository;
@@ -19,7 +20,7 @@ public class UserService extends AbstractService {
 
     @Action(name = "updateUser" , mandatoryFields = {"userId"})
     @Transactional
-    public Result updateUser(HashMap<String,Object> data) {
+    public Result updateUser(HashMap<String,Object> data) throws NotFound {
 
         User user = userRepository.read(longFromField("userId",data));
         if (user == null) return Result.NotFound();
@@ -30,6 +31,9 @@ public class UserService extends AbstractService {
 
         if (data.containsKey("roleName")) {
             Role role =roleRepository.getSingleEntityByFieldAndValue("roleName",data.get("roleName"));
+            if (role == null) {
+                throw new NotFound(String.format("Role (%s) not found. Update canceled.", data.get("roleName")));
+            }
             if (role != null) {
                 user.setRole(role);
             }

@@ -772,6 +772,10 @@ public class DataController {
         } catch (IOException e) {
             throw new ParseException("Can't parse result for action " + className,trace,e);
         } catch (InvocationTargetException e) {
+            if (e.getTargetException() instanceof PlatformException) {
+                PlatformException p = (PlatformException) e.getTargetException();
+                throw p;
+            }
             throw new InvokeException("InvocationTargetException", trace, e);
         } catch (IllegalAccessException e) {
             throw new InvokeException("IllegalAccessException", trace, e);
@@ -822,6 +826,10 @@ public class DataController {
             trace.logException("Parse result exception ", e, TraceLevel.Warning,false);
             throw new ParseException("Parse result exception");
         } catch (InvocationTargetException e) {
+            if (e.getTargetException() instanceof PlatformException) {
+                PlatformException p = (PlatformException) e.getTargetException();
+                throw p;
+            }
             throw new InvokeException("InvocationTargetException", trace, e);
         } catch (IllegalAccessException e) {
             throw new InvokeException("IllegalAccessException", trace, e);
@@ -831,5 +839,7 @@ public class DataController {
             throw new SystemError("Unhandled exception : " + e.getMessage(),trace,e);
         }
     }
+
+
 
 }
