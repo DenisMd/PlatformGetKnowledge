@@ -77,18 +77,17 @@ model.controller("customFilterController",function($scope,customFilterService){
                         if ($scope.selectedOperation.value.name  === 'in'){
                             $scope.inParams = [{}];
                         } else {
-                            $scope.params = "";
+                            $scope.params = {};
                         }
                         break;
                     case "number" :
                         if ($scope.selectedOperation.value.name === 'between'){
-                            $scope.params = undefined;
-                            $scope.params2 = undefined;
+                            $scope.params = {};
                         } else {
                             if ($scope.selectedOperation.value.name === 'in'){
                                 $scope.inParams = [{}];
                             } else {
-                                $scope.params = undefined;
+                                $scope.params = {};
                             }
                         }
                         break;
@@ -98,7 +97,7 @@ model.controller("customFilterController",function($scope,customFilterService){
                         if ($scope.selectedOperation.value.name === 'in'){
                             $scope.inParams = [{}];
                         } else {
-                            $scope.params = undefined;
+                            $scope.params = {};
                         }
                         break;
                     case "check_box" :
@@ -116,21 +115,20 @@ model.controller("customFilterController",function($scope,customFilterService){
                             $scope.createFilterExpressionFromArray($scope.inParams);
                             delete $scope.inParams;
                         } else {
-                            $scope.createFilterExpression($scope.params);
+                            $scope.createFilterExpression($scope.params.text);
                             delete $scope.params;
                         }
                         break;
                     case "number" :
                         if ($scope.selectedOperation.value.name === 'between'){
-                            $scope.createFilterExpression($scope.params, $scope.params2);
+                            $scope.createFilterExpression($scope.params.number1, $scope.params.number2);
                             delete $scope.params;
-                            delete $scope.params2;
                         } else {
                             if ($scope.selectedOperation.value.name === 'in'){
                                 $scope.createFilterExpressionFromArray($scope.inParams);
                                 delete $scope.inParams;
                             } else {
-                                $scope.createFilterExpression($scope.params);
+                                $scope.createFilterExpression($scope.params.number);
                                 delete $scope.params;
                             }
                         }
@@ -143,8 +141,8 @@ model.controller("customFilterController",function($scope,customFilterService){
                             $scope.createFilterExpressionFromArray($scope.inParams);
                             delete $scope.inParams;
                         } else {
-                            $scope.createFilterExpression($scope.params);
-                            delete $scope.params;
+                            $scope.createFilterExpression($scope.params.enum);
+                            delete $scope.params.enum;
                         }
                         break;
                     case "check_box" :
@@ -156,6 +154,7 @@ model.controller("customFilterController",function($scope,customFilterService){
         $scope.currentValue = null;
         $scope.state = ++$scope.state % Object.keys(STATE).length;
         $scope.isUpdate = false;
+        console.log($scope.params);
     };
 
 
@@ -164,15 +163,15 @@ model.controller("customFilterController",function($scope,customFilterService){
             switch ($scope.currentFilterExpression.field && $scope.currentFilterExpression.field.info.type){
                 case "text" :
                     if ($scope.selectedOperation.value.name  !== 'in'){
-                        return angular.isUndefined($scope.params);
+                        return angular.isUndefined($scope.params.text);
                     }
                     break;
                 case "number" :
                     if ($scope.selectedOperation.value.name === 'between'){
-                        return angular.isUndefined($scope.params) || angular.isUndefined($scope.params2) || params >= params2
+                        return angular.isUndefined($scope.params.number1) || angular.isUndefined($scope.params.number2) || $scope.params.number1 >= $scope.params.number2
                     } else {
                         if ($scope.selectedOperation.value.name !== 'in'){
-                            return angular.isUndefined($scope.params);
+                            return angular.isUndefined($scope.params.number);
                         }
                     }
                     break;
@@ -185,11 +184,11 @@ model.controller("customFilterController",function($scope,customFilterService){
                     break;
                 case "enum" :
                     if ($scope.selectedOperation.value.name !== 'in'){
-                        return angular.isUndefined($scope.params);
+                        return angular.isUndefined($scope.params.enum);
                     }
                     break;
                 case "check_box" :
-                    return angular.isUndefined($scope.params);
+                    return angular.isUndefined($scope.params.check);
             }
         }
         return false;
