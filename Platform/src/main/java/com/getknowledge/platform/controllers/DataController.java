@@ -653,6 +653,11 @@ public class DataController {
             return jsonResult;
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
+        } catch (InvocationTargetException e) {
+            if (e.getTargetException() instanceof PlatformException) {
+                throw (PlatformException) e.getTargetException();
+            }
+            throw new InvokeException("InvocationTargetException", trace, e);
         } catch (PlatformException p) {
             throw p;
         } catch (Exception e) {
@@ -773,8 +778,7 @@ public class DataController {
             throw new ParseException("Can't parse result for action " + className,trace,e);
         } catch (InvocationTargetException e) {
             if (e.getTargetException() instanceof PlatformException) {
-                PlatformException p = (PlatformException) e.getTargetException();
-                throw p;
+                throw (PlatformException) e.getTargetException();
             }
             throw new InvokeException("InvocationTargetException", trace, e);
         } catch (IllegalAccessException e) {
@@ -827,8 +831,7 @@ public class DataController {
             throw new ParseException("Parse result exception");
         } catch (InvocationTargetException e) {
             if (e.getTargetException() instanceof PlatformException) {
-                PlatformException p = (PlatformException) e.getTargetException();
-                throw p;
+                throw (PlatformException) e.getTargetException();
             }
             throw new InvokeException("InvocationTargetException", trace, e);
         } catch (IllegalAccessException e) {
