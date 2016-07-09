@@ -1005,7 +1005,7 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
 
     })
 
-    .directive("errorModalTemplate",function(resourceTemplate){
+    .directive("errorModalTemplate",function(resourceTemplate,$sce){
         return{
                 restrict: "E",
                 scope : {},
@@ -1017,8 +1017,17 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                         function(newValue,oldValue){
                             if (newValue !== oldValue){
                                 $scope.error = newValue;
+                                if (typeof $scope.error === 'string') {
+                                    $scope.errorHtml = $sce.trustAsHtml($scope.error);
+                                } else {
+                                    $scope.errorHtml = undefined;
+                                }
                             }
-                    });
+                        }
+                    );
+                    $scope.getErrorAsHtml = function () {
+                        return ;
+                    }
                 },
                 templateUrl: resourceTemplate+"/error/errorDialog.html"
         };
