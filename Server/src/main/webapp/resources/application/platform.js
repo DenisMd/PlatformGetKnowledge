@@ -43,8 +43,46 @@ function PlatformUtils(){
     }
 }
 
+function UrlsStack(size) {
+    this.size = size;
+    this.stack = [];
+    this.currentIndex = -1;
+    this.ismove = false;
+
+    this.pushUrl = function (url) {
+        if (this.stack.length > this.size) {
+            this.stack.splice(0, 1);
+        } else {
+            if (this.currentIndex >= 0 && this.currentIndex < this.stack.length-1) {
+                this.stack.splice(this.currentIndex+1);
+            }
+            this.stack.push(url);
+            this.currentIndex++;
+        }
+    };
+
+    this.back = function () {
+        this.ismove = true;
+        if (this.currentIndex != 0) {
+            this.currentIndex--;
+        }
+        return this.stack[this.currentIndex];
+    };
+
+    this.next = function () {
+        this.ismove = true;
+        if (this.currentIndex != this.stack.length) {
+            this.currentIndex++;
+        }
+        return this.stack[this.currentIndex];
+    };
+}
+
+var urlStack = new UrlsStack(100);
+
 //Глобальные утилиты
 var plUtils = new PlatformUtils();
+
 
 angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angular-loading-bar','ngAnimate','angularFileUpload'])
     .factory('className', function() {
@@ -904,6 +942,10 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
         });
 
         function getURL ($stateParams){
+            if (!urlStack.ismove){
+                urlStack.pushUrl("/" + $stateParams.path);
+            }
+            urlStack.ismove = false;
             return "module/" + $stateParams.path;
         }
 
@@ -932,6 +974,10 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                 '' : {
                     templateUrl : resourceTemplate + 'indexTemplate.html',
                     controllerProvider : function($rootScope,applicationProperties){
+                        if (!urlStack.ismove){
+                            urlStack.pushUrl("");
+                        }
+                        urlStack.ismove = false;
                         $rootScope.application = applicationProperties;
                         return "indexController";
                     }
@@ -946,7 +992,6 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
                 '' : {
                     templateUrl : getURL,
                     controllerProvider : getCtrl
-
                 }
             }
         })  .state("404",{

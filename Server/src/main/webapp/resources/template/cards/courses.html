@@ -34,8 +34,8 @@
                     </md-select>
                 </md-input-container>
                 <div flex-gt-sm>
-                    <md-checkbox ng-model="newCourse.base" aria-label="Base checkbox">
-                        {{translate("courses_is_base")}} : {{ newCourse.base }}
+                    <md-checkbox ng-model="newCourse.base" aria-label="Base checkbox" ng-init="newCourse.base = true">
+                        {{translate("course_is_base")}} : {{ newCourse.base }}
                     </md-checkbox>
                 </div>
             </div>

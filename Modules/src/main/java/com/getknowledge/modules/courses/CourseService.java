@@ -111,7 +111,7 @@ public class CourseService extends AbstractService implements ImageService {
         return false;
     }
 
-    @Action(name = "createCourse" , mandatoryFields = {"name","groupCourseId","description","language","base"})
+    @Action(name = "createCourse" , mandatoryFields = {"name","groupCourseUrl","description","language","base"})
     @Transactional
     public Result createProgram(HashMap<String,Object> data) {
         if (!data.containsKey("principalName"))
@@ -124,9 +124,7 @@ public class CourseService extends AbstractService implements ImageService {
             return Result.AccessDenied();
         }
 
-        Long groupCourseId = new Long(longFromField("groupCourseId",data));
-
-        GroupCourses groupCourses =  groupCoursesRepository.read(groupCourseId);
+        GroupCourses groupCourses =  groupCoursesRepository.getSingleEntityByFieldAndValue("url" , data.get("groupCourseUrl"));
         if (groupCourses == null) {
             trace.log("Group courses not found" , TraceLevel.Warning,false);
             return Result.NotFound();
