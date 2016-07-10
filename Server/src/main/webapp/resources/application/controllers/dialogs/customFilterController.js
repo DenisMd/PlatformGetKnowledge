@@ -36,6 +36,7 @@ model.controller("customFilterController",function($scope,customFilterService){
     $scope.state = STATE.FIELD;
     $scope.isUpdate = false;
     $scope.currentValue = null;
+    var previousValues = {};
     
     $scope.setCurrentValue = function (value) {
         $scope.currentValue = value;
@@ -49,9 +50,13 @@ model.controller("customFilterController",function($scope,customFilterService){
                 return;
             case STATE.OPERATION :
                 backToFiled();
+                $scope.currentValue = previousValues[STATE.FIELD];
+                previousValues = {};
                 break;
             case STATE.SET_VALUE:
                 backToOperation();
+                $scope.currentValue = previousValues[STATE.OPERATION];
+                delete previousValues[STATE.OPERATION];
                 break;
         }
         $scope.state = --$scope.state % Object.keys(STATE).length;
@@ -69,6 +74,7 @@ model.controller("customFilterController",function($scope,customFilterService){
         switch ($scope.state){
             case STATE.FIELD :
                 addField($scope.currentValue);
+                previousValues[STATE.FIELD] = $scope.currentValue;
                 break;
             case STATE.OPERATION :
                 addOperation();
@@ -106,6 +112,7 @@ model.controller("customFilterController",function($scope,customFilterService){
                         };
                         break;
                 }
+                previousValues[STATE.OPERATION] = $scope.currentFilterExpression.oper;
                 break;
             case STATE.SET_VALUE:
 
