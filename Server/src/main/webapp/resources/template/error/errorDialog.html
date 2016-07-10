@@ -7,10 +7,12 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
 
-                <h4 class="modal-title">{{error.status?"Error "+error.status:""}}</h4>
+                <h4 class="modal-title" ng-if="!errorHtml">{{error.status?"Error "+error.status:""}}</h4>
+                <h4 class="modal-title" ng-if="errorHtml">{{"HTTP Status 500 - Request processing failed;"}}</h4>
             </div>
             <div class="modal-body">
-                <p>{{error.message}}</p>
+                <p ng-if="!errorHtml">{{error.message}}</p>
+                <div ng-if="errorHtml" ng-bind-html="errorHtml"></div>
             </div>
         </div>
     </div>

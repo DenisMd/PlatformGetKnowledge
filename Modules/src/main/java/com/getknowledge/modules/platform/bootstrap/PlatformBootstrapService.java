@@ -42,6 +42,7 @@ public class PlatformBootstrapService implements BootstrapService {
             permissionRepository.ifNotExistCreate(new Permission(PermissionNames.UploadVideos()));
             permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditNews()));
             permissionRepository.ifNotExistCreate(new Permission(PermissionNames.BlockComments()));
+            permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditSections()));
         }
 
 

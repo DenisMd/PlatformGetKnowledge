@@ -90,7 +90,7 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
     $scope.langs = $languages.languages;
 
     $scope.createCourse = function(newCourse) {
-        newCourse.groupCourseId = $scope.getData().groupCourse;
+        newCourse.groupCourseUrl = $scope.getData().groupCourse;
         newCourse.language = newCourse.language.capitalizeFirstLetter();
         applicationService.action($scope,"",className.course,"createCourse",newCourse,function(result){
             $scope.showToast($scope.getResultMessage(result));
