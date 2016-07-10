@@ -27,6 +27,7 @@ import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import com.getknowledge.platform.utils.ModuleLocator;
 import com.getknowledge.platform.utils.MultipartFileSender;
+import org.hibernate.JDBCException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpHeaders;
@@ -143,6 +144,20 @@ public class DataController {
             return data;
         }
         return null;
+    }
+
+    private void processInvocationException(InvocationTargetException e) throws PlatformException {
+        if (e.getTargetException() instanceof PlatformException) {
+            throw (PlatformException) e.getTargetException();
+        }
+        if (e.getTargetException() instanceof javax.persistence.PersistenceException) {
+            javax.persistence.PersistenceException persistence = (javax.persistence.PersistenceException) e.getTargetException();
+            if (persistence.getCause() != null && persistence.getCause() instanceof JDBCException) {
+                JDBCException jdbcException = (JDBCException) persistence.getCause();
+                throw new PersistenceException(jdbcException.getSQLException().getMessage(),trace,TraceLevel.Error,persistence);
+            }
+        }
+        throw new InvokeException("InvocationTargetException", trace, e);
     }
 
     //Авторизационные проверки -----------------------------------------------------------
@@ -654,10 +669,9 @@ public class DataController {
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
         } catch (InvocationTargetException e) {
-            if (e.getTargetException() instanceof PlatformException) {
-                throw (PlatformException) e.getTargetException();
-            }
-            throw new InvokeException("InvocationTargetException", trace, e);
+            processInvocationException(e);
+            //Сюда мы не попадем
+            return "";
         } catch (PlatformException p) {
             throw p;
         } catch (Exception e) {
@@ -777,10 +791,9 @@ public class DataController {
         } catch (IOException e) {
             throw new ParseException("Can't parse result for action " + className,trace,e);
         } catch (InvocationTargetException e) {
-            if (e.getTargetException() instanceof PlatformException) {
-                throw (PlatformException) e.getTargetException();
-            }
-            throw new InvokeException("InvocationTargetException", trace, e);
+            processInvocationException(e);
+            //Сюда мы не попадем
+            return "";
         } catch (IllegalAccessException e) {
             throw new InvokeException("IllegalAccessException", trace, e);
         } catch (PlatformException pl){
@@ -830,10 +843,9 @@ public class DataController {
             trace.logException("Parse result exception ", e, TraceLevel.Warning,false);
             throw new ParseException("Parse result exception");
         } catch (InvocationTargetException e) {
-            if (e.getTargetException() instanceof PlatformException) {
-                throw (PlatformException) e.getTargetException();
-            }
-            throw new InvokeException("InvocationTargetException", trace, e);
+            processInvocationException(e);
+            //Сюда мы не попадем
+            return "";
         } catch (IllegalAccessException e) {
             throw new InvokeException("IllegalAccessException", trace, e);
         } catch (PlatformException pl) {
