@@ -25,25 +25,27 @@ public class PlatformBootstrapService implements BootstrapService {
 
     @Override
     public void bootstrap(HashMap<String, Object> map) throws Exception {
-        if (permissionRepository.count() == 0) {
-            permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditSocialLinks()));
-            permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditMenu()));
-            permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditSocialLinks()));
-            permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditFolders()));
-            permissionRepository.ifNotExistCreate(new Permission(PermissionNames.ReadHpMessage()));
-            permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditBooks()));
-            permissionRepository.ifNotExistCreate(new Permission(PermissionNames.CreateBooks()));
-            permissionRepository.ifNotExistCreate(new Permission(PermissionNames.CreatePrograms()));
-            permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditPrograms()));
-            permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditProgrammingDictionaries()));
-            permissionRepository.ifNotExistCreate(new Permission(PermissionNames.CreateCourse()));
-            permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditCourse()));
-            permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditKnowledge()));
-            permissionRepository.ifNotExistCreate(new Permission(PermissionNames.UploadVideos()));
-            permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditNews()));
-            permissionRepository.ifNotExistCreate(new Permission(PermissionNames.BlockComments()));
-            permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditSections()));
-        }
+
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditSocialLinks()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditMenu()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditSocialLinks()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditFolders()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.ReadHpMessage()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditBooks()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.CreateBooks()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.CreatePrograms()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditPrograms()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditProgrammingDictionaries()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.CreateCourse()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditCourse()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditKnowledge()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.UploadVideos()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditNews()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.BlockComments()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditSections()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.EditVideo()));
+        permissionRepository.ifNotExistCreate(new Permission(PermissionNames.ReadVideo()));
+
 
 
         if (roleRepository.count() == 0) {
@@ -82,6 +84,8 @@ public class PlatformBootstrapService implements BootstrapService {
                 moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.EditKnowledge()));
                 moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.BlockComments()));
                 moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.EditNews()));
+                moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.EditVideo()));
+                moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.ReadVideo()));
                 roleRepository.create(moderator);
             }
         }
@@ -92,7 +96,7 @@ public class PlatformBootstrapService implements BootstrapService {
         BootstrapInfo bootstrapInfo = new BootstrapInfo();
         bootstrapInfo.setName("Platform bootstrap");
         bootstrapInfo.setOrder(0);
-        bootstrapInfo.setRepeat(false);
+        bootstrapInfo.setRepeat(true);
         return bootstrapInfo;
     }
 }

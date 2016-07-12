@@ -115,6 +115,9 @@ public class VideoService extends AuthorizedService<Video> implements BootstrapS
         if (entity == null) return false;
         if (entity.isAllowEveryOne()) return true;
 
+        boolean checkPermissions = entity.getAuthorizationList().isAccessRead(currentUser);
+        if (checkPermissions) return true;
+
         UserInfo userInfo = userInfoRepository.getUserInfoByUser(currentUser);
         Course course = videoRepository.findCourseByVideo(entity);
 
@@ -128,6 +131,9 @@ public class VideoService extends AuthorizedService<Video> implements BootstrapS
     public boolean isAccessForEdit(User currentUser, Video entity) {
         if (currentUser == null) return false;
         if (entity == null) return false;
+
+        boolean checkPermissions = entity.getAuthorizationList().isAccessEdit(currentUser);
+        if (checkPermissions) return true;
 
         List<Course> courses = entityManager.createQuery("select c from Course c where c.intro.id = :id")
                 .setParameter("id",entity.getId()).getResultList();

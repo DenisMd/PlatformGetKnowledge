@@ -1,9 +1,9 @@
-model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationService,pageService,className) {
+model.controller("videoCtrl", function ($scope, $state,$http,applicationService,pageService,className) {
 
     $scope.selectorData = {
-        className   : className.knowledge,
-        tableName   :   "knowledge",
-        loadMoreTitle : "knowledge_loadMore",
+        className   : className.video,
+        tableName   :   "video",
+        loadMoreTitle : "video_load_more",
         filters      : [
             {
                 title : "id",
@@ -13,29 +13,21 @@ model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationServ
             {
                 title : "name",
                 type : "text",
-                field : "name",
+                field : "videoName",
                 default : true
             },{
-                title : "type",
-                type : "enum",
-                field : "knowledgeType",
-                constants : [
-                    {
-                        key : 'Programming',
-                        value : "programming"
-                    } ,
-                    {
-                        key : 'Design',
-                        value : "design"
-                    } ,
-                    {
-                        key : 'Math',
-                        value : "math"
-                    } ,
-                    {
-                        key : 'Physic',
-                        value : "physic"
-                    }],
+                title : "video_link",
+                type : "text",
+                field : "link",
+                default : true
+            },{
+                title: "video_upload_time",
+                type : "dateTime",
+                field : "uploadTime"
+            },{
+                title : "video_allow",
+                type : "check_box",
+                field : "allowEveryOne",
                 default : true
             }
         ],
@@ -43,13 +35,21 @@ model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationServ
             {
                 name : "id",
                 orderBy : true
-            }, {
-                name : "name",
+            },{
+                name : "videoName",
+                title : "name",
                 orderBy : true
-            },
-            {
-                name : "knowledgeType",
-                title : "type"
+            },{
+                name :  "link",
+                title : "video_link"
+            },{
+                name : "allowEveryOne",
+                title : "video_allow"
+            },{
+                name : "uploadTime",
+                title: "video_upload_time",
+                filter : "date",
+                orderBy : true
             }
         ],
         selectItemCallback : function (item) {

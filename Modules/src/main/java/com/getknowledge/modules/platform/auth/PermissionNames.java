@@ -61,4 +61,7 @@ public class PermissionNames {
     public static String UploadVideos() {
         return "Upload videos";
     }
+
+    public static String ReadVideo() {return "Read video";}
+    public static String EditVideo() {return "Edit video";}
 }
