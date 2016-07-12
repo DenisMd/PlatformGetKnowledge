@@ -10,9 +10,9 @@
                 </label>
                 <input class="folders-toolbar-item" ng-model="searchText">
             </md-input-container>
-            <md-input-container  flex="grow" flex-gt-sm>
+            <md-input-container  class="folders-toolbar-input-container"  flex="grow" flex-gt-sm>
                 <label>{{translate("language")}}</label>
-                <md-select ng-model="selectedLanguage">
+                <md-select class="folders-toolbar-select" ng-model="selectedLanguage">
                     <md-option ng-value="'any'">{{translate("language")}}</md-option>
                     <md-option ng-value="lang" ng-repeat="lang in langs">{{ translate(lang) }}</md-option>
                 </md-select>
