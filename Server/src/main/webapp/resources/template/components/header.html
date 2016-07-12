@@ -9,15 +9,11 @@
             <div class="site-title">
                 <a ng-href="{{'#/' +application.language}}">getKnowledge();</a>
             </div>
-            <div class="site-title">
-                <a href ng-click="getBack()">Back</a>
-            </div>
-            <div class="site-title">
-                <a href ng-click="getNext()">Next</a>
-            </div>
+
         </div>
         <span flex></span>
         <div class="header-item header-right">
+
             <div class="header-item language-panel">
             <span ng-repeat="l in getData().languages">
                 <a ng-class="application.language===l?'selected':''" ng-click="changeLanguage(l)">{{l.capitalizeFirstLetter()}}</a>
