@@ -223,6 +223,10 @@
               "name": "socialLinks",
               "url": "/socialLinks",
               "imageUrl": "/resources/image/menu/icons/links.png"
+            },{
+              "name": "video",
+              "url": "/video",
+              "imageUrl" : "/resources/image/menu/icons/video.png"
             },
             {
               "name": "programmingLanguages",

@@ -1,5 +1,7 @@
 package com.getknowledge.modules.menu.item;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.modules.menu.Menu;
 import com.getknowledge.modules.platform.auth.PermissionNames;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;
@@ -20,8 +22,7 @@ public class MenuItem extends AbstractEntity {
     @Column(nullable = false)
     private String url;
 
-    @OneToMany
-    @JoinTable(name = "subItems_of_item")
+    @OneToMany(mappedBy = "parent")
     private List<MenuItem> subItems = new ArrayList<>();
 
     @Column(name = "icon_url", length = 500)
@@ -29,6 +30,30 @@ public class MenuItem extends AbstractEntity {
 
     @Column(name = "color" , length = 20)
     private String color;
+
+    @ManyToOne
+    @JsonIgnore
+    private Menu menu;
+
+    @ManyToOne
+    @JsonIgnore
+    private MenuItem parent;
+
+    public MenuItem getParent() {
+        return parent;
+    }
+
+    public void setParent(MenuItem parent) {
+        this.parent = parent;
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+    }
 
     public String getColor() {
         return color;

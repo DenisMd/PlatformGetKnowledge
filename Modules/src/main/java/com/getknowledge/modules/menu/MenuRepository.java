@@ -47,9 +47,29 @@ public class MenuRepository extends ProtectedRepository<Menu> {
     private void createItems(List<HashMap<String, Object>> items,Menu parent,HashMap<String, Object> json) {
         //Пробегаем элементы в меню
         for (HashMap<String, Object> item : items) {
-            MenuItem menuItem = new MenuItem();
-            menuItem.setTitle((String) item.get("name"));
-            menuItem.setUrl((String) item.get("url"));
+
+            String menuItemName = (String) item.get("name");
+            String menuItemUrl = (String) item.get("url");
+
+            MenuItem menuItem = null;
+
+            if (parent.getId() != null) {
+                List<MenuItem> list = entityManager.createQuery("select mi from MenuItem mi where mi.title = :title and mi.url = :url and mi.menu.id = :menuId", MenuItem.class)
+                        .setParameter("title", menuItemName)
+                        .setParameter("url", menuItemUrl)
+                        .setParameter("menuId" , parent.getId())
+                        .getResultList();
+                menuItem = list.isEmpty() ? null : list.get(0);
+            }
+
+            boolean isNewItem = false;
+
+            if (menuItem == null) {
+                isNewItem = true;
+                menuItem = new MenuItem();
+                menuItem.setTitle(menuItemName);
+                menuItem.setUrl(menuItemUrl);
+            }
 
             if (item.containsKey("imageUrl")) {
                 menuItem.setIconUrl((String) item.get("imageUrl"));
@@ -59,13 +79,18 @@ public class MenuRepository extends ProtectedRepository<Menu> {
                 menuItem.setColor((String) item.get("color"));
             }
 
+            if (isNewItem) {
+                menuItem.setMenu(parent);
+                menuItemsRepository.create(menuItem);
+                parent.getItems().add(menuItem);
+            } else {
+                menuItemsRepository.merge(menuItem);
+            }
+
             if (item.containsKey("subItems")) {
                 List<HashMap<String, Object>> subItems = (List<HashMap<String, Object>>) item.get("subItems");
                 createSubItems(subItems, menuItem, json);
             }
-
-            menuItemsRepository.create(menuItem);
-            parent.getItems().add(menuItem);
         }
     }
 
@@ -77,15 +102,40 @@ public class MenuRepository extends ProtectedRepository<Menu> {
                 createSubItems(ref,parent,null);
                 break;
             }
-            MenuItem subMenuItem = new MenuItem();
-            subMenuItem.setTitle((String) subItem.get("name"));
-            subMenuItem.setUrl((String) subItem.get("url"));
+
+            MenuItem subMenuItem = null;
+
+            String menuItemName = (String) subItem.get("name");
+            String menuItemUrl = (String) subItem.get("url");
+
+            if (parent.getId() != null) {
+                List<MenuItem> list = entityManager.createQuery("select mi from MenuItem mi where mi.title = :title and mi.url = :url and mi.parent.id = :parentId", MenuItem.class)
+                        .setParameter("title", menuItemName)
+                        .setParameter("url", menuItemUrl)
+                        .setParameter("parentId" , parent.getId())
+                        .getResultList();
+                subMenuItem = list.isEmpty() ? null : list.get(0);
+            }
+
+            boolean isNewItem = false;
+
+            if (subMenuItem == null) {
+                isNewItem = true;
+                subMenuItem = new MenuItem();
+                subMenuItem.setTitle(menuItemName);
+                subMenuItem.setUrl(menuItemUrl);
+            }
             if (subItem.containsKey("imageUrl")) {
                 subMenuItem.setIconUrl((String) subItem.get("imageUrl"));
             }
 
-            menuItemsRepository.create(subMenuItem);
-            parent.getSubItems().add(subMenuItem);
+            if (isNewItem) {
+                subMenuItem.setParent(parent);
+                menuItemsRepository.create(subMenuItem);
+                parent.getSubItems().add(subMenuItem);
+            } else {
+                menuItemsRepository.merge(subMenuItem);
+            }
         }
     }
 
@@ -101,13 +151,27 @@ public class MenuRepository extends ProtectedRepository<Menu> {
             //пробегаем все возможные меню
             for (HashMap<String, Object> menu : menus) {
 
-                Menu menuEntity = new Menu();
-                menuEntity.setName((String) menu.get("name"));
+                String menuName = (String) menu.get("name");
+                Menu menuEntity = getSingleEntityByFieldAndValue("name",menuName);
+
+                boolean isNewMenu = false;
+
+                if (menuEntity == null) {
+                    isNewMenu = true;
+                    menuEntity = new Menu();
+                    menuEntity.setName(menuName);
+                }
+
                 if (menu.containsKey("roleName")) {
                     Role role = roleRepository.getRoleByName((String) menu.get("roleName"));
                     if (role != null) menuEntity.setRole(role);
                 }
 
+                if (isNewMenu) {
+                    create(menuEntity);
+                } else {
+                    merge(menuEntity);
+                }
 
                 List<HashMap<String, Object>> items = (List<HashMap<String, Object>>) menu.get("items");
 
@@ -117,11 +181,8 @@ public class MenuRepository extends ProtectedRepository<Menu> {
                     String baseName = (String) menu.get("base");
                     HashMap<String, Object> baseMenu =  menus.stream().filter(x -> x.get("name").equals(baseName)).findFirst().get();
                     List<HashMap<String, Object>> items2 = (List<HashMap<String, Object>>) baseMenu.get("items");
-                    createItems(items2,menuEntity,json);
+                    createItems(items2, menuEntity, json);
                 }
-
-                create(menuEntity);
-
             }
         } catch (IOException e) {
             trace.logException("Error read json from file" , e, TraceLevel.Error,true);

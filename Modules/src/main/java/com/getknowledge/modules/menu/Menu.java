@@ -25,7 +25,7 @@ public class Menu extends AbstractEntity implements CloneableEntity<Menu>{
     @com.getknowledge.platform.annotations.Access(roles = "ROLE_ADMIN")
     private Role role;
 
-    @OneToMany
+    @OneToMany(mappedBy = "menu")
     @OrderBy("id")
     private List<MenuItem> items = new ArrayList<>();
 

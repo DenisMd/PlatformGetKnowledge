@@ -26,9 +26,7 @@ public class MenuService extends AbstractService implements BootstrapService {
 
     @Override
     public void bootstrap(HashMap<String, Object> map) throws Exception {
-        if (menuRepository.count() == 0) {
-            menuRepository.createMenuFromJson(getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/menu/menuBootstrap.json"));
-        }
+        menuRepository.createMenuFromJson(getClass().getClassLoader().getResourceAsStream("com.getknowledge.modules/menu/menuBootstrap.json"));
     }
 
     @Override
@@ -36,7 +34,7 @@ public class MenuService extends AbstractService implements BootstrapService {
         BootstrapInfo bootstrapInfo = new BootstrapInfo();
         bootstrapInfo.setName("Menu service");
         bootstrapInfo.setOrder(1);
-        bootstrapInfo.setRepeat(false);
+        bootstrapInfo.setRepeat(true);
         return bootstrapInfo;
     }
 
