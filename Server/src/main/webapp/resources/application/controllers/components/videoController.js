@@ -16,7 +16,7 @@ function initVideoPlayer() {
     }
 }
 
-model.controller("videoCtrl",function($scope,videoDialogService,className,applicationService){
+model.controller("videoController",function($scope,videoDialogService,className,applicationService){
 
     initVideoPlayer();
 
