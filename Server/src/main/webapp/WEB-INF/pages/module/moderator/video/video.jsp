@@ -7,38 +7,33 @@
 
 <md-content md-theme="darkTheme">
   <md-tabs md-dynamic-height md-border-bottom>
-    <md-tab label="{{translate('knowledge_info')}}" ng-if="currentKnowledge != null">
+    <md-tab label="{{translate('video_info')}}" ng-if="currentVideo != null">
       <md-content flex layout-padding>
         <div layout="row">
           <div flex="55" flex-gt-sm="20">{{translate('id')}}</div>
-          <div flex>{{currentKnowledge.id}}</div>
+          <div flex>{{currentVideo.id}}</div>
+        </div>
+        <div layout="row">
+          <div flex="55" flex-gt-sm="20">{{translate('video_link')}}</div>
+          <div flex>{{currentVideo.link}}</div>
         </div>
         <div layout="row">
           <md-input-container flex>
             <label>{{translate("name")}}</label>
-            <input ng-model="currentKnowledge.name">
+            <input ng-model="currentVideo.videoName">
           </md-input-container>
         </div>
         <div layout="row">
-          <md-input-container flex>
-            <label>{{parentScope.translate("type")}}</label>
-            <md-select ng-model="currentKnowledge.knowledgeType" aria-label="knowledgeType">
-              <md-option ng-repeat="type in knowledgeType" value="{{type}}">
-                {{translate(type.toLowerCase())}}
-              </md-option>
-            </md-select>
-          </md-input-container>
+          <md-checkbox ng-model="currentVideo.allowEveryOne" flex>
+            {{translate("video_allow")}}
+          </md-checkbox>
         </div>
-        <div class="form-group">
-          <label for="note">{{translate("knowledge_note")}}:</label>
-          <textarea class="form-control" rows="5" id="note" ng-model="currentKnowledge.note"></textarea>
-        </div>
-        <md-button class="md-raised md-primary md-btn" ng-click="updateKnowledge()" ng-disabled="!currentKnowledge">{{translate("update")}}</md-button>
+        <md-button class="md-raised md-primary md-btn" ng-click="updateVideo()" ng-disabled="!currentVideo">{{translate("update")}}</md-button>
       </md-content>
     </md-tab>
-    <md-tab ng-if="currentKnowledge != null">
+    <md-tab ng-if="currentVideo != null">
       <md-tab-label>
-        {{translate('knowledge_image')}}
+        {{translate('video_cover')}}
       </md-tab-label>
       <md-tab-body>
         <md-content class="md-padding">

@@ -3,6 +3,9 @@
     "video_link" : "Ссылка на видео",
     "video_allow" : "Общедоступно",
     "video_upload_time" : "Время загрузки видео",
-    "video_load_more" : "Загрузить еще видео"
+    "video_load_more" : "Загрузить еще видео",
+    "video_create" : "Создать видео",
+    "video_info" : "Информация о видео",
+    "video_cover" : "Обложка"
   }
 }
