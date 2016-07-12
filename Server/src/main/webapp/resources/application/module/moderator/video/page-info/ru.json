@@ -6,6 +6,8 @@
     "video_load_more" : "Загрузить еще видео",
     "video_create" : "Создать видео",
     "video_info" : "Информация о видео",
-    "video_cover" : "Обложка"
+    "video_cover" : "Обложка",
+    "video_file"  : "Загрузить видео-фал",
+    "video_data" : "Выбрать видео файл"
   }
 }

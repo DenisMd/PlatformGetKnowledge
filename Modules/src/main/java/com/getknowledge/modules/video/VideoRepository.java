@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 @Repository("VideoRepository")
 public class VideoRepository extends BaseRepository<Video> {
@@ -57,7 +58,18 @@ public class VideoRepository extends BaseRepository<Video> {
         return courseList.isEmpty() ? null : courseList.get(0);
     }
 
-    public Video create(String name,String link,byte [] cover,boolean allowEveryOne) {
+    @Override
+    public void create(Video object) {
+        if (object.getLink() == null) {
+            object.setLink(UUID.randomUUID().toString());
+        }
+        if (object.getUploadTime() == null) {
+            object.setUploadTime(Calendar.getInstance());
+        }
+        super.create(object);
+    }
+
+    public Video create(String name, String link, byte [] cover, boolean allowEveryOne) {
         Video video = new Video();
         video.setLink(link);
         video.setVideoName(name);

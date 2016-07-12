@@ -41,15 +41,27 @@
         </md-content>
       </md-tab-body>
     </md-tab>
+    <md-tab ng-if="currentVideo != null">
+      <md-tab-label>
+        {{translate('video_file')}}
+      </md-tab-label>
+      <md-tab-body>
+        <md-content class="md-padding">
+          <module-template name="inputs/uploadFiles" data="uploadData"></module-template>
+        </md-content>
+      </md-tab-body>
+    </md-tab>
   </md-tabs>
 </md-content>
 
 
-<script type="text/ng-template" id="createKnowledge.html">
+
+
+<script type="text/ng-template" id="createVideo.html">
   <md-dialog  ng-cloak aria-label="options dialog">
     <md-toolbar>
       <div class="md-toolbar-tools" >
-        <h2>{{parentScope.translate("knowledge_create")}}</h2>
+        <h2>{{parentScope.translate("video_create")}}</h2>
         <span flex></span>
         <md-button class="md-icon-button" ng-click="cancel()">
           <md-icon md-svg-src="resources/image/svg/close.svg" aria-label="Close dialog"></md-icon>
@@ -61,23 +73,18 @@
         <div layout="row">
           <md-input-container flex>
             <label>{{parentScope.translate("name")}}</label>
-            <input ng-model="knowledge.name">
+            <input ng-model="video.videoName">
           </md-input-container>
         </div>
         <div layout="row">
-          <md-input-container flex>
-            <label>{{parentScope.translate("type")}}</label>
-            <md-select ng-model="knowledge.knowledgeType">
-              <md-option ng-repeat="type in parentScope.knowledgeType" value="{{type}}">
-                {{parentScope.translate(type.toLowerCase())}}
-              </md-option>
-            </md-select>
-          </md-input-container>
+          <md-checkbox ng-model="currentVideo.allowEveryOne" flex>
+            {{parentScope.translate("video_allow")}}
+          </md-checkbox>
         </div>
       </div>
     </md-dialog-content>
     <md-dialog-actions layout="row">
-      <md-button class="md-raised md-primary" ng-click="answer(knowledge)">
+      <md-button class="md-raised md-primary" ng-click="answer(video)">
         {{parentScope.translate("create")}}
       </md-button>
     </md-dialog-actions>

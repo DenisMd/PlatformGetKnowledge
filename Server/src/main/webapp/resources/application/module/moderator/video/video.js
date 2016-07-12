@@ -110,4 +110,17 @@ model.controller("videoCtrl", function ($scope, $state,$http,applicationService,
             }
         });
     };
+
+    $scope.uploadData = {
+        btnTitle : "video_data",
+        multiplyFiles : false,
+        className : className.video,
+        actionName : "uploadVideo",
+        title : "video_data",
+        parameters : {},
+        maxFileSize : 512000,
+        prepareParams : function (formData) {
+            formData.data = JSON.stringify({videoId:$scope.currentVideo.id});
+        }
+    };
 });

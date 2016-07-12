@@ -6,6 +6,8 @@
     "video_load_more" : "Load more videos",
     "video_create" : "Create video",
     "video_info" : "Video information",
-    "video_cover" : "Cover"
+    "video_cover" : "Cover",
+    "video_file"  : "Upload video file",
+    "video_data" : "Choose video data"
   }
 }
