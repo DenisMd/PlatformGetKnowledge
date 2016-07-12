@@ -23,6 +23,7 @@ public class MenuItem extends AbstractEntity {
     private String url;
 
     @OneToMany(mappedBy = "parent")
+    @OrderBy("id")
     private List<MenuItem> subItems = new ArrayList<>();
 
     @Column(name = "icon_url", length = 500)
