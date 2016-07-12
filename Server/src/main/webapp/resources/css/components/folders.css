@@ -29,10 +29,13 @@ md-input-container.folders-toolbar-input-container label{
     font-style: italic;
 }
 
-md-input-container.folders-toolbar-input-container .md-input{
-    border-width: 0 0 2px;
+md-input-container.folders-toolbar-input-container .md-input, md-input-container.folders-toolbar-input-container .md-select-value{
+    /*border-width: 0 0 2px;*/
 }
 
+md-input-container .folders-toolbar-select{
+    margin-bottom: 24px;
+}
 .folders-toolbar-icon{
     position: absolute;
     left: 0;
