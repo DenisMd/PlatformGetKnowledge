@@ -45,6 +45,7 @@ model.controller("clientSelectorController" , function ($scope , customFilterSer
         }
     };
 
+    $scope.currentRow = null;
     $scope.selectItem = function (item) {
         $scope.getData().selectItemCallback(item);
         var hideColumnForItem = item.hideColumnInfo;
@@ -52,6 +53,7 @@ model.controller("clientSelectorController" , function ($scope , customFilterSer
             item.hideColumnInfo = true;
         });
         item.hideColumnInfo = !hideColumnForItem;
+        $scope.currentRow = item;
     };
 
     $scope.filterSearch = function(item,index,allItems)

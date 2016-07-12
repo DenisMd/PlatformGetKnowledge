@@ -86,6 +86,7 @@ public class PlatformBootstrapService implements BootstrapService {
                 moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.EditNews()));
                 moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.EditVideo()));
                 moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.ReadVideo()));
+                moderator.getPermissions().add(permissionRepository.getPermissionByName(PermissionNames.UploadVideos()));
                 roleRepository.create(moderator);
             }
         }

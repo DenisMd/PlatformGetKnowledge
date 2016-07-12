@@ -3,6 +3,9 @@
     "video_link" : "Video link",
     "video_allow" : "Allow everyone",
     "video_upload_time" : "Video upload time",
-    "video_load_more" : "Load more videos"
+    "video_load_more" : "Load more videos",
+    "video_create" : "Create video",
+    "video_info" : "Video information",
+    "video_cover" : "Cover"
   }
 }

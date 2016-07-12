@@ -16,6 +16,7 @@ import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.modules.bootstrapInfo.BootstrapInfo;
 import com.getknowledge.platform.modules.trace.TraceService;
+import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import com.getknowledge.platform.modules.user.User;
 import org.apache.commons.io.IOUtils;
 import org.ini4j.Ini;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -92,6 +94,30 @@ public class VideoService extends AuthorizedService<Video> implements BootstrapS
         }
 
         videoRepository.uploadVideo(video,userInfo,fileList.get(0));
+
+        return Result.Complete();
+    }
+
+    @ActionWithFile(name = "uploadCover" , mandatoryFields = {"videoId"})
+    @Transactional
+    public Result uploadCover(HashMap<String,Object> data, List<MultipartFile> fileList) {
+        Long videoId = longFromField("videoId",data);
+        Video video = videoRepository.read(videoId);
+        if (video == null){
+            return Result.Failed();
+        }
+        UserInfo userInfo = userInfoRepository.getCurrentUser(data);
+        if (userInfo == null || !isAccessForEdit(userInfo.getUser(),video)) {
+            return Result.AccessDenied();
+        }
+
+        try {
+            video.setCover(fileList.get(0).getBytes());
+            videoRepository.merge(video);
+        } catch (IOException io) {
+            traceService.logException("Error upload cover for video " + video.getId(),io, TraceLevel.Error,true);
+        }
+
 
         return Result.Complete();
     }
