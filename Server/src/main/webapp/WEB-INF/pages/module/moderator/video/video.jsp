@@ -26,9 +26,10 @@
           </md-input-container>
         </div>
         <div layout="row">
-          <md-checkbox ng-model="currentVideo.allowEveryOne" flex>
-            {{translate("video_allow")}}
-          </md-checkbox>
+          <div flex="55" flex-gt-sm="20">{{translate('video_allow')}}</div>
+          <div flex>
+            <md-switch class="switch-cell" ng-model="currentVideo.allowEveryOne"></md-switch>
+          </div>
         </div>
         <md-button class="md-raised md-primary md-btn" ng-click="updateVideo()" ng-disabled="!currentVideo">{{translate("update")}}</md-button>
       </md-content>

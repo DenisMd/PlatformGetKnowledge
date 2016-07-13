@@ -15,7 +15,7 @@ import javax.persistence.*;
 import java.util.Calendar;
 
 @Entity
-@Table(name = "folders")
+@Table(name = "folders" , uniqueConstraints = {@UniqueConstraint(columnNames = {"url","section_id","type"})})
 @Inheritance( strategy = InheritanceType.SINGLE_TABLE )
 @DiscriminatorColumn( name = "type" )
 @ModuleInfo(serviceName = "FolderService" , repositoryName = "FolderRepository")
@@ -29,7 +29,7 @@ public abstract class Folder extends AbstractEntity implements CloneableEntity<F
     @ModelView(type = {ViewType.Public})
     private String title;
 
-    @Column(name = "url" , unique = true)
+    @Column(name = "url")
     @ModelView(type = {ViewType.Public})
     private String url;
 
