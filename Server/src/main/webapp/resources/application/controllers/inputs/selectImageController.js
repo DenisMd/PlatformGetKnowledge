@@ -1,5 +1,24 @@
 //crop image
 model.controller("selectImgController", function($scope){
+
+    $scope.sizeStyle = {
+        width : "300px",
+        height : "300px"
+    };
+
+    $scope.buttonStyle = {
+        width : "300px"
+    };
+
+    if ($scope.getData().width) {
+        $scope.sizeStyle.width = $scope.getData().width + "px";
+        $scope.buttonStyle.width = $scope.getData().width + "px";
+    }
+
+    if ($scope.getData().height) {
+        $scope.sizeStyle.height = $scope.getData().height + "px";
+    }
+
     var getDataSrc = function(){
         return $scope.getData().src+"&" + new Date();
     };

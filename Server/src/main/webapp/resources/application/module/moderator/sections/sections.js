@@ -64,7 +64,9 @@ model.controller("sectionsCtrl", function ($scope, $state,$http,applicationServi
         save: function(file){
             updateImage(file);
         },
-        areaType:"square"
+        areaType:"square",
+        width : 650,
+        height : 370
     };
 
     function updateCroppedImage(){

@@ -320,7 +320,9 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
         save: function(file){
             updateImage(file);
         },
-        areaType:"square"
+        areaType:"square",
+        width : 270,
+        height : 200
     };
 
     function updateCroppedImage(){

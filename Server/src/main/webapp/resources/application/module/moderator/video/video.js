@@ -87,7 +87,9 @@ model.controller("videoCtrl", function ($scope, $state,$http,applicationService,
         areaType:"square",
         resultQuality : 1.0,
         resultSize : 500,
-        isCrop : false
+        isCrop : false,
+        width : 510,
+        height : 300
     };
 
     var updateCroppedImage  = function(){
