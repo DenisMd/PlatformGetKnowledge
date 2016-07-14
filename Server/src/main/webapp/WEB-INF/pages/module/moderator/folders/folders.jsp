@@ -5,6 +5,16 @@
     <md-tabs md-dynamic-height md-border-bottom>
         <md-tab>
             <md-tab-label>
+                {{translate('folder_group_courses')}}
+            </md-tab-label>
+            <md-tab-body>
+                <div class="selector-zone">
+                    <module-template name="selectors/serverSelector" data="selectorData3"></module-template>
+                </div>
+            </md-tab-body>
+        </md-tab>
+        <md-tab>
+            <md-tab-label>
                 {{translate('folder_group_books')}}
             </md-tab-label>
             <md-tab-body>
@@ -20,16 +30,6 @@
             <md-tab-body>
                 <div class="selector-zone">
                     <module-template name="selectors/serverSelector" data="selectorData2"></module-template>
-                </div>
-            </md-tab-body>
-        </md-tab>
-        <md-tab>
-            <md-tab-label>
-                {{translate('folder_group_courses')}}
-            </md-tab-label>
-            <md-tab-body>
-                <div class="selector-zone">
-                    <module-template name="selectors/serverSelector" data="selectorData3"></module-template>
                 </div>
             </md-tab-body>
         </md-tab>
