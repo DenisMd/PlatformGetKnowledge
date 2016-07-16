@@ -112,15 +112,16 @@
         {{translate("program_links")}}
     </div>
 
-    <div ng-repeat="url in program.links track by $index" class="program-link-margin">
-        <i class="fa fa-external-link" aria-hidden="true"></i>
-        <a ng-href="{{url}}" class="program-link" target="_blank">{{url}}</a>
-    </div>
-
     <div ng-if="program.fileName">
         <i class="fa fa-cloud-download" aria-hidden="true"></i>
         <a ng-href="{{book.downloadUrl}}" download>{{translate("program_download_link")}} ---> '{{program.fileName}}'</a>
     </div>
+
+    <div ng-repeat="url in program.links track by $index" class="program-link-margin">
+        <i class="fa fa-external-link" aria-hidden="true"></i>
+        <a ng-href="{{url}}" class="program-link" target="_blank">{{translate("program_link")}} : {{$index + 1}}</a>
+    </div>
+
 </div>
 
 <div>

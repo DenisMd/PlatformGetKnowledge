@@ -116,15 +116,16 @@
         {{translate("book_links")}}
     </div>
 
-    <div ng-repeat="url in book.links track by $index" class="book-link-margin">
-        <i class="fa fa-external-link" aria-hidden="true"></i>
-        <a ng-href="{{url}}" class="book-link" target="_blank">{{url}}</a>
-    </div>
-
     <div ng-if="book.fileName">
         <i class="fa fa-cloud-download" aria-hidden="true"></i>
-        <a ng-href="{{book.downloadUrl}}" download>{{translate("book_download_link")}} ---> '{{book.fileName}}'</a>
+        <a ng-href="{{book.downloadUrl}}" download>{{translate("book_download_link")}} : '{{book.fileName}}'</a>
     </div>
+
+    <div ng-repeat="url in book.links track by $index" class="book-link-margin">
+        <i class="fa fa-external-link" aria-hidden="true"></i>
+        <a ng-href="{{url}}" class="book-link" target="_blank">{{translate("book_link")}} : {{$index+1}}</a>
+    </div>
+
 </div>
 
 <div>
