@@ -696,6 +696,8 @@ public class DataController {
             throw new ClassNameNotFound(className,trace);
         } catch (IOException e) {
             throw new ParseException("Can't parse entities for create " + className , trace, e);
+        }  catch (Exception e) {
+            throw new SystemError("Unhandled exception : " + e.getMessage(),trace,e);
         }
     }
 
@@ -715,6 +717,8 @@ public class DataController {
             throw new ParseException("Can't parse entities for update " + className,trace,e);
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
+        } catch (Exception e) {
+            throw new SystemError("Unhandled exception : " + e.getMessage(),trace,e);
         }
     }
 
@@ -732,6 +736,8 @@ public class DataController {
             return Result.Complete();
         } catch (ClassNotFoundException e) {
             throw new ClassNameNotFound(className,trace);
+        } catch (Exception e) {
+            throw new SystemError("Unhandled exception : " + e.getMessage(),trace,e);
         }
     }
 

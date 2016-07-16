@@ -6,6 +6,7 @@ import com.getknowledge.modules.video.comment.VideoComment;
 import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.exceptions.DeleteException;
 import com.getknowledge.platform.exceptions.PlatformException;
+import com.getknowledge.platform.exceptions.SystemError;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,18 @@ public class VideoRepository extends BaseRepository<Video> {
         super.create(object);
     }
 
+    @Override
+    public void update(Video object){
+        Video video = read(object.getId());
+        //Не разрешаем редактировать link, если по данному пути уже записано видео
+        if (video.getLink() != object.getLink()) {
+            if (new File(getVideoPath(video.getId())).exists()) {
+                throw new RuntimeException("Error update video file link, because link reference to video");
+            }
+        }
+        super.update(object);
+    }
+
     public Video create(String name, String link, byte [] cover, boolean allowEveryOne) {
         Video video = new Video();
         video.setLink(link);
@@ -112,7 +125,7 @@ public class VideoRepository extends BaseRepository<Video> {
 
         //Если мы перезаливаем видео необходимо удалить старое
         if (video.getLink() != null) {
-            File oldVideo = new File(pathToVideo + separator + video.getLink());
+            File oldVideo = new File(getVideoPath(video.getId()));
             oldVideo.delete();
         }
 
