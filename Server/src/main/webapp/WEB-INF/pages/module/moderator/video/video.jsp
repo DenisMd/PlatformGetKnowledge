@@ -57,9 +57,6 @@
   </md-tabs>
 </md-content>
 
-
-
-
 <script type="text/ng-template" id="createVideo.html">
   <md-dialog  ng-cloak aria-label="options dialog">
     <md-toolbar>

@@ -8,6 +8,7 @@
     "video_info" : "Video information",
     "video_cover" : "Cover",
     "video_file"  : "Upload video file",
-    "video_data" : "Choose video data"
+    "video_data" : "Choose video data",
+    "video_size" : "Video size"
   }
 }

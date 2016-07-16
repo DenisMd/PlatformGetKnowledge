@@ -33,6 +33,17 @@ public class Video extends AbstractEntity{
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar uploadTime;
 
+    @Column(name = "size")
+    private Long size;
+
+    public Long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
+    }
+
     public Calendar getUploadTime() {
         return uploadTime;
     }

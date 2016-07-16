@@ -204,6 +204,7 @@ public class BookService extends AbstractService implements ImageService,FileSer
             FileAttachment fileAttachment = new FileAttachment();
             fileAttachment.setFileName(files.get(0).getOriginalFilename());
             fileAttachment.setData(files.get(0).getBytes());
+            fileAttachment.setSize(files.get(0).getSize());
             fileAttachmentRepository.create(fileAttachment);
             book.setFileAttachment(fileAttachment);
             book.setFileName(files.get(0).getOriginalFilename());

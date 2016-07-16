@@ -196,6 +196,7 @@ public class ProgramService extends AbstractService  implements ImageService,Fil
             FileAttachment fileAttachment = new FileAttachment();
             fileAttachment.setFileName(files.get(0).getOriginalFilename());
             fileAttachment.setData(files.get(0).getBytes());
+            fileAttachment.setSize(files.get(0).getSize());
             fileAttachmentRepository.create(fileAttachment);
             program.setFileAttachment(fileAttachment);
             program.setFileName(files.get(0).getOriginalFilename());

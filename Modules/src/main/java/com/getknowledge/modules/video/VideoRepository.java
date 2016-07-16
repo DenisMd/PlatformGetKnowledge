@@ -164,6 +164,7 @@ public class VideoRepository extends BaseRepository<Video> {
 
         video.setLink(link);
         video.setUploadTime(Calendar.getInstance());
+        video.setSize(multipartFile.getSize());
         merge(video);
         trace.log("Video file successfully upload + " + videoFile.getAbsolutePath() , TraceLevel.Event,true);
     }

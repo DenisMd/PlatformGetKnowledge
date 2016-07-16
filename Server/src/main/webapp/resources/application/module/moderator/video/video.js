@@ -52,6 +52,11 @@ model.controller("videoCtrl", function ($scope, $state,$http,applicationService,
                 title: "video_upload_time",
                 filter : "date",
                 orderBy : true
+            },{
+                name : "size",
+                title : "video_size",
+                filter : "fileSize",
+                orderBy : true
             }
         ],
         selectItemCallback : function (item) {

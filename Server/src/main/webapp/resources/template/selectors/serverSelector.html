@@ -95,6 +95,7 @@
                 <td ng-repeat="header in getData().headerNames">
                     <span ng-switch="header.filter">
                         <span ng-switch-when="date">{{getItemByName(item , header.name) | date:'medium'}}</span>
+                        <span ng-switch-when="fileSize">{{getItemByName(item , header.name) | fileSize:2}}</span>
                         <span ng-switch-when="icon" class="fa fa-2x" ng-class="getItemByName(item , header.name).name" ng-style="{color : getItemByName(item , header.name).color}"></span>
                         <span ng-switch-default>{{header.translate ? translate(getItemByName(item , header.name)) : getItemByName(item , header.name)}}</span>
                     </span>

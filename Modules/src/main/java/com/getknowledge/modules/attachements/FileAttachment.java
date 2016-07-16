@@ -17,8 +17,18 @@ public class FileAttachment extends AbstractEntity{
     @JsonIgnore
     byte [] data;
 
+    private Long size;
+
     @Column(name = "file_name")
     private String fileName;
+
+    public Long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
+    }
 
     public String getFileName() {
         return fileName;
