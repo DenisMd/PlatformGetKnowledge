@@ -77,7 +77,7 @@
 </md-content>
 
 
-<script type="text/ng-template" id="createGroupCourses.html">
+<script type="text/ng-template" id="createFolder.html">
     <md-dialog  ng-cloak aria-label="options dialog">
             <md-toolbar>
                 <div class="md-toolbar-tools" >
@@ -102,14 +102,16 @@
                             <input ng-model="group.url">
                         </md-input-container>
                     </div>
-                    <md-input-container>
+                    <div layout="row">
+                        <md-input-container flex>
                         <label>{{parentScope.translate("section")}}</label>
                         <md-select ng-model="group.sectionId">
                             <md-option ng-repeat="section in parentScope.sections" value="{{section.id}}">
                                 {{parentScope.translate(section.name)}}
                             </md-option>
                         </md-select>
-                    </md-input-container>
+                        </md-input-container>
+                    </div>
                 </div>
             </md-dialog-content>
             <md-dialog-actions layout="row">
@@ -117,89 +119,5 @@
                     {{parentScope.translate("create")}}
                 </md-button>
             </md-dialog-actions>
-    </md-dialog>
-</script>
-<script type="text/ng-template" id="createGroupBooks.html">
-    <md-dialog  ng-cloak aria-label="options dialog">
-        <md-toolbar>
-            <div class="md-toolbar-tools" >
-                <h2>{{parentScope.translate("folder_create")}}</h2>
-                <span flex></span>
-                <md-button class="md-icon-button" ng-click="cancel()">
-                    <md-icon md-svg-src="resources/image/svg/close.svg" aria-label="Close dialog"></md-icon>
-                </md-button>
-            </div>
-        </md-toolbar>
-        <md-dialog-content  layout-padding>
-            <div class="md-dialog-content">
-                <div layout="row">
-                    <md-input-container flex>
-                        <label>{{parentScope.translate("name")}}</label>
-                        <input ng-model="group.title">
-                    </md-input-container>
-                </div>
-                <div layout="row">
-                    <md-input-container flex>
-                        <label>{{parentScope.translate("Url")}}</label>
-                        <input ng-model="group.url">
-                    </md-input-container>
-                </div>
-                <md-input-container>
-                    <label>{{parentScope.translate("section")}}</label>
-                    <md-select ng-model="group.sectionId">
-                        <md-option ng-repeat="section in parentScope.sections" value="{{section.id}}">
-                            {{parentScope.translate(section.name)}}
-                        </md-option>
-                    </md-select>
-                </md-input-container>
-            </div>
-        </md-dialog-content>
-        <md-dialog-actions layout="row">
-            <md-button class="md-raised md-primary" ng-click="answer(group)">
-                {{parentScope.translate("create")}}
-            </md-button>
-        </md-dialog-actions>
-    </md-dialog>
-</script>
-<script type="text/ng-template" id="createGroupPrograms.html">
-    <md-dialog  ng-cloak aria-label="options dialog">
-        <md-toolbar>
-            <div class="md-toolbar-tools" >
-                <h2>{{parentScope.translate("folder_create")}}</h2>
-                <span flex></span>
-                <md-button class="md-icon-button" ng-click="cancel()">
-                    <md-icon md-svg-src="resources/image/svg/close.svg" aria-label="Close dialog"></md-icon>
-                </md-button>
-            </div>
-        </md-toolbar>
-        <md-dialog-content  layout-padding>
-            <div class="md-dialog-content">
-                <div layout="row">
-                    <md-input-container flex>
-                        <label>{{parentScope.translate("name")}}</label>
-                        <input ng-model="group.title">
-                    </md-input-container>
-                </div>
-                <div layout="row">
-                    <md-input-container flex>
-                        <label>{{parentScope.translate("Url")}}</label>
-                        <input ng-model="group.url">
-                    </md-input-container>
-                </div>
-                <md-input-container>
-                    <label>{{parentScope.translate("section")}}</label>
-                    <md-select ng-model="group.sectionId">
-                        <md-option ng-repeat="section in parentScope.sections" value="{{section.id}}">
-                            {{parentScope.translate(section.name)}}
-                        </md-option>
-                    </md-select>
-                </md-input-container>
-            </div>
-        </md-dialog-content>
-        <md-dialog-actions layout="row">
-            <md-button class="md-raised md-primary" ng-click="answer(group)">
-                {{parentScope.translate("create")}}
-            </md-button>
-        </md-dialog-actions>
     </md-dialog>
 </script>
