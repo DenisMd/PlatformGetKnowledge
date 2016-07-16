@@ -32,6 +32,7 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
     @Column(nullable = false)
     private String name;
 
+    @Column(length = 1500)
     private String description;
 
     @ManyToOne(optional = false)

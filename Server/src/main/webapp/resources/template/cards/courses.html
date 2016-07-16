@@ -42,7 +42,7 @@
             <div layout="row" flex>
                 <md-input-container class="md-block" flex>
                     <label>{{translate("description")}}</label>
-                    <textarea ng-model="newCourse.description" md-maxlength="500" rows="3" md-select-on-focus></textarea>
+                    <textarea ng-model="newCourse.description" md-maxlength="1500" rows="3" md-select-on-focus></textarea>
                 </md-input-container>
             </div>
             <div layout="column" class="course-tags" flex ng-init="newCourse.tags = []">
