@@ -68,7 +68,9 @@ model.controller("logsCtrl", function ($scope,className) {
                 name : "calendar",
                 title : "log_date",
                 filter : "date",
-                orderBy : true
+                orderBy : true,
+                defaultOrder : true,
+                desc : true
             }
         ],
         callBackForFilter : function(log) {

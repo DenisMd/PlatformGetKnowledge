@@ -42,7 +42,9 @@ model.controller("knowledgeCtrl", function ($scope, $state,$http,applicationServ
         headerNames : [
             {
                 name : "id",
-                orderBy : true
+                orderBy : true,
+                defaultOrder :true,
+                desc : false
             }, {
                 name : "name",
                 orderBy : true

@@ -34,7 +34,9 @@ model.controller("videoCtrl", function ($scope, $state,$http,applicationService,
         headerNames : [
             {
                 name : "id",
-                orderBy : true
+                orderBy : true,
+                defaultOrder : true,
+                desc : false
             },{
                 name : "videoName",
                 title : "name",

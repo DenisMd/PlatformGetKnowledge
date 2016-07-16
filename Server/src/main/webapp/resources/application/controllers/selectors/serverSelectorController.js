@@ -39,8 +39,6 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
     var doAction = function(){
         applicationService.filterRequest($scope,"listInfo",$scope.filter,addItem);
     };
-
-    doAction();
     
     $scope.currentRow = null;
     $scope.selectItem = function (item) {
@@ -70,6 +68,21 @@ model.controller("serverSelectorController" , function ($scope , customFilterSer
             doAction();
         }
     };
+
+    var BreakException= {};
+
+    try {
+        $scope.getData().headerNames.forEach(function (header) {
+            if (header.defaultOrder === true) {
+                $scope.orderReverse = !header.desc;
+                $scope.setOrder(header);
+                throw  BreakException;
+            }
+        });
+        doAction();
+    } catch(e) {
+        if (e!==BreakException) throw e;
+    }
 
     $scope.loadMore = function () {
         $scope.filter.increase(10);

@@ -44,7 +44,9 @@ model.controller("usersCtrl", function ($scope, applicationService, className) {
         headerNames : [
             {
                 name : "id",
-                orderBy : true
+                orderBy : true,
+                defaultOrder : true,
+                desc : false
             }, {
                 name : "user.role.roleName",
                 title : "user_role"

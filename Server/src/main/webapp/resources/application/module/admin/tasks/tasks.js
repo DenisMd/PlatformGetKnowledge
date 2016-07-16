@@ -70,7 +70,9 @@ model.controller("tasksCtrl", function ($scope,className) {
         headerNames : [
             {
                 name : "id",
-                orderBy : true
+                orderBy : true,
+                defaultOrder : true,
+                desc : false
             }, {
                 name : "taskName",
                 title : "task_name"
