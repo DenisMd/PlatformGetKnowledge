@@ -63,7 +63,7 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 color : "#46BE28",
                 tooltip : "folder_create",
                 actionCallback : function (ev){
-                    $scope.showDialog(ev,$scope,"createGroupBooks.html",function(answer){
+                    $scope.showDialog(ev,$scope,"createFolder.html",function(answer){
                         answer.sectionId = parseInt(answer.sectionId);
                         answer.type = "book";
                         applicationService.action($scope,"", className.folder,"createFolder",answer,function(result){
@@ -157,7 +157,7 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 color : "#46BE28",
                 tooltip : "folder_create",
                 actionCallback : function (ev){
-                    $scope.showDialog(ev,$scope,"createGroupPrograms.html",function(answer){
+                    $scope.showDialog(ev,$scope,"createFolder.html",function(answer){
                         answer.sectionId = parseInt(answer.sectionId);
                         answer.type = "program";
                         applicationService.action($scope,"", className.folder,"createFolder",answer,function(result){
@@ -251,7 +251,7 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 color : "#46BE28",
                 tooltip : "folder_create",
                 actionCallback : function (ev){
-                    $scope.showDialog(ev,$scope,"createGroupCourses.html",function(answer){
+                    $scope.showDialog(ev,$scope,"createFolder.html",function(answer){
                         answer.sectionId = parseInt(answer.sectionId);
                         answer.type = "course";
                         applicationService.action($scope,"", className.folder,"createFolder",answer,function(result){
