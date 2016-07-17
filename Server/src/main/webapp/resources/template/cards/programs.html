@@ -59,9 +59,14 @@
             <h1 class="title text-center" flex-gt-sm="none">{{groupProgramInfo.list[0].title}}</h1>
 
             <div flex class="folders-orderBy text-center">
-                <span class="{{!currentFilterByDate ? 'active' : ''}}"
-                      ng-click="by_name()">{{translate("by_name")}}</span> / <span
-                    class="{{currentFilterByDate ? 'active' : ''}}" ng-click="by_date()">{{translate("by_date")}}</span>
+                <span ng-repeat="sort in sortings">
+                     <span class = "folder-order" ng-class="currentFilter == sort.id ? 'active' : ''" ng-click="sort.callback()">
+                         {{translate(sort.title)}}
+                            <i class="fa fa-long-arrow-down" aria-hidden="true" ng-show="currentFilter == sort.id && orderDesc"></i>
+                            <i class="fa fa-long-arrow-up" aria-hidden="true" ng-show="currentFilter == sort.id && !orderDesc"></i>
+                     </span>
+                     <span ng-if="!$last">/</span>
+                </span>
             </div>
             <div ng-show="programsInfo.creatable" flex-gt-sm="none" class="text-center" layout-margin-gt-sm>
                 <button class="btn btn-default blue-btn" ng-click="showCreateArea = !showCreateArea">{{translate("create")}}</button>

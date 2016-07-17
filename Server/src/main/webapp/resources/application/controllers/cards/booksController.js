@@ -2,7 +2,7 @@ model.controller("booksController" , function($scope,$state,$languages,applicati
 
     var maxCharactersInName = 21;
 
-    $scope.currentFilterByDate = true;
+    $scope.orderDesc = true;
     $scope.showCreateArea = false;
 
     $scope.filter = applicationService.createFilter($scope.getData().className,0,12);
@@ -11,10 +11,9 @@ model.controller("booksController" , function($scope,$state,$languages,applicati
     $scope.filter.equals("groupBooks.section.name","text",$scope.getData().sectionName);
     $scope.books = [];
 
-    $scope.by_date = function() {
-        $scope.currentFilterByDate = true;
+    $scope.by_date = function(orderDesc) {
         $scope.filter.clearOrder();
-        $scope.filter.setOrder("createDate" , true);
+        $scope.filter.setOrder("createDate" , orderDesc);
 
         $scope.filter.result.first = 0;
         $scope.books = [];
@@ -22,16 +21,36 @@ model.controller("booksController" , function($scope,$state,$languages,applicati
         doAction();
     };
 
-    $scope.by_name = function() {
-        $scope.currentFilterByDate = false;
+    $scope.by_name = function(orderDesc) {
         $scope.filter.clearOrder();
-        $scope.filter.setOrder("name" , false);
+        $scope.filter.setOrder("name" , orderDesc);
 
         $scope.filter.result.first = 0;
         $scope.books = [];
 
         doAction();
     };
+
+    $scope.currentFilter = "1";
+    $scope.sortings = [
+        {
+            id : "1",
+            title : "by_date",
+            callback : function() {
+                $scope.currentFilter = this.id;
+                $scope.orderDesc = !$scope.orderDesc;
+                $scope.by_date($scope.orderDesc);
+            }
+        },{
+            id : "2",
+            title : "by_name",
+            callback : function() {
+                $scope.currentFilter = this.id;
+                $scope.orderDesc = !$scope.orderDesc;
+                $scope.by_name($scope.orderDesc);
+            }
+        }
+    ];
 
     var likeIndex;
     var equalIndex;
@@ -109,6 +128,6 @@ model.controller("booksController" , function($scope,$state,$languages,applicati
             $state.go("404");
         }
 
-        $scope.by_date();
+        $scope.by_date(true);
     });
 });

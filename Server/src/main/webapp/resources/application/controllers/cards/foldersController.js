@@ -3,8 +3,9 @@ model.controller("foldersController" , function ($scope,className,applicationSer
     $scope.filter = applicationService.createFilter($scope.getData().className,0,12);
     $scope.filter.setDistinct(false);
     $scope.filter.createFiltersInfo();
-    $scope.orderDesc = true;
     $scope.filter.equals("section.name","text",$scope.getData().sectionName);
+    
+    $scope.orderDesc = true;
 
     $scope.by_date = function(orderDesc) {
         $scope.filter.clearOrder();
