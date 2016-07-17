@@ -3,7 +3,7 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
     var maxCharactersInName = 40;
     var maxCharacterDescription = 250;
 
-    $scope.currentFilterByDate = true;
+    $scope.orderDesc = true;
     $scope.showCreateArea = false;
 
     $scope.filter = applicationService.createFilter($scope.getData().className,0,10);
@@ -12,27 +12,62 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
     $scope.filter.equals("groupCourses.section.name","text",$scope.getData().sectionName);
     $scope.courses = [];
 
-    $scope.by_date = function() {
-        $scope.currentFilterByDate = true;
+     function by_date(orderDesc) {
         $scope.filter.clearOrder();
-        $scope.filter.setOrder("createDate" , false);
+        $scope.filter.setOrder("createDate" , orderDesc);
 
         $scope.filter.result.first = 0;
         $scope.courses = [];
 
         doAction();
-    };
+    }
 
-    $scope.by_name = function() {
-        $scope.currentFilterByDate = false;
+     function by_name() {
         $scope.filter.clearOrder();
-        $scope.filter.setOrder("name" , false);
+        $scope.filter.setOrder("name" , orderDesc);
 
         $scope.filter.result.first = 0;
         $scope.courses = [];
 
         doAction();
-    };
+    }
+
+    $scope.currentFilter = "1";
+    $scope.sortings = [
+        {
+            id : "1",
+            title : "by_date",
+            callback : function() {
+                $scope.currentFilter = this.id;
+                $scope.orderDesc = !$scope.orderDesc;
+                by_date($scope.orderDesc);
+            }
+        },{
+            id : "2",
+            title : "by_name",
+            callback : function() {
+                $scope.currentFilter = this.id;
+                $scope.orderDesc = !$scope.orderDesc;
+                by_name($scope.orderDesc);
+            }
+        },{
+            id : "3",
+            title : "by_rating",
+            callback : function () {
+                $scope.currentFilter = this.id;
+                $scope.orderDesc = !$scope.orderDesc;
+                by_rating($scope.orderDesc);
+            }
+        },{
+            id : "4",
+            title : "by_price",
+            callback : function () {
+                $scope.currentFilter = this.id;
+                $scope.orderDesc = !$scope.orderDesc;
+                by_price($scope.orderDesc);
+            }
+        }
+    ];
 
     var likeIndex;
     var equalIndex;
@@ -110,6 +145,6 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
             $state.go("404");
         }
 
-        $scope.by_date();
+        by_date(true);
     });
 });

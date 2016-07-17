@@ -11,7 +11,7 @@ model.controller("booksController" , function($scope,$state,$languages,applicati
     $scope.filter.equals("groupBooks.section.name","text",$scope.getData().sectionName);
     $scope.books = [];
 
-    $scope.by_date = function(orderDesc) {
+    function by_date(orderDesc) {
         $scope.filter.clearOrder();
         $scope.filter.setOrder("createDate" , orderDesc);
 
@@ -19,9 +19,9 @@ model.controller("booksController" , function($scope,$state,$languages,applicati
         $scope.books = [];
 
         doAction();
-    };
+    }
 
-    $scope.by_name = function(orderDesc) {
+    function by_name(orderDesc) {
         $scope.filter.clearOrder();
         $scope.filter.setOrder("name" , orderDesc);
 
@@ -29,7 +29,7 @@ model.controller("booksController" , function($scope,$state,$languages,applicati
         $scope.books = [];
 
         doAction();
-    };
+    }
 
     $scope.currentFilter = "1";
     $scope.sortings = [
@@ -39,7 +39,7 @@ model.controller("booksController" , function($scope,$state,$languages,applicati
             callback : function() {
                 $scope.currentFilter = this.id;
                 $scope.orderDesc = !$scope.orderDesc;
-                $scope.by_date($scope.orderDesc);
+               by_date($scope.orderDesc);
             }
         },{
             id : "2",
@@ -47,7 +47,7 @@ model.controller("booksController" , function($scope,$state,$languages,applicati
             callback : function() {
                 $scope.currentFilter = this.id;
                 $scope.orderDesc = !$scope.orderDesc;
-                $scope.by_name($scope.orderDesc);
+                by_name($scope.orderDesc);
             }
         }
     ];
@@ -128,6 +128,6 @@ model.controller("booksController" , function($scope,$state,$languages,applicati
             $state.go("404");
         }
 
-        $scope.by_date(true);
+        by_date(true);
     });
 });

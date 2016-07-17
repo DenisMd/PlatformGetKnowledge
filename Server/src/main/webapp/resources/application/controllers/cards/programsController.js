@@ -11,7 +11,7 @@ model.controller("programsController" , function($scope,$state,$languages,applic
     $scope.filter.equals("groupPrograms.section.name","text",$scope.getData().sectionName);
     $scope.programs = [];
 
-    $scope.by_date = function(orderDesc) {
+    function by_date(orderDesc) {
         $scope.currentFilterByDate = true;
         $scope.filter.clearOrder();
         $scope.filter.setOrder("createDate" , orderDesc);
@@ -20,9 +20,9 @@ model.controller("programsController" , function($scope,$state,$languages,applic
         $scope.programs = [];
 
         doAction();
-    };
+    }
 
-    $scope.by_name = function(orderDesc) {
+    function by_name(orderDesc) {
         $scope.currentFilterByDate = false;
         $scope.filter.clearOrder();
         $scope.filter.setOrder("name" , orderDesc);
@@ -31,7 +31,7 @@ model.controller("programsController" , function($scope,$state,$languages,applic
         $scope.programs = [];
 
         doAction();
-    };
+    }
 
     $scope.currentFilter = "1";
     $scope.sortings = [
@@ -41,7 +41,7 @@ model.controller("programsController" , function($scope,$state,$languages,applic
             callback : function() {
                 $scope.currentFilter = this.id;
                 $scope.orderDesc = !$scope.orderDesc;
-                $scope.by_date($scope.orderDesc);
+                by_date($scope.orderDesc);
             }
         },{
             id : "2",
@@ -49,7 +49,7 @@ model.controller("programsController" , function($scope,$state,$languages,applic
             callback : function() {
                 $scope.currentFilter = this.id;
                 $scope.orderDesc = !$scope.orderDesc;
-                $scope.by_name($scope.orderDesc);
+                by_name($scope.orderDesc);
             }
         }
     ];
@@ -130,6 +130,6 @@ model.controller("programsController" , function($scope,$state,$languages,applic
             $state.go("404");
         }
 
-        $scope.by_date(true);
+        by_date(true);
     });
 });

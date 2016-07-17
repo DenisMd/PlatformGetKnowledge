@@ -7,7 +7,7 @@ model.controller("foldersController" , function ($scope,className,applicationSer
     
     $scope.orderDesc = true;
 
-    $scope.by_date = function(orderDesc) {
+     function by_date(orderDesc) {
         $scope.filter.clearOrder();
         $scope.filter.clearCustomFilters();
         $scope.filter.setOrder("createDate" , orderDesc);
@@ -16,9 +16,9 @@ model.controller("foldersController" , function ($scope,className,applicationSer
         $scope.folders = [];
 
         doAction();
-    };
+    }
 
-    $scope.by_count = function(orderDesc) {
+    function by_count(orderDesc) {
         $scope.filter.clearOrder();
         $scope.filter.clearCustomFilters();
         $scope.filter.addCustomFilter("orderByCount" , {
@@ -29,7 +29,7 @@ model.controller("foldersController" , function ($scope,className,applicationSer
         $scope.folders = [];
 
         doAction();
-    };
+    }
 
     $scope.currentFilter = "1";
     $scope.sortings = [
@@ -39,7 +39,7 @@ model.controller("foldersController" , function ($scope,className,applicationSer
             callback : function() {
                 $scope.currentFilter = this.id;
                 $scope.orderDesc = !$scope.orderDesc;
-                $scope.by_count($scope.orderDesc);
+                by_count($scope.orderDesc);
             }
         },{
             id : "2",
@@ -47,7 +47,7 @@ model.controller("foldersController" , function ($scope,className,applicationSer
             callback : function() {
                 $scope.currentFilter = this.id;
                 $scope.orderDesc = !$scope.orderDesc;
-                $scope.by_date($scope.orderDesc);
+                by_date($scope.orderDesc);
             }
         }
     ];
@@ -88,7 +88,7 @@ model.controller("foldersController" , function ($scope,className,applicationSer
             $state.go("404");
         }
 
-        $scope.by_count($scope.orderDesc);
+        by_count($scope.orderDesc);
     });
 
     $scope.loadMore = function () {
