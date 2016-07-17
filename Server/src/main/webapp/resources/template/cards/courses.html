@@ -17,7 +17,25 @@
                     <md-option ng-value="lang" ng-repeat="lang in langs">{{ translate(lang) }}</md-option>
                 </md-select>
             </md-input-container>
-            <button flex="none" class="btn btn-default filter-panel-item folder-toolbar-btn" ng-click="searchCourse(searchText,selectedLanguage)">
+        </div>
+        <div layout="row" layout-align="center center">
+            <div flex-gt-sm>
+                <md-checkbox ng-model="options.isBase" aria-label="Base checkbox">
+                    {{translate("course_option_base")}}
+                </md-checkbox>
+            </div>
+            <div flex-gt-sm>
+                <md-checkbox ng-model="options.isFree" aria-label="Base checkbox">
+                    {{translate("course_option_free")}}
+                </md-checkbox>
+            </div>
+            <div flex-gt-sm>
+                <md-checkbox ng-model="options.isAvailable" aria-label="Base checkbox">
+                    {{translate("course_option_avail")}}
+                </md-checkbox>
+            </div>
+
+            <button flex="none" class="btn btn-default filter-panel-item folder-toolbar-btn" ng-click="searchCourse(searchText,selectedLanguage,options)">
                 {{translate("do_filter")}}
             </button>
         </div>

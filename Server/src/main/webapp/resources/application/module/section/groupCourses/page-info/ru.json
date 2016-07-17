@@ -4,6 +4,9 @@
     "folder_in" : "Перейти в каталог курсов",
     "folder_totals_count" : "Количество курсов",
     "course_is_base" : "Базовый",
-    "course_create" : "Создать курс"
+    "course_create" : "Создать курс",
+    "course_option_base" : "Только базовые курсы",
+    "course_option_free" : "Только бесплатные курсы",
+    "course_option_avail" : "Доступные по знаниям"
   }
 }
