@@ -45,6 +45,11 @@ public class GroupProgramsRepository extends ProtectedRepository<GroupPrograms> 
     public void orderByCountPrograms(HashMap<String,Object> data , FilterQuery<GroupBooks> query, FilterCountQuery<GroupPrograms> countQuery) {
         Join join = query.getRoot().join("programs", JoinType.LEFT);
         query.getCriteriaQuery().groupBy(query.getRoot().get("id"));
-        query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().desc(query.getCriteriaBuilder().count(join)));
+        boolean desc = (boolean) data.get("desc");
+        if (desc) {
+            query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().desc(query.getCriteriaBuilder().count(join)));
+        } else {
+            query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().asc(query.getCriteriaBuilder().count(join)));
+        }
     }
 }

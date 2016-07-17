@@ -62,14 +62,14 @@ md-input-container .folders-toolbar-select{
     color:#0E76B7;
 }
 
-.folders-orderBy span{
+.folder-order{
     margin: 0 10px;
     vertical-align: middle;
     display: inline-block;
     cursor: pointer;
 }
 
-.folders-orderBy span:hover{
+.folder-order:hover{
     transform: scale(1.05);
 }
 
