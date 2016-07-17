@@ -1,5 +1,6 @@
 package com.getknowledge.modules.courses;
 
+import com.getknowledge.modules.books.group.GroupBooks;
 import com.getknowledge.modules.courses.changelist.ChangeList;
 import com.getknowledge.modules.courses.changelist.ChangeListRepository;
 import com.getknowledge.modules.courses.group.GroupCourses;
@@ -89,6 +90,30 @@ public class CourseRepository extends ProtectedRepository<Course> {
         Predicate tags2 = countQuery.getCriteriaBuilder().like(join2.get("tagName"),"%"+value+"%");
         countQuery.addPrevPredicate(countQuery.getCriteriaBuilder().or(name2,tags2));
     }
+
+    @Filter(name = "orderByPrice")
+    public void orderByPrice(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
+        Join join = query.getRoot().join("books", JoinType.LEFT);
+        query.getCriteriaQuery().groupBy(query.getRoot().get("id"));
+        boolean desc = (boolean) data.get("desc");
+        if (desc) {
+            query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().desc(query.getCriteriaBuilder().count(join)));
+        } else {
+            query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().asc(query.getCriteriaBuilder().count(join)));
+        }
+    }
+    @Filter(name = "orderByRating")
+    public void orderByRating(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
+        Join join = query.getRoot().join("books", JoinType.LEFT);
+        query.getCriteriaQuery().groupBy(query.getRoot().get("id"));
+        boolean desc = (boolean) data.get("desc");
+        if (desc) {
+            query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().desc(query.getCriteriaBuilder().count(join)));
+        } else {
+            query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().asc(query.getCriteriaBuilder().count(join)));
+        }
+    }
+
 
     private void removeCourseInfo(Course course) {
         if (course.getTutorials() != null) {

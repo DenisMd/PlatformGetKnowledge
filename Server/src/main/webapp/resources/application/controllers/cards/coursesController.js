@@ -22,7 +22,7 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
         doAction();
     }
 
-     function by_name() {
+     function by_name(orderDesc) {
         $scope.filter.clearOrder();
         $scope.filter.setOrder("name" , orderDesc);
 
@@ -31,6 +31,33 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
 
         doAction();
     }
+
+    function by_rating(orderDesc) {
+        $scope.filter.clearOrder();
+        $scope.filter.clearCustomFilters();
+        $scope.filter.addCustomFilter("orderByPrice" , {
+            desc : orderDesc
+        });
+
+        $scope.filter.result.first = 0;
+        $scope.folders = [];
+
+        doAction();
+    }
+    
+    function by_price(orderDesc) {
+        $scope.filter.clearOrder();
+        $scope.filter.clearCustomFilters();
+        $scope.filter.addCustomFilter("orderByRating" , {
+            desc : orderDesc
+        });
+
+        $scope.filter.result.first = 0;
+        $scope.folders = [];
+
+        doAction();
+    }
+    
 
     $scope.currentFilter = "1";
     $scope.sortings = [
