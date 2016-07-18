@@ -8,7 +8,9 @@ import com.getknowledge.modules.programs.group.GroupPrograms;
 import com.getknowledge.modules.programs.tags.ProgramTag;
 import com.getknowledge.modules.tags.EntityWithTags;
 import com.getknowledge.modules.userInfo.UserInfo;
+import com.getknowledge.platform.annotations.ModelView;
 import com.getknowledge.platform.annotations.ModuleInfo;
+import com.getknowledge.platform.annotations.ViewType;
 import com.getknowledge.platform.base.entities.*;
 import com.getknowledge.platform.modules.permission.Permission;
 import com.getknowledge.platform.modules.user.User;
@@ -36,6 +38,7 @@ public class Program extends AbstractEntity implements CloneableEntity<Program>,
     private Language language;
 
     @ManyToOne(optional = false)
+    @ModelView(type = {ViewType.CompactPublic})
     private UserInfo owner;
 
     @Column(name = "create_date")

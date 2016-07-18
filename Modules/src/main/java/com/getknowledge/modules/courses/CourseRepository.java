@@ -91,27 +91,38 @@ public class CourseRepository extends ProtectedRepository<Course> {
         countQuery.addPrevPredicate(countQuery.getCriteriaBuilder().or(name2,tags2));
     }
 
+    @Filter(name = "isFreeCourses")
+      public void isFreeCourses(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
+        Join priceJoin = query.getJoin(new String[]{"item", "price"}, 0, null, JoinType.INNER);
+        Predicate freePrice = query.getCriteriaBuilder().equal(priceJoin.get("free"),true);
+        query.addPrevPredicate(freePrice);
+
+        Join priceJoin2 = countQuery.getJoin(new String[]{"item", "price"}, 0, null, JoinType.INNER);
+        Predicate freePrice2 = countQuery.getCriteriaBuilder().equal(priceJoin2.get("free"),true);
+        countQuery.addPrevPredicate(freePrice2);
+    }
+
+    @Filter(name = "isAvailable")
+    public void isAvailable(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
+        //Сделать
+    }
+
     @Filter(name = "orderByPrice")
     public void orderByPrice(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
-        Join join = query.getRoot().join("books", JoinType.LEFT);
-        query.getCriteriaQuery().groupBy(query.getRoot().get("id"));
-        boolean desc = (boolean) data.get("desc");
-        if (desc) {
-            query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().desc(query.getCriteriaBuilder().count(join)));
-        } else {
-            query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().asc(query.getCriteriaBuilder().count(join)));
-        }
+        //Пример
+//        Join join = query.getRoot().join("books", JoinType.LEFT);
+//        query.getCriteriaQuery().groupBy(query.getRoot().get("id"));
+//        boolean desc = (boolean) data.get("desc");
+//        if (desc) {
+//            query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().desc(query.getCriteriaBuilder().count(join)));
+//        } else {
+//            query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().asc(query.getCriteriaBuilder().count(join)));
+//        }
     }
+
     @Filter(name = "orderByRating")
     public void orderByRating(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
-        Join join = query.getRoot().join("books", JoinType.LEFT);
-        query.getCriteriaQuery().groupBy(query.getRoot().get("id"));
-        boolean desc = (boolean) data.get("desc");
-        if (desc) {
-            query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().desc(query.getCriteriaBuilder().count(join)));
-        } else {
-            query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().asc(query.getCriteriaBuilder().count(join)));
-        }
+        //Сделать
     }
 
 

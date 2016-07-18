@@ -29,12 +29,13 @@
                     {{translate("course_option_free")}}
                 </md-checkbox>
             </div>
-            <div flex-gt-sm>
+            <div flex-gt-sm ng-show="user">
                 <md-checkbox ng-model="options.isAvailable" aria-label="Base checkbox">
                     {{translate("course_option_avail")}}
                 </md-checkbox>
             </div>
-
+        </div>
+        <div layout="row" layout-align="center center">
             <button flex="none" class="btn btn-default filter-panel-item folder-toolbar-btn" ng-click="searchCourse(searchText,selectedLanguage,options)">
                 {{translate("do_filter")}}
             </button>

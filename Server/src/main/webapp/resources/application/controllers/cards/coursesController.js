@@ -98,7 +98,10 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
 
     var likeIndex;
     var equalIndex;
-    $scope.searchCourse = function(text,language) {
+    var isBaseIndex;
+    var isFreeIndex;
+    var isisAvailableIndex;
+    $scope.searchCourse = function(text,language,options) {
         if (likeIndex != undefined) {
             $scope.filter.result.customFilters.splice(likeIndex,1);
         }
@@ -106,6 +109,8 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
             likeIndex  = $scope.filter.addCustomFilter("searchCourses",{
                 textValue : text
             });
+        } else {
+            likeIndex = undefined;
         }
 
         if (equalIndex !== undefined) {
@@ -118,10 +123,44 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
             equalIndex = undefined;
         }
 
+        if (isBaseIndex != undefined) {
+            $scope.filter.result.filtersInfo.filters.splice(isBaseIndex,1);
+        } else {
+            isBaseIndex = undefined;
+        }
+
+        if (isFreeIndex != undefined) {
+            $scope.filter.result.customFilters.splice(isFreeIndex,1);
+        } else {
+            isFreeIndex = undefined;
+        }
+
+        if (isisAvailableIndex != undefined) {
+            $scope.filter.result.customFilters.splice(isisAvailableIndex,1);
+        } else {
+            isisAvailableIndex = undefined;
+        }
+
+        if (options) {
+            if ("isBase" in options) {
+                if (options.isBase)
+                    isBaseIndex  = $scope.filter.equals("base", "logical", options.isBase);
+            }
+
+            if ("isFree" in options) {
+                if (options.isFree)
+                    isFreeIndex  = $scope.filter.addCustomFilter("isFreeCourses",{});
+            }
+            if ("isAvailable" in options) {
+                if (options.isAvailable)
+                    isisAvailableIndex  = $scope.filter.addCustomFilter("isAvailable",{});
+            }
+        }
+
         //$scope.filter.like("tags.tagName","text","%"+text+"%");
 
         $scope.filter.result.first = 0;
-        $scope.programs = [];
+        $scope.courses = [];
 
         doAction();
     };
