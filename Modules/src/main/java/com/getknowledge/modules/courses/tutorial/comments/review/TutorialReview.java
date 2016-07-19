@@ -18,7 +18,7 @@ public class TutorialReview extends Comment {
     @JsonIgnore
     private Tutorial tutorial;
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     private Rating rating;
 
     public Tutorial getTutorial() {

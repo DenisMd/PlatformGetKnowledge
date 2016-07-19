@@ -11,13 +11,13 @@ import java.math.BigDecimal;
 @Table(name = "prices")
 public class Price extends AbstractEntity {
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Currency currency;
 
-    @Column(nullable = false)
-    private BigDecimal price;
+    @Column
+    private BigDecimal price = BigDecimal.ZERO;
 
-    @Column(nullable = false)
+    @Column
     private int discount = 0;
 
     @Column(nullable = false)

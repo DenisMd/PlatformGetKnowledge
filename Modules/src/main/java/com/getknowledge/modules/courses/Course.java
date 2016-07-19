@@ -36,6 +36,7 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
     private String description;
 
     @ManyToOne(optional = false)
+    @ModelView(type = {ViewType.Public})
     private GroupCourses groupCourses;
 
     @ManyToOne(optional = false)
@@ -77,7 +78,7 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
     @Embedded
     private Version version;
 
-    @Transient
+    @ManyToOne(optional = false)
     private Rating rating;
 
     @OneToMany(mappedBy = "course")
@@ -220,29 +221,12 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
     }
 
     public Rating getRating() {
-        rating = new Rating();
-        int qualityExercises = 0;
-        int qualityInformation = 0;
-        int qualityTest = 0;
-        int relevanceInformation = 0;
-
-        for (Tutorial tutorial : tutorials) {
-            qualityExercises += tutorial.getAvgTutorialRating().getQualityExercises();
-            qualityInformation += tutorial.getAvgTutorialRating().getQualityInformation();
-            qualityTest += tutorial.getAvgTutorialRating().getQualityTest();
-            relevanceInformation += tutorial.getAvgTutorialRating().getRelevanceInformation();
-        }
-
-        if (tutorials.size() != 0 && qualityExercises != 0) {
-            rating.setQualityExercises(qualityExercises / tutorials.size());
-            rating.setQualityInformation(qualityInformation / tutorials.size());
-            rating.setQualityTest(qualityTest / tutorials.size());
-            rating.setRelevanceInformation(relevanceInformation / tutorials.size());
-        }
-
         return rating;
     }
 
+    public void setRating(Rating rating) {
+        this.rating = rating;
+    }
 
     public Boolean isBase() {
         return base;

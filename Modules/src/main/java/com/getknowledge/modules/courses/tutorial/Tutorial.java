@@ -3,6 +3,7 @@ package com.getknowledge.modules.courses.tutorial;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.courses.Course;
 import com.getknowledge.modules.courses.raiting.Rating;
+import com.getknowledge.modules.courses.tutorial.comments.review.TutorialReview;
 import com.getknowledge.modules.courses.tutorial.homeworks.HomeWork;
 import com.getknowledge.modules.courses.tutorial.test.Test;
 import com.getknowledge.modules.userInfo.UserInfo;
@@ -47,7 +48,7 @@ public class Tutorial  extends AbstractEntity implements CloneableEntity<Tutoria
     @JsonIgnore
     private Video video;
 
-    @Transient
+    @ManyToOne(optional = false)
     private Rating avgTutorialRating;
 
     @Column(name = "last_change_time" , nullable = false)
@@ -64,6 +65,10 @@ public class Tutorial  extends AbstractEntity implements CloneableEntity<Tutoria
 
     @OneToOne
     private Test test;
+
+    @OneToMany(mappedBy = "tutorial")
+    @JsonIgnore
+    private List<TutorialReview> tutorialReviews = new ArrayList<>();
 
     public Test getTest() {
         return test;
@@ -130,9 +135,11 @@ public class Tutorial  extends AbstractEntity implements CloneableEntity<Tutoria
     }
 
     public Rating getAvgTutorialRating() {
-        //TODO:Вычислить из sql запроса
-        avgTutorialRating = new Rating();
         return avgTutorialRating;
+    }
+
+    public void setAvgTutorialRating(Rating avgTutorialRating) {
+        this.avgTutorialRating = avgTutorialRating;
     }
 
     public String getName() {

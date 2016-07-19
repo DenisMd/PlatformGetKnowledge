@@ -32,6 +32,7 @@ public class Program extends AbstractEntity implements CloneableEntity<Program>,
     private String description;
 
     @ManyToOne(optional = false)
+    @ModelView(type = {ViewType.Public})
     private GroupPrograms groupPrograms;
 
     @ManyToOne(optional = false)
