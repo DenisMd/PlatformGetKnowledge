@@ -5,6 +5,7 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
 
     $scope.orderDesc = true;
     $scope.showCreateArea = false;
+    $scope.showFilterArea = true;
 
     $scope.filter = applicationService.createFilter($scope.getData().className,0,10);
     $scope.filter.createFiltersInfo();

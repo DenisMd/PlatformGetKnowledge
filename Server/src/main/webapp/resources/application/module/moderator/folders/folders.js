@@ -236,7 +236,7 @@ model.controller("foldersCtrl", function ($scope,applicationService,className,$m
                 name : "createDate",
                 title : "folder_create_date",
                 orderBy : true,
-                filter : "dateTime"
+                filter : "date"
             }
         ],
         selectItemCallback : function (item) {

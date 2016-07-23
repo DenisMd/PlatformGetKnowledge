@@ -2,43 +2,45 @@
 
 <div ng-controller="coursesController">
     <md-content class="content-body folders-toolbar" >
-        <div layout="row" layout-align="center center">
-            <md-input-container flex class="folders-toolbar-input-container">
-                <span class="folders-toolbar-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
-                <label class="folders-toolbar-label">
-                    {{translate("search")}}
-                </label>
-                <input class="folders-toolbar-item" ng-model="searchText">
-            </md-input-container>
-            <md-input-container  class="folders-toolbar-input-container" flex="grow" flex-gt-sm>
-                <label>{{translate("language")}}</label>
-                <md-select class="folders-toolbar-select" ng-model="selectedLanguage">
-                    <md-option ng-value="'any'">{{translate("language")}}</md-option>
-                    <md-option ng-value="lang" ng-repeat="lang in langs">{{ translate(lang) }}</md-option>
-                </md-select>
-            </md-input-container>
-        </div>
-        <div layout="row" layout-align="center center">
-            <div flex-gt-sm>
-                <md-checkbox ng-model="options.isBase" aria-label="Base checkbox">
-                    {{translate("course_option_base")}}
-                </md-checkbox>
+        <div layout="column" ng-show="showFilterArea">
+            <div layout="row" layout-align="center center">
+                <md-input-container flex class="folders-toolbar-input-container">
+                    <span class="folders-toolbar-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
+                    <label class="folders-toolbar-label">
+                        {{translate("search")}}
+                    </label>
+                    <input class="folders-toolbar-item" ng-model="searchText">
+                </md-input-container>
+                <md-input-container  class="folders-toolbar-input-container" flex="grow" flex-gt-sm>
+                    <label>{{translate("language")}}</label>
+                    <md-select class="folders-toolbar-select" ng-model="selectedLanguage">
+                        <md-option ng-value="'any'">{{translate("language")}}</md-option>
+                        <md-option ng-value="lang" ng-repeat="lang in langs">{{ translate(lang) }}</md-option>
+                    </md-select>
+                </md-input-container>
             </div>
-            <div flex-gt-sm>
-                <md-checkbox ng-model="options.isFree" aria-label="Base checkbox">
-                    {{translate("course_option_free")}}
-                </md-checkbox>
+            <div layout="row" layout-align="center center">
+                <div flex-gt-sm>
+                    <md-checkbox ng-model="options.isBase" aria-label="Base checkbox">
+                        {{translate("course_option_base")}}
+                    </md-checkbox>
+                </div>
+                <div flex-gt-sm>
+                    <md-checkbox ng-model="options.isFree" aria-label="Base checkbox">
+                        {{translate("course_option_free")}}
+                    </md-checkbox>
+                </div>
+                <div flex-gt-sm ng-show="user">
+                    <md-checkbox ng-model="options.isAvailable" aria-label="Base checkbox">
+                        {{translate("course_option_avail")}}
+                    </md-checkbox>
+                </div>
             </div>
-            <div flex-gt-sm ng-show="user">
-                <md-checkbox ng-model="options.isAvailable" aria-label="Base checkbox">
-                    {{translate("course_option_avail")}}
-                </md-checkbox>
+            <div layout="row" layout-align="center center">
+                <button flex="none" class="btn btn-default filter-panel-item folder-toolbar-btn" ng-click="searchCourse(searchText,selectedLanguage,options)">
+                    {{translate("do_filter")}}
+                </button>
             </div>
-        </div>
-        <div layout="row" layout-align="center center">
-            <button flex="none" class="btn btn-default filter-panel-item folder-toolbar-btn" ng-click="searchCourse(searchText,selectedLanguage,options)">
-                {{translate("do_filter")}}
-            </button>
         </div>
         <div layout="column" ng-show="showCreateArea">
             <div layout-gt-sm="row" flex>
@@ -93,7 +95,7 @@
                 </span>
             </div>
             <div ng-show="coursesInfo.creatable" flex-gt-sm="none" class="text-center" layout-margin-gt-sm>
-                <button class="btn btn-default blue-btn" ng-click="showCreateArea = !showCreateArea">{{translate("create")}}</button>
+                <button class="btn btn-default blue-btn" ng-click="showCreateArea = !showCreateArea; showFilterArea = !showFilterArea">{{translate("create")}}</button>
             </div>
         </div>
         <div layout-wrap layout="row">
