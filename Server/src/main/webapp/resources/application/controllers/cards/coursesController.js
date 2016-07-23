@@ -3,8 +3,9 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
     var maxCharactersInName = 40;
     var maxCharacterDescription = 250;
 
-    $scope.currentFilterByDate = true;
+    $scope.orderDesc = true;
     $scope.showCreateArea = false;
+    $scope.showFilterArea = true;
 
     $scope.filter = applicationService.createFilter($scope.getData().className,0,10);
     $scope.filter.createFiltersInfo();
@@ -12,31 +13,96 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
     $scope.filter.equals("groupCourses.section.name","text",$scope.getData().sectionName);
     $scope.courses = [];
 
-    $scope.by_date = function() {
-        $scope.currentFilterByDate = true;
+     function by_date(orderDesc) {
         $scope.filter.clearOrder();
-        $scope.filter.setOrder("createDate" , false);
+        $scope.filter.setOrder("createDate" , orderDesc);
 
         $scope.filter.result.first = 0;
         $scope.courses = [];
 
         doAction();
-    };
+    }
 
-    $scope.by_name = function() {
-        $scope.currentFilterByDate = false;
+     function by_name(orderDesc) {
         $scope.filter.clearOrder();
-        $scope.filter.setOrder("name" , false);
+        $scope.filter.setOrder("name" , orderDesc);
 
         $scope.filter.result.first = 0;
         $scope.courses = [];
 
         doAction();
-    };
+    }
+
+    function by_rating(orderDesc) {
+        $scope.filter.clearOrder();
+        $scope.filter.clearCustomFilters();
+        $scope.filter.addCustomFilter("orderByPrice" , {
+            desc : orderDesc
+        });
+
+        $scope.filter.result.first = 0;
+        $scope.folders = [];
+
+        doAction();
+    }
+    
+    function by_price(orderDesc) {
+        $scope.filter.clearOrder();
+        $scope.filter.clearCustomFilters();
+        $scope.filter.addCustomFilter("orderByRating" , {
+            desc : orderDesc
+        });
+
+        $scope.filter.result.first = 0;
+        $scope.folders = [];
+
+        doAction();
+    }
+    
+
+    $scope.currentFilter = "1";
+    $scope.sortings = [
+        {
+            id : "1",
+            title : "by_date",
+            callback : function() {
+                $scope.currentFilter = this.id;
+                $scope.orderDesc = !$scope.orderDesc;
+                by_date($scope.orderDesc);
+            }
+        },{
+            id : "2",
+            title : "by_name",
+            callback : function() {
+                $scope.currentFilter = this.id;
+                $scope.orderDesc = !$scope.orderDesc;
+                by_name($scope.orderDesc);
+            }
+        },{
+            id : "3",
+            title : "by_rating",
+            callback : function () {
+                $scope.currentFilter = this.id;
+                $scope.orderDesc = !$scope.orderDesc;
+                by_rating($scope.orderDesc);
+            }
+        },{
+            id : "4",
+            title : "by_price",
+            callback : function () {
+                $scope.currentFilter = this.id;
+                $scope.orderDesc = !$scope.orderDesc;
+                by_price($scope.orderDesc);
+            }
+        }
+    ];
 
     var likeIndex;
     var equalIndex;
-    $scope.searchCourse = function(text,language) {
+    var isBaseIndex;
+    var isFreeIndex;
+    var isisAvailableIndex;
+    $scope.searchCourse = function(text,language,options) {
         if (likeIndex != undefined) {
             $scope.filter.result.customFilters.splice(likeIndex,1);
         }
@@ -44,6 +110,8 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
             likeIndex  = $scope.filter.addCustomFilter("searchCourses",{
                 textValue : text
             });
+        } else {
+            likeIndex = undefined;
         }
 
         if (equalIndex !== undefined) {
@@ -56,10 +124,44 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
             equalIndex = undefined;
         }
 
+        if (isBaseIndex != undefined) {
+            $scope.filter.result.filtersInfo.filters.splice(isBaseIndex,1);
+        } else {
+            isBaseIndex = undefined;
+        }
+
+        if (isFreeIndex != undefined) {
+            $scope.filter.result.customFilters.splice(isFreeIndex,1);
+        } else {
+            isFreeIndex = undefined;
+        }
+
+        if (isisAvailableIndex != undefined) {
+            $scope.filter.result.customFilters.splice(isisAvailableIndex,1);
+        } else {
+            isisAvailableIndex = undefined;
+        }
+
+        if (options) {
+            if ("isBase" in options) {
+                if (options.isBase)
+                    isBaseIndex  = $scope.filter.equals("base", "logical", options.isBase);
+            }
+
+            if ("isFree" in options) {
+                if (options.isFree)
+                    isFreeIndex  = $scope.filter.addCustomFilter("isFreeCourses",{});
+            }
+            if ("isAvailable" in options) {
+                if (options.isAvailable)
+                    isisAvailableIndex  = $scope.filter.addCustomFilter("isAvailable",{});
+            }
+        }
+
         //$scope.filter.like("tags.tagName","text","%"+text+"%");
 
         $scope.filter.result.first = 0;
-        $scope.programs = [];
+        $scope.courses = [];
 
         doAction();
     };
@@ -110,6 +212,6 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
             $state.go("404");
         }
 
-        $scope.by_date();
+        by_date(true);
     });
 });

@@ -10,6 +10,7 @@ import com.getknowledge.platform.modules.role.Role;
 import com.getknowledge.platform.modules.role.names.BaseRoleName;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.user.User;
+import com.getknowledge.platform.modules.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,7 @@ public class ViewController {
     private TraceService traceService;
 
     @Autowired
-    private UserInfoService userInfoService;
+    private UserRepository userRepository;
 
     @Autowired
     ServletContext servletContext;
@@ -125,8 +126,8 @@ public class ViewController {
         } else {
             temp.put("principalName", "");
         }
-        UserInfo userInfo = userInfoService.getAuthorizedUser(temp);
-        User user = userInfo == null ? null : userInfo.getUser();
+
+        User user = userRepository.getCurrentUser(temp);
         if (!isCorrectRole(user, split)) {
             throw new NotAuthorized("Access denied");
         }

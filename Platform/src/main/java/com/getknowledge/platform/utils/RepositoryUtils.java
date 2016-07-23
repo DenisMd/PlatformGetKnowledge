@@ -11,12 +11,23 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class RepositoryUtils {
 
+    public static List<Field> getAllFields(List<Field> fields, Class<?> type) {
+        fields.addAll(Arrays.asList(type.getDeclaredFields()));
+
+        if (type.getSuperclass() != null) {
+            fields = getAllFields(fields, type.getSuperclass());
+        }
+
+        return fields;
+    }
+
     public static void prepareViewFields(List<ViewType> viewTypes  , AbstractEntity entity){
-        for (Field field : entity.getClass().getDeclaredFields()) {
+        for (Field field : getAllFields(new LinkedList<>(),entity.getClass())) {
             if (viewTypes != null) {
                 boolean viewAvail = false;
                 for (ModelView modelView : field.getAnnotationsByType(ModelView.class)) {

@@ -106,7 +106,7 @@
     </div>
 </div>
 
-<div layout="column" layout-align="start center" class="program-links">
+<div layout="column" layout-align="start start" layout-align-gt-sm="start center" class="program-links">
 
     <div class="program-links-title">
         {{translate("program_links")}}
@@ -114,7 +114,7 @@
 
     <div ng-if="program.fileName">
         <i class="fa fa-cloud-download" aria-hidden="true"></i>
-        <a ng-href="{{book.downloadUrl}}" download>{{translate("program_download_link")}} ---> '{{program.fileName}}'</a>
+        <a ng-href="{{book.downloadUrl}}" class="program-link" download>{{translate("program_download_link")}} ---> '{{program.fileName}}'</a>
     </div>
 
     <div ng-repeat="url in program.links track by $index" class="program-link-margin">

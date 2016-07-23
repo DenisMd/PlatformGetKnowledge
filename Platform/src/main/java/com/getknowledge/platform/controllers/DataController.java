@@ -632,6 +632,11 @@ public class DataController {
                 for (HashMap<String,Object> customFilter : customFilters) {
                     String customFilterName = (String) customFilter.get("name");
                     HashMap<String,Object> customFilterData = (HashMap<String, Object>) customFilter.get("data");
+                    if (principal != null) {
+                        customFilterData.put("principalName", principal.getName());
+                    } else {
+                        customFilterData.put("principalName", "");
+                    }
                     for (Method method : repository.getClass().getMethods()) {
                         Filter filter = AnnotationUtils.findAnnotation(method, Filter.class);
                         if(filter == null || !filter.name().equals(customFilterName)) {

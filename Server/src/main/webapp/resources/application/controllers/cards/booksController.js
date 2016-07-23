@@ -2,7 +2,7 @@ model.controller("booksController" , function($scope,$state,$languages,applicati
 
     var maxCharactersInName = 21;
 
-    $scope.currentFilterByDate = true;
+    $scope.orderDesc = true;
     $scope.showCreateArea = false;
 
     $scope.filter = applicationService.createFilter($scope.getData().className,0,12);
@@ -11,27 +11,46 @@ model.controller("booksController" , function($scope,$state,$languages,applicati
     $scope.filter.equals("groupBooks.section.name","text",$scope.getData().sectionName);
     $scope.books = [];
 
-    $scope.by_date = function() {
-        $scope.currentFilterByDate = true;
+    function by_date(orderDesc) {
         $scope.filter.clearOrder();
-        $scope.filter.setOrder("createDate" , true);
+        $scope.filter.setOrder("createDate" , orderDesc);
 
         $scope.filter.result.first = 0;
         $scope.books = [];
 
         doAction();
-    };
+    }
 
-    $scope.by_name = function() {
-        $scope.currentFilterByDate = false;
+    function by_name(orderDesc) {
         $scope.filter.clearOrder();
-        $scope.filter.setOrder("name" , false);
+        $scope.filter.setOrder("name" , orderDesc);
 
         $scope.filter.result.first = 0;
         $scope.books = [];
 
         doAction();
-    };
+    }
+
+    $scope.currentFilter = "1";
+    $scope.sortings = [
+        {
+            id : "1",
+            title : "by_date",
+            callback : function() {
+                $scope.currentFilter = this.id;
+                $scope.orderDesc = !$scope.orderDesc;
+               by_date($scope.orderDesc);
+            }
+        },{
+            id : "2",
+            title : "by_name",
+            callback : function() {
+                $scope.currentFilter = this.id;
+                $scope.orderDesc = !$scope.orderDesc;
+                by_name($scope.orderDesc);
+            }
+        }
+    ];
 
     var likeIndex;
     var equalIndex;
@@ -109,6 +128,6 @@ model.controller("booksController" , function($scope,$state,$languages,applicati
             $state.go("404");
         }
 
-        $scope.by_date();
+        by_date(true);
     });
 });

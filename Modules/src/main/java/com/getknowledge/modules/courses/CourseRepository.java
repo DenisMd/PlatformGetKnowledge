@@ -1,8 +1,11 @@
 package com.getknowledge.modules.courses;
 
+import com.getknowledge.modules.books.group.GroupBooks;
 import com.getknowledge.modules.courses.changelist.ChangeList;
 import com.getknowledge.modules.courses.changelist.ChangeListRepository;
 import com.getknowledge.modules.courses.group.GroupCourses;
+import com.getknowledge.modules.courses.raiting.Rating;
+import com.getknowledge.modules.courses.raiting.RatingRepository;
 import com.getknowledge.modules.courses.tags.CoursesTag;
 import com.getknowledge.modules.courses.tags.CoursesTagRepository;
 import com.getknowledge.modules.courses.tutorial.Tutorial;
@@ -20,6 +23,8 @@ import com.getknowledge.modules.dictionaries.knowledge.Knowledge;
 import com.getknowledge.modules.dictionaries.knowledge.KnowledgeRepository;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.programs.Program;
+import com.getknowledge.modules.shop.item.Item;
+import com.getknowledge.modules.shop.item.ItemRepository;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.video.Video;
 import com.getknowledge.modules.video.VideoRepository;
@@ -75,6 +80,12 @@ public class CourseRepository extends ProtectedRepository<Course> {
     @Autowired
     private AnswerRepository answerRepository;
 
+    @Autowired
+    private ItemRepository itemRepository;
+
+    @Autowired
+    private RatingRepository ratingRepository;
+
     @Filter(name = "searchCourses")
     public void searchCourses(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
         Join join = query.getJoin(new String[]{"tags"},0,null, JoinType.LEFT);
@@ -89,6 +100,41 @@ public class CourseRepository extends ProtectedRepository<Course> {
         Predicate tags2 = countQuery.getCriteriaBuilder().like(join2.get("tagName"),"%"+value+"%");
         countQuery.addPrevPredicate(countQuery.getCriteriaBuilder().or(name2,tags2));
     }
+
+    @Filter(name = "isFreeCourses")
+      public void isFreeCourses(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
+        Join priceJoin = query.getJoin(new String[]{"item", "price"}, 0, null, JoinType.INNER);
+        Predicate freePrice = query.getCriteriaBuilder().equal(priceJoin.get("free"),true);
+        query.addPrevPredicate(freePrice);
+
+        Join priceJoin2 = countQuery.getJoin(new String[]{"item", "price"}, 0, null, JoinType.INNER);
+        Predicate freePrice2 = countQuery.getCriteriaBuilder().equal(priceJoin2.get("free"),true);
+        countQuery.addPrevPredicate(freePrice2);
+    }
+
+    @Filter(name = "isAvailable")
+    public void isAvailable(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
+        //Сделать
+    }
+
+    @Filter(name = "orderByPrice")
+    public void orderByPrice(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
+        //Пример
+//        Join join = query.getRoot().join("books", JoinType.LEFT);
+//        query.getCriteriaQuery().groupBy(query.getRoot().get("id"));
+//        boolean desc = (boolean) data.get("desc");
+//        if (desc) {
+//            query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().desc(query.getCriteriaBuilder().count(join)));
+//        } else {
+//            query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().asc(query.getCriteriaBuilder().count(join)));
+//        }
+    }
+
+    @Filter(name = "orderByRating")
+    public void orderByRating(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
+        //Сделать
+    }
+
 
     private void removeCourseInfo(Course course) {
         if (course.getTutorials() != null) {
@@ -149,6 +195,15 @@ public class CourseRepository extends ProtectedRepository<Course> {
         course.setBase(base);
         course.setCreateDate(Calendar.getInstance());
         course.setRelease(false);
+
+        Item item = new Item();
+        itemRepository.create(item);
+        course.setItem(item);
+
+        Rating rating = new Rating();
+        ratingRepository.create(rating);
+        course.setRating(rating);
+
         course.setVersion(new Version(1,0,0));
         if (tags != null) {
             coursesTagRepository.createTags(tags,course);

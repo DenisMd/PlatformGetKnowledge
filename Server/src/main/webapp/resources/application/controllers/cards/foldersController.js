@@ -1,35 +1,57 @@
 model.controller("foldersController" , function ($scope,className,applicationService,$state) {
-
-    $scope.currentFilterByDate = false;
-
+    
     $scope.filter = applicationService.createFilter($scope.getData().className,0,12);
     $scope.filter.setDistinct(false);
     $scope.filter.createFiltersInfo();
     $scope.filter.equals("section.name","text",$scope.getData().sectionName);
+    
+    $scope.orderDesc = true;
 
-    $scope.by_date = function() {
-        $scope.currentFilterByDate = true;
+     function by_date(orderDesc) {
         $scope.filter.clearOrder();
         $scope.filter.clearCustomFilters();
-        $scope.filter.setOrder("createDate" , true);
+        $scope.filter.setOrder("createDate" , orderDesc);
 
         $scope.filter.result.first = 0;
         $scope.folders = [];
 
         doAction();
-    };
+    }
 
-    $scope.by_count = function() {
-        $scope.currentFilterByDate = false;
+    function by_count(orderDesc) {
         $scope.filter.clearOrder();
         $scope.filter.clearCustomFilters();
-        $scope.filter.addCustomFilter("orderByCount" , {});
+        $scope.filter.addCustomFilter("orderByCount" , {
+            desc : orderDesc
+        });
 
         $scope.filter.result.first = 0;
         $scope.folders = [];
 
         doAction();
-    };
+    }
+
+    $scope.currentFilter = "1";
+    $scope.sortings = [
+        {
+            id : "1",
+            title : "by_count",
+            callback : function() {
+                $scope.currentFilter = this.id;
+                $scope.orderDesc = !$scope.orderDesc;
+                by_count($scope.orderDesc);
+            }
+        },{
+            id : "2",
+            title : "by_date",
+            callback : function() {
+                $scope.currentFilter = this.id;
+                $scope.orderDesc = !$scope.orderDesc;
+                by_date($scope.orderDesc);
+            }
+        }
+    ];
+
     var likeIndex;
     $scope.searchFilter = function(text) {
         if (likeIndex != undefined) {
@@ -66,7 +88,7 @@ model.controller("foldersController" , function ($scope,className,applicationSer
             $state.go("404");
         }
 
-        $scope.by_count();
+        by_count($scope.orderDesc);
     });
 
     $scope.loadMore = function () {

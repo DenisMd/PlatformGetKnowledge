@@ -3,6 +3,7 @@ package com.getknowledge.modules.userInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.courses.Course;
 import com.getknowledge.modules.dictionaries.city.City;
+import com.getknowledge.modules.dictionaries.knowledge.Knowledge;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.menu.Menu;
 import com.getknowledge.modules.userInfo.courseInfo.CourseInfo;
@@ -112,6 +113,18 @@ public class UserInfo extends AbstractEntity implements CloneableEntity<UserInfo
     @OneToMany(mappedBy = "userInfo")
     @JsonIgnore
     private List<CourseInfo> courseInfos = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "users_knowledge")
+    private List<Knowledge> knowledge = new ArrayList<>();
+
+    public List<Knowledge> getKnowledge() {
+        return knowledge;
+    }
+
+    public void setKnowledge(List<Knowledge> knowledge) {
+        this.knowledge = knowledge;
+    }
 
     public List<CourseInfo> getCourseInfos() {
         return courseInfos;

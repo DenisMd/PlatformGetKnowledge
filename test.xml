@@ -1,25 +1,87 @@
-XML запрос:
-<xml-fragment tit:Bitmap="2020010000C00012" xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">
-    <tit:H1>96</tit:H1>
-    <tit:H2>272</tit:H2>
-    <tit:H3>33219</tit:H3>
-    <tit:H4>500</tit:H4>
-    <tit:F3>
-        <tit:SF1>96</tit:SF1>
-        <tit:SF2>0</tit:SF2>
-        <tit:SF3>0</tit:SF3>
-    </tit:F3>
-    <tit:F11>150</tit:F11>
-    <tit:F24>110</tit:F24>
-    <tit:F41>01158251</tit:F41>
-    <tit:F42>8251001</tit:F42>
-    <tit:F60>000007</tit:F60>
-    <tit:F63>
-        001
-        000000000111
-        000
-        000000000000
-        000
-        000000000000
-        000000000000000000000000000000000000000000000</tit:F63>
+Request :
+<xml-fragment Kind="ModifyToken" LifePhase="Single" ProcessorInstId="2081" OriginatorInstId="2081">
+    <tran:Parties xmlns:tran="http://schemas.tranzaxis.com/tran.xsd">
+        <tran:Party Id="49467"/>
+    </tran:Parties>
+    <tran:Specific xmlns:tran="http://schemas.tranzaxis.com/tran.xsd">
+        <tran:Admin ObjectMustExist="true">
+            <tran:Token>
+                <tok:CardMagnetic xmlns:tok="http://schemas.tranzaxis.com/tokens-admin.xsd">
+                    <tok:Restrictions>
+                        <tok:Restriction ClassId="aclHTJOJ5BIQLOBDCKAAALOMT5GDM" Guid="YXNFSD5IHZGM7GETO23UG6KRCM"
+                                         ClassGuid="aclHTJOJ5BIQLOBDCKAAALOMT5GDM">
+                            <com:UserProps xmlns:com="http://schemas.radixware.org/common.xsd">
+                                <com:UserProp Id="pru67O64UPPERGZBDAJ3O5H6AZWIQ" OwnVal="true">
+                                    <com:Func ClassGUID="aclGWLRZPDEZXOBDCMVAALOMT5GDM"
+                                              OwnerPid="tblIIPUO7U277NRDA26AAMPGXSZKU~143~YXNFSD5IHZGM7GETO23UG6KRCM"
+                                              OwnerEntityId="tblWKV3U7T5PPNRDB4UAALOMT5GDM"
+                                              OwnerPropId="pru67O64UPPERGZBDAJ3O5H6AZWIQ"
+                                              Profile="boolean check(Tran tran, Doers::Doer doer)">
+                                        <com:JavaSrc xmlns:ads="http://schemas.radixware.org/adsdef.xsd">
+                                            <xsc:Item xmlns:xsc="http://schemas.radixware.org/xscml.xsd">
+                                                <xsc:Java>return true;</xsc:Java>
+                                            </xsc:Item>
+                                        </com:JavaSrc>
+                                        <com:MethodId>mthG6LRZPDEZXOBDCMVAALOMT5GDM</com:MethodId>
+                                    </com:Func>
+                                </com:UserProp>
+                                <com:UserProp Id="pruAZDIAVG22BH6XHRP6HECWYMUYE" OwnVal="true"/>
+                                <com:UserProp Id="pruU5JC3XGZTVFFBMSVEXNXJCSDNU" OwnVal="true"/>
+                            </com:UserProps>
+                            <res:ClientUpperMaxVal xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">222
+                            </res:ClientUpperMaxVal>
+                            <res:ClientCanChange xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">true
+                            </res:ClientCanChange>
+                            <res:Title xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">Test restriction
+                            </res:Title>
+                            <res:InUse xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">true</res:InUse>
+                            <res:BegTime xsi:nil="true" xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd"
+                                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <res:EndTime xsi:nil="true" xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd"
+                                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <res:MaxVal xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">100000
+                            </res:MaxVal>
+                            <res:Ccy xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">643</res:Ccy>
+                            <res:ResetPeriodType xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">
+                                OnAdminTran
+                            </res:ResetPeriodType>
+                            <res:ResetTime xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">0
+                            </res:ResetTime>
+                            <res:AccumulateCnt xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">1
+                            </res:AccumulateCnt>
+                            <res:Notes xsi:nil="true" xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd"
+                                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <res:CustomerDescription xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">
+                                <com:Text xsi:nil="true" xmlns:com="http://schemas.tranzaxis.com/common-types.xsd"
+                                          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            </res:CustomerDescription>
+                            <res:Condition xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">
+                                <res:UserFunc ClassGUID="aclGWLRZPDEZXOBDCMVAALOMT5GDM"
+                                              OwnerPid="tblIIPUO7U277NRDA26AAMPGXSZKU~143~YXNFSD5IHZGM7GETO23UG6KRCM"
+                                              OwnerEntityId="tblWKV3U7T5PPNRDB4UAALOMT5GDM"
+                                              OwnerPropId="pru67O64UPPERGZBDAJ3O5H6AZWIQ"
+                                              Profile="boolean check(Tran tran, Doers::Doer doer)">
+                                    <com:JavaSrc xmlns:ads="http://schemas.radixware.org/adsdef.xsd"
+                                                 xmlns:com="http://schemas.radixware.org/common.xsd">
+                                        <xsc:Item xmlns:xsc="http://schemas.radixware.org/xscml.xsd">
+                                            <xsc:Java>return true;</xsc:Java>
+                                        </xsc:Item>
+                                    </com:JavaSrc>
+                                    <com:MethodId xmlns:com="http://schemas.radixware.org/common.xsd">
+                                        mthG6LRZPDEZXOBDCMVAALOMT5GDM
+                                    </com:MethodId>
+                                </res:UserFunc>
+                            </res:Condition>
+                            <res:MaxValAdjustFunc xsi:nil="true"
+                                                  xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd"
+                                                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                            <res:ResetControlFunc xsi:nil="true"
+                                                  xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd"
+                                                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                        </tok:Restriction>
+                    </tok:Restrictions>
+                </tok:CardMagnetic>
+            </tran:Token>
+        </tran:Admin>
+    </tran:Specific>
 </xml-fragment>

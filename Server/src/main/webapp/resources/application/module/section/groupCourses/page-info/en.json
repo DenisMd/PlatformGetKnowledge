@@ -4,6 +4,9 @@
     "folder_in" : "Go to courses folder",
     "folder_totals_count" : "Courses totals count",
     "course_is_base" : "Base",
-    "course_crate" : "Create course"
+    "course_crate" : "Create course",
+    "course_option_base" : "Base only",
+    "course_option_free" : "Free only",
+    "course_option_avail" : "Available by knowledge"
   }
 }

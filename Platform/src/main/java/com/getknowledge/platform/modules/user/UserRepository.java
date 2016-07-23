@@ -75,8 +75,7 @@ public class UserRepository extends BaseRepository<User> {
 
     public User getCurrentUser(HashMap<String,Object> data){
         String login = (String) data.get("principalName");
-        User user = getSingleEntityByFieldAndValue("login", login);
-        return user;
+        return getSingleEntityByFieldAndValue("login", login);
     }
 
     public void blockUser(User user , String message) {

@@ -2,7 +2,7 @@ model.controller("programsController" , function($scope,$state,$languages,applic
     var maxCharactersInName = 40;
     var maxCharacterDescription = 250;
 
-    $scope.currentFilterByDate = true;
+    $scope.orderDesc = true;
     $scope.showCreateArea = false;
 
     $scope.filter = applicationService.createFilter($scope.getData().className,0,10);
@@ -11,27 +11,48 @@ model.controller("programsController" , function($scope,$state,$languages,applic
     $scope.filter.equals("groupPrograms.section.name","text",$scope.getData().sectionName);
     $scope.programs = [];
 
-    $scope.by_date = function() {
+    function by_date(orderDesc) {
         $scope.currentFilterByDate = true;
         $scope.filter.clearOrder();
-        $scope.filter.setOrder("createDate" , false);
+        $scope.filter.setOrder("createDate" , orderDesc);
 
         $scope.filter.result.first = 0;
         $scope.programs = [];
 
         doAction();
-    };
+    }
 
-    $scope.by_name = function() {
+    function by_name(orderDesc) {
         $scope.currentFilterByDate = false;
         $scope.filter.clearOrder();
-        $scope.filter.setOrder("name" , false);
+        $scope.filter.setOrder("name" , orderDesc);
 
         $scope.filter.result.first = 0;
         $scope.programs = [];
 
         doAction();
-    };
+    }
+
+    $scope.currentFilter = "1";
+    $scope.sortings = [
+        {
+            id : "1",
+            title : "by_date",
+            callback : function() {
+                $scope.currentFilter = this.id;
+                $scope.orderDesc = !$scope.orderDesc;
+                by_date($scope.orderDesc);
+            }
+        },{
+            id : "2",
+            title : "by_name",
+            callback : function() {
+                $scope.currentFilter = this.id;
+                $scope.orderDesc = !$scope.orderDesc;
+                by_name($scope.orderDesc);
+            }
+        }
+    ];
 
     var likeIndex;
     var equalIndex;
@@ -109,6 +130,6 @@ model.controller("programsController" , function($scope,$state,$languages,applic
             $state.go("404");
         }
 
-        $scope.by_date();
+        by_date(true);
     });
 });

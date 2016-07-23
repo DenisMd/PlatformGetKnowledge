@@ -170,6 +170,8 @@
     "by_count"      : "By count",
     "by_date"       : "By creation date",
     "by_name"       : "By name",
+    "by_rating"     : "By rating",
+    "by_price"      : "By price",
 
     "text_field"          : "Text field",
     "number_field"        : "Number field",
