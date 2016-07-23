@@ -127,3 +127,25 @@ md-input-container .folders-toolbar-select{
         margin-bottom: 10px;
     }
 }
+
+.create-area md-select{
+    margin-bottom: 1.725em;
+}
+
+@media (min-width: 960px) {
+    .create-area md-input-container{
+        margin:0;
+    }
+
+    .checkbox-container{
+        margin-left:5px;
+    }
+}
+
+.tags-container {
+    margin-bottom: 20px;
+}
+
+.tags-container label{
+    margin-right: 5px;
+}

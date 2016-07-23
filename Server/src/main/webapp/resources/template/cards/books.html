@@ -46,7 +46,7 @@
                     <textarea ng-model="newBook.description" md-maxlength="500" rows="3" md-select-on-focus></textarea>
                 </md-input-container>
             </div>
-            <div layout="column" class="book-tags" flex ng-init="newBook.tags = []">
+            <div layout="column" class="tags-container" flex ng-init="newBook.tags = []">
                 <div class="md-title" flex>{{translate("tags")}}</div>
                 <md-chips ng-model="newBook.tags" readonly="false" flex></md-chips>
             </div>
