@@ -2,8 +2,8 @@
 
 <div ng-controller="coursesController">
     <md-content class="content-body folders-toolbar" >
-        <div layout="column" ng-show="showFilterArea">
-            <div layout="row" layout-align="center center">
+        <div layout="column"  ng-show="showFilterArea">
+            <div layout-gt-sm="row" layout="column" layout-align-gt-sm="center center">
                 <md-input-container flex class="folders-toolbar-input-container">
                     <span class="folders-toolbar-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
                     <label class="folders-toolbar-label">
@@ -42,8 +42,8 @@
                 </button>
             </div>
         </div>
-        <div layout="column" ng-show="showCreateArea">
-            <div layout-gt-sm="row" flex>
+        <div class="create-area" layout="column" ng-show="showCreateArea">
+            <div layout-gt-sm="row" layout-align-gt-sm="start center" layout-fill flex>
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>{{translate("name")}}</label>
                     <input ng-model="newCourse.name">
@@ -54,9 +54,9 @@
                         <md-option ng-value="lang" ng-repeat="lang in langs">{{ translate(lang)}}</md-option>
                     </md-select>
                 </md-input-container>
-                <div flex-gt-sm>
+                <div class="checkbox-container" flex-gt-sm>
                     <md-checkbox ng-model="newCourse.base" aria-label="Base checkbox" ng-init="newCourse.base = true">
-                        {{translate("course_is_base")}} : {{ newCourse.base }}
+                        {{translate("course_is_base")}}
                     </md-checkbox>
                 </div>
             </div>
@@ -66,12 +66,12 @@
                     <textarea ng-model="newCourse.description" md-maxlength="1500" rows="3" md-select-on-focus></textarea>
                 </md-input-container>
             </div>
-            <div layout="column" class="course-tags" flex ng-init="newCourse.tags = []">
-                <div class="md-title" flex>{{translate("tags")}}</div>
+            <div layout="row" class="tags-container" flex ng-init="newCourse.tags = []" layout-align="start center">
+                <label flex="none">{{translate("tags")}}</label>
                 <md-chips ng-model="newCourse.tags" readonly="false" flex></md-chips>
             </div>
             <div layout="row" class="create-div" layout-align="center">
-                <button flex="20" class="btn btn-default blue-btn" ng-click="createCourse(newCourse)">{{translate("course_create")}}</button>
+                <button flex="none" class="btn btn-default blue-btn" ng-click="createCourse(newCourse)">{{translate("course_create")}}</button>
             </div>
         </div>
     </md-content>

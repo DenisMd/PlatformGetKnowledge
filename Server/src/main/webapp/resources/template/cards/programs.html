@@ -40,12 +40,12 @@
                     <textarea ng-model="newProgram.description" md-maxlength="500" rows="3" md-select-on-focus></textarea>
                 </md-input-container>
             </div>
-            <div layout="column" class="program-tags" flex ng-init="newProgram.tags = []">
+            <div layout="column" class="tags-container" flex ng-init="newProgram.tags = []">
                 <div class="md-title" flex>{{translate("tags")}}</div>
                 <md-chips ng-model="newProgram.tags" readonly="false" flex></md-chips>
             </div>
             <div layout="row" class="create-div" layout-align="center">
-                <button flex="20" class="btn btn-default blue-btn" ng-click="createProgram(newProgram)">{{translate("program_create")}}</button>
+                <button flex="none" class="btn btn-default blue-btn" ng-click="createProgram(newProgram)">{{translate("program_create")}}</button>
             </div>
         </div>
     </md-content>
