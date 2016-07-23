@@ -26,6 +26,7 @@ import com.getknowledge.modules.programs.Program;
 import com.getknowledge.modules.shop.item.Item;
 import com.getknowledge.modules.shop.item.ItemRepository;
 import com.getknowledge.modules.userInfo.UserInfo;
+import com.getknowledge.modules.userInfo.UserInfoRepository;
 import com.getknowledge.modules.video.Video;
 import com.getknowledge.modules.video.VideoRepository;
 import com.getknowledge.platform.annotations.Filter;
@@ -86,6 +87,9 @@ public class CourseRepository extends ProtectedRepository<Course> {
     @Autowired
     private RatingRepository ratingRepository;
 
+    @Autowired
+    private UserInfoRepository userInfoRepository;
+
     @Filter(name = "searchCourses")
     public void searchCourses(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
         Join join = query.getJoin(new String[]{"tags"},0,null, JoinType.LEFT);
@@ -103,18 +107,22 @@ public class CourseRepository extends ProtectedRepository<Course> {
 
     @Filter(name = "isFreeCourses")
       public void isFreeCourses(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
-        Join priceJoin = query.getJoin(new String[]{"item", "price"}, 0, null, JoinType.INNER);
+        Join priceJoin = query.getRoot().join("item").join("price");
         Predicate freePrice = query.getCriteriaBuilder().equal(priceJoin.get("free"),true);
         query.addPrevPredicate(freePrice);
 
-        Join priceJoin2 = countQuery.getJoin(new String[]{"item", "price"}, 0, null, JoinType.INNER);
+        Join priceJoin2 = countQuery.getRoot().join("item").join("price");
         Predicate freePrice2 = countQuery.getCriteriaBuilder().equal(priceJoin2.get("free"),true);
         countQuery.addPrevPredicate(freePrice2);
     }
 
     @Filter(name = "isAvailable")
     public void isAvailable(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
-        //Сделать
+        UserInfo currentUser = userInfoRepository.getCurrentUser(data);
+        if (currentUser == null)
+            return;
+        Join knowledgeJoin = query.getJoin(new String[]{"requiredKnowledge"},0,null,JoinType.INNER);
+        //query.getCriteriaBuilder().
     }
 
     @Filter(name = "orderByPrice")

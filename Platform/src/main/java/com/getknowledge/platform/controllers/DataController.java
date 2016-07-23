@@ -85,7 +85,7 @@ public class DataController {
 
     //Методы для подготовки объектов -------------------------------------------------------------
     private ObjectNode prepareJson (AbstractEntity abstractEntity,boolean editable, boolean creatable, Class classEntity) throws NotAuthorized, ModuleNotFound {
-        ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
+        ObjectNode objectNode = crudService.convertToObjectNode(objectMapper,abstractEntity);
         objectNode.put("editable" , editable);
         objectNode.put("creatable" , creatable);
         objectNode.put("imageViewExist" , false);
