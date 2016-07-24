@@ -39,6 +39,7 @@ import com.getknowledge.platform.exceptions.PlatformException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
@@ -118,6 +119,8 @@ public class CourseRepository extends ProtectedRepository<Course> {
 
     @Filter(name = "isAvailable")
     public void isAvailable(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
+        //TODO: Другого варианта пока не нашел
+        entityManager.createNativeQuery("select distinct c.id from course as c right join courses_required_knowledges as k on k.course_id = c.id right join users_knowledge as uk on uk.userInfo_id = 1 group by c.id having array_agg(k.requiredknowledge_id) <@ array_agg(uk.knowledge_id)");
         UserInfo currentUser = userInfoRepository.getCurrentUser(data);
         if (currentUser == null)
             return;
