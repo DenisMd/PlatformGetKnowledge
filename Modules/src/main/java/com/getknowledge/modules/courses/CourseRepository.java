@@ -38,11 +38,13 @@ import com.getknowledge.platform.exceptions.DeleteException;
 import com.getknowledge.platform.exceptions.PlatformException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
+import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -92,6 +94,7 @@ public class CourseRepository extends ProtectedRepository<Course> {
     private UserInfoRepository userInfoRepository;
 
     @Filter(name = "searchCourses")
+    @Transactional
     public void searchCourses(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
         Join join = query.getJoin(new String[]{"tags"},0,null, JoinType.LEFT);
         String value = (String) data.get("textValue");
@@ -107,7 +110,8 @@ public class CourseRepository extends ProtectedRepository<Course> {
     }
 
     @Filter(name = "isFreeCourses")
-      public void isFreeCourses(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
+    @Transactional
+    public void isFreeCourses(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
         Join priceJoin = query.getRoot().join("item").join("price");
         Predicate freePrice = query.getCriteriaBuilder().equal(priceJoin.get("free"),true);
         query.addPrevPredicate(freePrice);
@@ -118,17 +122,29 @@ public class CourseRepository extends ProtectedRepository<Course> {
     }
 
     @Filter(name = "isAvailable")
+    @Transactional
     public void isAvailable(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
-        //TODO: Другого варианта пока не нашел
-        entityManager.createNativeQuery("select distinct c.id from course as c right join courses_required_knowledges as k on k.course_id = c.id right join users_knowledge as uk on uk.userInfo_id = 1 group by c.id having array_agg(k.requiredknowledge_id) <@ array_agg(uk.knowledge_id)");
+
         UserInfo currentUser = userInfoRepository.getCurrentUser(data);
         if (currentUser == null)
             return;
-        Join knowledgeJoin = query.getJoin(new String[]{"requiredKnowledge"},0,null,JoinType.INNER);
-        //query.getCriteriaBuilder().
+
+        //TODO: Другого варианта пока не нашел
+        List<BigInteger> ids = entityManager.createNativeQuery(
+                "select distinct c.id from course as c right join courses_required_knowledges as k on k.course_id = c.id right join users_knowledge as uk on uk.userInfo_id = :userInfoId group by c.id having array_agg(k.requiredknowledge_id) <@ array_agg(uk.knowledge_id)"
+        ).setParameter("userInfoId" , currentUser.getId()).getResultList();
+
+        Predicate base = query.getCriteriaBuilder().equal(query.getRoot().get("base"),true);
+        if (ids.isEmpty()) {
+            query.addPrevPredicate(base);
+        } else {
+            Predicate predicate = query.getRoot().get("id").in(ids);
+            query.addPrevPredicate(query.getCriteriaBuilder().or(base,predicate));
+        }
     }
 
     @Filter(name = "orderByPrice")
+    @Transactional
     public void orderByPrice(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
         //Пример
 //        Join join = query.getRoot().join("books", JoinType.LEFT);
@@ -142,6 +158,7 @@ public class CourseRepository extends ProtectedRepository<Course> {
     }
 
     @Filter(name = "orderByRating")
+    @Transactional
     public void orderByRating(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
         //Сделать
     }
