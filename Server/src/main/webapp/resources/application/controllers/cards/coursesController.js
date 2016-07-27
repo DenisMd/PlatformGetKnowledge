@@ -35,13 +35,11 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
 
     function by_rating(orderDesc) {
         $scope.filter.clearOrder();
-        $scope.filter.clearCustomFilters();
-        $scope.filter.addCustomFilter("orderByPrice" , {
-            desc : orderDesc
-        });
+        $scope.filter.setOrder("rating.avgRating" , orderDesc);
+        $scope.filter.setDistinct(false);
 
         $scope.filter.result.first = 0;
-        $scope.folders = [];
+        $scope.courses = [];
 
         doAction();
     }

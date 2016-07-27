@@ -52,7 +52,11 @@ public class Trace extends AbstractEntity {
     }
 
     public void setMessage(String message) {
-        this.message = message;
+        if (message.length() > 500) {
+            this.message = message.substring(0,500);
+        } else {
+            this.message = message;
+        }
     }
 
     public Calendar getCalendar() {

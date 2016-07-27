@@ -152,27 +152,6 @@ public class CourseRepository extends ProtectedRepository<Course> {
         }
     }
 
-    @Filter(name = "orderByPrice")
-    @Transactional
-    public void orderByPrice(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
-        //Пример
-//        Join join = query.getRoot().join("books", JoinType.LEFT);
-//        query.getCriteriaQuery().groupBy(query.getRoot().get("id"));
-//        boolean desc = (boolean) data.get("desc");
-//        if (desc) {
-//            query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().desc(query.getCriteriaBuilder().count(join)));
-//        } else {
-//            query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().asc(query.getCriteriaBuilder().count(join)));
-//        }
-    }
-
-    @Filter(name = "orderByRating")
-    @Transactional
-    public void orderByRating(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
-        //Сделать
-    }
-
-
     private void removeCourseInfo(Course course) {
         if (course.getTutorials() != null) {
             for (Tutorial tutorial : course.getTutorials()) {
