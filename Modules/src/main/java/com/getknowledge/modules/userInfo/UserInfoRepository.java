@@ -90,8 +90,13 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
     }
 
     public UserInfo getCurrentUser(HashMap<String,Object> data){
-        com.getknowledge.platform.modules.user.User user = userRepository.getCurrentUser(data);
-        return getUserInfoByUser(user);
+        if (!data.containsKey("principalName"))
+            return null;
+        return findByLogin((String) data.get("principalName"));
+    }
+
+    public UserInfo findByLogin(String login){
+        return getSingleEntityByFieldAndValue("user.login",login);
     }
 
     public UserInfo createUserInfo(com.getknowledge.platform.modules.user.User user, String firstName, String lastName, Language language, boolean man, byte [] profileImage){

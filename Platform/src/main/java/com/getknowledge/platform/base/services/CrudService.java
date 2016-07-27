@@ -1,5 +1,7 @@
 package com.getknowledge.platform.base.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.getknowledge.platform.base.entities.AbstractEntity;
 import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.base.repositories.enumerations.RepOperations;
@@ -74,5 +76,9 @@ public class CrudService {
 
     public void merge(AbstractEntity entity,BaseRepository baseRepository) {
         baseRepository.merge(entity);
+    }
+
+    public ObjectNode convertToObjectNode(ObjectMapper objectMapper, AbstractEntity abstractEntity) {
+        return objectMapper.valueToTree(abstractEntity);
     }
 }

@@ -74,7 +74,13 @@ public class UserRepository extends BaseRepository<User> {
     }
 
     public User getCurrentUser(HashMap<String,Object> data){
+        if (!data.containsKey("principalName"))
+            return null;
         String login = (String) data.get("principalName");
+        return getSingleEntityByFieldAndValue("login", login);
+    }
+
+    public User findByLogin(String login){
         return getSingleEntityByFieldAndValue("login", login);
     }
 

@@ -85,7 +85,7 @@ public class DataController {
 
     //Методы для подготовки объектов -------------------------------------------------------------
     private ObjectNode prepareJson (AbstractEntity abstractEntity,boolean editable, boolean creatable, Class classEntity) throws NotAuthorized, ModuleNotFound {
-        ObjectNode objectNode = objectMapper.valueToTree(abstractEntity);
+        ObjectNode objectNode = crudService.convertToObjectNode(objectMapper,abstractEntity);
         objectNode.put("editable" , editable);
         objectNode.put("creatable" , creatable);
         objectNode.put("imageViewExist" , false);
@@ -790,7 +790,11 @@ public class DataController {
                     //TODO: обработать result
                     if (result instanceof Result){
                     }
-                    jsonResult = objectMapper.writeValueAsString(result);
+                    if (result instanceof AbstractEntity){
+                        jsonResult = crudService.convertToObjectNode(objectMapper, (AbstractEntity) result).toString();
+                    } else {
+                        jsonResult = objectMapper.writeValueAsString(result);
+                    }
                     trace.log(String.format("<------ Send \"Action\" response with parameters {className : %s , actionName : %s , data : %s} result : %s from user \"%s\"",className,actionName,jsonData,jsonResult,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
                     return jsonResult;
                 }

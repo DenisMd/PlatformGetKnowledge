@@ -26,6 +26,7 @@ import com.getknowledge.modules.programs.Program;
 import com.getknowledge.modules.shop.item.Item;
 import com.getknowledge.modules.shop.item.ItemRepository;
 import com.getknowledge.modules.userInfo.UserInfo;
+import com.getknowledge.modules.userInfo.UserInfoRepository;
 import com.getknowledge.modules.video.Video;
 import com.getknowledge.modules.video.VideoRepository;
 import com.getknowledge.platform.annotations.Filter;
@@ -37,10 +38,13 @@ import com.getknowledge.platform.exceptions.DeleteException;
 import com.getknowledge.platform.exceptions.PlatformException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Query;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
+import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -86,7 +90,11 @@ public class CourseRepository extends ProtectedRepository<Course> {
     @Autowired
     private RatingRepository ratingRepository;
 
+    @Autowired
+    private UserInfoRepository userInfoRepository;
+
     @Filter(name = "searchCourses")
+    @Transactional
     public void searchCourses(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
         Join join = query.getJoin(new String[]{"tags"},0,null, JoinType.LEFT);
         String value = (String) data.get("textValue");
@@ -102,39 +110,47 @@ public class CourseRepository extends ProtectedRepository<Course> {
     }
 
     @Filter(name = "isFreeCourses")
-      public void isFreeCourses(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
-        Join priceJoin = query.getJoin(new String[]{"item", "price"}, 0, null, JoinType.INNER);
+    @Transactional
+    public void isFreeCourses(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
+        Join priceJoin = query.getRoot().join("item").join("price");
         Predicate freePrice = query.getCriteriaBuilder().equal(priceJoin.get("free"),true);
         query.addPrevPredicate(freePrice);
 
-        Join priceJoin2 = countQuery.getJoin(new String[]{"item", "price"}, 0, null, JoinType.INNER);
+        Join priceJoin2 = countQuery.getRoot().join("item").join("price");
         Predicate freePrice2 = countQuery.getCriteriaBuilder().equal(priceJoin2.get("free"),true);
         countQuery.addPrevPredicate(freePrice2);
     }
 
     @Filter(name = "isAvailable")
+    @Transactional
     public void isAvailable(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
-        //Сделать
-    }
 
-    @Filter(name = "orderByPrice")
-    public void orderByPrice(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
-        //Пример
-//        Join join = query.getRoot().join("books", JoinType.LEFT);
-//        query.getCriteriaQuery().groupBy(query.getRoot().get("id"));
-//        boolean desc = (boolean) data.get("desc");
-//        if (desc) {
-//            query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().desc(query.getCriteriaBuilder().count(join)));
-//        } else {
-//            query.getCriteriaQuery().orderBy(query.getCriteriaBuilder().asc(query.getCriteriaBuilder().count(join)));
-//        }
-    }
+        UserInfo currentUser = userInfoRepository.getCurrentUser(data);
+        if (currentUser == null)
+            return;
 
-    @Filter(name = "orderByRating")
-    public void orderByRating(HashMap<String,Object> data , FilterQuery<Course> query, FilterCountQuery<Course> countQuery) {
-        //Сделать
-    }
+        //TODO: Другого варианта пока не нашел
+        List<BigInteger> ids = entityManager.createNativeQuery(
+                "select distinct c.id from course as c right join courses_required_knowledges as k on k.course_id = c.id right join users_knowledge as uk on uk.userInfo_id = :userInfoId group by c.id having array_agg(k.requiredknowledge_id) <@ array_agg(uk.knowledge_id)"
+        ).setParameter("userInfoId" , currentUser.getId()).getResultList();
 
+        Predicate base = query.getCriteriaBuilder().equal(query.getRoot().get("base"),true);
+        if (ids.isEmpty()) {
+            query.addPrevPredicate(base);
+        } else {
+            Predicate predicate = query.getRoot().get("id").in(ids);
+            query.addPrevPredicate(query.getCriteriaBuilder().or(base,predicate));
+        }
+
+
+        Predicate base2 = countQuery.getCriteriaBuilder().equal(countQuery.getRoot().get("base"),true);
+        if (ids.isEmpty()) {
+            countQuery.addPrevPredicate(base2);
+        } else {
+            Predicate predicate = countQuery.getRoot().get("id").in(ids);
+            countQuery.addPrevPredicate(countQuery.getCriteriaBuilder().or(base2,predicate));
+        }
+    }
 
     private void removeCourseInfo(Course course) {
         if (course.getTutorials() != null) {

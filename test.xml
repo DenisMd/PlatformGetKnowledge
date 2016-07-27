@@ -1,87 +1,22 @@
-Request :
-<xml-fragment Kind="ModifyToken" LifePhase="Single" ProcessorInstId="2081" OriginatorInstId="2081">
-    <tran:Parties xmlns:tran="http://schemas.tranzaxis.com/tran.xsd">
-        <tran:Party Id="49467"/>
-    </tran:Parties>
-    <tran:Specific xmlns:tran="http://schemas.tranzaxis.com/tran.xsd">
-        <tran:Admin ObjectMustExist="true">
-            <tran:Token>
-                <tok:CardMagnetic xmlns:tok="http://schemas.tranzaxis.com/tokens-admin.xsd">
-                    <tok:Restrictions>
-                        <tok:Restriction ClassId="aclHTJOJ5BIQLOBDCKAAALOMT5GDM" Guid="YXNFSD5IHZGM7GETO23UG6KRCM"
-                                         ClassGuid="aclHTJOJ5BIQLOBDCKAAALOMT5GDM">
-                            <com:UserProps xmlns:com="http://schemas.radixware.org/common.xsd">
-                                <com:UserProp Id="pru67O64UPPERGZBDAJ3O5H6AZWIQ" OwnVal="true">
-                                    <com:Func ClassGUID="aclGWLRZPDEZXOBDCMVAALOMT5GDM"
-                                              OwnerPid="tblIIPUO7U277NRDA26AAMPGXSZKU~143~YXNFSD5IHZGM7GETO23UG6KRCM"
-                                              OwnerEntityId="tblWKV3U7T5PPNRDB4UAALOMT5GDM"
-                                              OwnerPropId="pru67O64UPPERGZBDAJ3O5H6AZWIQ"
-                                              Profile="boolean check(Tran tran, Doers::Doer doer)">
-                                        <com:JavaSrc xmlns:ads="http://schemas.radixware.org/adsdef.xsd">
-                                            <xsc:Item xmlns:xsc="http://schemas.radixware.org/xscml.xsd">
-                                                <xsc:Java>return true;</xsc:Java>
-                                            </xsc:Item>
-                                        </com:JavaSrc>
-                                        <com:MethodId>mthG6LRZPDEZXOBDCMVAALOMT5GDM</com:MethodId>
-                                    </com:Func>
-                                </com:UserProp>
-                                <com:UserProp Id="pruAZDIAVG22BH6XHRP6HECWYMUYE" OwnVal="true"/>
-                                <com:UserProp Id="pruU5JC3XGZTVFFBMSVEXNXJCSDNU" OwnVal="true"/>
-                            </com:UserProps>
-                            <res:ClientUpperMaxVal xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">222
-                            </res:ClientUpperMaxVal>
-                            <res:ClientCanChange xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">true
-                            </res:ClientCanChange>
-                            <res:Title xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">Test restriction
-                            </res:Title>
-                            <res:InUse xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">true</res:InUse>
-                            <res:BegTime xsi:nil="true" xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd"
-                                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-                            <res:EndTime xsi:nil="true" xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd"
-                                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-                            <res:MaxVal xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">100000
-                            </res:MaxVal>
-                            <res:Ccy xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">643</res:Ccy>
-                            <res:ResetPeriodType xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">
-                                OnAdminTran
-                            </res:ResetPeriodType>
-                            <res:ResetTime xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">0
-                            </res:ResetTime>
-                            <res:AccumulateCnt xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">1
-                            </res:AccumulateCnt>
-                            <res:Notes xsi:nil="true" xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd"
-                                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-                            <res:CustomerDescription xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">
-                                <com:Text xsi:nil="true" xmlns:com="http://schemas.tranzaxis.com/common-types.xsd"
-                                          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-                            </res:CustomerDescription>
-                            <res:Condition xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd">
-                                <res:UserFunc ClassGUID="aclGWLRZPDEZXOBDCMVAALOMT5GDM"
-                                              OwnerPid="tblIIPUO7U277NRDA26AAMPGXSZKU~143~YXNFSD5IHZGM7GETO23UG6KRCM"
-                                              OwnerEntityId="tblWKV3U7T5PPNRDB4UAALOMT5GDM"
-                                              OwnerPropId="pru67O64UPPERGZBDAJ3O5H6AZWIQ"
-                                              Profile="boolean check(Tran tran, Doers::Doer doer)">
-                                    <com:JavaSrc xmlns:ads="http://schemas.radixware.org/adsdef.xsd"
-                                                 xmlns:com="http://schemas.radixware.org/common.xsd">
-                                        <xsc:Item xmlns:xsc="http://schemas.radixware.org/xscml.xsd">
-                                            <xsc:Java>return true;</xsc:Java>
-                                        </xsc:Item>
-                                    </com:JavaSrc>
-                                    <com:MethodId xmlns:com="http://schemas.radixware.org/common.xsd">
-                                        mthG6LRZPDEZXOBDCMVAALOMT5GDM
-                                    </com:MethodId>
-                                </res:UserFunc>
-                            </res:Condition>
-                            <res:MaxValAdjustFunc xsi:nil="true"
-                                                  xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd"
-                                                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-                            <res:ResetControlFunc xsi:nil="true"
-                                                  xmlns:res="http://schemas.tranzaxis.com/restricting-admin.xsd"
-                                                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-                        </tok:Restriction>
-                    </tok:Restrictions>
-                </tok:CardMagnetic>
-            </tran:Token>
-        </tran:Admin>
-    </tran:Specific>
+XML ответ:
+<xml-fragment>
+    <tit:H1 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">96</tit:H1>
+    <tit:H2 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">33768</tit:H2>
+    <tit:H3 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">272</tit:H3>
+    <tit:H4 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">210</tit:H4>
+    <tit:F3 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">
+        <tit:SF1>0</tit:SF1>
+        <tit:SF2>0</tit:SF2>
+        <tit:SF3>0</tit:SF3>
+    </tit:F3>
+    <tit:F4 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">4567</tit:F4>
+    <tit:F11 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">292</tit:F11>
+    <tit:F12 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">2016-07-26T12:08:14.019</tit:F12>
+    <tit:F13 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">2016-07-26T12:08:14.019</tit:F13>
+    <tit:F24 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">110</tit:F24>
+    <tit:F37 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">440</tit:F37>
+    <tit:F38 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">446996</tit:F38>
+    <tit:F39 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">00</tit:F39>
+    <tit:F41 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">01158251</tit:F41>
+    <tit:F49 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">524</tit:F49>
 </xml-fragment>

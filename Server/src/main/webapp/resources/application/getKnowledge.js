@@ -67,6 +67,9 @@ model.controller("mainController", function ($scope,$http,$state,$languages,maxM
     //информация о заголовке страници
     $scope.toggelMenu = true;
 
+    $scope.screenHeight = screen.height;
+    $scope.screenWidth = screen.width;
+
     //Сварачивает и разварачивает меню
     $scope.toggelClick = function () {
         $scope.toggelMenu = !$scope.toggelMenu;
