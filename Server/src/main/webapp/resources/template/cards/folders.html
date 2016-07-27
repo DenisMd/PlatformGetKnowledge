@@ -13,7 +13,7 @@
             </button>
         </div>
     </md-content>
-    <md-content class="content-body folders-body">
+    <md-content class="content-body folders-body" ng-style="{'min-height' : screenHeight-45-125 + 'px'}">
         <div layout-gt-sm="row" layout-align="center center">
             <p class="title text-center" flex-gt-sm="none">
                 {{data.title}} ({{foldersInfo.totalEntitiesCount + " " + translate("of_records")}})
