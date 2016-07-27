@@ -48,13 +48,11 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
     
     function by_price(orderDesc) {
         $scope.filter.clearOrder();
-        $scope.filter.clearCustomFilters();
-        $scope.filter.addCustomFilter("orderByRating" , {
-            desc : orderDesc
-        });
+        $scope.filter.setOrder("item.price.price" , orderDesc);
+        $scope.filter.setDistinct(false);
 
         $scope.filter.result.first = 0;
-        $scope.folders = [];
+        $scope.courses = [];
 
         doAction();
     }

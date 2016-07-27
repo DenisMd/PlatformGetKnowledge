@@ -141,6 +141,15 @@ public class CourseRepository extends ProtectedRepository<Course> {
             Predicate predicate = query.getRoot().get("id").in(ids);
             query.addPrevPredicate(query.getCriteriaBuilder().or(base,predicate));
         }
+
+
+        Predicate base2 = countQuery.getCriteriaBuilder().equal(countQuery.getRoot().get("base"),true);
+        if (ids.isEmpty()) {
+            countQuery.addPrevPredicate(base2);
+        } else {
+            Predicate predicate = countQuery.getRoot().get("id").in(ids);
+            countQuery.addPrevPredicate(countQuery.getCriteriaBuilder().or(base2,predicate));
+        }
     }
 
     @Filter(name = "orderByPrice")

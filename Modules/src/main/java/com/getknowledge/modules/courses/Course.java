@@ -287,6 +287,7 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
         course.setCreateDate(this.getCreateDate());
         course.setChangeLists(this.getChangeLists());
         course.setObjectVersion(this.getObjectVersion());
+        course.setItem(item);
         return course;
     }
 
