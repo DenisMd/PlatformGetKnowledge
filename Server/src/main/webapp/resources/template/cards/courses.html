@@ -66,9 +66,9 @@
                     <textarea ng-model="newCourse.description" md-maxlength="1500" rows="3" md-select-on-focus></textarea>
                 </md-input-container>
             </div>
-            <div layout="row" class="tags-container" flex ng-init="newCourse.tags = []" layout-align="start center">
-                <label flex="none">{{translate("tags")}}</label>
-                <md-chips ng-model="newCourse.tags" readonly="false" flex></md-chips>
+            <div layout="column" class="tags-container" flex ng-init="newProgram.tags = []">
+                <div class="md-title" flex>{{translate("tags")}}</div>
+                <md-chips ng-model="newProgram.tags" readonly="false" flex></md-chips>
             </div>
             <div layout="row" class="create-div" layout-align="center">
                 <button flex="none" class="btn btn-default blue-btn" ng-click="createCourse(newCourse)">{{translate("course_create")}}</button>
@@ -99,7 +99,8 @@
             </div>
         </div>
         <div layout-wrap layout="row">
-            <div flex-sm flex-gt-sm="50" ng-repeat="course in courses" class="text-center">
+            <div class="course-container" flex-sm flex-gt-sm="50" ng-repeat="course in courses" class="text-center">
+                <img src="/resources/image/sale.png" class="course-notification"/>
                 <md-card>
                     <md-card-title>
                         <md-card-title-text>
