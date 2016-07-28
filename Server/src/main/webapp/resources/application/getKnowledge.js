@@ -261,6 +261,8 @@ model.controller("mainController", function ($scope,$http,$state,$languages,maxM
         var result = JSON.stringify(obj, null, Number(tabWidth));
         return result;
     };
+
+    applicationService.action($scope, "baseCurrency", className.currency, "getBaseCurrency", {});
     
     //-------------------------------------- удалить их
     applicationService.list($scope , "programmingLanguages",className.programmingLanguages);

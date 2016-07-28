@@ -105,6 +105,11 @@ public class CurrencyService extends AbstractService implements BootstrapService
         return  Result.Complete();
     }
 
+    @Action(name = "getBaseCurrency")
+    public Currency getCurrency(HashMap<String,Object> data) {
+        return currencyRepository.getBaseCurrency();
+    }
+
     //every day - обновлять курсы валют
     @Scheduled(cron = "0 1 1 * * ?")
     @Transactional

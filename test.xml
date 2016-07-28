@@ -1,22 +1,20 @@
 XML ответ:
-<xml-fragment>
-    <tit:H1 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">96</tit:H1>
-    <tit:H2 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">33768</tit:H2>
-    <tit:H3 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">272</tit:H3>
-    <tit:H4 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">210</tit:H4>
-    <tit:F3 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">
-        <tit:SF1>0</tit:SF1>
-        <tit:SF2>0</tit:SF2>
-        <tit:SF3>0</tit:SF3>
-    </tit:F3>
-    <tit:F4 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">4567</tit:F4>
-    <tit:F11 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">292</tit:F11>
-    <tit:F12 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">2016-07-26T12:08:14.019</tit:F12>
-    <tit:F13 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">2016-07-26T12:08:14.019</tit:F13>
-    <tit:F24 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">110</tit:F24>
-    <tit:F37 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">440</tit:F37>
-    <tit:F38 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">446996</tit:F38>
-    <tit:F39 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">00</tit:F39>
-    <tit:F41 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">01158251</tit:F41>
-    <tit:F49 xmlns:tit="http://schemas.tranzaxis.com/titpRequest.xsd">524</tit:F49>
-</xml-fragment>
+<ProcessResult xmlns="http://schemas.tranzaxis.com/xdccontrol.xsd"
+               xmlns:xdc="http://schemas.tranzaxis.com/xdcmessages.xsd">
+    <Timeout Value="30"/>
+    <Message Kind="4" IsWincor="false" Luno="000">
+        <xdc:TranReply MCN="2" TranId="14" State="009">
+            <xdc:Cmd Kind="3" Screen="204"/>
+            <xdc:Print Device="0"/>
+            <xdc:ICC Id="CAM">
+                393130414544413532334536313831433536303633303330384130323330333037323132394631383034303141364641423538363039383432343030303030343845343041303842
+            </xdc:ICC>
+        </xdc:TranReply>
+    </Message>
+</ProcessResult>
+
+        at1  -  5
+        at2a -  CAM
+        at2b -  91 0A EDA523E6181C56063030
+        at2c -  8A 02 3030
+        at2d -  72 12 9F18 04 01A6FAB5 86 09 84240000048E40A08B
