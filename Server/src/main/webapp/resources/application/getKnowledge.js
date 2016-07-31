@@ -102,7 +102,7 @@ model.controller("mainController", function ($scope,$http,$state,$languages,maxM
 
     //--------------------------------------------------------методы по работе с ценами
     $scope.getRealPrice = function (price) {
-        if (price.isFree) {
+        if (price.free) {
             return 0;
         }
 
@@ -110,7 +110,7 @@ model.controller("mainController", function ($scope,$http,$state,$languages,maxM
     };
 
     $scope.convertPrice = function (price) {
-        if (price.isFree) {
+        if (price.free) {
             return price;
         }
         if (!$scope.user || !$scope.user.currency) {
