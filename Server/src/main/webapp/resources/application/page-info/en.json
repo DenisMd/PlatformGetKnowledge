@@ -95,6 +95,7 @@
     "mb"            : "MByte",
     "remove"        : "Remove",
     "upload"        : "Upload",
+    "price"         : "Price",
 
 
     "failed"        : "Failed",
@@ -131,6 +132,8 @@
     "upload_all"          : "Upload all",
     "cancel_all"          : "Cancel all",
     "remove_all"          : "Remove all",
+    "old_price"          : "Old price",
+    "current_price"       : "Current price",
 
     "video1_title"  : "Почему getKnowlege() ?",
     "video2_title"  : "Что значит быть программистом сегодня?",

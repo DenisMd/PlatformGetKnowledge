@@ -172,6 +172,10 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
             if (course.description.length > maxCharacterDescription) {
                 course.description = course.description.substr(0,maxCharacterDescription) + "...";
             }
+            if (course.item || course.item.price) {
+                course.item.price = $scope.convertPrice(course.item.price);
+            }
+            
             $scope.courses.push(course);
         }
     };

@@ -1,0 +1,8 @@
+<p ng-if="getData().discount > 0">
+    <del>{{translate("old_price")}} : {{getData().price}} {{getData().currency.charCode}}</del>
+    <br>
+    {{translate("current_price")}} : {{getRealPrice(getData()) | number:2}} {{getData().currency.charCode}}
+</p>
+<p ng-if="getData().discount == 0">
+    {{translate("price")}} : {{getData().price}} {{getData().currency.charCode}}
+</p>

@@ -96,6 +96,7 @@
     "mb"            : "Мбайт",
     "remove"        : "Удалить",
     "upload"        : "Загрузиить",
+    "price"         : "Цена",
 
     "failed"        : "Ошибка выполнения",
     "complete"      : "Завершено",
@@ -131,6 +132,8 @@
     "upload_all"          : "Загрузить все",
     "cancel_all"          : "Отменить все",
     "remove_all"          : "Удалить все",
+    "old_price"          : "Старая цена",
+    "current_price"       : "Текущая цена",
 
 
     "video1_title"  : "Почему getKnowlege() ?",

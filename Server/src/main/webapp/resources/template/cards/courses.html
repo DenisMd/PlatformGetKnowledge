@@ -106,6 +106,7 @@
                         <md-card-title-text>
                             <span class="md-headline">{{course.name}}</span>
                             <span class="md-subhead course-description">{{course.description}}</span>
+                            <module-template name="components/price" data="course.item.price"></module-template>
                         </md-card-title-text>
                         <md-card-title-media class="image-padding">
                             <a ng-href="{{course.href}}">
