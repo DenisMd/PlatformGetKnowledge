@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="/resources/css/main/inputs/image/select-image.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/main/inputs/files/select-files.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/main/inputs/list/list-input.css">
+    <link rel="stylesheet" type="text/css" href="/resources/css/main/inputs/rating/stars.css">
 
     <%--Dist css for production--%>
     <%--<link rel="stylesheet" type="text/css" href="/resources/dist/css/main.min.css">--%>
