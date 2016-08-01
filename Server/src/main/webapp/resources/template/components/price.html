@@ -2,10 +2,10 @@
     {{translate("price")}} : {{translate("free")}}
 </p>
 <p ng-if="!getData().free && getData().discount > 0">
-    <del>{{translate("old_price")}} : {{getData().price}} {{getData().currency.charCode}}</del>
+    <del>{{translate("old_price")}} : {{getData().price | number:2}} {{translate(getData().currency.charCode.toLowerCase())}}</del>
     <br>
-    {{translate("current_price")}} : {{getRealPrice(getData()) | number:2}} {{getData().currency.charCode}}
+    {{translate("current_price")}} : {{getRealPrice(getData()) | number:2}} {{translate(getData().currency.charCode.toLowerCase())}}
 </p>
 <p ng-if="!getData().free && getData().discount == 0">
-    {{translate("price")}} : {{getData().price}} {{getData().currency.charCode}}
+    {{translate("price")}} : {{getData().price | number:2}} {{translate(getData().currency.charCode.toLowerCase())}}
 </p>

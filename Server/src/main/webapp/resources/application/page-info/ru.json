@@ -204,6 +204,12 @@
     "file_size"                   : "Размер файла",
     "file_progress"               : "Прогресс загрузки",
     "file_status"                 : "Статус",
-    "file_actions"                : "Действия"
+    "file_actions"                : "Действия",
+
+
+    "rub" : "руб.",
+    "usd" : "$",
+    "eur" : "€",
+    "uah" : "гривен"
   }
 }
