@@ -36,6 +36,8 @@
     <link rel="stylesheet" type="text/css" href="/resources/css/main/inputs/list/list-input.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/main/inputs/rating/stars.css">
 
+    <link rel="stylesheet" type="text/css" href="/resources/css/components/price.css">
+
     <%--Dist css for production--%>
     <%--<link rel="stylesheet" type="text/css" href="/resources/dist/css/main.min.css">--%>
 
