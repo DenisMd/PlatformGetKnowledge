@@ -100,7 +100,9 @@
         </div>
         <div layout-wrap layout="row">
             <div class="course-container" flex-sm flex-gt-sm="50" ng-repeat="course in courses" class="text-center">
-                <img src="/resources/image/sale.png" class="course-notification"/>
+                <img src="/resources/image/courses/inDevelop.png" class="course-notification" ng-if="!course.release"/>
+                <img src="/resources/image/courses/base.png" class="course-notification" ng-if="course.release && course.base"/>
+                <img src="/resources/image/courses/sale.png" class="course-notification" ng-if="course.release && course.item.price.discount > 0"/>
                 <md-card>
                     <md-card-title>
                         <md-card-title-text>
