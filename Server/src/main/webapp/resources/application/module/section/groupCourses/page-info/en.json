@@ -7,6 +7,9 @@
     "course_crate" : "Create course",
     "course_option_base" : "Base only",
     "course_option_free" : "Free only",
-    "course_option_avail" : "Available by knowledge"
+    "course_option_avail" : "Available by knowledge",
+    "course_in_develop" : "Course are in develop status",
+    "course_base" : "Base course",
+    "course_sale" : "Sale"
   }
 }

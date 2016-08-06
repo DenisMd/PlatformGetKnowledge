@@ -100,9 +100,25 @@
         </div>
         <div layout-wrap layout="row">
             <div class="course-container" flex-sm flex-gt-sm="50" ng-repeat="course in courses" class="text-center">
-                <img src="/resources/image/courses/inDevelop.png" class="course-notification" ng-if="!course.release"/>
-                <img src="/resources/image/courses/base.png" class="course-notification" ng-if="course.release && course.base"/>
-                <img src="/resources/image/courses/sale.png" class="course-notification" ng-if="course.release && course.item.price.discount > 0"/>
+
+                <span ng-if="!course.release" class="course-notification">
+                    <img src="/resources/image/courses/inDevelop.png" class="course-img-notification" />
+                    <md-tooltip class="tooltip-text" md-direction="bottom">
+                        {{translate("course_in_develop")}}
+                    </md-tooltip>
+                </span>
+                <span ng-if="course.release && course.base" class="course-notification">
+                    <img src="/resources/image/courses/base.png" class="course-img-notification" />
+                    <md-tooltip class="tooltip-text" md-direction="bottom">
+                        {{translate("course_base")}}
+                    </md-tooltip>
+                </span>
+                <span ng-if="course.release && course.item.price.discount > 0" class="course-notification">
+                    <img src="/resources/image/courses/sale.png" class="course-img-notification" />
+                    <md-tooltip class="tooltip-text" md-direction="bottom">
+                        {{translate("course_sale")}}
+                    </md-tooltip>
+                </span>
                 <md-card>
                     <md-card-title>
                         <md-card-title-text>

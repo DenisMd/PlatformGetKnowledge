@@ -28,11 +28,14 @@
 }
 
 .course-notification{
-    width: 70px;
-    height: 70px;
     position: absolute;
     right: 0;
     top: -10px;
+}
+
+.course-img-notification {
+    width: 70px;
+    height: 70px;
 }
 
 .course-rating {
@@ -44,5 +47,9 @@
 }
 
 .course-create-margin {
-    margin-top: 15px;
+    margin-top: 25px;
+}
+
+.tooltip-text {
+    font-size : 1.3em;
 }
