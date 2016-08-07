@@ -1,5 +1,6 @@
 package com.getknowledge.modules.video;
 
+import com.coremedia.iso.IsoFile;
 import com.getknowledge.modules.courses.Course;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.video.comment.VideoComment;
@@ -9,14 +10,17 @@ import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.exceptions.SystemError;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
+import com.googlecode.mp4parser.FileDataSourceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -165,8 +169,29 @@ public class VideoRepository extends BaseRepository<Video> {
         video.setLink(link);
         video.setUploadTime(Calendar.getInstance());
         video.setSize(multipartFile.getSize());
+
+        FileDataSourceImpl dataSource = null;
+        IsoFile  isoFile = null;
+        try  {
+            dataSource = new FileDataSourceImpl(getVideoPath(video.getId()));
+            isoFile = new IsoFile(dataSource);
+            video.setDuration(isoFile.getMovieBox().getMovieHeaderBox().getDuration());
+
+        } catch (Exception e) {
+            trace.logException("Error calculate video duration" , e,TraceLevel.Error,true);
+        } finally {
+            if (isoFile != null) {
+                try {
+                    isoFile.close();
+                }  catch (IOException e) {
+                    trace.logException("Error close ISO File" , e,TraceLevel.Error,true);
+                }
+            }
+        }
+
         merge(video);
         trace.log("Video file successfully upload + " + videoFile.getAbsolutePath() , TraceLevel.Event,true);
+
     }
 
     public String getVideoPath(Long id){

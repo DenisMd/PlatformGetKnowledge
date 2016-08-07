@@ -26,6 +26,13 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
     }
 
     readCourse();
+    //Первое видео
+    $scope.indexVideo1 = {
+        id : 1,
+        showComments : false
+    };
+
+
     $scope.courseImg = function(){
         return applicationService.imageHref(className.course,courseId);
     };
@@ -146,6 +153,4 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
             readCourse();
         });
     };
-
-
 });

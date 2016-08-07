@@ -64,6 +64,10 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar createDate;
 
+    @Column(name = "last_released_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar lastReleasedDate;
+
     @Column(nullable = false)
     private Boolean release = false;
 
@@ -101,6 +105,14 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
 
     @OneToMany(mappedBy = "course" , cascade = {CascadeType.REMOVE})
     private List<ChangeList> changeLists = new ArrayList<>();
+
+    public Calendar getLastReleasedDate() {
+        return lastReleasedDate;
+    }
+
+    public void setLastReleasedDate(Calendar lastReleasedDate) {
+        this.lastReleasedDate = lastReleasedDate;
+    }
 
     public Boolean getDraft() {
         return draft;
