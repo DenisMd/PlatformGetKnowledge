@@ -124,7 +124,6 @@
                         <md-card-title-text>
                             <span class="md-headline">{{course.name}}</span>
                             <span class="md-subhead course-description">{{course.description}}</span>
-                            <module-template name="components/price" data="course.item.price"></module-template>
                         </md-card-title-text>
                         <md-card-title-media class="image-padding">
                             <a ng-href="{{course.href}}">
@@ -137,7 +136,9 @@
                             </div>
                         </md-card-title-media>
                     </md-card-title>
-                    <md-card-actions layout="row" layout-align="end center">
+                    <md-card-actions layout="row" layout-align="start center">
+                        <module-template name="components/price" data="course.item.price"></module-template>
+                        <span flex></span>
                         <md-button>
                             <a ng-href="{{course.href}}" class="link-without-style">
                                 {{translate("go_to")}}
