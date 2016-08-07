@@ -1,0 +1,19 @@
+.course-info {
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: #1a1a1a;
+    color: white;
+    margin-top: -10px;
+    /*Iphone 5 width*/
+    min-width: 320px;
+}
+
+.course-intro-video {
+    margin: 20px;
+}
+
+.course-info-left-block {
+    margin: 20px;
+}

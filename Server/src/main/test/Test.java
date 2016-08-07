@@ -11,9 +11,7 @@ public class Test {
 
     @org.junit.Test
     public void getProgrammingLanguage() throws IOException, ParseException {
-        String t = "000000";
-        int origMti = Integer.parseInt(t.substring(0, 4));
-        System.err.println(origMti);
+
     }
 
 

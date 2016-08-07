@@ -11,6 +11,7 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
     $scope.filter.createFiltersInfo();
     $scope.filter.equals("groupCourses.url","text",$scope.getData().groupCourse);
     $scope.filter.equals("groupCourses.section.name","text",$scope.getData().sectionName);
+    $scope.filter.equals("draft","logical",false);
     $scope.courses = [];
 
      function by_date(orderDesc) {
@@ -172,6 +173,10 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
             if (course.description.length > maxCharacterDescription) {
                 course.description = course.description.substr(0,maxCharacterDescription) + "...";
             }
+            if (course.item || course.item.price) {
+                course.item.price = $scope.convertPrice(course.item.price);
+            }
+            
             $scope.courses.push(course);
         }
     };

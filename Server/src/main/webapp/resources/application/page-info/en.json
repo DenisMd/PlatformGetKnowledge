@@ -95,6 +95,8 @@
     "mb"            : "MByte",
     "remove"        : "Remove",
     "upload"        : "Upload",
+    "price"         : "Price",
+    "free"          : "Free",
 
 
     "failed"        : "Failed",
@@ -131,6 +133,8 @@
     "upload_all"          : "Upload all",
     "cancel_all"          : "Cancel all",
     "remove_all"          : "Remove all",
+    "old_price"          : "Old price",
+    "current_price"       : "Current price",
 
     "video1_title"  : "Почему getKnowlege() ?",
     "video2_title"  : "Что значит быть программистом сегодня?",
@@ -199,6 +203,9 @@
     "file_size"                   : "File size",
     "file_progress"               : "Progress bar",
     "file_status"                 : "Status",
-    "file_actions"                : "Actions"
+    "file_actions"                : "Actions",
+
+    "usd" : "$",
+    "eur" : "€"
   }
 }

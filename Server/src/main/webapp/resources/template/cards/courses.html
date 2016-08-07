@@ -36,14 +36,14 @@
                     </md-checkbox>
                 </div>
             </div>
-            <div layout="row" layout-align="center center">
+            <div layout="row" layout-align="center center" class="course-do-filter">
                 <button flex="none" class="btn btn-default filter-panel-item folder-toolbar-btn" ng-click="searchCourse(searchText,selectedLanguage,options)">
                     {{translate("do_filter")}}
                 </button>
             </div>
         </div>
         <div class="create-area" layout="column" ng-show="showCreateArea">
-            <div layout-gt-sm="row" layout-align-gt-sm="start center" layout-fill flex>
+            <div layout-gt-sm="row" layout-align-gt-sm="start center" layout-fill flex class="course-create-margin">
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>{{translate("name")}}</label>
                     <input ng-model="newCourse.name">
@@ -100,17 +100,41 @@
         </div>
         <div layout-wrap layout="row">
             <div class="course-container" flex-sm flex-gt-sm="50" ng-repeat="course in courses" class="text-center">
-                <img src="/resources/image/hammer.png" class="course-notification"/>
+
+                <span ng-if="!course.release" class="course-notification">
+                    <img src="/resources/image/courses/inDevelop.png" class="course-img-notification" />
+                    <md-tooltip class="tooltip-text" md-direction="bottom">
+                        {{translate("course_in_develop")}}
+                    </md-tooltip>
+                </span>
+                <span ng-if="course.release && course.base" class="course-notification">
+                    <img src="/resources/image/courses/base.png" class="course-img-notification" />
+                    <md-tooltip class="tooltip-text" md-direction="bottom">
+                        {{translate("course_base")}}
+                    </md-tooltip>
+                </span>
+                <span ng-if="course.release && course.item.price.discount > 0" class="course-notification">
+                    <img src="/resources/image/courses/sale.png" class="course-img-notification" />
+                    <md-tooltip class="tooltip-text" md-direction="bottom">
+                        {{translate("course_sale")}}
+                    </md-tooltip>
+                </span>
                 <md-card>
                     <md-card-title>
                         <md-card-title-text>
                             <span class="md-headline">{{course.name}}</span>
                             <span class="md-subhead course-description">{{course.description}}</span>
+                            <module-template name="components/price" data="course.item.price"></module-template>
                         </md-card-title-text>
                         <md-card-title-media class="image-padding">
                             <a ng-href="{{course.href}}">
                                 <img class="md-media-md" ng-src="{{course.imageSrc}}"/>
                             </a>
+                            <div class="course-rating">
+                                <div star-rating ng-model="course.rating.avgRating" max="5"
+                                     readonly="true">
+                                </div>
+                            </div>
                         </md-card-title-media>
                     </md-card-title>
                     <md-card-actions layout="row" layout-align="end center">

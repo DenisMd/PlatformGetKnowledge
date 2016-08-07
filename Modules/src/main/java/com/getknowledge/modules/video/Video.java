@@ -36,6 +36,16 @@ public class Video extends AbstractEntity{
     @Column(name = "size")
     private Long size;
 
+    private Long duration;
+
+    public Long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Long duration) {
+        this.duration = duration;
+    }
+
     public Long getSize() {
         return size;
     }

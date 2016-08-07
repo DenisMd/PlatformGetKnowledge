@@ -1,7 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link rel="stylesheet" href="/resources/css/section.css">
-
-<h1 class="text-center">{{course.name}}</h1>
+<link rel="stylesheet" href="/resources/css/course-page/course.css">
 
 <div>
     <md-button class="md-raised md-primary" ng-click="showEditableContent = !showEditableContent" ng-show="course.editable">{{translate("change")}}</md-button>
@@ -92,6 +90,43 @@
     </md-content>
 </div>
 
+<%--Course Info--%>
+<div layout="row" class="course-info">
+    <div flex="60" class="course-intro-video">
+        <module-template name="components/video" data="indexVideo1"></module-template>
+    </div>
+    <div flex class="course-info-left-block">
+        <%--Name--%>
+        <div>
+            {{course.name}}
+        </div>
+        <%--Dates--%>
+        <did>
+            {{translate("course_create_time")}} : {{course.createDate | date:'meduim'}}
+        </did>
+        <div>
+            {{translate("course_last_released_time")}} : {{course.lastReleasedDate | date:'meduim'}}
+        </div>
+        <%--Knowledge--%>
+        <div>
+
+        </div>
+        <%--Rating--%>
+        <div>
+
+        </div>
+        <%--Price--%>
+        <div>
+
+        </div>
+    </div>
+</div>
+
+<%--Tutorials list--%>
+<div layout="row">
+
+</div>
+
 <img ng-src="{{courseImg()}}"
      class="cover-img">
 
@@ -107,11 +142,6 @@
     <br>
 </div>
 <div ng-controller="videoCtrl">
-<div class="video-image" ng-if="course.intro">
-    <img ng-src="{{videoImg(course.intro.id)}}"
-         class="img-thumbnail video-poster">
-    <a ng-click="open(course.intro.id)" class="video-play"><span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span></a>
-</div>
     <!-- Modal -->
     <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">

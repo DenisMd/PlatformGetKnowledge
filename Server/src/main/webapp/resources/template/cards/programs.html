@@ -2,8 +2,8 @@
 
 <div ng-controller="programsController">
     <md-content class="content-body folders-toolbar" >
-        <div layout="row" layout-align="center center">
-            <md-input-container flex class="folders-toolbar-input-container">
+        <div layout="row" layout-wrap layout-align="center center">
+            <md-input-container flex="grow" flex-gt-sm class="folders-toolbar-input-container">
                 <span class="folders-toolbar-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
                 <label class="folders-toolbar-label">
                     {{translate("search")}}

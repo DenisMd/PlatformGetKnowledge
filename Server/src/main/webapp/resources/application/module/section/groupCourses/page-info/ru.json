@@ -7,6 +7,9 @@
     "course_create" : "Создать курс",
     "course_option_base" : "Только базовые курсы",
     "course_option_free" : "Только бесплатные курсы",
-    "course_option_avail" : "Доступные по знаниям"
+    "course_option_avail" : "Доступные по знаниям",
+    "course_in_develop" : "Курс находится в разработке",
+    "course_base" : "Базовый курс",
+    "course_sale" : "Цена на курс снижена"
   }
 }

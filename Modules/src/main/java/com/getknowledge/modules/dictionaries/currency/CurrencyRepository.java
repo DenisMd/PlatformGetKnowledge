@@ -42,5 +42,9 @@ public class CurrencyRepository extends BaseRepository<Currency> {
         }
     }
 
+    public Currency getBaseCurrency() {
+        return getSingleEntityByFieldAndValue("baseCurrency" , true);
+    }
+
 }
 

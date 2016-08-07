@@ -147,7 +147,7 @@ public class CourseService extends AbstractService implements ImageService {
                                 (String)data.get("name"),
                                 (String)data.get("description"),
                                 language,tags,
-                                (Boolean)data.get("base"));
+                                (Boolean)data.get("base"),false);
 
         Result result = Result.Complete();
         result.setObject(course.getId());

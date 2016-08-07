@@ -28,9 +28,28 @@
 }
 
 .course-notification{
-    width: 70px;
-    height: 70px;
     position: absolute;
     right: 0;
     top: -10px;
+}
+
+.course-img-notification {
+    width: 70px;
+    height: 70px;
+}
+
+.course-rating {
+    margin-left: 4px;
+}
+
+.course-do-filter {
+    margin: 10px;
+}
+
+.course-create-margin {
+    margin-top: 25px;
+}
+
+.tooltip-text {
+    font-size : 1.3em;
 }

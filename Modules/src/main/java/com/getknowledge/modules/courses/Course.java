@@ -35,6 +35,9 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
     @Column(length = 1500)
     private String description;
 
+    @Column(name = "draft", nullable = false)
+    private Boolean draft = false;
+
     @ManyToOne(optional = false)
     @ModelView(type = {ViewType.Public})
     private GroupCourses groupCourses;
@@ -60,6 +63,10 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
     @Column(name = "create_date" , nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar createDate;
+
+    @Column(name = "last_released_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar lastReleasedDate;
 
     @Column(nullable = false)
     private Boolean release = false;
@@ -98,6 +105,22 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
 
     @OneToMany(mappedBy = "course" , cascade = {CascadeType.REMOVE})
     private List<ChangeList> changeLists = new ArrayList<>();
+
+    public Calendar getLastReleasedDate() {
+        return lastReleasedDate;
+    }
+
+    public void setLastReleasedDate(Calendar lastReleasedDate) {
+        this.lastReleasedDate = lastReleasedDate;
+    }
+
+    public Boolean getDraft() {
+        return draft;
+    }
+
+    public void setDraft(Boolean draft) {
+        this.draft = draft;
+    }
 
     public Item getItem() {
         return item;

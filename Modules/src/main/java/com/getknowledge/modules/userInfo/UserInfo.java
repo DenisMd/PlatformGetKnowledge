@@ -3,6 +3,7 @@ package com.getknowledge.modules.userInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.courses.Course;
 import com.getknowledge.modules.dictionaries.city.City;
+import com.getknowledge.modules.dictionaries.currency.Currency;
 import com.getknowledge.modules.dictionaries.knowledge.Knowledge;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.menu.Menu;
@@ -117,6 +118,17 @@ public class UserInfo extends AbstractEntity implements CloneableEntity<UserInfo
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_knowledge")
     private List<Knowledge> knowledge = new ArrayList<>();
+
+    @ManyToOne
+    private Currency currency;
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
 
     public List<Knowledge> getKnowledge() {
         return knowledge;

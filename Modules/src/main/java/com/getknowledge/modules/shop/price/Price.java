@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Table(name = "prices")
 public class Price extends AbstractEntity {
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Currency currency;
 
     @Column

@@ -201,7 +201,7 @@ public class CourseRepository extends ProtectedRepository<Course> {
         }
     }
 
-    public Course createCourse(UserInfo author,GroupCourses groupCourses,String name,String description,Language language,List<String> tags,boolean base) {
+    public Course createCourse(UserInfo author,GroupCourses groupCourses,String name,String description,Language language,List<String> tags,boolean base,boolean draft) {
         Course course = new Course();
         course.setAuthor(author);
         course.setGroupCourses(groupCourses);
@@ -211,6 +211,7 @@ public class CourseRepository extends ProtectedRepository<Course> {
         course.setBase(base);
         course.setCreateDate(Calendar.getInstance());
         course.setRelease(false);
+        course.setDraft(draft);
 
         Item item = new Item();
         itemRepository.create(item);

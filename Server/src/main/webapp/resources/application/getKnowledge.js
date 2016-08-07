@@ -100,6 +100,35 @@ model.controller("mainController", function ($scope,$http,$state,$languages,maxM
         }
     };
 
+    //--------------------------------------------------------методы по работе с ценами
+    $scope.getRealPrice = function (price) {
+        if (price.free) {
+            return 0;
+        }
+
+        return price.price - price.price * (price.discount / 100.0)
+    };
+
+    $scope.convertPrice = function (price) {
+        if (price.free) {
+            return price;
+        }
+        if (!$scope.user || !$scope.user.currency) {
+            //TODO: возможно лучше конвертировать в базовую валюту
+            return price;
+        }
+
+        if ($scope.user.currency.id === price.currency.id) {
+            return price;
+        }
+
+        var newPrice = angular.copy(price);
+        newPrice.currency = $scope.user.currency;
+        newPrice.price = (price.price * price.currency.value) / $scope.user.currency.value;
+
+        return newPrice;
+    };
+
     //--------------------------------------------------------- методы по работе с языком
 
     //перевести по ключу
@@ -261,6 +290,8 @@ model.controller("mainController", function ($scope,$http,$state,$languages,maxM
         var result = JSON.stringify(obj, null, Number(tabWidth));
         return result;
     };
+
+    applicationService.action($scope, "baseCurrency", className.currency, "getBaseCurrency", {});
     
     //-------------------------------------- удалить их
     applicationService.list($scope , "programmingLanguages",className.programmingLanguages);

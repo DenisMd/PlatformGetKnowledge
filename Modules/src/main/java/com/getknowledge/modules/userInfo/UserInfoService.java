@@ -3,6 +3,7 @@ package com.getknowledge.modules.userInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.getknowledge.modules.dictionaries.city.City;
 import com.getknowledge.modules.dictionaries.city.CityRepository;
+import com.getknowledge.modules.dictionaries.currency.*;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
@@ -91,6 +92,9 @@ public class UserInfoService extends AbstractService implements BootstrapService
 
     @Autowired
     private DialogMessageRepository dialogMessageRepository;
+
+    @Autowired
+    private CurrencyRepository currencyRepository;
 
     @Autowired
     private DialogRepository dialogRepository;
@@ -268,6 +272,14 @@ public class UserInfoService extends AbstractService implements BootstrapService
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             userInfo.setBirthDay(calendar);
+        }
+
+        if (data.containsKey("currencyId")) {
+            Long currencyId = longFromField("currencyId",data);
+            com.getknowledge.modules.dictionaries.currency.Currency currency = currencyRepository.read(currencyId);
+            if (currency != null) {
+                userInfo.setCurrency(currency);
+            }
         }
 
         userInfo.setFirstLogin(false);

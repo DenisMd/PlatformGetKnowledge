@@ -96,6 +96,8 @@
     "mb"            : "Мбайт",
     "remove"        : "Удалить",
     "upload"        : "Загрузиить",
+    "price"         : "Цена",
+    "free"          : "Бесплатно",
 
     "failed"        : "Ошибка выполнения",
     "complete"      : "Завершено",
@@ -131,6 +133,8 @@
     "upload_all"          : "Загрузить все",
     "cancel_all"          : "Отменить все",
     "remove_all"          : "Удалить все",
+    "old_price"          : "Старая цена",
+    "current_price"       : "Текущая цена",
 
 
     "video1_title"  : "Почему getKnowlege() ?",
@@ -200,6 +204,12 @@
     "file_size"                   : "Размер файла",
     "file_progress"               : "Прогресс загрузки",
     "file_status"                 : "Статус",
-    "file_actions"                : "Действия"
+    "file_actions"                : "Действия",
+
+
+    "rub" : "руб.",
+    "usd" : "$",
+    "eur" : "€",
+    "uah" : "гривен"
   }
 }
