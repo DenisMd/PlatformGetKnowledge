@@ -14,6 +14,10 @@
           <div flex>{{currentVideo.id}}</div>
         </div>
         <div layout="row">
+          <div flex="55" flex-gt-sm="20">{{translate('video_duration')}}</div>
+          <div flex>{{(currentVideo.duration) | date : 'hh:mm:ss'}} : {{currentVideo.duration}}</div>
+        </div>
+        <div layout="row">
           <md-input-container flex>
             <label>{{translate("video_link")}}</label>
             <input ng-model="currentVideo.link">
