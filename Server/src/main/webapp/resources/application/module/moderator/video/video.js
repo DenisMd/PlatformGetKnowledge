@@ -61,7 +61,8 @@ model.controller("videoCtrl", function ($scope, $state,$http,applicationService,
         ],
         selectItemCallback : function (item) {
             $scope.currentVideo = item;
-            var tempDate = new Date()
+            $scope.currentVideo.durationTime = new Date(1970, 0, 1);
+            $scope.currentVideo.durationTime.setMilliseconds($scope.currentVideo.duration);
             updateCroppedImage();
         },
         actions : [
