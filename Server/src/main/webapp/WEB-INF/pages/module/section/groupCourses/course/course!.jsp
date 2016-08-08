@@ -5,6 +5,18 @@
     <md-button class="md-raised md-primary" ng-click="showEditableContent = !showEditableContent" ng-show="course.editable">{{translate("change")}}</md-button>
 </div>
 
+<div ng-if="course.editable && !course.release">
+    <md-button class="md-raised md-primary" ng-click="makeRelease()">
+        Make release
+    </md-button>
+</div>
+
+<div ng-if="course.editable">
+    <md-button class="md-raised md-primary" ng-click="showAdvanced($event)">
+        Create tutorial
+    </md-button>
+</div>
+
 <div ng-show="showEditableContent">
     <md-content>
         <md-tabs md-dynamic-height md-border-bottom>
@@ -99,6 +111,9 @@
         <%--Name--%>
         <div layout="row" layout-align="center" class="course-title">
             {{course.name}}
+        </div>
+        <div ng-if="course.base">
+            {{translate("course_base")}}
         </div>
         <%--Version--%>
         <div>
@@ -196,18 +211,6 @@
             </div>
         </div>
     </div>
-</div>
-
-<div ng-if="course.editable && !course.release">
-    <md-button class="md-raised md-primary" ng-click="makeRelease()">
-        Make release
-    </md-button>
-</div>
-
-<div ng-if="course.editable">
-    <md-button class="md-raised md-primary" ng-click="showAdvanced($event)">
-        Create tutorial
-    </md-button>
 </div>
 
 <ul>

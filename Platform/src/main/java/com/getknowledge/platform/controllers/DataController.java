@@ -433,7 +433,11 @@ public class DataController {
             if (e.getCause() instanceof SocketException) {
                 //Ничего не даелаем так пользователь просто выключил видео
             } else {
-                throw new SystemError("Unhandled exception : " + e.getMessage(),trace,e);
+                boolean isSaveToDb = true;
+                if (e.getCause() instanceof IOException) {
+                    isSaveToDb = false;
+                }
+                throw new SystemError("Unhandled exception : " + e.getMessage(),trace,e,isSaveToDb);
             }
 
         }

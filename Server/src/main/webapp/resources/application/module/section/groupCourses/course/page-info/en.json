@@ -9,6 +9,7 @@
     "course_information_rating" : "Quality of tutorials",
     "course_exercises_rating" : "Quality of exercises",
     "course_test_rating" : "Quality of tests",
-    "course_relevance_information" : "Relevance information"
+    "course_relevance_information" : "Relevance information",
+    "course_base" : "Base course"
   }
 }
