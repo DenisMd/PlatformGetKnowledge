@@ -15,6 +15,10 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
                 });
             }
 
+            if (course.item || course.item.price) {
+                course.item.price = $scope.convertPrice(course.item.price);
+            }
+
             course.sourceKnowledge.forEach(function(knowledge) {
                 knowledge.image = applicationService.imageHref(className.knowledge,knowledge.id);
             });

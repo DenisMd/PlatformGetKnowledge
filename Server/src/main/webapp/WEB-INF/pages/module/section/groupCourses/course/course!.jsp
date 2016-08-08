@@ -97,27 +97,69 @@
     </div>
     <div flex class="course-info-left-block">
         <%--Name--%>
-        <div>
+        <div layout="row" layout-align="center" class="course-title">
             {{course.name}}
+        </div>
+        <%--Version--%>
+        <div>
+            {{translate("course_version")}} : {{course.version | version}}
         </div>
         <%--Dates--%>
         <did>
-            {{translate("course_create_time")}} : {{course.createDate | date:'meduim'}}
+            {{translate("course_create_date")}} : {{course.createDate | date:'medium'}}
         </did>
-        <div>
-            {{translate("course_last_released_time")}} : {{course.lastReleasedDate | date:'meduim'}}
+        <div ng-if="course.lastReleasedDate">
+            {{translate("course_last_released_date")}} : {{course.lastReleasedDate | date:'medium'}}
         </div>
+        <hr>
         <%--Knowledge--%>
         <div>
-
+            <div>{{translate("course_source_knowledge")}} : </div>
+            <md-contact-chips
+                    ng-model="course.sourceKnowledge"
+                    md-contacts="querySearch($query)"
+                    md-contact-name="name"
+                    md-contact-image="image"
+                    readonly="true">
+            </md-contact-chips>
+        </div>
+        <div ng-if="!course.base">
+            <div>{{translate("course_required_knowledge")}} : </div>
+            <md-contact-chips
+                    ng-model="course.requiredKnowledge"
+                    md-contacts="querySearch($query)"
+                    md-contact-name="name"
+                    md-contact-image="image"
+                    readonly="true">
+            </md-contact-chips>
         </div>
         <%--Rating--%>
+        <hr>
         <div>
-
+            <%--{{translate("course_avg_rating")}}--%>
+            <%--<div star-rating ng-model="course.rating.avgRating" max="5"--%>
+                 <%--readonly="true">--%>
+            <%--</div>--%>
+            {{translate("course_information_rating")}}
+            <div star-rating ng-model="course.rating.qualityInformation" max="5"
+                 readonly="true">
+            </div>
+            {{translate("course_exercises_rating")}}
+            <div star-rating ng-model="course.rating.qualityExercises" max="5"
+                 readonly="true">
+            </div>
+            {{translate("course_test_rating")}}
+            <div star-rating ng-model="course.rating.qualityTest" max="5"
+                 readonly="true">
+            </div>
+            {{translate("course_relevance_information")}}
+            <div star-rating ng-model="course.rating.relevanceInformation" max="5"
+                 readonly="true">
+            </div>
         </div>
         <%--Price--%>
         <div>
-
+            <module-template name="components/price" data="course.item.price"></module-template>
         </div>
     </div>
 </div>
