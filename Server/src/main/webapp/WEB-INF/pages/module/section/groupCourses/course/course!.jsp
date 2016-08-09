@@ -148,6 +148,13 @@
                     readonly="true">
             </md-contact-chips>
         </div>
+        <div>
+            {{translate("tags")}} :
+            <div ng-repeat="tag in course.tags" style="display:inline">
+                {{tag.tagName}}
+            </div>
+            <br>
+        </div>
         <%--Rating--%>
         <hr>
         <div>
@@ -179,47 +186,40 @@
     </div>
 </div>
 
-<%--Tutorials list--%>
+<%--Tutorials list and Description with Author info--%>
 <div layout="row">
-
-</div>
-
-<img ng-src="{{courseImg()}}"
-     class="cover-img">
-
-<p class="description">
-    {{course.description}}
-</p>
-
-<div>
-    {{translate("tags")}} :
-    <div ng-repeat="tag in course.tags" style="display:inline">
-        {{tag.tagName}}
+    <div flex="60">
+        <ul>
+            <li ng-repeat="(key,name) in tutorials">
+                <a ng-href="{{addUrlToPath('/tutorial/'+key)}}">Урок {{key + ') ' + name}}</a>
+            </li>
+        </ul>
     </div>
-    <br>
-</div>
-<div ng-controller="videoCtrl">
-    <!-- Modal -->
-    <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content modal-center">
-                <!--<div class="modal-body">-->
-                <video id="main-video" class="video-js vjs-default-skin vjs-big-play-centered">
-                    <!--poster="/resources/image/index/slider/programming.jpg" data-setup="{{videoSetup}}">-->
-                </video>
-                <!--</div>-->
-            </div>
-        </div>
+    <div flex>
+        <img ng-src="{{course.imageSrc}}"
+             class="cover-img">
+
+        <p class="description">
+            {{course.description}}
+        </p>
     </div>
 </div>
 
-<ul>
-    <li ng-repeat="(key,name) in tutorials">
-        <a ng-href="{{addUrlToPath('/tutorial/'+key)}}">Урок {{key + ') ' + name}}</a>
-    </li>
-</ul>
-
-{{course}}
+<%--<div ng-controller="videoCtrl">--%>
+    <%--<!-- Modal -->--%>
+    <%--<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">--%>
+        <%--<div class="modal-dialog" role="document">--%>
+            <%--<div class="modal-content modal-center">--%>
+                <%--<!--<div class="modal-body">-->--%>
+                <%--<video id="main-video" class="video-js vjs-default-skin vjs-big-play-centered">--%>
+                    <%--<!--poster="/resources/image/index/slider/programming.jpg" data-setup="{{videoSetup}}">-->--%>
+                <%--</video>--%>
+                <%--<!--</div>-->--%>
+            <%--</div>--%>
+        <%--</div>--%>
+    <%--</div>--%>
+<%--</div>--%>
+<%--{{course}}--%>
 
 <script type="text/ng-template" id="createTutorial.html">
     <md-dialog  ng-cloak>

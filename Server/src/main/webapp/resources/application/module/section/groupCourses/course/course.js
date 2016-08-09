@@ -19,6 +19,8 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
                 course.item.price = $scope.convertPrice(course.item.price);
             }
 
+            course.imageSrc = applicationService.imageHref(className.course,course.id);
+
             course.sourceKnowledge.forEach(function(knowledge) {
                 knowledge.image = applicationService.imageHref(className.knowledge,knowledge.id);
             });
@@ -34,11 +36,6 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
     $scope.indexVideo1 = {
         id : 1,
         showComments : false
-    };
-
-
-    $scope.courseImg = function(){
-        return applicationService.imageHref(className.course,courseId);
     };
 
     $scope.showEditableContent = false;
