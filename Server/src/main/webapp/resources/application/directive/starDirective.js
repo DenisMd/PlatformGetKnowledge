@@ -36,8 +36,8 @@ function starRating() {
                     });
                 }
             };
-            scope.$watch('ratingValue', function(oldValue, newValue) {
-                if (newValue || oldValue == 0) {
+            scope.$watch('ratingValue', function(newValue, oldValue) {
+                if (newValue != oldValue || newValue) {
                     updateStars();
                 }
             });
