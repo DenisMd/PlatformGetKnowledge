@@ -1,4 +1,4 @@
-model.controller("indexController",function($scope,applicationService,className){
+model.controller("indexController",function($scope,$timeout,applicationService,className){
     //--------------------------------------------- опции слайдера
     $scope.carouselData = {
         interval : 5000,
@@ -46,6 +46,10 @@ model.controller("indexController",function($scope,applicationService,className)
             cards : menu.items,
             prefix : ''
         };
-        $scope.$broadcast("fillCards",$scope.cardsData);
+
+        $timeout(function(){
+            $scope.$broadcast("fillCards",$scope.cardsData);
+        },1500);
+
     });
 });
