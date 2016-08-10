@@ -431,7 +431,7 @@ public class DataController {
         } catch (PlatformException p) {
             throw p;
         } catch (Exception e) {
-            if (e.getCause() instanceof SocketException || e.getCause() instanceof ClientAbortException) {
+            if (e.getCause() instanceof SocketException || e instanceof ClientAbortException) {
                 //Ничего не даелаем так пользователь просто выключил видео или выполнил перемотку
             } else {
                 throw new SystemError("Unhandled exception : " + e.getMessage(),trace,e,true);
