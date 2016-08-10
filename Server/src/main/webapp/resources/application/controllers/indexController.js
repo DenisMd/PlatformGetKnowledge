@@ -49,7 +49,7 @@ model.controller("indexController",function($scope,$timeout,applicationService,c
 
         $timeout(function(){
             $scope.$broadcast("fillCards",$scope.cardsData);
-        },1500);
+        },50);
 
     });
 });
