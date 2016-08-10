@@ -27,6 +27,7 @@ import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import com.getknowledge.platform.utils.ModuleLocator;
 import com.getknowledge.platform.utils.MultipartFileSender;
+import org.apache.catalina.connector.ClientAbortException;
 import org.hibernate.JDBCException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -430,14 +431,10 @@ public class DataController {
         } catch (PlatformException p) {
             throw p;
         } catch (Exception e) {
-            if (e.getCause() instanceof SocketException) {
-                //Ничего не даелаем так пользователь просто выключил видео
+            if (e.getCause() instanceof SocketException || e.getCause() instanceof ClientAbortException) {
+                //Ничего не даелаем так пользователь просто выключил видео или выполнил перемотку
             } else {
-                boolean isSaveToDb = true;
-                if (e.getCause() instanceof IOException) {
-                    isSaveToDb = false;
-                }
-                throw new SystemError("Unhandled exception : " + e.getMessage(),trace,e,isSaveToDb);
+                throw new SystemError("Unhandled exception : " + e.getMessage(),trace,e,true);
             }
 
         }
