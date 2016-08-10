@@ -1,6 +1,8 @@
 package com.getknowledge.modules.userInfo.blocker.info;
 
 
+import com.getknowledge.modules.userInfo.blocker.BlockerTypes;
+
 import java.util.Calendar;
 
 public class BlockerInfo {
@@ -8,14 +10,24 @@ public class BlockerInfo {
     private String ip;
     private Integer count;
     private Calendar startDate;
+    private BlockerTypes blockerTypes;
 
     public BlockerInfo() {
     }
 
-    public BlockerInfo(String ip, Integer count, Calendar startDate) {
+    public BlockerInfo(String ip, Integer count, Calendar startDate, BlockerTypes blockerTypes) {
         this.ip = ip;
         this.count = count;
         this.startDate = startDate;
+        this.blockerTypes = blockerTypes;
+    }
+
+    public BlockerTypes getBlockerTypes() {
+        return blockerTypes;
+    }
+
+    public void setBlockerTypes(BlockerTypes blockerTypes) {
+        this.blockerTypes = blockerTypes;
     }
 
     public String getIp() {

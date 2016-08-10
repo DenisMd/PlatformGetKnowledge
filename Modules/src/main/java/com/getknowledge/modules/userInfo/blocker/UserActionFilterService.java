@@ -25,12 +25,31 @@ public class UserActionFilterService {
     //После 15 мин, мы обновляем информацию о пользователе
     private int updateTimeInterval = 15;
 
-    //Ip,Info
-    private Map<String,BlockerInfo> activeInfo = new ConcurrentHashMap<>();
+    //UserInfoId,Info
+    private Map<Long,BlockerInfo> activeInfo = new ConcurrentHashMap<>();
 
     @Transactional
     public boolean filterAction(UserInfo userInfo,String ip,BlockerTypes blockerTypes) {
+        //1 Проверка заблокирован ли пользователь
+
+        if (!checkBlockers(userInfo,blockerTypes)) {
+            return false;
+        }
+
+        //2 Добавление информации о сообщении
 
         return true;
+    }
+
+
+    private boolean checkBlockers(UserInfo userInfo,BlockerTypes blockerTypes) {
+        return userBlockerRepository.getBlockerByTypeAndUser(userInfo,blockerTypes) == null;
+    }
+
+    private void addInfo(UserInfo userInfo , String ip, BlockerTypes type) {
+        BlockerInfo blockerInfo = null;
+        if (activeInfo.containsKey(userInfo.getId())) {
+            blockerInfo = activeInfo.get(userInfo.getId());
+        }
     }
 }
