@@ -3,6 +3,9 @@ package com.getknowledge.modules.video.comment;
 import com.getknowledge.modules.messages.CommentStatus;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoRepository;
+import com.getknowledge.modules.userInfo.blocker.BlockerTypes;
+import com.getknowledge.modules.userInfo.blocker.UserActionFilterService;
+import com.getknowledge.modules.userInfo.blocker.UserBlockerService;
 import com.getknowledge.modules.video.Video;
 import com.getknowledge.modules.video.VideoRepository;
 import com.getknowledge.modules.video.VideoService;
@@ -33,6 +36,9 @@ public class VideoCommentService extends AuthorizedService<VideoComment> {
 
     @Autowired
     private VideoService videoService;
+
+    @Autowired
+    private UserActionFilterService userActionFilterService;
 
     @Action(name = "blockComment", mandatoryFields = {"commentId","status"})
     @Transactional
@@ -96,6 +102,10 @@ public class VideoCommentService extends AuthorizedService<VideoComment> {
         }
 
         if (!videoService.isAccessForRead(userInfo.getUser(),video)){
+            return Result.AccessDenied();
+        }
+
+        if (!userActionFilterService.filterAction(userInfo, (String) data.get("ipAddress"), BlockerTypes.GeneralComments)) {
             return Result.AccessDenied();
         }
 
