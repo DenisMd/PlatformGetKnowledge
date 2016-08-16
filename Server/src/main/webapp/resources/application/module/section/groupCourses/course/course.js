@@ -35,7 +35,9 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
     //Первое видео
     $scope.indexVideo1 = {
         id : 1,
-        showComments : false
+        tagId : "index-video",
+        showComments : false,
+        inModal : false
     };
 
     $scope.showEditableContent = false;
