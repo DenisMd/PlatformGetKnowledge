@@ -1,4 +1,4 @@
-model.controller("courseCtrl", function ($scope,applicationService,className,pageService,$state) {
+model.controller("courseCtrl", function ($scope,$timeout,applicationService,className,pageService,$state) {
     var courseId = pageService.getPathVariable("course",$state.params.path);
     $scope.course = {
         tagsName : []
@@ -28,15 +28,18 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
             course.requiredKnowledge.forEach(function(knowledge) {
                 knowledge.image = applicationService.imageHref(className.knowledge,knowledge.id);
             });
+
+
+            $scope.introVideo.id = 1;
+            $scope.$broadcast("video"+$scope.introVideo.eventId.capitalizeFirstLetter()+"Event");
         });
     }
 
     readCourse();
     //Первое видео
-    $scope.indexVideo1 = {
-        id : 1,
-        tagId : "index-video",
-        showComments : false
+    $scope.introVideo = {
+        showComments : false,
+        eventId : "introVideo"
     };
 
     $scope.showEditableContent = false;

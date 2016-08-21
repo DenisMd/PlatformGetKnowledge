@@ -30,13 +30,21 @@ model.controller("videoController",function($scope,videoDialogService,className,
         return applicationService.imageHref(className.video,id);
     }
 
-    applicationService.read($scope,"video",className.video,$scope.getData().id,function(video){
-        video.coverSrc = videoImg(video.id);
-    });
+    if ($scope.getData().id) {
+        applicationService.read($scope, "video", className.video, $scope.getData().id, function (video) {
+            video.coverSrc = videoImg(video.id);
+        });
+    } else {
+        $scope.$on("video"+$scope.getData().eventId.capitalizeFirstLetter()+"Event", function () {
+            applicationService.read($scope, "video", className.video, $scope.getData().id, function (video) {
+                video.coverSrc = videoImg(video.id);
+            });
+        });
+    }
 
     $scope.open = function() {
         var videoUrl = getVideoUrl($scope.video.id);
-        videoDialogService.afterOpen($scope.video);
+        videoDialogService.afterOpen($scope.video,$scope.getData().showComments);
         if (!player || player.currentSrc() !== videoUrl) {
             player.src({type: "video/mp4", src: videoUrl});
             player.play();

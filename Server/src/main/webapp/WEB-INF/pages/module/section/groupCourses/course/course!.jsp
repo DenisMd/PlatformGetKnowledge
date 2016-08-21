@@ -105,7 +105,7 @@
 <%--Course Info--%>
 <div layout="row" class="course-info">
     <div flex="60" class="course-intro-video">
-        <module-template name="components/video" data="indexVideo1"></module-template>
+        <module-template name="components/video" data="introVideo"></module-template>
     </div>
     <div flex class="course-info-left-block">
         <%--Name--%>
