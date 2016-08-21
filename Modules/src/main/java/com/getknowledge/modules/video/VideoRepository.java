@@ -175,7 +175,9 @@ public class VideoRepository extends BaseRepository<Video> {
         try  {
             dataSource = new FileDataSourceImpl(getVideoPath(video.getId()));
             isoFile = new IsoFile(dataSource);
-            video.setDuration(isoFile.getMovieBox().getMovieHeaderBox().getDuration());
+            if (isoFile.getMovieBox() != null && isoFile.getMovieBox().getMovieHeaderBox() != null) {
+                video.setDuration(isoFile.getMovieBox().getMovieHeaderBox().getDuration());
+            }
 
         } catch (Exception e) {
             trace.logException("Error calculate video duration" , e,TraceLevel.Error,true);
