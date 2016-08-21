@@ -18,11 +18,7 @@ function initMainVideoPlayer() {
 
 model.controller("videoController",function($scope,videoDialogService,className,applicationService){
 
-    initMainVideoPlayer();
-
-    var internalVideoPlayer = null;
-
-    $scope.showVideoTag = false;
+    initMainVideoPlayer();    
 
     //Получаем url для загрузки видео
     function getVideoUrl(id) {
@@ -39,43 +35,20 @@ model.controller("videoController",function($scope,videoDialogService,className,
     });
 
     $scope.open = function() {
-        if ($scope.getData().inModal === false) {
-            $scope.showVideoTag = true;
-            //Иницилизируем новый видеоплеер
-            if ($scope.getData().inModal === false) {
-                var options = {
-                    "controls": true,
-                    "preload": "metadata",
-                    "autoplay": false,
-                    "width": 720,
-                    "height": 480,
-                    aspectRatio: '16:9'
-                };
-                console.log(document.getElementById($scope.getData().tagId));
-                internalVideoPlayer = videojs(angular.element( document.querySelector()), options, function () {
-                    internalVideoPlayer = this;
-                });
-            }
+        var videoUrl = getVideoUrl($scope.video.id);
+        videoDialogService.afterOpen($scope.video);
+        if (!player || player.currentSrc() !== videoUrl) {
+            player.src({type: "video/mp4", src: videoUrl});
+            player.play();
         } else {
-            var videoUrl = getVideoUrl($scope.video.id);
-            videoDialogService.afterOpen($scope.video);
-            if (!player || player.currentSrc() !== videoUrl) {
-                player.src({type: "video/mp4", src: videoUrl});
-                player.play();
-            } else {
-                player.play();
-            }
-            $('#videoModal').modal('show');
+            player.play();
         }
+        $('#videoModal').modal('show');
     };
 
     $scope.close = function(){
-        if ($scope.getData().inModal === false) {
-
-        } else {
-            if (player) {
-                player.pause();
-            }
+        if (player) {
+            player.pause();
         }
     };
 

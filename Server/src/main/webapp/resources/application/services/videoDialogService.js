@@ -5,9 +5,10 @@ model.factory('videoDialogService', function(applicationService,className) {
             mainScope = $scope;
         },
 
-        afterOpen : function(video) {
+        afterOpen : function(video, showComments) {
             mainScope.commentData.objectId = video.id;
             mainScope.video = video;
+            mainScope.showComments = angular.isUndefined(showComments)? true : showComments;
             mainScope.$broadcast("showSimpleComments");
         }
     }
