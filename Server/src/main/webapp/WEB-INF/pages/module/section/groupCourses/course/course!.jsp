@@ -5,6 +5,18 @@
     <md-button class="md-raised md-primary" ng-click="showEditableContent = !showEditableContent" ng-show="course.editable">{{translate("change")}}</md-button>
 </div>
 
+<div ng-if="course.editable && !course.release">
+    <md-button class="md-raised md-primary" ng-click="makeRelease()">
+        Make release
+    </md-button>
+</div>
+
+<div ng-if="course.editable">
+    <md-button class="md-raised md-primary" ng-click="showAdvanced($event)">
+        Create tutorial
+    </md-button>
+</div>
+
 <div ng-show="showEditableContent">
     <md-content>
         <md-tabs md-dynamic-height md-border-bottom>
@@ -97,84 +109,117 @@
     </div>
     <div flex class="course-info-left-block">
         <%--Name--%>
-        <div>
+        <div layout="row" layout-align="center" class="course-title">
             {{course.name}}
+        </div>
+        <div ng-if="course.base">
+            {{translate("course_base")}}
+        </div>
+        <%--Version--%>
+        <div>
+            {{translate("course_version")}} : {{course.version | version}}
         </div>
         <%--Dates--%>
         <did>
-            {{translate("course_create_time")}} : {{course.createDate | date:'meduim'}}
+            {{translate("course_create_date")}} : {{course.createDate | date:'medium'}}
         </did>
-        <div>
-            {{translate("course_last_released_time")}} : {{course.lastReleasedDate | date:'meduim'}}
+        <div ng-if="course.lastReleasedDate">
+            {{translate("course_last_released_date")}} : {{course.lastReleasedDate | date:'medium'}}
         </div>
+        <hr>
         <%--Knowledge--%>
         <div>
-
+            <div>{{translate("course_source_knowledge")}} : </div>
+            <md-contact-chips
+                    ng-model="course.sourceKnowledge"
+                    md-contacts="querySearch($query)"
+                    md-contact-name="name"
+                    md-contact-image="image"
+                    readonly="true">
+            </md-contact-chips>
+        </div>
+        <div ng-if="!course.base">
+            <div>{{translate("course_required_knowledge")}} : </div>
+            <md-contact-chips
+                    ng-model="course.requiredKnowledge"
+                    md-contacts="querySearch($query)"
+                    md-contact-name="name"
+                    md-contact-image="image"
+                    readonly="true">
+            </md-contact-chips>
+        </div>
+        <div>
+            {{translate("tags")}} :
+            <div ng-repeat="tag in course.tags" style="display:inline">
+                {{tag.tagName}}
+            </div>
+            <br>
         </div>
         <%--Rating--%>
+        <hr>
         <div>
-
+            <%--{{translate("course_avg_rating")}}--%>
+            <%--<div star-rating ng-model="course.rating.avgRating" max="5"--%>
+                 <%--readonly="true">--%>
+            <%--</div>--%>
+            {{translate("course_information_rating")}}
+            <div star-rating ng-model="course.rating.qualityInformation" max="5"
+                 readonly="true">
+            </div>
+            {{translate("course_exercises_rating")}}
+            <div star-rating ng-model="course.rating.qualityExercises" max="5"
+                 readonly="true">
+            </div>
+            {{translate("course_test_rating")}}
+            <div star-rating ng-model="course.rating.qualityTest" max="5"
+                 readonly="true">
+            </div>
+            {{translate("course_relevance_information")}}
+            <div star-rating ng-model="course.rating.relevanceInformation" max="5"
+                 readonly="true">
+            </div>
         </div>
         <%--Price--%>
         <div>
-
+            <module-template name="components/price" data="course.item.price"></module-template>
         </div>
     </div>
 </div>
 
-<%--Tutorials list--%>
+<%--Tutorials list and Description with Author info--%>
 <div layout="row">
-
-</div>
-
-<img ng-src="{{courseImg()}}"
-     class="cover-img">
-
-<p class="description">
-    {{course.description}}
-</p>
-
-<div>
-    {{translate("tags")}} :
-    <div ng-repeat="tag in course.tags" style="display:inline">
-        {{tag.tagName}}
+    <div flex="60">
+        <ul>
+            <li ng-repeat="(key,name) in tutorials">
+                <a ng-href="{{addUrlToPath('/tutorial/'+key)}}">Урок {{key + ') ' + name}}</a>
+            </li>
+        </ul>
     </div>
-    <br>
-</div>
-<div ng-controller="videoCtrl">
-    <!-- Modal -->
-    <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content modal-center">
-                <!--<div class="modal-body">-->
-                <video id="main-video" class="video-js vjs-default-skin vjs-big-play-centered">
-                    <!--poster="/resources/image/index/slider/programming.jpg" data-setup="{{videoSetup}}">-->
-                </video>
-                <!--</div>-->
-            </div>
-        </div>
+    <div flex>
+        <img ng-src="{{course.imageSrc}}"
+             class="cover-img">
+
+        <p class="description">
+            {{course.description}}
+        </p>
     </div>
 </div>
 
-<div ng-if="course.editable && !course.release">
-    <md-button class="md-raised md-primary" ng-click="makeRelease()">
-        Make release
-    </md-button>
-</div>
-
-<div ng-if="course.editable">
-    <md-button class="md-raised md-primary" ng-click="showAdvanced($event)">
-        Create tutorial
-    </md-button>
-</div>
-
-<ul>
-    <li ng-repeat="(key,name) in tutorials">
-        <a ng-href="{{addUrlToPath('/tutorial/'+key)}}">Урок {{key + ') ' + name}}</a>
-    </li>
-</ul>
-
-{{course}}
+<%--<div ng-controller="videoCtrl">--%>
+    <%--<!-- Modal -->--%>
+    <%--<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">--%>
+        <%--<div class="modal-dialog" role="document">--%>
+            <%--<div class="modal-content modal-center">--%>
+                <%--<!--<div class="modal-body">-->--%>
+                <%--<video id="main-video" class="video-js vjs-default-skin vjs-big-play-centered">--%>
+                    <%--<!--poster="/resources/image/index/slider/programming.jpg" data-setup="{{videoSetup}}">-->--%>
+                <%--</video>--%>
+                <%--<!--</div>-->--%>
+            <%--</div>--%>
+        <%--</div>--%>
+    <%--</div>--%>
+<%--</div>--%>
+<%--{{course}}--%>
 
 <script type="text/ng-template" id="createTutorial.html">
     <md-dialog  ng-cloak>

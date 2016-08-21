@@ -194,7 +194,7 @@ model.controller("coursesController" , function($scope,$state,$languages,applica
 
     $scope.createCourse = function(newCourse) {
         newCourse.groupCourseUrl = $scope.getData().groupCourse;
-        newCourse.language = newCourse.language.capitalizeFirstLetter();
+        newCourse.language = newCourse.lang.capitalizeFirstLetter();
         applicationService.action($scope,"",className.course,"createCourse",newCourse,function(result){
             $scope.showToast($scope.getResultMessage(result));
             if (result.status == "Complete") {

@@ -15,6 +15,12 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
                 });
             }
 
+            if (course.item || course.item.price) {
+                course.item.price = $scope.convertPrice(course.item.price);
+            }
+
+            course.imageSrc = applicationService.imageHref(className.course,course.id);
+
             course.sourceKnowledge.forEach(function(knowledge) {
                 knowledge.image = applicationService.imageHref(className.knowledge,knowledge.id);
             });
@@ -29,12 +35,9 @@ model.controller("courseCtrl", function ($scope,applicationService,className,pag
     //Первое видео
     $scope.indexVideo1 = {
         id : 1,
-        showComments : false
-    };
-
-
-    $scope.courseImg = function(){
-        return applicationService.imageHref(className.course,courseId);
+        tagId : "index-video",
+        showComments : false,
+        inModal : false
     };
 
     $scope.showEditableContent = false;

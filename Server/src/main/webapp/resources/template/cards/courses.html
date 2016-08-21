@@ -50,7 +50,7 @@
                 </md-input-container>
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>{{translate("choose_language")}}</label>
-                    <md-select ng-model="newCourse.language">
+                    <md-select ng-model="newCourse.lang">
                         <md-option ng-value="lang" ng-repeat="lang in langs">{{ translate(lang)}}</md-option>
                     </md-select>
                 </md-input-container>
@@ -66,9 +66,9 @@
                     <textarea ng-model="newCourse.description" md-maxlength="1500" rows="3" md-select-on-focus></textarea>
                 </md-input-container>
             </div>
-            <div layout="column" class="tags-container" flex ng-init="newProgram.tags = []">
+            <div layout="column" class="tags-container" flex ng-init="newCourse.tags = []">
                 <div class="md-title" flex>{{translate("tags")}}</div>
-                <md-chips ng-model="newProgram.tags" readonly="false" flex></md-chips>
+                <md-chips ng-model="newCourse.tags" readonly="false" flex></md-chips>
             </div>
             <div layout="row" class="create-div" layout-align="center">
                 <button flex="none" class="btn btn-default blue-btn" ng-click="createCourse(newCourse)">{{translate("course_create")}}</button>

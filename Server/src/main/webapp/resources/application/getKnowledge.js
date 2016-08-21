@@ -325,7 +325,16 @@ model.filter("fileSize" , function () {
             return bytes + ' B';
         }
     };
-})
+});
+
+model.filter("version" , function () {
+    return function (version) {
+        if (version) {
+            return version.majorVersion + "." + version.middleVersion + "." + version.minorVersion;
+        }
+        return "";
+    };
+});
 
 model.directive("hideOptions",function($document){
     return {

@@ -27,6 +27,7 @@ import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import com.getknowledge.platform.utils.ModuleLocator;
 import com.getknowledge.platform.utils.MultipartFileSender;
+import org.apache.catalina.connector.ClientAbortException;
 import org.hibernate.JDBCException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -120,7 +121,7 @@ public class DataController {
         return nodes;
     }
 
-    private HashMap<String, Object> getDataForAction(String name, String actionName , String [] mandatoryFields, String jsonData, Principal principal) throws MandatoryFieldNotContainException, IOException, InvocationTargetException, IllegalAccessException {
+    private HashMap<String, Object> getDataForAction(String name, String actionName , String [] mandatoryFields, String jsonData, Principal principal, String ip) throws MandatoryFieldNotContainException, IOException, InvocationTargetException, IllegalAccessException {
         if (name.equals(actionName)) {
             TypeReference<HashMap<String, Object>> typeRef
                     = new TypeReference<HashMap<String, Object>>() {
@@ -141,6 +142,7 @@ public class DataController {
             } else {
                 data.put("principalName" , null);
             }
+            data.put("ipAddress",ip);
             return data;
         }
         return null;
@@ -430,10 +432,10 @@ public class DataController {
         } catch (PlatformException p) {
             throw p;
         } catch (Exception e) {
-            if (e.getCause() instanceof SocketException) {
-                //Ничего не даелаем так пользователь просто выключил видео
+            if (e.getCause() instanceof SocketException || e instanceof ClientAbortException) {
+                //Ничего не даелаем так пользователь просто выключил видео или выполнил перемотку
             } else {
-                throw new SystemError("Unhandled exception : " + e.getMessage(),trace,e);
+                throw new SystemError("Unhandled exception : " + e.getMessage(),trace,e,true);
             }
 
         }
@@ -749,7 +751,7 @@ public class DataController {
     @RequestMapping(value = "/action", method = RequestMethod.POST)
     public @ResponseBody
     String action(@RequestParam("className") String className, @RequestParam("actionName") String actionName, @RequestParam("data") String jsonData
-            ,Principal principal) throws PlatformException {
+            ,Principal principal, HttpServletRequest request) throws PlatformException {
         try {
             trace.log(String.format("------> Received \"Action\" request with parameters {className : %s , actionName : %s , data : %s} from user \"%s\"",className,actionName,jsonData,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
             String  jsonResult = null;
@@ -763,7 +765,7 @@ public class DataController {
                 if(action == null) {
                     continue;
                 }
-                HashMap<String,Object> data = getDataForAction(actionName, action.name() , action.mandatoryFields(), jsonData,principal);
+                HashMap<String,Object> data = getDataForAction(actionName, action.name() , action.mandatoryFields(), jsonData,principal, request.getRemoteAddr());
                 if (data != null) {
                     Object result = method.invoke(abstractService, data);
                     if (action.prepareEntity()) {
@@ -821,7 +823,7 @@ public class DataController {
     @RequestMapping(value = "/actionWithFile", method = RequestMethod.POST, headers=("content-type=multipart/*"))
     public @ResponseBody String actionWithFile(@RequestParam("className") String className, @RequestParam("actionName") String actionName,
                                                @RequestParam("data") String jsonData, @RequestParam("file") List<MultipartFile> files,
-                                               Principal principal) throws PlatformException {
+                                               Principal principal, HttpServletRequest request) throws PlatformException {
         try {
             trace.log(String.format("------> Received \"Action with files\" request with parameters {className : %s , actionName : %s , data : %s} from user \"%s\"",className,actionName,jsonData,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
             if (files.size() > 20) {
@@ -837,7 +839,7 @@ public class DataController {
                     continue;
                 }
 
-                HashMap<String,Object> data = getDataForAction(actionName, action.name(), action.mandatoryFields(), jsonData, principal);
+                HashMap<String,Object> data = getDataForAction(actionName, action.name(), action.mandatoryFields(), jsonData, principal,request.getRemoteAddr());
 
                 if (data != null) {
                     long maxSize = files.stream().mapToLong(f -> f.getSize()).sum();

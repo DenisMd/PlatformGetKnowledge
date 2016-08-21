@@ -1,5 +1,15 @@
 {
   "text" : {
-
+    "course_create_date" : "Creation date",
+    "course_last_released_date" : "Last release",
+    "course_version" : "Version",
+    "course_source_knowledge" : "Knowledge, which will get, after course complete",
+    "course_required_knowledge" : "Knowledge required for this course",
+    "course_avg_rating" : "Average",
+    "course_information_rating" : "Quality of tutorials",
+    "course_exercises_rating" : "Quality of exercises",
+    "course_test_rating" : "Quality of tests",
+    "course_relevance_information" : "Relevance information",
+    "course_base" : "Base course"
   }
 }

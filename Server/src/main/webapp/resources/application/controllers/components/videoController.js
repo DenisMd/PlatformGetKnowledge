@@ -1,6 +1,6 @@
 var player;
 
-function initVideoPlayer() {
+function initMainVideoPlayer() {
     if (!player) {
         var options = {
             "controls": true,
@@ -10,7 +10,7 @@ function initVideoPlayer() {
             "height": 480,
             aspectRatio: '16:9'
         };
-        player = videojs(document.getElementById('main-video'), options, function () {
+        player = videojs(document.getElementById("main-video"), options, function () {
             player = this;
         });
     }
@@ -18,7 +18,11 @@ function initVideoPlayer() {
 
 model.controller("videoController",function($scope,videoDialogService,className,applicationService){
 
-    initVideoPlayer();
+    initMainVideoPlayer();
+
+    var internalVideoPlayer = null;
+
+    $scope.showVideoTag = false;
 
     //Получаем url для загрузки видео
     function getVideoUrl(id) {
@@ -35,26 +39,48 @@ model.controller("videoController",function($scope,videoDialogService,className,
     });
 
     $scope.open = function() {
-        var videoUrl = getVideoUrl($scope.video.id);
-        videoDialogService.afterOpen($scope.video);
-        if (!player ||player.currentSrc() !== videoUrl) {
-            player.src({type: "video/mp4", src: videoUrl});
-            player.play();
+        if ($scope.getData().inModal === false) {
+            $scope.showVideoTag = true;
+            //Иницилизируем новый видеоплеер
+            if ($scope.getData().inModal === false) {
+                var options = {
+                    "controls": true,
+                    "preload": "metadata",
+                    "autoplay": false,
+                    "width": 720,
+                    "height": 480,
+                    aspectRatio: '16:9'
+                };
+                console.log(document.getElementById($scope.getData().tagId));
+                internalVideoPlayer = videojs(angular.element( document.querySelector()), options, function () {
+                    internalVideoPlayer = this;
+                });
+            }
         } else {
-            player.play();
+            var videoUrl = getVideoUrl($scope.video.id);
+            videoDialogService.afterOpen($scope.video);
+            if (!player || player.currentSrc() !== videoUrl) {
+                player.src({type: "video/mp4", src: videoUrl});
+                player.play();
+            } else {
+                player.play();
+            }
+            $('#videoModal').modal('show');
         }
-        $('#videoModal').modal('show');
     };
 
     $scope.close = function(){
-        if (player) {
-            player.pause();
+        if ($scope.getData().inModal === false) {
+
+        } else {
+            if (player) {
+                player.pause();
+            }
         }
     };
-
-
 
     $('#videoModal').on("hidden.bs.modal",function(){
         $scope.close();
     });
+
 });

@@ -156,6 +156,12 @@
             <version>1.2</version>
         </dependency>
 
+        <dependency>
+            <groupId>tomcat</groupId>
+            <artifactId>catalina</artifactId>
+            <version>5.5.23</version>
+        </dependency>
+
         <!--Data Source-->
         <dependency>
             <groupId>postgresql</groupId>

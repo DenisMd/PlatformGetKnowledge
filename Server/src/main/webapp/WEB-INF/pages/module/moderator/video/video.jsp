@@ -13,6 +13,11 @@
           <div flex="55" flex-gt-sm="20">{{translate('id')}}</div>
           <div flex>{{currentVideo.id}}</div>
         </div>
+        <div layout="row" ng-if="currentVideo.duration > 0">
+          <div flex="55" flex-gt-sm="20">{{translate('video_duration')}}</div>
+          <div flex>{{(currentVideo.durationTime) | date : 'HH:mm:ss'}}</div>
+        </div>
+        <hr>
         <div layout="row">
           <md-input-container flex>
             <label>{{translate("video_link")}}</label>
