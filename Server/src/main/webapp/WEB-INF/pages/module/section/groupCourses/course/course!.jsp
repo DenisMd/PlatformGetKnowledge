@@ -106,6 +106,43 @@
 <div layout="row" class="course-info">
     <div flex="60" class="course-intro-video">
         <module-template name="components/video" data="introVideo"></module-template>
+        <%--Knowledge--%>
+        <div ng-if="!course.base">
+            <div>{{translate("course_required_knowledge")}} : </div>
+            <md-chips flex class="md-contact-chips"
+                      ng-model="course.requiredKnowledge"
+                      md-require-match="true"
+                      readonly="true">
+                <md-chip-template>
+                    <a ng-href="{{$chip.knowldgeHref}}" class="link-without-style">
+                        <div class="md-contact-avatar">
+                            <img ng-src="{{$chip.image}}" alt="{{$chip.name}}" ng-if="$chip.image" class="chip-image"/>
+                        </div>
+                        <div class="md-contact-name">
+                            {{$chip.name}}
+                        </div>
+                    </a>
+                </md-chip-template>
+            </md-chips>
+        </div>
+        <div>
+            <div>{{translate("course_source_knowledge")}} :</div>
+            <md-chips flex class="md-contact-chips"
+                      ng-model="course.sourceKnowledge"
+                      md-require-match="true"
+                      readonly="true">
+                <md-chip-template>
+                    <a ng-href="{{$chip.knowldgeHref}}" class="link-without-style">
+                        <div class="md-contact-avatar">
+                            <img ng-src="{{$chip.image}}" alt="{{$chip.name}}" ng-if="$chip.image" class="chip-image"/>
+                        </div>
+                        <div class="md-contact-name">
+                            {{$chip.name}}
+                        </div>
+                    </a>
+                </md-chip-template>
+            </md-chips>
+        </div>
     </div>
     <div flex class="course-info-left-block">
         <%--Name--%>
@@ -127,27 +164,6 @@
             {{translate("course_last_released_date")}} : {{course.lastReleasedDate | date:'medium'}}
         </div>
         <hr>
-        <%--Knowledge--%>
-        <div>
-            <div>{{translate("course_source_knowledge")}} : </div>
-            <md-contact-chips
-                    ng-model="course.sourceKnowledge"
-                    md-contacts="querySearch($query)"
-                    md-contact-name="name"
-                    md-contact-image="image"
-                    readonly="true">
-            </md-contact-chips>
-        </div>
-        <div ng-if="!course.base">
-            <div>{{translate("course_required_knowledge")}} : </div>
-            <md-contact-chips
-                    ng-model="course.requiredKnowledge"
-                    md-contacts="querySearch($query)"
-                    md-contact-name="name"
-                    md-contact-image="image"
-                    readonly="true">
-            </md-contact-chips>
-        </div>
         <div>
             {{translate("tags")}} :
             <div ng-repeat="tag in course.tags" style="display:inline">

@@ -21,3 +21,7 @@
 .course-title {
     font-size: 24px;
 }
+
+.chip-image {
+    vertical-align: baseline;
+}

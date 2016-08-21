@@ -29,6 +29,20 @@ model.controller("courseCtrl", function ($scope,$timeout,applicationService,clas
                 knowledge.image = applicationService.imageHref(className.knowledge,knowledge.id);
             });
 
+            applicationService.action($scope,"knowledges",className.knowledge,"getKnowledgeByType",{
+                sectionName : course.groupCourses.section.name
+            },function(knowledge) {
+                knowledge.image = applicationService.imageHref(className.knowledge,knowledge.id);
+            });
+
+            course.sourceKnowledge.forEach(function (item) {
+               item.knowldgeHref = $scope.createUrl("/knowledge/" + item.id);
+            });
+
+            course.requiredKnowledge.forEach(function (item) {
+                item.knowldgeHref = $scope.createUrl("/knowledge/" + item.id);
+            });
+
 
             $scope.introVideo.id = 1;
             $scope.$broadcast("video"+$scope.introVideo.eventId.capitalizeFirstLetter()+"Event");
@@ -107,11 +121,6 @@ model.controller("courseCtrl", function ($scope,$timeout,applicationService,clas
             videoName : $scope.course.intro.videoName
         },file);
     };
-
-
-    applicationService.list($scope,"knowledges",className.knowledge , function(knowledge) {
-        knowledge.image = applicationService.imageHref(className.knowledge,knowledge.id);
-    });
 
     $scope.knowledgesResult = [];
 

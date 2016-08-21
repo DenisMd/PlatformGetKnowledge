@@ -1,7 +1,9 @@
 package com.getknowledge.modules.dictionaries.knowledge;
 
+import com.getknowledge.modules.dictionaries.knowledge.enumeration.KnowledgeType;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoService;
+import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.ImageService;
@@ -28,6 +30,21 @@ public class KnowledgeService extends AbstractService implements ImageService {
 
     @Autowired
     private TraceService trace;
+
+    @Action(name = "getKnowledgeByType" , mandatoryFields = "sectionName")
+    @Transactional
+    public List<Knowledge> getKnowledgeByType(HashMap<String,Object> data) {
+
+        String sectionName = (String) data.get("sectionName");
+        sectionName = sectionName.substring(0, 1).toUpperCase() + sectionName.substring(1);
+        try {
+            KnowledgeType knowledgeType = KnowledgeType.valueOf(sectionName);
+            return knowledgeRepository.getEntitiesByFieldAndValue("knowledgeType",knowledgeType);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 
     @ActionWithFile(name = "uploadImage" , mandatoryFields = "knowledgeId")
     @Transactional
