@@ -212,6 +212,12 @@
         </ul>
     </div>
     <div flex>
+        <p class="text-center book-author-title">{{translate("course_author")}}<p>
+        <a ng-href="{{course.author.userUrl}}" class="course-author-name">
+            <img ng-src="{{course.author.imageSrc}}" class="main-image"/>
+            <p class="main-label">{{course.author.firstName}} {{course.author.lastName}}</p>
+        </a>
+        <p>{{course.author.speciality}}</p>
         <img ng-src="{{course.imageSrc}}"
              class="cover-img">
 
@@ -220,22 +226,6 @@
         </p>
     </div>
 </div>
-
-<%--<div ng-controller="videoCtrl">--%>
-    <%--<!-- Modal -->--%>
-    <%--<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">--%>
-        <%--<div class="modal-dialog" role="document">--%>
-            <%--<div class="modal-content modal-center">--%>
-                <%--<!--<div class="modal-body">-->--%>
-                <%--<video id="main-video" class="video-js vjs-default-skin vjs-big-play-centered">--%>
-                    <%--<!--poster="/resources/image/index/slider/programming.jpg" data-setup="{{videoSetup}}">-->--%>
-                <%--</video>--%>
-                <%--<!--</div>-->--%>
-            <%--</div>--%>
-        <%--</div>--%>
-    <%--</div>--%>
-<%--</div>--%>
-<%--{{course}}--%>
 
 <script type="text/ng-template" id="createTutorial.html">
     <md-dialog  ng-cloak>

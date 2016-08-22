@@ -43,6 +43,10 @@ model.controller("courseCtrl", function ($scope,$timeout,applicationService,clas
                 item.knowldgeHref = $scope.createUrl("/knowledge/" + item.id);
             });
 
+            if (course.author){
+                course.author.imageSrc = $scope.userImg(course.author.id);
+                course.author.userUrl = $scope.createUrl("/user/"+course.author.id);
+            }
 
             $scope.introVideo.id = 1;
             $scope.$broadcast("video"+$scope.introVideo.eventId.capitalizeFirstLetter()+"Event");

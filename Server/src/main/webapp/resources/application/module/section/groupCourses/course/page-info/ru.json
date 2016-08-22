@@ -10,6 +10,7 @@
     "course_exercises_rating" : "Качество упражнений",
     "course_test_rating" : "Качество тестов",
     "course_relevance_information" : "Актуальность информации",
-    "course_base" : "Базовый курс"
+    "course_base" : "Базовый курс",
+    "course_author" : "Автор Курса"
   }
 }
