@@ -108,7 +108,7 @@
         <module-template name="components/video" data="introVideo"></module-template>
         <%--Knowledge--%>
         <div ng-if="!course.base">
-            <div>{{translate("course_required_knowledge")}} : </div>
+            <div class="course-knowledge-title">{{translate("course_required_knowledge")}} : </div>
             <md-chips flex class="md-contact-chips"
                       ng-model="course.requiredKnowledge"
                       md-require-match="true"
@@ -126,7 +126,7 @@
             </md-chips>
         </div>
         <div>
-            <div>{{translate("course_source_knowledge")}} :</div>
+            <div class="course-knowledge-title">{{translate("course_source_knowledge")}} :</div>
             <md-chips flex class="md-contact-chips"
                       ng-model="course.sourceKnowledge"
                       md-require-match="true"
@@ -163,14 +163,6 @@
         <div ng-if="course.lastReleasedDate">
             {{translate("course_last_released_date")}} : {{course.lastReleasedDate | date:'medium'}}
         </div>
-        <hr>
-        <div>
-            {{translate("tags")}} :
-            <div ng-repeat="tag in course.tags" style="display:inline">
-                {{tag.tagName}}
-            </div>
-            <br>
-        </div>
         <%--Rating--%>
         <hr>
         <div>
@@ -198,6 +190,14 @@
         <%--Price--%>
         <div>
             <module-template name="components/price" data="course.item.price"></module-template>
+        </div>
+        <hr>
+        <div class="course-tags">
+            {{translate("tags")}} :
+            <div ng-repeat="tag in course.tags" style="display:inline">
+                <span class="course-tag-name">{{tag.tagName}}</span><span ng-if="!$last">,</span>
+            </div>
+            <br>
         </div>
     </div>
 </div>

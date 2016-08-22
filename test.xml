@@ -1,20 +1,1285 @@
-XML ответ:
-<ProcessResult xmlns="http://schemas.tranzaxis.com/xdccontrol.xsd"
-               xmlns:xdc="http://schemas.tranzaxis.com/xdcmessages.xsd">
-    <Timeout Value="30"/>
-    <Message Kind="4" IsWincor="false" Luno="000">
-        <xdc:TranReply MCN="2" TranId="14" State="009">
-            <xdc:Cmd Kind="3" Screen="204"/>
-            <xdc:Print Device="0"/>
-            <xdc:ICC Id="CAM">
-                393130414544413532334536313831433536303633303330384130323330333037323132394631383034303141364641423538363039383432343030303030343845343041303842
-            </xdc:ICC>
-        </xdc:TranReply>
-    </Message>
-</ProcessResult>
-
-        at1  -  5
-        at2a -  CAM
-        at2b -  91 0A EDA523E6181C56063030
-        at2c -  8A 02 3030
-        at2d -  72 12 9F18 04 01A6FAB5 86 09 84240000048E40A08B
+<xdc:Program xmlns:xdc="http://schemas.tranzaxis.com/xdccontrol.xsd">
+    <xdc:Procedure Name="OnConnect">
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="ChangeMacKey"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="PollState"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="FinishProcess"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Return" Label=""/>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Timeout Reject MacFailure" GotoLabel="ResetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="ResetConnection">
+            <xdc:Params>
+                <xdc:Call ProcName="resetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="OnTranRequest">
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="processTran"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Finish">
+            <xdc:Params>
+                <xdc:Call ProcName="FinishProcess"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Return" Label=""/>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Timeout" GotoLabel="ResetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Reject MacFailure" GotoLabel="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="NewTran" GotoLabel="TranRequest"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="ResetConnection">
+            <xdc:Params>
+                <xdc:Call ProcName="resetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Close">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Finish"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="TranRequest">
+            <xdc:Params>
+                <xdc:Call ProcName="processTran"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Finish"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="OnUnsolicitedMessage">
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="processUnsolicitedMessage"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="FinishProcess"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="OnEJUploadDataMessage">
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="processEJDataMessage"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="OnCommandOpen">
+        <xdc:Operator Kind="Call" Label="Start">
+            <xdc:Params>
+                <xdc:Call ProcName="Open"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Finish">
+            <xdc:Params>
+                <xdc:Call ProcName="FinishProcess"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Return" Label=""/>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Timeout" GotoLabel="ResetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Reject MacFailure" GotoLabel="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="NewTran" GotoLabel="TranRequest"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="ResetConnection">
+            <xdc:Params>
+                <xdc:Call ProcName="resetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Close">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Finish"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="TranRequest">
+            <xdc:Params>
+                <xdc:Call ProcName="processTran"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Start"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="OnCommandClose">
+        <xdc:Operator Kind="Call" Label="Start">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Finish">
+            <xdc:Params>
+                <xdc:Call ProcName="FinishProcess"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Return" Label=""/>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Timeout" GotoLabel="ResetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Reject MacFailure" GotoLabel="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="NewTran" GotoLabel="TranRequest"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="ResetConnection">
+            <xdc:Params>
+                <xdc:Call ProcName="resetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Close">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Finish"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="TranRequest">
+            <xdc:Params>
+                <xdc:Call ProcName="processTran"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Start"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="OnCommandReloadCfg">
+        <xdc:Operator Kind="Call" Label="Start">
+            <xdc:Params>
+                <xdc:Call ProcName="isOpen">
+                    <xdc:ReturnRules>
+                        <xdc:Rule Name="isOpen" VarType="Bool">
+                            <xdc:CopyFrom Name="isOpen"/>
+                        </xdc:Rule>
+                    </xdc:ReturnRules>
+                </xdc:Call>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="If" Label="">
+            <xdc:Params>
+                <xdc:If Condition="=" GotoLabel="SkipClose">
+                    <xdc:Param1>
+                        <xdc:Variable Name="isOpen"/>
+                    </xdc:Param1>
+                    <xdc:Param2>
+                        <xdc:Constant>
+                            <xdc:BoolVal>false</xdc:BoolVal>
+                        </xdc:Constant>
+                    </xdc:Param2>
+                </xdc:If>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="SkipClose">
+            <xdc:Params>
+                <xdc:Call ProcName="reloadCfg"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="setConfigId"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="pollConfig"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Finish">
+            <xdc:Params>
+                <xdc:Call ProcName="FinishProcess"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Return" Label=""/>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Timeout" GotoLabel="ResetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Reject MacFailure" GotoLabel="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="NewTran" GotoLabel="TranRequest"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="ResetConnection">
+            <xdc:Params>
+                <xdc:Call ProcName="resetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Close">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Finish"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="TranRequest">
+            <xdc:Params>
+                <xdc:Call ProcName="processTran"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Start"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="OnCommandUpdateCfg">
+        <xdc:Operator Kind="Call" Label="Start">
+            <xdc:Params>
+                <xdc:Call ProcName="isOpen">
+                    <xdc:ReturnRules>
+                        <xdc:Rule Name="isOpen" VarType="Bool">
+                            <xdc:CopyFrom Name="isOpen"/>
+                        </xdc:Rule>
+                    </xdc:ReturnRules>
+                </xdc:Call>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="If" Label="">
+            <xdc:Params>
+                <xdc:If Condition="=" GotoLabel="SkipClose">
+                    <xdc:Param1>
+                        <xdc:Variable Name="isOpen"/>
+                    </xdc:Param1>
+                    <xdc:Param2>
+                        <xdc:Constant>
+                            <xdc:BoolVal>false</xdc:BoolVal>
+                        </xdc:Constant>
+                    </xdc:Param2>
+                </xdc:If>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="SkipClose">
+            <xdc:Params>
+                <xdc:Call ProcName="updateCfg"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="setConfigId"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Finish">
+            <xdc:Params>
+                <xdc:Call ProcName="FinishProcess"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Return" Label=""/>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Timeout" GotoLabel="ResetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Reject MacFailure" GotoLabel="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="NewTran" GotoLabel="TranRequest"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="ResetConnection">
+            <xdc:Params>
+                <xdc:Call ProcName="resetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Close">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Finish"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="TranRequest">
+            <xdc:Params>
+                <xdc:Call ProcName="processTran"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Start"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="OnCommandUpdateKeys">
+        <xdc:Operator Kind="Call" Label="Start">
+            <xdc:Params>
+                <xdc:Call ProcName="isOpen">
+                    <xdc:ReturnRules>
+                        <xdc:Rule Name="isOpen" VarType="Bool">
+                            <xdc:CopyFrom Name="isOpen"/>
+                        </xdc:Rule>
+                    </xdc:ReturnRules>
+                </xdc:Call>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="If" Label="">
+            <xdc:Params>
+                <xdc:If Condition="=" GotoLabel="SkipClose">
+                    <xdc:Param1>
+                        <xdc:Variable Name="isOpen"/>
+                    </xdc:Param1>
+                    <xdc:Param2>
+                        <xdc:Constant>
+                            <xdc:BoolVal>false</xdc:BoolVal>
+                        </xdc:Constant>
+                    </xdc:Param2>
+                </xdc:If>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="SkipClose">
+            <xdc:Params>
+                <xdc:Call ProcName="ChangeKeys"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Finish">
+            <xdc:Params>
+                <xdc:Call ProcName="FinishProcess"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Return" Label=""/>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Timeout" GotoLabel="ResetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Reject MacFailure" GotoLabel="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="NewTran" GotoLabel="TranRequest"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="ResetConnection">
+            <xdc:Params>
+                <xdc:Call ProcName="resetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Close">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Finish"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="TranRequest">
+            <xdc:Params>
+                <xdc:Call ProcName="processTran"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Start"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="OnCommandSynchronizeTime">
+        <xdc:Operator Kind="Call" Label="Start">
+            <xdc:Params>
+                <xdc:Call ProcName="isOpen">
+                    <xdc:ReturnRules>
+                        <xdc:Rule Name="isOpen" VarType="Bool">
+                            <xdc:CopyFrom Name="isOpen"/>
+                        </xdc:Rule>
+                    </xdc:ReturnRules>
+                </xdc:Call>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="If" Label="">
+            <xdc:Params>
+                <xdc:If Condition="=" GotoLabel="SkipClose">
+                    <xdc:Param1>
+                        <xdc:Variable Name="isOpen"/>
+                    </xdc:Param1>
+                    <xdc:Param2>
+                        <xdc:Constant>
+                            <xdc:BoolVal>false</xdc:BoolVal>
+                        </xdc:Constant>
+                    </xdc:Param2>
+                </xdc:If>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="SkipClose">
+            <xdc:Params>
+                <xdc:Call ProcName="synchronizeTime"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Finish">
+            <xdc:Params>
+                <xdc:Call ProcName="FinishProcess"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Return" Label=""/>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Timeout" GotoLabel="ResetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Reject MacFailure" GotoLabel="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="NewTran" GotoLabel="TranRequest"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="ResetConnection">
+            <xdc:Params>
+                <xdc:Call ProcName="resetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Close">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Finish"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="TranRequest">
+            <xdc:Params>
+                <xdc:Call ProcName="processTran"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Start"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="OnCommandUploadJournal">
+        <xdc:Operator Kind="Call" Label="Start">
+            <xdc:Params>
+                <xdc:Call ProcName="activateEJUpload"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Finish">
+            <xdc:Params>
+                <xdc:Call ProcName="FinishProcess"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Return" Label=""/>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Timeout" GotoLabel="ResetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Reject MacFailure" GotoLabel="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="NewTran" GotoLabel="TranRequest"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="ResetConnection">
+            <xdc:Params>
+                <xdc:Call ProcName="resetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Close">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Finish"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="TranRequest">
+            <xdc:Params>
+                <xdc:Call ProcName="processTran"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Start"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="OnCommandPollState">
+        <xdc:Operator Kind="Call" Label="Start">
+            <xdc:Params>
+                <xdc:Call ProcName="isOpen">
+                    <xdc:ReturnRules>
+                        <xdc:Rule Name="isOpen" VarType="Bool">
+                            <xdc:CopyFrom Name="isOpen"/>
+                        </xdc:Rule>
+                    </xdc:ReturnRules>
+                </xdc:Call>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="If" Label="">
+            <xdc:Params>
+                <xdc:If Condition="=" GotoLabel="SkipClose">
+                    <xdc:Param1>
+                        <xdc:Variable Name="isOpen"/>
+                    </xdc:Param1>
+                    <xdc:Param2>
+                        <xdc:Constant>
+                            <xdc:BoolVal>false</xdc:BoolVal>
+                        </xdc:Constant>
+                    </xdc:Param2>
+                </xdc:If>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="SkipClose">
+            <xdc:Params>
+                <xdc:Call ProcName="PollState"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Finish">
+            <xdc:Params>
+                <xdc:Call ProcName="FinishProcess"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Return" Label=""/>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Timeout" GotoLabel="ResetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Reject MacFailure" GotoLabel="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="NewTran" GotoLabel="TranRequest"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="ResetConnection">
+            <xdc:Params>
+                <xdc:Call ProcName="resetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Close">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Finish"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="TranRequest">
+            <xdc:Params>
+                <xdc:Call ProcName="processTran"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Start"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="OnCommandTerminalRefill">
+        <xdc:Operator Kind="Call" Label="Start">
+            <xdc:Params>
+                <xdc:Call ProcName="isOpen">
+                    <xdc:ReturnRules>
+                        <xdc:Rule Name="isOpen" VarType="Bool">
+                            <xdc:CopyFrom Name="isOpen"/>
+                        </xdc:Rule>
+                    </xdc:ReturnRules>
+                </xdc:Call>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="If" Label="">
+            <xdc:Params>
+                <xdc:If Condition="=" GotoLabel="SkipClose">
+                    <xdc:Param1>
+                        <xdc:Variable Name="isOpen"/>
+                    </xdc:Param1>
+                    <xdc:Param2>
+                        <xdc:Constant>
+                            <xdc:BoolVal>false</xdc:BoolVal>
+                        </xdc:Constant>
+                    </xdc:Param2>
+                </xdc:If>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="SkipClose">
+            <xdc:Params>
+                <xdc:Call ProcName="pollCounters"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Finish">
+            <xdc:Params>
+                <xdc:Call ProcName="FinishProcess"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Return" Label=""/>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Timeout" GotoLabel="ResetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Reject MacFailure" GotoLabel="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="NewTran" GotoLabel="TranRequest"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="ResetConnection">
+            <xdc:Params>
+                <xdc:Call ProcName="resetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Close">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Finish"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="TranRequest">
+            <xdc:Params>
+                <xdc:Call ProcName="processTran"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Start"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="OnCommandRKL">
+        <xdc:Operator Kind="Call" Label="Start">
+            <xdc:Params>
+                <xdc:Call ProcName="isOpen">
+                    <xdc:ReturnRules>
+                        <xdc:Rule Name="isOpen" VarType="Bool">
+                            <xdc:CopyFrom Name="isOpen"/>
+                        </xdc:Rule>
+                    </xdc:ReturnRules>
+                </xdc:Call>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="If" Label="">
+            <xdc:Params>
+                <xdc:If Condition="=" GotoLabel="SkipClose">
+                    <xdc:Param1>
+                        <xdc:Variable Name="isOpen"/>
+                    </xdc:Param1>
+                    <xdc:Param2>
+                        <xdc:Constant>
+                            <xdc:BoolVal>false</xdc:BoolVal>
+                        </xdc:Constant>
+                    </xdc:Param2>
+                </xdc:If>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="SkipClose">
+            <xdc:Params>
+                <xdc:Call ProcName="rsaPollCaps"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="rsaExchangeKeys"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="rsaLoadKey"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Finish">
+            <xdc:Params>
+                <xdc:Call ProcName="FinishProcess"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Return" Label=""/>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Timeout" GotoLabel="ResetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Reject MacFailure" GotoLabel="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="NewTran" GotoLabel="TranRequest"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="ResetConnection">
+            <xdc:Params>
+                <xdc:Call ProcName="resetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Close">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Finish"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="TranRequest">
+            <xdc:Params>
+                <xdc:Call ProcName="processTran"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Start"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="OnCommandRefillByTxCounters">
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="FinishProcess"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="OnCommandResetConnection">
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="resetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="Open">
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="ChangeKeys"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="open"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="activateEJUpload"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="Close">
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Return" Label=""/>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Timeout Reject MacFailure" GotoLabel="ResetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="ResetConnection">
+            <xdc:Params>
+                <xdc:Call ProcName="resetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="ChangeKeys">
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="changePinKey"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="ChangeMacKey"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="setConfigId"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Return" Label=""/>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Timeout Reject MacFailure NewTran" GotoLabel="ResetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="ResetConnection">
+            <xdc:Params>
+                <xdc:Call ProcName="resetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="FinishProcess">
+        <xdc:Operator Kind="Call" Label="Start">
+            <xdc:Params>
+                <xdc:Call ProcName="needOpen">
+                    <xdc:ReturnRules>
+                        <xdc:Rule Name="needOpen" VarType="Bool">
+                            <xdc:CopyFrom Name="needOpen"/>
+                        </xdc:Rule>
+                    </xdc:ReturnRules>
+                </xdc:Call>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="If" Label="">
+            <xdc:Params>
+                <xdc:If Condition="=" GotoLabel="Open">
+                    <xdc:Param1>
+                        <xdc:Variable Name="needOpen"/>
+                    </xdc:Param1>
+                    <xdc:Param2>
+                        <xdc:Constant>
+                            <xdc:BoolVal>true</xdc:BoolVal>
+                        </xdc:Constant>
+                    </xdc:Param2>
+                </xdc:If>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="needClose">
+                    <xdc:ReturnRules>
+                        <xdc:Rule Name="needClose" VarType="Bool">
+                            <xdc:CopyFrom Name="needClose"/>
+                        </xdc:Rule>
+                    </xdc:ReturnRules>
+                </xdc:Call>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="If" Label="">
+            <xdc:Params>
+                <xdc:If Condition="=" GotoLabel="Close">
+                    <xdc:Param1>
+                        <xdc:Variable Name="needClose"/>
+                    </xdc:Param1>
+                    <xdc:Param2>
+                        <xdc:Constant>
+                            <xdc:BoolVal>true</xdc:BoolVal>
+                        </xdc:Constant>
+                    </xdc:Param2>
+                </xdc:If>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Return" Label=""/>
+        <xdc:Operator Kind="Call" Label="Open">
+            <xdc:Params>
+                <xdc:Call ProcName="Open"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Start"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Close">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Start"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="PollState">
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="PollStatus"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="PollCounters"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="PollCounters">
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="pollCounters"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="isCashAcceptorPresent">
+                    <xdc:ReturnRules>
+                        <xdc:Rule Name="isCashAcceptorPresent" VarType="Bool">
+                            <xdc:CopyFrom Name="isCashAcceptorPresent"/>
+                        </xdc:Rule>
+                    </xdc:ReturnRules>
+                </xdc:Call>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="If" Label="">
+            <xdc:Params>
+                <xdc:If Condition="=" GotoLabel="Finish">
+                    <xdc:Param1>
+                        <xdc:Variable Name="isCashAcceptorPresent"/>
+                    </xdc:Param1>
+                    <xdc:Param2>
+                        <xdc:Constant>
+                            <xdc:BoolVal>false</xdc:BoolVal>
+                        </xdc:Constant>
+                    </xdc:Param2>
+                </xdc:If>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="isWincor">
+                    <xdc:ReturnRules>
+                        <xdc:Rule Name="isWincor" VarType="Bool">
+                            <xdc:CopyFrom Name="isWincor"/>
+                        </xdc:Rule>
+                    </xdc:ReturnRules>
+                </xdc:Call>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="If" Label="">
+            <xdc:Params>
+                <xdc:If Condition="=" GotoLabel="Finish">
+                    <xdc:Param1>
+                        <xdc:Variable Name="isWincor"/>
+                    </xdc:Param1>
+                    <xdc:Param2>
+                        <xdc:Constant>
+                            <xdc:BoolVal>false</xdc:BoolVal>
+                        </xdc:Constant>
+                    </xdc:Param2>
+                </xdc:If>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="pollWincorCashInCounters"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Return" Label="Finish"/>
+    </xdc:Procedure>
+    <xdc:Procedure Name="OnCommandPollCounters">
+        <xdc:Operator Kind="Call" Label="Start">
+            <xdc:Params>
+                <xdc:Call ProcName="PollCounters"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Finish">
+            <xdc:Params>
+                <xdc:Call ProcName="FinishProcess"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Return" Label=""/>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Timeout" GotoLabel="ResetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Reject MacFailure" GotoLabel="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="NewTran" GotoLabel="TranRequest"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="ResetConnection">
+            <xdc:Params>
+                <xdc:Call ProcName="resetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Close">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Finish"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="TranRequest">
+            <xdc:Params>
+                <xdc:Call ProcName="processTran"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Start"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="OnInactive">
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="PollState"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Finish">
+            <xdc:Params>
+                <xdc:Call ProcName="FinishProcess"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Return" Label=""/>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Timeout" GotoLabel="ResetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="Reject MacFailure" GotoLabel="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Catch" Label="">
+            <xdc:Params>
+                <xdc:Catch Exceptions="NewTran" GotoLabel="TranRequest"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="ResetConnection">
+            <xdc:Params>
+                <xdc:Call ProcName="resetConnection"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="Close">
+            <xdc:Params>
+                <xdc:Call ProcName="Close"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Finish"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="TranRequest">
+            <xdc:Params>
+                <xdc:Call ProcName="processTran"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Goto" Label="">
+            <xdc:Params>
+                <xdc:GoTo Label="Finish"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="ChangeMacKey">
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="changeMacKey"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+    <xdc:Procedure Name="PollStatus">
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="pollConfig"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="isCashAcceptorPresent">
+                    <xdc:ReturnRules>
+                        <xdc:Rule Name="isCashAcceptorPresent" VarType="Bool">
+                            <xdc:CopyFrom Name="isCashAcceptorPresent"/>
+                        </xdc:Rule>
+                    </xdc:ReturnRules>
+                </xdc:Call>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="If" Label="">
+            <xdc:Params>
+                <xdc:If Condition="=" GotoLabel="Finish">
+                    <xdc:Param1>
+                        <xdc:Variable Name="isCashAcceptorPresent"/>
+                    </xdc:Param1>
+                    <xdc:Param2>
+                        <xdc:Constant>
+                            <xdc:BoolVal>false</xdc:BoolVal>
+                        </xdc:Constant>
+                    </xdc:Param2>
+                </xdc:If>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="isWincor">
+                    <xdc:ReturnRules>
+                        <xdc:Rule Name="isWincor" VarType="Bool">
+                            <xdc:CopyFrom Name="isWincor"/>
+                        </xdc:Rule>
+                    </xdc:ReturnRules>
+                </xdc:Call>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="If" Label="">
+            <xdc:Params>
+                <xdc:If Condition="=" GotoLabel="Finish">
+                    <xdc:Param1>
+                        <xdc:Variable Name="isWincor"/>
+                    </xdc:Param1>
+                    <xdc:Param2>
+                        <xdc:Constant>
+                            <xdc:BoolVal>false</xdc:BoolVal>
+                        </xdc:Constant>
+                    </xdc:Param2>
+                </xdc:If>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Call" Label="">
+            <xdc:Params>
+                <xdc:Call ProcName="pollWincorCashInStatus"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Return" Label="Finish"/>
+    </xdc:Procedure>
+    <xdc:Procedure Name="Test -> &lt;MacFailure>">
+        <xdc:Operator Kind="Throw" Label="a">
+            <xdc:Params>
+                <xdc:Throw Exception="MacFailure"/>
+            </xdc:Params>
+        </xdc:Operator>
+        <xdc:Operator Kind="Throw" Label="b">
+            <xdc:Params>
+                <xdc:Throw Exception="Timeout"/>
+            </xdc:Params>
+        </xdc:Operator>
+    </xdc:Procedure>
+</xdc:Program>

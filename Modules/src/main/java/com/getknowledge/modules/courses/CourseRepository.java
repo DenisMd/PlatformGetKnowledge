@@ -45,6 +45,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -241,6 +242,8 @@ public class CourseRepository extends ProtectedRepository<Course> {
             coursesTagRepository.createTags(tags,course);
         }
 
+
+        course.setSourceKnowledge(new ArrayList<>());
         if (sourceKnowledgeIds != null) {
             for (Integer id : sourceKnowledgeIds) {
                 Knowledge knowledge = knowledgeRepository.read(new Long(id));
@@ -248,6 +251,7 @@ public class CourseRepository extends ProtectedRepository<Course> {
             }
         }
 
+        course.setRequiredKnowledge(new ArrayList<>());
         if (requiredKnowledgeIds != null) {
             for (Integer id : requiredKnowledgeIds) {
                 Knowledge knowledge = knowledgeRepository.read(new Long(id));

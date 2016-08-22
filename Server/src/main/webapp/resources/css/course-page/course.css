@@ -25,3 +25,15 @@
 .chip-image {
     vertical-align: baseline;
 }
+
+.course-tag-name {
+    color: red;
+}
+
+.course-tags {
+    font-size: 1.3em;
+}
+
+.course-knowledge-title {
+    font-size: 1.3em;
+}
