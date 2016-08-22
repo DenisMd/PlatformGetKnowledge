@@ -155,7 +155,7 @@ model.controller("courseCtrl", function ($scope,$timeout,applicationService,clas
             var request = {};
             request.courseId = $scope.course.id;
             request.name = answer.name;
-            applicationService.action($scope,"", className.course,"createTutorial",request,function(result){
+            applicationService.action($scope,"", className.tutorial,"createTutorial",request,function(result){
                 $scope.showToast(result);
                 readTutorials();
             });

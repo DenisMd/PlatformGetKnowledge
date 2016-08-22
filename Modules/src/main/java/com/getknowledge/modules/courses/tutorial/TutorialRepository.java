@@ -1,6 +1,8 @@
 package com.getknowledge.modules.courses.tutorial;
 
 import com.getknowledge.modules.courses.Course;
+import com.getknowledge.modules.courses.raiting.Rating;
+import com.getknowledge.modules.courses.raiting.RatingRepository;
 import com.getknowledge.modules.courses.tutorial.comments.question.TutorialQuestion;
 import com.getknowledge.modules.courses.tutorial.comments.review.TutorialReview;
 import com.getknowledge.modules.courses.tutorial.homeworks.HomeWork;
@@ -35,6 +37,9 @@ public class TutorialRepository extends ProtectedRepository<Tutorial> {
     @Autowired
     private TestRepository testRepository;
 
+    @Autowired
+    private RatingRepository ratingRepository;
+
     @Override
     public void remove(Tutorial tutorial) {
         if (tutorial.getVideo() != null) {
@@ -61,6 +66,11 @@ public class TutorialRepository extends ProtectedRepository<Tutorial> {
 
         tutorial.setOrderNumber(maxOrder == null ? 1 : ((Integer) maxOrder) + 1);
         tutorial.setLastChangeTime(Calendar.getInstance());
+
+        Rating rating = new Rating();
+        ratingRepository.create(rating);
+        tutorial.setAvgTutorialRating(rating);
+
         create(tutorial);
         return tutorial;
     }

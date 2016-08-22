@@ -63,7 +63,7 @@ public class TutorialService extends AbstractService {
             return result;
         }
 
-        Tutorial tutorial =tutorialRepository.createTutorial(course, (String) data.get("name"));
+        Tutorial tutorial = tutorialRepository.createTutorial(course, (String) data.get("name"));
         Result result1 = Result.Complete();
         result1.setObject(tutorial.getId());
         return result1;
