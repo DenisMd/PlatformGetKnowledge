@@ -192,6 +192,7 @@
             </div>
         </div>
         <%--Price--%>
+        <hr>
         <div>
             <module-template name="components/price" data="course.item.price"></module-template>
         </div>
