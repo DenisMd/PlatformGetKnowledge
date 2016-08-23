@@ -3,7 +3,7 @@
 
 
 <div layout="column" layout-gt-sm="row" layout-margin class="course-author-row" layout-align-gt-sm="start start" layout-align="center center">
-    <button class="btn btn-default black-btn" ng-click="showEditableContent = !showEditableContent" ng-if="course.editable" flex="none">
+    <button class="btn btn-default black-btn" ng-click="changeEditableContent()" ng-if="course.editable" flex="none">
         {{translate("course_change")}}
     </button>
 
@@ -21,8 +21,9 @@
 
 </div>
 
-<div ng-if="showEditableContent">
-    <md-content>
+
+<div ng-if="showEditableContent" layout="row">
+    <md-content flex>
         <md-tabs md-dynamic-height md-border-bottom>
             <md-tab label="{{translate('course_info')}}">
                 <md-content class="md-padding">

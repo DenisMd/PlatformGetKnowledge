@@ -46,7 +46,7 @@
 }
 
 .course-content {
-    margin-top: 15px;
+    padding-top: 15px;
     background-color: rgb(245, 245, 245);
 }
 
@@ -70,5 +70,5 @@
 }
 
 .course-tutorial-name:hover {
-    color :#FF7B39;
+    color : rgb(211, 81, 54);
 }

@@ -64,6 +64,10 @@ model.controller("courseCtrl", function ($scope,$timeout,applicationService,clas
 
     $scope.showEditableContent = false;
 
+    $scope.changeEditableContent = function () {
+      $scope.showEditableContent = !$scope.showEditableContent;
+    };
+
     $scope.updateCourse = function(course) {
         var result = {};
         result.courseId = course.id;

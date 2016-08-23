@@ -34,6 +34,7 @@ import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.base.repositories.FilterCountQuery;
 import com.getknowledge.platform.base.repositories.FilterQuery;
 import com.getknowledge.platform.base.repositories.ProtectedRepository;
+import com.getknowledge.platform.base.repositories.enumerations.RepOperations;
 import com.getknowledge.platform.exceptions.DeleteException;
 import com.getknowledge.platform.exceptions.PlatformException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,6 +94,15 @@ public class CourseRepository extends ProtectedRepository<Course> {
 
     @Autowired
     private UserInfoRepository userInfoRepository;
+
+    @Override
+    public List<RepOperations> restrictedOperations() {
+        List<RepOperations> result = super.restrictedOperations();
+        result.add(RepOperations.Create);
+        result.add(RepOperations.Remove);
+        result.add(RepOperations.Update);
+        return result;
+    }
 
     @Filter(name = "searchCourses")
     @Transactional
@@ -271,6 +281,7 @@ public class CourseRepository extends ProtectedRepository<Course> {
     public void releaseBaseCourse(Course course,ChangeList changeList) {
         course.getChangeLists().add(changeList);
         course.setRelease(true);
+        course.setLastReleasedDate(Calendar.getInstance());
         merge(course);
     }
 
