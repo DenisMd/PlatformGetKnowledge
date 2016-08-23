@@ -8,3 +8,14 @@
     border-color: #217CCB;
     background: white;
 }
+
+.black-btn {
+    color: #6c6c6c;
+    border-color: #6c6c6c;
+}
+
+.black-btn:hover{
+    color: #000000;
+    border-color: #000000;
+    background: white;
+}

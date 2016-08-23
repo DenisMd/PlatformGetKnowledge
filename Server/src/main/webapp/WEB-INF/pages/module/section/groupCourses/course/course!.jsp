@@ -1,23 +1,23 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet" href="/resources/css/course-page/course.css">
 
-<div>
-    <md-button class="md-raised md-primary" ng-click="showEditableContent = !showEditableContent" ng-show="course.editable">{{translate("change")}}</md-button>
+
+<div layout="row" layout-margin class="course-author-row" layout-align-gt-sm="start start" layout-align="center center">
+    <button class="btn btn-default black-btn" ng-click="showEditableContent = !showEditableContent" ng-if="course.editable" flex="none">
+        {{translate("course_change")}}
+    </button>
+
+    <button class="btn btn-default black-btn" ng-click="showAdvanced($event)" ng-if="course.editable" flex="none">
+        {{translate("course_create_tutorial")}}
+    </button>
+
+    <button class="btn btn-default black-btn" ng-click="makeRelease()" ng-if="course.editable && !course.release" flex="none">
+        {{translate("course_make_release")}}
+    </button>
+
 </div>
 
-<div ng-if="course.editable && !course.release">
-    <md-button class="md-raised md-primary" ng-click="makeRelease()">
-        Make release
-    </md-button>
-</div>
-
-<div ng-if="course.editable">
-    <md-button class="md-raised md-primary" ng-click="showAdvanced($event)">
-        Create tutorial
-    </md-button>
-</div>
-
-<div ng-show="showEditableContent">
+<div ng-if="showEditableContent">
     <md-content>
         <md-tabs md-dynamic-height md-border-bottom>
             <md-tab label="{{translate('course_info')}}">

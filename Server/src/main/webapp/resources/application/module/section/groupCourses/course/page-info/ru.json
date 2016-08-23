@@ -11,6 +11,9 @@
     "course_test_rating" : "Качество тестов",
     "course_relevance_information" : "Актуальность информации",
     "course_base" : "Базовый курс",
-    "course_author" : "Автор Курса"
+    "course_author" : "Автор Курса",
+    "course_change" : "Изменить настройки курса",
+    "course_create_tutorial" : "Создать урок",
+    "course_make_release" : "Выпустить релиз"
   }
 }

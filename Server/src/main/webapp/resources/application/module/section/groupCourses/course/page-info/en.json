@@ -11,6 +11,9 @@
     "course_test_rating" : "Quality of tests",
     "course_relevance_information" : "Relevance information",
     "course_base" : "Base course",
-    "course_author" : "Course Author"
+    "course_author" : "Course Author",
+    "course_change" : "Change course settings",
+    "course_create_tutorial" : "Create tutorial",
+    "course_make_release" : "Make release"
   }
 }
