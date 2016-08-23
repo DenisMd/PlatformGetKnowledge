@@ -11,6 +11,10 @@
         {{translate("course_create_tutorial")}}
     </button>
 
+    <button class="btn btn-default black-btn" ng-click="" ng-if="course.editable" flex="none">
+        {{translate("course_change_tutorial_order")}}
+    </button>
+
     <button class="btn btn-default black-btn" ng-click="makeRelease()" ng-if="course.editable && !course.release" flex="none">
         {{translate("course_make_release")}}
     </button>

@@ -14,6 +14,7 @@
     "course_author" : "Автор Курса",
     "course_change" : "Изменить настройки курса",
     "course_create_tutorial" : "Создать урок",
-    "course_make_release" : "Выпустить релиз"
+    "course_make_release" : "Выпустить релиз",
+    "course_change_tutorial_order" : "Изменить порядок уроков"
   }
 }
