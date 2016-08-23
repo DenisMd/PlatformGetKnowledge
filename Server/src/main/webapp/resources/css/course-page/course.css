@@ -44,3 +44,31 @@
     margin-top: -10px;
     margin-bottom: 15px;
 }
+
+.course-content {
+    margin-top: 15px;
+    background-color: rgb(245, 245, 245);
+}
+
+.course-tutorials-title {
+    font-size: 2em;
+    margin-bottom: 15px;
+}
+
+.course-tutorial {
+    border-top: 1px solid #e6e6e6;
+    cursor: pointer;
+}
+
+.course-tutorial:hover {
+    background-color: white;
+}
+
+.course-tutorial-inner {
+    margin: 0;
+    padding: 10px 0;
+}
+
+.course-tutorial-name:hover {
+    color :#FF7B39;
+}

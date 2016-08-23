@@ -15,6 +15,7 @@
     "course_change" : "Change course settings",
     "course_create_tutorial" : "Create tutorial",
     "course_make_release" : "Make release",
-    "course_change_tutorial_order" : "Change tutorials order"
+    "course_change_tutorial_order" : "Change tutorials order",
+    "course_tutorials_title" : "Tutorials in this course"
   }
 }

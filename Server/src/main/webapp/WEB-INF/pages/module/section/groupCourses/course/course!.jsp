@@ -208,13 +208,18 @@
 </div>
 
 <%--Tutorials list and Description with Author info--%>
-<div layout="row">
+<div layout="row" class="course-content">
     <div flex="60">
-        <ul>
-            <li ng-repeat="(key,name) in tutorials">
-                <a ng-href="{{addUrlToPath('/tutorial/'+key)}}">Урок {{key + ') ' + name}}</a>
-            </li>
-        </ul>
+        <div class="course-tutorials-title">
+            {{translate("course_tutorials_title")}}
+        </div>
+        <div ng-repeat="(tutorialId,tutorialName) in tutorials" class="course-tutorial">
+            <div class="course-tutorial-inner">
+                <a ng-href="{{addUrlToPath('/tutorial/'+tutorialId)}}" class="link-without-style">
+                    {{translate("tutorial")}} {{tutorialId + ')  '}} <span class="course-tutorial-name">{{tutorialName}}</span>
+                </a>
+            </div>
+        </div>
     </div>
     <div flex>
         <p class="text-center book-author-title">{{translate("course_author")}}<p>
