@@ -29,11 +29,13 @@ model.controller("courseCtrl", function ($scope,$timeout,applicationService,clas
                 knowledge.image = applicationService.imageHref(className.knowledge,knowledge.id);
             });
 
-            applicationService.action($scope,"knowledges",className.knowledge,"getKnowledgeByType",{
-                sectionName : course.groupCourses.section.name
-            },function(knowledge) {
-                knowledge.image = applicationService.imageHref(className.knowledge,knowledge.id);
-            });
+            if (course.editable) {
+                applicationService.action($scope, "knowledges", className.knowledge, "getKnowledgeByType", {
+                    sectionName: course.groupCourses.section.name
+                }, function (knowledge) {
+                    knowledge.image = applicationService.imageHref(className.knowledge, knowledge.id);
+                });
+            }
 
             course.sourceKnowledge.forEach(function (item) {
                item.knowldgeHref = $scope.createUrl("/knowledge/" + item.id);
