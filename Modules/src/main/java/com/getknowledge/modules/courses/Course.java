@@ -1,6 +1,7 @@
 package com.getknowledge.modules.courses;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.getknowledge.modules.books.Book;
 import com.getknowledge.modules.courses.changelist.ChangeList;
 import com.getknowledge.modules.courses.group.GroupCourses;
 import com.getknowledge.modules.courses.raiting.Rating;
@@ -10,6 +11,7 @@ import com.getknowledge.modules.courses.version.Version;
 import com.getknowledge.modules.dictionaries.knowledge.Knowledge;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.platform.auth.PermissionNames;
+import com.getknowledge.modules.programs.Program;
 import com.getknowledge.modules.shop.item.Item;
 import com.getknowledge.modules.tags.EntityWithTags;
 import com.getknowledge.modules.userInfo.UserInfo;
@@ -68,6 +70,10 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar lastReleasedDate;
 
+    @ManyToMany
+    @JsonIgnore
+    private List<UserInfo> testers = new ArrayList<>();
+
     @Column(nullable = false)
     private Boolean release = false;
 
@@ -105,6 +111,38 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
 
     @OneToMany(mappedBy = "course" , cascade = {CascadeType.REMOVE})
     private List<ChangeList> changeLists = new ArrayList<>();
+
+    @ManyToMany
+    @JsonIgnore
+    private List<Book> books = new ArrayList<>();
+
+    @ManyToMany
+    @JsonIgnore
+    private List<Program> programs = new ArrayList<>();
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+
+    public List<Program> getPrograms() {
+        return programs;
+    }
+
+    public void setPrograms(List<Program> programs) {
+        this.programs = programs;
+    }
+
+    public List<UserInfo> getTesters() {
+        return testers;
+    }
+
+    public void setTesters(List<UserInfo> testers) {
+        this.testers = testers;
+    }
 
     public Calendar getLastReleasedDate() {
         return lastReleasedDate;
@@ -326,14 +364,15 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
         authorizationList.allowReadEveryOne = true;
         authorizationList.allowCreateEveryOne = false;
         authorizationList.getPermissionsForCreate().add(new Permission(PermissionNames.CreateCourse()));
-        authorizationList.getPermissionsForRemove().add(new Permission(PermissionNames.EditCourse()));
 
         //Если курс имеет состояние release даже автор его не может редоктировать
-        if (!release)
+        if (!release) {
+            authorizationList.getPermissionsForRemove().add(new Permission(PermissionNames.EditCourse()));
             authorizationList.getPermissionsForEdit().add(new Permission(PermissionNames.EditCourse()));
-
-        if (author != null && !release)
-            authorizationList.getUserList().add(author.getUser());
+            if (author != null) {
+                authorizationList.getUserList().add(author.getUser());
+            }
+        }
 
         return authorizationList;
     }

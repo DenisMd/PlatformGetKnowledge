@@ -48,6 +48,7 @@
 .course-content {
     padding-top: 15px;
     background-color: rgb(245, 245, 245);
+    margin: 0 -20px;
 }
 
 .course-tutorials-title {
@@ -70,5 +71,13 @@
 }
 
 .course-tutorial-name:hover {
-    color : rgb(211, 81, 54);
+    color : rgb(216, 92, 22);
+}
+
+.course-tutorial-wrap {
+    padding-left: 35px;
+}
+
+.course-tutorial-time {
+    margin-right: 10px;
 }

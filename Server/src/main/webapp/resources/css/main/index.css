@@ -350,6 +350,13 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     color : black;
 }
 
+a.disabled {
+    color: #AAAAAA;
+    cursor: default;
+    pointer-events: none;
+    text-decoration: none;
+}
+
 /*320 - Iphone 5 , 250 - width menu*/
 @media (max-width: 570px) {
 }

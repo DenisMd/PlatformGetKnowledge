@@ -52,6 +52,12 @@ model.controller("courseCtrl", function ($scope,$timeout,applicationService,clas
 
             $scope.introVideo.id = 1;
             $scope.$broadcast("video"+$scope.introVideo.eventId.capitalizeFirstLetter()+"Event");
+
+            readTutorials();
+
+            applicationService.action($scope,"userHasAccessToCourse",className.course,"userHasAccessToCourse",{
+                courseId : +course.id
+            })
         });
     }
 
@@ -151,10 +157,15 @@ model.controller("courseCtrl", function ($scope,$timeout,applicationService,clas
     function readTutorials() {
         applicationService.action($scope,"tutorials",className.course,"getTutorialsForCourse",{
             courseId : +courseId
+        },function(tutorial) {
+            for (var key in tutorial) {
+                tutorial[key].durationTime = new Date(1970, 0, 1);
+                if (!angular.isUndefined(tutorial.duration)) {
+                    tutorial[key].durationTime.setMilliseconds(tutorial[key].duration);
+                }
+            }
         });
     }
-
-    readTutorials();
 
     $scope.showAdvanced = function(ev) {
         $scope.showDialog(ev,$scope,"createTutorial.html",function(answer){

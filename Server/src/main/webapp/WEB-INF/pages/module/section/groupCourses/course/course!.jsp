@@ -108,7 +108,7 @@
 </div>
 
 <%--Course Info--%>
-<div layout="column" layout-gt-sm="row" class="course-info">
+<div layout="row" class="course-info">
     <div flex="60" class="course-intro-video">
         <module-template name="components/video" data="introVideo"></module-template>
         <%--Knowledge--%>
@@ -210,14 +210,24 @@
 
 <%--Tutorials list and Description with Author info--%>
 <div layout="row" class="course-content">
-    <div flex="60">
+    <div flex="60" class="course-tutorial-wrap">
         <div class="course-tutorials-title">
             {{translate("course_tutorials_title")}}
         </div>
-        <div ng-repeat="(tutorialId,tutorialName) in tutorials" class="course-tutorial">
+        <div ng-repeat="(tutorialId,tutInfo) in tutorials" class="course-tutorial">
             <div class="course-tutorial-inner">
-                <a ng-href="{{addUrlToPath('/tutorial/'+tutorialId)}}" class="link-without-style">
-                    {{translate("tutorial")}} {{tutorialId + ')  '}} <span class="course-tutorial-name">{{tutorialName}}</span>
+                <a ng-href="{{addUrlToPath('/tutorial/'+tutorialId)}}" class="link-without-style" aDisable="!userHasAccessToCourse">
+                    <div layout="row">
+                        <div flex="70">
+                            {{translate("tutorial")}} {{tutorialId + ')  '}} <span class="course-tutorial-name">{{tutInfo.name}}</span>
+                        </div>
+                        <div flex layout="row" layout-align="end center">
+                            <div class="course-tutorial-time">
+                               {{tutInfo.durationTime | date : 'HH:mm:ss'}}
+                            </div>
+                        </div>
+                    </div>
+
                 </a>
             </div>
         </div>

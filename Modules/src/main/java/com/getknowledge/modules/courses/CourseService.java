@@ -22,6 +22,7 @@ import com.getknowledge.modules.video.VideoRepository;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.annotations.ActionWithFile;
 import com.getknowledge.platform.base.services.AbstractService;
+import com.getknowledge.platform.base.services.AuthorizedService;
 import com.getknowledge.platform.base.services.ImageService;
 import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.modules.Result;
@@ -36,10 +37,11 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service("CourseService")
-public class CourseService extends AbstractService implements ImageService {
+public class CourseService extends AuthorizedService<Course> implements ImageService {
 
     @Autowired
     private CourseRepository courseRepository;
@@ -92,6 +94,23 @@ public class CourseService extends AbstractService implements ImageService {
     }
 
     public boolean isUserHasAccessToCourse(UserInfo userInfo , Course course) {
+
+        if (Objects.equals(course.getAuthor().getId(), userInfo.getId())) {
+            return true;
+        }
+
+        if (course.getTesters().contains(userInfo)) {
+            return true;
+        }
+
+        if (isAccessForEdit(userInfo.getUser(),course)) {
+            return true;
+        }
+
+        if (!course.isRelease()) {
+            return false;
+        }
+
         if (course.isBase()) {
             return true;
         }
@@ -298,18 +317,45 @@ public class CourseService extends AbstractService implements ImageService {
         return result;
     }
 
+    @Action(name = "userHasAccessToCourse" , mandatoryFields = {"courseId"})
+    @Transactional
+    public Boolean userHasAccessToCourse(HashMap<String,Object> data) {
+        Long courseId = longFromField("courseId",data);
+        Course course = courseRepository.read(courseId);
+        if (course == null) {
+            return false;
+        }
+
+        UserInfo userInfo = userInfoRepository.getCurrentUser(data);
+        if (userInfo == null) {
+            return false;
+        }
+        return isUserHasAccessToCourse(userInfo,course);
+    }
+
+    //InnerClass
+    public class TutorialInternalInfo {
+        public String name;
+        public Long duration = null;
+    }
+
     @Action(name = "getTutorialsForCourse" , mandatoryFields = {"courseId"})
     @Transactional
-    public HashMap<Integer,String> getTutorialsForCourse(HashMap<String , Object> data) {
+    public HashMap<Integer,TutorialInternalInfo> getTutorialsForCourse(HashMap<String , Object> data) {
         Long courseId = new Long(longFromField("courseId",data));
         Course course = courseRepository.read(courseId);
         if (course == null) {
             return null;
         }
         List<Tutorial> tutorials = course.getTutorials();
-        HashMap<Integer,String> result = new HashMap<>();
+        HashMap<Integer,TutorialInternalInfo> result = new HashMap<>();
         for (Tutorial tutorial : tutorials) {
-            result.put(tutorial.getOrderNumber(),tutorial.getName());
+            TutorialInternalInfo internalInfo = new TutorialInternalInfo();
+            internalInfo.name = tutorial.getName();
+            if (tutorial.getVideo() != null) {
+                internalInfo.duration = tutorial.getVideo().getDuration();
+            }
+            result.put(tutorial.getOrderNumber(),internalInfo);
         }
         return result;
     }
