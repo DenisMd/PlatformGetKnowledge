@@ -81,3 +81,13 @@
 .course-tutorial-time {
     margin-right: 10px;
 }
+
+.course-author-block {
+    background: #fff;
+    margin: 0 45px;
+}
+
+.course-author-link {
+    padding: 20px;
+    display: block;
+}

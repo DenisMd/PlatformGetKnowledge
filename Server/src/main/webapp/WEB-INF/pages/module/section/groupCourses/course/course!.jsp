@@ -216,7 +216,7 @@
         </div>
         <div ng-repeat="(tutorialId,tutInfo) in tutorials" class="course-tutorial">
             <div class="course-tutorial-inner">
-                <a ng-href="{{addUrlToPath('/tutorial/'+tutorialId)}}" class="link-without-style" aDisable="!userHasAccessToCourse">
+                <a ng-href="{{addUrlToPath('/tutorial/'+tutorialId)}}" class="link-without-style" linkDisabled="userHasAccessToCourse">
                     <div layout="row">
                         <div flex="70">
                             {{translate("tutorial")}} {{tutorialId + ')  '}} <span class="course-tutorial-name">{{tutInfo.name}}</span>
@@ -233,12 +233,25 @@
         </div>
     </div>
     <div flex>
-        <p class="text-center book-author-title">{{translate("course_author")}}<p>
-        <a ng-href="{{course.author.userUrl}}" class="course-author-name">
-            <img ng-src="{{course.author.imageSrc}}" class="main-image"/>
-            <p class="main-label">{{course.author.firstName}} {{course.author.lastName}}</p>
-        </a>
-        <p>{{course.author.speciality}}</p>
+
+        <div class="course-author-block">
+            <a ng-href="{{course.author.userUrl}}" class="course-author-link" >
+                <div layout="row">
+                    <div flex="20">
+                        <img ng-src="{{course.author.imageSrc}}" class="main-image"/>
+                    </div>
+                    <div flex>
+                        <div layout="column" layout-align="center center">
+                            <div flex>{{translate("course_author")}}</div>
+                            <div flex>{{course.author.firstName}} {{course.author.lastName}}</div>
+                            <div flex>{{course.author.speciality}}</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="main-label"></p>
+            </a>
+        </div>
+
         <img ng-src="{{course.imageSrc}}"
              class="cover-img">
 
