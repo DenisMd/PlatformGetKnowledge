@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="/resources/css/course-page/course.css">
 
 
-<div layout="column" layout-gt-sm="row" layout-margin class="course-author-row" layout-align-gt-sm="start start" layout-align="center center">
+<div layout="column" layout-gt-sm="row" layout-margin class="course-author-row" layout-align-gt-sm="start start" layout-align="center stretch">
     <button class="btn btn-default black-btn" ng-click="changeEditableContent()" ng-if="course.editable" flex="none">
         {{translate("course_change")}}
     </button>
@@ -108,8 +108,8 @@
 </div>
 
 <%--Course Info--%>
-<div layout="row" class="course-info">
-    <div flex="60" class="course-intro-video">
+<div layout-gt-sm="row" layout="column" class="course-info">
+    <div flex-gt-sm="60" flex class="course-intro-video">
         <module-template name="components/video" data="introVideo"></module-template>
         <%--Knowledge--%>
         <div ng-if="!course.base">

@@ -45,8 +45,16 @@
     color: #17789D;
 }
 
-@media (min-width: 992px) {
-    .video-play span {
+/*gt-sm*/
+@media (min-width: 960px) {
+    .video-play span{
         font-size: 8vmax;
+    }
+}
+
+/*xs*/
+@media (max-width: 599px) {
+    .video-play span{
+        font-size: 15vmax;
     }
 }
