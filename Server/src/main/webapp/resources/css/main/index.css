@@ -343,6 +343,12 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     z-index: 31;
 }
 
+.course-author-title{
+    color: #b3b3b3;
+    text-transform: uppercase;
+    font-weight: normal;
+}
+
 /*Utils*/
 
 .link-without-style, .link-without-style:hover, .link-without-style:active, .link-without-style:focus {

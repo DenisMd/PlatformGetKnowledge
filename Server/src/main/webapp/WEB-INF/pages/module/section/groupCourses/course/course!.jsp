@@ -235,14 +235,14 @@
     <div flex-gt-sm="40" flex flex-order="-1" flex-order-gt-sm="1">
 
         <div class="course-author-block">
-            <a ng-href="{{course.author.userUrl}}" class="course-author-link" >
+            <a ng-href="{{course.author.userUrl}}" class="link-without-style course-author-link" >
                 <div layout="row">
                     <div flex="20" layout="row" layout-align="center center">
-                        <img ng-src="{{course.author.imageSrc}}" class="main-image " flex/>
+                        <img ng-src="{{course.author.imageSrc}}" class="main-image" flex/>
                     </div>
                     <div flex>
-                        <div layout="column" layout-align="center center">
-                            <div flex>{{translate("course_author")}}</div>
+                        <div layout="column" class="course-author" layout-align="center center">
+                            <div class="course-author-title" flex>{{translate("course_author")}}</div>
                             <div flex>{{course.author.firstName}} {{course.author.lastName}}</div>
                             <div flex>{{course.author.speciality}}</div>
                         </div>
