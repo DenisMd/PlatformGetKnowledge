@@ -216,7 +216,7 @@
         </div>
         <div ng-repeat="(tutorialId,tutInfo) in tutorials" class="course-tutorial">
             <div class="course-tutorial-inner">
-                <a ng-href="{{tutInfo.link}}" class="link-without-style" linkDisabled="userHasAccessToCourse">
+                <a ng-href="{{tutInfo.link}}" class="link-without-style course-tutorial-link" linkDisabled="userHasAccessToCourse">
                     <div layout="row">
                         <div flex="70">
                             {{translate("tutorial")}} {{tutorialId + ')  '}} <span class="course-tutorial-name">{{tutInfo.name}}</span>
@@ -237,8 +237,8 @@
         <div class="course-author-block">
             <a ng-href="{{course.author.userUrl}}" class="course-author-link" >
                 <div layout="row">
-                    <div flex="20">
-                        <img ng-src="{{course.author.imageSrc}}" class="main-image"/>
+                    <div flex="20" layout="row" layout-align="center center">
+                        <img ng-src="{{course.author.imageSrc}}" class="main-image " flex/>
                     </div>
                     <div flex>
                         <div layout="column" layout-align="center center">

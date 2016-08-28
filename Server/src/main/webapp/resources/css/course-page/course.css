@@ -71,7 +71,7 @@
     padding: 10px 0;
 }
 
-.course-tutorial-name:hover {
+.course-tutorial:hover .course-tutorial-name{
     color : rgb(216, 92, 22);
 }
 
@@ -91,6 +91,11 @@
 .course-author-link {
     padding: 20px;
     display: block;
+}
+
+.course-author-block img{
+    height: auto;
+    width: auto;
 }
 
 .course-description {
