@@ -149,7 +149,7 @@
             </md-chips>
         </div>
     </div>
-    <div flex class="course-info-left-block">
+    <div flex-gt-sm="40" flex class="course-info-left-block">
         <%--Name--%>
         <div layout="row" layout-align="center" class="course-title">
             {{course.name}}
@@ -209,8 +209,8 @@
 </div>
 
 <%--Tutorials list and Description with Author info--%>
-<div layout="row" class="course-content">
-    <div flex="60" class="course-tutorial-wrap">
+<div layout-gt-sm="row" layout="column" class="course-content">
+    <div flex-gt-sm="60" flex class="course-tutorial-wrap">
         <div class="course-tutorials-title">
             {{translate("course_tutorials_title")}}
         </div>
@@ -232,7 +232,7 @@
             </div>
         </div>
     </div>
-    <div flex>
+    <div flex-gt-sm="40" flex flex-order="-1" flex-order-gt-sm="1">
 
         <div class="course-author-block">
             <a ng-href="{{course.author.userUrl}}" class="course-author-link" >
