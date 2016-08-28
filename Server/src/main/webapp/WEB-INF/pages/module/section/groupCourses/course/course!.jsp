@@ -216,7 +216,7 @@
         </div>
         <div ng-repeat="(tutorialId,tutInfo) in tutorials" class="course-tutorial">
             <div class="course-tutorial-inner">
-                <a ng-href="{{addUrlToPath('/tutorial/'+tutorialId)}}" class="link-without-style" linkDisabled="userHasAccessToCourse">
+                <a ng-href="{{tutInfo.link}}" class="link-without-style" linkDisabled="userHasAccessToCourse">
                     <div layout="row">
                         <div flex="70">
                             {{translate("tutorial")}} {{tutorialId + ')  '}} <span class="course-tutorial-name">{{tutInfo.name}}</span>
@@ -252,12 +252,18 @@
             </a>
         </div>
 
-        <img ng-src="{{course.imageSrc}}"
-             class="cover-img">
+        <div class="course-description">
+            <div layout="row" layout-align="center center">
+                <img ng-src="{{course.imageSrc}}"
+                     class="course-image">
+            </div>
+            <div>
+                <p>
+                    {{course.description}}
+                </p>
+            </div>
+        </div>
 
-        <p class="description">
-            {{course.description}}
-        </p>
     </div>
 </div>
 

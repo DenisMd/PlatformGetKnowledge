@@ -163,6 +163,7 @@ model.controller("courseCtrl", function ($scope,$timeout,applicationService,clas
                 if (!angular.isUndefined(tutorial.duration)) {
                     tutorial[key].durationTime.setMilliseconds(tutorial[key].duration);
                 }
+                tutorial[key].link = $scope.addUrlToPath('/tutorial/'+key);
             }
         });
     }
