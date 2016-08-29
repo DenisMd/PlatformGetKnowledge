@@ -108,3 +108,12 @@
     height: 112px;
     width: 112px;
 }
+
+.course-disabled-link,.course-disabled-link .link-without-style {
+    color : #858585;
+    cursor: not-allowed;
+}
+
+.course-disabled-link:hover .course-tutorial-name{
+    color : #858585;
+}

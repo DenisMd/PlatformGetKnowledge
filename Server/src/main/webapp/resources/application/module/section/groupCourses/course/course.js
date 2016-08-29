@@ -1,7 +1,25 @@
 model.controller("courseCtrl", function ($scope,$timeout,applicationService,className,pageService,$state) {
+
     var courseId = pageService.getPathVariable("course",$state.params.path);
+
     $scope.course = {
         tagsName : []
+    };
+
+    //Первое видео
+    $scope.introVideo = {
+        showComments : false,
+        eventId : "introVideo"
+    };
+
+    $scope.descriptionScroll = {
+        theme: 'dark-3',
+        setHeight: 450,
+        axis: "y",
+        advanced: {
+            updateOnContentResize: true,
+            updateOnSelectorChange: true
+        }
     };
 
     function readCourse(){
@@ -61,18 +79,21 @@ model.controller("courseCtrl", function ($scope,$timeout,applicationService,clas
         });
     }
 
+    function readTutorials() {
+        applicationService.action($scope,"tutorials",className.course,"getTutorialsForCourse",{
+            courseId : +courseId
+        },function(tutorial) {
+            for (var key in tutorial) {
+                tutorial[key].durationTime = new Date(1970, 0, 1);
+                if (!angular.isUndefined(tutorial.duration)) {
+                    tutorial[key].durationTime.setMilliseconds(tutorial[key].duration);
+                }
+                tutorial[key].link = $scope.addUrlToPath('/tutorial/'+key);
+            }
+        });
+    }
+
     readCourse();
-    //Первое видео
-    $scope.introVideo = {
-        showComments : false,
-        eventId : "introVideo"
-    };
-
-    $scope.showEditableContent = false;
-
-    $scope.changeEditableContent = function () {
-      $scope.showEditableContent = !$scope.showEditableContent;
-    };
 
     $scope.updateCourse = function(course) {
         var result = {};
@@ -96,6 +117,12 @@ model.controller("courseCtrl", function ($scope,$timeout,applicationService,clas
             $scope.showToast(result);
             readCourse();
         });
+    };
+
+    $scope.showEditableContent = false;
+
+    $scope.changeEditableContent = function () {
+      $scope.showEditableContent = !$scope.showEditableContent;
     };
 
     var croppedImg = {
@@ -153,20 +180,6 @@ model.controller("courseCtrl", function ($scope,$timeout,applicationService,clas
     $scope.uploader = applicationService.createUploader($scope,"",className.video,"uploadVideo",null,null,function(formData){
         formData.data = JSON.stringify({videoId:$scope.course.intro.id});
     });
-
-    function readTutorials() {
-        applicationService.action($scope,"tutorials",className.course,"getTutorialsForCourse",{
-            courseId : +courseId
-        },function(tutorial) {
-            for (var key in tutorial) {
-                tutorial[key].durationTime = new Date(1970, 0, 1);
-                if (!angular.isUndefined(tutorial.duration)) {
-                    tutorial[key].durationTime.setMilliseconds(tutorial[key].duration);
-                }
-                tutorial[key].link = $scope.addUrlToPath('/tutorial/'+key);
-            }
-        });
-    }
 
     $scope.showAdvanced = function(ev) {
         $scope.showDialog(ev,$scope,"createTutorial.html",function(answer){

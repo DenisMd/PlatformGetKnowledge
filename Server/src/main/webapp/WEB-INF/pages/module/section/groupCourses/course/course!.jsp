@@ -214,9 +214,9 @@
         <div class="course-tutorials-title">
             {{translate("course_tutorials_title")}}
         </div>
-        <div ng-repeat="(tutorialId,tutInfo) in tutorials" class="course-tutorial">
+        <div ng-repeat="(tutorialId,tutInfo) in tutorials" class="course-tutorial" ng-class="!userHasAccessToCourse ? 'course-disabled-link' : ''">
             <div class="course-tutorial-inner">
-                <a ng-href="{{tutInfo.link}}" class="link-without-style course-tutorial-link" linkDisabled="userHasAccessToCourse">
+                <a ng-href="{{userHasAccessToCourse ? tutInfo.link : ''}}" class="link-without-style">
                     <div layout="row">
                         <div flex="70">
                             {{translate("tutorial")}} {{tutorialId + ')  '}} <span class="course-tutorial-name">{{tutInfo.name}}</span>
@@ -252,7 +252,7 @@
             </a>
         </div>
 
-        <div class="course-description">
+        <div class="course-description" ng-scrollbars ng-scrollbars-config="descriptionScroll">
             <div layout="row" layout-align="center center">
                 <img ng-src="{{course.imageSrc}}"
                      class="course-image">
