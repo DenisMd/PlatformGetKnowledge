@@ -185,12 +185,18 @@ public class CourseService extends AuthorizedService<Course> implements ImageSer
             return result;
         }
 
-        course = courseRepository.updateCourse(course,
+        Language language = null;
+        if (data.containsKey("language")) {
+            language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
+        }
+
+        courseRepository.updateCourse(course,
                                 (String)data.get("name"),
                                 (String)data.get("description"),
                                 (List<String>)data.get("tags"),
                                 (List<Integer>)data.get("sourceKnowledge"),
-                                (List<Integer>)data.get("requiredKnowledge"));
+                                (List<Integer>)data.get("requiredKnowledge"),
+                                language);
 
         return Result.Complete();
     }

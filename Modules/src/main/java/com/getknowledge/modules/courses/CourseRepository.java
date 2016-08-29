@@ -241,7 +241,7 @@ public class CourseRepository extends ProtectedRepository<Course> {
         return course;
     }
 
-    public Course updateCourse(Course course,String name,String description,List<String> tags,List<Integer> sourceKnowledgeIds,List<Integer> requiredKnowledgeIds){
+    public Course updateCourse(Course course,String name,String description,List<String> tags,List<Integer> sourceKnowledgeIds,List<Integer> requiredKnowledgeIds, Language language){
         if (name != null)
             course.setName(name);
         if (description != null)
@@ -268,6 +268,8 @@ public class CourseRepository extends ProtectedRepository<Course> {
                 course.getRequiredKnowledge().add(knowledge);
             }
         }
+
+        course.setLanguage(language);
 
         merge(course);
         if (tags != null  && !tags.isEmpty()) {

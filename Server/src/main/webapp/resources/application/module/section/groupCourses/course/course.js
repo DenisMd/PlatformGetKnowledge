@@ -1,4 +1,4 @@
-model.controller("courseCtrl", function ($scope,$timeout,applicationService,className,pageService,$state) {
+model.controller("courseCtrl", function ($scope,$timeout,$languages,applicationService,className,pageService,$state) {
 
     var courseId = pageService.getPathVariable("course",$state.params.path);
 
@@ -21,6 +21,8 @@ model.controller("courseCtrl", function ($scope,$timeout,applicationService,clas
             updateOnSelectorChange: true
         }
     };
+
+    $scope.langs = $languages.languages;
 
     function readCourse(){
         applicationService.read($scope,"course",className.course,courseId,function(course){
@@ -75,7 +77,9 @@ model.controller("courseCtrl", function ($scope,$timeout,applicationService,clas
 
             applicationService.action($scope,"userHasAccessToCourse",className.course,"userHasAccessToCourse",{
                 courseId : +course.id
-            })
+            });
+
+            course.language = $languages.getLanguageByName(course.language.name);
         });
     }
 

@@ -27,18 +27,24 @@
         <md-tabs md-dynamic-height md-border-bottom>
             <md-tab label="{{translate('course_info')}}">
                 <md-content class="md-padding">
-                    <div>
-                        <md-input-container>
+                    <div layout-gt-sm="row" layout-align-gt-sm="start center" layout-fill flex class="course-create-margin">
+                        <md-input-container class="md-block" flex-gt-sm>
                             <label>{{translate("name")}}</label>
                             <input ng-model="course.name">
                         </md-input-container>
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>{{translate("choose_language")}}</label>
+                            <md-select ng-model="course.language">
+                                <md-option ng-value="lang" ng-repeat="lang in langs">{{ translate(lang)}}</md-option>
+                            </md-select>
+                        </md-input-container>
                     </div>
-                    <h2 class="md-title">Тэги</h2>
                     <div>
-                        <md-chips ng-model="course.tagsName" readonly="false"></md-chips>
+                        <label for="description">{{translate("description")}}</label>
+                        <textarea class="form-control" rows="5" id="description" ng-model="course.description"></textarea>
                     </div>
-                    <div>
-                        <h2 class="md-title">Знания, полученные за курс</h2>
+                    <div layout="column" class="tags-container" flex>
+                        <div class="md-title" flex>{{translate("course_source_knowledge")}}</div>
                         <md-contact-chips
                                 ng-model="course.sourceKnowledge"
                                 md-contacts="querySearch($query)"
@@ -49,8 +55,8 @@
                                 placeholder="To">
                         </md-contact-chips>
                     </div>
-                    <div ng-if="!course.base">
-                        <h2 class="md-title">Знания, требуемые для освоения курса</h2>
+                    <div layout="column" class="tags-container" flex ng-if="!course.base">
+                        <div class="md-title" flex>{{translate("course_required_knowledge")}}</div>
                         <md-contact-chips
                                 ng-model="course.requiredKnowledge"
                                 md-contacts="querySearch($query)"
@@ -61,9 +67,9 @@
                                 placeholder="To">
                         </md-contact-chips>
                     </div>
-                    <div>
-                        <label for="description">{{translate("description")}}</label>
-                        <textarea class="form-control" rows="5" id="description" ng-model="course.description"></textarea>
+                    <div layout="column" class="tags-container" flex>
+                        <div class="md-title" flex>{{translate("tags")}}</div>
+                        <md-chips ng-model="course.tagsName" readonly="false" flex></md-chips>
                     </div>
                     <div>
                         <md-button class="md-raised md-primary" ng-click="updateCourse(course)">{{translate("update")}}</md-button>

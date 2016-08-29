@@ -136,7 +136,18 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
             $get: function(){
                 return {
                     defaultLanguage : this.defaultLanguage,
-                    languages : this.languages
+                    languages : this.languages,
+                    getLanguageByName : function (name) {
+                        var result = this.languages.filter(function (item) {
+                            if (item == name.toLowerCase()) {
+                                return true;
+                            }
+                            return false;
+                        });
+                        if (result) {
+                            return result[0];
+                        }
+                    }
                 }
             }
         }
