@@ -17,6 +17,9 @@
     "course_make_release" : "Выпустить релиз",
     "course_change_tutorial_order" : "Изменить порядок уроков",
     "course_tutorials_title" : "Уроки в данном курсе",
-    "course_info" : "Информация о курсе"
+    "course_info" : "Информация о курсе",
+    "course_cover" : "Обложка курса",
+    "course_video_intro" : "Интро видео",
+    "course_intro" : "Загрузить видео-файл"
   }
 }

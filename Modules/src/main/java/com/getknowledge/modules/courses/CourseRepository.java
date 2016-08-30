@@ -269,7 +269,9 @@ public class CourseRepository extends ProtectedRepository<Course> {
             }
         }
 
-        course.setLanguage(language);
+        if (language != null) {
+            course.setLanguage(language);
+        }
 
         merge(course);
         if (tags != null  && !tags.isEmpty()) {

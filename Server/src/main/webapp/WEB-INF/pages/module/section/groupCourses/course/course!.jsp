@@ -26,7 +26,7 @@
     <md-content flex>
         <md-tabs md-dynamic-height md-border-bottom>
             <md-tab label="{{translate('course_info')}}">
-                <md-content class="md-padding">
+                <md-content class="md-padding" layout="column">
                     <div layout-gt-sm="row" layout-align-gt-sm="start center" layout-fill flex class="course-create-margin">
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>{{translate("name")}}</label>
@@ -39,9 +39,11 @@
                             </md-select>
                         </md-input-container>
                     </div>
-                    <div>
-                        <label for="description">{{translate("description")}}</label>
-                        <textarea class="form-control" rows="5" id="description" ng-model="course.description"></textarea>
+                    <div layout="row" flex>
+                        <md-input-container class="md-block" flex>
+                            <label>{{translate("description")}}</label>
+                            <textarea ng-model="course.description" md-maxlength="1500" rows="3" md-select-on-focus></textarea>
+                        </md-input-container>
                     </div>
                     <div layout="column" class="tags-container" flex>
                         <div class="md-title" flex>{{translate("course_source_knowledge")}}</div>
@@ -71,8 +73,9 @@
                         <div class="md-title" flex>{{translate("tags")}}</div>
                         <md-chips ng-model="course.tagsName" readonly="false" flex></md-chips>
                     </div>
-                    <div>
-                        <md-button class="md-raised md-primary" ng-click="updateCourse(course)">{{translate("update")}}</md-button>
+
+                    <div layout="row" class="course-update-btn-row" layout-align="center">
+                        <button flex="none" class="btn btn-default black-btn" ng-click="updateCourse(course)">{{translate("course_change")}}</button>
                     </div>
                 </md-content>
             </md-tab>
@@ -80,7 +83,7 @@
                 <md-content class="md-padding">
                     <md-tab-body>
                         <md-content class="md-padding">
-                            <module-template name="inputs/selectImage" data="getCropImageData()"></module-template>
+                            <module-template name="inputs/selectImage" data="courseImage"></module-template>
                         </md-content>
                     </md-tab-body>
                 </md-content>
@@ -94,17 +97,9 @@
                                 <input ng-model="course.intro.videoName">
                             </md-input-container>
                             <div ng-show="course.intro.videoName">
-                                <module-template name="inputs/selectImage" data="getVideoImage()"></module-template>
+                                <module-template name="inputs/selectImage" data="videoImg"></module-template>
                             </div>
-                            <div>
-                                <input type="file" accept="video/mp4,video/x-m4v,video/*" nv-file-select uploader="uploader"/><br/>
-                                <ul>
-                                    <li ng-repeat="item in uploader.queue">
-                                        Name: <span ng-bind="item.file.name"></span><br/>
-                                        <button ng-click="item.upload()">{{translate("upload")}}</button>
-                                    </li>
-                                </ul>
-                            </div>
+                            <module-template name="inputs/uploadFiles" data="uploadIntroData" ng-if="videoIsPresent"></module-template>
                         </md-content>
                     </md-tab-body>
                 </md-content>

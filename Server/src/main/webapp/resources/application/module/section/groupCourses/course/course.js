@@ -1,5 +1,6 @@
 model.controller("courseCtrl", function ($scope,$timeout,$languages,applicationService,className,pageService,$state) {
 
+    //------------------------------------------ Иницализация перменных
     var courseId = pageService.getPathVariable("course",$state.params.path);
 
     $scope.course = {
@@ -22,8 +23,13 @@ model.controller("courseCtrl", function ($scope,$timeout,$languages,applicationS
         }
     };
 
+    $scope.knowledgesResult = [];
+
     $scope.langs = $languages.languages;
 
+    $scope.videoIsPresent = false;
+
+    //-------------------------------------- Чтение курса и уроков
     function readCourse(){
         applicationService.read($scope,"course",className.course,courseId,function(course){
             if (!("tags" in course)) {
@@ -49,14 +55,6 @@ model.controller("courseCtrl", function ($scope,$timeout,$languages,applicationS
                 knowledge.image = applicationService.imageHref(className.knowledge,knowledge.id);
             });
 
-            if (course.editable) {
-                applicationService.action($scope, "knowledges", className.knowledge, "getKnowledgeByType", {
-                    sectionName: course.groupCourses.section.name
-                }, function (knowledge) {
-                    knowledge.image = applicationService.imageHref(className.knowledge, knowledge.id);
-                });
-            }
-
             course.sourceKnowledge.forEach(function (item) {
                item.knowldgeHref = $scope.createUrl("/knowledge/" + item.id);
             });
@@ -70,8 +68,11 @@ model.controller("courseCtrl", function ($scope,$timeout,$languages,applicationS
                 course.author.userUrl = $scope.createUrl("/user/"+course.author.id);
             }
 
-            $scope.introVideo.id = 1;
-            $scope.$broadcast("video"+$scope.introVideo.eventId.capitalizeFirstLetter()+"Event");
+
+            if (course.intro) {
+                $scope.introVideo.id = course.intro.id;
+                $scope.$broadcast("video" + $scope.introVideo.eventId.capitalizeFirstLetter() + "Event");
+            }
 
             readTutorials();
 
@@ -79,7 +80,21 @@ model.controller("courseCtrl", function ($scope,$timeout,$languages,applicationS
                 courseId : +course.id
             });
 
-            course.language = $languages.getLanguageByName(course.language.name);
+            if (course.editable) {
+
+                applicationService.action($scope, "knowledges", className.knowledge, "getKnowledgeByType", {
+                    sectionName: course.groupCourses.section.name
+                }, function (knowledge) {
+                    knowledge.image = applicationService.imageHref(className.knowledge, knowledge.id);
+                });
+
+                course.language = $languages.getLanguageByName(course.language.name);
+
+                updateCourseImage(course);
+                updateVideoImage(course);
+
+                $scope.videoIsPresent = !angular.isUndefined(course.intro);
+            }
         });
     }
 
@@ -99,6 +114,13 @@ model.controller("courseCtrl", function ($scope,$timeout,$languages,applicationS
 
     readCourse();
 
+    //-------------------------------------- Изменение ифнорамации о курсе
+    $scope.showEditableContent = false;
+
+    $scope.changeEditableContent = function () {
+        $scope.showEditableContent = !$scope.showEditableContent;
+    };
+
     $scope.updateCourse = function(course) {
         var result = {};
         result.courseId = course.id;
@@ -106,6 +128,7 @@ model.controller("courseCtrl", function ($scope,$timeout,$languages,applicationS
         result.description = course.description;
 
         result.tags = course.tagsName;
+        result.language = course.language.capitalizeFirstLetter();
         result.sourceKnowledge = [];
         result.requiredKnowledge = [];
 
@@ -118,58 +141,14 @@ model.controller("courseCtrl", function ($scope,$timeout,$languages,applicationS
         });
 
         applicationService.action($scope,"",className.course,"updateCourseInformation",result,function(result){
-            $scope.showToast(result);
+            $scope.showToast($scope.getResultMessage(result));
             readCourse();
         });
     };
 
-    $scope.showEditableContent = false;
-
-    $scope.changeEditableContent = function () {
-      $scope.showEditableContent = !$scope.showEditableContent;
+    $scope.querySearch = function(criteria) {
+        return $scope.knowledges.filter(createFilterFor(criteria));
     };
-
-    var croppedImg = {
-        save: function(file){
-            updateImage(file);
-        },
-        areaType:"square"
-    };
-
-    $scope.getCropImageData  = function(){
-        croppedImg.src = applicationService.imageHref(className.course,$scope.course.id);
-        croppedImg.notUseDefault = $scope.course.imageViewExist;
-        return croppedImg;
-    };
-
-    var updateImage = function(file) {
-        applicationService.actionWithFile($scope,"",className.course,"uploadCover",{courseId:$scope.course.id},file);
-    };
-
-
-    var videoImg = {
-        save: function(file){
-            updateVideoImage(file);
-        },
-        areaType:"square"
-    };
-
-    $scope.getVideoImage  = function(){
-        if ($scope.course.intro) {
-            videoImg.src = applicationService.imageHref(className.video, $scope.course.intro.id);
-            videoImg.notUseDefault = true;
-        }
-        return videoImg;
-    };
-
-    var updateVideoImage = function(file) {
-        applicationService.actionWithFile($scope,"",className.course,"uploadVideoIntro",{
-            courseId : $scope.course.id,
-            videoName : $scope.course.intro.videoName
-        },file);
-    };
-
-    $scope.knowledgesResult = [];
 
     function createFilterFor(query) {
         return function filterFn(contact) {
@@ -177,14 +156,85 @@ model.controller("courseCtrl", function ($scope,$timeout,$languages,applicationS
         };
     }
 
-    $scope.querySearch = function(criteria) {
-       return $scope.knowledges.filter(createFilterFor(criteria));
+    //-------------------------------------- Работа с изображением
+    $scope.courseImage = {
+        id : 'course-cover',
+        save: function(file){
+            uploadImage(file);
+        },
+        areaType:"square"
     };
 
-    $scope.uploader = applicationService.createUploader($scope,"",className.video,"uploadVideo",null,null,function(formData){
-        formData.data = JSON.stringify({videoId:$scope.course.intro.id});
-    });
+    var uploadImage = function(file) {
+        applicationService.actionWithFile($scope,"",className.course,"uploadCover",{courseId:$scope.course.id},file,function (result) {
+            $scope.showToast($scope.getResultMessage(result));
+            if (result.status === "Complete") {
+                $scope.course.imageViewExist = true;
+                $scope.$broadcast("updateCropImage"+$scope.courseImage.id+"Event");
+            }
+        });
+    };
 
+    function updateCourseImage(course){
+        $scope.courseImage.src = applicationService.imageHref(className.course,course.id);
+        $scope.courseImage.notUseDefault = course.imageViewExist;
+
+        //Если изображение открывается первый раз событие не сработает так не зарегестрированно
+        //Поэтому добавляется проверка для открытия
+        $scope.courseImage.setupImgae = true;
+
+        $scope.$broadcast("updateCropImage"+$scope.courseImage.id+"Event");
+    }
+
+    //-------------------------------------- Работа с видео
+    $scope.videoImg = {
+        id : 'video-intro-img',
+        save: function(file){
+            uploadIntro(file);
+        },
+        areaType:"square"
+    };
+
+    var uploadIntro = function(file) {
+        applicationService.actionWithFile($scope,"",className.course,"uploadVideoIntro",{
+            courseId : $scope.course.id,
+            videoName : $scope.course.intro.videoName
+        },file,function (result) {
+            $scope.showToast($scope.getResultMessage(result));
+            if (result.status === "Complete") {
+                $scope.course.intro.imageViewExist = true;
+                $scope.$broadcast("updateCropImage"+$scope.videoImg.id+"Event");
+                readCourse();
+            }
+        });
+    };
+
+    function updateVideoImage(course){
+        if (course.intro) {
+            $scope.videoImg.src = applicationService.imageHref(className.video, course.intro.id);
+            $scope.videoImg.notUseDefault = course.intro.imageViewExist;
+
+            //Если изображение открывается первый раз событие не сработает так не зарегестрированно
+            //Поэтому добавляется проверка для открытия
+            $scope.videoImg.setupImgae = true;
+
+            $scope.$broadcast("updateCropImage" + $scope.videoImg.id + "Event");
+        }
+    }
+
+    $scope.uploadIntroData = {
+        btnTitle : "course_intro",
+        multiplyFiles : false,
+        className : className.video,
+        actionName : "uploadVideo",
+        title : "course_intro",
+        prepareParams : function(formData){
+            formData.data = JSON.stringify({videoId:$scope.course.intro.id});
+        },
+        maxFileSize : 512000
+    };
+
+    //-------------------------------------- Работа с уроками
     $scope.showAdvanced = function(ev) {
         $scope.showDialog(ev,$scope,"createTutorial.html",function(answer){
             var request = {};
@@ -197,6 +247,7 @@ model.controller("courseCtrl", function ($scope,$timeout,$languages,applicationS
         });
     };
 
+    //-------------------------------------- Создание релиза
     $scope.makeRelease = function () {
         applicationService.action($scope,"",className.course,"release", {
             courseId : $scope.course.id,

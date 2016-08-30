@@ -17,6 +17,9 @@
     "course_make_release" : "Make release",
     "course_change_tutorial_order" : "Change tutorials order",
     "course_tutorials_title" : "Tutorials in this course",
-    "course_info" : "Course info"
+    "course_info" : "Course info",
+    "course_cover" : "Course cover",
+    "course_video_intro" : "Intro video",
+    "course_intro" : "Upload video file"
   }
 }

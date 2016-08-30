@@ -187,7 +187,11 @@ public class CourseService extends AuthorizedService<Course> implements ImageSer
 
         Language language = null;
         if (data.containsKey("language")) {
-            language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
+            try {
+                language = languageRepository.getLanguage(Languages.valueOf((String) data.get("language")));
+            } catch (Exception e) {
+                trace.logException(String.format("Incorrect language value %s",data.get("language")),e,TraceLevel.Warning,true);
+            }
         }
 
         courseRepository.updateCourse(course,
@@ -236,6 +240,9 @@ public class CourseService extends AuthorizedService<Course> implements ImageSer
 
         try {
             if (course.getIntro() == null) {
+                if (!data.containsKey("videoName")) {
+                    return Result.Failed("Video name is not present in request");
+                }
                 Video intro = videoRepository.create((String) data.get("videoName"), files.get(0).getBytes());
                 course.setIntro(intro);
                 courseRepository.merge(course);

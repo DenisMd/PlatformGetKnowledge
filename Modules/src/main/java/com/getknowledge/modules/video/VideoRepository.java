@@ -108,7 +108,9 @@ public class VideoRepository extends BaseRepository<Video> {
 
     public Video update(String name, byte[] cover) {
         Video video = new Video();
-        video.setVideoName(name);
+        if (name != null) {
+            video.setVideoName(name);
+        }
         video.setCover(cover);
         merge(video);
         return video;
