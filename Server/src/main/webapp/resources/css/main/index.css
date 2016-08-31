@@ -356,6 +356,10 @@ button:focus, .btn:focus, .btn:active:focus, .btn.active:focus {
     color : black;
 }
 
+.md-contact-suggestion img{
+    vertical-align: baseline;
+}
+
 /*320 - Iphone 5 , 250 - width menu*/
 @media (max-width: 570px) {
 }

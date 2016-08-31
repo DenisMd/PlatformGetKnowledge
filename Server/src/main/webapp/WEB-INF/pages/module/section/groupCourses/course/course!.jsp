@@ -27,7 +27,7 @@
         <md-tabs md-dynamic-height md-border-bottom>
             <md-tab label="{{translate('course_info')}}">
                 <md-content class="md-padding" layout="column">
-                    <div layout-gt-sm="row" layout-align-gt-sm="start center" layout-fill flex class="course-create-margin">
+                    <div layout-gt-sm="row" layout-fill flex class="course-create-margin">
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>{{translate("name")}}</label>
                             <input ng-model="course.name">
