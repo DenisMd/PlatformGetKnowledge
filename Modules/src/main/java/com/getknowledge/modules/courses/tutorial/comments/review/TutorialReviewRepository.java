@@ -1,10 +1,6 @@
 package com.getknowledge.modules.courses.tutorial.comments.review;
 
-import com.getknowledge.modules.courses.tutorial.comments.question.TutorialQuestion;
-import com.getknowledge.modules.messages.CommentRepository;
-import com.getknowledge.modules.messages.CommentStatus;
-import com.getknowledge.platform.base.repositories.BaseRepository;
-import com.getknowledge.platform.base.repositories.ProtectedRepository;
+import com.getknowledge.modules.messages.comments.CommentRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository("TutorialReviewRepository")

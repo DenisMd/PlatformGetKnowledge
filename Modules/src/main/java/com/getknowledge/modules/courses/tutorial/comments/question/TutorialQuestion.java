@@ -2,7 +2,7 @@ package com.getknowledge.modules.courses.tutorial.comments.question;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.courses.tutorial.Tutorial;
-import com.getknowledge.modules.messages.Comment;
+import com.getknowledge.modules.messages.comments.Comment;
 import com.getknowledge.modules.messages.attachments.AttachmentImage;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AuthorizationList;

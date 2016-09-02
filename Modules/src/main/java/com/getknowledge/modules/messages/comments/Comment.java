@@ -1,5 +1,6 @@
-package com.getknowledge.modules.messages;
+package com.getknowledge.modules.messages.comments;
 
+import com.getknowledge.modules.messages.Message;
 import com.getknowledge.modules.platform.auth.PermissionNames;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AbstractEntity;

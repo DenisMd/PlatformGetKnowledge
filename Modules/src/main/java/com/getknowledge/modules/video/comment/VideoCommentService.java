@@ -1,16 +1,14 @@
 package com.getknowledge.modules.video.comment;
 
-import com.getknowledge.modules.messages.CommentStatus;
+import com.getknowledge.modules.messages.comments.CommentStatus;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoRepository;
 import com.getknowledge.modules.userInfo.blocker.BlockerTypes;
 import com.getknowledge.modules.userInfo.blocker.UserActionFilterService;
-import com.getknowledge.modules.userInfo.blocker.UserBlockerService;
 import com.getknowledge.modules.video.Video;
 import com.getknowledge.modules.video.VideoRepository;
 import com.getknowledge.modules.video.VideoService;
 import com.getknowledge.platform.annotations.Action;
-import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.base.services.AuthorizedService;
 import com.getknowledge.platform.exceptions.NotAuthorized;
 import com.getknowledge.platform.modules.Result;

@@ -1,14 +1,9 @@
 package com.getknowledge.modules.video.comment;
 
-import com.getknowledge.modules.messages.CommentRepository;
-import com.getknowledge.modules.messages.CommentStatus;
+import com.getknowledge.modules.messages.comments.CommentRepository;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.video.Video;
-import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.Calendar;
-import java.util.List;
 
 @Repository("VideoCommentRepository")
 public class VideoCommentRepository extends CommentRepository<VideoComment> {

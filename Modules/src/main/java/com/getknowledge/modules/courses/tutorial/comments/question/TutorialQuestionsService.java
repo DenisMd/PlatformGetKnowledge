@@ -1,6 +1,6 @@
 package com.getknowledge.modules.courses.tutorial.comments.question;
 
-import com.getknowledge.modules.messages.CommentStatus;
+import com.getknowledge.modules.messages.comments.CommentStatus;
 import com.getknowledge.modules.messages.attachments.AttachmentImage;
 import com.getknowledge.modules.messages.attachments.AttachmentImageRepository;
 import com.getknowledge.modules.userInfo.UserInfo;

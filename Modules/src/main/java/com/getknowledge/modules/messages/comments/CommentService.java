@@ -1,4 +1,4 @@
-package com.getknowledge.modules.messages;
+package com.getknowledge.modules.messages.comments;
 
 /**
  * Created by dmarkov on 7/1/2016.

@@ -1,14 +1,9 @@
 package com.getknowledge.modules.books.comment;
 
 import com.getknowledge.modules.books.Book;
-import com.getknowledge.modules.messages.CommentRepository;
-import com.getknowledge.modules.messages.CommentStatus;
+import com.getknowledge.modules.messages.comments.CommentRepository;
 import com.getknowledge.modules.userInfo.UserInfo;
-import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.Calendar;
-import java.util.List;
 
 @Repository("BookCommentRepository")
 public class BookCommentRepository extends CommentRepository<BookComment> {

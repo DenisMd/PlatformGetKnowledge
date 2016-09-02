@@ -2,12 +2,9 @@ package com.getknowledge.modules.books.comment;
 
 import com.getknowledge.modules.books.Book;
 import com.getknowledge.modules.books.BookRepository;
-import com.getknowledge.modules.messages.CommentStatus;
+import com.getknowledge.modules.messages.comments.CommentStatus;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoRepository;
-import com.getknowledge.modules.video.Video;
-import com.getknowledge.modules.video.comment.VideoComment;
-import com.getknowledge.modules.video.comment.VideoCommentRepository;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.exceptions.NotAuthorized;

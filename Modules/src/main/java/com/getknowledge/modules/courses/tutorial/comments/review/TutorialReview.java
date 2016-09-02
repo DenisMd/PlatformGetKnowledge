@@ -3,7 +3,7 @@ package com.getknowledge.modules.courses.tutorial.comments.review;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.courses.raiting.Rating;
 import com.getknowledge.modules.courses.tutorial.Tutorial;
-import com.getknowledge.modules.messages.Comment;
+import com.getknowledge.modules.messages.comments.Comment;
 import com.getknowledge.platform.annotations.ModuleInfo;
 import com.getknowledge.platform.base.entities.AuthorizationList;
 

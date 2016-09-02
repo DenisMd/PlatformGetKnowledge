@@ -1,4 +1,4 @@
-package com.getknowledge.modules.messages;
+package com.getknowledge.modules.messages.comments;
 
 
 import com.getknowledge.platform.base.repositories.ProtectedRepository;

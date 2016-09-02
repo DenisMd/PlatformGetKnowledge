@@ -1,7 +1,6 @@
 package com.getknowledge.modules.courses.tutorial.comments.review;
 
-import com.getknowledge.modules.courses.tutorial.comments.question.TutorialQuestion;
-import com.getknowledge.modules.messages.CommentStatus;
+import com.getknowledge.modules.messages.comments.CommentStatus;
 import com.getknowledge.platform.annotations.Action;
 import com.getknowledge.platform.base.services.AbstractService;
 import com.getknowledge.platform.modules.Result;

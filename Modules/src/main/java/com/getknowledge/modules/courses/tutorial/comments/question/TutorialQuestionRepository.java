@@ -2,13 +2,10 @@ package com.getknowledge.modules.courses.tutorial.comments.question;
 
 
 import com.getknowledge.modules.courses.tutorial.Tutorial;
-import com.getknowledge.modules.messages.CommentRepository;
-import com.getknowledge.modules.messages.CommentStatus;
+import com.getknowledge.modules.messages.comments.CommentRepository;
 import com.getknowledge.modules.messages.attachments.AttachmentImage;
 import com.getknowledge.modules.messages.attachments.AttachmentImageRepository;
 import com.getknowledge.modules.userInfo.UserInfo;
-import com.getknowledge.platform.base.repositories.BaseRepository;
-import com.getknowledge.platform.base.repositories.ProtectedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

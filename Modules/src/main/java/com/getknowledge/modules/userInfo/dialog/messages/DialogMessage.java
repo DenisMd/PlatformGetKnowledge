@@ -1,7 +1,6 @@
 package com.getknowledge.modules.userInfo.dialog.messages;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.getknowledge.modules.messages.Comment;
 import com.getknowledge.modules.messages.Message;
 import com.getknowledge.modules.messages.attachments.AttachmentImage;
 import com.getknowledge.modules.userInfo.dialog.Dialog;
@@ -11,7 +10,6 @@ import com.getknowledge.platform.base.entities.AuthorizationList;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 @Entity

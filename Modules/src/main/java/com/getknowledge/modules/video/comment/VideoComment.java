@@ -1,7 +1,7 @@
 package com.getknowledge.modules.video.comment;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.getknowledge.modules.messages.Comment;
+import com.getknowledge.modules.messages.comments.Comment;
 import com.getknowledge.modules.video.Video;
 import com.getknowledge.platform.annotations.ModuleInfo;
 

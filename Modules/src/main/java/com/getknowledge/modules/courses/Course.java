@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.getknowledge.modules.books.Book;
 import com.getknowledge.modules.courses.changelist.ChangeList;
 import com.getknowledge.modules.courses.group.GroupCourses;
+import com.getknowledge.modules.courses.questions.CourseQuestion;
 import com.getknowledge.modules.courses.raiting.Rating;
 import com.getknowledge.modules.courses.tags.CoursesTag;
 import com.getknowledge.modules.courses.tutorial.Tutorial;
@@ -119,6 +120,18 @@ public class Course extends AbstractEntity implements CloneableEntity<Course>,IU
     @ManyToMany
     @JsonIgnore
     private List<Program> programs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "course")
+    @JsonIgnore
+    private List<CourseQuestion> questions = new ArrayList<>();
+
+    public List<CourseQuestion> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<CourseQuestion> questions) {
+        this.questions = questions;
+    }
 
     public List<Book> getBooks() {
         return books;

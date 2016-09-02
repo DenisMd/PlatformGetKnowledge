@@ -1,8 +1,6 @@
 package com.getknowledge.modules.programs.comment;
 
-import com.getknowledge.modules.books.Book;
-import com.getknowledge.modules.books.BookRepository;
-import com.getknowledge.modules.messages.CommentStatus;
+import com.getknowledge.modules.messages.comments.CommentStatus;
 import com.getknowledge.modules.programs.Program;
 import com.getknowledge.modules.programs.ProgramRepository;
 import com.getknowledge.modules.userInfo.UserInfo;
