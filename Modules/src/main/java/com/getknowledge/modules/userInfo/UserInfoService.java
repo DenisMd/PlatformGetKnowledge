@@ -88,9 +88,6 @@ public class UserInfoService extends AbstractService implements BootstrapService
     private UserEventRepository userEventRepository;
 
     @Autowired
-    private PostMessageRepository postMessageRepository;
-
-    @Autowired
     private DialogMessageRepository dialogMessageRepository;
 
     @Autowired
@@ -440,75 +437,6 @@ public class UserInfoService extends AbstractService implements BootstrapService
             taskRepository.createTask("SystemEventService","removeRestorePasswordInfo",jsonData,calendar);
         } catch (JsonProcessingException e) {
             trace.logException("Can't parse restore password info to json" , e , TraceLevel.Warning,true);
-        }
-
-        return Result.Complete();
-    }
-
-    @Action(name = "getPosts" , mandatoryFields = {"userId","first","max"})
-    @Transactional
-    public List<PostMessage> getPosts(HashMap<String,Object> data){
-        UserInfo selectedUser = userInfoRepository.read(longFromField("userId",data));
-        if (selectedUser == null)
-            return null;
-
-        int first = (int) data.get("first");
-        int max = (int) data.get("max");
-        return userInfoRepository.postMessages(selectedUser,first,max);
-    }
-
-    @Action(name = "addPost" , mandatoryFields = {"userId","text"})
-    @Transactional
-    public Result addPost(HashMap<String,Object> data){
-        UserInfo selectedUser = userInfoRepository.read(longFromField("userId",data));
-        if (selectedUser == null)
-            return Result.NotFound();
-
-        UserInfo currentUser = userInfoRepository.getCurrentUser(data);
-        if (currentUser == null)
-            return  Result.NotAuthorized();
-
-
-        String textMessage = (String) data.get("text");
-        postMessageRepository.createMessage(currentUser,selectedUser,textMessage);
-
-        return Result.Complete();
-    }
-
-    @Action(name = "addCommentToPost" , mandatoryFields = {"postId","text"})
-    @Transactional
-    public Result addCommentToPost(HashMap<String,Object> data){
-        UserInfo currentUser = userInfoRepository.getCurrentUser(data);
-        if (currentUser == null)
-            return  Result.NotAuthorized();
-
-        PostMessage basePost = postMessageRepository.read(longFromField("postId",data));
-        if (basePost == null) {
-            return Result.NotFound();
-        }
-        String textMessage = (String) data.get("text");
-        postMessageRepository.createComment(currentUser,basePost,textMessage);
-
-        return Result.Complete();
-    }
-
-    @Action(name = "removePost" , mandatoryFields = {"postId"})
-    @Transactional
-    public Result removePost(HashMap<String,Object> data) throws PlatformException {
-        UserInfo userInfo = userInfoRepository.getCurrentUser(data);
-        if (userInfo == null)
-            return Result.NotAuthorized();
-
-        Long postId = longFromField("postId",data);
-        PostMessage postMessage = postMessageRepository.read(postId);
-        if (postMessage == null) {
-            return Result.NotFound();
-        }
-
-        if (postMessage.getSender().equals(userInfo) || postMessage.getRecipient().equals(userInfo)) {
-            postMessageRepository.remove(postId);
-        } else {
-            return Result.NotAuthorized();
         }
 
         return Result.Complete();

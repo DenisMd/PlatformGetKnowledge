@@ -117,16 +117,6 @@ public class UserInfoRepository extends ProtectedRepository<UserInfo> {
         return getSingleEntityByFieldAndValue("user.id",user.getId());
     }
 
-    public List<PostMessage> postMessages(UserInfo userInfo,int first,int max){
-        List<PostMessage> messages = entityManager.createQuery("select pm from PostMessage pm " +
-                "where pm.recipient.id = :userId order by pm.createTime desc")
-                .setParameter("userId", userInfo.getId())
-                .setFirstResult(first)
-                .setMaxResults(max)
-                .getResultList();
-        return messages;
-    }
-
     public Dialog getDialog(UserInfo current,UserInfo companion){
         for (Dialog dialog : current.getDialogs()) {
             if (dialog.getCompanion().equals(companion)){
