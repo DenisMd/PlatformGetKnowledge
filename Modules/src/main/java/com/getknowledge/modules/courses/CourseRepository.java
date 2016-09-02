@@ -1,5 +1,7 @@
 package com.getknowledge.modules.courses;
 
+import com.getknowledge.modules.books.Book;
+import com.getknowledge.modules.books.BookRepository;
 import com.getknowledge.modules.books.group.GroupBooks;
 import com.getknowledge.modules.courses.changelist.ChangeList;
 import com.getknowledge.modules.courses.changelist.ChangeListRepository;
@@ -23,6 +25,7 @@ import com.getknowledge.modules.dictionaries.knowledge.Knowledge;
 import com.getknowledge.modules.dictionaries.knowledge.KnowledgeRepository;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.programs.Program;
+import com.getknowledge.modules.programs.ProgramRepository;
 import com.getknowledge.modules.shop.item.Item;
 import com.getknowledge.modules.shop.item.ItemRepository;
 import com.getknowledge.modules.userInfo.UserInfo;
@@ -94,6 +97,12 @@ public class CourseRepository extends ProtectedRepository<Course> {
 
     @Autowired
     private UserInfoRepository userInfoRepository;
+
+    @Autowired
+    private BookRepository bookRepository;
+
+    @Autowired
+    private ProgramRepository programRepository;
 
     @Override
     public List<RepOperations> restrictedOperations() {
@@ -280,6 +289,45 @@ public class CourseRepository extends ProtectedRepository<Course> {
         coursesTagRepository.removeUnusedTags();
 
         return course;
+    }
+
+    public void updateBooks(Course course, List<Integer> booksIds) {
+
+        course.getBooks().clear();
+        for (Integer bookId : booksIds) {
+            Book book = bookRepository.read(new Long(bookId));
+            if (book != null) {
+                course.getBooks().add(book);
+            }
+        }
+
+        merge(course);
+    }
+
+    public void updatePrograms(Course course, List<Integer> programIds) {
+
+        course.getPrograms().clear();
+        for (Integer programId : programIds) {
+            Program program = programRepository.read(new Long(programId));
+            if (program != null) {
+                course.getPrograms().add(program);
+            }
+        }
+
+        merge(course);
+    }
+
+    public void updateTesters(Course course, List<Integer> testersIds) {
+
+        course.getTesters().clear();
+        for (Integer testerId : testersIds) {
+            UserInfo tester = userInfoRepository.read(new Long(testerId));
+            if (tester != null) {
+                course.getTesters().add(tester);
+            }
+        }
+
+        merge(course);
     }
 
     public void releaseBaseCourse(Course course,ChangeList changeList) {

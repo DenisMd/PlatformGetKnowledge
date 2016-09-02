@@ -1,5 +1,6 @@
 package com.getknowledge.modules.courses;
 
+import com.getknowledge.modules.books.Book;
 import com.getknowledge.modules.courses.changelist.ChangeList;
 import com.getknowledge.modules.courses.changelist.ChangeListRepository;
 import com.getknowledge.modules.courses.group.GroupCourses;
@@ -9,11 +10,17 @@ import com.getknowledge.modules.courses.tags.CoursesTagRepository;
 import com.getknowledge.modules.courses.tutorial.Tutorial;
 import com.getknowledge.modules.courses.tutorial.TutorialRepository;
 import com.getknowledge.modules.courses.version.Version;
+import com.getknowledge.modules.dictionaries.currency.Currency;
+import com.getknowledge.modules.dictionaries.currency.CurrencyRepository;
 import com.getknowledge.modules.dictionaries.knowledge.Knowledge;
 import com.getknowledge.modules.dictionaries.knowledge.KnowledgeRepository;
 import com.getknowledge.modules.dictionaries.language.Language;
 import com.getknowledge.modules.dictionaries.language.LanguageRepository;
 import com.getknowledge.modules.dictionaries.language.names.Languages;
+import com.getknowledge.modules.programs.Program;
+import com.getknowledge.modules.shop.item.ItemRepository;
+import com.getknowledge.modules.shop.price.Price;
+import com.getknowledge.modules.shop.price.PriceRepository;
 import com.getknowledge.modules.userInfo.UserInfo;
 import com.getknowledge.modules.userInfo.UserInfoRepository;
 import com.getknowledge.modules.userInfo.UserInfoService;
@@ -34,6 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -58,17 +66,19 @@ public class CourseService extends AuthorizedService<Course> implements ImageSer
     @Autowired
     private LanguageRepository languageRepository;
 
+    @Autowired
+    private CurrencyRepository currencyRepository;
+
+    @Autowired
+    private ItemRepository itemRepository;
 
     @Autowired
     private VideoRepository videoRepository;
 
     @Autowired
-    private TutorialRepository tutorialRepository;
-
-    @Autowired
     private ChangeListRepository changeListRepository;
 
-    public Result checkCourseRight(HashMap<String,Object> data) {
+    public Result checkCourseRight(HashMap<String,Object> data, boolean ignoreRelease) {
         Long courseId = longFromField("courseId",data);
         Course course = courseRepository.read(courseId);
         if (course == null) {
@@ -82,7 +92,7 @@ public class CourseService extends AuthorizedService<Course> implements ImageSer
         }
 
         //Для выпущенных курсов информацию менять нельзя
-        if (course.isRelease()) {
+        if (course.isRelease() && !ignoreRelease) {
             Result result = Result.Failed();
             result.setObject("Course is release");
             return result;
@@ -177,7 +187,7 @@ public class CourseService extends AuthorizedService<Course> implements ImageSer
     @Transactional
     public Result updateProgramInformation(HashMap<String,Object> data) {
 
-        Result result = checkCourseRight(data);
+        Result result = checkCourseRight(data, false);
         Course course;
         if (result.getObject() != null)  {
             course = (Course) result.getObject();
@@ -205,10 +215,142 @@ public class CourseService extends AuthorizedService<Course> implements ImageSer
         return Result.Complete();
     }
 
+    @Action(name = "updateCoursePrice", mandatoryFields = {"courseId"})
+    @Transactional
+    public Result updateCoursePrice(HashMap<String,Object> data) {
+        Result result = checkCourseRight(data, true);
+        Course course;
+        if (result.getObject() != null)  {
+            course = (Course) result.getObject();
+        } else {
+            return result;
+        }
+
+        //Все базовые курсы должны быть бесплатными
+        if (course.isBase()) {
+            return Result.Failed("Course is base");
+        }
+
+        Boolean free = null;
+        Currency currency = null;
+        BigDecimal num = null;
+        Integer discount = null;
+
+
+        if (data.containsKey("free")) {
+            free = (Boolean) data.get("free");
+        }
+
+        if (data.containsKey("currencyId")) {
+            long currencyId = longFromField("currencyId", data);
+            currency = currencyRepository.read(currencyId);
+            if (currency == null) {
+                return Result.Failed("Currency by id " + currencyId + " not exist");
+            }
+        }
+
+        if (data.containsKey("price")) {
+            num = (BigDecimal) data.get("price");
+        }
+
+        if (data.containsKey("discount")) {
+            discount = (int) data.get("discount");
+        }
+
+        itemRepository.updateItemPrice(course.getItem(), free, currency, num, discount);
+        return Result.Complete();
+    }
+
+    @Action(name = "updateBooks", mandatoryFields = {"courseId","bookListIds"})
+    public Result updateBooks(HashMap<String, Object> data) {
+        Result result = checkCourseRight(data, false);
+        Course course;
+        if (result.getObject() != null)  {
+            course = (Course) result.getObject();
+        } else {
+            return result;
+        }
+
+        List<Integer> bookIds = (List<Integer>) data.get("bookListIds");
+        courseRepository.updateBooks(course, bookIds);
+
+        return Result.Complete();
+    }
+
+    @Action(name = "updatePrograms", mandatoryFields = {"courseId","programListIds"})
+    public Result updatePrograms(HashMap<String, Object> data) {
+        Result result = checkCourseRight(data, false);
+        Course course;
+        if (result.getObject() != null)  {
+            course = (Course) result.getObject();
+        } else {
+            return result;
+        }
+
+        List<Integer> programListIds = (List<Integer>) data.get("programListIds");
+        courseRepository.updatePrograms(course, programListIds);
+
+        return Result.Complete();
+    }
+
+    @Action(name = "updateTesters", mandatoryFields = {"courseId","testersIds"})
+    public Result updateTesters(HashMap<String, Object> data) {
+        Result result = checkCourseRight(data, false);
+        Course course;
+        if (result.getObject() != null)  {
+            course = (Course) result.getObject();
+        } else {
+            return result;
+        }
+
+        List<Integer> testersIds = (List<Integer>) data.get("testersIds");
+        courseRepository.updateTesters(course, testersIds);
+
+        return Result.Complete();
+    }
+
+    @Action(name = "getBooks", mandatoryFields = {"courseId"}, prepareEntity = true, repositoryName = "BookRepository")
+    public List<Book> getBooks(HashMap<String, Object> data) {
+
+        long courseId = longFromField("courseId", data);
+        Course course = courseRepository.read(courseId);
+        if (course == null) {
+            return null;
+        }
+
+        return course.getBooks();
+    }
+
+    @Action(name = "getPrograms", mandatoryFields = {"courseId"}, prepareEntity = true, repositoryName = "ProgramRepository")
+    public List<Program> getPrograms(HashMap<String, Object> data) {
+
+        long courseId = longFromField("courseId", data);
+        Course course = courseRepository.read(courseId);
+        if (course == null) {
+            return null;
+        }
+
+        return course.getPrograms();
+    }
+
+    @Action(name = "getTesters", mandatoryFields = {"courseId"}, prepareEntity = true, repositoryName = "UserInfoRepository")
+    public List<UserInfo> getTesters(HashMap<String, Object> data) {
+
+        long courseId = longFromField("courseId", data);
+        Course course = courseRepository.read(courseId);
+        if (course == null) {
+            return null;
+        }
+
+        return course.getTesters();
+    }
+
+
+
     @ActionWithFile(name = "uploadCover" , mandatoryFields = "courseId")
     @Transactional
     public Result uploadCover(HashMap<String,Object> data, List<MultipartFile> files) {
-        Result result = checkCourseRight(data);
+        Result result = checkCourseRight(data, false);
         Course course;
         if (result.getObject() != null)  {
             course = (Course) result.getObject();
@@ -230,7 +372,7 @@ public class CourseService extends AuthorizedService<Course> implements ImageSer
     @ActionWithFile(name = "uploadVideoIntro" , mandatoryFields = "courseId")
     @Transactional
     public Result uploadVideoIntro(HashMap<String,Object> data, List<MultipartFile> files) {
-        Result result = checkCourseRight(data);
+        Result result = checkCourseRight(data, false);
         Course course;
         if (result.getObject() != null)  {
             course = (Course) result.getObject();
@@ -261,7 +403,7 @@ public class CourseService extends AuthorizedService<Course> implements ImageSer
     @Action(name = "release" , mandatoryFields = {"courseId", "version"})
     @Transactional
     public Result release(HashMap<String,Object> data) throws PlatformException {
-        Result result = checkCourseRight(data);
+        Result result = checkCourseRight(data, false);
         Course course;
         if (result.getObject() != null)  {
             course = (Course) result.getObject();
@@ -269,6 +411,7 @@ public class CourseService extends AuthorizedService<Course> implements ImageSer
             return result;
         }
 
+        //Выпускаем первый раз
         if (course.getBaseCourse() == null) {
             if (!course.isRelease()) {
                 ChangeList changeList = changeListRepository.createChangeList(course,"Initialize course");
@@ -310,7 +453,7 @@ public class CourseService extends AuthorizedService<Course> implements ImageSer
     @Action(name = "makeDraft" , mandatoryFields = {"courseId"})
     @Transactional
     public Result makeDraft(HashMap<String,Object> data) {
-        Result result = checkCourseRight(data);
+        Result result = checkCourseRight(data, false);
         Course course;
         if (result.getObject() != null)  {
             course = (Course) result.getObject();
@@ -319,7 +462,7 @@ public class CourseService extends AuthorizedService<Course> implements ImageSer
         }
 
         if (!course.isRelease() && course.getDraftCourse() != null) {
-            return Result.Failed();
+            return Result.Failed("Draft already exist");
         }
 
         Course draft = course.clone();
