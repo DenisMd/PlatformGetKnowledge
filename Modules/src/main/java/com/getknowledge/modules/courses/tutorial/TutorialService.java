@@ -55,7 +55,24 @@ public class TutorialService extends AbstractService {
     @Action(name = "createTutorial" , mandatoryFields = {"courseId","name"})
     @Transactional
     public Result createTutorial(HashMap<String , Object> data) {
-        Result result = courseService.checkCourseRight(data);
+        Result result = courseService.checkCourseRight(data, false);
+        Course course;
+        if (result.getObject() != null)  {
+            course = (Course) result.getObject();
+        } else {
+            return result;
+        }
+
+        Tutorial tutorial = tutorialRepository.createTutorial(course, (String) data.get("name"));
+        Result result1 = Result.Complete();
+        result1.setObject(tutorial.getId());
+        return result1;
+    }
+
+    @Action(name = "changeTutorialOrders" , mandatoryFields = {"courseId", "tutorialsId"})
+    @Transactional
+    public Result changeTutorialOrders(HashMap<String , Object> data) {
+        Result result = courseService.checkCourseRight(data, false);
         Course course;
         if (result.getObject() != null)  {
             course = (Course) result.getObject();
@@ -219,7 +236,6 @@ public class TutorialService extends AbstractService {
 
         return Result.Complete();
     }
-
 
     @Action(name = "getQuestion" , mandatoryFields = {"tutorialId","first","max"})
     @Transactional

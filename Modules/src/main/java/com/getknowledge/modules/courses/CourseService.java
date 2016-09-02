@@ -262,6 +262,7 @@ public class CourseService extends AuthorizedService<Course> implements ImageSer
     }
 
     @Action(name = "updateBooks", mandatoryFields = {"courseId","bookListIds"})
+    @Transactional
     public Result updateBooks(HashMap<String, Object> data) {
         Result result = checkCourseRight(data, false);
         Course course;
@@ -278,6 +279,7 @@ public class CourseService extends AuthorizedService<Course> implements ImageSer
     }
 
     @Action(name = "updatePrograms", mandatoryFields = {"courseId","programListIds"})
+    @Transactional
     public Result updatePrograms(HashMap<String, Object> data) {
         Result result = checkCourseRight(data, false);
         Course course;
@@ -294,6 +296,7 @@ public class CourseService extends AuthorizedService<Course> implements ImageSer
     }
 
     @Action(name = "updateTesters", mandatoryFields = {"courseId","testersIds"})
+    @Transactional
     public Result updateTesters(HashMap<String, Object> data) {
         Result result = checkCourseRight(data, false);
         Course course;
@@ -310,6 +313,7 @@ public class CourseService extends AuthorizedService<Course> implements ImageSer
     }
 
     @Action(name = "getBooks", mandatoryFields = {"courseId"}, prepareEntity = true, repositoryName = "BookRepository")
+    @Transactional
     public List<Book> getBooks(HashMap<String, Object> data) {
 
         long courseId = longFromField("courseId", data);
@@ -322,6 +326,7 @@ public class CourseService extends AuthorizedService<Course> implements ImageSer
     }
 
     @Action(name = "getPrograms", mandatoryFields = {"courseId"}, prepareEntity = true, repositoryName = "ProgramRepository")
+    @Transactional
     public List<Program> getPrograms(HashMap<String, Object> data) {
 
         long courseId = longFromField("courseId", data);
@@ -334,6 +339,7 @@ public class CourseService extends AuthorizedService<Course> implements ImageSer
     }
 
     @Action(name = "getTesters", mandatoryFields = {"courseId"}, prepareEntity = true, repositoryName = "UserInfoRepository")
+    @Transactional
     public List<UserInfo> getTesters(HashMap<String, Object> data) {
 
         long courseId = longFromField("courseId", data);
@@ -344,8 +350,6 @@ public class CourseService extends AuthorizedService<Course> implements ImageSer
 
         return course.getTesters();
     }
-
-
 
     @ActionWithFile(name = "uploadCover" , mandatoryFields = "courseId")
     @Transactional

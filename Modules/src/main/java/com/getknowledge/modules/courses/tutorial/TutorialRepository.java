@@ -18,6 +18,7 @@ import com.getknowledge.platform.exceptions.PlatformException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -73,6 +74,32 @@ public class TutorialRepository extends ProtectedRepository<Tutorial> {
 
         create(tutorial);
         return tutorial;
+    }
+
+    public void changeTutorialsOrder(Course course , List<Integer> tutorialsIds) {
+
+        for (Tutorial tutorial : course.getTutorials()) {
+            if (!tutorialsIds.contains(tutorial.getId().intValue())) {
+                return;
+            }
+        }
+
+        List<Tutorial> tutorials = new ArrayList<>();
+        int currentIndex = 1;
+        for (Integer tutId : tutorialsIds) {
+            Tutorial tutorial = read((long) tutId);
+            if (tutorial == null) {
+                return;
+            }
+
+            tutorial.setOrderNumber(currentIndex);
+            tutorials.add(tutorial);
+            currentIndex++;
+        }
+
+        for (Tutorial tutorial : tutorials) {
+            merge(tutorial);
+        }
     }
 
     public Tutorial getTutorial(Long courseId,Integer orderNumber) {
