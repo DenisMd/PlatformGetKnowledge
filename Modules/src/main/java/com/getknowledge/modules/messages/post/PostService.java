@@ -27,6 +27,8 @@ public abstract class PostService<T extends Post, T2 extends AbstractEntity> ext
 
     protected abstract T2 getEntity(long objectId);
 
+    protected abstract String getEntityName();
+
     @Autowired
     protected UserInfoRepository userInfoRepository;
 
@@ -70,7 +72,7 @@ public abstract class PostService<T extends Post, T2 extends AbstractEntity> ext
     @Transactional
     public List<T> getPosts(HashMap<String,Object> data){
 
-        T2 entity = getEntity(longFromField("userId", data));;
+        T2 entity = getEntity(longFromField("objectId", data));;
         if (entity == null)
             return null;
 
@@ -78,22 +80,22 @@ public abstract class PostService<T extends Post, T2 extends AbstractEntity> ext
         int max = (int) data.get("max");
 
 
-        List<T> messages = entityManager.createQuery("select pm from PostMessage pm " +
-                "where pm.recipient.id = :userId order by pm.createTime desc")
-                .setParameter("userId", userInfo.getId())
+        List<T> messages = entityManager.createQuery("select mess from " + getRepository().getClass().getSimpleName() + " mess " +
+                "where mess." + getEntityName() + ".id = :objectId order by mess.createTime desc")
+                .setParameter("objectId", entity.getId())
                 .setFirstResult(first)
                 .setMaxResults(max)
                 .getResultList();
         return messages;
-
-        return userInfoRepository.postMessages(selectedUser,first,max);
     }
 
-    @Action(name = "addPost" , mandatoryFields = {"userId","text"})
+    @Action(name = "addPost" , mandatoryFields = {"objectId","text"})
     @Transactional
     public Result addPost(HashMap<String,Object> data){
-        UserInfo selectedUser = userInfoRepository.read(longFromField("userId",data));
-        if (selectedUser == null)
+
+        T2 entity = getEntity(longFromField("objectId",data));
+
+        if (entity == null)
             return Result.NotFound();
 
         UserInfo currentUser = userInfoRepository.getCurrentUser(data);
@@ -102,7 +104,7 @@ public abstract class PostService<T extends Post, T2 extends AbstractEntity> ext
 
 
         String textMessage = (String) data.get("text");
-        postMessageRepository.createMessage(currentUser,selectedUser,textMessage);
+        getRepository().createPost(currentUser, entity, textMessage);
 
         return Result.Complete();
     }

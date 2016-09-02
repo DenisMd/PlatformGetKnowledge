@@ -21,4 +21,9 @@ public class PostMessageService extends PostService<PostMessage, UserInfo> {
     protected UserInfo getEntity(long objectId) {
         return userInfoRepository.read(objectId);
     }
+
+    @Override
+    protected String getEntityName() {
+        return "recipient";
+    }
 }
