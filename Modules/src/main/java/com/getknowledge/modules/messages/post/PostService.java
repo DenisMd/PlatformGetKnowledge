@@ -27,6 +27,8 @@ public abstract class PostService<T extends Post, T2 extends AbstractEntity> ext
 
     protected abstract T2 getEntity(long objectId);
 
+    protected  abstract boolean currentUserHasAccessToRemovePost(UserInfo userInfo, T post);
+
     protected abstract String getEntityName();
 
     @Autowired
@@ -116,12 +118,12 @@ public abstract class PostService<T extends Post, T2 extends AbstractEntity> ext
         if (currentUser == null)
             return  Result.NotAuthorized();
 
-        PostMessage basePost = postMessageRepository.read(longFromField("postId",data));
-        if (basePost == null) {
+        T post = getRepository().read(longFromField("postId",data));
+        if (post == null) {
             return Result.NotFound();
         }
         String textMessage = (String) data.get("text");
-        postMessageRepository.createComment(currentUser,basePost,textMessage);
+        getRepository().createPostComment(currentUser,post,textMessage);
 
         return Result.Complete();
     }
@@ -134,13 +136,13 @@ public abstract class PostService<T extends Post, T2 extends AbstractEntity> ext
             return Result.NotAuthorized();
 
         Long postId = longFromField("postId",data);
-        PostMessage postMessage = postMessageRepository.read(postId);
-        if (postMessage == null) {
+        T post = getRepository().read(postId);
+        if (post == null) {
             return Result.NotFound();
         }
 
-        if (postMessage.getSender().equals(userInfo) || postMessage.getRecipient().equals(userInfo)) {
-            postMessageRepository.remove(postId);
+        if (post.getSender().equals(userInfo) || currentUserHasAccessToRemovePost(userInfo,post)) {
+            getRepository().remove(postId);
         } else {
             return Result.NotAuthorized();
         }

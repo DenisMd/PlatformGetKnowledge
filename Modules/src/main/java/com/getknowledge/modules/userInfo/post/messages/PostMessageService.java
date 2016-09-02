@@ -26,4 +26,9 @@ public class PostMessageService extends PostService<PostMessage, UserInfo> {
     protected String getEntityName() {
         return "recipient";
     }
+
+    @Override
+    protected boolean currentUserHasAccessToRemovePost(UserInfo userInfo, PostMessage post) {
+        return  post.getRecipient().equals(userInfo);
+    }
 }
