@@ -1,4 +1,4 @@
-model.factory('videoDialogService', function(applicationService,className) {
+model.factory('videoDialogService', function(applicationService,className, $timeout) {
     var mainScope;
     return {
         init : function($scope) {
@@ -9,7 +9,7 @@ model.factory('videoDialogService', function(applicationService,className) {
             mainScope.commentData.objectId = video.id;
             mainScope.video = video;
             mainScope.showComments = angular.isUndefined(showComments)? true : showComments;
-            mainScope.$broadcast("showSimpleComments");
+            $timeout(function(){mainScope.$broadcast("showSimpleComments")}, 500);
         }
     }
 });
