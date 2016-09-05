@@ -38,6 +38,8 @@ model.controller("rolesCtrl", function ($scope, applicationService, className) {
             },
             {
                 name : "note",
+                filter : "memo",
+                charLength : 30,
                 title : "role_note"
             }
         ],

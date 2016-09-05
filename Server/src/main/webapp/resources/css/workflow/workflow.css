@@ -13,6 +13,10 @@
     margin-left: 0;
 }
 
+.margin-top-10 {
+    margin-top: 10px;
+}
+
 .field {
     padding: 10px 0;
 }
