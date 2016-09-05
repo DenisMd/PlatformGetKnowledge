@@ -338,6 +338,8 @@ model.filter("version" , function () {
 
 model.filter("memo" , function () {
     return function (text, limitChar) {
+        if (!text || text.length < limitChar)
+            return text;
         return text.substring(0,limitChar) + "...";
     };
 });
