@@ -472,6 +472,9 @@ public class DataController {
                 headers.setContentType(MediaType.IMAGE_JPEG);
 
                 byte [] origImage = imageService.getImageById(id);
+                if (origImage == null) {
+                    return new ResponseEntity<>(origImage, headers, HttpStatus.OK);
+                }
                 try (InputStream inputStream = new ByteArrayInputStream(origImage)) {
 
                     BufferedImage bufferedImage = ImageIO.read(inputStream);
