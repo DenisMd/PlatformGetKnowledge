@@ -20,6 +20,7 @@
     "course_info" : "Информация о курсе",
     "course_cover" : "Обложка курса",
     "course_video_intro" : "Интро видео",
-    "course_intro" : "Загрузить видео-файл"
+    "course_intro" : "Загрузить видео-файл",
+    "course_set_price" : "Изменить цену курса"
   }
 }

@@ -20,6 +20,7 @@
     "course_info" : "Course info",
     "course_cover" : "Course cover",
     "course_video_intro" : "Intro video",
-    "course_intro" : "Upload video file"
+    "course_intro" : "Upload video file",
+    "course_set_price" : "Change course price"
   }
 }

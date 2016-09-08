@@ -15,6 +15,10 @@
         {{translate("course_change_tutorial_order")}}
     </button>
 
+    <button class="btn btn-default black-btn" ng-click="changePriceContent()" ng-if="user.id === course.author.id && !course.base" flex="none">
+        {{translate("course_set_price")}}
+    </button>
+
     <button class="btn btn-default black-btn" ng-click="makeRelease()" ng-if="course.editable && !course.release" flex="none">
         {{translate("course_make_release")}}
     </button>

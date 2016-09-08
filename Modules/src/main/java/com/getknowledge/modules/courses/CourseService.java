@@ -87,7 +87,10 @@ public class CourseService extends AuthorizedService<Course> implements ImageSer
 
         UserInfo userInfo = userInfoRepository.getCurrentUser(data);
 
-        if (!course.getAuthorizationList().isAccessEdit(userInfo.getUser())) {
+        if (ignoreRelease && userInfo != null && Objects.equals(course.getAuthor().getId(), userInfo.getId())) {
+            return Result.AccessDenied();
+        }
+        if (ignoreRelease || !course.getAuthorizationList().isAccessEdit(userInfo.getUser())) {
             return Result.AccessDenied();
         }
 
