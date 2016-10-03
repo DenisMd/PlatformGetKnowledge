@@ -1,4 +1,5 @@
 import java.io.*;
+import java.lang.Integer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -12,28 +13,9 @@ public class Test {
 
     @org.junit.Test
     public void getProgrammingLanguage() throws IOException, ParseException {
-        String f = "D:\\Workplace\\test.txt";
-        File file = new File(f);
-        FileChannel fileChannel = null;
-        try {
-            System.out.println("Create file chanel");
-            fileChannel = (new FileInputStream(file)).getChannel();
-            System.out.println("sleep");
-            for (int i=0; i < 50; i++) {
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        } finally {
-            if (fileChannel != null) {
-                System.out.println("close");
-                fileChannel.close();
-            }
-        }
-
-
+        Integer a = 1;
+        int number = 5 + (a == null ? 0 : a.intValue()*60*1000);
+        System.out.println(number);
     }
 
 

@@ -47,7 +47,7 @@ public class Book extends AbstractEntity implements CloneableEntity<Book>,IUser,
 
     @ElementCollection
     @CollectionTable(name = "books_link")
-    @Column(name = "links")
+    @Column(name = "links", length = 1000)
     private List<String> links = new ArrayList<>();
 
     @Column(name = "create_date")
