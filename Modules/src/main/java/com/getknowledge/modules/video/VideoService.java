@@ -93,9 +93,7 @@ public class VideoService extends AuthorizedService<Video> implements BootstrapS
             return Result.AccessDenied();
         }
 
-        videoRepository.uploadVideo(video,userInfo,fileList.get(0));
-
-        return Result.Complete();
+        return videoRepository.uploadVideo(video,userInfo,fileList.get(0));
     }
 
     @ActionWithFile(name = "uploadCover" , mandatoryFields = {"videoId"})

@@ -130,6 +130,9 @@ model.controller("videoCtrl", function ($scope, $state,$http,applicationService,
         title : "video_data",
         parameters : {},
         maxFileSize : 512000,
+        callback : function (response) {
+            $scope.showToast($scope.getResultMessage(response));
+        },
         prepareParams : function (formData) {
             formData.data = JSON.stringify({videoId:$scope.currentVideo.id});
         }

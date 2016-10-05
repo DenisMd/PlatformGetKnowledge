@@ -8,6 +8,7 @@ import com.getknowledge.platform.base.repositories.BaseRepository;
 import com.getknowledge.platform.exceptions.DeleteException;
 import com.getknowledge.platform.exceptions.PlatformException;
 import com.getknowledge.platform.exceptions.SystemError;
+import com.getknowledge.platform.modules.Result;
 import com.getknowledge.platform.modules.trace.TraceService;
 import com.getknowledge.platform.modules.trace.enumeration.TraceLevel;
 import com.googlecode.mp4parser.FileDataSourceImpl;
@@ -21,6 +22,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -118,7 +122,7 @@ public class VideoRepository extends BaseRepository<Video> {
 
     //Загрузка видео в каталог
     // {paramPath}/{userId}/{videoId}_{fileName}
-    public void uploadVideo(Video video,UserInfo userInfo,MultipartFile multipartFile) {
+    public Result uploadVideo(Video video, UserInfo userInfo, MultipartFile multipartFile) {
 
         String separator = File.separator;
 
@@ -126,13 +130,22 @@ public class VideoRepository extends BaseRepository<Video> {
 
         if (!file.exists()) {
             trace.log("Create dir for author videos : " + file.getAbsolutePath(), TraceLevel.Event,true);
-            file.mkdir();
+            if (file.mkdir()) {
+                trace.log("Can't create path for user : " + file.getAbsolutePath(), TraceLevel.Error, true);
+                return Result.Failed("Не возможно создать папку для пользователя : " + file.getAbsolutePath());
+            }
         }
 
         //Если мы перезаливаем видео необходимо удалить старое
         if (video.getLink() != null) {
-            File oldVideo = new File(getVideoPath(video.getId()));
-            oldVideo.delete();
+            try {
+                if (Files.exists(Paths.get(getVideoPath(video.getId())))) {
+                    Files.delete(Paths.get(getVideoPath(video.getId())));
+                }
+            } catch (IOException e) {
+                trace.logException("Can't remove video file : " + video.getLink(), e, TraceLevel.Error, true);
+                return Result.Failed("Не возможно удалить файл: " + video.getLink());
+            }
         }
 
         String link =  userInfo.getId() + separator +
@@ -144,39 +157,31 @@ public class VideoRepository extends BaseRepository<Video> {
         //Если такого файла нету созадем
         if (!videoFile.exists()) {
             try {
-                videoFile.createNewFile();
+                if (!videoFile.createNewFile()) {
+                    return Result.Failed("Не возможно создать файл");
+                }
             } catch (IOException e) {
                 trace.logException("Error upload video file" , e,TraceLevel.Error,true);
+                return Result.Failed("Не возможно создать файл");
             }
         }
 
         //Записываем данные из request
-        FileOutputStream fos = null;
-
-        try {
-            fos = new FileOutputStream(videoFile);
+        try (FileOutputStream fos = new FileOutputStream(videoFile)) {
             fos.write(multipartFile.getBytes());
         } catch (IOException e) {
             trace.logException("Error upload video file" , e,TraceLevel.Error,true);
-        } finally {
-            if (fos != null) {
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    trace.logException("Error upload video file" , e,TraceLevel.Error,true);
-                }
-            }
         }
 
         video.setLink(link);
         video.setUploadTime(Calendar.getInstance());
         video.setSize(multipartFile.getSize());
 
-        FileDataSourceImpl dataSource = null;
         IsoFile  isoFile = null;
-        try  {
-            dataSource = new FileDataSourceImpl(getVideoPath(video.getId()));
+        try(FileDataSourceImpl dataSource = new FileDataSourceImpl(getVideoPath(video.getId())))  {
+
             isoFile = new IsoFile(dataSource);
+
             if (isoFile.getMovieBox() != null && isoFile.getMovieBox().getMovieHeaderBox() != null) {
                 video.setDuration(isoFile.getMovieBox().getMovieHeaderBox().getDuration());
             }
@@ -195,7 +200,7 @@ public class VideoRepository extends BaseRepository<Video> {
 
         merge(video);
         trace.log("Video file successfully upload + " + videoFile.getAbsolutePath() , TraceLevel.Event,true);
-
+        return Result.Complete();
     }
 
     public String getVideoPath(Long id){
