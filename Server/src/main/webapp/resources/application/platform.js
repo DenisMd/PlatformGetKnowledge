@@ -788,9 +788,13 @@ angular.module("backend.service", ['ui.router','ngSanitize','ngScrollbars','angu
          *
          * @description получает ссылку для показа изображения
          * */
-        this.imageHref = function(className,id){
+        this.imageHref = function(className,id, width, height){
             if (!className || !id) {
                 return "";
+            }
+
+            if (!angular.isUndefined(width) && !angular.isUndefined(height)) {
+                return "/data/image?className="+className+"&id="+id+"&width="+width+"&height="+height;
             }
             return "/data/image?className="+className+"&id="+id;
         };

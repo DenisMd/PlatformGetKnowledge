@@ -17,9 +17,11 @@
                     <div flex="55" flex-gt-sm="20">{{translate('name')}}</div>
                     <div flex>{{currentPermission.permissionName}}</div>
                 </div>
-                <div class="form-group">
-                    <label for="note">{{translate("permission_note")}}:</label>
-                    <textarea class="form-control" rows="5" id="note" ng-model="currentPermission.note"></textarea>
+                <div layout="row" class="margin-top-10">
+                    <md-input-container class="md-block" flex>
+                        <label>{{translate("permission_note")}}</label>
+                        <textarea ng-model="currentPermission.note" md-maxlength="255" rows="3" md-select-on-focus></textarea>
+                    </md-input-container>
                 </div>
                 <md-button class="md-raised md-primary md-btn" ng-click="updatePermission()" ng-disabled="!currentPermission">{{translate("permission_update_permission")}}</md-button>
             </md-content>
@@ -80,10 +82,11 @@
                         </md-input-container>
                     </div>
                     <div layout="row">
-                        <md-input-container flex>
+                        <md-input-container class="md-block" flex>
                             <label>{{parentScope.translate("permission_note")}}</label>
-                            <input ng-model="permission.note">
+                            <textarea ng-model="permission.note" md-maxlength="255" rows="3" md-select-on-focus></textarea>
                         </md-input-container>
+                    </div>
                     </div>
                 </div>
             </md-dialog-content>

@@ -75,6 +75,9 @@ public class VideoRepository extends BaseRepository<Video> {
         if (object.getUploadTime() == null) {
             object.setUploadTime(Calendar.getInstance());
         }
+        if (object.getVideoType() == null) {
+            object.setVideoType(VideoType.LocalVideoFile);
+        }
         super.create(object);
     }
 

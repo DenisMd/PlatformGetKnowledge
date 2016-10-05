@@ -16,6 +16,21 @@ model.controller("videoCtrl", function ($scope, $state,$http,applicationService,
                 field : "videoName",
                 default : true
             },{
+                title: "video_type",
+                type : "enum",
+                field : "videoType",
+                constants : [{
+                    key : "LocalVideoFile",
+                    value : "video_local_file"
+                }, {
+                    key : "Vimeo",
+                    value : "video_vimeo"
+                }, {
+                    key : "Youtube",
+                    value : "video_youtube"
+                }],
+                default:true
+            },{
                 title : "video_link",
                 type : "text",
                 field : "link",
@@ -44,6 +59,9 @@ model.controller("videoCtrl", function ($scope, $state,$http,applicationService,
             },{
                 name :  "link",
                 title : "video_link"
+            },{
+                name : "videoType",
+                title : "video_type"
             },{
                 name : "allowEveryOne",
                 title : "video_allow"

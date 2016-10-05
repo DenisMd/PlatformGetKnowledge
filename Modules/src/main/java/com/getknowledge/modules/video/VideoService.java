@@ -152,6 +152,7 @@ public class VideoService extends AuthorizedService<Video> implements BootstrapS
     }
 
     @Override
+    @Transactional
     public boolean isAccessForEdit(User currentUser, Video entity) {
         if (currentUser == null) return false;
         if (entity == null) return false;

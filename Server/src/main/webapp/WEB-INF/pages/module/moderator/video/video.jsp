@@ -17,7 +17,6 @@
           <div flex="55" flex-gt-sm="20">{{translate('video_duration')}}</div>
           <div flex>{{(currentVideo.durationTime) | date : 'HH:mm:ss'}}</div>
         </div>
-        <hr>
         <div layout="row">
           <md-input-container flex>
             <label>{{translate("video_link")}}</label>

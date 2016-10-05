@@ -45,6 +45,20 @@ model.controller("clientSelectorController" , function ($scope , customFilterSer
         }
     };
 
+    var BreakException= {};
+
+    try {
+        $scope.getData().headerNames.forEach(function (header) {
+            if (header.defaultOrder === true) {
+                $scope.orderReverse = !header.desc;
+                $scope.setOrder(header);
+                throw  BreakException;
+            }
+        });
+    } catch(e) {
+        if (e!==BreakException) throw e;
+    }
+
     $scope.currentRow = null;
     $scope.selectItem = function (item) {
         $scope.getData().selectItemCallback(item);

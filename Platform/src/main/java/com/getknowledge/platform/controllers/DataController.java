@@ -27,6 +27,8 @@ import com.getknowledge.platform.modules.user.User;
 import com.getknowledge.platform.modules.user.UserRepository;
 import com.getknowledge.platform.utils.ModuleLocator;
 import com.getknowledge.platform.utils.MultipartFileSender;
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
+import net.coobird.thumbnailator.Thumbnails;
 import org.apache.catalina.connector.ClientAbortException;
 import org.hibernate.JDBCException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +44,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -443,7 +447,10 @@ public class DataController {
 
     @RequestMapping(value = "/image", method = RequestMethod.GET)
     public ResponseEntity<byte[]> getImage(@RequestParam(value = "id" ,required = true) Long id,
-                              @RequestParam(value ="className" , required = true) String className, Principal principal, HttpServletRequest request, HttpServletResponse response) throws PlatformException {
+                                           @RequestParam(value ="className" , required = true) String className,
+                                           @RequestParam(value = "width", required = false) Integer width,
+                                           @RequestParam(value = "height", required = false) Integer height,
+                                           Principal principal, HttpServletRequest request, HttpServletResponse response) throws PlatformException {
         try {
             trace.log(String.format("------> Received \"Read Image\" request with parameters {className : %s , id : %d} from user \"%s\"",className,id,principal==null?"guest":principal.getName()),TraceLevel.Debug,false);
 
@@ -463,7 +470,30 @@ public class DataController {
                 ImageService imageService = ((ImageService)abstractService);
                 final HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.IMAGE_JPEG);
-                return new ResponseEntity<>(imageService.getImageById(id), headers, HttpStatus.OK);
+
+                byte [] origImage = imageService.getImageById(id);
+                if (origImage == null) {
+                    return new ResponseEntity<>(origImage, headers, HttpStatus.OK);
+                }
+                try (InputStream inputStream = new ByteArrayInputStream(origImage)) {
+
+                    BufferedImage bufferedImage = ImageIO.read(inputStream);
+
+                    if (width == null || height == null || (bufferedImage.getWidth() <= width && bufferedImage.getHeight() <= height)) {
+                        return new ResponseEntity<>(origImage, headers, HttpStatus.OK);
+                    }
+
+                    BufferedImage resized = Thumbnails.of(bufferedImage)
+                            .size(height, width)
+                            .outputFormat("jpg").asBufferedImage();
+
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    ImageIO.write(resized, "jpg", outputStream);
+                    return new ResponseEntity<>(outputStream.toByteArray(), headers, HttpStatus.OK);
+                }
+
+
+
             }
 
             return null;

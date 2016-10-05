@@ -10,6 +10,9 @@
     "video_file"  : "Upload video file",
     "video_data" : "Choose video data",
     "video_size" : "Video size",
-    "video_duration" : "Duration"
-  }
+    "video_duration" : "Duration",
+    "video_type" : "Video type",
+    "video_local_file" : "Local video file",,
+    "video_vimeo" : "Vimeo",
+    "video_youtube" : "Youtube"
 }

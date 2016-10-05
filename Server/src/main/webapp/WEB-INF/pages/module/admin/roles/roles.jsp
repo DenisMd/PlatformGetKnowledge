@@ -17,9 +17,11 @@
                     <div flex="55" flex-gt-sm="20">{{translate('name')}}</div>
                     <div flex>{{currentRole.roleName}}</div>
                 </div>
-                <div class="form-group">
-                    <label for="note">{{translate("role_note")}}:</label>
-                    <textarea class="form-control" rows="5" id="note" ng-model="currentRole.note"></textarea>
+                <div layout="row" class="margin-top-10">
+                    <md-input-container class="md-block" flex>
+                        <label>{{translate("role_note")}}:</label>
+                        <textarea ng-model="currentRole.note" md-maxlength="255" rows="3" md-select-on-focus></textarea>
+                    </md-input-container>
                 </div>
                 <md-button class="md-raised md-primary md-btn" ng-click="updateRole()" ng-disabled="!currentRole">{{translate("role_update_role")}}</md-button>
 
@@ -79,9 +81,9 @@
                         </md-input-container>
                     </div>
                     <div layout="row">
-                        <md-input-container flex>
+                        <md-input-container class="md-block" flex>
                             <label>{{parentScope.translate("role_note")}}</label>
-                            <input ng-model="role.note">
+                            <textarea ng-model="role.note" md-maxlength="255" rows="3" md-select-on-focus></textarea>
                         </md-input-container>
                     </div>
                 </div>

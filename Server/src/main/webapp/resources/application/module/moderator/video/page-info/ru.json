@@ -10,6 +10,10 @@
     "video_file"  : "Загрузить видео-фал",
     "video_data" : "Выбрать видео файл",
     "video_size" : "Размер видео",
-    "video_duration" : "Продолжительность видео"
+    "video_duration" : "Продолжительность видео",
+    "video_type" : "Тип видео",
+    "video_local_file" : "Видео файл на хосте",
+    "video_vimeo" : "Vimeo",
+    "video_youtube" : "Youtube"
   }
 }

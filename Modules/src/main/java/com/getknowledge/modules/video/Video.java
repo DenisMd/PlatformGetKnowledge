@@ -38,6 +38,10 @@ public class Video extends AbstractEntity{
 
     private Long duration;
 
+    @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private VideoType videoType = VideoType.LocalVideoFile;
+
     public Long getDuration() {
         return duration;
     }
@@ -92,6 +96,14 @@ public class Video extends AbstractEntity{
 
     public void setVideoName(String videoName) {
         this.videoName = videoName;
+    }
+
+    public VideoType getVideoType() {
+        return videoType;
+    }
+
+    public void setVideoType(VideoType videoType) {
+        this.videoType = videoType;
     }
 
     @Override

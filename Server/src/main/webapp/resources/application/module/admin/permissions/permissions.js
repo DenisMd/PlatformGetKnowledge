@@ -30,6 +30,8 @@ model.controller("permissionsCtrl", function ($scope,$timeout, applicationServic
             },
             {
                 name : "note",
+                filter : "memo",
+                charLength : 50,
                 title : "permission_note"
             }
         ],

@@ -27,7 +27,7 @@ model.controller("videoController",function($scope,videoDialogService,className,
 
     //Получения обложки для видео
     function videoImg(id){
-        return applicationService.imageHref(className.video,id);
+            return applicationService.imageHref(className.video,id,1000,700);
     }
 
     if ($scope.getData().id) {
